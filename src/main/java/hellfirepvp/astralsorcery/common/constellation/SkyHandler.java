@@ -37,10 +37,10 @@ public class SkyHandler implements ITickHandler {
     
     private static final SkyHandler instance = new SkyHandler();
 
-    private Map<Integer, WorldContext> worldHandlersServer = Maps.newHashMap();
-    private Map<Integer, WorldContext> worldHandlersClient = Maps.newHashMap();
+    private final Map<Integer, WorldContext> worldHandlersServer = Maps.newHashMap();
+    private final Map<Integer, WorldContext> worldHandlersClient = Maps.newHashMap();
 
-    private Map<Integer, Boolean> skyRevertMap = Maps.newHashMap();
+    private final Map<Integer, Boolean> skyRevertMap = Maps.newHashMap();
 
     private SkyHandler() {}
 

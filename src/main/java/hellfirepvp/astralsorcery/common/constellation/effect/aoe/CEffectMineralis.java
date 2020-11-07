@@ -99,6 +99,7 @@ public class CEffectMineralis extends CEffectAbstractList<ListEntries.PosEntry> 
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(at)
                     .alpha(VFXAlphaFunction.FADE_OUT)
+                    .setMotion(Vector3.random().multiply(0.05F))
                     .color(VFXColorFunction.constant(c))
                     .setScaleMultiplier(0.5F + rand.nextFloat() * 0.25F)
                     .setMaxAge(50 + rand.nextInt(40));
@@ -107,32 +108,38 @@ public class CEffectMineralis extends CEffectAbstractList<ListEntries.PosEntry> 
 
     @Override
     public boolean playEffect(World world, BlockPos pos, ConstellationEffectProperties properties, @Nullable IMinorConstellation trait) {
-        ListEntries.PosEntry entry = this.peekNewPosition(world, pos, properties);
-        if (entry != null) {
-            BlockState atState = world.getBlockState(entry.getPos());
+        return this.peekNewPosition(world, pos, properties).mapLeft(entry -> {
+            BlockPos at = entry.getPos();
+            BlockState atState = world.getBlockState(at);
             if (properties.isCorrupted()) {
                 if (world.isAirBlock(entry.getPos())) {
                     if (rand.nextInt(25) == 0) {
                         Block ore = OreBlockRarityRegistry.MINERALIS_RITUAL.getRandomBlock(rand);
                         if (ore != null) {
-                            return world.setBlockState(entry.getPos(), ore.getDefaultState());
+                            return world.setBlockState(at, ore.getDefaultState());
                         } else {
-                            return world.setBlockState(entry.getPos(), Blocks.STONE.getDefaultState());
+                            return world.setBlockState(at, Blocks.STONE.getDefaultState());
                         }
                     } else {
-                        return world.setBlockState(entry.getPos(), Blocks.STONE.getDefaultState());
+                        return world.setBlockState(at, Blocks.STONE.getDefaultState());
                     }
                 }
             } else {
                 if (CONFIG.replaceableStates.test(atState)) {
                     Block ore = OreBlockRarityRegistry.MINERALIS_RITUAL.getRandomBlock(rand);
                     if (ore != null) {
-                        return world.setBlockState(entry.getPos(), ore.getDefaultState());
+                        return world.setBlockState(at, ore.getDefaultState());
+                    } else {
+                        sendConstellationPing(world, new Vector3(at).add(0.5, 0.5, 0.5));
                     }
+                } else {
+                    sendConstellationPing(world, new Vector3(at).add(0.5, 0.5, 0.5));
                 }
             }
-        }
-        return false;
+            return false;
+        }).ifRight(attemptedBreak -> {
+            sendConstellationPing(world, new Vector3(attemptedBreak).add(0.5, 0.5, 0.5));
+        }).left().orElse(false);
     }
 
     @Override

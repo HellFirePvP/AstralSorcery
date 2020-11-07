@@ -21,11 +21,8 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarTrait;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -61,18 +58,21 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
             ItemStack out = recipe.getOutputForRender(this.getContainer().getTileEntity().getInventory());
             RenderSystem.pushMatrix();
             RenderSystem.translated(190, 35, 0);
-            RenderSystem.scaled(2.5, 2.5, 2.5);
+            RenderSystem.scaled(2.5, 2.5, 1);
 
             RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), out, 0, 0, null);
 
             RenderSystem.popMatrix();
         }
 
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+        RenderSystem.disableDepthTest();
+
         float pTicks = Minecraft.getInstance().getRenderPartialTicks();
         TexturesAS.TEX_STAR_1.bindTexture();
-        RenderSystem.disableDepthTest();
         rand.setSeed(0x889582997FF29A92L);
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 18; i++) {
 
             int x = rand.nextInt(54);
             int y = rand.nextInt(54);
@@ -91,15 +91,14 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
         if (c != null && altar.hasMultiblock() && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
             rand.setSeed(0x61FF25A5B7C24109L);
 
-            RenderSystem.enableBlend();
-            Blending.DEFAULT.apply();
             RenderingConstellationUtils.renderConstellationIntoGUI(c.getConstellationColor(), c,
                     16, 41, this.getBlitOffset(),
                     58, 58,
                     2, () -> 0.2F + 0.8F * RenderingConstellationUtils.conCFlicker(Minecraft.getInstance().world.getDayTime(), pTicks, 5 + rand.nextInt(5)),
                     true, false);
-            RenderSystem.disableBlend();
         }
+
+        RenderSystem.disableBlend();
         RenderSystem.enableDepthTest();
     }
 

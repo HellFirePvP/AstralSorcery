@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.lens;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -47,15 +48,15 @@ public class ItemColoredLensPush extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
-            if (entity instanceof PlayerEntity) {
+        public void entityInBeam(IWorld world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
+            if (entity instanceof PlayerEntity && !GeneralConfig.CONFIG.doColoredLensesAffectPlayers.get()) {
                 return;
             }
             Vector3 dir = target.clone().subtract(origin).normalize().multiply(0.4F * beamStrength);
             Vector3d eMotion = entity.getMotion();
             Vector3 motion = new Vector3(
                     Math.min(1F, eMotion.x + dir.getX()),
-                    Math.min(1F, eMotion.y + dir.getY()),
+                    dir.getY() + 0.04F,
                     Math.min(1F, eMotion.z + dir.getZ())
             );
             entity.setMotion(motion.toVector3d());

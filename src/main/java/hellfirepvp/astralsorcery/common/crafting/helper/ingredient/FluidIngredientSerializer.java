@@ -90,7 +90,7 @@ public class FluidIngredientSerializer implements IIngredientSerializer<FluidIng
 
     @Override
     public void write(PacketBuffer buffer, FluidIngredient ingredient) {
-        ByteBufUtils.writeList(buffer, ingredient.getFluids(), ByteBufUtils::writeFluidStack);
+        ByteBufUtils.writeCollection(buffer, ingredient.getFluids(), ByteBufUtils::writeFluidStack);
     }
 
 }

@@ -42,13 +42,21 @@ public class AreaOfInfluencePreview implements ITickHandler {
 
     private static final int MAX_LIFE = 40;
     private static final float alphaTick = 1F / MAX_LIFE;
-    private static final float sizeCube1 = 0.9F, sizeCube2 = 1.05F;
+    private static final float sizeCube1 = 1.25F, sizeCube2 = 1.35F;
 
     private ResourceLocation tileDimension = null;
     private BlockPos tilePosition = null;
     private FXCube effect1 = null, effect2 = null;
 
     private AreaOfInfluencePreview() {}
+
+    public void showOrRemoveIdentical(TileAreaOfInfluence aoeTile) {
+        if (this.tileDimension == aoeTile.getDimensionType() && aoeTile.getEffectOriginPosition().equals(this.tilePosition)) {
+            this.clearClient();
+            return;
+        }
+        this.show(aoeTile);
+    }
 
     public void show(TileAreaOfInfluence aoeTile) {
         if (!(aoeTile instanceof TileEntity)) {

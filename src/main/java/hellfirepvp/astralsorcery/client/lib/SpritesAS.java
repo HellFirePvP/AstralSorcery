@@ -51,6 +51,8 @@ public class SpritesAS {
     public static SpriteSheetResource SPR_GRAPPLING_HOOK;
     public static SpriteSheetResource SPR_HALO_INFUSION;
     public static SpriteSheetResource SPR_HALO_RITUAL;
+    public static SpriteSheetResource SPR_FOUNTAIN_LIQUID;
+    public static SpriteSheetResource SPR_FOUNTAIN_VORTEX;
 
     public static SpriteSheetResource SPR_OVERLAY_CHARGE;
     public static SpriteSheetResource SPR_OVERLAY_CHARGE_COLORLESS;

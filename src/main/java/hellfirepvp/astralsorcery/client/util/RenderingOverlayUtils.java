@@ -13,10 +13,7 @@ import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
@@ -94,9 +91,9 @@ public class RenderingOverlayUtils {
         //Draw itemstacks on frame
         tempY = offsetY;
         for (Tuple<ItemStack, Integer> stackTpl : itemStacks) {
-            itemRender.zLevel -= 250;
+            itemRender.zLevel = -250;
             itemRender.renderItemAndEffectIntoGUI(Minecraft.getInstance().player, stackTpl.getA(), offsetX + 5, tempY + 5);
-            itemRender.zLevel += 250;
+            itemRender.zLevel = 0;
             tempY += heightNormal;
         }
 

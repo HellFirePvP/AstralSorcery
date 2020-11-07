@@ -30,8 +30,7 @@ import java.util.*;
  */
 public class ClientLightBlockEndpoints extends ClientData<ClientLightBlockEndpoints> {
 
-    private Map<ResourceLocation, Set<BlockPos>> clientPositions = new HashMap<>();
-
+    private final Map<ResourceLocation, Set<BlockPos>> clientPositions = new HashMap<>();
     public boolean doesPositionReceiveStarlightClient(World world, BlockPos pos) {
         return this.clientPositions.getOrDefault(world.func_234923_W_().func_240901_a_(), Collections.emptySet()).contains(pos);
     }

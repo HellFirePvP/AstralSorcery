@@ -23,6 +23,8 @@ import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
@@ -67,8 +69,8 @@ public class CelestialStrike {
                 ds = DamageSource.causePlayerDamage((PlayerEntity) attacker);
             }
         }
-        float dmg = 15F;
-        dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, at.toBlockPos()) * 30F;
+        float dmg = 25F;
+        dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, at.toBlockPos()) * 10F;
         for (LivingEntity living : livingEntities) {
             if ((living instanceof PlayerEntity) &&
                     (living.isSpectator() || ((PlayerEntity) living).isCreative() ||
@@ -80,6 +82,13 @@ public class CelestialStrike {
             float dmgDealt = dstPerc * dmg;
             if (dmgDealt > 0.5) {
                 DamageUtil.attackEntityFrom(living, ds, dmgDealt);
+
+                if (attacker != null) {
+                    int fireAspectLevel = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FIRE_ASPECT, attacker);
+                    if (fireAspectLevel > 0 && !living.isBurning()) {
+                        living.setFire(fireAspectLevel * 4);
+                    }
+                }
             }
         }
         PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.CELESTIAL_STRIKE)

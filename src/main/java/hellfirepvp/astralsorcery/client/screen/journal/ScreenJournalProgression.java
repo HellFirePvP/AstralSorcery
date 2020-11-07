@@ -157,13 +157,13 @@ public class ScreenJournalProgression extends ScreenJournal {
     private void renderSearchView(int mouseX, int mouseY, float pTicks) {
         this.drawDefault(TexturesAS.TEX_GUI_BOOK_BLANK, mouseX, mouseY);
 
-        this.changeZLevel(150);
+        this.setBlitOffset(150);
         this.drawSearchResults(mouseX, mouseY, pTicks);
         this.drawSearchBox();
 
-        this.changeZLevel(20);
+        this.setBlitOffset(170);
         this.drawSearchPageNavArrows(mouseX, mouseY, pTicks);
-        this.changeZLevel(-170);
+        this.setBlitOffset(0);
     }
 
     private void renderProgressView(int mouseX, int mouseY, float pTicks) {
@@ -180,9 +180,9 @@ public class ScreenJournalProgression extends ScreenJournal {
 
         this.drawSearchBox();
 
-        this.changeZLevel(150);
+        this.setBlitOffset(150);
         drawMouseHighlight(this.getGuiZLevel(), mouseX, mouseY);
-        this.changeZLevel(-150);
+        this.setBlitOffset(0);
     }
 
     private void drawSearchResults(int mouseX, int mouseY, float pTicks) {
@@ -350,7 +350,7 @@ public class ScreenJournalProgression extends ScreenJournal {
         this.searchResultPageIndex.clear();
         String searchText = this.searchTextEntry.getText().toLowerCase();
         for (ResearchProgression research : ResearchProgression.values()) {
-            if (!prog.getResearchProgression().contains(research)) {
+            if (!prog.hasResearch(research)) {
                 continue;
             }
 

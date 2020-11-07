@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.client.screen.base;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -56,10 +58,6 @@ public class WidthHeightScreen extends InputScreen {
         return this.getBlitOffset();
     }
 
-    public void changeZLevel(int change) {
-        this.setBlitOffset(this.getBlitOffset() + change);
-    }
-
     public int getGuiWidth() {
         return this.guiWidth;
     }
@@ -78,8 +76,15 @@ public class WidthHeightScreen extends InputScreen {
     }
 
     protected void drawWHRect(AbstractRenderableTexture resource) {
+        //Whoever disables blending on GUI overlays, your states bleed into following GUIs
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.defaultAlphaFunc();
+
         resource.bindTexture();
         RenderingGuiUtils.drawRect(guiLeft, guiTop, this.getBlitOffset(), guiWidth, guiHeight);
+        RenderSystem.disableAlphaTest();
     }
 
     @Override

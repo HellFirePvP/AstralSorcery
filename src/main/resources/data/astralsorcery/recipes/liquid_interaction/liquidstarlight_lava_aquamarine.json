@@ -1,0 +1,19 @@
+{
+  "type": "astralsorcery:liquid_interaction",
+  "reactant1": "astralsorcery:liquid_starlight",
+  "reactant1Amount": 10,
+  "reactant2": "minecraft:lava",
+  "reactant2Amount": 10,
+  "chanceConsumeReactant1": 0.5,
+  "chanceConsumeReactant2": 0.5,
+  "weight": 1,
+  "result": {
+    "id": "astralsorcery:drop_item",
+    "data": {
+      "output": {
+        "item": "astralsorcery:aquamarine_sand_ore",
+        "count": 1
+      }
+    }
+  }
+}

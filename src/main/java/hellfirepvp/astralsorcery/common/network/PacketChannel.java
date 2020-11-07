@@ -65,7 +65,6 @@ public class PacketChannel {
         // PLAY DEDICATED_SERVER -> CLIENT
         registerMessage(PktOreScan::new);
         registerMessage(PktPlayEffect::new);
-        registerMessage(PktPlayLiquidInteraction::new);
         registerMessage(PktProgressionUpdate::new);
         registerMessage(PktShootEntity::new);
         registerMessage(PktSyncCharge::new);
@@ -89,6 +88,7 @@ public class PacketChannel {
         registerMessage(PktRotateTelescope::new);
         registerMessage(PktUnlockPerk::new);
         registerMessage(PktToggleClientOption::new);
+        registerMessage(PktRevokeGatewayAccess::new);
     }
 
     private static <T extends ASLoginPacket<T>> void registerLoginMessage(Supplier<T> pktSupplier, Supplier<T> makeLoginPacket) {

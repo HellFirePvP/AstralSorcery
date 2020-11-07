@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.*;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
@@ -39,8 +40,10 @@ public class RegistryTileEntities {
         ALTAR = registerTile(TileAltar.class, BlocksAS.ALTAR_DISCOVERY, BlocksAS.ALTAR_ATTUNEMENT, BlocksAS.ALTAR_CONSTELLATION, BlocksAS.ALTAR_RADIANCE);
         ATTUNEMENT_ALTAR = registerTile(TileAttunementAltar.class, BlocksAS.ATTUNEMENT_ALTAR);
         CELESTIAL_CRYSTAL_CLUSTER = registerTile(TileCelestialCrystals.class, BlocksAS.CELESTIAL_CRYSTAL_CLUSTER);
+        GATEWAY = registerTile(TileCelestialGateway.class, BlocksAS.GATEWAY);
         CHALICE = registerTile(TileChalice.class, BlocksAS.CHALICE);
         COLLECTOR_CRYSTAL = registerTile(TileCollectorCrystal.class, BlocksAS.ROCK_COLLECTOR_CRYSTAL, BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL);
+        FOUNTAIN = registerTile(TileFountain.class, BlocksAS.FOUNTAIN);
         GEM_CRYSTAL_CLUSTER = registerTile(TileGemCrystals.class, BlocksAS.GEM_CRYSTAL_CLUSTER);
         ILLUMINATOR = registerTile(TileIlluminator.class, BlocksAS.ILLUMINATOR);
         INFUSER = registerTile(TileInfuser.class, BlocksAS.INFUSER);
@@ -52,6 +55,8 @@ public class RegistryTileEntities {
         RITUAL_PEDESTAL = registerTile(TileRitualPedestal.class, BlocksAS.RITUAL_PEDESTAL);
         TELESCOPE = registerTile(TileTelescope.class, BlocksAS.TELESCOPE);
         TRANSLUCENT_BLOCK = registerTile(TileTranslucentBlock.class, BlocksAS.TRANSLUCENT_BLOCK);
+        TREE_BEACON = registerTile(TileTreeBeacon.class, BlocksAS.TREE_BEACON);
+        TREE_BEACON_COMPONENT = registerTile(TileTreeBeaconComponent.class, BlocksAS.TREE_BEACON_COMPONENT);
         VANISHING = registerTile(TileVanishing.class, BlocksAS.VANISHING);
         WELL = registerTile(TileWell.class, BlocksAS.WELL);
     }
@@ -70,7 +75,8 @@ public class RegistryTileEntities {
         ClientRegistry.bindTileEntityRenderer(RITUAL_PEDESTAL, RenderRitualPedestal::new);
         ClientRegistry.bindTileEntityRenderer(SPECTRAL_RELAY, RenderSpectralRelay::new);
         ClientRegistry.bindTileEntityRenderer(TELESCOPE, RenderTelescope::new);
-        ClientRegistry.bindTileEntityRenderer(TRANSLUCENT_BLOCK, RenderTranslucentBlock::new);
+        ClientRegistry.bindTileEntityRenderer(TRANSLUCENT_BLOCK, RenderTileFakedState::new);
+        ClientRegistry.bindTileEntityRenderer(TREE_BEACON_COMPONENT, RenderTileFakedState::new);
         ClientRegistry.bindTileEntityRenderer(WELL, RenderWell::new);
     }
 

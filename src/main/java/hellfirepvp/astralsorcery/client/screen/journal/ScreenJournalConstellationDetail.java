@@ -215,7 +215,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
 
         drawNavArrows(pTicks, mouseX, mouseY);
 
-        this.changeZLevel(120);
+        this.setBlitOffset(120);
         switch (doublePageID) {
             case 0:
                 drawPageConstellation(pTicks);
@@ -231,7 +231,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
             default:
                 break;
         }
-        this.changeZLevel(-120);
+        this.setBlitOffset(0);
     }
 
     private void drawCapeInformationPages(int mouseX, int mouseY, float partialTicks) {
@@ -350,8 +350,8 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
         int width = font.getStringWidth(name);
 
         RenderSystem.pushMatrix();
-        RenderSystem.translated(guiLeft + (305 - (width * 1.8F / 2F)), guiTop + 26, 0);
-        RenderSystem.scaled(1.8, 1.8, 1.8);
+        RenderSystem.translated(guiLeft + (305 - (width * 1.8F / 2F)), guiTop + 26, this.getGuiZLevel());
+        RenderSystem.scaled(1.8, 1.8, 1);
         RenderingDrawUtils.renderStringWithShadowAtCurrentPos(font, name, 0xFFC3C3C3);
         RenderSystem.popMatrix();
 

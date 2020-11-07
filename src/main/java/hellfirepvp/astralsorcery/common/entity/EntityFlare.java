@@ -143,7 +143,7 @@ public class EntityFlare extends FlyingEntity {
                         this.doLightningAttack(closest, 100F);
                     }
                 }
-                if (EntityConfig.CONFIG.flareAttackBats.get() && rand.nextInt(30) == 0) {
+                if (EntityConfig.CONFIG.flareAttackPhantoms.get() && rand.nextInt(30) == 0) {
                     PhantomEntity closest = EntityUtils.getClosestEntity(this.getEntityWorld(), PhantomEntity.class, this.getBoundingBox().grow(10), Vector3.atEntityCenter(this));
                     if (closest != null) {
                         this.doLightningAttack(closest, 100F);

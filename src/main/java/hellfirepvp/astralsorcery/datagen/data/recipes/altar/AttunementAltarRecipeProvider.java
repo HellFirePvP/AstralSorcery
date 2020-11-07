@@ -33,7 +33,6 @@ import java.util.function.Consumer;
 public class AttunementAltarRecipeProvider {
 
     public static void registerAltarRecipes(Consumer<IFinishedRecipe> registrar) {
-        //TODO gateway
         registerRecipes(registrar);
     }
 
@@ -92,6 +91,25 @@ public class AttunementAltarRecipeProvider {
                         .key('S', Tags.Items.RODS_WOODEN)
                 )
                 .addOutput(BlocksAS.TELESCOPE)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(BlocksAS.GATEWAY, AltarType.ATTUNEMENT)
+                .setStarlightRequirement(0.7F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("S   S")
+                        .patternLine("  N  ")
+                        .patternLine(" LCL ")
+                        .patternLine(" RSR ")
+                        .patternLine("G   G")
+                        .key('S', TagsAS.Items.DUSTS_STARDUST)
+                        .key('G', Tags.Items.INGOTS_GOLD)
+                        .key('R', BlocksAS.MARBLE_RUNED)
+                        .key('C', new CrystalIngredient(false, false))
+                        .key('L', ItemsAS.GLASS_LENS)
+                        .key('N', ItemsAS.NOCTURNAL_POWDER)
+                )
+                .addOutput(BlocksAS.GATEWAY)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()

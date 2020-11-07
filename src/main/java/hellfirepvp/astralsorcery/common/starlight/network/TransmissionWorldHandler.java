@@ -75,6 +75,7 @@ public class TransmissionWorldHandler {
                     sourcePosBuilding.add(at);
                     buildSourceNetworkThreaded(world, source, handler, at);
                 }
+                continue; //No chain for that source (yet)
             }
 
             List<ChunkPos> activeChunks = activeChunkMap.get(source);

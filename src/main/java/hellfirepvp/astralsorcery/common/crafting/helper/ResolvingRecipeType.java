@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -59,7 +61,7 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
     }
 
     @Nonnull
-    public Collection<T> getAllRecipes() {
+    public List<T> getAllRecipes() {
         RecipeManager mgr = RecipeHelper.getRecipeManager();
         if (mgr == null) {
             return Collections.emptyList();
@@ -70,6 +72,13 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
             recipes.add((T) rec);
         }
         return recipes;
+    }
+
+    @Nonnull
+    public List<T> getRecipes(Predicate<T> test) {
+        return this.getAllRecipes().stream()
+                .filter(test)
+                .collect(Collectors.toList());
     }
 
     public final Class<T> getBaseClass() {
@@ -89,4 +98,10 @@ public class ResolvingRecipeType<C extends IItemHandler, T extends IHandlerRecip
         return MiscUtils.iterativeSearch(this.getAllRecipes(), (recipe) -> this.matchFct.test(recipe, context));
     }
 
+    @Nonnull
+    public List<T> findMatchingRecipes(R context) {
+        return this.getAllRecipes().stream()
+                .filter((recipe) -> this.matchFct.test(recipe, context))
+                .collect(Collectors.toList());
+    }
 }

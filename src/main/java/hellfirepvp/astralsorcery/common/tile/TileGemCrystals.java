@@ -31,7 +31,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 public class TileGemCrystals extends TileEntityTick {
 
-    public static final int TICK_GROWTH_CHANCE = 20_000;
+    public static final int TICK_GROWTH_CHANCE = 10_000;
 
     public TileGemCrystals() {
         super(TileEntityTypesAS.GEM_CRYSTAL_CLUSTER);
@@ -45,7 +45,7 @@ public class TileGemCrystals extends TileEntityTick {
             if (getGrowth().getGrowthStage() < 2 && doesSeeSky()) {
                 this.tryGrowWithChance(TICK_GROWTH_CHANCE);
             } else if (getGrowth().getGrowthStage() == 2) {
-                if (rand.nextInt(2400) == 0) {
+                if (rand.nextInt(4000) == 0) {
                     this.setGrowth(getGrowth().shrink());
                 }
             }

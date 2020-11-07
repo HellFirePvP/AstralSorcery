@@ -27,9 +27,6 @@ import hellfirepvp.astralsorcery.common.network.play.client.PktEngraveGlass;
 import hellfirepvp.astralsorcery.common.tile.TileRefractionTable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -70,6 +67,7 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        RenderSystem.enableDepthTest();
         super.render(mouseX, mouseY, pTicks);
         this.mapRenderedConstellations.clear();
 
@@ -99,9 +97,9 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             List<String> localized = tooltip.stream()
                     .map(ITextComponent::getFormattedText)
                     .collect(Collectors.toList());
-            this.changeZLevel(510);
+            this.setBlitOffset(510);
             RenderingDrawUtils.renderBlueTooltipString(mouseX, mouseY, this.getGuiZLevel(), localized, tooltipRenderer, true);
-            this.changeZLevel(-510);
+            this.setBlitOffset(0);
         }
     }
 
@@ -150,8 +148,8 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             return;
         }
 
-        this.changeZLevel(100);
-        this.itemRenderer.zLevel += 100;
+        this.setBlitOffset(100);
+        this.itemRenderer.zLevel = 100;
 
         ItemStack input = this.getTile().getInputStack();
 
@@ -165,8 +163,8 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
         RenderSystem.enableDepthTest();
         RenderSystem.popMatrix();
 
-        this.changeZLevel(-100);
-        this.itemRenderer.zLevel -= 100;
+        this.setBlitOffset(0);
+        this.itemRenderer.zLevel = 0;
     }
 
     private void renderRunningHalo() {
@@ -270,8 +268,8 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
     }
 
     private FontRenderer renderTileItems(int mouseX, int mouseY, List<ITextComponent> tooltip, FontRenderer tooltipRenderer) {
-        this.changeZLevel(100);
-        this.itemRenderer.zLevel += 100;
+        this.setBlitOffset(100);
+        this.itemRenderer.zLevel = 100;
 
         ItemStack input = this.getTile().getInputStack();
         if (!input.isEmpty()) {
@@ -300,8 +298,8 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
             }
         }
 
-        this.changeZLevel(-100);
-        this.itemRenderer.zLevel -= 100;
+        this.setBlitOffset(0);
+        this.itemRenderer.zLevel = 0;
         return tooltipRenderer;
     }
     

@@ -33,11 +33,11 @@ import java.util.*;
  */
 public class DataLightConnections extends AbstractData {
 
-    private Map<ResourceLocation, Map<BlockPos, Set<BlockPos>>> serverPosBuffer = new HashMap<>();
+    private final Map<ResourceLocation, Map<BlockPos, Set<BlockPos>>> serverPosBuffer = new HashMap<>();
 
     //Boolean flag: true=addition, false=removal
-    private Map<ResourceLocation, LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>>> serverChangeBuffer = new HashMap<>();
-    private Set<ResourceLocation> dimensionClearBuffer = new HashSet<>();
+    private final Map<ResourceLocation, LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>>> serverChangeBuffer = new HashMap<>();
+    private final Set<ResourceLocation> dimensionClearBuffer = new HashSet<>();
 
     private DataLightConnections(ResourceLocation key) {
         super(key);

@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.registry;
 
 import net.minecraft.block.Block;
@@ -79,6 +87,13 @@ public class RegistryBlockRenderTypes {
         setRenderLayer(TELESCOPE,                   RenderType.getSolid());
         setRenderLayer(OBSERVATORY,                 RenderType.getSolid());
         setRenderLayer(REFRACTION_TABLE,            RenderType.getSolid());
+        setRenderLayer(TREE_BEACON,                 RenderType.getSolid());
+        setRenderLayer(TREE_BEACON_COMPONENT,       RenderType.getTranslucent());
+        setRenderLayer(GATEWAY,                     RenderType.getSolid(), RenderType.getTranslucent());
+        setRenderLayer(FOUNTAIN,                    RenderType.getSolid());
+        setRenderLayer(FOUNTAIN_PRIME_LIQUID,       RenderType.getSolid(), RenderType.getTranslucent());
+        setRenderLayer(FOUNTAIN_PRIME_VORTEX,       RenderType.getSolid(), RenderType.getTranslucent());
+        setRenderLayer(FOUNTAIN_PRIME_ORE,          RenderType.getSolid(), RenderType.getTranslucent());
 
         setRenderLayer(FLARE_LIGHT,       RenderType.getTranslucent());
         setRenderLayer(TRANSLUCENT_BLOCK, RenderType.getTranslucent());

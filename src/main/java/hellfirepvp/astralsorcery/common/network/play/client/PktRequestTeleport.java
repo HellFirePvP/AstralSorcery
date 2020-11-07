@@ -8,11 +8,23 @@
 
 package hellfirepvp.astralsorcery.common.network.play.client;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
+import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
+import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.LogicalSidedProvider;
 
 import javax.annotation.Nonnull;
 
@@ -63,20 +75,22 @@ public class PktRequestTeleport extends ASPacket<PktRequestTeleport> {
             context.enqueueWork(() -> {
                 //TODO 1.16.2 re-check once worlds are not all constantly loaded
                 PlayerEntity player = context.getSender();
-                //TODO gateway
-                //TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, false);
-                //if (gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
-                //    MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                //    if (server != null) {
-                //        World to = server.getWorld(packet.type);
-                //        if (to != null) {
-                //            GatewayCache data = WorldCacheManager.getOrLoadData(to, WorldCacheManager.SaveKey.GATEWAY_DATA);
-                //            if (MiscUtils.contains(data.getGatewayPositions(), gatewayNode -> gatewayNode.equals(packet.pos))) {
-                //                AstralSorcery.getProxy().scheduleDelayed(() -> MiscUtils.transferEntityTo(player, packet.type, packet.pos));
-                //            }
-                //        }
-                //    }
-                //}
+                TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, false);
+                if (gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
+                    MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+                    if (server != null) {
+                        DimensionType type = DimensionType.byName(packet.type);
+                        if (type != null) {
+                            World to = server.getWorld(type);
+                            if (to != null) {
+                                GatewayCache.GatewayNode node = DataAS.DOMAIN_AS.getData(to, DataAS.KEY_GATEWAY_CACHE).getGatewayNode(packet.pos);
+                                if (node != null && node.hasAccess(player)) {
+                                    AstralSorcery.getProxy().scheduleDelayed(() -> MiscUtils.transferEntityTo(player, type, packet.pos));
+                                }
+                            }
+                        }
+                    }
+                }
             });
         };
     }

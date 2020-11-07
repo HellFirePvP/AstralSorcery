@@ -23,11 +23,13 @@ import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
+import hellfirepvp.astralsorcery.common.util.block.iterator.BlockPositionGenerator;
+import hellfirepvp.astralsorcery.common.util.block.iterator.BlockRandomProximityPositionGenerator;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopController;
 import hellfirepvp.astralsorcery.common.util.time.TimeStopZone;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -50,7 +52,13 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
     public static HorologiumConfig CONFIG = new HorologiumConfig();
 
     public CEffectHorologium(@Nonnull ILocatable origin) {
-        super(origin, ConstellationsAS.horologium, CONFIG.maxAmount.get(), (world, pos, state) -> TileAccelerationBlacklistRegistry.INSTANCE.canBeAccelerated(world.getTileEntity(pos)));
+        super(origin, ConstellationsAS.horologium, CONFIG.maxAmount.get(), (world, pos, state) -> TileAccelerationBlacklistRegistry.INSTANCE.canBeInfluenced(MiscUtils.getTileAt(world, pos, TileEntity.class, false)));
+    }
+
+    @Nonnull
+    @Override
+    protected BlockPositionGenerator createPositionStrategy() {
+        return new BlockRandomProximityPositionGenerator();
     }
 
     @Nullable
@@ -83,7 +91,7 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
                     .setMaxAge(40 + rand.nextInt(20));
         }
 
-        if (rand.nextInt(8) == 0) {
+        if (rand.nextInt(16) == 0) {
             Vector3 rand1 = Vector3.random().normalize().multiply(rand.nextFloat() * prop.getSize()).add(pos).add(0.5, 0.5, 0.5);
             Vector3 rand2 = Vector3.random().normalize().multiply(rand.nextFloat() * prop.getSize()).add(pos).add(0.5, 0.5, 0.5);
             EffectHelper.of(EffectTemplatesAS.LIGHTNING)
@@ -110,12 +118,14 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
         if (entry != null) {
             if (MiscUtils.executeWithChunk(world, entry.getPos(), () -> {
                 TileEntity tile = MiscUtils.getTileAt(world, entry.getPos(), TileEntity.class, true);
-                if (tile != null && TileAccelerationBlacklistRegistry.INSTANCE.canBeAccelerated(tile)) {
+                if (tile != null && TileAccelerationBlacklistRegistry.INSTANCE.canBeInfluenced(tile)) {
+                    sendConstellationPing(world, new Vector3(entry.getPos()).add(Vector3.positiveRandom()));
+                    sendConstellationPing(world, new Vector3(entry.getPos()).add(Vector3.positiveRandom()));
                     try {
                         long startNs = System.nanoTime();
-                        int times = 2 + rand.nextInt(4);
+                        int times = 4 + rand.nextInt(2);
                         while (times > 0) {
-                            ((ITickable) tile).tick();
+                            ((ITickableTileEntity) tile).tick();
                             if((System.nanoTime() - startNs) >= 80_000) {
                                 break;
                             }
@@ -138,7 +148,9 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
             }
         }
 
-        if (this.findNewPosition(world, pos, properties) != null) {
+        if (this.findNewPosition(world, pos, properties)
+                .ifRight(attemptedPos -> sendConstellationPing(world, new Vector3(attemptedPos).add(0.5, 0.5, 0.5)))
+                .left().isPresent()) {
             changed = true;
         }
 

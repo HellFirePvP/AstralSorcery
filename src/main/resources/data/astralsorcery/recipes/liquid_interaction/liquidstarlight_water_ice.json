@@ -1,0 +1,19 @@
+{
+  "type": "astralsorcery:liquid_interaction",
+  "reactant1": "astralsorcery:liquid_starlight",
+  "reactant1Amount": 10,
+  "reactant2": "minecraft:water",
+  "reactant2Amount": 10,
+  "chanceConsumeReactant1": 1.0,
+  "chanceConsumeReactant2": 1.0,
+  "weight": 1,
+  "result": {
+    "id": "astralsorcery:drop_item",
+    "data": {
+      "output": {
+        "item": "minecraft:ice",
+        "count": 1
+      }
+    }
+  }
+}

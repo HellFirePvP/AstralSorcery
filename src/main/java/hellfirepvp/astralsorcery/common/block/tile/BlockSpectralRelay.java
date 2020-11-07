@@ -18,18 +18,18 @@ import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -51,13 +51,13 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
     }
 
     @Override
-    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
         return RELAY;
     }
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             ItemStack held = player.getHeldItem(hand);
             TileSpectralRelay tar = MiscUtils.getTileAt(world, pos, TileSpectralRelay.class, true);
             if (tar != null) {
@@ -68,6 +68,7 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
                         player.inventory.placeItemBackInInventory(world, stack);
                         inv.setStackInSlot(0, ItemStack.EMPTY);
                         tar.markForUpdate();
+                        TileSpectralRelay.cascadeRelayProximityUpdates(world, pos);
                     }
 
                     if (!world.isAirBlock(pos.up())) {
@@ -80,18 +81,41 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
                         held.shrink(1);
                     }
                     tar.updateAltarLinkState();
+                    TileSpectralRelay.cascadeRelayProximityUpdates(world, pos);
                     tar.markForUpdate();
                 } else {
                     if (!inv.getStackInSlot(0).isEmpty()) {
                         ItemStack stack = inv.getStackInSlot(0);
                         player.inventory.placeItemBackInInventory(world, stack);
                         inv.setStackInSlot(0, ItemStack.EMPTY);
+                        TileSpectralRelay.cascadeRelayProximityUpdates(world, pos);
                         tar.markForUpdate();
                     }
                 }
             }
         }
         return ActionResultType.SUCCESS;
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        if (!worldIn.isRemote()) {
+            TileSpectralRelay.cascadeRelayProximityUpdates(worldIn, pos);
+        }
+    }
+
+    @Override
+    public BlockState updatePostPlacement(BlockState state, Direction placedAgainst, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
+        if (!this.isValidPosition(state, world, pos)) {
+            return Blocks.AIR.getDefaultState();
+        }
+        return state;
+    }
+
+    @Override
+    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
+        return hasSolidSideOnTop(world, pos.down());
     }
 
     @Override

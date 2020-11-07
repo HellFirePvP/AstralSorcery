@@ -25,7 +25,6 @@ import net.minecraftforge.fml.LogicalSide;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 

@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.item;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.link.IItemLinkingTool;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
@@ -35,16 +37,52 @@ public class ItemLinkingTool extends Item implements IItemLinkingTool {
     }
 
     @Override
-    public boolean shouldInterceptInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+    public boolean shouldInterceptBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
         return true;
     }
 
     @Override
-    public boolean doInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+    public boolean shouldInterceptEntityInteract(LogicalSide side, PlayerEntity player, Hand hand, Entity interacted) {
+        return interacted instanceof PlayerEntity;
+    }
+
+    @Override
+    public boolean doBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
         World world = player.getEntityWorld();
         if (!world.isRemote()) {
-            LinkHandler.RightClickResult result = LinkHandler.onRightClick(player, world, pos, player.isSneaking());
-            LinkHandler.propagateClick(result, player, world, pos);
+            LinkHandler.LinkSession session = LinkHandler.getActiveSession(player);
+            if (session != null && session.getType() == LinkHandler.LinkType.ENTITY) {
+                LinkHandler.RightClickResult result = LinkHandler.onInteractBlock(player, world, pos, player.isSneaking());
+                if (result.shouldProcess()) {
+                    LinkHandler.processInteraction(result, player, world, pos);
+                    return true;
+                }
+            }
+            LinkHandler.RightClickResult result = LinkHandler.onInteractBlock(player, world, pos, player.isSneaking());
+            if (result.shouldProcess()) {
+                LinkHandler.processInteraction(result, player, world, pos);
+            }
+        } else {
+            player.swingArm(hand);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean doEntityInteract(LogicalSide side, PlayerEntity player, Hand hand, Entity interacted) {
+        if (!(interacted instanceof LivingEntity)) {
+            return false;
+        }
+        LivingEntity target = (LivingEntity) interacted;
+        World world = player.getEntityWorld();
+        if (!world.isRemote()) {
+            LinkHandler.LinkSession session = LinkHandler.getActiveSession(player);
+            if (session == null || session.getType() == LinkHandler.LinkType.ENTITY) {
+                LinkHandler.RightClickResult result = LinkHandler.onInteractEntity(player, target);
+                if (result.shouldProcess()) {
+                    LinkHandler.processInteraction(result, player, world, BlockPos.ZERO);
+                }
+            }
         } else {
             player.swingArm(hand);
         }

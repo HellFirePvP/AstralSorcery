@@ -30,7 +30,6 @@ public class RegistryEffects {
         EFFECT_BLEED = register(new EffectBleed());
         EFFECT_CHEAT_DEATH = register(new EffectCheatDeath());
         EFFECT_DROP_MODIFIER = register(new EffectDropModifier());
-        EFFECT_TIME_FREEZE = register(new EffectTimeFreeze());
     }
 
     private static <T extends EffectCustomTexture> T register(T effect) {

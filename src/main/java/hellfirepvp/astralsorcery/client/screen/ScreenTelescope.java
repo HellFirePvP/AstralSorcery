@@ -1,9 +1,9 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2020
  *
- *  All rights reserved.
- *  The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- *  For further details, see the License file there.
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.client.screen;
@@ -27,9 +27,6 @@ import hellfirepvp.astralsorcery.common.network.play.client.PktRotateTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Tuple;
 import org.lwjgl.opengl.GL11;
@@ -110,13 +107,12 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        RenderSystem.enableDepthTest();
         super.render(mouseX, mouseY, pTicks);
 
         this.drawWHRect(TexturesAS.TEX_GUI_TELESCOPE);
 
-        this.changeZLevel(-10);
         this.drawConstellationCell(pTicks);
-        this.changeZLevel(10);
 
         this.drawNavArrows(mouseX, mouseY, pTicks);
     }
@@ -138,9 +134,12 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
 
+        this.setBlitOffset(-10);
         this.drawSkyBackground(pTicks, canSeeSky);
 
         if (!this.isInitialized()) {
+            this.setBlitOffset(0);
+
             Blending.DEFAULT.apply();
             RenderSystem.disableBlend();
             RenderSystem.enableAlphaTest();
@@ -156,13 +155,13 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
                 gen.nextFloat(); //Flush
             }
 
-            this.changeZLevel(1);
+            this.setBlitOffset(-9);
             float starSize = 5F;
             TexturesAS.TEX_STAR_1.bindTexture();
             RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
                 for (int i = 0; i < 72 + gen.nextInt(108); i++) {
-                    float innerOffsetX = starSize + gen.nextFloat() * (guiWidth  - starSize) + this.getGuiLeft();
-                    float innerOffsetY = starSize + gen.nextFloat() * (guiHeight - starSize) + this.getGuiTop();
+                    float innerOffsetX = starSize + gen.nextFloat() * (guiWidth  - starSize * 2) + this.getGuiLeft();
+                    float innerOffsetY = starSize + gen.nextFloat() * (guiHeight - starSize * 2) + this.getGuiTop();
                     float brightness = 0.4F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + gen.nextInt(20))) * 0.5F;
                     brightness = this.multiplyStarBrightness(pTicks, brightness);
 
@@ -173,9 +172,8 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
                             .draw();
                 }
             });
-            this.changeZLevel(-1);
 
-            this.changeZLevel(3);
+            this.setBlitOffset(-7);
             for (TelescopeRotationDrawArea area : this.getVisibleDrawAreas()) {
                 for (IConstellation cst : area.getDisplayMap().keySet()) {
                     ConstellationDisplayInformation info = area.getDisplayMap().get(cst);
@@ -199,12 +197,12 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
                     info.getFrameDrawInformation().putAll(cstRenderInfo);
                 }
             }
-            this.changeZLevel(-3);
 
-            this.changeZLevel(5);
+            this.setBlitOffset(-5);
             this.renderDrawnLines(gen, pTicks);
-            this.changeZLevel(-5);
         }
+
+        this.setBlitOffset(0);
 
         Blending.DEFAULT.apply();
         RenderSystem.disableBlend();
@@ -214,8 +212,8 @@ public class ScreenTelescope extends TileConstellationDiscoveryScreen<TileTelesc
     private void drawSkyBackground(float pTicks, boolean canSeeSky) {
         Tuple<Color, Color> rgbFromTo = SkyScreen.getSkyGradient(canSeeSky, 1F, pTicks);
         RenderingDrawUtils.drawGradientRect(this.getGuiZLevel(),
-                this.guiLeft, this.guiTop,
-                this.guiLeft + this.guiWidth, this.guiTop + this.guiHeight,
+                this.guiLeft + 5, this.guiTop + 5,
+                this.guiLeft + this.guiWidth - 5, this.guiTop + this.guiHeight - 5,
                 rgbFromTo.getA().getRGB(), rgbFromTo.getB().getRGB());
     }
     @Override

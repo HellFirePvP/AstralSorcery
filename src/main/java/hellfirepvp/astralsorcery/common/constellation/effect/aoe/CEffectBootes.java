@@ -38,6 +38,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -89,6 +91,8 @@ public class CEffectBootes extends ConstellationEffectEntityCollect<LivingEntity
         boolean didEffect = false;
 
         List<LivingEntity> entities = this.collectEntities(world, pos, properties);
+        Collections.shuffle(entities);
+        entities.subList(0, Math.min(25, entities.size()));
         for (LivingEntity entity : entities) {
             AnimalHelper.HerdableAnimal animal = AnimalHelper.getHandler(entity);
             if (animal == null) {
@@ -107,7 +111,13 @@ public class CEffectBootes extends ConstellationEffectEntityCollect<LivingEntity
             if (rand.nextFloat() < CONFIG.herdingChance.get()) {
                 didEffect = MiscUtils.executeWithChunk(world, entity.getPosition(), didEffect, (didEffectFlag) -> {
 
-                    List<ItemStack> drops = EntityUtils.generateLoot(entity, rand, CommonProxy.DAMAGE_SOURCE_STELLAR, null);
+                    List<ItemStack> rawDrops = EntityUtils.generateLoot(entity, rand, CommonProxy.DAMAGE_SOURCE_STELLAR, null);
+                    List<ItemStack> drops = new ArrayList<>();
+                    rawDrops.forEach(drop -> {
+                        for (int i = 0; i < drop.getCount(); i++) {
+                            drops.add(ItemUtils.copyStackWithSize(drop, 1));
+                        }
+                    });
                     for (ItemStack drop : drops) {
                         if (rand.nextFloat() < CONFIG.herdingLootChance.get() &&
                                 ItemUtils.dropItemNaturally(world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), drop) != null) {
@@ -117,6 +127,7 @@ public class CEffectBootes extends ConstellationEffectEntityCollect<LivingEntity
                     }
                     return didEffectFlag;
                 }, false);
+                sendConstellationPing(world, Vector3.atEntityCorner(entity));
             }
         }
 

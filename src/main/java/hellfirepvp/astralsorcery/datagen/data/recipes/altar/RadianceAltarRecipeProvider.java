@@ -43,7 +43,6 @@ import java.util.function.Consumer;
 public class RadianceAltarRecipeProvider {
 
     public static void registerAltarRecipes(Consumer<IFinishedRecipe> registrar) {
-        //TODO fountain + primes
         registerRecipes(registrar);
         registerConstellationRecipes(registrar);
     }
@@ -93,6 +92,74 @@ public class RadianceAltarRecipeProvider {
                                 ItemResonator.ResonatorUpgrade.STARLIGHT,
                                 ItemResonator.ResonatorUpgrade.FLUID_FIELDS),
                         ItemResonator.ResonatorUpgrade.FLUID_FIELDS))
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(BlocksAS.FOUNTAIN, AltarType.RADIANCE)
+                .setStarlightRequirement(0.5F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("WSSSW")
+                        .patternLine("WMCMW")
+                        .patternLine("WGRGW")
+                        .patternLine(" MRM ")
+                        .patternLine("     ")
+                        .key('C', new CrystalIngredient(false, false))
+                        .key('G', Tags.Items.INGOTS_GOLD)
+                        .key('W', BlocksAS.INFUSED_WOOD_PLANKS)
+                        .key('S', BlocksAS.BLACK_MARBLE_RAW)
+                        .key('M', TagsAS.Items.INGOTS_STARMETAL)
+                        .key('R', ItemsAS.RESONATING_GEM)
+                )
+                .addOutput(BlocksAS.FOUNTAIN)
+                .addRelayInput(TagsAS.Items.FORGE_GEM_AQUAMARINE)
+                .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
+                .addRelayInput(TagsAS.Items.FORGE_GEM_AQUAMARINE)
+                .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(BlocksAS.FOUNTAIN_PRIME_LIQUID, AltarType.RADIANCE)
+                .setStarlightRequirement(0.7F)
+                .setFocusConstellation(ConstellationsAS.octans)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("GSSSG")
+                        .patternLine("RG GR")
+                        .patternLine(" MLM ")
+                        .patternLine(" R R ")
+                        .patternLine(" RLR ")
+                        .key('R', ItemsAS.RESONATING_GEM)
+                        .key('G', Tags.Items.INGOTS_GOLD)
+                        .key('M', TagsAS.Items.INGOTS_STARMETAL)
+                        .key('L', ItemsAS.GLASS_LENS)
+                        .key('S', BlocksAS.BLACK_MARBLE_RAW)
+                )
+                .addOutput(BlocksAS.FOUNTAIN_PRIME_LIQUID)
+                .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
+                .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
+                .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(BlocksAS.FOUNTAIN_PRIME_VORTEX, AltarType.RADIANCE)
+                .setStarlightRequirement(0.7F)
+                .setFocusConstellation(ConstellationsAS.vicio)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("GSSSG")
+                        .patternLine(" GRG ")
+                        .patternLine("M L M")
+                        .patternLine("M   M")
+                        .patternLine(" M M ")
+                        .key('R', ItemsAS.RESONATING_GEM)
+                        .key('G', Tags.Items.INGOTS_GOLD)
+                        .key('M', TagsAS.Items.INGOTS_STARMETAL)
+                        .key('L', ItemsAS.GLASS_LENS)
+                        .key('S', BlocksAS.BLACK_MARBLE_RAW)
+                )
+                .addOutput(BlocksAS.FOUNTAIN_PRIME_VORTEX)
+                .addRelayInput(ItemsAS.NOCTURNAL_POWDER)
+                .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
+                .addRelayInput(ItemsAS.NOCTURNAL_POWDER)
+                .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()

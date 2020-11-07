@@ -1,9 +1,18 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.RenderStateUtil;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import org.lwjgl.opengl.GL11;
@@ -37,6 +46,11 @@ public class RenderStateBuilder {
         return this;
     }
 
+    public RenderStateBuilder disableTexture() {
+        this.builder.texture(new RenderState.TextureState());
+        return this;
+    }
+
     public RenderStateBuilder blend(Blending blendMode) {
         this.builder.transparency(blendMode.asState());
         return this;
@@ -66,7 +80,7 @@ public class RenderStateBuilder {
     }
 
     public RenderStateBuilder disableDepthMask() {
-        this.builder.writeMask(new RenderState.WriteMaskState(true, false));
+        this.builder.writeMask(new RenderStateUtil.WriteMaskState(true, false));
         return this;
     }
 
@@ -86,7 +100,7 @@ public class RenderStateBuilder {
     }
 
     public RenderStateBuilder disableCull() {
-        this.builder.cull(new RenderState.CullState(false));
+        this.builder.cull(new RenderStateUtil.CullState(false));
         return this;
     }
 

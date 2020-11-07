@@ -22,8 +22,6 @@ public class CraftingConfig extends ConfigEntry {
 
     public static final CraftingConfig CONFIG = new CraftingConfig();
 
-    public ForgeConfigSpec.BooleanValue grindstoneDustRecipes;
-
     public ForgeConfigSpec.BooleanValue liquidStarlightCrystalGrowth;
     public ForgeConfigSpec.BooleanValue liquidStarlightFormCelestialCrystalCluster;
     public ForgeConfigSpec.BooleanValue liquidStarlightFormGemCrystalCluster;
@@ -40,11 +38,6 @@ public class CraftingConfig extends ConfigEntry {
 
     @Override
     public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
-        grindstoneDustRecipes = cfgBuilder
-                .comment("Set this to false to prevent the lookup and registration of oreblock -> ore dust recipes on the grindstone.")
-                .translation(translationKey("grindstoneDustRecipes"))
-                .define("grindstoneDustRecipes", true);
-
         liquidStarlightCrystalGrowth = cfgBuilder
                 .comment("Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.")
                 .translation(translationKey("liquidStarlightCrystalGrowth"))

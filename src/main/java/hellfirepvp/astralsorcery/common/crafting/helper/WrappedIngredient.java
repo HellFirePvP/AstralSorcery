@@ -32,7 +32,7 @@ public class WrappedIngredient {
     }
 
     public ItemStack getRandomMatchingStack(long tick) {
-        return IngredientHelper.getRandomMatchingStack(this.getIngredient(), tick);
+        return IngredientHelper.getRandomVisibleStack(this.getIngredient(), tick);
     }
 
 }

@@ -41,7 +41,6 @@ public class PatternInfuser extends PatternBlockArray {
         BlockState chiseled = BlocksAS.MARBLE_CHISELED.getDefaultState();
         BlockState runed = BlocksAS.MARBLE_RUNED.getDefaultState();
         BlockState raw = BlocksAS.MARBLE_RAW.getDefaultState();
-        Block pillar = BlocksAS.MARBLE_PILLAR;
 
         addBlock(Blocks.LAPIS_BLOCK.getDefaultState(), 0, -1, 0);
 

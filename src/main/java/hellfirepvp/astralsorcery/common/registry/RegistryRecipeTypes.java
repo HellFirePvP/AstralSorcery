@@ -16,10 +16,7 @@ import hellfirepvp.astralsorcery.common.crafting.nojson.AttunementCraftingRegist
 import hellfirepvp.astralsorcery.common.crafting.nojson.LiquidStarlightCraftingRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.WorldFreezingRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.WorldMeltableRegistry;
-import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutation;
-import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInfusion;
-import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
-import hellfirepvp.astralsorcery.common.crafting.recipe.WellLiquefaction;
+import hellfirepvp.astralsorcery.common.crafting.recipe.*;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect.*;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.util.registry.Registry;
@@ -47,6 +44,8 @@ public class RegistryRecipeTypes {
                 recipe.matches(context.getWorld(), context.getPos(), context.getState(), context.getConstellation()));
         TYPE_ALTAR = new ResolvingRecipeType<>("simple_altar", SimpleAltarRecipe.class, (recipe, context) ->
                 recipe.matches(context.getSide(), context.getCrafter(), context.getAltar(), context.ignoreStarlightRequirement()));
+        TYPE_LIQUID_INTERACTION = new ResolvingRecipeType<>("liquid_interaction", LiquidInteraction.class, (recipe, context) ->
+                recipe.matches(context.getContentTank1(), context.getContentTank2()));
 
         //Other, non-json recipes/recipe-ish conversions
         LiquidStarlightCraftingRegistry.INSTANCE.init();

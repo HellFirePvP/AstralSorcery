@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.item.lens;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.DamageUtil;
@@ -49,17 +50,19 @@ public class ItemColoredLensDamage extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
-            if (!(entity instanceof LivingEntity)) {
+        public void entityInBeam(IWorld world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
+            if (world.isRemote() || !(entity instanceof LivingEntity)) {
                 return;
             }
             if (random.nextFloat() > beamStrength) {
                 return;
             }
-            if (entity instanceof PlayerEntity &&
-                    entity.getServer() != null &&
-                    entity.getServer().isPVPEnabled()) {
-                return;
+            if (entity instanceof PlayerEntity) {
+                if (!GeneralConfig.CONFIG.doColoredLensesAffectPlayers.get() ||
+                        entity.getServer() == null ||
+                        !entity.getServer().isPVPEnabled()) {
+                    return;
+                }
             }
             DamageUtil.attackEntityFrom(entity, CommonProxy.DAMAGE_SOURCE_STELLAR, 7F * beamStrength);
         }

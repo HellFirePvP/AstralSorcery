@@ -16,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public List<ResearchProgression> getResearchProgression() {
+    public Collection<ResearchProgression> getResearchProgression() {
         return Collections.emptyList();
     }
 

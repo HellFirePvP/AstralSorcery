@@ -25,9 +25,6 @@ import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
@@ -90,13 +87,12 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        RenderSystem.enableDepthTest();
         super.render(mouseX, mouseY, pTicks);
 
         this.drawWHRect(TexturesAS.TEX_GUI_HAND_TELESCOPE);
 
-        this.changeZLevel(-10);
         this.drawTelescopeCell(pTicks);
-        this.changeZLevel(10);
     }
 
     private void drawTelescopeCell(float pTicks) {
@@ -117,9 +113,12 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
         Blending.DEFAULT.apply();
         RenderSystem.disableAlphaTest();
 
+        this.setBlitOffset(-10);
         this.drawSkyBackground(pTicks, canSeeSky, angleOpacity);
 
         if (!this.isInitialized()) {
+            this.setBlitOffset(0);
+
             RenderSystem.enableAlphaTest();
             Blending.DEFAULT.apply();
             RenderSystem.disableBlend();
@@ -140,7 +139,7 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
             }
             float playerPitch = Minecraft.getInstance().player.rotationPitch;
 
-            this.changeZLevel(1);
+            this.setBlitOffset(-9);
             float starSize = 5F;
             TexturesAS.TEX_STAR_1.bindTexture();
             RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
@@ -156,9 +155,8 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
                             .draw();
                 }
             });
-            this.changeZLevel(-1);
 
-            this.changeZLevel(3);
+            this.setBlitOffset(-7);
             for (DrawArea areas : this.getVisibleDrawAreas()) {
                 for (IConstellation cst : areas.getDisplayMap().keySet()) {
                     ConstellationDisplayInformation info = areas.getDisplayMap().get(cst);
@@ -205,13 +203,12 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
                     }
                 }
             }
-            this.changeZLevel(-3);
 
-            this.changeZLevel(5);
+            this.setBlitOffset(-5);
             this.renderDrawnLines(gen, pTicks);
-            this.changeZLevel(-5);
         }
 
+        this.setBlitOffset(0);
         RenderSystem.enableAlphaTest();
         Blending.DEFAULT.apply();
         RenderSystem.disableBlend();

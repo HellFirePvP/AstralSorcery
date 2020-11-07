@@ -12,7 +12,6 @@ import com.google.common.base.Splitter;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.ArrayList;

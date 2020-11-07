@@ -104,12 +104,12 @@ public abstract class ItemCrystalBase extends Item implements CrystalAttributeGe
 
     @Override
     public int getGeneratedPropertyTiers() {
-        return 8;
+        return 5;
     }
 
     @Override
     public int getMaxPropertyTiers() {
-        return 12;
+        return 7;
     }
 
     protected Color getItemEntityColor(ItemStack stack) {

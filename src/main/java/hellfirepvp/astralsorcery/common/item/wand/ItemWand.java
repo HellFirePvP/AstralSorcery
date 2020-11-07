@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.observerlib.api.structure.MatchableStructure;
+import hellfirepvp.observerlib.api.util.BlockArray;
 import hellfirepvp.observerlib.client.preview.StructurePreview;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -94,12 +95,12 @@ public class ItemWand extends Item implements OverrideInteractItem {
     }
 
     @Override
-    public boolean shouldInterceptInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+    public boolean shouldInterceptBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
         return true;
     }
 
     @Override
-    public boolean doInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+    public boolean doBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
         World world = player.getEntityWorld();
         BlockState state = world.getBlockState(pos);
         Block b = state.getBlock();
@@ -121,6 +122,11 @@ public class ItemWand extends Item implements OverrideInteractItem {
                     !((MatchableStructure) mbTe.getRequiredStructureType().getStructure()).matches(world, pos)) {
                 if (world.isRemote()) {
                     this.displayClientStructurePreview(world, pos, mbTe.getRequiredStructureType());
+                } else if (player.isCrouching() && player.isCreative()) {
+                    BlockArray structure = mbTe.getRequiredStructureType().getStructure();
+                    structure.getContents().forEach((offset, rState) -> {
+                        world.setBlockState(pos.add(offset), rState.getDescriptiveState(0));
+                    });
                 }
                 return true;
             }

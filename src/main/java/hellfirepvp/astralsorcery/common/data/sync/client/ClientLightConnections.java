@@ -37,7 +37,7 @@ import java.util.Set;
  */
 public class ClientLightConnections extends ClientData<ClientLightConnections> {
 
-    private Map<ResourceLocation, Map<BlockPos, Set<BlockPos>>> clientPosBuffer = new HashMap<>();
+    private final Map<ResourceLocation, Map<BlockPos, Set<BlockPos>>> clientPosBuffer = new HashMap<>();
 
     @Nonnull
     public Map<BlockPos, Set<BlockPos>> getClientConnections(RegistryKey<World> dim) {

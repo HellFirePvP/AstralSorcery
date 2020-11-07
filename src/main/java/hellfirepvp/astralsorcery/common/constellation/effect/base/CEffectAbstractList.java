@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect.base;
 
+import com.mojang.datafixers.util.Either;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
@@ -52,7 +53,7 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
     protected final BlockPredicate verifier;
     protected final int maxAmount;
     private final BlockPositionGenerator positionStrategy;
-    private List<T> elements = new ArrayList<>();
+    private final List<T> elements = new ArrayList<>();
 
     protected CEffectAbstractList(@Nonnull ILocatable origin, @Nonnull IWeakConstellation cst, int maxAmount, BlockPredicate verifier) {
         super(origin, cst);
@@ -111,11 +112,12 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
                                                 !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos) && //actual Ritual layer
                                                         !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down()) && //Pillars & config
                                                         !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down(2)) &&  //uh... consistency?
-                                                        !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down(3))))); //Lenses
+                                                        !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down(3)) && //Lenses
+                                                        !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(pos.down(4))))); //Another layer of lenses
     }
 
     private Predicate<BlockPos> createExcludeRitualColumnPredicate() {
-        return pos -> (this.isLinkedRitual && pos.getX() == 0 && pos.getZ() == 0) ||
+        return pos -> (this.isLinkedRitual && !(pos.getX() == 0 && pos.getZ() == 0)) ||
                 (!this.isLinkedRitual && StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(new BlockPos(pos.getX(), -1, pos.getZ())));
     }
 
@@ -137,14 +139,16 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
         if (this.elements.isEmpty()) {
             return null;
         }
-        if (rand.nextInt(Math.max(0, (this.maxAmount - this.getCount()) / 4) + 1) == 0) {
+        float perc = 1F - (((float) this.getCount()) / this.maxAmount);
+        perc = 0.1F / ((perc / 2F) + 0.1F);
+        if (rand.nextFloat() < perc) {
             return getRandomElement();
         }
         return null;
     }
 
-    @Nullable
-    public T peekNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
+    @Nonnull
+    public Either<T, BlockPos> peekNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
         if (this.excludesRitual || this.excludeRitualColumn) {
             MiscUtils.executeWithChunk(world, pos, () -> {
                 this.isLinkedRitual = MiscUtils.getTileAt(world, pos, TileRitualLink.class, true) != null;
@@ -156,25 +160,30 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
         }
         BlockPos at = gen.generateNextPosition(BlockPos.ZERO, prop.getSize());
         BlockPos actual = at.add(pos);
+
+        if (this.getCount() >= this.maxAmount) {
+            return Either.right(actual);
+        }
         return MiscUtils.executeWithChunk(world, actual, () -> {
             if (this.verifier.test(world, actual, world.getBlockState(actual))) {
-                return this.createElement(world, actual);
+                T element = this.createElement(world, actual);
+                if (element == null) {
+                    return Either.right(actual);
+                } else {
+                    return Either.left(element);
+                }
             }
-            return null;
-        });
+            return Either.right(actual);
+        }, Either.right(actual));
     }
 
-    @Nullable
-    public T findNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
-        if (this.getCount() >= this.maxAmount) {
-            return null;
-        }
-        T newElement = this.peekNewPosition(world, pos, prop);
-        if (newElement != null && !this.hasElement(newElement.getPos())) {
-            this.elements.add(newElement);
-            return newElement;
-        }
-        return null;
+    @Nonnull
+    public Either<T, BlockPos> findNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
+        return this.peekNewPosition(world, pos, prop).ifLeft(entry -> {
+            if (!this.hasElement(entry.getPos())) {
+                this.elements.add(entry);
+            }
+        });
     }
 
     public boolean removeElement(T entry) {

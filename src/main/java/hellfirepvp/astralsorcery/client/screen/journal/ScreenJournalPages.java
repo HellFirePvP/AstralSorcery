@@ -114,7 +114,7 @@ public class ScreenJournalPages extends ScreenJournal implements NavigationArrow
             RenderSystem.disableBlend();
         }
 
-        this.changeZLevel(100);
+        this.setBlitOffset(100);
         int pageYOffset = 20;
 
         //Draw headline
@@ -150,9 +150,9 @@ public class ScreenJournalPages extends ScreenJournal implements NavigationArrow
             page.render    (guiLeft + 220, guiTop + 20, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
 
-        this.changeZLevel(20);
+        this.setBlitOffset(120);
         drawNavArrows(pTicks, mouseX, mouseY);
-        this.changeZLevel(-20);
+        this.setBlitOffset(100);
 
         index = currentPageOffset * 2;
         if (pages.size() > index) {
@@ -164,7 +164,7 @@ public class ScreenJournalPages extends ScreenJournal implements NavigationArrow
             RenderablePage page = pages.get(index);
             page.postRender(guiLeft + 220, guiTop + 20, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
-        this.changeZLevel(-100);
+        this.setBlitOffset(0);
     }
 
     private void drawNavArrows(float partialTicks, int mouseX, int mouseY) {

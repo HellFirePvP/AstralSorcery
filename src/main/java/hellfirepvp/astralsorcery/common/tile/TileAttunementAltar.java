@@ -1,4 +1,12 @@
 /*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+/*******************************************************************************
  * HellFirePvP / Astral Sorcery 2019
  *
  * All rights reserved.
@@ -264,7 +272,7 @@ public class TileAttunementAltar extends TileEntityTick {
             Vector3 from = new Vector3(conn.getA()).add(0.5, 0.5, 0.5);
             Vector3 to   = new Vector3(conn.getB()).add(0.5, 0.5, 0.5);
 
-            if (this.getTicksExisted() % 45 == 0) {
+            if (this.getTicksExisted() % 50 == 0) {
                 EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
                         .spawn(from)
                         .setup(to, beamSize, beamSize)
@@ -286,8 +294,8 @@ public class TileAttunementAltar extends TileEntityTick {
                         .spawn(at)
                         .alpha(VFXAlphaFunction.FADE_OUT)
                         .color(VFXColorFunction.constant(this.activeConstellation.getConstellationColor()))
-                        .setScaleMultiplier(0.2F + rand.nextFloat() * 0.05F)
-                        .setMaxAge(15 + rand.nextInt(5));
+                        .setScaleMultiplier(0.2F + rand.nextFloat() * 0.1F)
+                        .setMaxAge(20 + rand.nextInt(10));
             }
         }
     }
@@ -359,9 +367,7 @@ public class TileAttunementAltar extends TileEntityTick {
         if (heldTpl != null) {
             ItemStack cstPaper = heldTpl.getB();
             IConstellation cst = ((ItemConstellationPaper) cstPaper.getItem()).getConstellation(cstPaper);
-            if (cst != null &&
-                    ResearchHelper.getClientProgress().hasConstellationDiscovered(cst) &&
-                    ctx.getConstellationHandler().isActiveCurrently(cst, MoonPhase.fromWorld(getWorld()))) {
+            if (cst != null && ResearchHelper.getClientProgress().hasConstellationDiscovered(cst)) {
                 float night = DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
                 if (night >= 0.1F) {
                     for (BlockPos pos : this.getConstellationPositions(cst)) {

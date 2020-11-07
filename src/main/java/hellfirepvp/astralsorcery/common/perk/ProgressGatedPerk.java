@@ -45,9 +45,9 @@ public class ProgressGatedPerk extends AbstractPerk {
 
     private BiPredicate<PlayerEntity, PlayerProgress> unlockFunction = (player, progress) -> true;
 
-    private List<IConstellation> neededConstellations = new ArrayList<>();
-    private List<ResearchProgression> neededResearch = new ArrayList<>();
-    private List<ProgressionTier> neededProgression = new ArrayList<>();
+    private final List<IConstellation> neededConstellations = new ArrayList<>();
+    private final List<ResearchProgression> neededResearch = new ArrayList<>();
+    private final List<ProgressionTier> neededProgression = new ArrayList<>();
 
     public ProgressGatedPerk(ResourceLocation name, float x, float y) {
         super(name, x, y);
@@ -59,7 +59,7 @@ public class ProgressGatedPerk extends AbstractPerk {
     }
 
     public void addRequireProgress(ResearchProgression research) {
-        addResearchPreRequisite(((player, progress) -> progress.getResearchProgression().contains(research)));
+        addResearchPreRequisite(((player, progress) -> progress.hasResearch(research)));
         this.neededResearch.add(research);
     }
 

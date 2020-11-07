@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.datagen.data.recipes.altar.CelestialAltarRecipe
 import hellfirepvp.astralsorcery.datagen.data.recipes.altar.DiscoveryAltarRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipes.altar.RadianceAltarRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipes.infuser.InfuserRecipeProvider;
+import hellfirepvp.astralsorcery.datagen.data.recipes.interaction.InteractionRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipes.transmutation.BlockTransmutationRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipes.vanilla.VanillaTypedRecipeProvider;
 import hellfirepvp.astralsorcery.datagen.data.recipes.well.LightwellRecipeProvider;
@@ -45,6 +46,7 @@ public class AstralRecipeProvider extends RecipeProvider {
         InfuserRecipeProvider.registerInfuserRecipes(registrar);
         LightwellRecipeProvider.registerLightwellRecipes(registrar);
         BlockTransmutationRecipeProvider.registerTransmutationRecipes(registrar);
+        InteractionRecipeProvider.registerLiquidInteractionRecipes(registrar);
 
         VanillaTypedRecipeProvider.registerStoneCutterRecipes(registrar);
         VanillaTypedRecipeProvider.registerShapedRecipes(registrar);

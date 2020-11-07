@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
  */
 public class TileCelestialCrystals extends TileEntityTick implements CrystalAttributeTile {
 
-    public static final int TICK_GROWTH_CHANCE = 24_000;
+    public static final int TICK_GROWTH_CHANCE = 18_000;
 
     private CrystalAttributes attributes = null;
 

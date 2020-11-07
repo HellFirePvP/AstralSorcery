@@ -98,16 +98,19 @@ public class RegistryResearch {
                 .addPage(text("C_CHALICE.4"))
                 .register(ResearchProgression.RADIANCE);
 
-        //TODO evershifting fountain
-        ResearchNode resFountain = new ResearchNode(Items.APPLE, "BORE_CORE", 2.25F, 4F)
+        ResearchNode resFountain = new ResearchNode(BlocksAS.FOUNTAIN, "BORE_CORE", 2.25F, 4F)
                 .addPage(text("BORE_CORE.1"))
-                .addPage(text("BORE_CORE.2"))
+                .addPage(recipe(BlocksAS.FOUNTAIN))
+                .addTomeLookup(BlocksAS.FOUNTAIN, 1, ResearchProgression.RADIANCE)
+                .addPage(text("BORE_CORE.3"))
+                .addPage(structure(StructureTypesAS.PTYPE_FOUNTAIN))
                 .register(ResearchProgression.RADIANCE);
 
-        //TODO neromantic prime
-        ResearchNode resLiquidBore = new ResearchNode(Items.APPLE, "BORE_HEAD_LIQUID", 1.5F, 5F)
+        ResearchNode resLiquidBore = new ResearchNode(BlocksAS.FOUNTAIN_PRIME_LIQUID, "BORE_HEAD_LIQUID", 1.5F, 5F)
                 .addPage(text("BORE_HEAD_LIQUID.1"))
-                .addPage(text("BORE_HEAD_LIQUID.2"))
+                .addPage(recipe(BlocksAS.FOUNTAIN_PRIME_LIQUID))
+                .addTomeLookup(BlocksAS.FOUNTAIN_PRIME_LIQUID, 1, ResearchProgression.RADIANCE)
+                .addPage(text("BORE_HEAD_LIQUID.3"))
                 .addPage(text("BORE_HEAD_LIQUID.4"))
                 .register(ResearchProgression.RADIANCE);
 
@@ -118,9 +121,10 @@ public class RegistryResearch {
                 .addPage(recipe(stack -> ItemsAS.RESONATOR.equals(stack.getItem()) && ItemResonator.getCurrentUpgrade(null, stack) == ItemResonator.ResonatorUpgrade.FLUID_FIELDS))
                 .register(ResearchProgression.RADIANCE);
 
-        //TODO fysallidic prime
-        ResearchNode resVortexBore = new ResearchNode(Items.APPLE, "BORE_HEAD_VORTEX", 3.5F, 4.75F)
+        ResearchNode resVortexBore = new ResearchNode(BlocksAS.FOUNTAIN_PRIME_VORTEX, "BORE_HEAD_VORTEX", 3.5F, 4.75F)
                 .addPage(text("BORE_HEAD_VORTEX.1"))
+                .addPage(recipe(BlocksAS.FOUNTAIN_PRIME_VORTEX))
+                .addTomeLookup(BlocksAS.FOUNTAIN_PRIME_VORTEX, 1, ResearchProgression.RADIANCE)
                 .addPage(text("BORE_HEAD_VORTEX.3"))
                 .register(ResearchProgression.RADIANCE);
 
@@ -232,11 +236,10 @@ public class RegistryResearch {
                 .addTomeLookup(ItemsAS.INFUSED_CRYSTAL_SHOVEL, 5, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 
-        //TODO tree beacon
-        ResearchNode resTreeBeacon = new ResearchNode(Items.APPLE, "TREEBEACON", 1.25F, 0.5F)
+        ResearchNode resTreeBeacon = new ResearchNode(BlocksAS.TREE_BEACON, "TREEBEACON", 1.25F, 0.5F)
                 .addPage(text("TREEBEACON.1"))
-                //.addPage(recipe(BlocksAS.TREE_BEACON))
-                //.addTomeLookup(BlocksAS.TREE_BEACON, 1, ResearchProgression.ATTUNEMENT)
+                .addPage(recipe(BlocksAS.TREE_BEACON))
+                .addTomeLookup(BlocksAS.TREE_BEACON, 1, ResearchProgression.CONSTELLATION)
                 .addPage(text("TREEBEACON.3"))
                 .register(ResearchProgression.CONSTELLATION);
 
@@ -396,13 +399,12 @@ public class RegistryResearch {
                 .addPage(recipe(stack -> ItemsAS.RESONATOR.equals(stack.getItem()) && ItemResonator.getCurrentUpgrade(null, stack) == ItemResonator.ResonatorUpgrade.AREA_SIZE))
                 .register(ResearchProgression.ATTUNEMENT);
 
-        //TODO celestial gateway
-        ResearchNode resCelestialGateway = new ResearchNode(Items.APPLE, "CELESTIAL_GATEWAY", 7.5F, 1.5F)
+        ResearchNode resCelestialGateway = new ResearchNode(BlocksAS.GATEWAY, "CELESTIAL_GATEWAY", 7.5F, 1.5F)
                 .addPage(text("CELESTIAL_GATEWAY.1"))
-                //.addPage(recipe(BlocksAS.CELESTIAL_GATEWAY))
-                //.addTomeLookup(BlocksAS.CELESTIAL_GATEWAY, 1, ResearchProgression.ATTUNEMENT)
+                .addPage(recipe(BlocksAS.GATEWAY))
+                .addTomeLookup(BlocksAS.GATEWAY, 1, ResearchProgression.ATTUNEMENT)
                 .addPage(text("CELESTIAL_GATEWAY.3"))
-                //.addPage(structure(StructureTypesAS.PTYPE_CELESTIAL_GATEWAY))
+                .addPage(structure(StructureTypesAS.PTYPE_CELESTIAL_GATEWAY))
                 .register(ResearchProgression.ATTUNEMENT);
 
         ResearchNode resAltar3 = new ResearchNode(BlocksAS.ALTAR_CONSTELLATION, "ALTAR3", 7.25F, 0)

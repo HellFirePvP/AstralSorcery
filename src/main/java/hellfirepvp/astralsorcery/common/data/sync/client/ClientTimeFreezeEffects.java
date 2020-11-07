@@ -32,7 +32,7 @@ import java.util.*;
  */
 public class ClientTimeFreezeEffects extends ClientData<ClientTimeFreezeEffects> {
 
-    private Map<ResourceLocation, List<TimeStopEffectHelper>> clientActiveFreezeZones = new HashMap<>();
+    private final Map<ResourceLocation, List<TimeStopEffectHelper>> clientActiveFreezeZones = new HashMap<>();
 
     @Nonnull
     public List<TimeStopEffectHelper> getTimeStopEffects(World world) {

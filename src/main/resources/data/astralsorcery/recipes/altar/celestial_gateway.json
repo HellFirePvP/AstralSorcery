@@ -1,0 +1,47 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 1,
+  "duration": 200,
+  "starlight": 1400,
+  "pattern": [
+    "A___A",
+    "__D__",
+    "_EFE_",
+    "_BAB_",
+    "C___C"
+  ],
+  "key": {
+    "A": {
+      "tag": "astralsorcery:stardust"
+    },
+    "B": {
+      "item": "astralsorcery:marble_runed"
+    },
+    "C": {
+      "tag": "forge:ingots/gold"
+    },
+    "D": {
+      "item": "astralsorcery:nocturnal_powder"
+    },
+    "E": {
+      "item": "astralsorcery:glass_lens"
+    },
+    "F": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false,
+      "canBeAttuned": true,
+      "canBeCelestialCrystal": true
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:celestial_gateway",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

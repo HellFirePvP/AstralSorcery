@@ -25,7 +25,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.AltarRecipeEffectsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
@@ -255,10 +255,10 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
         this.getInputs().write(buffer);
         ByteBufUtils.writeOptional(buffer, this.getCustomRecipeType(), ByteBufUtils::writeResourceLocation);
 
-        ByteBufUtils.writeList(buffer, this.outputs, ByteBufUtils::writeItemStack);
+        ByteBufUtils.writeCollection(buffer, this.outputs, ByteBufUtils::writeItemStack);
         ByteBufUtils.writeOptional(buffer, this.getFocusConstellation(), ByteBufUtils::writeRegistryEntry);
-        ByteBufUtils.writeList(buffer, this.getRelayInputs(), (buf, ingredient) -> ingredient.getIngredient().write(buf));
-        ByteBufUtils.writeList(buffer, this.getCraftingEffects(), ByteBufUtils::writeRegistryEntry);
+        ByteBufUtils.writeCollection(buffer, this.getRelayInputs(), (buf, ingredient) -> ingredient.getIngredient().write(buf));
+        ByteBufUtils.writeCollection(buffer, this.getCraftingEffects(), ByteBufUtils::writeRegistryEntry);
         this.writeRecipeSync(buffer);
     }
 

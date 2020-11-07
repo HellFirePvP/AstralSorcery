@@ -88,4 +88,31 @@ public class BlockGeometry {
         return out;
     }
 
+    public static List<BlockPos> getVerticalCone(BlockPos offset, int flatRadius) {
+        List<BlockPos> out = new ArrayList<>();
+
+        int lX = offset.getX() - flatRadius;
+        int hX = offset.getX() + flatRadius;
+        int lZ = offset.getZ() - flatRadius;
+        int hZ = offset.getZ() + flatRadius;
+
+        for (int yy = offset.getY(); yy > 0; yy--) {
+            for (int xx = lX; xx <= hX; xx++) {
+                for (int zz = lZ; zz <= hZ; zz++) {
+
+                    float perc = (float) yy / offset.getY();
+                    float dstAllowed = flatRadius * perc;
+                    double dX = offset.getX() - xx;
+                    double dZ = offset.getZ() - zz;
+                    double dstCur = Math.sqrt(dX * dX + dZ * dZ);
+                    if (dstCur <= dstAllowed) {
+                        out.add(new BlockPos(xx, yy, zz));
+                    }
+                }
+            }
+        }
+
+        return out;
+    }
+
 }

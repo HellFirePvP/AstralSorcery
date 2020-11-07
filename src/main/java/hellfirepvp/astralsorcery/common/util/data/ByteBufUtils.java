@@ -23,6 +23,7 @@ import net.minecraft.state.Property;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -33,9 +34,11 @@ import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -74,7 +77,7 @@ public class ByteBufUtils {
         return new UUID(buf.readLong(), buf.readLong());
     }
 
-    public static <T> void writeList(PacketBuffer buf, @Nullable Collection<T> list, BiConsumer<PacketBuffer, T> iterationFct) {
+    public static <T> void writeCollection(PacketBuffer buf, @Nullable Collection<T> list, BiConsumer<PacketBuffer, T> iterationFct) {
         if (list != null) {
             buf.writeInt(list.size());
             list.forEach(e -> iterationFct.accept(buf, e));
@@ -85,15 +88,25 @@ public class ByteBufUtils {
 
     @Nullable
     public static <T> List<T> readList(PacketBuffer buf, Function<PacketBuffer, T> readFct) {
+        return readCollection(buf, ArrayList::new, List::add, readFct);
+    }
+
+    @Nullable
+    public static <T> Set<T> readSet(PacketBuffer buf, Function<PacketBuffer, T> readFct) {
+        return readCollection(buf, HashSet::new, Set::add, readFct);
+    }
+
+    @Nullable
+    public static <T, C extends Collection<T>> C readCollection(PacketBuffer buf, Supplier<C> newCollection, BiConsumer<C, T> addFn, Function<PacketBuffer, T> readFct) {
         int size = buf.readInt();
         if (size == -1) {
             return null;
         }
-        List<T> list = new ArrayList<>(size);
+        C collection = newCollection.get();
         for (int i = 0; i < size; i++) {
-            list.add(readFct.apply(buf));
+            addFn.accept(collection, readFct.apply(buf));
         }
-        return list;
+        return collection;
     }
 
     public static <K, V> void writeMap(PacketBuffer buf,
@@ -126,8 +139,16 @@ public class ByteBufUtils {
         return map;
     }
 
+    public static void writeTextComponent(PacketBuffer buf, ITextComponent cmp) {
+        writeString(buf, ITextComponent.Serializer.toJson(cmp));
+    }
+
+    public static ITextComponent readTextComponent(PacketBuffer buf) {
+        return ITextComponent.Serializer.fromJson(readString(buf));
+    }
+
     public static void writeString(PacketBuffer buf, String toWrite) {
-        byte[] str = toWrite.getBytes(Charset.forName("UTF-8"));
+        byte[] str = toWrite.getBytes(StandardCharsets.UTF_8);
         buf.writeInt(str.length);
         buf.writeBytes(str);
     }
@@ -136,7 +157,7 @@ public class ByteBufUtils {
         int length = buf.readInt();
         byte[] strBytes = new byte[length];
         buf.readBytes(strBytes, 0, length);
-        return new String(strBytes, Charset.forName("UTF-8"));
+        return new String(strBytes, StandardCharsets.UTF_8);
     }
 
     public static <T> void writeRegistryEntry(PacketBuffer buf, IForgeRegistryEntry<T> entry) {

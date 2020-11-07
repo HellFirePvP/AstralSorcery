@@ -40,6 +40,9 @@ public class RegistryStructureTypes {
         PTYPE_ENHANCED_COLLECTOR_CRYSTAL = registerAS("pattern_enhanced_collector_crystal", () -> StructuresAS.STRUCT_ENHANCED_COLLECTOR_CRYSTAL);
         PTYPE_SPECTRAL_RELAY = registerAS("pattern_spectral_relay", () -> StructuresAS.STRUCT_SPECTRAL_RELAY);
         PTYPE_ATTUNEMENT_ALTAR = registerAS("pattern_attunement_altar", () -> StructuresAS.STRUCT_ATTUNEMENT_ALTAR);
+        PTYPE_CELESTIAL_GATEWAY = registerAS("pattern_celestial_gateway", () -> StructuresAS.STRUCT_CELESTIAL_GATEWAY);
+        PTYPE_SINGULARITY = registerAS("pattern_singularity", () -> StructuresAS.STRUCT_SINGULARITY);
+        PTYPE_FOUNTAIN = registerAS("pattern_fountain", () -> StructuresAS.STRUCT_FOUNTAIN);
     }
 
     private static StructureType registerAS(String name, Supplier<BlockArray> structureSupplier) {

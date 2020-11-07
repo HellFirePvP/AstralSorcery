@@ -33,12 +33,8 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
-import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.handler.*;
-import hellfirepvp.astralsorcery.common.event.helper.EventHelperEnchantmentTick;
-import hellfirepvp.astralsorcery.common.event.helper.EventHelperInvulnerability;
-import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
-import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
+import hellfirepvp.astralsorcery.common.event.helper.*;
 import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
 import hellfirepvp.astralsorcery.common.item.armor.ArmorMaterialImbuedLeather;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -58,6 +54,7 @@ import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegist
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
+import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.DamageSourceUtil;
 import hellfirepvp.astralsorcery.common.util.ServerLifecycleListener;
@@ -83,6 +80,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -180,10 +178,11 @@ public class CommonProxy {
 
         this.serverLifecycleListeners.add(ResearchIOThread.startup());
         this.serverLifecycleListeners.add(ServerLifecycleListener.wrap(EventHandlerCache::onServerStart, EventHandlerCache::onServerStop));
-        this.serverLifecycleListeners.add(ServerLifecycleListener.start(CelestialGatewayHandler.INSTANCE::onServerStart));
-        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(BlockBreakHelper::clearServerCache));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.wrap(CelestialGatewayHandler.INSTANCE::onServerStart, CelestialGatewayHandler.INSTANCE::onServerStop));
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(PerkTree.PERK_TREE::setupServerPerkTree));
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(PerkLevelManager::loadPerkLevels));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(BlockBreakHelper::clearServerCache));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(TileTreeBeacon.TreeWatcher::clearServerCache));
 
         SyncDataHolder.initialize();
 
@@ -214,11 +213,13 @@ public class CommonProxy {
         EventHandlerMisc.attachListeners(eventBus);
         EventHelperSpawnDeny.attachListeners(eventBus);
         EventHelperInvulnerability.attachListeners(eventBus);
+        EventHelperEntityFreeze.attachListeners(eventBus);
         PerkAttributeLimiter.attachListeners(eventBus);
 
         eventBus.addListener(PlayerAmuletHandler::onEnchantmentAdd);
         eventBus.addListener(BlockDropCaptureAssist.INSTANCE::onDrop);
         eventBus.addListener(CelestialGatewayHandler.INSTANCE::onWorldInit);
+        eventBus.addListener(EventPriority.LOW, TileTreeBeacon.TreeWatcher::onGrow);
 
         tickManager.attachListeners(eventBus);
         TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);
@@ -244,12 +245,14 @@ public class CommonProxy {
         EventHelperTemporaryFlight.attachTickListener(registrar);
         EventHelperSpawnDeny.attachTickListener(registrar);
         EventHelperInvulnerability.attachTickListener(registrar);
+        EventHelperEntityFreeze.attachTickListener(registrar);
         PerkCooldownHelper.attachTickListeners(registrar);
     }
 
     protected void initializeConfigurations() {
         ConfigRegistries.getRegistries().addDataRegistry(FluidRarityRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(TechnicalEntityRegistry.INSTANCE);
+        ConfigRegistries.getRegistries().addDataRegistry(TileAccelerationBlacklistRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(AmuletEnchantmentRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(WeightedPerkAttributeRegistry.INSTANCE);
         ConfigRegistries.getRegistries().addDataRegistry(OreItemRarityRegistry.VOID_TRASH_REWARD);
@@ -258,6 +261,7 @@ public class CommonProxy {
         ConfigRegistries.getRegistries().addDataRegistry(EntityTransmutationRegistry.INSTANCE);
 
         ToolsConfig.CONFIG.newSubSection(WandsConfig.CONFIG);
+        MachineryConfig.CONFIG.newSubSection(TileTreeBeacon.Config.CONFIG);
 
         this.serverConfig.addConfigEntry(GeneralConfig.CONFIG);
         this.serverConfig.addConfigEntry(ToolsConfig.CONFIG);
@@ -267,6 +271,7 @@ public class CommonProxy {
         this.serverConfig.addConfigEntry(LogConfig.CONFIG);
         this.serverConfig.addConfigEntry(PerkConfig.CONFIG);
         this.serverConfig.addConfigEntry(AmuletRandomizeHelper.CONFIG);
+        this.serverConfig.addConfigEntry(MachineryConfig.CONFIG);
 
         RegistryPerks.initConfig(PerkConfig.CONFIG::newSubSection);
 
@@ -353,10 +358,6 @@ public class CommonProxy {
     }
 
     // Generic events
-
-    private void onClientInitialized(ClientInitializedEvent event) {
-
-    }
 
     private void onServerAboutToStart(FMLServerAboutToStartEvent event) {
         IResourceManager mgr = event.getServer().getDataPackRegistries().getResourceManager();

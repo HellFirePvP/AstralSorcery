@@ -79,7 +79,7 @@ public class BindableResource extends AbstractRenderableTexture.Full {
         if (this.resource == null) {
             allocateGlId();
         }
-        this.resource.bindTexture();
+        RenderSystem.bindTexture(this.resource.getGlTextureId());
     }
 
     @Override

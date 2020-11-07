@@ -10,6 +10,7 @@
   "sun_brightness_client": "coremods/sun_brightness_client.js",
   "add_missing_tag_enchantment_tooltip": "coremods/add_missing_tag_enchantment_tooltip.js",
   "add_enchantment_tooltip": "coremods/add_enchantment_tooltip.js",
+  "add_enchantment_condition": "coremods/add_enchantment_condition.js",
   "add_enchantment_helper_apply_modifier": "coremods/add_enchantment_helper_apply_modifier.js",
   "add_enchantment_helper_enchantments": "coremods/add_enchantment_helper_enchantments.js",
   "add_enchantment_helper_levels": "coremods/add_enchantment_helper_levels.js",

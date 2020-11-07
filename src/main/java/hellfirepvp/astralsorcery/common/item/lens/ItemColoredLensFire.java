@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
+import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -25,6 +26,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -74,8 +76,8 @@ public class ItemColoredLensFire extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
-            if (random.nextFloat() > beamStrength) {
+        public void entityInBeam(IWorld world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
+            if (world.isRemote() || random.nextFloat() > beamStrength) {
                 return;
             }
             if (entity instanceof ItemEntity) {
@@ -95,6 +97,13 @@ public class ItemColoredLensFire extends ItemColoredLens {
                     }
                 }
             } else if (entity instanceof LivingEntity) {
+                if (entity instanceof PlayerEntity) {
+                    if (!GeneralConfig.CONFIG.doColoredLensesAffectPlayers.get() ||
+                            entity.getServer() == null ||
+                            !entity.getServer().isPVPEnabled()) {
+                        return;
+                    }
+                }
                 entity.attackEntityFrom(DamageSource.ON_FIRE, 0.5F);
                 entity.setFire(3);
             }

@@ -44,7 +44,7 @@ public class BookLookupInfo {
     }
 
     public boolean canSee(PlayerProgress progress) {
-        return this.getResearchNode().canSee(progress) && progress.getResearchProgression().contains(this.neededKnowledge);
+        return this.getResearchNode().canSee(progress) && progress.hasResearch(this.neededKnowledge);
     }
 
     @OnlyIn(Dist.CLIENT)

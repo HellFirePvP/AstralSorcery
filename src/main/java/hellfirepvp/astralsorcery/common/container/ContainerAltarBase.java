@@ -8,13 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.container;
 
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -46,6 +48,9 @@ public abstract class ContainerAltarBase extends ContainerTileEntity<TileAltar> 
     abstract void bindAltarInventory(TileInventory altarInventory);
 
     abstract Optional<ItemStack> handleCustomTransfer(PlayerEntity player, int index);
+
+    //Yes this is not a pretty solution. tell me a better one.
+    public abstract int translateIndex(int fromIndex);
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
@@ -92,7 +97,7 @@ public abstract class ContainerAltarBase extends ContainerTileEntity<TileAltar> 
     @Override
     public boolean canInteractWith(PlayerEntity player) {
         BlockPos pos = this.getTileEntity().getPos();
-        if (this.getTileEntity().getWorld().getTileEntity(pos) != this.getTileEntity()) {
+        if (MiscUtils.getTileAt(this.getTileEntity().getWorld(), pos, TileEntity.class, false) != this.getTileEntity()) {
             return false;
         } else {
             return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;

@@ -1,9 +1,9 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2020
  *
- *  All rights reserved.
- *  The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- *  For further details, see the License file there.
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.client.event.effect;
@@ -52,7 +52,7 @@ public class LightbeamRenderHelper implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         ticksExisted++;
-        if (ticksExisted % 35 == 0) {
+        if (ticksExisted % 48 == 0) {
             ticksExisted = 0;
             Entity rView = Minecraft.getInstance().getRenderViewEntity();
             if (rView == null) {

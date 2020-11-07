@@ -26,7 +26,7 @@ import java.util.function.Consumer;
  */
 public abstract class ConfigEntry implements Consumer<ForgeConfigSpec.Builder> {
 
-    private Set<ConfigEntry> subSections = new HashSet<>();
+    private final Set<ConfigEntry> subSections = new HashSet<>();
     private final String path;
 
     private String subPath = "";

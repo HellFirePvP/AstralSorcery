@@ -10,18 +10,8 @@ pipeline {
 rm -rf AS-Example.zs perkMapDraft.pdn README.html README.md AstralSorcery'''
       }
     }
-    stage('Build only') {
+    stage('Build') {
       when {
-        not {
-          branch 'master'
-        }
-      }
-      steps {
-        sh '''./gradlew build'''
-      }
-    }
-    stage('Build and Publish') {
-      when{
         branch 'master'
       }
       steps {

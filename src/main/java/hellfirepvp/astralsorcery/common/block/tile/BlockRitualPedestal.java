@@ -132,17 +132,6 @@ public class BlockRitualPedestal extends BlockStarlightNetwork implements Custom
         return BlockRenderType.MODEL;
     }
 
-    @Override
-    public int getHarvestLevel(BlockState p_getHarvestLevel_1_) {
-        return 1;
-    }
-
-    @Nullable
-    @Override
-    public ToolType getHarvestTool(BlockState p_getHarvestTool_1_) {
-        return ToolType.PICKAXE;
-    }
-
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {

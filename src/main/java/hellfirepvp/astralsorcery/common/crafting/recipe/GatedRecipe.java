@@ -26,25 +26,24 @@ import javax.annotation.Nonnull;
  */
 public interface GatedRecipe {
 
-    public boolean hasProgressionServer(PlayerEntity player);
+    boolean hasProgressionServer(PlayerEntity player);
 
     @OnlyIn(Dist.CLIENT)
-    public boolean hasProgressionClient();
+    boolean hasProgressionClient();
 
     public interface Progression extends GatedRecipe {
 
         @Nonnull
         ResearchProgression getRequiredProgression();
 
-        default public boolean hasProgressionServer(PlayerEntity player) {
+        default boolean hasProgressionServer(PlayerEntity player) {
             return ResearchHelper.getProgress(player, LogicalSide.SERVER)
-                    .getResearchProgression().contains(getRequiredProgression());
+                    .hasResearch(getRequiredProgression());
         }
 
         @OnlyIn(Dist.CLIENT)
-        default public boolean hasProgressionClient() {
-            return ResearchHelper.getClientProgress().getResearchProgression().contains(getRequiredProgression());
+        default boolean hasProgressionClient() {
+            return ResearchHelper.getClientProgress().hasResearch(getRequiredProgression());
         }
-
     }
 }

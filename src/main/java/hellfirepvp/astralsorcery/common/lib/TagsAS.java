@@ -17,7 +17,8 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
-import static hellfirepvp.astralsorcery.common.base.Mods.*;
+import static hellfirepvp.astralsorcery.common.base.Mods.ASTRAL_SORCERY;
+import static hellfirepvp.astralsorcery.common.base.Mods.CURIOS;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,6 +41,8 @@ public class TagsAS {
     public static class Items {
 
         public static final ITag.INamedTag<Item> CURIOS_NECKLACE = itemTag(CURIOS, "necklace");
+
+        public static final Tag<Item> FORGE_GEM_AQUAMARINE = itemTagForge("gems/aquamarine");
 
         public static final ITag.INamedTag<Item> DUSTS_STARDUST = itemTag(ASTRAL_SORCERY, "stardust");
         public static final ITag.INamedTag<Item> INGOTS_STARMETAL = itemTag(ASTRAL_SORCERY, "starmetal");

@@ -28,9 +28,6 @@ import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Tuple;
@@ -56,7 +53,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
     private static final int FRAME_TEXTURE_SIZE = 16;
 
     private static final int randomStars = 220;
-    private List<Point.Float> usedStars = new ArrayList<>(randomStars);
+    private final List<Point.Float> usedStars = new ArrayList<>(randomStars);
     private final ContainerObservatory container;
 
     public ScreenObservatory(ContainerObservatory container) {
@@ -128,12 +125,12 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
 
     @Override
     public void render(int mouseX, int mouseY, float pTicks) {
+        RenderSystem.enableDepthTest();
         super.render(mouseX, mouseY, pTicks);
 
         Minecraft.getInstance().gameSettings.thirdPersonView = 0;
 
         double guiFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
-        this.changeZLevel(-10);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor(MathHelper.floor((FRAME_TEXTURE_SIZE - 2) * guiFactor),
                 MathHelper.floor((FRAME_TEXTURE_SIZE - 2) * guiFactor),
@@ -141,11 +138,8 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
                 MathHelper.floor((this.getGuiHeight() + 2) * guiFactor));
         this.drawObservatoryScreen(pTicks);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        this.changeZLevel(10);
 
-        this.changeZLevel(10);
-        drawFrame();
-        this.changeZLevel(-10);
+        this.drawFrame();
     }
 
     private void drawObservatoryScreen(float pTicks) {
@@ -165,9 +159,12 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
 
+        this.setBlitOffset(-10);
         this.drawSkyBackground(pTicks, canSeeSky, angleOpacity);
 
         if (!this.isInitialized()) {
+            this.setBlitOffset(0);
+
             Blending.DEFAULT.apply();
             RenderSystem.disableBlend();
             RenderSystem.enableAlphaTest();
@@ -188,7 +185,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
         if (ctx != null && canSeeSky) {
             Random gen = ctx.getDayRandom();
 
-            this.changeZLevel(1);
+            this.setBlitOffset(-9);
             TexturesAS.TEX_STAR_1.bindTexture();
             RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
                 for (Point.Float star : usedStars) {
@@ -204,9 +201,8 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
                             .draw();
                 }
             });
-            this.changeZLevel(-1);
 
-            this.changeZLevel(3);
+            this.setBlitOffset(-7);
             for (DrawArea area : this.getVisibleDrawAreas()) {
                 for (IConstellation cst : area.getDisplayMap().keySet()) {
                     ConstellationDisplayInformation info = area.getDisplayMap().get(cst);
@@ -243,19 +239,19 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
                     }
                 }
             }
-            this.changeZLevel(-3);
 
-            this.changeZLevel(5);
+            this.setBlitOffset(-5);
             this.renderDrawnLines(gen, pTicks);
-            this.changeZLevel(-5);
         }
 
+        this.setBlitOffset(0);
         Blending.DEFAULT.apply();
         RenderSystem.disableBlend();
         RenderSystem.enableAlphaTest();
     }
 
     private void drawFrame() {
+        this.setBlitOffset(10);
         TexturesAS.TEX_GUI_OBSERVATORY.bindTexture();
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
@@ -277,6 +273,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
             RenderingGuiUtils.rect(buf, this).at(0, FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, this.getGuiHeight())
                     .tex(0, 16F / 20F, 8F / 20F, 1F / 20F).draw();
         });
+        this.setBlitOffset(0);
     }
 
     private void drawSkyBackground(float pTicks, boolean canSeeSky, float angleOpacity) {

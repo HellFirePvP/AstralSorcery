@@ -104,7 +104,7 @@ public final class CrystalAttributes {
     }
 
     public boolean isEmpty() {
-        return this.crystalAttributes.isEmpty();
+        return this.getTotalTierLevel() <= 0;
     }
 
     public List<CrystalProperty> getProperties() {

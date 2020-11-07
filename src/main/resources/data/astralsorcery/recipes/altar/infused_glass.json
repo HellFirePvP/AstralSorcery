@@ -24,7 +24,8 @@
   "output": [
     {
       "item": "astralsorcery:infused_glass",
-      "count": 1
+      "count": 1,
+      "nbt": "{Damage:0}"
     }
   ],
   "effects": [

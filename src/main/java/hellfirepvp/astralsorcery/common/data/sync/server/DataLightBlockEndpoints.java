@@ -32,10 +32,10 @@ import java.util.*;
  */
 public class DataLightBlockEndpoints extends AbstractData {
 
-    private Map<ResourceLocation, Set<BlockPos>> serverPositions = new HashMap<>();
+    private final Map<ResourceLocation, Set<BlockPos>> serverPositions = new HashMap<>();
 
-    private Map<ResourceLocation, Map<BlockPos, Boolean>> serverChangeBuffer = new HashMap<>();
-    private Set<ResourceLocation> dimensionClearBuffer = new HashSet<>();
+    private final Map<ResourceLocation, Map<BlockPos, Boolean>> serverChangeBuffer = new HashMap<>();
+    private final Set<ResourceLocation> dimensionClearBuffer = new HashSet<>();
 
     private DataLightBlockEndpoints(ResourceLocation key) {
         super(key);

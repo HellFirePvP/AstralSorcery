@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,6 +29,7 @@ import java.awt.*;
 // These methods are exclusively called on clientside
 public interface TileAreaOfInfluence {
 
+    @OnlyIn(Dist.CLIENT)
     @Nullable
     public Color getEffectColor();
 

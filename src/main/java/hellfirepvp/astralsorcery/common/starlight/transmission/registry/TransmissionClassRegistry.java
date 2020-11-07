@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.Crys
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalTransmissionNode;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverAltar;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverRitualPedestal;
+import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverTreeBeacon;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverWell;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -66,8 +67,7 @@ public class TransmissionClassRegistry {
         register(new StarlightReceiverWell.Provider());
         register(new StarlightReceiverRitualPedestal.Provider());
         register(new StarlightReceiverAltar.Provider());
-        //init(new TileTreeBeacon.TreeBeaconReceiverProvider());
-        // TODO tree beacon
+        register(new StarlightReceiverTreeBeacon.Provider());
 
         MinecraftForge.EVENT_BUS.post(new StarlightNetworkEvent.TransmissionRegister(eventInstance));
     }

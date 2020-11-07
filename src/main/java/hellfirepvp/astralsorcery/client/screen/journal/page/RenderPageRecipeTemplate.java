@@ -29,6 +29,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.util.IngredientHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -80,7 +81,7 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
     }
 
     public void renderExpectedIngredientInput(float offsetX, float offsetY, float zLevel, double scale, long tickOffset, Ingredient ingredient) {
-        ItemStack expected = IngredientHelper.getRandomMatchingStack(ingredient, ClientScheduler.getClientTick() + tickOffset);
+        ItemStack expected = IngredientHelper.getRandomVisibleStack(ingredient, ClientScheduler.getClientTick() + tickOffset);
         if (!expected.isEmpty()) {
             BlockAtlasTexture.getInstance().bindTexture();
 
@@ -129,11 +130,15 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
     }
 
     protected void renderItemStack(float offsetX, float offsetY, float zLevel, double scale, ItemStack stack) {
+        RenderSystem.depthMask(true);
+
         RenderSystem.pushMatrix();
         RenderSystem.translated(offsetX, offsetY, zLevel + 60);
-        RenderSystem.scaled(scale, scale, scale);
+        RenderSystem.scaled(scale, scale, 1);
         RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), stack, 0, 0, null);
         RenderSystem.popMatrix();
+
+        RenderSystem.depthMask(false);
     }
 
     public boolean handleRecipeNameCopyClick(double mouseX, double mouseZ, SimpleAltarRecipe recipe) {
@@ -202,9 +207,9 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         List<ITextComponent> toolTip = new LinkedList<>();
         tooltipProvider.accept(toolTip);
         if (!toolTip.isEmpty() && this.thisFrameInfoStar.contains(mouseX, mouseY)) {
-            zLevel += 200;
+            zLevel += 600;
             RenderingDrawUtils.renderBlueTooltipComponents(offsetX, offsetY, zLevel, toolTip, RenderablePage.getFontRenderer(), false);
-            zLevel -= 200;
+            zLevel -= 600;
         }
     }
 

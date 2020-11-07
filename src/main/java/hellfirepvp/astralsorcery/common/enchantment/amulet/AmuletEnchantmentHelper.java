@@ -106,11 +106,15 @@ public class AmuletEnchantmentHelper {
             return null;
         }
 
+        ItemStack cmpThis = anyTool.copy();
+        cmpThis.setDamage(0);
+
         //Check if the player actually wears/carries the tool
         boolean foundTool = false;
         for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-            ItemStack stack = player.getItemStackFromSlot(slot);
-            if (ItemComparator.compare(stack, anyTool, ItemComparator.Clause.Sets.ITEMSTACK_STRICT)) {
+            ItemStack stack = player.getItemStackFromSlot(slot).copy();
+            stack.setDamage(0);
+            if (ItemComparator.compare(stack, cmpThis, ItemComparator.Clause.Sets.ITEMSTACK_STRICT)) {
                 foundTool = true;
                 break;
             }

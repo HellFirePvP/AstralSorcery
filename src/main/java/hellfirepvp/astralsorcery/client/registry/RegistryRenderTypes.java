@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -149,8 +157,8 @@ public class RegistryRenderTypes {
         EFFECT_FX_COLOR_SPHERE = createType("effect_fx_color_sphere", DefaultVertexFormats.POSITION_COLOR, GL11.GL_TRIANGLES, 32768,
                 RenderStateBuilder.builder()
                         .blend(Blending.DEFAULT)
+                        .disableTexture()
                         .alpha(0.00001F)
-                        .disableDepthMask()
                         .build());
     }
 
@@ -213,7 +221,15 @@ public class RegistryRenderTypes {
                         .enableOverlay()
                         .build());
 
-        MODEL_LENS = createType("model_lens", DefaultVertexFormats.ENTITY,
+        MODEL_LENS_SOLID = createType("model_lens", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_frame"))
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
+                        .build());
+
+        MODEL_LENS_GLASS = createType("model_lens_glass", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_frame"))
                         .blend(Blending.DEFAULT)
@@ -223,7 +239,15 @@ public class RegistryRenderTypes {
                         .enableOverlay()
                         .build());
 
-        MODEL_LENS_COLORED = createType("model_lens_colored", DefaultVertexFormats.ENTITY,
+        MODEL_LENS_COLORED_SOLID = createType("model_lens_colored", DefaultVertexFormats.ENTITY,
+                RenderStateBuilder.builder()
+                        .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_color"))
+                        .enableLighting()
+                        .enableDiffuseLighting()
+                        .enableOverlay()
+                        .build());
+
+        MODEL_LENS_COLORED_GLASS = createType("model_lens_colored_glass", DefaultVertexFormats.ENTITY,
                 RenderStateBuilder.builder()
                         .texture(AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "entity", "lens_color"))
                         .blend(Blending.DEFAULT)

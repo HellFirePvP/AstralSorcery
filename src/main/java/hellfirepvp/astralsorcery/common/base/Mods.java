@@ -32,6 +32,7 @@ public enum Mods {
     ASTRAL_SORCERY(AstralSorcery.MODID, true),
     DRACONIC_EVOLUTION("draconicevolution"),
     CURIOS("curios"),
+    JEI("jei"),
     BOTANIA("botania");
 
     private final String modid;
@@ -39,7 +40,7 @@ public enum Mods {
 
     //private static Class<?> gcPlayerClass, urPlayerClass;
 
-    private Mods(String modid) {
+    Mods(String modid) {
         this(modid, ModList.get().isLoaded(modid));
     }
 

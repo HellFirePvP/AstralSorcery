@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
+import com.mojang.datafixers.util.Either;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
@@ -20,6 +21,7 @@ import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
@@ -73,13 +75,13 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
     @Nullable
     @Override
     public ListEntries.CounterMaxEntry recreateElement(CompoundNBT tag, BlockPos pos) {
-        return null;
+        return new ListEntries.CounterMaxEntry(pos, 1);
     }
 
     @Nullable
     @Override
     public ListEntries.CounterMaxEntry createElement(World world, BlockPos pos) {
-        return null;
+        return new ListEntries.CounterMaxEntry(pos, 1);
     }
 
     @Override
@@ -89,19 +91,20 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
 
         Vector3 at = new Vector3(pos).add(0.5, 0.5, 0.5);
         at.addY(prop.getSize() * 0.75F);
-        at.add(Vector3.random().setY(0).multiply(rand.nextFloat() * prop.getSize()));
+        for (int i = 0; i < Math.max(1, prop.getSize() / 6); i++) {
+            Vector3 vec = at.clone().add(Vector3.random().setY(0).multiply(rand.nextFloat() * prop.getSize()));
 
-        Color c = MiscUtils.eitherOf(rand,
-                () -> ColorsAS.CONSTELLATION_OCTANS,
-                () -> ColorsAS.CONSTELLATION_OCTANS.darker(),
-                () -> ColorsAS.CONSTELLATION_OCTANS.darker().darker());
-        EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                .spawn(at)
-                .alpha(VFXAlphaFunction.FADE_OUT)
-                .color(VFXColorFunction.constant(c))
-                .setScaleMultiplier(0.5F + rand.nextFloat() * 0.2F)
-                .setGravityStrength(0.0025F)
-                .setMaxAge(50 + rand.nextInt(20));
+            Color c = MiscUtils.eitherOf(rand,
+                    () -> ColorsAS.CONSTELLATION_OCTANS,
+                    () -> ColorsAS.CONSTELLATION_OCTANS.darker());
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(vec)
+                    .alpha(VFXAlphaFunction.FADE_OUT)
+                    .color(VFXColorFunction.constant(c))
+                    .setScaleMultiplier(0.6F + rand.nextFloat() * 0.3F)
+                    .setGravityStrength(0.0004F + rand.nextFloat() * 0.0008F)
+                    .setMaxAge(100 + rand.nextInt(60));
+        }
     }
 
     @Override
@@ -113,9 +116,9 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
         boolean update = false;
         if (properties.isCorrupted()) {
             corruptedSkipWaterCheck = true;
-            ListEntries.CounterMaxEntry entry = this.peekNewPosition(world, pos, properties);
+            Either<ListEntries.CounterMaxEntry, BlockPos> newEntry = this.peekNewPosition(world, pos, properties);
             corruptedSkipWaterCheck = false;
-            if (entry != null) {
+            return newEntry.mapLeft(entry -> {
                 BlockState state = world.getBlockState(entry.getPos());
                 BlockPos offset = entry.getPos().subtract(pos);
                 if (world.isAirBlock(entry.getPos()) &&
@@ -126,7 +129,7 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
                         }
                         world.neighborChanged(entry.getPos(), Blocks.WATER, entry.getPos());
                     }
-                } else if (state.getBlock() instanceof FlowingFluidBlock) {
+                } else if (BlockUtils.isFluidBlock(state)) {
                     if (state.getBlock() == Blocks.WATER) {
                         if (rand.nextInt(100) == 0) {
                             spawnFishingDropsAt((ServerWorld) world, entry.getPos());
@@ -135,9 +138,8 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
                         world.setBlockState(entry.getPos(), Blocks.SAND.getDefaultState());
                     }
                 }
-                update = true;
-            }
-            return update;
+                return true;
+            }).left().orElse(false);
         }
 
         ListEntries.CounterMaxEntry entry = getRandomElementChanced();
@@ -146,6 +148,7 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
                 if (!verifier.test(world, entry.getPos(), world.getBlockState(entry.getPos()))) {
                     removeElement(entry);
                 } else {
+                    sendConstellationPing(world, new Vector3(entry.getPos()).add(0.5, 1, 0.5));
                     int count = entry.getCounter();
                     count++;
                     entry.setCounter(count);
@@ -154,7 +157,8 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
                         int min = Math.min(CONFIG.minFishTickTime.get(), CONFIG.maxFishTickTime.get());
                         int max = Math.max(CONFIG.minFishTickTime.get(), CONFIG.maxFishTickTime.get());
 
-                        entry.setMaxCount(min + rand.nextInt(max - min + 1));
+                        int diff = Math.max(1, max - min + 1);
+                        entry.setMaxCount(min + rand.nextInt(diff));
                         entry.setCounter(0);
 
                         spawnFishingDropsAt((ServerWorld) world, entry.getPos());
@@ -164,7 +168,9 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
             }
         }
 
-        if (findNewPosition(world, pos, properties) != null) {
+        if (findNewPosition(world, pos, properties)
+                .ifRight(attemptedPos -> sendConstellationPing(world, new Vector3(attemptedPos).add(0.5, 0.5, 0.5)))
+                .left().isPresent()) {
             update = true;
         }
         return update;

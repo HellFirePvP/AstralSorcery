@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.datagen.data.recipes.builder.SimpleShapedRecipe
 import hellfirepvp.astralsorcery.datagen.data.recipes.builder.StoneCuttingRecipeBuilder;
 import net.minecraft.data.CustomRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.SingleItemRecipeBuilder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -218,7 +217,7 @@ public class VanillaTypedRecipeProvider {
     }
 
     public static void registerCustomRecipes(Consumer<IFinishedRecipe> registrar) {
-        CustomRecipeBuilder.customRecipe(RecipeSerializersAS.CUSTOM_CHANGE_WAND_COLOR_SERIALIZER).build(registrar, AstralSorcery.key("change_wand_color").toString());
+        CustomRecipeBuilder.customRecipe(RecipeSerializersAS.CUSTOM_CHANGE_WAND_COLOR_SERIALIZER).build(registrar, RecipeSerializersAS.CUSTOM_CHANGE_WAND_COLOR.toString());
+        CustomRecipeBuilder.customRecipe(RecipeSerializersAS.CUSTOM_CHANGE_GATEWAY_COLOR_SERIALIZER).build(registrar, RecipeSerializersAS.CUSTOM_CHANGE_GATEWAY_COLOR.toString());
     }
-
 }

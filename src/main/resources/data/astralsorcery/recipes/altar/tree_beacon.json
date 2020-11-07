@@ -1,0 +1,48 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 2,
+  "duration": 400,
+  "starlight": 2400,
+  "pattern": [
+    "_____",
+    "_ABA_",
+    "_ACA_",
+    "_ADA_",
+    "EE_EE"
+  ],
+  "key": {
+    "A": {
+      "tag": "minecraft:leaves"
+    },
+    "B": {
+      "item": "astralsorcery:resonating_gem"
+    },
+    "C": {
+      "tag": "minecraft:saplings"
+    },
+    "D": {
+      "type": "astralsorcery:fluid",
+      "fluid": [
+        {
+          "fluid": "astralsorcery:liquid_starlight",
+          "amount": 1000
+        }
+      ]
+    },
+    "E": {
+      "item": "astralsorcery:marble_runed"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:tree_beacon",
+      "count": 1
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

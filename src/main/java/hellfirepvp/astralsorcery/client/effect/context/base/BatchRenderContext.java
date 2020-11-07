@@ -25,6 +25,7 @@ import hellfirepvp.observerlib.client.util.RenderTypeDecorator;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.math.vector.Vector3d;
+import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -42,6 +43,7 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
 
     private final int id;
     private final SpriteSheetResource sprite;
+    private boolean drawWithTexture = true;
     protected RenderType renderType;
     protected BiFunction<BatchRenderContext<T>, Vector3, T> particleCreator;
 
@@ -75,6 +77,11 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
         return this.particleCreator.apply(this, pos);
     }
 
+    public BatchRenderContext<T> setDrawWithTexture(boolean drawWithTexture) {
+        this.drawWithTexture = drawWithTexture;
+        return this;
+    }
+
     public SpriteSheetResource getSprite() {
         return sprite;
     }
@@ -86,20 +93,23 @@ public class BatchRenderContext<T extends EntityVisualFX> extends OrderSortable 
                 .filter(effect -> effect.getEffect() instanceof EntityDynamicFX)
                 .forEach(effect -> ((EntityDynamicFX) effect.getEffect()).renderNow(blankCtx, renderStack, drawBuffer, pTicks));
 
-        RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(this.getRenderType(), () -> {
-            RenderSystem.enableTexture();
-            this.getSprite().bindTexture();
-        }, () -> {
-            BlockAtlasTexture.getInstance().bindTexture();
-            RenderSystem.disableTexture();
-        });
-        IVertexBuilder buf = drawBuffer.getBuffer(decorated);
+        RenderType drawType = this.getRenderType();
+        if (this.drawWithTexture) {
+            drawType = RenderTypeDecorator.wrapSetup(this.getRenderType(), () -> {
+                RenderSystem.enableTexture();
+                this.getSprite().bindTexture();
+            }, () -> {
+                BlockAtlasTexture.getInstance().bindTexture();
+                RenderSystem.disableTexture();
+            });
+        }
+        IVertexBuilder buf = drawBuffer.getBuffer(drawType);
         effects.forEach(effect -> effect.getEffect().render(this, renderStack, buf, pTicks));
         this.drawBatched(buf, drawBuffer);
     }
 
     private void drawBatched(IVertexBuilder buf, IDrawRenderTypeBuffer renderTypeBuffer) {
-        if (buf instanceof BufferBuilder) {
+        if (buf instanceof BufferBuilder && this.getRenderType().getDrawMode() == GL11.GL_QUADS) {
             Vector3d view = RenderInfo.getInstance().getARI().getProjectedView();
             ((BufferBuilder) buf).sortVertexData((float) view.x, (float) view.y, (float) view.z);
         }

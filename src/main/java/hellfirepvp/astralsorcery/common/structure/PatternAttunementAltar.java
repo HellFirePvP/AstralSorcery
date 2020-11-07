@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.structure;
 
 import hellfirepvp.astralsorcery.common.block.marble.BlockMarblePillar;
@@ -7,6 +15,7 @@ import hellfirepvp.observerlib.api.block.MatchableState;
 import hellfirepvp.observerlib.api.block.SimpleMatchableBlock;
 import hellfirepvp.observerlib.api.util.PatternBlockArray;
 import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -29,7 +38,7 @@ public class PatternAttunementAltar extends PatternBlockArray {
         BlockState arch = BlocksAS.MARBLE_ARCH.getDefaultState();
         BlockState sooty = BlocksAS.BLACK_MARBLE_RAW.getDefaultState();
 
-        addBlock(BlocksAS.ATTUNEMENT_ALTAR.getDefaultState(), 0, 0, 0);
+        addBlock(BlocksAS.ATTUNEMENT_ALTAR, BlockPos.ZERO);
 
         addBlockCube(arch, -7, -1, -8,  7, -1, -8);
         addBlockCube(arch, -7, -1,  8,  7, -1,  8);

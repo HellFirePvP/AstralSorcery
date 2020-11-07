@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.gateway.CelestialGatewayHandle
 import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
 import hellfirepvp.astralsorcery.common.network.base.ASLoginPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,10 +20,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,7 +31,7 @@ import java.util.Map;
  */
 public class PktLoginSyncGateway extends ASLoginPacket<PktLoginSyncGateway> {
 
-    private Map<ResourceLocation, List<GatewayCache.GatewayNode>> positions = new HashMap<>();
+    private Map<ResourceLocation, Collection<GatewayCache.GatewayNode>> positions = new HashMap<>();
 
     public PktLoginSyncGateway() {}
 
@@ -49,13 +47,8 @@ public class PktLoginSyncGateway extends ASLoginPacket<PktLoginSyncGateway> {
         return (packet, buffer) -> {
             buffer.writeInt(packet.positions.size());
             for (ResourceLocation dim : packet.positions.keySet()) {
-                List<GatewayCache.GatewayNode> gatewayNodes = packet.positions.get(dim);
                 ByteBufUtils.writeResourceLocation(buffer, dim);
-                buffer.writeInt(gatewayNodes.size());
-                for (GatewayCache.GatewayNode node : gatewayNodes) {
-                    ByteBufUtils.writePos(buffer, node);
-                    ByteBufUtils.writeString(buffer, node.getDisplayName());
-                }
+                ByteBufUtils.writeCollection(buffer, packet.positions.get(dim), (buf, node) -> node.write(buf));
             }
         };
     }
@@ -68,14 +61,7 @@ public class PktLoginSyncGateway extends ASLoginPacket<PktLoginSyncGateway> {
             int dimSize = buffer.readInt();
             for (int i = 0; i < dimSize; i++) {
                 ResourceLocation dim = ByteBufUtils.readResourceLocation(buffer);
-                int nodeCount = buffer.readInt();
-                for (int j = 0; j < nodeCount; j++) {
-                    GatewayCache.GatewayNode newNode =
-                            new GatewayCache.GatewayNode(
-                                    ByteBufUtils.readPos(buffer),
-                                    ByteBufUtils.readString(buffer));
-                    pkt.positions.computeIfAbsent(dim, (ii) -> new LinkedList<>()).add(newNode);
-                }
+                pkt.positions.put(dim, ByteBufUtils.readList(buffer, GatewayCache.GatewayNode::read));
             }
             return pkt;
         };

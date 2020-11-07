@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.auxiliary.link;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -78,12 +79,22 @@ public interface LinkableTileEntity {
     }
 
     /**
-     * Informs of a successful link creation, however it is handled.
-     * Can only happen after tryLink() returned true to mark a successful link creation.
+     * Informs of a successful link creation.
+     * Can only happen after tryLinkBlock() returned true to mark a successful link creation.
      *
      * @param player the player that created the link.
+     * @param other the new location linked to.
      */
-    public void onLinkCreate(PlayerEntity player, BlockPos other);
+    public void onBlockLinkCreate(PlayerEntity player, BlockPos other);
+
+    /**
+     * Informs of a successful link creation.
+     * Can only happen after tryLinkEntity() returned true to mark a successful link creation.
+     *
+     * @param player the player that created the link.
+     * @param linked the new entity linked to.
+     */
+    public void onEntityLinkCreate(PlayerEntity player, LivingEntity linked);
 
     /**
      * Informs that a player right-clicked the tile to start the linking process.
@@ -104,14 +115,23 @@ public interface LinkableTileEntity {
     }
 
     /**
-     * Called when a player right-clicks any other block while in link mode
-     * and this tile's onSelect()
+     * Called when a player right-clicks this tile and then links another block.
      *
      * @param player the player trying to create the link.
      * @param other the other block this tile is supposed to link to.
      * @return true, if and only if a allowed/correct link can be created, false otherwise
      */
-    public boolean tryLink(PlayerEntity player, BlockPos other);
+    public boolean tryLinkBlock(PlayerEntity player, BlockPos other);
+
+    /**
+     * Called when a player right-clicks any entity and then right-clicks this tile,
+     * indicating trying to link this player to this tile.
+     *
+     * @param player the player trying to create the link.
+     * @param other the other entity to link to this block tile.
+     * @return true, if and only if a allowed/correct link can be created, false otherwise
+     */
+    public boolean tryLinkEntity(PlayerEntity player, LivingEntity other);
 
     /**
      * Called when a player shift-right-clicks a block that is linked to this tile.

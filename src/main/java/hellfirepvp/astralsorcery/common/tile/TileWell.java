@@ -74,7 +74,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
 
         this.tank = new PrecisionSingleFluidTank(TANK_SIZE);
         this.tank.setAllowInput(false);
-        this.tank.setOnUpdate(this::markForUpdate);
+        this.tank.addUpdateFunction(this::markForUpdate);
         this.access = new FluidTankAccess();
         this.access.putTank(0, tank, Direction.DOWN);
 

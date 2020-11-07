@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.util.block;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -51,12 +52,21 @@ public class BlockUtils {
 
     @Nonnull
     public static List<ItemStack> getDrops(ServerWorld world, BlockPos pos, int harvestFortune, Random rand) {
-        BlockState state;
+        return getDrops(world, pos, harvestFortune, rand, ItemStack.EMPTY);
+    }
+
+    @Nonnull
+    public static List<ItemStack> getDrops(ServerWorld world, BlockPos pos, int harvestFortune, Random rand, ItemStack tool) {
+        return getDrops(world, pos, world.getBlockState(pos), harvestFortune, rand, tool);
+    }
+
+    @Nonnull
+    public static List<ItemStack> getDrops(ServerWorld world, BlockPos pos, BlockState state, int harvestFortune, Random rand, ItemStack tool) {
         LootContext.Builder builder = new LootContext.Builder(world)
                 .withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos))
-                .withParameter(LootParameters.BLOCK_STATE, (state = world.getBlockState(pos)))
-                .withParameter(LootParameters.TOOL, ItemStack.EMPTY)
-                .withNullableParameter(LootParameters.BLOCK_ENTITY, world.getTileEntity(pos))
+                .withParameter(LootParameters.BLOCK_STATE, state)
+                .withParameter(LootParameters.TOOL, tool)
+                .withNullableParameter(LootParameters.BLOCK_ENTITY, MiscUtils.getTileAt(world, pos, TileEntity.class, true))
                 .withRandom(rand)
                 .withLuck(harvestFortune);
         return state.getDrops(builder);
@@ -71,7 +81,7 @@ public class BlockUtils {
         return it;
     }
 
-    public static boolean isReplaceable(World world, BlockPos pos){
+    public static boolean isReplaceable(World world, BlockPos pos) {
         return isReplaceable(world, pos, world.getBlockState(pos));
     }
 
@@ -81,6 +91,14 @@ public class BlockUtils {
         }
         BlockItemUseContext ctx = TestBlockUseContext.getHandContext(world, null, Hand.MAIN_HAND, pos, Direction.UP);
         return state.isReplaceable(ctx);
+    }
+
+    public static boolean isFluidBlock(World world, BlockPos pos) {
+        return isFluidBlock(world.getBlockState(pos));
+    }
+
+    public static boolean isFluidBlock(BlockState state) {
+        return state == state.getFluidState().getBlockState();
     }
 
     @Nullable
@@ -147,10 +165,15 @@ public class BlockUtils {
     //Duplicate break functionality without a active player.
     //Emulates a FakePlayer - attempts without a player as harvester in case a fakeplayer leads to issues.
     public static boolean breakBlockWithoutPlayer(ServerWorld world, BlockPos pos) {
-        return breakBlockWithoutPlayer(world, pos, world.getBlockState(pos), ItemStack.EMPTY, true, false, true);
+        return breakBlockWithoutPlayer(world, pos, world.getBlockState(pos), ItemStack.EMPTY, true, false);
     }
 
+    @Deprecated
     public static boolean breakBlockWithoutPlayer(ServerWorld world, BlockPos pos, BlockState stateBroken, ItemStack heldItem, boolean breakBlock, boolean ignoreHarvestRestrictions, boolean playEffects) {
+        return breakBlockWithoutPlayer(world, pos, stateBroken, heldItem, breakBlock, ignoreHarvestRestrictions);
+    }
+
+    public static boolean breakBlockWithoutPlayer(ServerWorld world, BlockPos pos, BlockState stateBroken, ItemStack heldItem, boolean breakBlock, boolean ignoreHarvestRestrictions) {
         FakePlayer fakePlayer = AstralSorcery.getProxy().getASFakePlayerServer(world);
         int xp;
         try {
@@ -173,8 +196,6 @@ public class BlockUtils {
             return false;
         }
 
-        TileEntity tileentity = world.getTileEntity(pos);
-
         if (heldItem.onBlockStartBreak(pos, fakePlayer)) {
             return false;
         }
@@ -193,10 +214,6 @@ public class BlockUtils {
             heldCopy.onBlockDestroyed(world, stateBroken, pos, fakePlayer);
         } catch (Exception exc) {
             return false;
-        }
-
-        if (playEffects) {
-            world.playEvent(null, 2001, pos, Block.getStateId(stateBroken));
         }
 
         boolean wasCapturingStates = world.captureBlockSnapshots;
@@ -221,6 +238,7 @@ public class BlockUtils {
 
         if (harvestable) {
             try {
+                TileEntity tileentity = MiscUtils.getTileAt(world, pos, TileEntity.class, true);
                 ItemStack harvestStack = heldCopy.isEmpty() ? ItemStack.EMPTY : heldCopy.copy();
                 stateBroken.getBlock().harvestBlock(world, fakePlayer, pos, stateBroken, tileentity, harvestStack);
             } catch (Exception exc) {
@@ -236,7 +254,9 @@ public class BlockUtils {
         try {
             //Capturing block snapshots is aids. don't try that at home kids.
             world.captureBlockSnapshots = false;
+            world.restoringBlockSnapshots = true;
             world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
+            world.restoringBlockSnapshots = false;
             world.capturedBlockSnapshots.forEach((s) -> world.setBlockState(s.getPos(), Blocks.AIR.getDefaultState()));
         } finally {
             BlockDropCaptureAssist.getCapturedStacksAndStop(); //Discard
@@ -251,7 +271,11 @@ public class BlockUtils {
 
     private static void restoreWorldState(World world, boolean prevCaptureFlag, List<BlockSnapshot> prevSnapshots) {
         world.captureBlockSnapshots = false;
+
+        world.restoringBlockSnapshots = true;
         world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
+        world.restoringBlockSnapshots = false;
+
         world.capturedBlockSnapshots.clear();
 
         world.captureBlockSnapshots = prevCaptureFlag;

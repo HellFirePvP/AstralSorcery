@@ -1,9 +1,9 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2020
  *
- *  All rights reserved.
- *  The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- *  For further details, see the License file there.
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
@@ -48,7 +48,7 @@ public class MantleEffectVicio extends MantleEffect {
         super.tickServer(player);
 
         PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if (prog.hasPerkEffect(p -> p instanceof KeyMantleFlight) && prog.doPerkAbilities() &&
+        if (prog.hasPerkEffect(p -> p instanceof KeyMantleFlight) &&
                 AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
             boolean prev = player.abilities.allowFlying;
             player.abilities.allowFlying = true;
@@ -68,7 +68,7 @@ public class MantleEffectVicio extends MantleEffect {
     protected void tickClient(PlayerEntity player) {
         super.tickClient(player);
 
-        if (player.isElytraFlying() || (!player.isCreative() && player.abilities.isFlying)) {
+        if (player.isElytraFlying() || (!(player.isCreative() || player.isSpectator()) && player.abilities.isFlying)) {
             if (Minecraft.getInstance().gameSettings.thirdPersonView == 1) {
                 this.playCapeSparkles(player, 0.1F);
             } else {
@@ -83,7 +83,7 @@ public class MantleEffectVicio extends MantleEffect {
     @Override
     @OnlyIn(Dist.CLIENT)
     protected FXFacingParticle spawnFacingParticle(PlayerEntity player, Vector3 at) {
-        if (player.isElytraFlying() || (!player.isCreative() && player.abilities.isFlying)) {
+        if (player.isElytraFlying() || (!(player.isCreative() || player.isSpectator()) && player.abilities.isFlying)) {
             at.subtract(player.getMotion().mul(1.5, 1.5, 1.5));
         }
         return super.spawnFacingParticle(player, at);
@@ -92,8 +92,13 @@ public class MantleEffectVicio extends MantleEffect {
     public static boolean isUsableElytra(ItemStack elytraStack, PlayerEntity wearingEntity) {
         if (elytraStack.getItem() instanceof ItemMantle) {
             MantleEffect effect = ItemMantle.getEffect(wearingEntity, ConstellationsAS.vicio);
-            PlayerProgress progress = ResearchHelper.getProgress(wearingEntity, LogicalSide.SERVER);
-            return effect != null && (!progress.hasPerkEffect(p -> p instanceof KeyMantleFlight) || !progress.doPerkAbilities());
+            PlayerProgress progress;
+            if (wearingEntity.getEntityWorld().isRemote()) {
+                progress = ResearchHelper.getClientProgress();
+            } else {
+                progress = ResearchHelper.getProgress(wearingEntity, LogicalSide.SERVER);
+            }
+            return effect != null && !progress.hasPerkEffect(p -> p instanceof KeyMantleFlight);
         }
         return false;
     }

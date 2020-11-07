@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantment;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
-import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
+import hellfirepvp.astralsorcery.common.item.base.client.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -41,7 +41,7 @@ import java.util.*;
  */
 public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor {
 
-    private static Random rand = new Random();
+    private static final Random rand = new Random();
 
     public ItemEnchantmentAmulet() {
         super(new Properties()
@@ -87,7 +87,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor {
             return color.get();
         }
         int tick = (int) (ClientScheduler.getClientTick() % 500000L);
-        int c = Color.getHSBColor((tick / 500000F) * 360F, 0.7F, 1F).getRGB();
+        int c = Color.getHSBColor(tick / 500000F, 0.7F, 1F).getRGB();
         return c | 0xFF000000;
     }
 
@@ -113,8 +113,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor {
         if (rand.nextInt(400) == 0) {
             tag.putInt("amuletColor", 0xFFFFFFFF);
         } else {
-            float hue = rand.nextFloat() * 360F;
-            tag.putInt("amuletColor", Color.getHSBColor(hue, 0.7F, 1.0F).getRGB() | 0xFF000000);
+            tag.putInt("amuletColor", Color.getHSBColor(rand.nextFloat(), 0.7F, 1.0F).getRGB() | 0xFF000000);
         }
     }
 

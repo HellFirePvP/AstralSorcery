@@ -1,0 +1,66 @@
+{
+  "type": "astralsorcery:altar",
+  "altar_type": 3,
+  "duration": 600,
+  "starlight": 4000,
+  "pattern": [
+    "ABBBA",
+    "ACDCA",
+    "AEFEA",
+    "_CFC_",
+    "_____"
+  ],
+  "key": {
+    "A": {
+      "item": "astralsorcery:infused_wood_planks"
+    },
+    "B": {
+      "item": "astralsorcery:black_marble_raw"
+    },
+    "C": {
+      "tag": "astralsorcery:starmetal"
+    },
+    "D": {
+      "type": "astralsorcery:crystal",
+      "hasToBeAttuned": false,
+      "hasToBeCelestial": false,
+      "canBeAttuned": true,
+      "canBeCelestialCrystal": true
+    },
+    "E": {
+      "tag": "forge:ingots/gold"
+    },
+    "F": {
+      "item": "astralsorcery:resonating_gem"
+    }
+  },
+  "output": [
+    {
+      "item": "astralsorcery:fountain",
+      "count": 1
+    }
+  ],
+  "relay_inputs": [
+    {
+      "tag": "forge:gems/aquamarine"
+    },
+    {
+      "tag": "astralsorcery:stardust"
+    },
+    {
+      "tag": "forge:gems/aquamarine"
+    },
+    {
+      "tag": "astralsorcery:stardust"
+    }
+  ],
+  "effects": [
+    "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:built_in_effect_trait_relay_highlight",
+    "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:built_in_effect_trait_focus_circle",
+    "astralsorcery:altar_default_sparkle",
+    "astralsorcery:built_in_effect_constellation_lines",
+    "astralsorcery:built_in_effect_attunement_sparkle"
+  ]
+}

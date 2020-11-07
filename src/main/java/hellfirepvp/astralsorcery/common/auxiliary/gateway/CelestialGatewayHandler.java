@@ -8,24 +8,26 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary.gateway;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
 import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktUpdateGateways;
+import hellfirepvp.astralsorcery.common.util.SidedReference;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,8 +42,7 @@ public class CelestialGatewayHandler {
     private CelestialGatewayFilter filter = null;
     private boolean startUp = false;
 
-    private Map<ResourceLocation, List<GatewayCache.GatewayNode>> serverCache = new HashMap<>();
-    private Map<ResourceLocation, List<GatewayCache.GatewayNode>> clientCache = new HashMap<>();
+    private final SidedReference<Map<ResourceLocation, Collection<GatewayCache.GatewayNode>>> cache = new SidedReference<>();
 
     private CelestialGatewayHandler() {}
 
@@ -50,6 +51,54 @@ public class CelestialGatewayHandler {
             filter = new CelestialGatewayFilter();
         }
         return filter;
+    }
+
+    public void addPosition(IWorld world, GatewayCache.GatewayNode node) {
+        if (world.isRemote()) {
+            return;
+        }
+
+        ResourceLocation dimKey = world.getDimension().getType().getRegistryName();
+        if (!cache.getData(LogicalSide.SERVER).map(map -> map.get(dimKey)).isPresent()) {
+            forceLoad(world.getDimension().getType());
+        }
+
+        Optional<Collection<GatewayCache.GatewayNode>> worldData = cache.getData(LogicalSide.SERVER).map(map -> map.get(dimKey));
+        if (!worldData.isPresent()) {
+            AstralSorcery.log.info("Couldn't add gateway at " + node.getPos() + " - loading the world failed.");
+            return;
+        }
+        Collection<GatewayCache.GatewayNode> nodes = worldData.get();
+
+        getFilter().addDim(dimKey);
+        if (!nodes.contains(node)) {
+            nodes.add(node);
+            syncToAll();
+        }
+    }
+
+    public void removePosition(IWorld world, BlockPos pos) {
+        if (world.isRemote()) {
+            return;
+        }
+
+        ResourceLocation dimKey = world.getDimension().getType().getRegistryName();
+        Optional<Collection<GatewayCache.GatewayNode>> worldData = cache.getData(LogicalSide.SERVER).map(map -> map.get(dimKey));
+        if (!worldData.isPresent()) {
+            return;
+        }
+        Collection<GatewayCache.GatewayNode> nodes = worldData.get();
+        if (nodes.removeIf(node -> node.getPos().equals(pos))) {
+            if (nodes.isEmpty()) {
+                getFilter().removeDim(dimKey);
+            }
+            syncToAll();
+        }
+    }
+
+    private void forceLoad(DimensionType type) {
+        MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+        srv.getWorld(type);
     }
 
     public void onServerStart() {
@@ -68,6 +117,10 @@ public class CelestialGatewayHandler {
         startUp = false;
     }
 
+    public void onServerStop() {
+        this.cache.setData(LogicalSide.SERVER, null);
+    }
+
     public void onWorldInit(WorldEvent.Load event) {
         if (this.startUp) {
             return; //We're already loading up there.
@@ -79,27 +132,45 @@ public class CelestialGatewayHandler {
         }
 
         this.loadIntoCache((World) world);
+        this.syncToAll();
+    }
 
+    public void syncToAll() {
         PktUpdateGateways pkt = new PktUpdateGateways(this.getGatewayCache(LogicalSide.SERVER));
         PacketChannel.CHANNEL.sendToAll(pkt);
     }
 
-    public List<GatewayCache.GatewayNode> getGatewaysForWorld(World world, LogicalSide side) {
-        return (side == LogicalSide.SERVER ? serverCache : clientCache).get(world.func_234923_W_().func_240901_a_());
+    public Collection<GatewayCache.GatewayNode> getGatewaysForWorld(World world, LogicalSide side) {
+        return this.cache.getData(side)
+                .map(data -> data.getOrDefault(world.func_234923_W_().func_240901_a_(), Collections.emptyList()))
+                .orElse(Collections.emptyList());
     }
 
-    public Map<ResourceLocation, List<GatewayCache.GatewayNode>> getGatewayCache(LogicalSide side) {
-        return Collections.unmodifiableMap(side == LogicalSide.SERVER ? serverCache : clientCache);
+    public Map<ResourceLocation, Collection<GatewayCache.GatewayNode>> getGatewayCache(LogicalSide side) {
+        return this.cache.getData(side).orElse(Collections.emptyMap());
+    }
+
+    @Nullable
+    public GatewayCache.GatewayNode getGatewayNode(IWorld world, LogicalSide side, BlockPos pos) {
+        return this.cache.getData(side)
+                .map(data -> data.get(world.getDimension().getType().getRegistryName()))
+                .orElse(Collections.emptyList())
+                .stream()
+                .filter(node -> node.getPos().equals(pos))
+                .findFirst()
+                .orElse(null);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void updateClientCache(Map<ResourceLocation, List<GatewayCache.GatewayNode>> positions) {
-        this.clientCache = positions;
+    public void updateClientCache(@Nullable Map<ResourceLocation, Collection<GatewayCache.GatewayNode>> positions) {
+        this.cache.setData(LogicalSide.CLIENT, positions);
     }
 
     private void loadIntoCache(World world) {
         GatewayCache cache = DataAS.DOMAIN_AS.getData(world, DataAS.KEY_GATEWAY_CACHE);
-        this.serverCache.put(world.func_234923_W_().func_240901_a_(), cache.getGatewayPositions());
+        Map<ResourceLocation, Collection<GatewayCache.GatewayNode>> gatewayCache = this.cache.getData(LogicalSide.SERVER).orElse(new HashMap<>());
+        gatewayCache.put(world.func_234923_W_().func_240901_a_(), new HashSet<>(cache.getGatewayPositions()));
+        this.cache.setData(LogicalSide.SERVER, gatewayCache);
     }
 
 }

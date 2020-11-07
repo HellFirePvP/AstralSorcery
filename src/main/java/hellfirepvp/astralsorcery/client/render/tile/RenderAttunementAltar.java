@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelAttunementAltar;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
@@ -36,12 +35,10 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
 
     @Override
     public void render(TileAttunementAltar tile, float pTicks, MatrixStack renderStack, IRenderTypeBuffer renderTypeBuffer, int combinedLight, int combinedOverlay) {
-        IVertexBuilder buf = renderTypeBuffer.getBuffer(MODEL_ATTUNEMENT_ALTAR.getGeneralType());
-
         renderStack.push();
         renderStack.translate(0.5, 0.5, 0.5);
         renderStack.rotate(Vector3f.XP.rotationDegrees(180));
-        MODEL_ATTUNEMENT_ALTAR.render(renderStack, buf, combinedLight, combinedOverlay);
+        MODEL_ATTUNEMENT_ALTAR.render(renderStack, renderTypeBuffer, combinedLight, combinedOverlay);
         renderStack.pop();
 
         float spinDur = TileAttunementAltar.MAX_START_ANIMATION_SPIN;
@@ -87,7 +84,7 @@ public class RenderAttunementAltar extends CustomTileEntityRenderer<TileAttuneme
             renderStack.push();
             renderStack.translate(0.5, framePosY, 0.5);
             renderStack.rotate(Vector3f.XP.rotationDegrees(180));
-            MODEL_ATTUNEMENT_ALTAR.renderHovering(renderStack, buf, combinedLight, combinedOverlay, 1F, 1F, 1F, 1F, xOffset, zOffset, rotation);
+            MODEL_ATTUNEMENT_ALTAR.renderHovering(renderStack, renderTypeBuffer.getBuffer(MODEL_ATTUNEMENT_ALTAR.getGeneralType()), combinedLight, combinedOverlay, 1F, 1F, 1F, 1F, xOffset, zOffset, rotation);
             renderStack.pop();
         }
     }

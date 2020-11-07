@@ -30,7 +30,7 @@ public class ModelLensColored extends CustomModel {
     public ModelRenderer fitting1;
 
     public ModelLensColored() {
-        super((resKey) -> RenderTypesAS.MODEL_LENS_COLORED);
+        super((resKey) -> RenderTypesAS.MODEL_LENS_COLORED_SOLID);
         this.textureWidth = 32;
         this.textureHeight = 16;
         this.glass = new ModelRenderer(this, 0, 0);

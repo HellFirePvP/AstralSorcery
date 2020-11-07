@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlockProperties;
 import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
-import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
+import hellfirepvp.astralsorcery.common.item.base.client.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
@@ -30,7 +30,9 @@ import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.useables.*;
 import hellfirepvp.astralsorcery.common.item.wand.*;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
+import hellfirepvp.astralsorcery.common.util.dispenser.FluidContainerDispenseBehavior;
 import net.minecraft.block.Block;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -52,7 +54,7 @@ import static hellfirepvp.astralsorcery.common.lib.ItemsAS.*;
  */
 public class RegistryItems {
 
-    private static List<ItemDynamicColor> colorItems = Lists.newArrayList();
+    private static final List<ItemDynamicColor> colorItems = Lists.newArrayList();
 
     private RegistryItems() {}
 
@@ -129,6 +131,10 @@ public class RegistryItems {
     @OnlyIn(Dist.CLIENT)
     public static void registerColors(ColorHandlerEvent.Item itemColorEvent) {
         colorItems.forEach(item -> itemColorEvent.getItemColors().register(item::getColor, (Item) item));
+    }
+
+    public static void registerDispenseBehaviors() {
+        DispenserBlock.registerDispenseBehavior(BUCKET_LIQUID_STARLIGHT, FluidContainerDispenseBehavior.getInstance());
     }
 
     private static void registerItemBlock(CustomItemBlock block) {

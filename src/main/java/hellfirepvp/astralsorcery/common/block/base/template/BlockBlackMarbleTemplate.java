@@ -28,16 +28,4 @@ public class BlockBlackMarbleTemplate extends Block implements CustomItemBlock {
     public BlockBlackMarbleTemplate() {
         super(PropertiesMarble.defaultBlackMarble());
     }
-
-    @Override
-    public int getHarvestLevel(BlockState state) {
-        return 1;
-    }
-
-    @Nullable
-    @Override
-    public ToolType getHarvestTool(BlockState state) {
-        return ToolType.PICKAXE;
-    }
-
 }

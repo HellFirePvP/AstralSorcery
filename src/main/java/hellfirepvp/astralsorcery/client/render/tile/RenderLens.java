@@ -10,13 +10,13 @@ package hellfirepvp.astralsorcery.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelLens;
 import hellfirepvp.astralsorcery.client.model.builtin.ModelLensColored;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileLens;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.math.BlockPos;
@@ -222,16 +222,15 @@ public class RenderLens extends CustomTileEntityRenderer<TileLens> {
         MODEL_LENS_COLORED.detail1_1.rotateAngleX = pitch * 0.017453292F;
         MODEL_LENS_COLORED.detail1.  rotateAngleX = pitch * 0.017453292F;
 
-        RenderType type = MODEL_LENS_COLORED.getGeneralType();
-        IVertexBuilder buf = buffer.getBuffer(type);
-        MODEL_LENS_COLORED.renderGlass(renderStack, buf, combinedLight, combinedOverlay, c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
-        MODEL_LENS_COLORED.render(renderStack, buf, combinedLight, combinedOverlay);
-        RenderingUtils.refreshDrawing(buf, type);
+        IVertexBuilder vb = buffer.getBuffer(RenderTypesAS.MODEL_LENS_COLORED_GLASS);
+        MODEL_LENS_COLORED.renderGlass(renderStack, vb, combinedLight, combinedOverlay, c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
+        RenderingUtils.refreshDrawing(vb, RenderTypesAS.MODEL_LENS_COLORED_GLASS);
+        MODEL_LENS_COLORED.render(renderStack, buffer, combinedLight, combinedOverlay);
     }
 
     private void renderLens(MatrixStack renderStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay, float pitch) {
         MODEL_LENS.lens.rotateAngleX = pitch * 0.017453292F;
 
-        MODEL_LENS.render(renderStack, buffer.getBuffer(MODEL_LENS.getGeneralType()), combinedLight, combinedOverlay);
+        MODEL_LENS.render(renderStack, buffer, combinedLight, combinedOverlay);
     }
 }

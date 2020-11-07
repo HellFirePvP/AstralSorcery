@@ -48,11 +48,12 @@ public final class EffectHandler {
 
     private boolean cleanRequested = false;
     private boolean acceptsNewEffects = false; //Wait for 1st tick to finish.
-    private List<PendingEffect> toAddBuffer = Lists.newLinkedList();
+    private final List<PendingEffect> toAddBuffer = Lists.newLinkedList();
 
-    private AlternatingSet<FXSource<?, ?>> sources = new AlternatingSet<>();
+    private final AlternatingSet<FXSource<?, ?>> sources = new AlternatingSet<>();
+    private final Map<BatchRenderContext<?>, List<PendingEffect>> effectMap = Maps.newLinkedHashMap();
+
     private List<BatchRenderContext<?>> orderedEffects = null;
-    private Map<BatchRenderContext<?>, List<PendingEffect>> effectMap = Maps.newHashMap();
 
     private EffectHandler() {}
 
@@ -87,10 +88,11 @@ public final class EffectHandler {
         this.acceptsNewEffects = true;
     }
 
-    void tick() {
+    void tick() throws IOException {
         if (this.cleanRequested) {
             this.toAddBuffer.clear();
             this.sources.clear();
+            this.effectMap.values().forEach(effects -> effects.stream().map(PendingEffect::getEffect).forEach(EntityComplexFX::flagAsRemoved));
             this.effectMap.values().forEach(List::clear);
             this.cleanRequested = false;
         }
@@ -125,17 +127,15 @@ public final class EffectHandler {
             }
         });
 
-        try {
-            this.sources.forEach(src -> {
-                src.tick();
-                src.tickSpawnFX(new EffectRegistrar(src));
-                if (src.canRemove()) {
-                    src.flagAsRemoved();
-                    return false;
-                }
-                return true;
-            });
-        } catch (IOException ignored) {}
+        this.sources.forEach(src -> {
+            src.tick();
+            src.tickSpawnFX(new EffectRegistrar(src));
+            if (src.canRemove()) {
+                src.flagAsRemoved();
+                return false;
+            }
+            return true;
+        });
 
         this.acceptsNewEffects = true;
 
@@ -153,7 +153,6 @@ public final class EffectHandler {
         } else {
             this.toAddBuffer.add(pendingEffect);
         }
-        pendingEffect.getEffect().setActive();
     }
 
     private void registerUnsafe(PendingEffect pendingEffect) {
@@ -161,10 +160,11 @@ public final class EffectHandler {
             return;
         }
         EntityVisualFX effect = pendingEffect.getEffect();
-        BatchRenderContext ctx = pendingEffect.getProperties().getContext();
+        BatchRenderContext<?> ctx = pendingEffect.getProperties().getContext();
         pendingEffect.getProperties().applySpecialEffects(effect);
 
         this.effectMap.get(ctx).add(pendingEffect);
+        effect.setActive();
     }
 
     private boolean mayAcceptParticle(EffectProperties<?> properties) {
@@ -218,5 +218,4 @@ public final class EffectHandler {
             return effect;
         }
     }
-
 }

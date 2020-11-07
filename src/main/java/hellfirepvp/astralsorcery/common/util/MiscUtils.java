@@ -12,6 +12,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.lib.GameRulesAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.block.BlockState;
@@ -81,16 +82,25 @@ public class MiscUtils {
     }
 
     public static boolean canEntityTickAt(IWorld world, BlockPos pos) {
-        if (!world.getChunkProvider().isChunkLoaded(new ChunkPos(pos))) {
+        ChunkPos chPos = new ChunkPos(pos);
+        if (!world.getChunkProvider().isChunkLoaded(chPos)) {
             return false;
         }
-        BlockPos test = new BlockPos(pos.getX(), 0, pos.getZ());
-        boolean isForced = false;
-        if (world instanceof ServerWorld) {
-            isForced = ((ServerWorld) world).getForcedChunks().contains(new ChunkPos(test).asLong());
+        if (world.isRemote() || !(world instanceof ServerWorld)) {
+            //Assume if a chunk is present and loaded on the client that it is valid for the client.
+            return true;
         }
-        int range = isForced ? 0 : 32;
-        return world.isAreaLoaded(test, range);
+        ServerChunkProvider chunkProvider = ((ServerWorld) world).getChunkProvider();
+        return !chunkProvider.chunkManager.isOutsideSpawningRadius(chPos);
+    }
+
+    public static List<BlockSnapshot> captureBlockChanges(World world, Runnable r) {
+        world.captureBlockSnapshots = true;
+        r.run();
+        world.captureBlockSnapshots = false;
+        List<BlockSnapshot> blockSnapshots = (List<BlockSnapshot>) world.capturedBlockSnapshots.clone();
+        world.capturedBlockSnapshots.clear();
+        return blockSnapshots;
     }
 
     @Nullable
@@ -140,24 +150,42 @@ public class MiscUtils {
         return item != null ? item.getValue() : null;
     }
 
-    public static <T, V extends Comparable<V>> V getMaxEntry(Collection<T> elements, Function<T, V> valueFunction) {
+    public static <T, V extends Comparable<V>> T getMaxEntry(Collection<T> elements, Function<T, V> valueFunction) {
         V max = null;
+        T maxElement = null;
         for (T element : elements) {
             V val = valueFunction.apply(element);
             if (max == null || max.compareTo(val) < 0) {
                 max = val;
+                maxElement = element;
             }
         }
-        return max;
+        return maxElement;
+    }
+
+    public static <T, V extends Comparable<V>> T getMinEntry(Collection<T> elements, Function<T, V> valueFunction) {
+        V min = null;
+        T minElement = null;
+        for (T element : elements) {
+            V val = valueFunction.apply(element);
+            if (min == null || min.compareTo(val) > 0) {
+                min = val;
+                minElement = element;
+            }
+        }
+        return minElement;
     }
 
     public static boolean canSeeSky(World world, BlockPos at, boolean loadChunk, boolean defaultValue) {
-        //if (world.getGameRules().getBoolean(GameRulesAS.IGNORE_SKYLIGHT_CHECK_RULE)) {
-        //    return true;
-        //}
+        if (world.getGameRules().getBoolean(GameRulesAS.IGNORE_SKYLIGHT_CHECK_RULE)) {
+            return true;
+        }
 
         if (!world.getChunkProvider().isChunkLoaded(new ChunkPos(at)) && !loadChunk) {
             return defaultValue;
+        }
+        if (!world.getDimension().hasSkyLight()) {
+            return true;
         }
         return world.canBlockSeeSky(at);
     }
@@ -180,6 +208,17 @@ public class MiscUtils {
 
     public static <T, P, R> Function<P, R> apply(BiFunction<T, P, R> func, Supplier<T> supply) {
         return p -> func.apply(supply.get(), p);
+    }
+
+    public static <T, V> Function<T, V> nullFunction(Runnable run) {
+        return nullFunction((v) -> run.run());
+    }
+
+    public static <T, V> Function<T, V> nullFunction(Consumer<T> run) {
+        return (t) -> {
+            run.accept(t);
+            return null;
+        };
     }
 
     public static <T> Supplier<T> nullSupplier(Runnable run) {
@@ -419,6 +458,15 @@ public class MiscUtils {
         return out;
     }
 
+    public static Vector3 getRandomCirclePosition(Vector3 centerOffset, Vector3 axis, double radius) {
+        return getCirclePosition(centerOffset, axis, radius, Math.random() * 360);
+    }
+
+    public static Vector3 getCirclePosition(Vector3 centerOffset, Vector3 axis, double radius, double degree) {
+        Vector3 circleVec = axis.clone().perpendicular().normalize().multiply(radius);
+        return circleVec.rotate(Math.toRadians(degree), axis.clone()).add(centerOffset);
+    }
+
     @Nullable
     public static BlockRayTraceResult rayTraceLookBlock(PlayerEntity player) {
         return rayTraceLookBlock(player, player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue());
@@ -479,6 +527,17 @@ public class MiscUtils {
         target.addX(rand.nextFloat() * multiplier * (rand.nextBoolean() ? 1 : -1));
         target.addY(rand.nextFloat() * multiplier * (rand.nextBoolean() ? 1 : -1));
         target.addZ(rand.nextFloat() * multiplier * (rand.nextBoolean() ? 1 : -1));
+    }
+
+    public static void applyRandomCircularOffset(Vector3 target, Random rand) {
+        applyRandomOffset(target, rand, 1F);
+    }
+
+    public static void applyRandomCircularOffset(Vector3 target, Random rand, float multiplier) {
+        Vector3 v = Vector3.random().normalize().multiply(rand.nextFloat() * multiplier);
+        target.addX(v.getX() * (rand.nextBoolean() ? 1 : -1));
+        target.addY(v.getY() * (rand.nextBoolean() ? 1 : -1));
+        target.addZ(v.getZ() * (rand.nextBoolean() ? 1 : -1));
     }
 
     public static void executeWithChunk(IWorldReader world, ChunkPos pos, Runnable run) {

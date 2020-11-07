@@ -51,10 +51,10 @@ import java.util.*;
  */
 public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.ChunkNetworkData> {
 
-    private Map<BlockPos, IIndependentStarlightSource> starlightSources = new HashMap<>();
+    private final Map<BlockPos, IIndependentStarlightSource> starlightSources = new HashMap<>();
     private Collection<Tuple<BlockPos, IIndependentStarlightSource>> cachedSourceTuples = null;
 
-    private Set<BlockPos> queueRemoval = new HashSet<>();
+    private final Set<BlockPos> queueRemoval = new HashSet<>();
 
     public LightNetworkBuffer(WorldCacheDomain.SaveKey<?> key) {
         super(key, PRECISION_CHUNK);
@@ -82,26 +82,24 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
             IIndependentStarlightSource source = entry.getValue();
 
             MiscUtils.executeWithChunk(world, pos, () -> {
-                TileEntity te = world.getTileEntity(pos); //Safe to do now.
+                IStarlightSource<?> te = MiscUtils.getTileAt(world, pos, IStarlightSource.class, true);
                 if (te != null) {
-                    if (te instanceof IStarlightSource) {
-                        if (((IStarlightSource) te).needsToRefreshNetworkChain()) {
-                            if (handle != null) {
-                                handle.breakSourceNetwork(source);
-                            }
-                            ((IStarlightSource) te).markChainRebuilt();
+                    if (te.needsToRefreshNetworkChain()) {
+                        if (handle != null) {
+                            handle.breakSourceNetwork(source);
                         }
-                    } else {
-                        BlockState actual = world.getBlockState(pos);
-                        AstralSorcery.log.warn("Cached source at " + pos + " but didn't find the TileEntity!");
-                        AstralSorcery.log.warn("Purging cache entry and removing erroneous block!");
-                        AstralSorcery.log.warn("Block that gets purged: " + BlockStateHelper.serialize(actual));
-                        iterator.remove();
-                        if (world.setBlockState(pos, actual.getFluidState().getBlockState())) {
-                            ChunkNetworkData data = getSection(pos);
-                            if (data != null) {
-                                data.removeSourceTile(pos);
-                            }
+                        te.markChainRebuilt();
+                    }
+                } else {
+                    BlockState actual = world.getBlockState(pos);
+                    AstralSorcery.log.warn("Cached source at " + pos + " but didn't find the TileEntity!");
+                    AstralSorcery.log.warn("Purging cache entry and removing erroneous block!");
+                    AstralSorcery.log.warn("Block that gets purged: " + BlockStateHelper.serialize(actual));
+                    iterator.remove();
+                    if (world.setBlockState(pos, actual.getFluidState().getBlockState())) {
+                        ChunkNetworkData data = getSection(pos);
+                        if (data != null) {
+                            data.removeSourceTile(pos);
                         }
                     }
                 }
@@ -120,13 +118,12 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
             for (ChunkNetworkData data : getSections()) {
                 for (ChunkSectionNetworkData secData : data.sections.values()) {
                     for (IPrismTransmissionNode node : secData.getAllTransmissionNodes()) {
-                        TileEntity te = world.getTileEntity(node.getLocationPos());
-                        if (!(te instanceof IStarlightTransmission)) {
+                        IStarlightTransmission<?> te = MiscUtils.getTileAt(world, node.getLocationPos(), IStarlightTransmission.class, true);
+                        if (te == null) {
                             invalidRemoval.add(node);
                             continue;
                         }
-                        IStarlightTransmission ism = (IStarlightTransmission) te;
-                        IPrismTransmissionNode newNode = ism.provideTransmissionNode(node.getLocationPos());
+                        IPrismTransmissionNode newNode = te.provideTransmissionNode(node.getLocationPos());
                         if (!node.getClass().isAssignableFrom(newNode.getClass())) {
                             invalidRemoval.add(node);
                             continue;
@@ -243,7 +240,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
     }
 
     //Network changing
-    public void addSource(IStarlightSource source, BlockPos pos) {
+    public void addSource(IStarlightSource<?> source, BlockPos pos) {
         ChunkNetworkData data = getOrCreateSection(pos);
         data.addSourceTile(pos, source);
 
@@ -269,7 +266,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
         }
     }
 
-    public void addTransmission(IStarlightTransmission transmission, BlockPos pos) {
+    public void addTransmission(IStarlightTransmission<?> transmission, BlockPos pos) {
         ChunkNetworkData data = getOrCreateSection(pos);
         data.addTransmissionTile(pos, transmission);
 
@@ -313,7 +310,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
     }
 
     @Nullable
-    private IIndependentStarlightSource addIndependentSource(BlockPos pos, IStarlightSource source) {
+    private IIndependentStarlightSource addIndependentSource(BlockPos pos, IStarlightSource<?> source) {
         this.cachedSourceTuples = null;
 
         IPrismTransmissionNode node = source.getNode();
@@ -332,7 +329,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
 
     public static class ChunkNetworkData extends WorldSection {
 
-        private Map<Integer, ChunkSectionNetworkData> sections = new HashMap<>();
+        private final Map<Integer, ChunkSectionNetworkData> sections = new HashMap<>();
 
         ChunkNetworkData(int sX, int sZ) {
             super(sX, sZ);
@@ -405,13 +402,13 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
             section.removeTransmissionTile(pos);
         }
 
-        private void addSourceTile(BlockPos pos, IStarlightSource source) {
+        private void addSourceTile(BlockPos pos, IStarlightSource<?> source) {
             int yLevel = (pos.getY() & 255) >> 4;
             ChunkSectionNetworkData section = getOrCreateSection(yLevel);
             section.addSourceTile(pos, source);
         }
 
-        private void addTransmissionTile(BlockPos pos, IStarlightTransmission transmission) {
+        private void addTransmissionTile(BlockPos pos, IStarlightTransmission<?> transmission) {
             int yLevel = (pos.getY() & 255) >> 4;
             ChunkSectionNetworkData section = getOrCreateSection(yLevel);
             section.addTransmissionTile(pos, transmission);
@@ -421,7 +418,7 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
 
     public static class ChunkSectionNetworkData {
 
-        private Map<BlockPos, IPrismTransmissionNode> nodes = new HashMap<>();
+        private final Map<BlockPos, IPrismTransmissionNode> nodes = new HashMap<>();
 
         private static ChunkSectionNetworkData loadFromNBT(ListNBT sectionData) {
             ChunkSectionNetworkData netData = new ChunkSectionNetworkData();
@@ -502,17 +499,17 @@ public class LightNetworkBuffer extends SectionWorldData<LightNetworkBuffer.Chun
             nodes.remove(pos);
         }
 
-        private void addSourceTile(BlockPos pos, IStarlightSource source) {
+        private void addSourceTile(BlockPos pos, IStarlightSource<?> source) {
             //sourceTiles.put(pos, source);
             addNode(pos, source);
         }
 
-        private void addTransmissionTile(BlockPos pos, IStarlightTransmission transmission) {
+        private void addTransmissionTile(BlockPos pos, IStarlightTransmission<?> transmission) {
             //transmissionTiles.put(pos, transmission);
             addNode(pos, transmission);
         }
 
-        private void addNode(BlockPos pos, IStarlightTransmission transmission) {
+        private void addNode(BlockPos pos, IStarlightTransmission<?> transmission) {
             nodes.put(pos, transmission.provideTransmissionNode(pos));
         }
 

@@ -38,7 +38,7 @@ import java.util.List;
 public class WorldNetworkHandler {
 
     private final LightNetworkBuffer buffer;
-    private World world;
+    private final World world;
 
     public WorldNetworkHandler(LightNetworkBuffer lightNetworkBuffer, World world) {
         this.buffer = lightNetworkBuffer;
@@ -155,34 +155,34 @@ public class WorldNetworkHandler {
         return buffer.getAllSources();
     }
 
-    public void removeSource(IStarlightSource source) {
+    public void removeSource(IStarlightSource<?> source) {
         removeThisSourceFromNext(source);
         removeThisNextFromSources(source);
 
         buffer.removeSource(source.getTrPos());
     }
 
-    public void removeTransmission(IStarlightTransmission transmission) {
+    public void removeTransmission(IStarlightTransmission<?> transmission) {
         removeThisSourceFromNext(transmission);
         removeThisNextFromSources(transmission);
 
         buffer.removeTransmission(transmission.getTrPos());
     }
 
-    public void addNewSourceTile(IStarlightSource source) {
+    public void addNewSourceTile(IStarlightSource<?> source) {
         buffer.addSource(source, source.getTrPos());
 
         linkNextToThisSources(source);
     }
 
-    public void addTransmissionTile(IStarlightTransmission transmission) {
+    public void addTransmissionTile(IStarlightTransmission<?> transmission) {
         buffer.addTransmission(transmission, transmission.getTrPos());
 
         linkNextToThisSources(transmission);
     }
 
     //For all sources of this "tr" inform the transmission system that the connection might've changed.
-    private void removeThisNextFromSources(IStarlightTransmission tr) {
+    private void removeThisNextFromSources(IStarlightTransmission<?> tr) {
         TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(getWorld());
         if (handle == null) return;
 
@@ -204,7 +204,7 @@ public class WorldNetworkHandler {
 
     //What it does: For all "next"'s of this "tr" inform them that "tr" has been removed and
     //thus remove "tr" from their sources.
-    private void removeThisSourceFromNext(IStarlightTransmission tr) {
+    private void removeThisSourceFromNext(IStarlightTransmission<?> tr) {
         IPrismTransmissionNode node = tr.getNode();
         if (node == null) {
             AstralSorcery.log.warn("Could not find transmission node for Transmission tile '" + tr.getClass().getSimpleName() + "'");
@@ -231,7 +231,7 @@ public class WorldNetworkHandler {
     //That's what i call resource intensive.
     //What it does: Checks if there is a Node that has a "next" at this "tr"'s position.
     //If yes, it'll add that node as source for this "tr" to make backwards find possible.
-    private void linkNextToThisSources(IStarlightTransmission tr) {
+    private void linkNextToThisSources(IStarlightTransmission<?> tr) {
         IPrismTransmissionNode node = tr.getNode();
         if (node == null) {
             AstralSorcery.log.warn("Previously added Transmission tile '" + tr.getClass().getSimpleName() + "' didn't create a Transmission node!");

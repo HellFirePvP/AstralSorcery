@@ -53,7 +53,7 @@ public class PktEngraveGlass extends ASPacket<PktEngraveGlass> {
         return (packet, buffer) -> {
             ByteBufUtils.writeResourceLocation(buffer, packet.dim);
             ByteBufUtils.writePos(buffer, packet.pos);
-            ByteBufUtils.writeList(buffer, packet.constellations, (buf, cst) -> {
+            ByteBufUtils.writeCollection(buffer, packet.constellations, (buf, cst) -> {
                 buf.writeInt(cst.getPoint().x);
                 buf.writeInt(cst.getPoint().y);
                 ByteBufUtils.writeRegistryEntry(buf, cst.getConstellation());

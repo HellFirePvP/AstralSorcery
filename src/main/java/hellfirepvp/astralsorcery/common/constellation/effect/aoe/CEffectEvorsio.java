@@ -80,9 +80,13 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float alphaMultiplier, boolean extended) {
+        float addY = 1F;
+        if (!pedestal.getPos().equals(pos)) {
+            addY = 0F;
+        }
         Vector3 motion = Vector3.random().multiply(0.1);
         EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                .spawn(new Vector3(pos).add(0.5, 1.5, 0.5))
+                .spawn(new Vector3(pos).add(0.5, 0.5, 0.5).addY(addY))
                 .alpha(VFXAlphaFunction.FADE_OUT)
                 .setMotion(motion)
                 .color(VFXColorFunction.constant(ColorsAS.CONSTELLATION_EVORSIO))
@@ -96,8 +100,7 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
             return false;
         }
 
-        ListEntries.PosEntry newEntry = this.peekNewPosition(world, pos, properties);
-        if (newEntry != null) {
+        return this.peekNewPosition(world, pos, properties).mapLeft(newEntry -> {
             BlockPos at = newEntry.getPos();
 
             if (properties.isCorrupted()) {
@@ -132,10 +135,14 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
                         captured.forEach((stack) -> ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, stack));
                     }
                     return true;
+                } else {
+                    sendConstellationPing(world, new Vector3(at).add(0.5, 0.5, 0.5));
                 }
             }
-        }
-        return false;
+            return false;
+        }).ifRight(attemptedBreak -> {
+            sendConstellationPing(world, new Vector3(attemptedBreak).add(0.5, 0.5, 0.5));
+        }).left().orElse(false);
     }
 
     private boolean canBreakBlock(World world, BlockPos pos, BlockState state, Collection<BlockState> blacklist) {

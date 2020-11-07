@@ -11,14 +11,10 @@ package hellfirepvp.astralsorcery.common.item.crystal;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,7 +23,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * Created by HellFirePvP
  * Date: 21.07.2019 / 13:38
  */
-public class ItemAttunedRockCrystal extends ItemAttunedCrystalBase implements ItemGatedVisibility {
+public class ItemAttunedRockCrystal extends ItemAttunedCrystalBase {
 
     public ItemAttunedRockCrystal() {
         super(new Properties()
@@ -43,12 +39,6 @@ public class ItemAttunedRockCrystal extends ItemAttunedCrystalBase implements It
                 items.add(stack);
             }
         }
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean isSupposedToSeeInRender(ItemStack stack) {
-        return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT);
     }
 
     @Override

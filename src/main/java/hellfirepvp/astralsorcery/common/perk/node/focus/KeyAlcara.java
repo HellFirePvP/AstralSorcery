@@ -10,18 +10,10 @@ package hellfirepvp.astralsorcery.common.perk.node.focus;
 
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
-import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
-import hellfirepvp.astralsorcery.common.lib.PerkConvertersAS;
-import hellfirepvp.astralsorcery.common.perk.PerkConverter;
-import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.node.ConstellationPerk;
-import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod

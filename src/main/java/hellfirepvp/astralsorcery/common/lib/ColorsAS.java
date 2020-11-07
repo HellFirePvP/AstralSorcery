@@ -51,10 +51,11 @@ public class ColorsAS {
     public static final Color SPECTRAL_TOOL         = new Color(0x5C2EEC);
     public static final Color RESONATOR_STARFIELD   = new Color(0x00063A);
 
-    public static final Color CONSTELLATION_TYPE_MAJOR = new Color(40, 67, 204);
-    public static final Color CONSTELLATION_TYPE_WEAK  = new Color(67, 44, 176);
-    public static final Color CONSTELLATION_TYPE_MINOR = new Color(93, 25, 127);
-    public static final Color CONSTELLATION_TYPE_BLANK = new Color(0xCC666666);
+    public static final Color CONSTELLATION_TYPE_MAJOR  = new Color(40, 67, 204);
+    public static final Color CONSTELLATION_TYPE_WEAK   = new Color(67, 44, 176);
+    public static final Color CONSTELLATION_TYPE_MINOR  = new Color(93, 25, 127);
+    public static final Color CONSTELLATION_TYPE_BLANK  = new Color(0xCC666666);
+    public static final Color CONSTELLATION_SINGLE_STAR = new Color(0xF0BD00);
 
     public static final Color PERK_CONNECTION_UNALLOCATED = new Color(0xBBBBFF);
     public static final Color PERK_CONNECTION_ALLOCATED   = new Color(0x00EEEE00);

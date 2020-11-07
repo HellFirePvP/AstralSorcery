@@ -41,7 +41,6 @@ import hellfirepvp.astralsorcery.common.network.play.client.PktPerkGemModificati
 import hellfirepvp.astralsorcery.common.network.play.client.PktRequestPerkSealAction;
 import hellfirepvp.astralsorcery.common.network.play.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.perk.*;
-import hellfirepvp.astralsorcery.common.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
 import hellfirepvp.astralsorcery.common.perk.source.AttributeConverterProvider;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
@@ -203,9 +202,10 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor(MathHelper.floor((guiLeft + 27) * guiFactor), MathHelper.floor((guiTop + 27) * guiFactor),
                 MathHelper.floor((guiWidth - 54) * guiFactor), MathHelper.floor((guiHeight - 54) * guiFactor));
-        this.changeZLevel(-50);
+
+        this.setBlitOffset(-50);
         this.drawBackground();
-        this.changeZLevel(50);
+        this.setBlitOffset(0);
 
         this.drawPerkTree(pTicks);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -219,9 +219,9 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         drawSocketContextMenu();
         drawSealBox();
 
-        this.changeZLevel(510);
+        this.setBlitOffset(510);
         drawHoverTooltips(mouseX, mouseY);
-        this.changeZLevel(-510);
+        this.setBlitOffset(0);
 
         if (!this.mouseSealStack.isEmpty()) {
             RenderingUtils.renderItemStack(this.itemRenderer, this.mouseSealStack, mouseX - 8, mouseY - 8, null);

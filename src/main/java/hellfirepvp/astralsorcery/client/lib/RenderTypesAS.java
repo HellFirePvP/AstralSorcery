@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.lib;
 
 import com.google.common.collect.ImmutableList;
@@ -44,8 +52,10 @@ public class RenderTypesAS {
 
     //Models
     public static RenderType MODEL_ATTUNEMENT_ALTAR;
-    public static RenderType MODEL_LENS;
-    public static RenderType MODEL_LENS_COLORED;
+    public static RenderType MODEL_LENS_SOLID;
+    public static RenderType MODEL_LENS_GLASS;
+    public static RenderType MODEL_LENS_COLORED_SOLID;
+    public static RenderType MODEL_LENS_COLORED_GLASS;
     public static RenderType MODEL_OBSERVATORY;
     public static RenderType MODEL_REFRACTION_TABLE;
     public static RenderType MODEL_REFRACTION_TABLE_GLASS;

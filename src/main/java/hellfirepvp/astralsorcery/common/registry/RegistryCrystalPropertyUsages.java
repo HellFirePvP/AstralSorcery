@@ -27,7 +27,6 @@ public class RegistryCrystalPropertyUsages {
     public static void init() {
         USE_RITUAL_EFFECT = createUsage("ritual.effect");
         USE_RITUAL_RANGE = createUsage("ritual.range");
-        USE_RITUAL_CAPACITY = createUsage("ritual.capacity");
         USE_COLLECTOR_CRYSTAL = createUsage("collector");
         USE_LENS_TRANSFER = createUsage("lens.transfer");
         USE_TOOL_DURABILITY = createUsage("tool.durability");

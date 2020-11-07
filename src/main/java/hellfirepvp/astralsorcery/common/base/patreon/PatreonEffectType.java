@@ -23,6 +23,7 @@ public enum PatreonEffectType {
 
     FLARE_DYNAMIC_COLOR(new ProviderFlareDynamicColor()),
     FLARE_CRYSTAL(new ProviderFlareCrystal()),
+    TREE_BEACON_COLOR(new ProviderTreeBeaconColor()),
     CRYSTAL_FOOTPRINTS(new ProviderCrystalFootprints()),
     HELMET(new ProviderHelmetRender()),
     WRAITH_WINGS(new ProviderWraithWings()),

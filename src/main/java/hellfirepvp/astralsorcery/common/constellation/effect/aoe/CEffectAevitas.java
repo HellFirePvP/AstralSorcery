@@ -108,8 +108,12 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
             }, false);
         }
 
-        if (this.findNewPosition(world, pos, properties) != null) changed = true;
-        if (this.findNewPosition(world, pos, properties) != null) changed = true;
+        if (this.findNewPosition(world, pos, properties)
+                .ifRight(attemptedPos -> sendConstellationPing(world, new Vector3(attemptedPos).add(0.5, 0.5, 0.5)))
+                .left().isPresent()) changed = true;
+        if (this.findNewPosition(world, pos, properties)
+                .ifRight(attemptedPos -> sendConstellationPing(world, new Vector3(attemptedPos).add(0.5, 0.5, 0.5)))
+                .left().isPresent()) changed = true;
 
         int amplifier = CONFIG.potionAmplifier.get();
         List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, BOX.offset(pos).grow(properties.getSize()));

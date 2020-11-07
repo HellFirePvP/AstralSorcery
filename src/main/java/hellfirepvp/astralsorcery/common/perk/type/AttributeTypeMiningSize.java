@@ -17,6 +17,8 @@ import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Direction;
@@ -95,7 +97,8 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                     BlockPos other = at.add(xx, yy, zz);
                     if (world.getBlockState(other).getBlockHardness(world, other) != -1 &&
                             AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
-                        if (player.interactionManager.tryHarvestBlock(other)) {
+                        BlockState state = world.getBlockState(other);
+                        if (!BlockUtils.isFluidBlock(state) && player.interactionManager.tryHarvestBlock(other)) {
                             AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
                         }
                     }
@@ -116,7 +119,8 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                 BlockPos other = at.add(xx, 0, zz);
                 if (world.getBlockState(other).getBlockHardness(world, other) != -1 &&
                         AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
-                    if (player.interactionManager.tryHarvestBlock(other)) {
+                    BlockState state = world.getBlockState(other);
+                    if (!BlockUtils.isFluidBlock(state) && player.interactionManager.tryHarvestBlock(other)) {
                         AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
                     }
                 }

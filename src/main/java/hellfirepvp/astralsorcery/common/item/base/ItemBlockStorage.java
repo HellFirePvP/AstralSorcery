@@ -1,9 +1,9 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2020
  *
- *  All rights reserved.
- *  The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- *  For further details, see the License file there.
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.item.base;
@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.Tuple;
@@ -38,7 +39,7 @@ public interface ItemBlockStorage {
     Random random = new Random();
 
     static boolean storeBlockState(ItemStack stack, World world, BlockPos pos) {
-        if (world.getTileEntity(pos) != null) {
+        if (MiscUtils.getTileAt(world, pos, TileEntity.class, true) != null) {
             return false;
         }
         BlockState state = world.getBlockState(pos);

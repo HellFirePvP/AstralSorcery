@@ -57,6 +57,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 
@@ -91,7 +92,9 @@ public class ItemResonator extends Item implements OverrideInteractItem {
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         if (this.isInGroup(group)) {
-            items.add(new ItemStack(this));
+            ItemStack resonator = new ItemStack(this);
+            setUpgradeUnlocked(resonator, ResonatorUpgrade.STARLIGHT);
+            items.add(resonator);
 
             ItemStack upgradedResonator = new ItemStack(this);
             setUpgradeUnlocked(upgradedResonator, ResonatorUpgrade.values());
@@ -136,7 +139,7 @@ public class ItemResonator extends Item implements OverrideInteractItem {
                         IChunk ch = world.getChunk(pos);
                         if (ch instanceof Chunk) {
                             ((Chunk) ch).getCapability(CapabilitiesAS.CHUNK_FLUID).ifPresent(entry -> {
-                                FluidStack display = entry.drain(1, true);
+                                FluidStack display = entry.drain(1, IFluidHandler.FluidAction.SIMULATE);
                                 if (!display.isEmpty()) {
                                     PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.LIQUID_FOUNTAIN).addData(buf -> {
                                         ByteBufUtils.writeFluidStack(buf, display);
@@ -207,13 +210,13 @@ public class ItemResonator extends Item implements OverrideInteractItem {
     }
 
     @Override
-    public boolean shouldInterceptInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+    public boolean shouldInterceptBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
         ResonatorUpgrade upgrade = getCurrentUpgrade(player, player.getHeldItem(hand));
         return upgrade == ResonatorUpgrade.AREA_SIZE && MiscUtils.getTileAt(player.getEntityWorld(), pos, TileAreaOfInfluence.class, false) != null;
     }
 
     @Override
-    public boolean doInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
+    public boolean doBlockInteract(LogicalSide side, PlayerEntity player, Hand hand, BlockPos pos, Direction face) {
         ResonatorUpgrade upgrade = getCurrentUpgrade(player, player.getHeldItem(hand));
         if (upgrade == ResonatorUpgrade.AREA_SIZE && player.getEntityWorld().isRemote()) {
             TileAreaOfInfluence aoeTile = MiscUtils.getTileAt(player.getEntityWorld(), pos, TileAreaOfInfluence.class, false);
@@ -226,7 +229,7 @@ public class ItemResonator extends Item implements OverrideInteractItem {
 
     @OnlyIn(Dist.CLIENT)
     private void playAreaOfInfluenceEffect(TileAreaOfInfluence aoeTile) {
-        AreaOfInfluencePreview.INSTANCE.show(aoeTile);
+        AreaOfInfluencePreview.INSTANCE.showOrRemoveIdentical(aoeTile);
     }
 
     @Override
@@ -336,7 +339,6 @@ public class ItemResonator extends Item implements OverrideInteractItem {
 
     public static enum ResonatorUpgrade {
 
-
         STARLIGHT("starlight",
                 (player, side, stack) -> true),
         FLUID_FIELDS("liquid",
@@ -350,6 +352,10 @@ public class ItemResonator extends Item implements OverrideInteractItem {
         private ResonatorUpgrade(String appendixUpgrade, TriPredicate<PlayerEntity, LogicalSide, ItemStack> check) {
             this.check = check;
             this.appendixUpgrade = appendixUpgrade;
+        }
+
+        public String getAppendix() {
+            return appendixUpgrade;
         }
 
         public String getUnlocalizedItemName() {

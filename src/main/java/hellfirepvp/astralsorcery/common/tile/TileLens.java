@@ -29,6 +29,8 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
@@ -71,23 +73,19 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
         if (colorType != null) {
             if (world.isRemote()) {
                 playColorEffects();
-            } else {
-                doColorEffects();
             }
+            doColorEffects();
         }
     }
 
     public void transmissionTick() {
-        this.lensEffectTimeout = 5;
+        this.lensEffectTimeout = 20;
+        markForUpdate();
     }
 
     private void doColorEffects() {
-        if (getTicksExisted() % 4 != 0) {
-            return;
-        }
-
-
-        if (!this.occupiedConnections.isEmpty()) {
+        World world = this.getWorld();
+        if (!world.isRemote() && !this.occupiedConnections.isEmpty()) {
             this.occupiedConnections.clear();
             markForUpdate();
         }
@@ -100,31 +98,34 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
 
         Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
         List<BlockPos> linked = getLinkedPositions();
-        float str = (1F / ((float) linked.size())) * 0.7F;
+        float str = (1F / ((float) linked.size())) * 0.15F;
 
         for (BlockPos linkedTo : linked) {
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
             RaytraceAssist rta = new RaytraceAssist(thisVec, to).includeEndPoint();
             if (colorType.getType() == LensColorType.TargetType.BLOCK || colorType.getType() == LensColorType.TargetType.ANY) {
-                boolean clear = rta.isClear(world);
-                if (!clear && rta.positionHit() != null) {
+                if (!rta.isClear(world) && rta.positionHit() != null) {
                     BlockPos posHit = rta.positionHit();
 
                     BlockState stateHit = world.getBlockState(posHit);
                     colorType.blockInBeam(world, posHit, stateHit, str);
 
-                    this.occupiedConnections.add(posHit);
+                    if (!world.isRemote()) {
+                        this.occupiedConnections.add(posHit);
+                    }
                 } else {
-                    this.occupiedConnections.add(linkedTo);
+                    if (!world.isRemote()) {
+                        this.occupiedConnections.add(linkedTo);
+                    }
                 }
             }
             if (colorType.getType() == LensColorType.TargetType.ENTITY || colorType.getType() == LensColorType.TargetType.ANY) {
                 rta.setCollectEntities(0.5);
                 rta.isClear(world);
                 List<Entity> found = rta.collectedEntities(world);
-                found.forEach(e -> colorType.entityInBeam(thisVec, to, e, str));
+                found.forEach(e -> colorType.entityInBeam(world, thisVec, to, e, str));
                 for (Entity entity : found) {
-                    colorType.entityInBeam(thisVec, to, entity, str);
+                    colorType.entityInBeam(world, thisVec, to, entity, str);
                 }
             }
         }
@@ -207,6 +208,12 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
     }
 
     @Override
+    public void readNetNBT(CompoundNBT compound) {
+        super.readNetNBT(compound);
+        this.lensEffectTimeout = compound.getInt("lensEffectTimeout");
+    }
+
+    @Override
     public void writeCustomNBT(CompoundNBT compound) {
         super.writeCustomNBT(compound);
 
@@ -218,6 +225,12 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
         }
         NBTHelper.writeList(compound, "occupiedConnections", this.occupiedConnections,
                 pos -> NBTHelper.writeBlockPosToNBT(pos, new CompoundNBT()));
+    }
+
+    @Override
+    public void writeNetNBT(CompoundNBT compound) {
+        super.writeNetNBT(compound);
+        compound.putInt("lensEffectTimeout", this.lensEffectTimeout);
     }
 
     @Nonnull

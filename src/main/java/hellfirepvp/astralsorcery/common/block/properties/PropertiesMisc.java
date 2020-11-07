@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraftforge.common.ToolType;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,12 +31,14 @@ public class PropertiesMisc {
     public static Block.Properties defaultSand() {
         return Block.Properties.create(Material.SAND, MaterialColor.SAND)
                 .hardnessAndResistance(0.5F)
+                .harvestTool(ToolType.SHOVEL)
                 .sound(SoundType.SAND);
     }
 
     public static Block.Properties defaultRock() {
         return Block.Properties.create(Material.ROCK, MaterialColor.STONE)
                 .hardnessAndResistance(1.5F, 6.0F)
+                .harvestTool(ToolType.PICKAXE)
                 .sound(SoundType.STONE);
     }
 

@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXBlock;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXColorEffectSphere;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXCube;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
-import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -65,6 +64,7 @@ public class RegistryEffectTemplates {
         BLOCK_TRANSLUCENT_IGNORE_DEPTH = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_BLOCK_TRANSLUCENT_DEPTH, (ctx, pos) -> new FXBlock(pos)));
 
         COLOR_SPHERE = register(new BatchRenderContext<>(RenderTypesAS.EFFECT_FX_COLOR_SPHERE, (ctx, pos) -> new FXColorEffectSphere(pos)));
+        COLOR_SPHERE.setDrawWithTexture(false);
         GENERIC_GATEWAY_PARTICLE = register(new RenderContextGenericParticle());
 
         setupRenderOrder();

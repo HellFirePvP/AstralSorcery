@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 public class FluidTankAccess {
 
-    private Set<AccessibleTank> tanks = new HashSet<>();
+    private final Set<AccessibleTank> tanks = new HashSet<>();
 
     public void putTank(int tankId, IFluidTank tank, Direction... sides) {
         this.tanks.add(new AccessibleTank(tankId, tank, sides));

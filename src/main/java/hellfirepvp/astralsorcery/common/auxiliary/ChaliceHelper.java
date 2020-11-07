@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary;
 
+import hellfirepvp.astralsorcery.common.block.tile.BlockChalice;
+import hellfirepvp.astralsorcery.common.block.tile.BlockFountain;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileChalice;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -37,14 +39,16 @@ public class ChaliceHelper {
 
     @Nonnull
     public static List<BlockPos> findNearbyChalices(World world, BlockPos origin, int distance) {
-        distance = MathHelper.clamp(distance, 0, 16);
-        Vector3 thisVector = new Vector3(origin).add(0.5, 0.5, 0.5);
+        Vector3 thisVector = new Vector3(origin).add(0.5, 1.5, 0.5);
 
-        List<BlockPos> foundChalices = BlockDiscoverer.searchForBlocksAround(world, origin, distance,
-                (w, pos, state) -> !w.isBlockPowered(pos) && state.getBlock().equals(BlocksAS.CHALICE));
+        List<BlockPos> foundChalices = BlockDiscoverer.searchForBlocksAround(world, origin, MathHelper.clamp(distance, 0, 16),
+                (w, pos, state) -> !pos.equals(origin) &&
+                        state.getBlock() instanceof BlockChalice &&
+                        !w.isBlockPowered(pos) &&
+                        !(w.getBlockState(pos.down()).getBlock() instanceof BlockFountain));
 
         foundChalices.removeIf(pos -> {
-            Vector3 chaliceVector = new Vector3(pos).add(0.5, 0.5, 0.5);
+            Vector3 chaliceVector = new Vector3(pos).add(0.5, 1.5, 0.5);
             RaytraceAssist assist = new RaytraceAssist(thisVector, chaliceVector);
             return !assist.isClear(world);
         });

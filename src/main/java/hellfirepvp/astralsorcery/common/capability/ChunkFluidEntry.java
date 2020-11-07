@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -64,7 +65,7 @@ public class ChunkFluidEntry implements INBTSerializable<CompoundNBT> {
     }
 
     @Nonnull
-    public FluidStack drain(int amount, boolean simulate) {
+    public FluidStack drain(int amount, IFluidHandler.FluidAction action) {
         if (!isInitialized() || isEmpty()) {
             return new FluidStack(Fluids.WATER, amount);
         }
@@ -72,7 +73,7 @@ public class ChunkFluidEntry implements INBTSerializable<CompoundNBT> {
         int drainableAmount = Math.min(amount, this.mbAmount);
         FluidStack drained = this.chunkFluid.copy();
         drained.setAmount(drainableAmount);
-        if (!simulate) {
+        if (action.execute()) {
             this.mbAmount -= drainableAmount;
             if (isEmpty()) {
                 setEmpty();

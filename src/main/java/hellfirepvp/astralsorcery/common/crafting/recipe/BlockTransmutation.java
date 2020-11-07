@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.crafting.recipe;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomMatcherRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockMatchInformation;
@@ -27,6 +28,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,14 +37,14 @@ import java.util.function.Predicate;
  * Created by HellFirePvP
  * Date: 10.10.2019 / 19:27
  */
-public class BlockTransmutation extends CustomMatcherRecipe {
+public class BlockTransmutation extends CustomMatcherRecipe implements GatedRecipe.Progression {
 
     private final BlockState outputState;
     private final double starlight;
     private final IWeakConstellation constellation;
 
+    private final List<BlockMatchInformation> stateCheck = new ArrayList<>();
     private ItemStack outputDisplay;
-    private List<BlockMatchInformation> stateCheck = new ArrayList<>();
     private Predicate<BlockState> matcher = null;
 
     public BlockTransmutation(ResourceLocation recipeId, BlockState outState, double starlight) {
@@ -55,6 +57,12 @@ public class BlockTransmutation extends CustomMatcherRecipe {
         this.starlight = starlight;
         this.constellation = constellation;
         this.outputDisplay = new ItemStack(outState.getBlock());
+    }
+
+    @Nonnull
+    @Override
+    public ResearchProgression getRequiredProgression() {
+        return ResearchProgression.ATTUNEMENT;
     }
 
     public boolean matches(@Nonnull IWorld world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IWeakConstellation constellation) {
@@ -70,7 +78,13 @@ public class BlockTransmutation extends CustomMatcherRecipe {
     }
 
     public List<BlockMatchInformation> getInputOptions() {
-        return stateCheck;
+        return this.stateCheck;
+    }
+
+    public List<ItemStack> getInputDisplay() {
+        return this.getInputOptions().stream()
+                .map(BlockMatchInformation::getDisplayStack)
+                .collect(Collectors.toList());
     }
 
     @Nonnull

@@ -1,0 +1,19 @@
+{
+  "type": "astralsorcery:liquid_interaction",
+  "reactant1": "minecraft:water",
+  "reactant1Amount": 10,
+  "reactant2": "minecraft:lava",
+  "reactant2Amount": 10,
+  "chanceConsumeReactant1": 0.0,
+  "chanceConsumeReactant2": 0.0,
+  "weight": 6,
+  "result": {
+    "id": "astralsorcery:drop_item",
+    "data": {
+      "output": {
+        "item": "minecraft:cobblestone",
+        "count": 1
+      }
+    }
+  }
+}

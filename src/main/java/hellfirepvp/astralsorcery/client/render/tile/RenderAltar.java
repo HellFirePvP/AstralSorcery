@@ -19,7 +19,7 @@ import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -69,7 +69,7 @@ public class RenderAltar extends CustomTileEntityRenderer<TileAltar> {
                     .forEach(effect -> effect.onTESR(tile, recipe.getState(), renderStack, renderTypeBuffer, pTicks, combinedLight));
         }
 
-        if (tile.getAltarType().isThisGEThan(AltarType.RADIANCE)) {
+        if (tile.getAltarType().isThisGEThan(AltarType.RADIANCE) && tile.hasMultiblock()) {
             renderStack.push();
             renderStack.translate(0.5F, 4.5F, 0.5F);
 

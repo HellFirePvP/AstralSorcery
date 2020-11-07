@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.client.event;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import hellfirepvp.astralsorcery.common.item.base.render.ItemHeldRender;
+import hellfirepvp.astralsorcery.common.item.base.client.ItemHeldRender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;

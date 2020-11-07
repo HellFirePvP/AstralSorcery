@@ -9,9 +9,10 @@
 package hellfirepvp.astralsorcery.common.container;
 
 import hellfirepvp.astralsorcery.common.container.slot.SlotConstellationFocus;
+import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.item.base.IConstellationFocus;
 import hellfirepvp.astralsorcery.common.lib.ContainerTypesAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -50,9 +51,9 @@ public class ContainerAltarTrait extends ContainerAltarBase {
 
     @Override
     void bindAltarInventory(TileInventory altarInventory) {
-        for (int yy = 0; yy < 5; yy++) {
-            for (int xx = 0; xx < 5; xx++) {
-                addSlot(new SlotItemHandler(altarInventory, yy * 5 + xx, 84 + xx * 18, 11 + yy * 18));
+        for (int yy = 0; yy < AltarRecipeGrid.GRID_SIZE; yy++) {
+            for (int xx = 0; xx < AltarRecipeGrid.GRID_SIZE; xx++) {
+                addSlot(new SlotItemHandler(altarInventory, xx + yy * AltarRecipeGrid.GRID_SIZE, 84 + xx * 18, 11 + yy * 18));
             }
         }
 
@@ -74,5 +75,10 @@ public class ContainerAltarTrait extends ContainerAltarBase {
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public int translateIndex(int fromIndex) {
+        return fromIndex;
     }
 }
