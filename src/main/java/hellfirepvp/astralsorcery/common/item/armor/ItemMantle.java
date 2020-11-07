@@ -116,11 +116,6 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
     }
 
     @Override
-    public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
-        return stack.getDamage() < stack.getMaxDamage() - 1;
-    }
-
-    @Override
     public Collection<PerkAttributeModifier> getModifiers(ItemStack stack, PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
         if (ItemMantle.getEffect(stack, ConstellationsAS.evorsio) == null) {
             return Collections.emptyList();

@@ -25,6 +25,7 @@ import net.minecraft.state.Property;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.commons.lang3.ArrayUtils;
 

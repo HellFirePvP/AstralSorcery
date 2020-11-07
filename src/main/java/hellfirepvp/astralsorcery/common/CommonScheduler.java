@@ -29,8 +29,8 @@ public class CommonScheduler implements ITickHandler {
     private static final Object lock = new Object();
 
     private boolean inTick = false;
-    private LinkedList<Tuple<Runnable, Counter>> queue = new LinkedList<>();
-    private LinkedList<Tuple<Runnable, Integer>> waiting = new LinkedList<>();
+    private final LinkedList<Tuple<Runnable, Counter>> queue = new LinkedList<>();
+    private final LinkedList<Tuple<Runnable, Integer>> waiting = new LinkedList<>();
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {

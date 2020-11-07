@@ -198,8 +198,6 @@ public class CommonProxy {
     }
 
     public void attachEventHandlers(IEventBus eventBus) {
-        eventBus.addListener(this::onClientInitialized);
-
         eventBus.addListener(this::onRegisterCommands);
         eventBus.addListener(this::onServerStop);
         eventBus.addListener(this::onServerStopping);
