@@ -28,6 +28,7 @@ public enum GatedKnowledge {
     COLLECTOR_CRYSTAL(ProgressionTier.CONSTELLATION_CRAFT),
     COLLECTOR_TYPE(ProgressionTier.CONSTELLATION_CRAFT),
 
+    //TODO this should be gone
     CONSTELLATION_RITUAL(ProgressionTier.ATTUNEMENT),
     CONSTELLATION_ENCH_POTION(ProgressionTier.CONSTELLATION_CRAFT),
 

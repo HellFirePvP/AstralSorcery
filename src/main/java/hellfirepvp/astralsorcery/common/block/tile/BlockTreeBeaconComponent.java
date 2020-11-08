@@ -34,8 +34,8 @@ public class BlockTreeBeaconComponent extends BlockFakedState {
 
     public BlockTreeBeaconComponent() {
         super(Properties.create(Material.BARRIER, MaterialColor.AIR)
-                .hardnessAndResistance(-1.0F, 6_000_000.0F)
-                .lightValue(12));
+                .hardnessAndResistance(-1F, 3600000.0F)
+                .setLightLevel(state -> 12));
     }
 
     @Override

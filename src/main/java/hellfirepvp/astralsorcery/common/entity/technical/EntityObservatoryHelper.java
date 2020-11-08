@@ -41,7 +41,7 @@ import java.util.UUID;
  */
 public class EntityObservatoryHelper extends Entity {
 
-    private static DataParameter<BlockPos> FIXED = EntityDataManager.createKey(EntityObservatoryHelper.class, DataSerializers.BLOCK_POS);
+    private static final DataParameter<BlockPos> FIXED = EntityDataManager.createKey(EntityObservatoryHelper.class, DataSerializers.BLOCK_POS);
 
     public EntityObservatoryHelper(World worldIn) {
         super(EntityTypesAS.OBSERVATORY_HELPER, worldIn);

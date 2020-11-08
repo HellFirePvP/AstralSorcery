@@ -34,7 +34,7 @@ import java.util.function.Consumer;
  */
 public abstract class CustomRecipeBuilder<R extends CustomMatcherRecipe> {
 
-    private static Map<IRecipeType<?>, Set<ResourceLocation>> builtRecipes = new HashMap<>();
+    private static final Map<IRecipeType<?>, Set<ResourceLocation>> builtRecipes = new HashMap<>();
 
     public void build(Consumer<IFinishedRecipe> consumerIn) {
         this.build(consumerIn, null);

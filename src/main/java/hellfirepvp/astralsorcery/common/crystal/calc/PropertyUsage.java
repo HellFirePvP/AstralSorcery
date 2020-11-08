@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crystal.calc;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -28,7 +29,7 @@ public class PropertyUsage extends ForgeRegistryEntry<PropertyUsage> {
         setRegistryName(registryName);
     }
 
-    public ITextComponent getName() {
+    public IFormattableTextComponent getName() {
         return new TranslationTextComponent(String.format("crystal.usage.%s.%s.name",
                 getRegistryName().getNamespace(), getRegistryName().getPath()));
     }

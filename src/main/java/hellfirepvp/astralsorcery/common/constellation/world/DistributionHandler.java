@@ -32,7 +32,7 @@ public class DistributionHandler {
 
     private final WorldContext ctx;
 
-    private Map<Integer, Map<IConstellation, Float>> dayDistributionMap = Maps.newHashMap();
+    private final Map<Integer, Map<IConstellation, Float>> dayDistributionMap = Maps.newHashMap();
     private Map<IConstellation, Float> activeDistribution = Maps.newHashMap();
 
     private int lastRecordedDay = -1;

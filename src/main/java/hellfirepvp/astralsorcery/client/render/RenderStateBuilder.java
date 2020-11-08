@@ -67,7 +67,7 @@ public class RenderStateBuilder {
     }
 
     public RenderStateBuilder disableDepth() {
-        this.builder.depthTest(new RenderState.DepthTestState(GL11.GL_ALWAYS) {
+        this.builder.depthTest(new RenderState.DepthTestState("always", GL11.GL_ALWAYS) {
             @Override
             public void setupRenderState() {
                 //For some ungodly reason this might not be reset to disable depth testing by default...

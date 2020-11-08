@@ -36,7 +36,7 @@ public class TransmissionClassRegistry {
 
     public static final TransmissionClassRegistry eventInstance = new TransmissionClassRegistry();
 
-    private static Map<ResourceLocation, TransmissionProvider> providerMap = new HashMap<>();
+    private static final Map<ResourceLocation, TransmissionProvider> providerMap = new HashMap<>();
 
     private TransmissionClassRegistry() {}
 

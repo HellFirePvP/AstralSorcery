@@ -89,7 +89,7 @@ public abstract class MantleEffect extends ForgeRegistryEntry<MantleEffect> impl
 
     @OnlyIn(Dist.CLIENT)
     protected void playCapeSparkles(PlayerEntity player, float chance) {
-        if (player == Minecraft.getInstance().player && Minecraft.getInstance().gameSettings.thirdPersonView == 0) {
+        if (player == Minecraft.getInstance().player && Minecraft.getInstance().gameSettings.getPointOfView().func_243192_a()) {
             chance *= 0.1F;
         }
         if (rand.nextFloat() < chance) {

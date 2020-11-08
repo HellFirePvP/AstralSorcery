@@ -43,7 +43,7 @@ public class BlockTransmutationBuilder extends CustomRecipeBuilder<BlockTransmut
     private double starlight = 200.0D;
     private IWeakConstellation constellation = null;
     private ItemStack outputDisplay = ItemStack.EMPTY;
-    private List<BlockMatchInformation> stateCheck = new ArrayList<>();
+    private final List<BlockMatchInformation> stateCheck = new ArrayList<>();
 
     private BlockTransmutationBuilder(ResourceLocation id) {
         this.id = id;

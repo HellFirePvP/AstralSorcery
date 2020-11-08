@@ -241,7 +241,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
     @Nonnull
     @Override
     public RegistryKey<World> getDimension() {
-        return this.getWorld().func_234923_W_();
+        return this.getWorld().getDimensionKey();
     }
 
     @Override

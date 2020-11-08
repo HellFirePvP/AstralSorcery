@@ -53,7 +53,7 @@ import java.util.List;
  */
 public class TileRefractionTable extends TileEntityTick implements NamedInventoryTile {
 
-    private static float RUN_TIME = 10 * 20F;
+    private static final float RUN_TIME = 10 * 20F;
 
     private int runTick = 0;
 

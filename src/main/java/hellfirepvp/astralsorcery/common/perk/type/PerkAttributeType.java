@@ -38,7 +38,7 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
     protected static final Random rand = new Random();
 
     //May be used by subclasses to more efficiently track who's got a perk applied
-    private Map<LogicalSide, Set<UUID>> applicationCache = Maps.newHashMap();
+    private final Map<LogicalSide, Set<UUID>> applicationCache = Maps.newHashMap();
 
     private final boolean isOnlyMultiplicative;
 

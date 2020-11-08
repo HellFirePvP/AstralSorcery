@@ -37,7 +37,7 @@ public class ResearchNode {
     private final int id;
     private final NodeRenderType nodeRenderType;
     public final float renderPosX, renderPosZ;
-    private String unlocName;
+    private final String unlocName;
 
     private ItemStack[] renderItemStacks;
     private SpriteQuery renderSpriteQuery;
@@ -45,8 +45,8 @@ public class ResearchNode {
 
     private Color textureColorHint = new Color(0xFFFFFFFF, true);
 
-    private List<ResearchNode> connectionsTo = new ArrayList<>();
-    private List<JournalPage> pages = new LinkedList<>();
+    private final List<ResearchNode> connectionsTo = new ArrayList<>();
+    private final List<JournalPage> pages = new LinkedList<>();
 
     private ResearchNode(NodeRenderType type, String unlocName, float rPosX, float rPosZ) {
         this.id = counter;

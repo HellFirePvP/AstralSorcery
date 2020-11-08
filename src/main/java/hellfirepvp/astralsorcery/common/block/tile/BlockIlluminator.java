@@ -46,7 +46,7 @@ public class BlockIlluminator extends ContainerBlock implements CustomItemBlock 
 
     public BlockIlluminator() {
         super(PropertiesGlass.coatedGlass()
-                .lightValue(10)
+                .setLightLevel(state -> 10)
                 .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE));
         this.shape = createShape();

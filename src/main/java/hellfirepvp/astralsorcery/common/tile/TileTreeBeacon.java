@@ -40,10 +40,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -169,7 +169,7 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
                 .filter(pos -> !this.addComponent(pos))
                 .forEach(pos -> {
                     //Update blocks that didn't get a client notification
-                    world.markAndNotifyBlock(pos, world.getChunkAt(pos), Blocks.AIR.getDefaultState(), world.getBlockState(pos), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+                    world.markAndNotifyBlock(pos, world.getChunkAt(pos), Blocks.AIR.getDefaultState(), world.getBlockState(pos), Constants.BlockFlags.DEFAULT_AND_RERENDER, 512);
                 });
     }
 
@@ -318,8 +318,8 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
 
     @Nonnull
     @Override
-    public DimensionType getDimensionType() {
-        return this.getWorld().getDimension().getType();
+    public RegistryKey<World> getDimension() {
+        return this.getWorld().getDimensionKey();
     }
 
     @Override
@@ -331,7 +331,7 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
     public void validate() {
         super.validate();
 
-        TreeWatcher.WATCHERS.computeIfAbsent(this.getDimensionType(), type -> new HashSet<>())
+        TreeWatcher.WATCHERS.computeIfAbsent(this.getDimension(), type -> new HashSet<>())
                 .add(this.getPos());
     }
 
@@ -339,7 +339,7 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
     public void remove() {
         super.remove();
 
-        TreeWatcher.WATCHERS.computeIfAbsent(this.getDimensionType(), type -> new HashSet<>())
+        TreeWatcher.WATCHERS.computeIfAbsent(this.getDimension(), type -> new HashSet<>())
                 .remove(this.getPos());
     }
 
@@ -449,7 +449,7 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
 
     public static class TreeWatcher {
 
-        private static final Map<DimensionType, Set<BlockPos>> WATCHERS = new HashMap<>();
+        private static final Map<RegistryKey<World>, Set<BlockPos>> WATCHERS = new HashMap<>();
 
         public static void clearServerCache() {
             WATCHERS.clear();
@@ -467,7 +467,7 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
                 return;
             }
             double rangeSq = Config.CONFIG.range.get() * Config.CONFIG.range.get();
-            Set<BlockPos> watchers = WATCHERS.getOrDefault(world.getDimension().getType(), Collections.emptySet())
+            Set<BlockPos> watchers = WATCHERS.getOrDefault(world.getDimensionKey(), Collections.emptySet())
                     .stream()
                     .filter(pos -> pos.distanceSq(treePos) < rangeSq)
                     .collect(Collectors.toSet());

@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class StorageCache {
 
-    private Map<StorageKey, List<StoredItemStack>> content = Maps.newHashMap();
+    private final Map<StorageKey, List<StoredItemStack>> content = Maps.newHashMap();
 
     public int getTotalItemCount() {
         int i = 0;

@@ -19,11 +19,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -112,7 +111,7 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
         return this.addSignatureItem(Ingredient.fromItems(item));
     }
 
-    default public IConstellation addSignatureItem(Tag<Item> tag) {
+    default public IConstellation addSignatureItem(ITag<Item> tag) {
         return this.addSignatureItem(Ingredient.fromTag(tag));
     }
 

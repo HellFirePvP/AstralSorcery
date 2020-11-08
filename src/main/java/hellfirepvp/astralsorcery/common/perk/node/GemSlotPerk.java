@@ -20,10 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -134,7 +131,7 @@ public interface GemSlotPerk {
     }
 
     @OnlyIn(Dist.CLIENT)
-    default public void addTooltipInfo(Collection<ITextComponent> tooltip) {
+    default public void addTooltipInfo(Collection<IFormattableTextComponent> tooltip) {
         if (!(this instanceof AbstractPerk)) {
             return;
         }
@@ -142,26 +139,25 @@ public interface GemSlotPerk {
         if (!prog.isValid()) {
             return;
         }
-        Style gray = new Style().setColor(TextFormatting.GRAY);
 
         ItemStack contained = getContainedItem(Minecraft.getInstance().player, LogicalSide.CLIENT);
         if (contained.isEmpty()) {
-            tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.empty").setStyle(gray));
+            tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.empty").mergeStyle(TextFormatting.GRAY));
             if (prog.hasPerkEffect((AbstractPerk) this)) {
-                tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.empty").setStyle(gray));
+                tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.empty").mergeStyle(TextFormatting.GRAY));
 
                 boolean has = !ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getInstance().player,
                         s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !DynamicModifierHelper.getStaticModifiers(s).isEmpty()).isEmpty();
                 if (!has) {
                     tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.empty.none")
-                            .setStyle(new Style().setColor(TextFormatting.RED)));
+                            .mergeStyle(TextFormatting.RED));
                 }
             }
         } else {
             tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.item", contained.getDisplayName())
-                    .setStyle(gray));
+                    .mergeStyle(TextFormatting.GRAY));
             if (prog.hasPerkEffect((AbstractPerk) this)) {
-                tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.remove").setStyle(gray));
+                tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.remove").mergeStyle(TextFormatting.GRAY));
             }
         }
     }

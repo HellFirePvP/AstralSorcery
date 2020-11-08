@@ -32,10 +32,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -81,9 +78,9 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> toolTip, ITooltipFlag flag) {
         IConstellation c = getConstellation(stack);
         if (c != null && c.canDiscover(Minecraft.getInstance().player, ResearchHelper.getClientProgress())) {
-            toolTip.add(c.getConstellationName().applyTextStyle(TextFormatting.BLUE));
+            toolTip.add(c.getConstellationName().mergeStyle(TextFormatting.BLUE));
         } else {
-            toolTip.add(new TranslationTextComponent("astralsorcery.misc.noinformation").applyTextStyle(TextFormatting.GRAY));
+            toolTip.add(new TranslationTextComponent("astralsorcery.misc.noinformation").mergeStyle(TextFormatting.GRAY));
         }
     }
 
@@ -177,12 +174,14 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
                 if (cst.canDiscover((PlayerEntity) entity, progress) && ResearchManager.memorizeConstellation(cst, (PlayerEntity) entity)) {
                     entity.sendMessage(
                             new TranslationTextComponent("astralsorcery.progress.constellation.seen.chat",
-                                    cst.getConstellationName().applyTextStyle(TextFormatting.GRAY))
-                                    .applyTextStyle(TextFormatting.BLUE));
+                                    cst.getConstellationName().mergeStyle(TextFormatting.GRAY))
+                                    .mergeStyle(TextFormatting.BLUE),
+                            Util.DUMMY_UUID);
                     if (ResearchHelper.getClientProgress().getSeenConstellations().size() == 1) {
                         entity.sendMessage(
                                 new TranslationTextComponent("astralsorcery.progress.constellation.seen.track")
-                                        .applyTextStyle(TextFormatting.BLUE));
+                                        .mergeStyle(TextFormatting.BLUE),
+                                Util.DUMMY_UUID);
                     }
                 }
             }

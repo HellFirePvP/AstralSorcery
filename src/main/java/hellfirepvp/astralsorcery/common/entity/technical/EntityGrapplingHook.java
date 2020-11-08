@@ -49,8 +49,8 @@ import java.util.List;
  */
 public class EntityGrapplingHook extends ThrowableEntity implements IEntityAdditionalSpawnData {
 
-    private static DataParameter<Integer> PULLING_ENTITY = EntityDataManager.createKey(EntityGrapplingHook.class, DataSerializers.VARINT);
-    private static DataParameter<Boolean> PULLING = EntityDataManager.createKey(EntityGrapplingHook.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> PULLING_ENTITY = EntityDataManager.createKey(EntityGrapplingHook.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> PULLING = EntityDataManager.createKey(EntityGrapplingHook.class, DataSerializers.BOOLEAN);
 
     private boolean launchedThrower = false;
 

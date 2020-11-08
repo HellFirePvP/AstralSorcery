@@ -24,7 +24,7 @@ public class ActiveCelestialsHandler {
 
     public static LinkedList<RenderPosition> availablePositions = new LinkedList<>();
 
-    private Map<IConstellation, RenderPosition> activePositions = new HashMap<>();
+    private final Map<IConstellation, RenderPosition> activePositions = new HashMap<>();
 
     public void updatePositions(LinkedList<IConstellation> activeConstellations) {
         activePositions.clear();

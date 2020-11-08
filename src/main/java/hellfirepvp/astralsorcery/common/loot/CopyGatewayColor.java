@@ -12,16 +12,12 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.block.tile.BlockCelestialGateway;
+import hellfirepvp.astralsorcery.common.lib.LootAS;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
-import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.LootParameter;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 
 import java.util.Set;
 
@@ -44,6 +40,11 @@ public class CopyGatewayColor extends LootFunction {
     }
 
     @Override
+    public LootFunctionType getFunctionType() {
+        return LootAS.Functions.COPY_GATEWAY_COLOR;
+    }
+
+    @Override
     protected ItemStack doApply(ItemStack stack, LootContext context) {
         TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
         if (tile instanceof TileCelestialGateway) {
@@ -60,12 +61,8 @@ public class CopyGatewayColor extends LootFunction {
 
     public static class Serializer extends LootFunction.Serializer<CopyGatewayColor> {
 
-        public Serializer(ResourceLocation name) {
-            super(name, CopyGatewayColor.class);
-        }
-
         @Override
-        public CopyGatewayColor deserialize(JsonObject jsonObject, JsonDeserializationContext ctx, ILootCondition[] conditions) {
+        public CopyGatewayColor deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditions) {
             return new CopyGatewayColor(conditions);
         }
     }

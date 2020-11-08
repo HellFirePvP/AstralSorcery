@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.properties.PropertiesMisc;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
@@ -32,8 +34,7 @@ public class BlockSandTemplate extends FallingBlock implements CustomItemBlock {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public int getDustColor(BlockState p_189876_1_) {
+    public int getDustColor(BlockState state, IBlockReader reader, BlockPos pos) {
         return 0xDBDEA0;
     }
 }

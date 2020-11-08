@@ -29,11 +29,11 @@ public class ConstellationHandler {
 
     private final WorldContext ctx;
 
-    private Map<MoonPhase, LinkedList<IConstellation>> activeMap = Maps.newHashMap();
-    private Map<IConstellation, MoonPhase> directOffsetMap = Maps.newHashMap();
+    private final Map<MoonPhase, LinkedList<IConstellation>> activeMap = Maps.newHashMap();
+    private final Map<IConstellation, MoonPhase> directOffsetMap = Maps.newHashMap();
 
     private int lastRecordedDay = -1;
-    private List<IConstellation> visibleSpecialConstellations = Lists.newArrayList();
+    private final List<IConstellation> visibleSpecialConstellations = Lists.newArrayList();
 
     ConstellationHandler(WorldContext context) {
         this.ctx = context;

@@ -31,8 +31,8 @@ import java.util.function.Function;
  */
 public class FXOrbitalCrystalAttunement extends FXSourceOrbital<FXFacingParticle, BatchRenderContext<FXFacingParticle>> {
 
-    private Vector3 targetPoint;
-    private IConstellation cst;
+    private final Vector3 targetPoint;
+    private final IConstellation cst;
 
     public FXOrbitalCrystalAttunement(Vector3 pos, Vector3 floatTarget, IConstellation constellation) {
         super(pos, EffectTemplatesAS.GENERIC_PARTICLE);

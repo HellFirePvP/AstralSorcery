@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
  * Created by HellFirePvP
  * Date: 05.08.2016 / 13:43
  */
-public interface IStarlightReceiver<T extends ITransmissionReceiver> extends IStarlightTransmission {
+public interface IStarlightReceiver<T extends ITransmissionReceiver> extends IStarlightTransmission<T> {
 
     @Nonnull
     public T provideEndpoint(BlockPos at);

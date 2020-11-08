@@ -103,14 +103,13 @@ public class EventHandlerCache {
     @SubscribeEvent
     public static void onUnload(WorldEvent.Unload event) {
         IWorld w = event.getWorld();
-
-        SkyHandler.getInstance().informWorldUnload(w);
-        TimeStopController.onWorldUnload(w);
-
         if (w instanceof World) {
             World world = (World) w;
+
             SyncDataHolder.clearWorld(world);
             StarlightTransmissionHandler.getInstance().informWorldUnload(world);
+            TimeStopController.onWorldUnload(world);
+            SkyHandler.getInstance().informWorldUnload(world);
         }
     }
 

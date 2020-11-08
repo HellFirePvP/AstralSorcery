@@ -30,7 +30,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BindableResource extends AbstractRenderableTexture.Full {
 
     private Texture resource = null;
-    private String path;
+    private final String path;
 
     public BindableResource(String path) {
         super(AstralSorcery.key(path.replaceAll("[^a-zA-Z0-9\\.\\-]", "_")));

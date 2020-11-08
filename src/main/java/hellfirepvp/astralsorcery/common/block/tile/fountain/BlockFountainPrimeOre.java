@@ -16,7 +16,7 @@ public class BlockFountainPrimeOre extends BlockFountainPrime {
 
     @Nonnull
     @Override
-    public FountainEffect provideEffect() {
+    public FountainEffect<?> provideEffect() {
         return FountainEffectRegistry.EFFECT_LIQUID;
     }
 }

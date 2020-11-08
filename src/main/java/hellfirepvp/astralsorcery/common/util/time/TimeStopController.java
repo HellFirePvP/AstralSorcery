@@ -78,12 +78,12 @@ public class TimeStopController implements ITickHandler {
         return stopZone;
     }
 
-    public static void onWorldUnload(IWorld world) {
-        if (world.isRemote() || !(world instanceof World)) {
+    public static void onWorldUnload(World world) {
+        if (world.isRemote()) {
             return;
         }
 
-        RegistryKey<World> dimKey = ((World) world).getDimensionKey();
+        RegistryKey<World> dimKey = world.getDimensionKey();
         for (TimeStopZone stop : activeTimeStopZones.getOrDefault(dimKey, Collections.emptyList())) {
             stop.stopEffect();
         }

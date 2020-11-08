@@ -40,7 +40,7 @@ public class DynamicAttributeModifier extends PerkAttributeModifier {
     private final UUID uuid;
     private PerkAttributeModifier actualModifier = null;
 
-    private static Map<UUID, Map<PerkConverter, Table<PerkAttributeType, ModifierType, PerkAttributeModifier>>> gemConverterCache = Maps.newHashMap();
+    private static final Map<UUID, Map<PerkConverter, Table<PerkAttributeType, ModifierType, PerkAttributeModifier>>> gemConverterCache = Maps.newHashMap();
 
     public DynamicAttributeModifier(UUID uniqueId, PerkAttributeType type, ModifierType mode, float value) {
         super(type, mode, value);

@@ -24,7 +24,7 @@ public class RegistryGameRules {
     private RegistryGameRules() {}
 
     public static void init() {
-        IGNORE_SKYLIGHT_CHECK_RULE = GameRules.register("asIgnoreSkylightCheck", GameRules.BooleanValue.create(false));
+        IGNORE_SKYLIGHT_CHECK_RULE = GameRules.register("asIgnoreSkylightCheck", GameRules.Category.UPDATES, GameRules.BooleanValue.create(false));
     }
 
 }

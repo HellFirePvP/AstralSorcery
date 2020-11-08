@@ -25,7 +25,7 @@ public class ConfigRegistries {
 
     private static final ConfigRegistries INSTANCE = new ConfigRegistries();
 
-    private List<ConfigDataAdapter<?>> dataRegistries = new ArrayList<>();
+    private final List<ConfigDataAdapter<?>> dataRegistries = new ArrayList<>();
 
     private ConfigRegistries() {}
 

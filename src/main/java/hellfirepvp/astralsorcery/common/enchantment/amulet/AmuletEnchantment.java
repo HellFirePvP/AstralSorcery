@@ -14,6 +14,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.LanguageMap;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -38,15 +41,17 @@ public class AmuletEnchantment extends DynamicEnchantment {
         super(type, levelAddition);
     }
 
+    //TODO nested translation components..?
     @OnlyIn(Dist.CLIENT)
-    public String getDisplay() {
+    public IFormattableTextComponent getDisplay() {
         String typeStr = this.getType().getDisplayName();
         String levelsStr = I18n.format(String.format("astralsorcery.amulet.enchantment.level.%s", this.levelAddition > 1 ? "more" : "one"));
 
         if (this.getType().isEnchantmentSpecific()) {
-            return I18n.format(typeStr, String.valueOf(this.getLevelAddition()), levelsStr, I18n.format(this.getEnchantment().getName()));
+            return new TranslationTextComponent(typeStr,
+                    String.valueOf(this.getLevelAddition()), levelsStr, LanguageMap.getInstance().func_230503_a_(this.getEnchantment().getName()));
         } else {
-            return I18n.format(typeStr, String.valueOf(this.getLevelAddition()), levelsStr);
+            return new TranslationTextComponent(typeStr, String.valueOf(this.getLevelAddition()), levelsStr);
         }
     }
 

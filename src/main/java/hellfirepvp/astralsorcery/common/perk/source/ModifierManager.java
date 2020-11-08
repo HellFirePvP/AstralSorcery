@@ -40,8 +40,8 @@ public class ModifierManager implements ITickHandler {
 
     private static Map<ResourceLocation, ModifierSourceProvider<?>> sourceProviders = null;
 
-    private static Map<UUID, Set<ModifierSource>> modifierCache = new HashMap<>();
-    private static Map<UUID, Set<ModifierSource>> modifierCacheClient = new HashMap<>();
+    private static final Map<UUID, Set<ModifierSource>> modifierCache = new HashMap<>();
+    private static final Map<UUID, Set<ModifierSource>> modifierCacheClient = new HashMap<>();
 
     private ModifierManager() {}
 

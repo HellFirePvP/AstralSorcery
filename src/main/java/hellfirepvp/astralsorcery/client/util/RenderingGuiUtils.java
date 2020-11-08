@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.vector.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -27,12 +29,16 @@ import java.awt.*;
  * Date: 26.08.2019 / 19:31
  */
 public class RenderingGuiUtils {
-    
+
+    private static final MatrixStack EMPTY = new MatrixStack();
+
+    @Deprecated
     public static void drawTexturedRect(float offsetX, float offsetY, float zLevel, float width, float height, AbstractRenderableTexture tex) {
         Tuple<Float, Float> uv = tex.getUVOffset();
         drawTexturedRect(offsetX, offsetY, zLevel, width, height, uv.getA(), uv.getB(), tex.getUWidth(), tex.getVWidth());
     }
-    
+
+    @Deprecated
     public static void drawTexturedRectAtCurrentPos(float width, float height, float zLevel, float uFrom, float vFrom, float uWidth, float vWidth) {
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             rect(buf, 0, 0, zLevel, width, height)
@@ -41,10 +47,12 @@ public class RenderingGuiUtils {
         });
     }
 
+    @Deprecated
     public static void drawTexturedRectAtCurrentPos(float width, float height, float zLevel) {
         drawTexturedRectAtCurrentPos(width, height, zLevel, 0, 0, 1, 1);
     }
 
+    @Deprecated
     public static void drawRect(float offsetX, float offsetY, float zLevel, int width, int height) {
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             rect(buf, offsetX, offsetY, zLevel, width, height)
@@ -52,6 +60,7 @@ public class RenderingGuiUtils {
         });
     }
 
+    @Deprecated
     public static void drawTexturedRect(float offsetX, float offsetY, float zLevel, float width, float height, float uFrom, float vFrom, float uWidth, float vWidth) {
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             rect(buf, offsetX, offsetY, zLevel, width, height)
@@ -60,24 +69,37 @@ public class RenderingGuiUtils {
         });
     }
 
+    @Deprecated
     public static DrawBuilder rect(BufferBuilder buf, WidthHeightScreen screen) {
         return rect(buf, screen.getGuiLeft(), screen.getGuiTop(), screen.getGuiZLevel(), screen.getGuiWidth(), screen.getGuiHeight());
     }
 
+    @Deprecated
     public static DrawBuilder rect(BufferBuilder buf, float offsetX, float offsetY, float offsetZ, float width, float height) {
-        return new DrawBuilder(buf, offsetX, offsetY, offsetZ, width, height);
+        return rect(buf, EMPTY, offsetX, offsetY, offsetZ, width, height);
+    }
+
+    @Deprecated
+    public static DrawBuilder rect(BufferBuilder buf, MatrixStack renderStack, float offsetX, float offsetY, float offsetZ, float width, float height) {
+        return new DrawBuilder(buf, renderStack, offsetX, offsetY, offsetZ, width, height);
+    }
+
+    public static DrawBuilder rect(BufferBuilder buf, MatrixStack renderStack, float width, float height) {
+        return new DrawBuilder(buf, renderStack, 0, 0, 0, width, height);
     }
 
     public static class DrawBuilder {
 
         private final BufferBuilder buf;
+        private final MatrixStack renderStack;
         private float offsetX, offsetY, offsetZ;
         private float width, height;
         private float u = 0F, v = 0F, uWidth = 1F, vWidth = 1F;
         private Color color = Color.WHITE;
 
-        private DrawBuilder(BufferBuilder buf, float offsetX, float offsetY, float offsetZ, float width, float height) {
+        private DrawBuilder(BufferBuilder buf, MatrixStack renderStack, float offsetX, float offsetY, float offsetZ, float width, float height) {
             this.buf = buf;
+            this.renderStack = renderStack;
             this.offsetX = offsetX;
             this.offsetY = offsetY;
             this.offsetZ = offsetZ;
@@ -85,12 +107,14 @@ public class RenderingGuiUtils {
             this.height = height;
         }
 
+        @Deprecated
         public DrawBuilder at(float offsetX, float offsetY) {
             this.offsetX = offsetX;
             this.offsetY = offsetY;
             return this;
         }
 
+        @Deprecated
         public DrawBuilder zLevel(float offsetZ) {
             this.offsetZ = offsetZ;
             return this;
@@ -146,19 +170,12 @@ public class RenderingGuiUtils {
             int g = this.color.getGreen();
             int b = this.color.getBlue();
             int a = this.color.getAlpha();
-            buf.pos(offsetX,         offsetY + height, offsetZ).color(r, g, b, a).tex(u, v + vWidth).endVertex();
-            buf.pos(offsetX + width, offsetY + height, offsetZ).color(r, g, b, a).tex(u + uWidth, v + vWidth).endVertex();
-            buf.pos(offsetX + width, offsetY,          offsetZ).color(r, g, b, a).tex(u + uWidth, v).endVertex();
-            buf.pos(offsetX,         offsetY,          offsetZ).color(r, g, b, a).tex(u, v).endVertex();
+            Matrix4f offset = this.renderStack.getLast().getMatrix();
+            buf.pos(offset, offsetX,         offsetY + height, offsetZ).color(r, g, b, a).tex(u, v + vWidth).endVertex();
+            buf.pos(offset, offsetX + width, offsetY + height, offsetZ).color(r, g, b, a).tex(u + uWidth, v + vWidth).endVertex();
+            buf.pos(offset, offsetX + width, offsetY,          offsetZ).color(r, g, b, a).tex(u + uWidth, v).endVertex();
+            buf.pos(offset, offsetX,         offsetY,          offsetZ).color(r, g, b, a).tex(u, v).endVertex();
             return this;
-        }
-
-        public Rectangle.Float getDrawRectangle() {
-            return this.getDrawRectangle(1F);
-        }
-
-        public Rectangle.Float getDrawRectangle(float scale) {
-            return new Rectangle.Float(this.offsetX * scale, this.offsetY * scale, this.width * scale, this.height * scale);
         }
     }
 }

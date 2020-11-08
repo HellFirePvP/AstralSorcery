@@ -48,10 +48,10 @@ public abstract class TileEntitySynchronized extends TileEntity implements ILoca
     }
 
     @Override
-    public final void read(CompoundNBT compound) {
-        super.read(compound);
-        readCustomNBT(compound);
-        readSaveNBT(compound);
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
+        readCustomNBT(nbt);
+        readSaveNBT(nbt);
     }
 
     //Both Network & Chunk-saving

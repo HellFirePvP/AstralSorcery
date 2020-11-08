@@ -143,24 +143,23 @@ public final class CrystalAttributes {
                 if (!prop.canSee(progress) || !attr.isDiscovered()) {
                     missing = true;
                 } else {
-                    ITextComponent enchantmentLevel = new TranslationTextComponent(String.format("enchantment.level.%s", String.valueOf(attr.getTier())))
-                            .setStyle(new Style().setColor(TextFormatting.GOLD));
-                    ITextComponent propertyName = prop.getName(attr.getTier()).applyTextStyle(TextFormatting.GRAY);
+                    IFormattableTextComponent enchantmentLevel = new TranslationTextComponent(String.format("enchantment.level.%s", attr.getTier()))
+                            .mergeStyle(TextFormatting.GOLD);
+                    IFormattableTextComponent propertyName = prop.getName(attr.getTier()).mergeStyle(TextFormatting.GRAY);
                     if (!prop.hasUsageFor(ctx) && !ctx.isEmpty()) {
                         //Don't add a line for it if it's there, but not used in context
                         continue;
                     }
                     tooltip.add(propertyName
-                            .appendSibling(new StringTextComponent(" "))
-                            .appendSibling(enchantmentLevel));
+                            .append(new StringTextComponent(" "))
+                            .append(enchantmentLevel));
                     addedAtLeastOne = true;
                 }
             }
         }
 
         if (missing) {
-            tooltip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge")
-                    .setStyle(new Style().setColor(TextFormatting.GRAY)));
+            tooltip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").mergeStyle(TextFormatting.GRAY));
         }
         return missing && !addedAtLeastOne ? TooltipResult.ALL_MISSING :
                 missing ?  TooltipResult.ADDED_ALL_WITH_MISSING : TooltipResult.ADDED_ALL;

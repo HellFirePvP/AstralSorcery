@@ -19,6 +19,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -46,7 +47,7 @@ public class ResearchHelper {
 
     private static PlayerProgress clientProgress = new PlayerProgressTestAccess();
 
-    private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
+    private static final Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
     @Nonnull
     public static PlayerProgress getProgress(@Nullable PlayerEntity player, LogicalSide side) {
@@ -160,13 +161,13 @@ public class ResearchHelper {
         if (server != null) {
             ServerPlayerEntity player = server.getPlayerList().getPlayerByUUID(pUUID);
             if (player != null) {
-                player.sendMessage(new StringTextComponent("AstralSorcery: Your progression could not be loaded and can't be recovered from backup. Please contact an administrator to lookup what went wrong and/or potentially recover your data from a backup.").setStyle(new Style().setColor(TextFormatting.RED)));
+                player.sendMessage(new StringTextComponent("AstralSorcery: Your progression could not be loaded and can't be recovered from backup. Please contact an administrator to lookup what went wrong and/or potentially recover your data from a backup.").mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
             }
             String resolvedName = player != null ? player.getGameProfile().getName() : pUUID.toString() + " (Not online)";
             for (String opName : server.getPlayerList().getOppedPlayerNames()) {
                 PlayerEntity pl = server.getPlayerList().getPlayerByUsername(opName);
                 if (pl != null) {
-                    pl.sendMessage(new StringTextComponent("AstralSorcery: The progression of " + resolvedName + " could not be loaded and can't be recovered from backup. Error files might be created from the unloadable progression files, check the console for additional information!").setStyle(new Style().setColor(TextFormatting.RED)));
+                    pl.sendMessage(new StringTextComponent("AstralSorcery: The progression of " + resolvedName + " could not be loaded and can't be recovered from backup. Error files might be created from the unloadable progression files, check the console for additional information!").mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
                 }
             }
         }

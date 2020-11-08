@@ -420,7 +420,7 @@ public class MiscUtils {
                         entity.rotationYaw,
                         entity.rotationPitch);
             } else {
-                entity = (T) entity.changeDimension(targetWorld);
+                entity = (T) entity.changeDimension(targetWorld, new NoOpTeleporter(targetWorld, targetPos));
                 if (entity == null) {
                     return null;
                 }

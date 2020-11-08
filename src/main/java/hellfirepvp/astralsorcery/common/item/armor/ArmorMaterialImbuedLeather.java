@@ -65,4 +65,9 @@ public class ArmorMaterialImbuedLeather implements IArmorMaterial {
     public float getToughness() {
         return 1.5F;
     }
+
+    @Override
+    public float getKnockbackResistance() {
+        return 0F;
+    }
 }

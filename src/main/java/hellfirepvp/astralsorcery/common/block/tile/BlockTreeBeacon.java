@@ -50,7 +50,7 @@ public class BlockTreeBeacon extends BlockStarlightNetwork implements CustomItem
                 .hardnessAndResistance(1.5F, 6.0F)
                 .harvestLevel(1)
                 .harvestTool(ToolType.AXE)
-                .lightValue(6)
+                .setLightLevel(state -> 6)
                 .sound(SoundType.PLANT));
     }
 

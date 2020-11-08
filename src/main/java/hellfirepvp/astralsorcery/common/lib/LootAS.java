@@ -31,6 +31,7 @@ public class LootAS {
         public static LootFunctionType RANDOM_CRYSTAL_PROPERTIES;
         public static LootFunctionType COPY_CRYSTAL_PROPERTIES;
         public static LootFunctionType COPY_CONSTELLATION;
+        public static LootFunctionType COPY_GATEWAY_COLOR;
 
     }
 }

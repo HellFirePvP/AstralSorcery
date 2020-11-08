@@ -94,7 +94,8 @@ public class DynamicModifierHelper {
         for (PerkAttributeModifier mod : DynamicModifierHelper.getDynamicModifiers(stack, Minecraft.getInstance().player, LogicalSide.CLIENT, false)) {
             if (mod.hasDisplayString()) {
                 tooltip.add(new StringTextComponent(mod.getLocalizedDisplayString())
-                        .setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true)));
+                        .mergeStyle(TextFormatting.GRAY)
+                        .mergeStyle(TextFormatting.ITALIC));
             }
         }
     }

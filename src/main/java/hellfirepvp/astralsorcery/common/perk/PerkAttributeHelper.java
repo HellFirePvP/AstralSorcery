@@ -27,8 +27,8 @@ import java.util.UUID;
  */
 public class PerkAttributeHelper {
 
-    private static Map<UUID, PerkAttributeMap> playerPerkAttributes = new HashMap<>();
-    private static Map<UUID, PerkAttributeMap> playerPerkAttributesClient = new HashMap<>();
+    private static final Map<UUID, PerkAttributeMap> playerPerkAttributes = new HashMap<>();
+    private static final Map<UUID, PerkAttributeMap> playerPerkAttributesClient = new HashMap<>();
 
     private PerkAttributeHelper() {}
 

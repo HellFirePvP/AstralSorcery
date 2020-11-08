@@ -24,10 +24,10 @@ import java.util.*;
  */
 public class ConstellationRegistry {
 
-    private static SortedSet<IMajorConstellation> majorConstellations = new TreeSet<>();
-    private static SortedSet<IWeakConstellation> weakConstellations = new TreeSet<>();
-    private static SortedSet<IMinorConstellation> minorConstellations = new TreeSet<>();
-    private static SortedSet<IConstellationSpecialShowup> specialShowupConstellations = new TreeSet<>();
+    private static final SortedSet<IMajorConstellation> majorConstellations = new TreeSet<>();
+    private static final SortedSet<IWeakConstellation> weakConstellations = new TreeSet<>();
+    private static final SortedSet<IMinorConstellation> minorConstellations = new TreeSet<>();
+    private static final SortedSet<IConstellationSpecialShowup> specialShowupConstellations = new TreeSet<>();
 
     public static <T extends IConstellation> void addConstellation(T constellation) {
         if (constellation instanceof IWeakConstellation) {

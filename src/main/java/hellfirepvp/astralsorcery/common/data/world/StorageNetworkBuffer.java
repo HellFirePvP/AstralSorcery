@@ -36,8 +36,8 @@ import java.util.Map;
  */
 public class StorageNetworkBuffer extends GlobalWorldData {
 
-    private Map<BlockPos, StorageNetwork> rawNetworks = Maps.newHashMap();
-    private Map<ChunkPos, List<StorageNetwork>> availableNetworks = Maps.newHashMap();
+    private final Map<BlockPos, StorageNetwork> rawNetworks = Maps.newHashMap();
+    private final Map<ChunkPos, List<StorageNetwork>> availableNetworks = Maps.newHashMap();
 
     public StorageNetworkBuffer(WorldCacheDomain.SaveKey<?> key) {
         super(key);

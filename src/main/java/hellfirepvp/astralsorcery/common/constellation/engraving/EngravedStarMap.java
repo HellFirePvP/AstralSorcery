@@ -38,8 +38,8 @@ public class EngravedStarMap {
 
     private static final Random rand = new Random();
 
-    private Map<ResourceLocation, Float> distributions;
-    private List<DrawnConstellation> drawInformation;
+    private final Map<ResourceLocation, Float> distributions;
+    private final List<DrawnConstellation> drawInformation;
 
     private EngravedStarMap(Map<ResourceLocation, Float> distributions, List<DrawnConstellation> drawnConstellations) {
         this.distributions = distributions;

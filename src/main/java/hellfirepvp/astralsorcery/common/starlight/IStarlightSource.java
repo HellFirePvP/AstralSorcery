@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 12:23
  */
-public interface IStarlightSource<T extends ITransmissionSource> extends IStarlightTransmission {
+public interface IStarlightSource<T extends ITransmissionSource> extends IStarlightTransmission<T> {
 
     @Nonnull
     public IIndependentStarlightSource provideNewSourceNode();

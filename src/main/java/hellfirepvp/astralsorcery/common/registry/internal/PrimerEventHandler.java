@@ -139,12 +139,13 @@ public class PrimerEventHandler {
 
     private void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         RegistryEntities.init();
+        RegistryEntities.initAttributes();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
     private void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
         //Query ocean-biome key to start creating the biome instances
-        BiomeRegistry.func_244203_a(0);
+        BiomeRegistry.getKeyFromID(0);
 
         RegistryWorldGeneration.registerFeatures();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());

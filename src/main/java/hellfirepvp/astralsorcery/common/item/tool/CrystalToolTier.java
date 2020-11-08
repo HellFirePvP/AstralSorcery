@@ -20,7 +20,7 @@ import net.minecraft.item.crafting.Ingredient;
  */
 public class CrystalToolTier implements IItemTier {
 
-    private static CrystalToolTier INSTANCE = new CrystalToolTier();
+    private static final CrystalToolTier INSTANCE = new CrystalToolTier();
 
     private CrystalToolTier() {}
 

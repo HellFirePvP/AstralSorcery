@@ -41,9 +41,11 @@ public class PerkTreeLoader extends JsonReloadListener {
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonObject> dataMap, IResourceManager resourceManager, IProfiler profiler) {
+    protected void apply(Map<ResourceLocation, JsonElement> dataMap, IResourceManager resourceManager, IProfiler profiler) {
         Collection<JsonObject> loadingPerkObjects = MapStream.of(dataMap)
                 .filterKey(key -> !key.getPath().startsWith("_"))
+                .filterValue(JsonElement::isJsonObject)
+                .mapValue(JsonElement::getAsJsonObject)
                 .valueStream()
                 .collect(Collectors.toList());
         PerkTree.PERK_TREE.updateOriginPerkTree(loadPerkTree(loadingPerkObjects));

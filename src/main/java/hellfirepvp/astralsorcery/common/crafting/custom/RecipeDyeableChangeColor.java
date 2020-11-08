@@ -59,7 +59,7 @@ public class RecipeDyeableChangeColor extends SpecialRecipe {
             return ItemStack.EMPTY;
         }
         ItemStack wand = new ItemStack(this.output);
-        ItemIlluminationWand.setConfiguredColor(wand, color);
+        this.colorFn.accept(wand, color);
         return wand;
     }
 

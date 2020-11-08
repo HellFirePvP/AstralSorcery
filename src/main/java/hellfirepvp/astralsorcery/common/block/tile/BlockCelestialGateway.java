@@ -49,6 +49,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
@@ -67,7 +68,8 @@ public class BlockCelestialGateway extends ContainerBlock implements CustomItemB
 
     public BlockCelestialGateway() {
         super(PropertiesGlass.coatedGlass()
-                .lightValue(12)
+                .setLightLevel((state) -> 12)
+                .hardnessAndResistance(-1F, 3600000.0F)
                 .harvestLevel(1)
                 .harvestTool(ToolType.PICKAXE));
     }
@@ -79,7 +81,7 @@ public class BlockCelestialGateway extends ContainerBlock implements CustomItemB
 
         DyeColor color = getColor(stack);
         if (color != null) {
-            tooltip.add(ColorUtils.getTranslation(color).applyTextStyle(ColorUtils.textFormattingForDye(color)));
+            tooltip.add(ColorUtils.getTranslation(color).mergeStyle(ColorUtils.textFormattingForDye(color)));
         }
     }
 
@@ -150,21 +152,23 @@ public class BlockCelestialGateway extends ContainerBlock implements CustomItemB
     @Override
     public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader world, BlockPos pos) {
         TileCelestialGateway gateway = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, true);
-        if (gateway != null && gateway.isLocked() && gateway.getOwner() != null) {
-            return gateway.getOwner().isPlayer(player) ? this.blockHardness : -1F;
+        if (gateway != null && gateway.isLocked() && gateway.getOwner() != null && gateway.getOwner().isPlayer(player)) {
+            int i = ForgeHooks.canHarvestBlock(state, player, world, pos) ? 30 : 100;
+            return player.getDigSpeed(state, pos) / i;
         }
-        return this.blockHardness;
+        return super.getPlayerRelativeBlockHardness(state, player, world, pos);
     }
 
-    @Override
-    public float getBlockHardness(BlockState blockState, IBlockReader world, BlockPos pos) {
-        TileCelestialGateway gateway = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, true);
-        if (gateway != null && gateway.isLocked() && gateway.getOwner() != null) {
-            //Assume this is non-player related hardness. In which case, it cannot be mined to begin with.
-            return -1;
-        }
-        return this.blockHardness;
-    }
+    //TODO custom states via state container
+    //@Override
+    //public float getBlockHardness(BlockState blockState, IBlockReader world, BlockPos pos) {
+    //    TileCelestialGateway gateway = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, true);
+    //    if (gateway != null && gateway.isLocked() && gateway.getOwner() != null) {
+    //        //Assume this is non-player related hardness. In which case, it cannot be mined to begin with.
+    //        return -1;
+    //    }
+    //    return this.blockHardness;
+    //}
 
     @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moving) {

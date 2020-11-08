@@ -21,8 +21,8 @@ import java.awt.*;
  */
 public class PlayerAngledConstellationInformation extends ConstellationDiscoveryScreen.ConstellationDisplayInformation {
 
-    private float yaw;
-    private float pitch;
+    private final float yaw;
+    private final float pitch;
 
     public PlayerAngledConstellationInformation(float size, float yaw, float pitch) {
         super(new Point(), size);

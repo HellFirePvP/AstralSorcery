@@ -24,7 +24,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -101,7 +101,7 @@ public class FountainEffectVortex extends FountainEffect<VortexContext> {
                     rules.get(GameRules.MOB_GRIEFING).set(prev, null);
                 }
             } else {
-                le.setMotion(Vec3d.ZERO);
+                le.setMotion(Vector3d.ZERO);
             }
 
             EventHelperEntityFreeze.freeze(le);
@@ -123,7 +123,7 @@ public class FountainEffectVortex extends FountainEffect<VortexContext> {
                 if (le instanceof EnderDragonEntity) {
                     Vector3 nextPos = new Vector3(le.getPosition()).add(v);
                     le.setPositionAndRotation(nextPos.getX(), nextPos.getY(), nextPos.getZ(), le.rotationYaw, le.rotationPitch);
-                    le.setMotion(Vec3d.ZERO);
+                    le.setMotion(Vector3d.ZERO);
                 } else {
                     le.setMotion(le.getMotion().add(v.getX(), v.getY() * 2.5, v.getZ()));
                     le.velocityChanged = true;

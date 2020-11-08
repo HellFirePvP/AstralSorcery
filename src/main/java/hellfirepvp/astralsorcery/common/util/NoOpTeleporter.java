@@ -13,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.server.ServerWorld;
 
+import java.util.function.Function;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -30,9 +32,9 @@ public class NoOpTeleporter extends Teleporter {
     }
 
     @Override
-    public boolean placeInPortal(Entity entity, float yaw) {
-        entity.moveToBlockPosAndAngles(targetPos, yaw, entity.rotationPitch);
-        return true;
+    public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
+        Entity created = repositionEntity.apply(false);
+        created.setPositionAndUpdate(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+        return created;
     }
-
 }

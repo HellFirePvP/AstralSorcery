@@ -36,14 +36,14 @@ import java.util.*;
  */
 public class TransmissionChain {
 
-    private List<ChunkPos> involvedChunks = new LinkedList<>();
-    private List<LightConnection> foundConnections = new LinkedList<>();
-    private Map<BlockPos, Float> remainMultiplierMap = new HashMap<>();
+    private final List<ChunkPos> involvedChunks = new LinkedList<>();
+    private final List<LightConnection> foundConnections = new LinkedList<>();
+    private final Map<BlockPos, Float> remainMultiplierMap = new HashMap<>();
 
-    private Set<BlockPos> uncheckedEndpointsBlock = new HashSet<>(); //Might be IBlockSLRecipient or just a normal block.
-    private Set<BlockPos> resolvedNormalBlockPositions = new HashSet<>();
-    private Set<ITransmissionReceiver> endpointsNodes = new HashSet<>(); //Safe to assume those are endpoints
-    private Set<IPrismTransmissionNode> transmissionUpdateList = new HashSet<>();
+    private final Set<BlockPos> uncheckedEndpointsBlock = new HashSet<>(); //Might be IBlockSLRecipient or just a normal block.
+    private final Set<BlockPos> resolvedNormalBlockPositions = new HashSet<>();
+    private final Set<ITransmissionReceiver> endpointsNodes = new HashSet<>(); //Safe to assume those are endpoints
+    private final Set<IPrismTransmissionNode> transmissionUpdateList = new HashSet<>();
 
     private final WorldNetworkHandler handler;
     private final IPrismTransmissionNode sourceNode;
@@ -58,10 +58,10 @@ public class TransmissionChain {
             TransmissionChain chain = buildFromSource(netHandler, sourcePos);
             handle.threadTransmissionChainCallback(world, chain, source, netHandler, sourcePos);
             SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS, DataLightConnections.class, data -> {
-                data.updateNewConnectionsThreaded(netHandler.getWorld().func_234923_W_(), chain.getFoundConnections());
+                data.updateNewConnectionsThreaded(netHandler.getWorld().getDimensionKey(), chain.getFoundConnections());
             });
             SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
-                data.updateNewEndpoints(netHandler.getWorld().func_234923_W_(), chain.getResolvedNormalBlockPositions());
+                data.updateNewEndpoints(netHandler.getWorld().getDimensionKey(), chain.getResolvedNormalBlockPositions());
             });
         });
         tr.setName("TrChainCalculationThread");
@@ -99,7 +99,7 @@ public class TransmissionChain {
         if (uncheckedEndpointsBlock.contains(pos) && !resolvedNormalBlockPositions.contains(pos)) {
             resolvedNormalBlockPositions.add(pos);
             SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
-                data.updateNewEndpoint(world.func_234923_W_(), pos);
+                data.updateNewEndpoint(world.getDimensionKey(), pos);
             });
         }
     }

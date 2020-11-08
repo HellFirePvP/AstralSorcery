@@ -28,7 +28,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Sources.*
  */
 public class PropertyConstellation extends CrystalProperty {
 
-    private IWeakConstellation cst;
+    private final IWeakConstellation cst;
 
     public PropertyConstellation(IWeakConstellation cst) {
         super(AstralSorcery.key("constellation." + cst.getSimpleName()));

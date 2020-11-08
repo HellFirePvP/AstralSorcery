@@ -39,12 +39,12 @@ import java.util.Optional;
 public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
 
     private boolean isClockwise = false;
-    private ResourceLocation dim = null;
+    private RegistryKey<World> dim = null;
     private BlockPos pos = BlockPos.ZERO;
 
     public PktRotateTelescope() {}
 
-    public PktRotateTelescope(boolean isClockwise, ResourceLocation dim, BlockPos pos) {
+    public PktRotateTelescope(boolean isClockwise, RegistryKey<World> dim, BlockPos pos) {
         this.isClockwise = isClockwise;
         this.dim = dim;
         this.pos = pos;
@@ -54,7 +54,7 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
     public Encoder<PktRotateTelescope> encoder() {
         return (packet, buffer) -> {
             buffer.writeBoolean(packet.isClockwise);
-            ByteBufUtils.writeOptional(buffer, packet.dim, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeOptional(buffer, packet.dim, ByteBufUtils::writeVanillaRegistryEntry);
             ByteBufUtils.writePos(buffer, packet.pos);
         };
     }
@@ -66,7 +66,7 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
             PktRotateTelescope pkt = new PktRotateTelescope();
 
             pkt.isClockwise = buffer.readBoolean();
-            pkt.dim = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
+            pkt.dim = ByteBufUtils.readOptional(buffer, ByteBufUtils::readVanillaRegistryEntry);
             pkt.pos = ByteBufUtils.readPos(buffer);
 
             return pkt;
@@ -99,8 +99,7 @@ public class PktRotateTelescope extends ASPacket<PktRotateTelescope> {
                 context.enqueueWork(() -> {
                     //TODO 1.16.2 re-check once worlds are not all constantly loaded
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                    RegistryKey<World> dimKey = RegistryKey.func_240903_a_(Registry.WORLD_KEY, packet.dim);
-                    World world = srv.getWorld(dimKey);
+                    World world = srv.getWorld(packet.dim);
 
                     TileTelescope tt = MiscUtils.getTileAt(world, packet.pos, TileTelescope.class, false);
                     if(tt != null) {

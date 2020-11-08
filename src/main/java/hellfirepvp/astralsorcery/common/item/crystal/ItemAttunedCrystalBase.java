@@ -55,10 +55,10 @@ public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements 
             if (c != null) {
                 if (GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
                     toolTip.add(new TranslationTextComponent("crystal.info.astralsorcery.attuned",
-                            c.getConstellationName().applyTextStyle(TextFormatting.BLUE))
-                            .applyTextStyle(TextFormatting.GRAY));
+                            c.getConstellationName().mergeStyle(TextFormatting.BLUE))
+                            .mergeStyle(TextFormatting.GRAY));
                 } else if (!addedMissing) {
-                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").applyTextStyle(TextFormatting.GRAY));
+                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").mergeStyle(TextFormatting.GRAY));
                     addedMissing = true;
                 }
             }
@@ -67,10 +67,10 @@ public abstract class ItemAttunedCrystalBase extends ItemCrystalBase implements 
             if (tr != null) {
                 if (GatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchHelper.getClientProgress().hasConstellationDiscovered(tr)) {
                     toolTip.add(new TranslationTextComponent("crystal.info.astralsorcery.trait",
-                            tr.getConstellationName().applyTextStyle(TextFormatting.BLUE))
-                            .applyTextStyle(TextFormatting.GRAY));
+                            tr.getConstellationName().mergeStyle(TextFormatting.BLUE))
+                            .mergeStyle(TextFormatting.GRAY));
                 } else if (!addedMissing) {
-                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").applyTextStyle(TextFormatting.GRAY));
+                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").mergeStyle(TextFormatting.GRAY));
                 }
             }
         }

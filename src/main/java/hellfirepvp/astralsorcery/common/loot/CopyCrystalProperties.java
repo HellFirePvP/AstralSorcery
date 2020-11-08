@@ -37,7 +37,7 @@ public class CopyCrystalProperties extends LootFunction {
     }
 
     @Override
-    public LootFunctionType func_230425_b_() {
+    public LootFunctionType getFunctionType() {
         return LootAS.Functions.COPY_CRYSTAL_PROPERTIES;
     }
 

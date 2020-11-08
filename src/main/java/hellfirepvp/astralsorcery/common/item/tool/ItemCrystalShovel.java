@@ -58,7 +58,7 @@ public class ItemCrystalShovel extends ItemCrystalTierItem {
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         EnchantmentType type = enchantment.type;
-        return type == EnchantmentType.ALL || type == EnchantmentType.DIGGER || type == EnchantmentType.BREAKABLE;
+        return type == EnchantmentType.DIGGER || type == EnchantmentType.BREAKABLE;
     }
 
     @Override

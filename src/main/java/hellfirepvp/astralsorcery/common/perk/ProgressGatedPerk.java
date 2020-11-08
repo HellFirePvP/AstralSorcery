@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -83,10 +84,10 @@ public class ProgressGatedPerk extends AbstractPerk {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean addLocalizedTooltip(Collection<ITextComponent> tooltip) {
+    public boolean addLocalizedTooltip(Collection<IFormattableTextComponent> tooltip) {
         if (!canSeeClient()) {
             tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.missing_progress")
-                    .applyTextStyle(TextFormatting.RED));
+                    .mergeStyle(TextFormatting.RED));
             return false;
         }
         return super.addLocalizedTooltip(tooltip);

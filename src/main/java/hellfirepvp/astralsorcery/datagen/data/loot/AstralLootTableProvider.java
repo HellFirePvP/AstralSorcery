@@ -45,6 +45,6 @@ public final class AstralLootTableProvider extends LootTableProvider {
 
     @Override
     protected void validate(Map<ResourceLocation, LootTable> tables, ValidationTracker tracker) {
-        tables.forEach((key, table) -> LootTableManager.func_227508_a_(tracker, key, table));
+        tables.forEach((key, table) -> LootTableManager.validateLootTable(tracker, key, table));
     }
 }

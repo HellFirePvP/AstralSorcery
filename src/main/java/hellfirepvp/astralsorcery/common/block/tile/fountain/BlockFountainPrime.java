@@ -30,7 +30,7 @@ public abstract class BlockFountainPrime extends Block implements CustomItemBloc
     }
 
     @Nonnull
-    public abstract FountainEffect provideEffect();
+    public abstract FountainEffect<?> provideEffect();
 
     @Override
     public BlockState updatePostPlacement(BlockState state, Direction placedAgainst, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {

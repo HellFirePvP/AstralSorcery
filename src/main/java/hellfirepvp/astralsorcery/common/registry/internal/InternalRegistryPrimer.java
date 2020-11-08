@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class InternalRegistryPrimer {
 
-    private Map<Class<?>, List<IForgeRegistryEntry<?>>> primed = new HashMap<>();
+    private final Map<Class<?>, List<IForgeRegistryEntry<?>>> primed = new HashMap<>();
 
     public <V extends IForgeRegistryEntry<V>> V register(V entry) {
         Class<V> type = entry.getRegistryType();

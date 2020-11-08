@@ -39,6 +39,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -222,7 +223,11 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
             dstr = yLevel / 120F;
         }
         if (posDistribution == -1) {
-            posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, getPos());
+            if (world instanceof ISeedReader) {
+                posDistribution = SkyCollectionHelper.getSkyNoiseDistribution((ISeedReader) world, getPos());
+            } else {
+                posDistribution = 0.3F;
+            }
         }
 
         sbDayDistribution *= dstr;

@@ -19,6 +19,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -67,7 +68,7 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean addLocalizedTooltip(Collection<ITextComponent> tooltip) {
+    public boolean addLocalizedTooltip(Collection<IFormattableTextComponent> tooltip) {
         if (super.addLocalizedTooltip(tooltip)) {
             tooltip.add(new StringTextComponent(""));
         }

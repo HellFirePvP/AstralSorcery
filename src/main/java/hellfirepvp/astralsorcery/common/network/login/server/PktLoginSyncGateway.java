@@ -13,7 +13,9 @@ import hellfirepvp.astralsorcery.common.data.world.GatewayCache;
 import hellfirepvp.astralsorcery.common.network.base.ASLoginPacket;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.item.DyeColor;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -31,7 +33,7 @@ import java.util.*;
  */
 public class PktLoginSyncGateway extends ASLoginPacket<PktLoginSyncGateway> {
 
-    private Map<ResourceLocation, Collection<GatewayCache.GatewayNode>> positions = new HashMap<>();
+    private Map<RegistryKey<World>, Collection<GatewayCache.GatewayNode>> positions = new HashMap<>();
 
     public PktLoginSyncGateway() {}
 
@@ -46,8 +48,8 @@ public class PktLoginSyncGateway extends ASLoginPacket<PktLoginSyncGateway> {
     public Encoder<PktLoginSyncGateway> encoder() {
         return (packet, buffer) -> {
             buffer.writeInt(packet.positions.size());
-            for (ResourceLocation dim : packet.positions.keySet()) {
-                ByteBufUtils.writeResourceLocation(buffer, dim);
+            for (RegistryKey<World> dim : packet.positions.keySet()) {
+                ByteBufUtils.writeVanillaRegistryEntry(buffer, dim);
                 ByteBufUtils.writeCollection(buffer, packet.positions.get(dim), (buf, node) -> node.write(buf));
             }
         };
@@ -60,7 +62,7 @@ public class PktLoginSyncGateway extends ASLoginPacket<PktLoginSyncGateway> {
             PktLoginSyncGateway pkt = new PktLoginSyncGateway();
             int dimSize = buffer.readInt();
             for (int i = 0; i < dimSize; i++) {
-                ResourceLocation dim = ByteBufUtils.readResourceLocation(buffer);
+                RegistryKey<World> dim = ByteBufUtils.readVanillaRegistryEntry(buffer);
                 pkt.positions.put(dim, ByteBufUtils.readList(buffer, GatewayCache.GatewayNode::read));
             }
             return pkt;

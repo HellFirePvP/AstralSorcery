@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.starlight.network;
 
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -33,29 +35,41 @@ public class TransmissionChunkTracker {
     }
 
     private void onChLoad(ChunkEvent.Load event) {
-        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(event.getWorld());
+        IWorld iWorld = event.getWorld();
+        if (iWorld.isRemote() || !(iWorld instanceof World)) {
+            return;
+        }
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler((World) iWorld);
         if (handle != null) {
             handle.informChunkLoad(event.getChunk().getPos());
         }
     }
 
     private void onChUnload(ChunkEvent.Unload event) {
-        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(event.getWorld());
+        IWorld iWorld = event.getWorld();
+        if (iWorld.isRemote() || !(iWorld instanceof World)) {
+            return;
+        }
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler((World) iWorld);
         if (handle != null) {
             handle.informChunkUnload(event.getChunk().getPos());
         }
     }
 
     private void onWorldLoad(WorldEvent.Load event) {
-        if (event.getWorld().isRemote()) {
+        IWorld iWorld = event.getWorld();
+        if (iWorld.isRemote() || !(iWorld instanceof World)) {
             return;
         }
-        StarlightUpdateHandler.getInstance().informWorldLoad(event.getWorld());
+        StarlightUpdateHandler.getInstance().informWorldLoad((World) iWorld);
     }
 
     private void onWorldUnload(WorldEvent.Unload event) {
-        //StarlightTransmissionHandler.getInstance().informWorldUnload(event.getWorld());
-        //StarlightUpdateHandler.getInstance().informWorldUnload(event.getWorld());
+        IWorld iWorld = event.getWorld();
+        if (iWorld.isRemote() || !(iWorld instanceof World)) {
+            return;
+        }
+        StarlightTransmissionHandler.getInstance().informWorldUnload((World) iWorld);
     }
 
 }

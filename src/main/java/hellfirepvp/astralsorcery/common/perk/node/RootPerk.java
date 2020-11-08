@@ -34,7 +34,7 @@ import java.util.UUID;
 public abstract class RootPerk extends AttributeModifierPerk {
 
     private final IMajorConstellation constellation;
-    private Map<UUID, DiminishingMultiplier> dimReturns = new HashMap<>();
+    private final Map<UUID, DiminishingMultiplier> dimReturns = new HashMap<>();
 
     private final Config config;
 

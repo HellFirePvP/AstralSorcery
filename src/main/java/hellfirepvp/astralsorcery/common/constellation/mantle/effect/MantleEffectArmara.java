@@ -113,7 +113,7 @@ public class MantleEffectArmara extends MantleEffect {
                 Vector3 pos = anglePlayer.clone().multiply(sRand.nextFloat() * 0.4F + 0.9F).add(at);
 
                 float alpha = 0.8F;
-                if (Minecraft.getInstance().gameSettings.thirdPersonView == 0) {
+                if (Minecraft.getInstance().gameSettings.getPointOfView().func_243192_a()) {
                     float deg = (float) Math.toDegrees(lookVec.angle(anglePlayer));
                     if (deg < 70F) {
                         float tansparentDegree = 40F;

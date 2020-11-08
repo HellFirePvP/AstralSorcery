@@ -38,7 +38,7 @@ public abstract class TileSourceBase<T extends ITransmissionSource> extends Tile
 
     protected boolean needsNetworkChainRebuild = false;
     private boolean linked = false;
-    private List<BlockPos> positions = new LinkedList<>();
+    private final List<BlockPos> positions = new LinkedList<>();
 
     protected TileSourceBase(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);

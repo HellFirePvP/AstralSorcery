@@ -380,7 +380,7 @@ public class ActivePlayerAttunementRecipe extends AttunementRecipe.Active<Attune
                 ICameraTransformer transformer = (ICameraTransformer) this.cameraHack;
                 ICameraPersistencyFunction persistency = transformer.getPersistencyFunction();
                 if (persistency.isExpired() && !persistency.wasForciblyStopped()) {
-                    PktAttunePlayerConstellation attuneRequest = new PktAttunePlayerConstellation(this.constellation, altar.getWorld().func_234923_W_(), at);
+                    PktAttunePlayerConstellation attuneRequest = new PktAttunePlayerConstellation(this.constellation, altar.getWorld().getDimensionKey(), at);
                     PacketChannel.CHANNEL.sendToServer(attuneRequest);
                 }
             }

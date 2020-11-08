@@ -47,7 +47,7 @@ public class RockCrystalBuffer extends SectionWorldData<RockCrystalBuffer.Buffer
         for (int xx = -chunkRadius; xx <= chunkRadius; xx++) {
             for (int zz = -chunkRadius; zz <= chunkRadius; zz++) {
                 ChunkPos other = new ChunkPos(center.x + xx, center.z + zz);
-                BufferSection section = this.getSection(other.getBlock(0, 0, 0));
+                BufferSection section = this.getSection(other.asBlockPos());
                 if (section != null) {
                     out.addAll(section.crystalPositions);
                 }

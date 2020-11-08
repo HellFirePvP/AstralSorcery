@@ -34,8 +34,8 @@ public class ResearchIOThread extends TimerTask implements ServerLifecycleListen
     private static ResearchIOThread saveTask;
     private static Timer ioThread;
 
-    private Map<UUID, PlayerProgress> playerSaveQueue = Maps.newHashMap();
-    private Map<UUID, PlayerProgress> awaitingSaveQueue = Maps.newHashMap();
+    private final Map<UUID, PlayerProgress> playerSaveQueue = Maps.newHashMap();
+    private final Map<UUID, PlayerProgress> awaitingSaveQueue = Maps.newHashMap();
     private boolean inSave = false, skipTick = false;
 
     private ResearchIOThread() {}

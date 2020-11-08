@@ -25,7 +25,6 @@ public class MaterialBuilderAS {
     private PushReaction pushReaction = PushReaction.NORMAL;
     private boolean blocksMovement = true;
     private boolean canBurn = false;
-    private boolean requiresNoTool = true;
     private boolean isLiquid = false;
     private boolean isReplaceable = false;
     private boolean isSolid = true;
@@ -52,11 +51,6 @@ public class MaterialBuilderAS {
 
     public MaterialBuilderAS notOpaque() {
         this.isOpaque = false;
-        return this;
-    }
-
-    public MaterialBuilderAS requiresTool() {
-        this.requiresNoTool = false;
         return this;
     }
 
@@ -87,7 +81,6 @@ public class MaterialBuilderAS {
                 this.isSolid,
                 this.blocksMovement,
                 this.isOpaque,
-                this.requiresNoTool,
                 this.canBurn,
                 this.isReplaceable,
                 this.pushReaction);

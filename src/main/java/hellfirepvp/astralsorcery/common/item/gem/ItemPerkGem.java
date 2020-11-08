@@ -36,7 +36,7 @@ public abstract class ItemPerkGem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
         if (world.isRemote()) {
             return;
         }

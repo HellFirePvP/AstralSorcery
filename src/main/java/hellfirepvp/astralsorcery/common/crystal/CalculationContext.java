@@ -25,7 +25,7 @@ import java.util.function.Supplier;
  */
 public class CalculationContext {
 
-    private Collection<PropertyUsage> usages = new HashSet<>();
+    private final Collection<PropertyUsage> usages = new HashSet<>();
     private PropertySource.SourceInstance source = null;
 
     private CalculationContext() {}

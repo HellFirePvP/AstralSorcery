@@ -65,7 +65,7 @@ public class AbstractPerk implements ModifierSource {
 
     private ResourceLocation customPerkType = null;
 
-    private List<ITextComponent> tooltipCache = null;
+    private List<IFormattableTextComponent> tooltipCache = null;
     private boolean cacheTooltip = true;
     private float cacheEffectMultiplier = 1.0F;
 
@@ -221,15 +221,15 @@ public class AbstractPerk implements ModifierSource {
         return false;
     }
 
-    public ITextComponent getName() {
+    public IFormattableTextComponent getName() {
         return new TranslationTextComponent(this.unlocalizedKey + ".name")
-                .applyTextStyle(this.getCategory().getTextFormatting());
+                .mergeStyle(this.getCategory().getTextFormatting());
     }
 
     @Nonnull
     @OnlyIn(Dist.CLIENT)
-    public Collection<ITextComponent> getDescription() {
-        List<ITextComponent> toolTip = new ArrayList<>();
+    public Collection<IFormattableTextComponent> getDescription() {
+        List<IFormattableTextComponent> toolTip = new ArrayList<>();
         if (I18n.hasKey(this.unlocalizedKey + ".desc.1")) { // Might have a indexed list there
             int count = 1;
             while (I18n.hasKey(this.unlocalizedKey + ".desc." + count)) {
@@ -250,7 +250,7 @@ public class AbstractPerk implements ModifierSource {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public final Collection<ITextComponent> getLocalizedTooltip() {
+    public final Collection<IFormattableTextComponent> getLocalizedTooltip() {
         if (cacheTooltip && tooltipCache != null) {
             return tooltipCache;
         }
@@ -258,7 +258,7 @@ public class AbstractPerk implements ModifierSource {
         tooltipCache = Lists.newArrayList();
         if (modifiersDisabled(Minecraft.getInstance().player, LogicalSide.CLIENT)) {
             tooltipCache.add(new TranslationTextComponent("perk.info.astralsorcery.disabled")
-                    .setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    .mergeStyle(TextFormatting.GRAY));
         } else if (!(this instanceof ProgressGatedPerk) || ((ProgressGatedPerk) this).canSeeClient()) {
             tooltipCache.add(this.getName());
 
@@ -270,13 +270,13 @@ public class AbstractPerk implements ModifierSource {
             tooltipCache.addAll(this.getDescription());
         } else {
             tooltipCache.add(new TranslationTextComponent("perk.info.astralsorcery.missing_progress")
-                    .setStyle(new Style().setColor(TextFormatting.RED)));
+                    .mergeStyle(TextFormatting.RED));
         }
         return tooltipCache;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public boolean addLocalizedTooltip(Collection<ITextComponent> tooltip) {
+    public boolean addLocalizedTooltip(Collection<IFormattableTextComponent> tooltip) {
         return false;
     }
 
@@ -284,7 +284,7 @@ public class AbstractPerk implements ModifierSource {
     //Default: modname of added mod
     @Nullable
     @OnlyIn(Dist.CLIENT)
-    public Collection<ITextComponent> getSource() {
+    public Collection<IFormattableTextComponent> getSource() {
         String modid = getRegistryName().getNamespace();
         ModContainer mod = ModList.get().getModContainerById(modid).orElse(null);
         if (mod != null) {

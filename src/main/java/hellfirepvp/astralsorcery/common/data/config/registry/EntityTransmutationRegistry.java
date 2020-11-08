@@ -40,7 +40,7 @@ public class EntityTransmutationRegistry extends ConfigDataAdapter<EntityTransmu
         return Lists.newArrayList(
                 new EntityTransmutationEntry(EntityType.SKELETON, EntityType.WITHER_SKELETON),
                 new EntityTransmutationEntry(EntityType.VILLAGER, EntityType.WITCH),
-                new EntityTransmutationEntry(EntityType.PIG,      EntityType.ZOMBIE_PIGMAN),
+                new EntityTransmutationEntry(EntityType.PIG,      EntityType.ZOMBIFIED_PIGLIN),
                 new EntityTransmutationEntry(EntityType.COW,      EntityType.ZOMBIE),
                 new EntityTransmutationEntry(EntityType.PARROT,   EntityType.GHAST),
                 new EntityTransmutationEntry(EntityType.CHICKEN,  EntityType.BLAZE),

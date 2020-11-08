@@ -30,7 +30,7 @@ import java.util.Random;
  */
 public class StarlightNetworkRegistry {
 
-    private static List<IStarlightBlockHandler> blockHandlers = new LinkedList<>();
+    private static final List<IStarlightBlockHandler> blockHandlers = new LinkedList<>();
 
     @Nullable
     public static IStarlightBlockHandler getStarlightHandler(World world, BlockPos pos, BlockState state, IWeakConstellation cst) {

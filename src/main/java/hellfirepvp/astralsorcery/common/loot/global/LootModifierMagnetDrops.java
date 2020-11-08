@@ -72,5 +72,10 @@ public class LootModifierMagnetDrops extends LootModifier {
         public LootModifierMagnetDrops read(ResourceLocation location, JsonObject object, ILootCondition[] lootConditions) {
             return new LootModifierMagnetDrops(lootConditions);
         }
+
+        @Override
+        public JsonObject write(LootModifierMagnetDrops instance) {
+            return this.makeConditions(instance.conditions);
+        }
     }
 }

@@ -84,7 +84,7 @@ public class AttunePlayerRecipe extends AttunementRecipe<ActivePlayerAttunementR
         Vector3 thisVec = new Vector3(altar).add(0.5, 1.5, 0.5);
         List<ServerPlayerEntity> players = altar.getWorld().getEntitiesWithinAABB(ServerPlayerEntity.class, boxAt);
         if (!players.isEmpty()) {
-            ServerPlayerEntity pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
+            ServerPlayerEntity pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVec()));
             if (isEligablePlayer(pl, altar.getActiveConstellation())) {
                 return pl;
             }

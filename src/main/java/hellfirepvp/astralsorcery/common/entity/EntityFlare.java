@@ -31,6 +31,8 @@ import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.PhantomEntity;
 import net.minecraft.entity.passive.BatEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -74,6 +76,11 @@ public class EntityFlare extends FlyingEntity {
         return (type, world) -> new EntityFlare(world);
     }
 
+    public static AttributeModifierMap.MutableAttribute createAttributes() {
+        return MobEntity.func_233666_p_()
+                .createMutableAttribute(Attributes.MAX_HEALTH, 1);
+    }
+
     public static void spawnAmbientFlare(World world, BlockPos at) {
         if (world.isRemote() || EntityConfig.CONFIG.flareAmbientSpawnChance.get() <= 0) {
             return;
@@ -115,12 +122,6 @@ public class EntityFlare extends FlyingEntity {
             return null;
         }
         return (LivingEntity) e;
-    }
-
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1.0D);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class LinearLuckBonus extends LootFunction {
     }
 
     @Override
-    public LootFunctionType func_230425_b_() {
+    public LootFunctionType getFunctionType() {
         return LootAS.Functions.LINEAR_LUCK_BONUS;
     }
 

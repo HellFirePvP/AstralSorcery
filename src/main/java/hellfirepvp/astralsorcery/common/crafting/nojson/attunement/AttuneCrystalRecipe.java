@@ -78,7 +78,7 @@ public class AttuneCrystalRecipe extends AttunementRecipe<ActiveCrystalAttunemen
         Vector3 thisVec = new Vector3(altar).add(0.5, 1.5, 0.5);
         List<ItemEntity> items = altar.getWorld().getEntitiesWithinAABB(ItemEntity.class, boxAt);
         if (!items.isEmpty()) {
-            ItemEntity item = EntityUtils.selectClosest(items, (iEntity) -> thisVec.distanceSquared(iEntity.getPositionVector()));
+            ItemEntity item = EntityUtils.selectClosest(items, (iEntity) -> thisVec.distanceSquared(iEntity.getPositionVec()));
             if (isApplicableCrystal(item, cst)) {
                 return item;
             }

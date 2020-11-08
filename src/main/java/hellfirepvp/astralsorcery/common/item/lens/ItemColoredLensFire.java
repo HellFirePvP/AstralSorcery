@@ -76,7 +76,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(IWorld world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
+        public void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
             if (world.isRemote() || random.nextFloat() > beamStrength) {
                 return;
             }
@@ -110,7 +110,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
         }
 
         @Override
-        public void blockInBeam(IWorld world, BlockPos pos, BlockState state, float beamStrength) {
+        public void blockInBeam(World world, BlockPos pos, BlockState state, float beamStrength) {
             if (!(world instanceof ServerWorld) || random.nextFloat() > beamStrength) {
                 return;
             }

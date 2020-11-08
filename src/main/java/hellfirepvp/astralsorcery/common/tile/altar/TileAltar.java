@@ -50,6 +50,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -304,7 +305,11 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
             this.collectStarlight(heightAmount * altarTier * 60F, AltarCollectionCategory.HEIGHT);
 
             if (posDistribution == -1) {
-                posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
+                if (world instanceof ISeedReader) {
+                    posDistribution = SkyCollectionHelper.getSkyNoiseDistribution((ISeedReader) world, pos);
+                } else {
+                    posDistribution = 0.3F;
+                }
             }
             float fieldAmount = posDistribution * posDistribution;
             fieldAmount *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());

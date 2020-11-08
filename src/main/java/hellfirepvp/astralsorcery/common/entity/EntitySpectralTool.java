@@ -22,6 +22,8 @@ import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -77,6 +79,12 @@ public class EntitySpectralTool extends FlyingEntity {
         return (type, world) -> new EntitySpectralTool(world);
     }
 
+    public static AttributeModifierMap.MutableAttribute createAttributes() {
+        return MobEntity.func_233666_p_()
+                .createMutableAttribute(Attributes.MAX_HEALTH, 3)
+                .createMutableAttribute(Attributes.FLYING_SPEED, 0.85);
+    }
+
     @Override
     protected void registerData() {
         super.registerData();
@@ -85,19 +93,8 @@ public class EntitySpectralTool extends FlyingEntity {
     }
 
     @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0);
-        this.getAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.85);
-    }
-
-    @Nullable
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return null;
+    public boolean canCollide(Entity entity) {
+        return !(entity instanceof PlayerEntity);
     }
 
     @Override

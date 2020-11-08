@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -28,7 +29,7 @@ import java.util.Map;
 public interface IIndependentStarlightSource {
 
     //As the purpose of the source, this should produce the starlight - called once every tick
-    public float produceStarlightTick(World world, BlockPos pos);
+    public float produceStarlightTick(ServerWorld world, BlockPos pos);
 
     //Can be null or change per tick.
     @Nullable

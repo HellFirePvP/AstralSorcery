@@ -42,12 +42,12 @@ public class PerkTree {
     //The original tree, loaded from JSON on the server
     private PerkTreeData loadedPerkTree = null;
 
-    private SidedReference<PreparedPerkTreeData> treedata = new SidedReference<>();
+    private final SidedReference<PreparedPerkTreeData> treeData = new SidedReference<>();
 
     private PerkTree() {}
 
     public Optional<PreparedPerkTreeData> getData(LogicalSide side) {
-        return this.treedata.getData(side);
+        return this.treeData.getData(side);
     }
 
     public Optional<AbstractPerk> getPerk(LogicalSide side, ResourceLocation key) {
@@ -95,17 +95,17 @@ public class PerkTree {
 
     @OnlyIn(Dist.CLIENT)
     public void receivePerkTree(PreparedPerkTreeData serverTreeData) {
-        this.treedata.setData(LogicalSide.CLIENT, serverTreeData);
+        this.treeData.setData(LogicalSide.CLIENT, serverTreeData);
     }
 
     public void clearCache(LogicalSide side) {
         this.getData(side).ifPresent(data -> data.clearPerkCache(side));
-        this.treedata.setData(side, null);
+        this.treeData.setData(side, null);
     }
 
     public void setupServerPerkTree() {
         if (this.loadedPerkTree != null) {
-            this.treedata.setData(LogicalSide.SERVER, this.loadedPerkTree.prepare());
+            this.treeData.setData(LogicalSide.SERVER, this.loadedPerkTree.prepare());
             AstralSorcery.log.info("Loaded PerkTree!");
         } else {
             AstralSorcery.log.info("No PerkTree data found!");

@@ -14,8 +14,9 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.world.WorldSeedCache;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.IWorld;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
@@ -37,10 +38,10 @@ public class SkyHandler implements ITickHandler {
     
     private static final SkyHandler instance = new SkyHandler();
 
-    private final Map<Integer, WorldContext> worldHandlersServer = Maps.newHashMap();
-    private final Map<Integer, WorldContext> worldHandlersClient = Maps.newHashMap();
+    private final Map<RegistryKey<World>, WorldContext> worldHandlersServer = Maps.newHashMap();
+    private final Map<RegistryKey<World>, WorldContext> worldHandlersClient = Maps.newHashMap();
 
-    private final Map<Integer, Boolean> skyRevertMap = Maps.newHashMap();
+    private final Map<RegistryKey<World>, Boolean> skyRevertMap = Maps.newHashMap();
 
     private SkyHandler() {}
 
@@ -52,13 +53,14 @@ public class SkyHandler implements ITickHandler {
     public void tick(TickEvent.Type type, Object... context) {
         if (type == TickEvent.Type.WORLD) {
             World w = (World) context[0];
-            if (!w.isRemote) {
-                int dimId = w.getDimension().getType().getId();
-                skyRevertMap.put(dimId, false);
-                WorldContext ctx = worldHandlersServer.get(dimId);
+            if (!w.isRemote() && w instanceof ServerWorld) {
+                RegistryKey<World> dimKey = w.getDimensionKey();
+                skyRevertMap.put(dimKey, false);
+
+                WorldContext ctx = worldHandlersServer.get(dimKey);
                 if (ctx == null) {
-                    ctx = createContext(MiscUtils.getRandomWorldSeed(w));
-                    worldHandlersServer.put(dimId, ctx);
+                    ctx = createContext(MiscUtils.getRandomWorldSeed((ServerWorld) w));
+                    worldHandlersServer.put(dimKey, ctx);
                 }
                 ctx.tick(w);
             }
@@ -71,15 +73,15 @@ public class SkyHandler implements ITickHandler {
     private void handleClientTick() {
         World w = Minecraft.getInstance().world;
         if (w != null) {
-            int dimId = w.getDimension().getType().getId();
-            WorldContext ctx = worldHandlersClient.get(dimId);
+            RegistryKey<World> dimKey = w.getDimensionKey();
+            WorldContext ctx = worldHandlersClient.get(dimKey);
             if (ctx == null) {
-                Optional<Long> seedOpt = WorldSeedCache.getSeedIfPresent(w);
+                Optional<Long> seedOpt = WorldSeedCache.getSeedIfPresent(dimKey);
                 if (!seedOpt.isPresent()) {
                     return;
                 }
                 ctx = createContext(seedOpt.get());
-                worldHandlersClient.put(dimId, ctx);
+                worldHandlersClient.put(dimKey, ctx);
             }
             ctx.tick(w);
         }
@@ -99,19 +101,19 @@ public class SkyHandler implements ITickHandler {
         if (world == null) {
             return null;
         }
-        int dimId = world.getDimension().getType().getId();
+        RegistryKey<World> dimKey = world.getDimensionKey();
         if (dist.isClient()) {
-            return getInstance().worldHandlersClient.getOrDefault(dimId, null);
+            return getInstance().worldHandlersClient.getOrDefault(dimKey, null);
         } else {
-            return getInstance().worldHandlersServer.getOrDefault(dimId, null);
+            return getInstance().worldHandlersServer.getOrDefault(dimKey, null);
         }
     }
 
-    public void revertWorldTimeTick(World world) {
-        int dimId = world.getDimension().getType().getId();
-        Boolean state = skyRevertMap.get(dimId);
+    public void revertWorldTimeTick(ServerWorld world) {
+        RegistryKey<World> dimKey = world.getDimensionKey();
+        Boolean state = skyRevertMap.get(dimKey);
         if (!world.isRemote && state != null && !state) {
-            skyRevertMap.put(dimId, true);
+            skyRevertMap.put(dimKey, true);
             world.setDayTime(world.getDayTime() - 1);
         }
     }
@@ -120,9 +122,9 @@ public class SkyHandler implements ITickHandler {
         worldHandlersClient.clear();
     }
 
-    public void informWorldUnload(IWorld world) {
-        worldHandlersServer.remove(world.getDimension().getType().getId());
-        worldHandlersClient.remove(world.getDimension().getType().getId());
+    public void informWorldUnload(World world) {
+        worldHandlersServer.remove(world.getDimensionKey());
+        worldHandlersClient.remove(world.getDimensionKey());
     }
 
     @Override

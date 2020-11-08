@@ -94,5 +94,10 @@ public class LootModifierPerkVoidTrash extends LootModifier {
         public LootModifierPerkVoidTrash read(ResourceLocation location, JsonObject object, ILootCondition[] lootConditions) {
             return new LootModifierPerkVoidTrash(lootConditions);
         }
+
+        @Override
+        public JsonObject write(LootModifierPerkVoidTrash instance) {
+            return this.makeConditions(instance.conditions);
+        }
     }
 }

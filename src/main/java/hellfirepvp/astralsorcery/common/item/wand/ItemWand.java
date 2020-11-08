@@ -136,7 +136,7 @@ public class ItemWand extends Item implements OverrideInteractItem {
 
     @OnlyIn(Dist.CLIENT)
     private void displayClientStructurePreview(World world, BlockPos pos, StructureType type) {
-        StructurePreview.newBuilder(world.func_234923_W_(), pos, (MatchableStructure) type.getStructure())
+        StructurePreview.newBuilder(world.getDimensionKey(), pos, (MatchableStructure) type.getStructure())
                 .removeIfOutInDifferentWorld()
                 .andPersistOnlyIf((inWorld, at) -> {
                     return MiscUtils.executeWithChunk(world, pos, () -> {

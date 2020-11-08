@@ -42,7 +42,7 @@ public class BlockVanishing extends ContainerBlock {
 
     public BlockVanishing() {
         super(Properties.create(Material.BARRIER, MaterialColor.AIR)
-                .hardnessAndResistance(-1, 6_000_000.0F)
+                .hardnessAndResistance(-1F, 3600000.0F)
                 .sound(SoundType.METAL));
     }
 

@@ -45,7 +45,7 @@ public class BlockFlareLight extends Block {
 
     public BlockFlareLight() {
         super(PropertiesMisc.defaultAir()
-                .lightValue(15));
+                .setLightLevel(state -> 15));
         setDefaultState(this.getStateContainer().getBaseState().with(COLOR, DyeColor.YELLOW));
     }
 

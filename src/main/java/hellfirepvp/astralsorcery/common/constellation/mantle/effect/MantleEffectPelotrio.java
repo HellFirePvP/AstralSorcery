@@ -88,7 +88,7 @@ public class MantleEffectPelotrio extends MantleEffect {
                 ItemMantle.getEffect(player, ConstellationsAS.pelotrio) != null) {
 
             BlockState state = event.getState();
-            if ((state.getHarvestTool() == ToolType.PICKAXE || state.getMaterial().isToolNotRequired()) &&
+            if ((state.getHarvestTool() == ToolType.PICKAXE || !state.getRequiresTool()) &&
                     !player.getHeldItemMainhand().isEmpty() &&
                     player.getHeldItemMainhand().getToolTypes().contains(ToolType.PICKAXE)) {
 
@@ -102,7 +102,7 @@ public class MantleEffectPelotrio extends MantleEffect {
                 return;
             }
 
-            if ((state.getHarvestTool() == ToolType.AXE || state.getMaterial().isToolNotRequired()) &&
+            if ((state.getHarvestTool() == ToolType.AXE || !state.getRequiresTool()) &&
                     (state.isIn(BlockTags.LOGS) || state.isIn(BlockTags.LEAVES)) &&
                     !player.getHeldItemMainhand().isEmpty() &&
                     player.getHeldItemMainhand().getToolTypes().contains(ToolType.AXE)) {

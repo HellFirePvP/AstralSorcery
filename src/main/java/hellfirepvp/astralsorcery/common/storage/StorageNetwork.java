@@ -31,7 +31,7 @@ import java.util.Map;
 public class StorageNetwork {
 
     private CoreArea master = null;
-    private Map<BlockPos, AxisAlignedBB> cores = Maps.newHashMap();
+    private final Map<BlockPos, AxisAlignedBB> cores = Maps.newHashMap();
 
     //True if set.
     public boolean setMaster(@Nullable BlockPos pos) {

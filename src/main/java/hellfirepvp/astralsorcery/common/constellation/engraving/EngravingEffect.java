@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  */
 public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
 
-    private List<ApplicableEffect> effects = new ArrayList<>();
+    private final List<ApplicableEffect> effects = new ArrayList<>();
 
     public EngravingEffect(IConstellation cst) {
         this.setRegistryName(cst.getRegistryName());
@@ -101,7 +101,11 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
                 return false;
             }
             if (this.applicableTypes.isEmpty()) {
-                return EnchantmentType.ALL.canEnchantItem(stack.getItem());
+                for (EnchantmentType type : EnchantmentType.values()) {
+                    if (type.canEnchantItem(stack.getItem())) {
+                        return true;
+                    }
+                }
             }
             for (EnchantmentType type : this.applicableTypes) {
                 if (type.canEnchantItem(stack.getItem())) {
@@ -215,7 +219,7 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
             PotionUtils.appendEffects(stack, existing);
             stack.getTag().putInt("CustomPotionColor", ColorsAS.DYE_ORANGE.getRGB());
             //TODO meh.. they changed displayname stuff :V RIP
-            stack.setDisplayName(new TranslationTextComponent("potion.astralsorcery.crafted.name").applyTextStyle(TextFormatting.GOLD));
+            stack.setDisplayName(new TranslationTextComponent("potion.astralsorcery.crafted.name").mergeStyle(TextFormatting.GOLD));
             return stack;
         }
     }

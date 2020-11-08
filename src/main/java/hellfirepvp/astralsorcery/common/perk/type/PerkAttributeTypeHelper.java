@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public class PerkAttributeTypeHelper {
 
-    private static Map<Attribute, PerkAttributeType> vanillaTypes = new HashMap<>();
+    private static final Map<Attribute, PerkAttributeType> vanillaTypes = new HashMap<>();
 
     public static void register(PerkAttributeType type) {
         if (type instanceof VanillaPerkAttributeType) {

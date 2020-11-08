@@ -31,6 +31,7 @@ import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -65,9 +66,9 @@ public class ItemShiftingStar extends Item implements PerkExperienceRevealer {
         IConstellation cst = this.getBaseConstellation();
         if (cst != null) {
             if (ResearchHelper.getClientProgress().hasConstellationDiscovered(cst)) {
-                tooltip.add(cst.getConstellationName().applyTextStyle(TextFormatting.BLUE));
+                tooltip.add(cst.getConstellationName().mergeStyle(TextFormatting.BLUE));
             } else {
-                tooltip.add(new TranslationTextComponent("astralsorcery.misc.noinformation").applyTextStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("astralsorcery.misc.noinformation").mergeStyle(TextFormatting.GRAY));
             }
         }
     }
@@ -92,12 +93,12 @@ public class ItemShiftingStar extends Item implements PerkExperienceRevealer {
                 double perkExp = prog.getPerkExp();
                 if (ResearchManager.setAttunedConstellation(player, cst)) {
                     ResearchManager.setExp(player, MathHelper.lfloor(perkExp));
-                    player.sendMessage(new TranslationTextComponent("astralsorcery.progress.switch.attunement").setStyle(new Style().setColor(TextFormatting.BLUE)));
+                    player.sendMessage(new TranslationTextComponent("astralsorcery.progress.switch.attunement").mergeStyle(TextFormatting.BLUE), Util.DUMMY_UUID);
                     SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, worldIn, entityLiving.getPosition(), 1F, 1F);
 
                 }
             } else if (ResearchManager.setAttunedConstellation(player, null)) {
-                player.sendMessage(new TranslationTextComponent("astralsorcery.progress.remove.attunement").setStyle(new Style().setColor(TextFormatting.BLUE)));
+                player.sendMessage(new TranslationTextComponent("astralsorcery.progress.remove.attunement").mergeStyle(TextFormatting.BLUE), Util.DUMMY_UUID);
                 SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, worldIn, entityLiving.getPosition(), 1F, 1F);
             }
         }

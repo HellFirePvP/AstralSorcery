@@ -48,6 +48,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
@@ -68,11 +69,11 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
 
     public BlockCollectorCrystal(CollectorCrystalType type) {
         super(Properties.create(Material.GLASS, type.getMaterialColor())
-                .hardnessAndResistance(-1.0F, 3600000.0F)
+                .hardnessAndResistance(-1F, 3600000.0F)
                 .harvestTool(ToolType.PICKAXE)
                 .harvestLevel(1)
                 .sound(SoundType.GLASS)
-                .lightValue(11));
+                .setLightLevel(state -> 11));
     }
 
     @Override
@@ -102,11 +103,11 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
             if (c != null) {
                 if (GatedKnowledge.COLLECTOR_TYPE.canSee(tier) && clientProgress.hasConstellationDiscovered(c)) {
                     toolTip.add(new TranslationTextComponent("crystal.info.astralsorcery.collect.type",
-                            c.getConstellationName().applyTextStyle(TextFormatting.BLUE))
-                            .setStyle(new Style().setColor(TextFormatting.GRAY)));
+                            c.getConstellationName().mergeStyle(TextFormatting.BLUE))
+                            .mergeStyle(TextFormatting.GRAY));
 
                 } else if (!addedMissing) {
-                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").mergeStyle(TextFormatting.GRAY));
                 }
             }
 
@@ -114,11 +115,11 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
             if (tr != null) {
                 if (GatedKnowledge.CRYSTAL_TRAIT.canSee(tier) && clientProgress.hasConstellationDiscovered(tr)) {
                     toolTip.add(new TranslationTextComponent("crystal.info.astralsorcery.trait",
-                            tr.getConstellationName().applyTextStyle(TextFormatting.BLUE))
-                            .setStyle(new Style().setColor(TextFormatting.GRAY)));
+                            tr.getConstellationName().mergeStyle(TextFormatting.BLUE))
+                            .mergeStyle(TextFormatting.GRAY));
 
                 } else if (!addedMissing) {
-                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").setStyle(new Style().setColor(TextFormatting.GRAY)));
+                    toolTip.add(new TranslationTextComponent("astralsorcery.progress.missing.knowledge").mergeStyle(TextFormatting.GRAY));
                 }
             }
         }
@@ -130,12 +131,13 @@ public abstract class BlockCollectorCrystal extends BlockStarlightNetwork implem
     }
 
     @Override
-    public float getBlockHardness(BlockState state, IBlockReader world, BlockPos pos) {
+    public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader world, BlockPos pos) {
         TileCollectorCrystal crystal = MiscUtils.getTileAt(world, pos, TileCollectorCrystal.class, false);
         if (crystal != null && crystal.isPlayerMade()) {
-            return PLAYER_HARVEST_HARDNESS;
+            int i = ForgeHooks.canHarvestBlock(state, player, world, pos) ? 30 : 100;
+            return player.getDigSpeed(state, pos) / PLAYER_HARVEST_HARDNESS / i;
         }
-        return super.getBlockHardness(state, world, pos);
+        return super.getPlayerRelativeBlockHardness(state, player, world, pos);
     }
 
     @Nullable

@@ -115,7 +115,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork implements Custom
         if (te != null && !world.isRemote()) {
             BlockPos toCheck = pos.up();
             BlockState other = world.getBlockState(toCheck);
-            if (Block.hasSolidSide(other, world, toCheck, Direction.DOWN)) {
+            if (Block.doesSideFillSquare(other.getCollisionShape(world, pos), Direction.DOWN)) {
                 ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, te.getCurrentCrystal());
                 te.tryPlaceCrystalInPedestal(ItemStack.EMPTY);
             }

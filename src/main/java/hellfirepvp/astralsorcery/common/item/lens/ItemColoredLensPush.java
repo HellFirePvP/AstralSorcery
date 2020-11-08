@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,7 +49,7 @@ public class ItemColoredLensPush extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(IWorld world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
+        public void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
             if (entity instanceof PlayerEntity && !GeneralConfig.CONFIG.doColoredLensesAffectPlayers.get()) {
                 return;
             }
@@ -63,6 +64,6 @@ public class ItemColoredLensPush extends ItemColoredLens {
         }
 
         @Override
-        public void blockInBeam(IWorld world, BlockPos pos, BlockState state, float beamStrength) {}
+        public void blockInBeam(World world, BlockPos pos, BlockState state, float beamStrength) {}
     }
 }

@@ -19,6 +19,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -43,6 +44,8 @@ public class KeyProjectileProximity extends KeyPerk {
     @Override
     public void attachListeners(IEventBus bus) {
         super.attachListeners(bus);
+
+        bus.addListener(EventPriority.HIGH, this::onProjDamage);
     }
 
     private void onProjDamage(LivingHurtEvent event) {

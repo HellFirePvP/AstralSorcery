@@ -37,6 +37,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.LogicalSide;
@@ -161,7 +162,11 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver<
         double collected = 0.25 + (0.75 * DayTimeHelper.getCurrentDaytimeDistribution(world));
 
         if (this.noiseDistribution == -1) {
-            this.noiseDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, this.getLocationPos());
+            if (world instanceof ISeedReader) {
+                this.noiseDistribution = SkyCollectionHelper.getSkyNoiseDistribution((ISeedReader) world, this.getLocationPos());
+            } else {
+                this.noiseDistribution = 0.3F;
+            }
         }
 
         collected *= CrystalCalculations.getCrystalCollectionRate(attributes);
@@ -252,7 +257,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver<
 
         long seed = 3451968351053166105L;
         seed |= this.getLocationPos().toLong() * 31;
-        seed |= this.channelingType.getConstellationName().getFormattedText().hashCode() * 31;
+        seed |= this.channelingType.getConstellationName().getUnformattedComponentText().hashCode() * 31;
         Random r = new Random(seed);
         for (int i = 0; i < this.getMirrorCount(); i++) {
             r.nextInt(TileRitualPedestal.RITUAL_CIRCLE_OFFSETS.size());

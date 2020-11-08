@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.integration.jei;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.crafting.recipe.LiquidInteractionContext;
@@ -18,6 +19,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -66,9 +69,9 @@ public class CategoryLiquidInteraction extends JEICategory<LiquidInteraction> {
     }
 
     @Override
-    public void draw(LiquidInteraction recipe, double mouseX, double mouseY) {
-        this.icon.draw(3, 36);
-        this.icon.draw(93, 36);
+    public void draw(LiquidInteraction recipe, MatrixStack renderStack, double mouseX, double mouseY) {
+        this.icon.draw(renderStack, 3, 36);
+        this.icon.draw(renderStack, 93, 36);
 
         JEIInteractionResultRegistry.get(recipe.getResult().getId())
                 .ifPresent(handler -> handler.drawRecipe(recipe, mouseX, mouseY));
@@ -82,10 +85,9 @@ public class CategoryLiquidInteraction extends JEICategory<LiquidInteraction> {
             float perc = ((float) recipe.getWeight() / totalWeight) * 100;
 
             FontRenderer fr = Minecraft.getInstance().fontRenderer;
-            String chanceStr = FORMAT_CHANCE.format(perc);
-            chanceStr = I18n.format("jei.astralsorcery.tip.chance", chanceStr);
-            int width = fr.getStringWidth(chanceStr);
-            fr.drawString(chanceStr, 74 - width, 44, 0x333333);
+            IFormattableTextComponent txt = new TranslationTextComponent("jei.astralsorcery.tip.chance", FORMAT_CHANCE.format(perc));
+            int width = fr.getStringPropertyWidth(txt);
+            fr.func_243248_b(renderStack, txt, 74 - width, 44, 0x333333);
         }
     }
 

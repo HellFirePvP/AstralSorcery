@@ -27,7 +27,7 @@ import java.util.function.Predicate;
  */
 public class ConfiguredBlockStateList implements BlockPredicate, Predicate<BlockState> {
 
-    private ForgeConfigSpec.ConfigValue<List<String>> configList;
+    private final ForgeConfigSpec.ConfigValue<List<String>> configList;
     private BlockStateList resolvedConfiguration = null;
 
     public ConfiguredBlockStateList(ForgeConfigSpec.ConfigValue<List<String>> configList) {

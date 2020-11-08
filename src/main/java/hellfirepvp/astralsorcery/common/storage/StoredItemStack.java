@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
  */
 public class StoredItemStack {
 
-    private ItemStack stack;
+    private final ItemStack stack;
     private int amount;
 
     StoredItemStack(ItemStack stack) {

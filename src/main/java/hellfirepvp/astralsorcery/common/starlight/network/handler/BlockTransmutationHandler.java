@@ -47,7 +47,7 @@ import java.util.Random;
  */
 public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStarlightBlockHandler {
 
-    private static Map<WorldBlockPos, ActiveTransmutation> runningTransmutations = new HashMap<>();
+    private static final Map<WorldBlockPos, ActiveTransmutation> runningTransmutations = new HashMap<>();
 
     @Override
     public boolean isApplicable(World world, BlockPos pos, BlockState state, IWeakConstellation starlightType) {

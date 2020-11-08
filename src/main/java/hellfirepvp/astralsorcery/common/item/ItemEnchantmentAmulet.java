@@ -28,7 +28,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
-import java.awt.*;
+import java.awt.Color;
 import java.util.List;
 import java.util.*;
 
@@ -56,13 +56,13 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor {
 
         List<AmuletEnchantment> enchantments = getAmuletEnchantments(stack);
         for (AmuletEnchantment ench : enchantments) {
-            tooltip.add(new StringTextComponent(ench.getDisplay()).setStyle(new Style().setColor(TextFormatting.BLUE)));
+            tooltip.add(ench.getDisplay().mergeStyle(TextFormatting.BLUE));
         }
 
         if (getAmuletColor(stack).map(color -> color == 0xFFFFFFFF).orElse(false)) {
             tooltip.add(new TranslationTextComponent("astralsorcery.amulet.color.colorless")
-                    .applyTextStyle(TextFormatting.ITALIC)
-                    .applyTextStyle(TextFormatting.GRAY));
+                    .mergeStyle(TextFormatting.ITALIC)
+                    .mergeStyle(TextFormatting.GRAY));
         }
     }
 

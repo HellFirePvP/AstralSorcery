@@ -62,7 +62,7 @@ public class ItemIlluminationPowder extends ItemUsableDust {
             return false;
         }
 
-        if (player.canPlayerEdit(pos, ctx.getFace(), ctx.getItem()) && !ForgeEventFactory.onBlockPlace(player, BlockSnapshot.getBlockSnapshot(world, pos), ctx.getFace())) {
+        if (player.canPlayerEdit(pos, ctx.getFace(), ctx.getItem()) && !ForgeEventFactory.onBlockPlace(player, BlockSnapshot.create(world.getDimensionKey(), world, pos), ctx.getFace())) {
             return world.setBlockState(pos, BlocksAS.FLARE_LIGHT.getDefaultState());
         }
         return false;

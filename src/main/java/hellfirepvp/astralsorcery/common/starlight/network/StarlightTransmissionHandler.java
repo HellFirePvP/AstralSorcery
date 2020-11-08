@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.starlight.network;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
 
 import javax.annotation.Nullable;
@@ -39,12 +40,11 @@ public class StarlightTransmissionHandler implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         World world = (World) context[0];
-        if (world.isRemote()) {
+        if (world.isRemote() || !(world instanceof ServerWorld)) {
             return;
         }
 
-        worldHandlers.computeIfAbsent(world.getDimensionKey(), TransmissionWorldHandler::new)
-                .tick(world);
+        worldHandlers.computeIfAbsent(world.getDimensionKey(), TransmissionWorldHandler::new).tick((ServerWorld) world);
     }
 
     public void clearServer() {

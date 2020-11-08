@@ -26,8 +26,8 @@ import javax.annotation.Nullable;
  */
 public class EntityTransmutationEntry implements ConfigDataSet {
 
-    private EntityType<?> fromEntity;
-    private EntityType<?> toEntity;
+    private final EntityType<?> fromEntity;
+    private final EntityType<?> toEntity;
 
     public EntityTransmutationEntry(EntityType<?> fromEntity, EntityType<?> toEntity) {
         this.fromEntity = fromEntity;

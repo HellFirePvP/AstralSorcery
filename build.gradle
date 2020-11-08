@@ -103,7 +103,7 @@ repositories {
 
     maven {
         name 'JEI maven'
-        url = "https://dvs1.progwml6.com/files/maven"
+        url "https://dvs1.progwml6.com/files/maven"
     }
 
 }
@@ -118,8 +118,8 @@ dependencies {
     compileOnly 'top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0:api'
     runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0')
 
-    compileOnly 'mezz.jei:jei-1.16.3:7.3.2.29:api'
-    runtimeOnly fg.deobf('mezz.jei:jei-1.16.3:7.3.2.29')
+    compileOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.0.52')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.0.52')
 
 }
 

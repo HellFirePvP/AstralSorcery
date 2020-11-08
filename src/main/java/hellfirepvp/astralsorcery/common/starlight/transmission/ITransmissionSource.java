@@ -22,7 +22,7 @@ import net.minecraft.tileentity.TileEntity;
  */
 public interface ITransmissionSource extends IPrismTransmissionNode {
 
-    public IIndependentStarlightSource provideNewIndependentSource(IStarlightSource source);
+    public IIndependentStarlightSource provideNewIndependentSource(IStarlightSource<?> source);
 
     @Override
     default <T extends TileEntity> boolean updateFromTileEntity(T tile) {

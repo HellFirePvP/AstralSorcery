@@ -30,7 +30,7 @@ public class SourceClassRegistry {
 
     public static final SourceClassRegistry eventInstance = new SourceClassRegistry();
 
-    private static Map<ResourceLocation, SourceProvider> providerMap = new HashMap<>();
+    private static final Map<ResourceLocation, SourceProvider> providerMap = new HashMap<>();
 
     private SourceClassRegistry() {}
 

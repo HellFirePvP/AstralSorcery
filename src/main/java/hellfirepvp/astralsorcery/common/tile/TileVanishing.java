@@ -54,7 +54,7 @@ public class TileVanishing extends TileEntityTick {
                     double yDiff = player.getPosY() - this.getPos().getY();
 
                     //Standing on top of this block
-                    if (player.onGround && yDiff >= 0.95 && yDiff <= 1.15) {
+                    if (player.isOnGround() && yDiff >= 0.95 && yDiff <= 1.15) {
                         if (player.isSneaking()) { //Indicating they want to drop down
                             break; //Remove the block
                         }

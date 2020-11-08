@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
  */
 public class ContainerTomeProvider extends CustomContainerProvider<ContainerTome> {
 
-    private ItemStack stackTome;
-    private int slotTome;
+    private final ItemStack stackTome;
+    private final int slotTome;
 
     public ContainerTomeProvider(ItemStack stackTome, int slotTome) {
         super(ContainerTypesAS.TOME);

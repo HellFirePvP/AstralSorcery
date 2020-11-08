@@ -34,7 +34,7 @@ public class RandomCrystalProperty extends LootFunction {
     }
 
     @Override
-    public LootFunctionType func_230425_b_() {
+    public LootFunctionType getFunctionType() {
         return LootAS.Functions.RANDOM_CRYSTAL_PROPERTIES;
     }
 

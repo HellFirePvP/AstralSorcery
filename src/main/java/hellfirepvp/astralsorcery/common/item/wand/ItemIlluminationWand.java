@@ -158,7 +158,7 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
                     SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_LIGHT, SoundCategory.BLOCKS, world, pos, 1F, 1F);
                 }
             } else if (placeState.isValidPosition(world, placePos) &&
-                    world.func_226663_a_(placeState, placePos, selContext)) {
+                    world.placedBlockCollides(placeState, placePos, selContext)) {
                 if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_FLARE, false)) {
                     if (world.setBlockState(placePos, placeState, Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
                         SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_LIGHT, SoundCategory.BLOCKS, world, pos, 1F, 1F);

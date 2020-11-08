@@ -35,6 +35,7 @@ public class GemAttributeHelper {
 
     private static final Random rand = new Random();
 
+    //TODO this. at some point.
     private static float chance3Modifiers = 0.2F;
     private static float chance4Modifiers = 0.05F;
 

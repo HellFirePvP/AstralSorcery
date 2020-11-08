@@ -136,7 +136,7 @@ public class EntityIlluminationSpark extends ThrowableEntity {
             pos = pos.offset(bCtx.getFace());
         }
 
-        if (!ForgeEventFactory.onBlockPlace(player, BlockSnapshot.create(world.func_234923_W_(), world, pos), bCtx.getFace())) {
+        if (!ForgeEventFactory.onBlockPlace(player, BlockSnapshot.create(world.getDimensionKey(), world, pos), bCtx.getFace())) {
             world.setBlockState(pos, BlocksAS.FLARE_LIGHT.getDefaultState());
         }
         remove();

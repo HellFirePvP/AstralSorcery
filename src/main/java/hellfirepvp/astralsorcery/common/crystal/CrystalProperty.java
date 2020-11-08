@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.crystal;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -94,7 +95,7 @@ public abstract class CrystalProperty extends ForgeRegistryEntry<CrystalProperty
         return value;
     }
 
-    public ITextComponent getName(int currentTier) {
+    public IFormattableTextComponent getName(int currentTier) {
         return new TranslationTextComponent(String.format("crystal.property.%s.%s.name", getRegistryName().getNamespace(), getRegistryName().getPath()));
     }
 

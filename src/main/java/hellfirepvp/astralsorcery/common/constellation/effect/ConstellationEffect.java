@@ -118,11 +118,11 @@ public abstract class ConstellationEffect {
         return null;
     }
 
-    public void sendConstellationPing(IWorld world, Vector3 at) {
+    public void sendConstellationPing(World world, Vector3 at) {
         sendConstellationPing(world, at, this.getConstellation());
     }
 
-    public static void sendConstellationPing(IWorld world, Vector3 at, IConstellation cst) {
+    public static void sendConstellationPing(World world, Vector3 at, IConstellation cst) {
         PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.CONSTELLATION_EFFECT_PING)
                 .addData(buf -> {
                     ByteBufUtils.writeVector(buf, at);

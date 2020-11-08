@@ -41,7 +41,7 @@ public class RootVicio extends RootPerk implements PlayerTickPerk {
 
     public static final Config CONFIG = new Config("root.vicio");
 
-    private Map<ResourceLocation, Map<UUID, Integer>> moveTrackMap = new HashMap<>();
+    private final Map<ResourceLocation, Map<UUID, Integer>> moveTrackMap = new HashMap<>();
 
     public RootVicio(ResourceLocation name, float x, float y) {
         super(name, CONFIG, ConstellationsAS.vicio, x, y);

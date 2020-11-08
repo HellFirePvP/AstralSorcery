@@ -52,7 +52,7 @@ public class PerkAttributeModifier extends ForgeRegistryEntry<PerkAttributeModif
     //Cached in case the value of the modifier actually is supposed to change down the road.
     protected double ctMultiplier = 1.0D;
 
-    private Map<PerkConverter, Table<PerkAttributeType, ModifierType, PerkAttributeModifier>> cachedConverters = Maps.newHashMap();
+    private final Map<PerkConverter, Table<PerkAttributeType, ModifierType, PerkAttributeModifier>> cachedConverters = Maps.newHashMap();
 
     public PerkAttributeModifier(PerkAttributeType type, ModifierType mode, float value) {
         this.comparisonKey = AstralSorcery.key("generic_perk_modifier_" + counter++);

@@ -73,7 +73,7 @@ public class ActiveLiquidInfusionRecipe {
     private final UUID playerCraftingUUID;
 
     private int ticksCrafting = 0;
-    private Set<BlockPos> supportingChalices = new HashSet<>();
+    private final Set<BlockPos> supportingChalices = new HashSet<>();
     private CompoundNBT craftingData = new CompoundNBT();
 
     private Object orbitalLiquid = null;

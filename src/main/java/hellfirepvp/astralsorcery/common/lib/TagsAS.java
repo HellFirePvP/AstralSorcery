@@ -14,8 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.Tags;
 
 import static hellfirepvp.astralsorcery.common.base.Mods.ASTRAL_SORCERY;
 import static hellfirepvp.astralsorcery.common.base.Mods.CURIOS;
@@ -42,7 +40,7 @@ public class TagsAS {
 
         public static final ITag.INamedTag<Item> CURIOS_NECKLACE = itemTag(CURIOS, "necklace");
 
-        public static final Tag<Item> FORGE_GEM_AQUAMARINE = itemTagForge("gems/aquamarine");
+        public static final ITag.INamedTag<Item> FORGE_GEM_AQUAMARINE = itemTagForge("gems/aquamarine");
 
         public static final ITag.INamedTag<Item> DUSTS_STARDUST = itemTag(ASTRAL_SORCERY, "stardust");
         public static final ITag.INamedTag<Item> INGOTS_STARMETAL = itemTag(ASTRAL_SORCERY, "starmetal");
@@ -51,7 +49,7 @@ public class TagsAS {
     }
 
     private static ITag.INamedTag<Block> blockTagForge(String name) {
-        return blockTag(FORGE, name);
+        return blockTag(Mods.FORGE, name);
     }
 
     private static ITag.INamedTag<Block> blockTag(Mods mod, String name) {
@@ -59,7 +57,7 @@ public class TagsAS {
     }
 
     private static ITag.INamedTag<Item> itemTagForge(String name) {
-        return itemTag(FORGE, name);
+        return itemTag(Mods.FORGE, name);
     }
 
     private static ITag.INamedTag<Item> itemTag(Mods mod, String name) {

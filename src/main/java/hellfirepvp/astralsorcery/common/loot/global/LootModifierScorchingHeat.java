@@ -84,5 +84,10 @@ public class LootModifierScorchingHeat extends LootModifier {
         public LootModifierScorchingHeat read(ResourceLocation location, JsonObject object, ILootCondition[] lootConditions) {
             return new LootModifierScorchingHeat(lootConditions);
         }
+
+        @Override
+        public JsonObject write(LootModifierScorchingHeat instance) {
+            return this.makeConditions(instance.conditions);
+        }
     }
 }

@@ -27,9 +27,9 @@ import java.util.function.Consumer;
  */
 public class PerkCooldownHelper {
 
-    private static TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> perkCooldowns =
+    private static final TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> perkCooldowns =
             new TimeoutListContainer<>(new PerkTimeoutHandler(), TickEvent.Type.SERVER);
-    private static TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> perkCooldownsClient =
+    private static final TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> perkCooldownsClient =
             new TimeoutListContainer<>(new PerkTimeoutHandler(), TickEvent.Type.CLIENT);
 
     private PerkCooldownHelper() {}

@@ -30,10 +30,10 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public class PerkAttributeInterpreter {
 
-    private Map<PerkAttributeType, PerkAttributeReader> attributeReaderOverrides = Maps.newHashMap();
+    private final Map<PerkAttributeType, PerkAttributeReader> attributeReaderOverrides = Maps.newHashMap();
 
     private PerkAttributeMap attributeMap;
-    private PlayerEntity player;
+    private final PlayerEntity player;
 
     private PerkAttributeInterpreter(PerkAttributeMap attributeMap, PlayerEntity player) {
         this.attributeMap = attributeMap;
@@ -59,7 +59,7 @@ public class PerkAttributeInterpreter {
 
     public static class Builder {
 
-        private PerkAttributeInterpreter reader;
+        private final PerkAttributeInterpreter reader;
 
         private Builder(PlayerEntity player) {
             this.reader = new PerkAttributeInterpreter(null, player);

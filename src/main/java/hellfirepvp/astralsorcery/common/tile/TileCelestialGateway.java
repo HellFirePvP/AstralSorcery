@@ -32,6 +32,7 @@ import hellfirepvp.astralsorcery.common.util.PlayerReference;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
@@ -39,8 +40,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.INameable;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -89,7 +92,7 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
     };
 
     private boolean networkRegistered = false;
-    private ITextComponent displayText = null;
+    private IFormattableTextComponent displayText = null;
     private DyeColor color = null;
 
     private boolean locked = false;
@@ -163,7 +166,7 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
         }
 
         if (distance < 5.5) {
-            Minecraft.getInstance().gameSettings.thirdPersonView = 0;
+            Minecraft.getInstance().gameSettings.setPointOfView(PointOfView.FIRST_PERSON);
         }
         if (distance < 2.5) {
             GatewayUIRenderHandler.getInstance().getOrCreateUI(this.getWorld(), this.getPos(), at);
@@ -349,7 +352,7 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
         return OFFSETS_ALLOWED_PREVIEW[MathHelper.clamp(index, 0, OFFSETS_ALLOWED_PREVIEW.length - 1)];
     }
 
-    public void setDisplayText(@Nullable ITextComponent displayText) {
+    public void setDisplayText(@Nullable IFormattableTextComponent displayText) {
         this.displayText = displayText;
     }
 
@@ -388,7 +391,7 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
         super.readCustomNBT(compound);
 
         this.networkRegistered = compound.getBoolean("networkRegistered");
-        this.displayText = compound.contains("displayText") ? ITextComponent.Serializer.fromJson(compound.getString("displayText")) : null;
+        this.displayText = compound.contains("displayText") ? ITextComponent.Serializer.getComponentFromJson(compound.getString("displayText")) : null;
         this.color = compound.contains("color") ? NBTHelper.readEnum(compound, "color", DyeColor.class) : null;
 
         this.locked = compound.getBoolean("locked");
@@ -433,9 +436,9 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
                 ITextComponent accessGrantedMessage = new TranslationTextComponent(
                         "astralsorcery.misc.link.gateway.link",
                         linked.getDisplayName())
-                        .applyTextStyle(TextFormatting.GREEN);
-                player.sendMessage(accessGrantedMessage);
-                linked.sendMessage(accessGrantedMessage);
+                        .mergeStyle(TextFormatting.GREEN);
+                player.sendMessage(accessGrantedMessage, Util.DUMMY_UUID);
+                linked.sendMessage(accessGrantedMessage, Util.DUMMY_UUID);
             }
         }
     }
