@@ -16,6 +16,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -30,14 +31,15 @@ import java.util.*;
  */
 public class ClientLightBlockEndpoints extends ClientData<ClientLightBlockEndpoints> {
 
-    private final Map<ResourceLocation, Set<BlockPos>> clientPositions = new HashMap<>();
+    private final Map<RegistryKey<World>, Set<BlockPos>> clientPositions = new HashMap<>();
+
     public boolean doesPositionReceiveStarlightClient(World world, BlockPos pos) {
-        return this.clientPositions.getOrDefault(world.func_234923_W_().func_240901_a_(), Collections.emptySet()).contains(pos);
+        return this.clientPositions.getOrDefault(world.getDimensionKey(), Collections.emptySet()).contains(pos);
     }
 
     @Override
     public void clear(RegistryKey<World> dim) {
-        this.clientPositions.remove(dim.func_240901_a_());
+        this.clientPositions.remove(dim);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class ClientLightBlockEndpoints extends ClientData<ClientLightBlockEndpoi
             data.clientPositions.clear();
 
             for (String dimKey : compound.keySet()) {
-                ResourceLocation dim = new ResourceLocation(dimKey);
+                RegistryKey<World> dim = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(dimKey));
 
                 Set<BlockPos> positions = new HashSet<>();
                 ListNBT list = compound.getList(dimKey, Constants.NBT.TAG_COMPOUND);
@@ -71,7 +73,8 @@ public class ClientLightBlockEndpoints extends ClientData<ClientLightBlockEndpoi
             Set<String> clearedDimensions = new HashSet<>();
             for (INBT dimKeyNBT : compound.getList("clear", Constants.NBT.TAG_STRING)) {
                 String dimKey = dimKeyNBT.getString();
-                data.clientPositions.remove(new ResourceLocation(dimKey));
+                RegistryKey<World> dim = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(dimKey));
+                data.clientPositions.remove(dim);
 
                 clearedDimensions.add(dimKey);
             }
@@ -80,7 +83,7 @@ public class ClientLightBlockEndpoints extends ClientData<ClientLightBlockEndpoi
                 if (clearedDimensions.contains(dimKey)) {
                     continue;
                 }
-                ResourceLocation dim = new ResourceLocation(dimKey);
+                RegistryKey<World> dim = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(dimKey));
 
                 Set<BlockPos> positions = data.clientPositions.computeIfAbsent(dim, k -> new HashSet<>());
 

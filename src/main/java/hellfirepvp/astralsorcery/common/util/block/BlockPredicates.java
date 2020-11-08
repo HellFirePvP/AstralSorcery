@@ -50,7 +50,7 @@ public class BlockPredicates {
     }
 
     public static <T extends TileEntity> BlockPredicate doesTileExist(T tile, boolean loadTileWorldAndChunk) {
-        RegistryKey<World> dim = tile.getWorld().func_234923_W_();
+        RegistryKey<World> dim = tile.getWorld().getDimensionKey();
         TileEntityType<?> tileType = tile.getType();
         MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
 

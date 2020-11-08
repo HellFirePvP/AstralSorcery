@@ -31,7 +31,7 @@ import java.util.Random;
  */
 public class AnimalHelper {
 
-    private static LinkedList<HerdableAnimal> animalHandlers = new LinkedList<>();
+    private static final LinkedList<HerdableAnimal> animalHandlers = new LinkedList<>();
 
     static {
         register(new Squid());

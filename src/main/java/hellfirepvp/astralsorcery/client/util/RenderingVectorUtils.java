@@ -23,11 +23,6 @@ import net.minecraft.util.math.vector.Vector3d;
  */
 public class RenderingVectorUtils {
 
-    public static void removeStandardTranslationFromTESRMatrix(float partialTicks) {
-        Vector3 v = getStandardTranslationRemovalVector(partialTicks);
-        RenderSystem.translated(-v.getX(), -v.getY(), -v.getZ());
-    }
-
     public static Vector3 getStandardTranslationRemovalVector(float partialTicks) {
         Vector3d view = RenderInfo.getInstance().getARI().getProjectedView();
         return new Vector3(view);

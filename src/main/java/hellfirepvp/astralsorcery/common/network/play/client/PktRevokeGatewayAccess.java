@@ -18,13 +18,13 @@ import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
@@ -40,14 +40,14 @@ import java.util.UUID;
  */
 public class PktRevokeGatewayAccess extends ASPacket<PktRevokeGatewayAccess> {
 
-    private DimensionType type = null;
+    private RegistryKey<World> dim = null;
     private BlockPos pos = BlockPos.ZERO;
     private UUID revokeUUID = null;
 
     public PktRevokeGatewayAccess() {}
 
-    public PktRevokeGatewayAccess(DimensionType type, BlockPos pos, UUID revokeUUID) {
-        this.type = type;
+    public PktRevokeGatewayAccess(RegistryKey<World> dim, BlockPos pos, UUID revokeUUID) {
+        this.dim = dim;
         this.pos = pos;
         this.revokeUUID = revokeUUID;
     }
@@ -56,7 +56,7 @@ public class PktRevokeGatewayAccess extends ASPacket<PktRevokeGatewayAccess> {
     @Override
     public Encoder<PktRevokeGatewayAccess> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeRegistryEntry(buffer, packet.type);
+            ByteBufUtils.writeVanillaRegistryEntry(buffer, packet.dim);
             ByteBufUtils.writePos(buffer, packet.pos);
             ByteBufUtils.writeUUID(buffer, packet.revokeUUID);
         };
@@ -66,7 +66,7 @@ public class PktRevokeGatewayAccess extends ASPacket<PktRevokeGatewayAccess> {
     @Override
     public Decoder<PktRevokeGatewayAccess> decoder() {
         return buffer -> new PktRevokeGatewayAccess(
-                ByteBufUtils.readRegistryEntry(buffer),
+                ByteBufUtils.readVanillaRegistryEntry(buffer),
                 ByteBufUtils.readPos(buffer),
                 ByteBufUtils.readUUID(buffer));
     }
@@ -82,7 +82,7 @@ public class PktRevokeGatewayAccess extends ASPacket<PktRevokeGatewayAccess> {
                 }
 
                 MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                World world = srv.getWorld(packet.type);
+                World world = srv.getWorld(packet.dim);
 
                 TileCelestialGateway gateway = MiscUtils.getTileAt(world, packet.pos, TileCelestialGateway.class, false);
                 if (gateway != null && gateway.isLocked() && gateway.getOwner() != null && gateway.getOwner().isPlayer(sender)) {
@@ -98,8 +98,8 @@ public class PktRevokeGatewayAccess extends ASPacket<PktRevokeGatewayAccess> {
                             ITextComponent accessGrantedMessage = new TranslationTextComponent(
                                     "astralsorcery.misc.link.gateway.unlink",
                                     removedPlayer.getPlayerName())
-                                    .applyTextStyle(TextFormatting.GREEN);
-                            sender.sendMessage(accessGrantedMessage);
+                                    .mergeStyle(TextFormatting.GREEN);
+                            sender.sendMessage(accessGrantedMessage, Util.DUMMY_UUID);
                         }
                     }
                 }

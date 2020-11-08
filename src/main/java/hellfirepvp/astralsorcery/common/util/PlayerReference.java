@@ -14,7 +14,9 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
@@ -32,15 +34,19 @@ import java.util.UUID;
 public class PlayerReference {
 
     private final UUID playerUUID;
-    private final ITextComponent playerName;
+    private final IFormattableTextComponent playerName;
 
-    public PlayerReference(UUID playerUUID, ITextComponent playerName) {
+    public PlayerReference(UUID playerUUID, IFormattableTextComponent playerName) {
         this.playerUUID = playerUUID;
         this.playerName = playerName;
     }
 
     public static PlayerReference of(PlayerEntity player) {
-        return new PlayerReference(player.getUniqueID(), player.getDisplayName());
+        ITextComponent txt = player.getDisplayName();
+        if (txt instanceof IFormattableTextComponent) {
+            return new PlayerReference(player.getUniqueID(), (IFormattableTextComponent) txt);
+        }
+        return new PlayerReference(player.getUniqueID(), new StringTextComponent("").append(txt));
     }
 
     public boolean isPlayer(PlayerEntity player) {
@@ -94,7 +100,7 @@ public class PlayerReference {
     }
 
     public static PlayerReference deserialize(CompoundNBT tag) {
-        return new PlayerReference(tag.getUniqueId("playerUUID"), ITextComponent.Serializer.fromJson(tag.getString("playerName")));
+        return new PlayerReference(tag.getUniqueId("playerUUID"), ITextComponent.Serializer.getComponentFromJson(tag.getString("playerName")));
     }
 
     public static PlayerReference read(PacketBuffer buf) {

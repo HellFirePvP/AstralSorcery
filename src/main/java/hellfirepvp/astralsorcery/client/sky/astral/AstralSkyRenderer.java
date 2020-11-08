@@ -39,6 +39,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ISkyRenderHandler;
 import net.minecraftforge.client.SkyRenderHandler;
 import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
@@ -56,7 +57,7 @@ import java.util.Random;
  * Date: 13.01.2020 / 20:11
  */
 @OnlyIn(Dist.CLIENT)
-public class AstralSkyRenderer implements SkyRenderHandler {
+public class AstralSkyRenderer implements ISkyRenderHandler {
 
     private static final Random RAND = new Random();
     private static final ResourceLocation REF_TEX_MOON_PHASES = new ResourceLocation("textures/environment/moon_phases.png");
@@ -351,7 +352,7 @@ public class AstralSkyRenderer implements SkyRenderHandler {
         float moonSize = 20F;
 
         //Don't ask me.. i'm just copying this and be done with it
-        int moonPhase = world.func_242414_af();
+        int moonPhase = world.getMoonPhase();
         int i = moonPhase % 4;
         int j = moonPhase / 4 % 2;
         float minU = (i) / 4F;

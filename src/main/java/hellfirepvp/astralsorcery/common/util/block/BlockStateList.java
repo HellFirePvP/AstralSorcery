@@ -32,7 +32,7 @@ import java.util.function.Predicate;
 public class BlockStateList implements BlockPredicate, Predicate<BlockState> {
 
     public static final Codec<BlockStateList> CODEC = RecordCodecBuilder.create(codecBuilder -> codecBuilder.group(
-            BlockState.BLOCKSTATE_CODEC.listOf().fieldOf("blockStates").forGetter(stateList -> {
+            BlockState.CODEC.listOf().fieldOf("blockStates").forGetter(stateList -> {
                 List<BlockState> applicable = new ArrayList<>();
                 stateList.configuredMatches.forEach(predicate -> {
                     predicate.validMatch.ifLeft(applicable::addAll).ifRight(block -> {
@@ -47,7 +47,7 @@ public class BlockStateList implements BlockPredicate, Predicate<BlockState> {
         return list;
     }));
 
-    private List<SimpleBlockPredicate> configuredMatches = new ArrayList<>();
+    private final List<SimpleBlockPredicate> configuredMatches = new ArrayList<>();
 
     public BlockStateList add(BlockState... states) {
         this.configuredMatches.add(new SimpleBlockPredicate(states));

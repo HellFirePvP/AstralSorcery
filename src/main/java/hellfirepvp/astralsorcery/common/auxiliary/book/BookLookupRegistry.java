@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class BookLookupRegistry {
 
-    private static Map<ItemStack, BookLookupInfo> lookupMap = new HashMap<>();
+    private static final Map<ItemStack, BookLookupInfo> lookupMap = new HashMap<>();
 
     private BookLookupRegistry() {}
 

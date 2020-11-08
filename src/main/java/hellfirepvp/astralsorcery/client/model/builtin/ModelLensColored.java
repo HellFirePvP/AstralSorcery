@@ -23,11 +23,11 @@ import net.minecraft.client.renderer.model.ModelRenderer;
  */
 public class ModelLensColored extends CustomModel {
 
-    public ModelRenderer glass;
-    public ModelRenderer detail1;
-    public ModelRenderer detail1_1;
-    public ModelRenderer fitting2;
-    public ModelRenderer fitting1;
+    public final ModelRenderer glass;
+    public final ModelRenderer detail1;
+    public final ModelRenderer detail1_1;
+    public final ModelRenderer fitting2;
+    public final ModelRenderer fitting1;
 
     public ModelLensColored() {
         super((resKey) -> RenderTypesAS.MODEL_LENS_COLORED_SOLID);

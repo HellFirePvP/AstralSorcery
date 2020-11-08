@@ -22,14 +22,14 @@ import net.minecraft.client.renderer.model.ModelRenderer;
  */
 public class ModelTelescope extends CustomModel {
 
-    private ModelRenderer mountpiece;
-    private ModelRenderer opticalTube;
-    private ModelRenderer leg;
-    private ModelRenderer mountpiece_1;
-    private ModelRenderer aperture;
-    private ModelRenderer extension;
-    private ModelRenderer detail;
-    private ModelRenderer aperture_1;
+    private final ModelRenderer mountpiece;
+    private final ModelRenderer opticalTube;
+    private final ModelRenderer leg;
+    private final ModelRenderer mountpiece_1;
+    private final ModelRenderer aperture;
+    private final ModelRenderer extension;
+    private final ModelRenderer detail;
+    private final ModelRenderer aperture_1;
 
     public ModelTelescope() {
         super((resKey) -> RenderTypesAS.MODEL_TELESCOPE);

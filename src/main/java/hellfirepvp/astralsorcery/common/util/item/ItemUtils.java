@@ -19,8 +19,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -174,12 +174,12 @@ public class ItemUtils {
 
     @Nonnull
     public static List<ItemStack> getItemsOfTag(ResourceLocation key) {
-        Tag<Item> tag = ItemTags.getCollection().get(key);
+        ITag<Item> tag = ItemTags.getCollection().get(key);
         return tag == null ? Collections.emptyList() : getItemsOfTag(tag);
     }
 
     @Nonnull
-    public static List<ItemStack> getItemsOfTag(Tag<Item> itemTag) {
+    public static List<ItemStack> getItemsOfTag(ITag<Item> itemTag) {
         return itemTag.getAllElements().stream().map(ItemStack::new).collect(Collectors.toList());
     }
 

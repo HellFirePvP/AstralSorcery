@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.data.sync.client;
 
 import hellfirepvp.astralsorcery.common.data.sync.base.ClientData;
 import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
-import hellfirepvp.observerlib.common.util.RegistryUtil;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
@@ -18,7 +17,6 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -37,16 +35,16 @@ import java.util.Set;
  */
 public class ClientLightConnections extends ClientData<ClientLightConnections> {
 
-    private final Map<ResourceLocation, Map<BlockPos, Set<BlockPos>>> clientPosBuffer = new HashMap<>();
+    private final Map<RegistryKey<World>, Map<BlockPos, Set<BlockPos>>> clientPosBuffer = new HashMap<>();
 
     @Nonnull
     public Map<BlockPos, Set<BlockPos>> getClientConnections(RegistryKey<World> dim) {
-        return this.clientPosBuffer.getOrDefault(dim.func_240901_a_(), new HashMap<>());
+        return this.clientPosBuffer.getOrDefault(dim, new HashMap<>());
     }
 
     @Override
     public void clear(RegistryKey<World> dim) {
-        this.clientPosBuffer.remove(dim.func_240901_a_());
+        this.clientPosBuffer.remove(dim);
     }
 
     @Override
@@ -61,7 +59,7 @@ public class ClientLightConnections extends ClientData<ClientLightConnections> {
             cl.clientPosBuffer.clear();
 
             for (String dimKey : compound.keySet()) {
-                ResourceLocation dim = new ResourceLocation(dimKey);
+                RegistryKey<World> dim = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(dimKey));
 
                 Map<BlockPos, Set<BlockPos>> posMap = new HashMap<>();
                 ListNBT list = compound.getList(dimKey, Constants.NBT.TAG_COMPOUND);
@@ -83,7 +81,7 @@ public class ClientLightConnections extends ClientData<ClientLightConnections> {
             Set<String> clearedDimensions = new HashSet<>();
             for (INBT dimKeyNBT : compound.getList("clear", Constants.NBT.TAG_STRING)) {
                 String dimKey = dimKeyNBT.getString();
-                ResourceLocation dim = new ResourceLocation(dimKey);
+                RegistryKey<World> dim = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(dimKey));
                 cl.clientPosBuffer.remove(dim);
 
                 clearedDimensions.add(dimKey);
@@ -93,7 +91,7 @@ public class ClientLightConnections extends ClientData<ClientLightConnections> {
                 if (clearedDimensions.contains(dimKey)) {
                     continue;
                 }
-                ResourceLocation dim = new ResourceLocation(dimKey);
+                RegistryKey<World> dim = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(dimKey));
 
                 Map<BlockPos, Set<BlockPos>> posMap = cl.clientPosBuffer.computeIfAbsent(dim, d -> new HashMap<>());
 

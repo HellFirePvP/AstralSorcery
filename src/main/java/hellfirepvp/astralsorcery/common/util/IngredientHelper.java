@@ -11,8 +11,10 @@ package hellfirepvp.astralsorcery.common.util;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -54,15 +56,18 @@ public class IngredientHelper {
     }
 
     @Nullable
-    public static Tag<Item> guessTag(Ingredient ingredient) {
+    public static ITag<Item> guessTag(Ingredient ingredient) {
         ItemStack[] stacks = ingredient.getMatchingStacks();
         if (stacks.length == 0) {
             return null;
         }
-        List<Tag<Item>> applicableTags = new ArrayList<>();
+        List<ITag<Item>> applicableTags = new ArrayList<>();
         ItemStack first = stacks[0];
         for (ResourceLocation key : first.getItem().getTags()) {
-            Tag<Item> wrapper = new ItemTags.Wrapper(key);
+            ITag<Item> wrapper = TagCollectionManager.getManager().getItemTags().get(key);
+            if (wrapper == null) {
+                continue;
+            }
 
             boolean containsAllItems = true;
             for (Item itemInTag : wrapper.getAllElements()) {

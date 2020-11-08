@@ -14,7 +14,11 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -41,7 +45,7 @@ public class PatreonPartialEntity {
     protected Vector3 motion = new Vector3();
     protected boolean removed = false, updatePos = false;
 
-    private Integer lastTickedDimension = null;
+    private RegistryKey<World> lastTickedDimension = null;
 
     public PatreonPartialEntity(UUID effectUUID, UUID ownerUUID) {
         this.effectUUID = effectUUID;
@@ -70,7 +74,7 @@ public class PatreonPartialEntity {
     }
 
     @Nullable
-    public Integer getLastTickedDimension() {
+    public RegistryKey<World> getLastTickedDimension() {
         return lastTickedDimension;
     }
 
@@ -78,11 +82,11 @@ public class PatreonPartialEntity {
     public void tickClient() {}
 
     @OnlyIn(Dist.CLIENT)
-    public void tickEffects(IWorld world) {}
+    public void tickEffects(World world) {}
 
-    public boolean tick(IWorld world) {
-        boolean changed = lastTickedDimension == null || lastTickedDimension != world.getDimension().getType().getId();
-        lastTickedDimension = world.getDimension().getType().getId();
+    public boolean tick(World world) {
+        boolean changed = lastTickedDimension == null || !lastTickedDimension.equals(world.getDimensionKey());
+        lastTickedDimension = world.getDimensionKey();
 
         if (updateMotion(world)) {
             changed = true;
@@ -148,7 +152,12 @@ public class PatreonPartialEntity {
     }
 
     public void readFromNBT(CompoundNBT cmp) {
-        this.lastTickedDimension = cmp.getInt("lastTickedDimension");
+        if (cmp.contains("lastTickedDimension")) {
+            ResourceLocation worldKey = new ResourceLocation(cmp.getString("lastTickedDimension"));
+            this.lastTickedDimension = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, worldKey);
+        } else {
+            this.lastTickedDimension = null;
+        }
         if (cmp.contains("pos") && cmp.contains("prevPos")) {
             this.pos = NBTHelper.readVector3(cmp.getCompound("pos"));
             this.prevPos = NBTHelper.readVector3(cmp.getCompound("prevPos"));
@@ -156,7 +165,9 @@ public class PatreonPartialEntity {
     }
 
     public void writeToNBT(CompoundNBT cmp) {
-        cmp.putInt("lastTickedDimension", this.lastTickedDimension == null ? 0 : this.lastTickedDimension);
+        if (this.lastTickedDimension != null) {
+            cmp.putString("lastTickedDimension", this.lastTickedDimension.getLocation().toString());
+        }
         if (updatePos) {
             cmp.put("pos", NBTHelper.writeVector3(this.pos));
             cmp.put("prevPos", NBTHelper.writeVector3(this.prevPos));

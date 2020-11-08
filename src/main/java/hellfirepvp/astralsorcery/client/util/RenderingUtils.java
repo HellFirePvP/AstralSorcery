@@ -11,13 +11,14 @@ package hellfirepvp.astralsorcery.client.util;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.datafixers.util.Pair;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
-import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
 import hellfirepvp.observerlib.client.util.RenderTypeDecorator;
+import hellfirepvp.observerlib.common.util.RegistryUtil;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -34,20 +35,24 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.DyeColor;
+import net.minecraft.item.CompassItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.LanguageMap;
 import net.minecraft.world.IBlockDisplayReader;
-import net.minecraft.world.ILightReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -59,7 +64,6 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -239,11 +243,11 @@ public class RenderingUtils {
         }
     }
 
-    public static void renderInWorldText(String text, Color color, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
+    public static void renderInWorldText(ITextProperties text, Color color, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
         renderInWorldText(text, color, 1 / 80F, at, renderStack, pTicks, facePlayer);
     }
 
-    public static void renderInWorldText(String text, Color color, float scale, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
+    public static void renderInWorldText(ITextProperties text, Color color, float scale, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
         FontRenderer fr = Minecraft.getInstance().fontRenderer;
 
         renderStack.push();
@@ -260,9 +264,10 @@ public class RenderingUtils {
         }
 
         Matrix4f matr = renderStack.getLast().getMatrix();
-        int length = fr.getStringWidth(text);
-        IRenderTypeBuffer.Impl buffers = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-        fr.renderString(text, -(length / 2F), 0, color.getRGB(), false, matr, buffers, true, 0, LightmapUtil.getPackedFullbrightCoords());
+        int length = fr.getStringPropertyWidth(text);
+        IRenderTypeBuffer.Impl buffers = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        IReorderingProcessor processedText = LanguageMap.getInstance().func_241870_a(text);
+        fr.func_238416_a_(processedText, -(length / 2F), 0, color.getRGB(), false, matr, buffers, true, 0, LightmapUtil.getPackedFullbrightCoords());
         buffers.finish();
 
         renderStack.pop();
@@ -338,17 +343,19 @@ public class RenderingUtils {
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
 
-        RenderType rType = RenderTypeLookup.getRenderType(stack);
-        rType.setupRenderState();
+        RenderSystem.enableRescaleNormal();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.defaultAlphaFunc();
         RenderSystem.enableBlend();
         blendMode.apply();
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         renderStack.push();
         renderStack.translate(8.0F, 8.0F, 0.0F);
         renderStack.scale(16.0F, -16.0F, 16.0F);
 
         IBakedModel bakedModel = ForgeHooksClient.handleCameraTransforms(renderStack, getItemModel(stack), ItemCameraTransforms.TransformType.GUI, false);
-        if (!bakedModel.func_230044_c_()) {
+        if (!bakedModel.isSideLit()) {
             RenderHelper.setupGuiFlatDiffuseLighting();
         }
 
@@ -357,13 +364,15 @@ public class RenderingUtils {
                     LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, MathHelper.clamp(alpha, 0, 255));
         });
 
-        if (!bakedModel.func_230044_c_()) {
+        if (!bakedModel.isSideLit()) {
             RenderHelper.setupGui3DDiffuseLighting();
         }
 
         Blending.DEFAULT.apply();
         RenderSystem.disableBlend();
-        rType.clearRenderState();
+        RenderSystem.disableAlphaTest();
+        RenderSystem.disableRescaleNormal();
+        RenderSystem.enableDepthTest();
         renderStack.pop();
     }
 
@@ -376,36 +385,67 @@ public class RenderingUtils {
             renderStack.push();
             renderStack.translate(-0.5, -0.5, -0.5);
 
-            if (model.isBuiltInRenderer()) {
+            boolean renderThirdPersonView = transformType == ItemCameraTransforms.TransformType.GUI ||
+                    transformType == ItemCameraTransforms.TransformType.GROUND ||
+                    transformType == ItemCameraTransforms.TransformType.FIXED;
+
+            if (model.isBuiltInRenderer() || (stack.getItem() == Items.TRIDENT && !renderThirdPersonView)) {
                 int[] colors = new int[] { c.getRed(), c.getGreen(), c.getBlue(), alpha };
                 IRenderTypeBuffer decoratedBuffer = type -> BufferDecoratorBuilder.withColor((r, g, b, a) -> colors).decorate(buffer.getBuffer(type));
                 stack.getItem().getItemStackTileEntityRenderer().func_239207_a_(stack, transformType, renderStack, decoratedBuffer, combinedLight, combinedOverlay);
+            } else if (model.isLayered()) {
+                for (Pair<IBakedModel, RenderType> layerModel : model.getLayerModels(stack, true)) {
+                    IBakedModel layer = layerModel.getFirst();
+                    RenderType rType = layerModel.getSecond();
+                    ForgeHooksClient.setRenderLayer(rType);
+                    try {
+                        IVertexBuilder vertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(buffer, rType, true, stack.hasEffect());
+                        renderColoredItemModel(stack, layer, renderStack, vertexBuilder,combinedLight, combinedOverlay, c, alpha);
+                    } finally {
+                        ForgeHooksClient.setRenderLayer(null);
+                    }
+                }
             } else {
-                renderColoredItemModel(stack, model, renderStack, buffer, combinedLight, combinedOverlay, c, alpha);
+                //Always get translucent renderType
+                RenderType rType = RenderTypeLookup.func_239219_a_(stack, true);
+                IVertexBuilder vertexBuilder;
+
+                //TODO check correct VBs are being returned from ItemRenderer calls
+                //Wth are you doing here mojang. Taken from ItemRenderer#renderItem
+                if (stack.getItem() instanceof CompassItem && stack.hasEffect()) {
+                    renderStack.push();
+                    MatrixStack.Entry topEntry = renderStack.getLast();
+
+                    if (transformType == ItemCameraTransforms.TransformType.GUI) {
+                        topEntry.getMatrix().mul(0.5F);
+                    } else if (transformType.isFirstPerson()) {
+                        topEntry.getMatrix().mul(0.75F);
+                    }
+                    vertexBuilder = ItemRenderer.getDirectGlintVertexBuilder(buffer, rType, topEntry);
+                    renderStack.pop();
+                } else {
+                    vertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(buffer, rType, true, stack.hasEffect());
+                }
+
+                renderColoredItemModel(stack, model, renderStack, vertexBuilder,combinedLight, combinedOverlay, c, alpha);
             }
 
             renderStack.pop();
         }
     }
 
-    private static void renderColoredItemModel(ItemStack stack, IBakedModel model, MatrixStack renderStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay, Color color, int alpha) {
+    private static void renderColoredItemModel(ItemStack stack, IBakedModel model, MatrixStack renderStack, IVertexBuilder buffer, int combinedLight, int combinedOverlay, Color color, int alpha) {
         Color alphaColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-        RenderType rendertype = RenderTypeLookup.getRenderType(stack);
-        if (Objects.equals(rendertype, Atlases.getTranslucentBlockType())) {
-            rendertype = Atlases.getTranslucentCullBlockType();
-        }
-        IVertexBuilder buf = buffer.getBuffer(rendertype);
 
         Random renderRand = new Random();
         IModelData data = EmptyModelData.INSTANCE;
-
         for (Direction dir : Direction.values()) {
             renderRand.setSeed(42);
-            renderColoredQuads(buf, renderStack, model.getQuads(null, dir, renderRand, data), alphaColor, combinedLight, combinedOverlay, stack);
+            renderColoredQuads(buffer, renderStack, model.getQuads(null, dir, renderRand, data), alphaColor, combinedLight, combinedOverlay, stack);
         }
 
         renderRand.setSeed(42);
-        renderColoredQuads(buf, renderStack, model.getQuads(null, null, renderRand, data), alphaColor, combinedLight, combinedOverlay, stack);
+        renderColoredQuads(buffer, renderStack, model.getQuads(null, null, renderRand, data), alphaColor, combinedLight, combinedOverlay, stack);
     }
 
     private static void renderColoredQuads(IVertexBuilder vb, MatrixStack renderStack, List<BakedQuad> quads, Color color, int combinedLight, int combinedOverlay, ItemStack stack) {
@@ -435,7 +475,7 @@ public class RenderingUtils {
 
     public static void renderSimpleBlockModel(BlockState state, MatrixStack renderStack, IVertexBuilder vb, BlockPos pos, @Nullable TileEntity te, boolean checkRenderSide) {
         if (plainRenderWorld == null) {
-            plainRenderWorld = new EmptyRenderWorld(Biomes.PLAINS);
+            plainRenderWorld = new EmptyRenderWorld(() -> RegistryUtil.client().getValue(Registry.BIOME_KEY, Biomes.PLAINS));
         }
 
         BlockRenderType brt = state.getRenderType();

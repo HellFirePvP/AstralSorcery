@@ -19,7 +19,7 @@ import net.minecraft.util.WeightedRandom;
  */
 public class WRItemObject<T> extends WeightedRandom.Item {
 
-    private T object;
+    private final T object;
 
     public WRItemObject(int itemWeightIn, T value) {
         super(itemWeightIn);

@@ -179,7 +179,7 @@ public class EntityUtils {
         LootContext.Builder builder = new LootContext.Builder(sw)
                 .withRandom(rand)
                 .withParameter(LootParameters.THIS_ENTITY, entity)
-                .withParameter(LootParameters.POSITION, new BlockPos(entity))
+                .withParameter(LootParameters.field_237457_g_, entity.getPositionVec())
                 .withParameter(LootParameters.DAMAGE_SOURCE, srcDeath)
                 .withNullableParameter(LootParameters.KILLER_ENTITY, srcDeath.getTrueSource())
                 .withNullableParameter(LootParameters.DIRECT_KILLER_ENTITY, srcDeath.getImmediateSource());

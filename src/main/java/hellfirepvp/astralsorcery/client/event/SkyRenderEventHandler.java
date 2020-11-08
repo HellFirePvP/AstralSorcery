@@ -13,8 +13,12 @@ import hellfirepvp.astralsorcery.client.sky.ChainingSkyRenderer;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.world.DimensionRenderInfo;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.client.ISkyRenderHandler;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -29,26 +33,26 @@ import net.minecraftforge.fml.LogicalSide;
 public class SkyRenderEventHandler {
 
     public static void onRender(RenderWorldLastEvent event) {
-        World world = Minecraft.getInstance().world;
-        if (world != null && world.getDimension().isSurfaceWorld()) {
-            IRenderHandler render = world.getDimension().getSkyRenderer();
+        ClientWorld world = Minecraft.getInstance().world;
+        if (world != null && world.func_239132_a_().func_241683_c_() == DimensionRenderInfo.FogType.NORMAL) {
+            ISkyRenderHandler render = world.func_239132_a_().getSkyRenderHandler();
             if (!(render instanceof ChainingSkyRenderer)) {
-                int dimId = world.getDimension().getType().getId();
-                if (RenderingConfig.CONFIG.skyRenderDimensions.get().contains(dimId)) {
-                    world.getDimension().setSkyRenderer(new ChainingSkyRenderer(world.getDimension().getSkyRenderer()));
+                String strDimKey = world.getDimensionKey().getLocation().toString();
+                if (RenderingConfig.CONFIG.skyRenderDimensions.get().contains(strDimKey)) {
+                    world.func_239132_a_().setSkyRenderHandler(new ChainingSkyRenderer(world.func_239132_a_().getSkyRenderHandler()));
                 }
             }
         }
     }
 
     public static void onFog(EntityViewRenderEvent.FogColors event) {
-        World world = Minecraft.getInstance().world;
+        ClientWorld world = Minecraft.getInstance().world;
         if (world != null) {
-            int dimId = world.getDimension().getType().getId();
-            if (world.getDimension().isSurfaceWorld() &&
-                    RenderingConfig.CONFIG.skyRenderDimensions.get().contains(dimId) &&
-                    !RenderingConfig.CONFIG.weakSkyRenders.get().contains(dimId) &&
-                    world.getDimension().getSkyRenderer() instanceof ChainingSkyRenderer) {
+            String strDimKey = world.getDimensionKey().getLocation().toString();
+            if (world.func_239132_a_().func_241683_c_() == DimensionRenderInfo.FogType.NORMAL &&
+                    RenderingConfig.CONFIG.skyRenderDimensions.get().contains(strDimKey) &&
+                    !RenderingConfig.CONFIG.weakSkyRenders.get().contains(strDimKey) &&
+                    world.func_239132_a_().getSkyRenderHandler() instanceof ChainingSkyRenderer) {
 
                 WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
 

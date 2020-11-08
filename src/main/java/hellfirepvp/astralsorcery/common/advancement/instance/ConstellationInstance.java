@@ -17,6 +17,8 @@ import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import net.minecraft.advancements.criterion.CriterionInstance;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.loot.ConditionArraySerializer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
@@ -36,10 +38,10 @@ public class ConstellationInstance extends CriterionInstance {
     private boolean constellationMajor = false;
     private boolean constellationWeak = false;
     private boolean constellationMinor = false;
-    private Set<IConstellation> constellations = new HashSet<>();
+    private final Set<IConstellation> constellations = new HashSet<>();
 
     private ConstellationInstance(ResourceLocation id) {
-        super(id);
+        super(id, EntityPredicate.AndPredicate.ANY_AND);
     }
 
     public static ConstellationInstance any(ResourceLocation type) {
@@ -71,8 +73,8 @@ public class ConstellationInstance extends CriterionInstance {
     }
 
     @Override
-    public JsonElement serialize() {
-        JsonObject out = new JsonObject();
+    public JsonObject serialize(ConditionArraySerializer conditions) {
+        JsonObject out = super.serialize(conditions);
         if (this.constellationMajor) {
             out.addProperty("major", true);
         }

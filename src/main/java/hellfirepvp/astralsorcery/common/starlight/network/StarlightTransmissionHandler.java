@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 
@@ -28,7 +28,7 @@ import java.util.Map;
 public class StarlightTransmissionHandler implements ITickHandler {
 
     private static final StarlightTransmissionHandler instance = new StarlightTransmissionHandler();
-    private Map<ResourceLocation, TransmissionWorldHandler> worldHandlers = new HashMap<>();
+    private final Map<RegistryKey<World>, TransmissionWorldHandler> worldHandlers = new HashMap<>();
 
     private StarlightTransmissionHandler() {}
 
@@ -43,7 +43,7 @@ public class StarlightTransmissionHandler implements ITickHandler {
             return;
         }
 
-        worldHandlers.computeIfAbsent(world.func_234923_W_().func_240901_a_(), TransmissionWorldHandler::new)
+        worldHandlers.computeIfAbsent(world.getDimensionKey(), TransmissionWorldHandler::new)
                 .tick(world);
     }
 
@@ -53,7 +53,7 @@ public class StarlightTransmissionHandler implements ITickHandler {
     }
 
     public void informWorldUnload(World world) {
-        ResourceLocation dimKey = world.func_234923_W_().func_240901_a_();
+        RegistryKey<World> dimKey = world.getDimensionKey();
         TransmissionWorldHandler handle = worldHandlers.get(dimKey);
         if (handle != null) {
             handle.clear();
@@ -66,7 +66,7 @@ public class StarlightTransmissionHandler implements ITickHandler {
         if (world == null) {
             return null;
         }
-        return worldHandlers.get(world.func_234923_W_().func_240901_a_());
+        return worldHandlers.get(world.getDimensionKey());
     }
 
     @Override

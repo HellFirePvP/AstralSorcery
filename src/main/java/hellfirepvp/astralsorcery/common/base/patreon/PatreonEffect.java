@@ -33,8 +33,8 @@ public class PatreonEffect {
 
     protected static final Random rand = new Random();
 
-    private FlareColor flareColor;
-    private UUID effectUUID;
+    private final FlareColor flareColor;
+    private final UUID effectUUID;
 
     public PatreonEffect(UUID effectUUID, @Nullable FlareColor flareColor) {
         this.effectUUID = effectUUID;

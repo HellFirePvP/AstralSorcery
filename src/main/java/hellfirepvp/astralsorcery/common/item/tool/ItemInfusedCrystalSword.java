@@ -50,7 +50,7 @@ public class ItemInfusedCrystalSword extends ItemCrystalSword implements Equipme
                     !serverPlayer.isSneaking() &&
                     !serverPlayer.getCooldownTracker().hasCooldown(sword.getItem())) {
 
-                CelestialStrike.play(serverPlayer, serverPlayer.getEntityWorld(), Vector3.atEntityCorner(entity), Vector3.atEntityCorner(entity));
+                CelestialStrike.play(serverPlayer, serverPlayer.getServerWorld(), Vector3.atEntityCorner(entity), Vector3.atEntityCorner(entity));
                 serverPlayer.getCooldownTracker().setCooldown(sword.getItem(), 120);
             }
         }

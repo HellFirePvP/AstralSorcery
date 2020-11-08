@@ -25,6 +25,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IWorld;
@@ -91,7 +92,7 @@ public class GatewayCache extends GlobalWorldData {
         }
         markDirty();
         CelestialGatewayHandler.INSTANCE.addPosition(world, node);
-        LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Added new gateway node at: dim=" + world.getDimension().getType().getId() + ", " + pos.toString());
+        LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Added new gateway node at: dim=" + world.getDimensionKey().getLocation() + ", " + pos.toString());
         return true;
     }
 
@@ -99,7 +100,7 @@ public class GatewayCache extends GlobalWorldData {
         if (gatewayPositions.removeIf(node -> node.getPos().equals(pos))) {
             markDirty();
             CelestialGatewayHandler.INSTANCE.removePosition(world, pos);
-            LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Removed gateway node at: dim=" + world.getDimension().getType().getId() + ", " + pos.toString());
+            LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Removed gateway node at: dim=" + world.getDimensionKey().getLocation() + ", " + pos.toString());
         }
     }
 
@@ -110,7 +111,7 @@ public class GatewayCache extends GlobalWorldData {
     public void onLoad(IWorld world) {
         super.onLoad(world);
 
-        LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Checking GatewayCache integrity for dimension " + world.getDimension().getType().getId());
+        LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Checking GatewayCache integrity for dimension " + world.getDimensionKey().getLocation());
         long msStart = System.currentTimeMillis();
 
         Iterator<GatewayNode> iterator = gatewayPositions.iterator();
@@ -157,7 +158,7 @@ public class GatewayCache extends GlobalWorldData {
     public static class GatewayNode {
 
         private final BlockPos pos;
-        private ITextComponent display;
+        private IFormattableTextComponent display;
         private DyeColor color;
 
         private boolean locked = false;
@@ -178,7 +179,7 @@ public class GatewayCache extends GlobalWorldData {
         }
 
         @Nullable
-        public ITextComponent getDisplayName() {
+        public IFormattableTextComponent getDisplayName() {
             return display;
         }
 
@@ -239,7 +240,7 @@ public class GatewayCache extends GlobalWorldData {
         public static GatewayNode read(CompoundNBT tag) {
             GatewayNode node = new GatewayNode(NBTHelper.readBlockPosFromNBT(tag));
             if (tag.contains("display")) {
-                node.display = ITextComponent.Serializer.fromJson(tag.getString("display"));
+                node.display = ITextComponent.Serializer.getComponentFromJson(tag.getString("display"));
             }
             if (tag.contains("color")) {
                 node.color = NBTHelper.readEnum(tag, "color", DyeColor.class);
@@ -299,11 +300,11 @@ public class GatewayCache extends GlobalWorldData {
 
         @Nullable
         @Override
-        public ITextComponent getDisplayName() {
+        public IFormattableTextComponent getDisplayName() {
             return this.decorated.getDisplayName();
         }
 
-        public void setDisplayName(@Nullable ITextComponent displayName) {
+        public void setDisplayName(@Nullable IFormattableTextComponent displayName) {
             this.decorated.display = displayName;
         }
 

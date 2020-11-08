@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -45,13 +46,13 @@ public class PatreonManagerClient implements ITickHandler {
         if (clWorld == null || thisPlayer == null) {
             return;
         }
-        int clDim = clWorld.getDimension().getType().getId();
+        RegistryKey<World> clientWorld = clWorld.getDimensionKey();
         Vector3 thisPlayerPos = Vector3.atEntityCenter(thisPlayer);
 
         SyncDataHolder.executeClient(SyncDataHolder.DATA_PATREON_FLARES, ClientPatreonFlares.class, data -> {
             for (Collection<PatreonPartialEntity> playerEntities : data.getEntities()) {
                 for (PatreonPartialEntity entity : playerEntities) {
-                    if (entity.getLastTickedDimension() == null || entity.getLastTickedDimension() != clDim) {
+                    if (entity.getLastTickedDimension() == null || !entity.getLastTickedDimension().equals(clientWorld)) {
                         continue;
                     }
                     if (entity.getPos().distanceSquared(thisPlayerPos) <= RenderingConfig.CONFIG.getMaxEffectRenderDistanceSq()) {

@@ -45,14 +45,14 @@ public class WorldBlockPos extends BlockPos {
     }
 
     public static WorldBlockPos wrapServer(World world, BlockPos pos) {
-        return new WorldBlockPos(world.func_234923_W_(), pos, type -> {
+        return new WorldBlockPos(world.getDimensionKey(), pos, type -> {
             MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
             return server.getWorld(type);
         });
     }
 
     public static WorldBlockPos wrapTileEntity(TileEntity tile) {
-        return new WorldBlockPos(tile.getWorld().func_234923_W_(), tile.getPos(), type -> tile.getWorld());
+        return new WorldBlockPos(tile.getWorld().getDimensionKey(), tile.getPos(), type -> tile.getWorld());
     }
 
     public RegistryKey<World> getWorldKey() {

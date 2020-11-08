@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
@@ -17,6 +18,8 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -41,7 +44,7 @@ public class RenderingOverlayUtils {
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 
         RenderSystem.enableBlend();
-        Blending.DEFAULT.apply();
+        RenderSystem.defaultBlendFunc();
 
         //Draw background frame
         int tempY = offsetY;
@@ -98,8 +101,8 @@ public class RenderingOverlayUtils {
         }
 
         //Draw itemstack counts
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(offsetX + 14, offsetY + 16, 0);
+        MatrixStack renderStack = new MatrixStack();
+        renderStack.translate(offsetX + 14, offsetY + 16, 0);
         int txtColor = 0x00DDDDDD;
         for (Tuple<ItemStack, Integer> stackTpl : itemStacks) {
             ItemStack stack = stackTpl.getA();
@@ -111,20 +114,22 @@ public class RenderingOverlayUtils {
             if (stackTpl.getB() == -1) {
                 amountStr = "\u221E"; //+Inf
             }
+            ITextProperties prop = new StringTextComponent(amountStr);
+            int length = fontRenderer.getStringPropertyWidth(prop);
 
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(-fontRenderer.getStringWidth(amountStr) / 3, 0, 0);
-            RenderSystem.scaled(0.7, 0.7, 0.7);
+            renderStack.push();
+            renderStack.translate(-length / 3F, 0, 0);
+            renderStack.scale(0.7F, 0.7F, 0.7F);
             if (amountStr.length() > 3) {
-                RenderSystem.scaled(0.9, 0.9, 0.9);
+                renderStack.scale(0.9F, 0.9F, 0.9F);
             }
-            RenderingDrawUtils.renderStringAtCurrentPos(fr, amountStr, txtColor);
-            RenderSystem.popMatrix();
+            RenderingDrawUtils.renderStringAt(fr, renderStack, prop, txtColor);
+            renderStack.pop();
 
-            RenderSystem.translated(0, heightNormal, 0);
+            renderStack.translate(0, heightNormal, 0);
         }
 
-        RenderSystem.popMatrix();
+        renderStack.pop();
     }
 
 }

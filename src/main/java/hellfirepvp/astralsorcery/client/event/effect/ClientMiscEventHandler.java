@@ -48,8 +48,6 @@ public class ClientMiscEventHandler {
 
     private ClientMiscEventHandler() {}
 
-
-
     //Obligatory, dev gimmick
     @OnlyIn(Dist.CLIENT)
     static void onRender(RenderPlayerEvent.Post event) {

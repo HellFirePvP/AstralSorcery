@@ -137,7 +137,7 @@ public class ScreenJournalConstellationOverview extends ScreenJournal implements
 
         String trName = display.getConstellationName().getFormattedText().toUpperCase();
         float fullLength = (width / 2F) - (((float) font.getStringWidth(trName)) / 2F);
-        RenderingDrawUtils.renderStringAtPos(fullLength, 90, this.getGuiZLevel(), font, trName, 0xBBDDDDDD, false);
+        RenderingDrawUtils.renderStringAt(fullLength, 90, this.getGuiZLevel(), font, trName, 0xBBDDDDDD, false);
 
         RenderSystem.popMatrix();
         return rect;

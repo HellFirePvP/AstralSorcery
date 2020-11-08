@@ -36,13 +36,13 @@ import javax.annotation.Nonnull;
  */
 public class PktRequestSeed extends ASPacket<PktRequestSeed> {
 
-    private ResourceLocation dim;
+    private RegistryKey<World> dim;
     private Integer session;
     private Long seed;
 
     public PktRequestSeed() {}
 
-    public PktRequestSeed(Integer session, ResourceLocation dim) {
+    public PktRequestSeed(Integer session, RegistryKey<World> dim) {
         this.dim = dim;
         this.session = session;
         this.seed = -1L;
@@ -57,7 +57,7 @@ public class PktRequestSeed extends ASPacket<PktRequestSeed> {
     @Override
     public Encoder<PktRequestSeed> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeOptional(buffer, packet.dim, ByteBufUtils::writeResourceLocation);
+            ByteBufUtils.writeOptional(buffer, packet.dim, ByteBufUtils::writeVanillaRegistryEntry);
             ByteBufUtils.writeOptional(buffer, packet.session, PacketBuffer::writeInt);
             ByteBufUtils.writeOptional(buffer, packet.seed, PacketBuffer::writeLong);
         };
@@ -69,7 +69,7 @@ public class PktRequestSeed extends ASPacket<PktRequestSeed> {
         return buffer -> {
             PktRequestSeed pkt = new PktRequestSeed();
 
-            pkt.dim = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
+            pkt.dim = ByteBufUtils.readOptional(buffer, ByteBufUtils::readVanillaRegistryEntry);
             pkt.session = ByteBufUtils.readOptional(buffer, PacketBuffer::readInt);
             pkt.seed = ByteBufUtils.readOptional(buffer, PacketBuffer::readLong);
 
@@ -92,11 +92,12 @@ public class PktRequestSeed extends ASPacket<PktRequestSeed> {
                 context.enqueueWork(() -> {
                     //TODO 1.16.2 re-check once worlds are not all constantly loaded
                     MinecraftServer srv = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
-                    RegistryKey<World> dimKey = RegistryKey.func_240903_a_(Registry.WORLD_KEY, packet.dim);
-                    ServerWorld w = srv.getWorld(dimKey);
-                    PktRequestSeed seedResponse = new PktRequestSeed(packet.session, packet.dim);
-                    seedResponse.seed(MiscUtils.getRandomWorldSeed(w));
-                    packet.replyWith(seedResponse, context);
+                    ServerWorld w = srv.getWorld(packet.dim);
+                    if (w != null) {
+                        PktRequestSeed seedResponse = new PktRequestSeed(packet.session, packet.dim);
+                        seedResponse.seed(MiscUtils.getRandomWorldSeed(w));
+                        packet.replyWith(seedResponse, context);
+                    }
                 });
             }
         };

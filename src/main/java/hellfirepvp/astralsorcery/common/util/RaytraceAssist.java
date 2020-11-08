@@ -38,7 +38,7 @@ public class RaytraceAssist {
     private final BlockPos startPos, targetPos;
 
     private boolean collectEntities = false;
-    private Set<Integer> collected = new HashSet<>();
+    private final Set<Integer> collected = new HashSet<>();
     private AxisAlignedBB collectBox = null;
     private boolean includeEnd = false, hitBlocks = true, hitFluids = true;
     private double stepWidth = STEP_WIDTH;

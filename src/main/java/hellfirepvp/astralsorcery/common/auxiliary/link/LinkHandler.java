@@ -14,6 +14,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -96,13 +97,13 @@ public class LinkHandler implements ITickHandler {
             case SELECT_START:
                 if (session.getType() == LinkType.ENTITY) {
                     playerIn.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.start",
-                            result.getLinkingSession().getSelectedEntity().getDisplayName()).applyTextStyle(TextFormatting.GREEN));
+                            result.getLinkingSession().getSelectedEntity().getDisplayName()).mergeStyle(TextFormatting.GREEN), Util.DUMMY_UUID);
                 } else {
                     String name = tile.getUnLocalizedDisplayName();
                     if (tile.onSelect(playerIn)) {
                         if (name != null) {
                             playerIn.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.start",
-                                    new TranslationTextComponent(name)).applyTextStyle(TextFormatting.GREEN));
+                                    new TranslationTextComponent(name)).mergeStyle(TextFormatting.GREEN), Util.DUMMY_UUID);
                         }
                     }
                 }
@@ -134,7 +135,7 @@ public class LinkHandler implements ITickHandler {
                             playerIn.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.link",
                                     new TranslationTextComponent(linkedFrom),
                                     new TranslationTextComponent(linkedToName))
-                                    .applyTextStyle(TextFormatting.GREEN));
+                                    .mergeStyle(TextFormatting.GREEN), Util.DUMMY_UUID);
                         }
                     }
                 }
@@ -154,7 +155,7 @@ public class LinkHandler implements ITickHandler {
                         playerIn.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.unlink",
                                 new TranslationTextComponent(linkedFrom),
                                 new TranslationTextComponent(linkedToName))
-                                .applyTextStyle(TextFormatting.GREEN));
+                                .mergeStyle(TextFormatting.GREEN), Util.DUMMY_UUID);
                     }
                 }
                 break;
@@ -186,13 +187,12 @@ public class LinkHandler implements ITickHandler {
             switch (session.getType()) {
                 case ENTITY:
                     LivingEntity entity = session.getSelectedEntity();
-                    if (!entity.isAlive() || entity.getEntityWorld().getDimension().getType().getId() != player.dimension.getId()) {
+                    if (!entity.isAlive() || !entity.getEntityWorld().getDimensionKey().equals(player.getEntityWorld().getDimensionKey())) {
                         needsRemoval = true;
                     }
                     break;
                 case BLOCK:
-                    int dimId = session.getSelectedTile().getLinkWorld().getDimension().getType().getId();
-                    if (dimId != player.dimension.getId()) {
+                    if (!session.getSelectedTile().getLinkWorld().getDimensionKey().equals(player.getEntityWorld().getDimensionKey())) {
                         needsRemoval = true;
                     }
                     break;
@@ -200,7 +200,7 @@ public class LinkHandler implements ITickHandler {
             if (needsRemoval) {
                 iterator.remove();
                 player.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.stop")
-                        .applyTextStyle(TextFormatting.RED));
+                        .mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
             }
         }
     }

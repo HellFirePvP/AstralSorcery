@@ -23,8 +23,7 @@ import net.minecraft.state.Property;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
@@ -33,7 +32,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -139,12 +137,12 @@ public class ByteBufUtils {
         return map;
     }
 
-    public static void writeTextComponent(PacketBuffer buf, ITextComponent cmp) {
-        writeString(buf, ITextComponent.Serializer.toJson(cmp));
+    public static void writeTextComponent(PacketBuffer buf, IFormattableTextComponent cmp) {
+        writeString(buf, IFormattableTextComponent.Serializer.toJson(cmp));
     }
 
-    public static ITextComponent readTextComponent(PacketBuffer buf) {
-        return ITextComponent.Serializer.fromJson(readString(buf));
+    public static IFormattableTextComponent readTextComponent(PacketBuffer buf) {
+        return IFormattableTextComponent.Serializer.getComponentFromJson(readString(buf));
     }
 
     public static void writeString(PacketBuffer buf, String toWrite) {
@@ -172,12 +170,13 @@ public class ByteBufUtils {
     }
 
     public static void writeVanillaRegistryEntry(PacketBuffer buf, RegistryKey<?> key) {
-        writeResourceLocation(buf, key.func_240901_a_());
+        writeResourceLocation(buf, key.getRegistryName());
+        writeResourceLocation(buf, key.getLocation());
     }
 
-    public static <T> RegistryKey<T> readVanillaRegistryEntry(PacketBuffer buf, RegistryKey<Registry<T>> registry) {
-        ResourceLocation key = readResourceLocation(buf);
-        return RegistryKey.func_240903_a_(registry, key);
+    public static <T> RegistryKey<T> readVanillaRegistryEntry(PacketBuffer buf) {
+        ResourceLocation registryName = readResourceLocation(buf);
+        return RegistryKey.getOrCreateKey(RegistryKey.getOrCreateRootKey(registryName), readResourceLocation(buf));
     }
 
     public static void writeResourceLocation(PacketBuffer buf, ResourceLocation key) {

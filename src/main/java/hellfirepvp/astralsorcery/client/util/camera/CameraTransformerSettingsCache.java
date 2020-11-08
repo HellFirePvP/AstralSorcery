@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.util.camera;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.player.PlayerEntity;
 
 /**
@@ -25,7 +26,7 @@ public abstract class CameraTransformerSettingsCache implements ICameraTransform
     private boolean active = false;
 
     private boolean viewBobbing = false, hideGui = false, flying = false;
-    private int thirdPersonView = 0;
+    private PointOfView thirdPersonView;
 
     private Vector3 startPosition;
     private float startYaw, startPitch;
@@ -36,7 +37,7 @@ public abstract class CameraTransformerSettingsCache implements ICameraTransform
 
         this.viewBobbing = mc.gameSettings.viewBobbing;
         this.hideGui = mc.gameSettings.hideGUI;
-        this.thirdPersonView = mc.gameSettings.thirdPersonView;
+        this.thirdPersonView = mc.gameSettings.getPointOfView();
         PlayerEntity player = mc.player;
         this.flying = player.abilities.isFlying;
         this.startPosition = new Vector3(player.getPosX(), player.getPosY(), player.getPosZ());
@@ -52,7 +53,7 @@ public abstract class CameraTransformerSettingsCache implements ICameraTransform
             GameSettings settings = Minecraft.getInstance().gameSettings;
             settings.viewBobbing = viewBobbing;
             settings.hideGUI = hideGui;
-            settings.thirdPersonView = thirdPersonView;
+            settings.setPointOfView(thirdPersonView);
             PlayerEntity player = Minecraft.getInstance().player;
             player.abilities.isFlying = flying;
             player.setPositionAndRotation(startPosition.getX(), startPosition.getY(), startPosition.getZ(), startYaw, startPitch);
@@ -70,7 +71,7 @@ public abstract class CameraTransformerSettingsCache implements ICameraTransform
         GameSettings settings = Minecraft.getInstance().gameSettings;
         settings.hideGUI = true;
         settings.viewBobbing = false;
-        settings.thirdPersonView = 0;
+        settings.setPointOfView(PointOfView.THIRD_PERSON_BACK);
         Minecraft.getInstance().player.abilities.isFlying = true;
         Minecraft.getInstance().player.setVelocity(0, 0, 0);
     }

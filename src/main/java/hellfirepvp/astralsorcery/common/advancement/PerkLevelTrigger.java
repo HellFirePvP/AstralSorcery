@@ -8,11 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.advancement;
 
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.advancement.instance.PerkLevelInstance;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.loot.ConditionArrayParser;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -31,8 +31,8 @@ public class PerkLevelTrigger extends ListenerCriterionTrigger<PerkLevelInstance
     }
 
     @Override
-    public PerkLevelInstance deserializeInstance(JsonObject json, JsonDeserializationContext context) {
-        return PerkLevelInstance.deserialize(getId(), json);
+    public PerkLevelInstance deserialize(JsonObject object, ConditionArrayParser conditions) {
+        return PerkLevelInstance.deserialize(getId(), object);
     }
 
     public void trigger(ServerPlayerEntity player) {

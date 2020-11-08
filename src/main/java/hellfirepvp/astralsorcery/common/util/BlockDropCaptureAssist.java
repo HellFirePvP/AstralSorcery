@@ -25,9 +25,9 @@ import java.util.Stack;
  */
 public class BlockDropCaptureAssist {
 
-    public static BlockDropCaptureAssist INSTANCE = new BlockDropCaptureAssist();
+    public static final BlockDropCaptureAssist INSTANCE = new BlockDropCaptureAssist();
 
-    private static Stack<NonNullList<ItemStack>> capturing = new Stack<>();
+    private static final Stack<NonNullList<ItemStack>> capturing = new Stack<>();
 
     private BlockDropCaptureAssist() {}
 

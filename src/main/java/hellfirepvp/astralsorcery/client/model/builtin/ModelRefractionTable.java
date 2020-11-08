@@ -22,31 +22,31 @@ import net.minecraft.client.renderer.model.ModelRenderer;
  */
 public class ModelRefractionTable extends CustomModel {
 
-    private ModelRenderer fitting_l;
-    private ModelRenderer fitting_r;
-    private ModelRenderer support_1;
-    private ModelRenderer support_2;
-    private ModelRenderer support_3;
-    private ModelRenderer support_4;
-    private ModelRenderer platform_l;
-    private ModelRenderer platform_r;
-    private ModelRenderer platform_f;
-    private ModelRenderer platform_b;
-    private ModelRenderer basin_l;
-    private ModelRenderer basim_r;
-    private ModelRenderer basin_f;
-    private ModelRenderer basin_b;
-    private ModelRenderer socket;
-    private ModelRenderer base;
-    private ModelRenderer leg_1;
-    private ModelRenderer leg_2;
-    private ModelRenderer leg_3;
-    private ModelRenderer leg_4;
+    private final ModelRenderer fitting_l;
+    private final ModelRenderer fitting_r;
+    private final ModelRenderer support_1;
+    private final ModelRenderer support_2;
+    private final ModelRenderer support_3;
+    private final ModelRenderer support_4;
+    private final ModelRenderer platform_l;
+    private final ModelRenderer platform_r;
+    private final ModelRenderer platform_f;
+    private final ModelRenderer platform_b;
+    private final ModelRenderer basin_l;
+    private final ModelRenderer basim_r;
+    private final ModelRenderer basin_f;
+    private final ModelRenderer basin_b;
+    private final ModelRenderer socket;
+    private final ModelRenderer base;
+    private final ModelRenderer leg_1;
+    private final ModelRenderer leg_2;
+    private final ModelRenderer leg_3;
+    private final ModelRenderer leg_4;
 
-    private ModelRenderer parchment;
-    private ModelRenderer black_mirror;
+    private final ModelRenderer parchment;
+    private final ModelRenderer black_mirror;
 
-    private ModelRenderer treated_glass;
+    private final ModelRenderer treated_glass;
 
     public ModelRefractionTable() {
         super((resKey) -> RenderTypesAS.MODEL_REFRACTION_TABLE);

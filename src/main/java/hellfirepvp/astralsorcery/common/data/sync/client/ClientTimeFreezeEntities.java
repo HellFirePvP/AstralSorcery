@@ -5,8 +5,10 @@ import hellfirepvp.astralsorcery.common.data.sync.base.ClientDataReader;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
@@ -20,14 +22,14 @@ import java.util.*;
  */
 public class ClientTimeFreezeEntities extends ClientData<ClientTimeFreezeEntities> {
 
-    private final Map<DimensionType, Set<Integer>> clientActiveEntityFreeze = new HashMap<>();
+    private final Map<RegistryKey<World>, Set<Integer>> clientActiveEntityFreeze = new HashMap<>();
 
     public boolean isFrozen(Entity e) {
-        return this.clientActiveEntityFreeze.getOrDefault(e.dimension, Collections.emptySet()).contains(e.getEntityId());
+        return this.clientActiveEntityFreeze.getOrDefault(e.getEntityWorld().getDimensionKey(), Collections.emptySet()).contains(e.getEntityId());
     }
 
     @Override
-    public void clear(DimensionType dimType) {
+    public void clear(RegistryKey<World> dimType) {
         this.clientActiveEntityFreeze.remove(dimType);
     }
 
@@ -51,7 +53,7 @@ public class ClientTimeFreezeEntities extends ClientData<ClientTimeFreezeEntitie
         private void readEntityInformation(ClientTimeFreezeEntities data, CompoundNBT compound) {
             CompoundNBT dimTypes = compound.getCompound("dimTypes");
             for (String key : dimTypes.keySet()) {
-                DimensionType type = DimensionType.byName(new ResourceLocation(key));
+                RegistryKey<World> dim = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(key));
 
                 ListNBT list = dimTypes.getList(key, Constants.NBT.TAG_INT);
                 Set<Integer> entities = new HashSet<>();
@@ -59,7 +61,7 @@ public class ClientTimeFreezeEntities extends ClientData<ClientTimeFreezeEntitie
                     entities.add(list.getInt(i));
                 }
 
-                data.clientActiveEntityFreeze.put(type, entities);
+                data.clientActiveEntityFreeze.put(dim, entities);
             }
         }
     }

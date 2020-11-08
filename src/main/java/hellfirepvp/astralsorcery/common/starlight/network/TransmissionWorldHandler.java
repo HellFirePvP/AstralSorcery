@@ -44,23 +44,23 @@ public class TransmissionWorldHandler {
 
     //If a source looses all chunks/all chunks in its network get unloaded it doesn't need to broadcast starlight anymore
     //This map exists to associate a certain chunkPosition to the involved networks in it.
-    private Map<ChunkPos, List<IIndependentStarlightSource>> involvedSourceMap = new HashMap<>();
+    private final Map<ChunkPos, List<IIndependentStarlightSource>> involvedSourceMap = new HashMap<>();
 
     //The counterpart to check faster
     //Removing a source here will also stop production!
-    private Map<IIndependentStarlightSource, List<ChunkPos>> activeChunkMap = new HashMap<>();
+    private final Map<IIndependentStarlightSource, List<ChunkPos>> activeChunkMap = new HashMap<>();
 
-    private Map<IIndependentStarlightSource, TransmissionChain> cachedSourceChain = new HashMap<>(); //The distribution source chain.
+    private final Map<IIndependentStarlightSource, TransmissionChain> cachedSourceChain = new HashMap<>(); //The distribution source chain.
 
-    private Map<BlockPos, List<IIndependentStarlightSource>> posToSourceMap = new HashMap<>();
+    private final Map<BlockPos, List<IIndependentStarlightSource>> posToSourceMap = new HashMap<>();
 
     //Contains a list of source positions whose sources currently calculate their network.
-    private Set<BlockPos> sourcePosBuilding = new HashSet<>();
+    private final Set<BlockPos> sourcePosBuilding = new HashSet<>();
 
     private final RegistryKey<World> dim;
 
-    public TransmissionWorldHandler(ResourceLocation dimKey) {
-        this.dim = RegistryKey.func_240903_a_(Registry.WORLD_KEY, dimKey);
+    public TransmissionWorldHandler(RegistryKey<World> dimKey) {
+        this.dim = dimKey;
     }
 
     public void tick(World world) {

@@ -13,6 +13,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -108,7 +109,7 @@ public interface LinkableTileEntity {
             for (BlockPos linkTo : Lists.newArrayList(getLinkedPositions())) {
                 tryUnlink(player, linkTo);
             }
-            player.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.unlink.all").setStyle(new Style().setColor(TextFormatting.GREEN)));
+            player.sendMessage(new TranslationTextComponent("astralsorcery.misc.link.unlink.all").mergeStyle(TextFormatting.GREEN), Util.DUMMY_UUID);
             return false;
         }
         return true;

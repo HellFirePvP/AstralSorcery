@@ -27,9 +27,9 @@ import java.util.Map;
  */
 public class TimeoutListContainer<K, V> implements ITickHandler {
 
-    private EnumSet<TickEvent.Type> tickTypes;
+    private final EnumSet<TickEvent.Type> tickTypes;
     private final ContainerTimeoutDelegate<K, V> delegate;
-    private Map<K, TimeoutList<V>> timeoutListMap = new HashMap<>();
+    private final Map<K, TimeoutList<V>> timeoutListMap = new HashMap<>();
 
     public TimeoutListContainer(TickEvent.Type... restTypes) {
         this(null, restTypes);

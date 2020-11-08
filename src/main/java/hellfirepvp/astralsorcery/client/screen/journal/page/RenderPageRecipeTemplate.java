@@ -34,6 +34,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
@@ -317,20 +318,21 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         try {
             tooltip.addAll(stack.getTooltip(Minecraft.getInstance().player, Minecraft.getInstance().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
         } catch (Exception exc) {
-            tooltip.add(new TranslationTextComponent("astralsorcery.misc.tooltipError").setStyle(new Style().setColor(TextFormatting.RED)));
+            tooltip.add(new TranslationTextComponent("astralsorcery.misc.tooltipError").mergeStyle(TextFormatting.RED));
         }
         BookLookupInfo info = BookLookupRegistry.findPage(Minecraft.getInstance().player, LogicalSide.CLIENT, stack);
         if (info != null &&
                 info.canSee(ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT)) &&
                 !info.getResearchNode().equals(this.getResearchNode())) {
             tooltip.add(new StringTextComponent(""));
-            tooltip.add(new TranslationTextComponent("astralsorcery.misc.craftInformation").setStyle(new Style().setColor(TextFormatting.GRAY)));
+            tooltip.add(new TranslationTextComponent("astralsorcery.misc.craftInformation").mergeStyle(TextFormatting.GRAY));
         }
         if (stackIngredient != null && Minecraft.getInstance().gameSettings.advancedItemTooltips) {
-            Tag<Item> itemTag = IngredientHelper.guessTag(stackIngredient);
-            if (itemTag != null) {
+            ITag<Item> itemTag = IngredientHelper.guessTag(stackIngredient);
+            if (itemTag instanceof ITag.INamedTag) {
                 tooltip.add(new StringTextComponent(""));
-                tooltip.add(new TranslationTextComponent("astralsorcery.misc.input.tag", itemTag.getId().toString()).setStyle(new Style().setColor(TextFormatting.GRAY)));
+                tooltip.add(new TranslationTextComponent("astralsorcery.misc.input.tag",
+                        ((ITag.INamedTag<Item>) itemTag).getName().toString()).mergeStyle(TextFormatting.GRAY));
             }
             if (stackIngredient instanceof FluidIngredient) {
                 List<FluidStack> fluids = ((FluidIngredient) stackIngredient).getFluids();

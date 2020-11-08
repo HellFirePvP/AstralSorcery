@@ -13,7 +13,9 @@ import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.advancement.PerkLevelTrigger;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import net.minecraft.advancements.criterion.CriterionInstance;
+import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.loot.ConditionArraySerializer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
@@ -30,7 +32,7 @@ public class PerkLevelInstance extends CriterionInstance {
     private int levelNeeded = 0;
 
     private PerkLevelInstance(ResourceLocation criterionIn) {
-        super(criterionIn);
+        super(criterionIn, EntityPredicate.AndPredicate.ANY_AND);
     }
 
     public static PerkLevelInstance reachLevel(int level) {
@@ -40,8 +42,8 @@ public class PerkLevelInstance extends CriterionInstance {
     }
 
     @Override
-    public JsonElement serialize() {
-        JsonObject out = new JsonObject();
+    public JsonObject serialize(ConditionArraySerializer conditions) {
+        JsonObject out = super.serialize(conditions);
         out.addProperty("levelNeeded", this.levelNeeded);
         return out;
     }

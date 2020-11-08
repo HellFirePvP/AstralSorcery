@@ -85,8 +85,7 @@ public class JsonHelper {
         if (fluidElement.isJsonPrimitive() && ((JsonPrimitive) fluidElement).isString()) {
             String strKey = fluidElement.getAsString();
             ResourceLocation fluidKey = new ResourceLocation(strKey);
-            fluidStack = new FluidStack(Registry.FLUID.getValue(fluidKey).orElseThrow(
-                    () -> new IllegalStateException("Fluid: " + strKey + " does not exist")), FluidAttributes.BUCKET_VOLUME);
+            fluidStack = new FluidStack(ForgeRegistries.FLUIDS.getValue(fluidKey), FluidAttributes.BUCKET_VOLUME);
         } else if (fluidElement.isJsonObject()) {
             fluidStack = getFluidStack(fluidElement.getAsJsonObject(), true);
         } else {
@@ -134,8 +133,7 @@ public class JsonHelper {
         if (itemElement.isJsonPrimitive() && ((JsonPrimitive) itemElement).isString()) {
             String strKey = itemElement.getAsString();
             ResourceLocation itemKey = new ResourceLocation(strKey);
-            itemstack = new ItemStack(Registry.ITEM.getValue(itemKey).orElseThrow(
-                    () -> new IllegalStateException("Item: " + strKey + " does not exist")));
+            itemstack = new ItemStack(ForgeRegistries.ITEMS.getValue(itemKey));
         } else if (itemElement.isJsonObject()) {
             itemstack = CraftingHelper.getItemStack(itemElement.getAsJsonObject(), true);
         } else {
@@ -155,8 +153,7 @@ public class JsonHelper {
         } else {
             String strKey = JSONUtils.getString(root, key);
             ResourceLocation itemKey = new ResourceLocation(strKey);
-            itemstack = new ItemStack(Registry.ITEM.getValue(itemKey).orElseThrow(
-                    () -> new IllegalStateException("Item: " + strKey + " does not exist")));
+            itemstack = new ItemStack(ForgeRegistries.ITEMS.getValue(itemKey));
         }
         return itemstack;
     }

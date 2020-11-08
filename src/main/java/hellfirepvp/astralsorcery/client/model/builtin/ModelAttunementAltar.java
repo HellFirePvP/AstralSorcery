@@ -21,8 +21,8 @@ import net.minecraft.client.renderer.model.ModelRenderer;
  */
 public class ModelAttunementAltar extends CustomModel {
 
-    private ModelRenderer base;
-    private ModelRenderer hovering;
+    private final ModelRenderer base;
+    private final ModelRenderer hovering;
 
     public ModelAttunementAltar() {
         super((resKey) -> RenderTypesAS.MODEL_ATTUNEMENT_ALTAR);

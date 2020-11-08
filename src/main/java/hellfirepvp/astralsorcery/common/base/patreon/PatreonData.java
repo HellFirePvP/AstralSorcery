@@ -23,7 +23,7 @@ import java.util.List;
 //Class deserialized into via GSON
 public class PatreonData {
 
-    private List<EffectEntry> effectList = Lists.newArrayList();
+    private final List<EffectEntry> effectList = Lists.newArrayList();
 
     public List<EffectEntry> getEffectList() {
         return Collections.unmodifiableList(effectList);
@@ -33,7 +33,7 @@ public class PatreonData {
 
         private String uuid;
         private String effectClass;
-        private List<String> parameters = Lists.newArrayList();
+        private final List<String> parameters = Lists.newArrayList();
 
         public String getUuid() {
             return uuid;

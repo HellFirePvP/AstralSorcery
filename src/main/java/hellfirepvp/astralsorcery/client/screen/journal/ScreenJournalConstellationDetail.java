@@ -237,7 +237,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
     private void drawCapeInformationPages(int mouseX, int mouseY, float partialTicks) {
         for (int i = 0; i < locTextMantleCorruption.size(); i++) {
             String line = locTextMantleCorruption.get(i);
-            RenderingDrawUtils.renderStringAtPos(guiLeft + 30, guiTop + 30 + i * 10, this.getGuiZLevel(), font, line, 0xFFCCCCCC, true);
+            RenderingDrawUtils.renderStringAt(guiLeft + 30, guiTop + 30 + i * 10, this.getGuiZLevel(), font, line, 0xFFCCCCCC, true);
         }
 
         if (GatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchHelper.getClientProgress())) {
@@ -256,7 +256,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
     private void drawEnchantingPotionPaperPageInformation(int mouseX, int mouseY, float partialTicks) {
         for (int i = 0; i < locTextRitualEnch.size(); i++) {
             String line = locTextRitualEnch.get(i);
-            RenderingDrawUtils.renderStringAtPos(guiLeft + 30, guiTop + 30 + i * 10, this.getGuiZLevel(), font, line, 0xFFCCCCCC, true);
+            RenderingDrawUtils.renderStringAt(guiLeft + 30, guiTop + 30 + i * 10, this.getGuiZLevel(), font, line, 0xFFCCCCCC, true);
         }
 
         if (GatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(ResearchHelper.getClientProgress())) {
@@ -278,12 +278,12 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
 
         int width = font.getStringWidth(info);
         int chX = 305 - (width / 2);
-        RenderingDrawUtils.renderStringAtPos(guiLeft + chX, guiTop + 44, this.getGuiZLevel(), font, info, 0xFFCCCCCC, true);
+        RenderingDrawUtils.renderStringAt(guiLeft + chX, guiTop + 44, this.getGuiZLevel(), font, info, 0xFFCCCCCC, true);
 
         if (detailed && !locTextMain.isEmpty()) {
             int offsetX = 220, offsetY = 77;
             for (String s : locTextMain) {
-                RenderingDrawUtils.renderStringAtPos(guiLeft + offsetX, guiTop + offsetY, this.getGuiZLevel(), font, s, 0xFFCCCCCC, true);
+                RenderingDrawUtils.renderStringAt(guiLeft + offsetX, guiTop + offsetY, this.getGuiZLevel(), font, s, 0xFFCCCCCC, true);
                 offsetY += 13;
             }
         }
@@ -362,7 +362,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
         dstInfo = I18n.format(dstInfo);
         width = font.getStringWidth(dstInfo);
 
-        RenderingDrawUtils.renderStringAtPos(guiLeft + (305 - (width / 2)), guiTop + 219, this.getGuiZLevel(), font, dstInfo, 0xFFDDDDDD, true);
+        RenderingDrawUtils.renderStringAt(guiLeft + (305 - (width / 2)), guiTop + 219, this.getGuiZLevel(), font, dstInfo, 0xFFDDDDDD, true);
 
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();

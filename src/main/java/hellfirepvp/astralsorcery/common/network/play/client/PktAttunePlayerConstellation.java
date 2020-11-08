@@ -64,7 +64,7 @@ public class PktAttunePlayerConstellation extends ASPacket<PktAttunePlayerConste
             PktAttunePlayerConstellation pkt = new PktAttunePlayerConstellation();
 
             pkt.attunement = ByteBufUtils.readRegistryEntry(buffer);
-            pkt.world = ByteBufUtils.readVanillaRegistryEntry(buffer, Registry.WORLD_KEY);
+            pkt.world = ByteBufUtils.readVanillaRegistryEntry(buffer);
             pkt.at = ByteBufUtils.readPos(buffer);
 
             return pkt;

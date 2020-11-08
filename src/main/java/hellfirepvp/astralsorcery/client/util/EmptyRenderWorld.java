@@ -15,7 +15,9 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.IBlockDisplayReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.biome.Biome;
@@ -25,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,8 +40,8 @@ public class EmptyRenderWorld implements IBlockDisplayReader {
 
     private final Biome biome;
 
-    public EmptyRenderWorld(Biome biome) {
-        this.biome = biome;
+    public EmptyRenderWorld(Supplier<Biome> biomeSupplier) {
+        this.biome = biomeSupplier.get();
     }
 
     @Override
@@ -54,7 +57,7 @@ public class EmptyRenderWorld implements IBlockDisplayReader {
 
     @Override
     public int getBlockColor(BlockPos blockPosIn, ColorResolver colorResolverIn) {
-        return colorResolverIn.getColor(biome, (double) blockPosIn.getX(), (double) blockPosIn.getZ());
+        return colorResolverIn.getColor(biome, blockPosIn.getX(), blockPosIn.getZ());
     }
 
     @Override

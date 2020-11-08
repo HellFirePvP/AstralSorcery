@@ -93,7 +93,7 @@ public class GatewayInteractionHandler {
                 .findAny()
                 .map(Tuple::getB)
                 .ifPresent(playerRef -> {
-                    PktRevokeGatewayAccess pkt = new PktRevokeGatewayAccess(world.getDimension().getType(), gateway.getPos(), playerRef.getPlayerUUID());
+                    PktRevokeGatewayAccess pkt = new PktRevokeGatewayAccess(world.getDimensionKey(), gateway.getPos(), playerRef.getPlayerUUID());
                     PacketChannel.CHANNEL.sendToServer(pkt);
                 });
     }

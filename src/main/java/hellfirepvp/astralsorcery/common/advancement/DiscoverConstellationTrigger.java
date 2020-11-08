@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.advancement.instance.ConstellationInstance;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.loot.ConditionArrayParser;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -32,8 +33,8 @@ public class DiscoverConstellationTrigger extends ListenerCriterionTrigger<Const
     }
 
     @Override
-    public ConstellationInstance deserializeInstance(JsonObject json, JsonDeserializationContext context) {
-        return ConstellationInstance.deserialize(getId(), json);
+    public ConstellationInstance deserialize(JsonObject object, ConditionArrayParser conditions) {
+        return ConstellationInstance.deserialize(getId(), object);
     }
 
     public void trigger(ServerPlayerEntity player, IConstellation cst) {

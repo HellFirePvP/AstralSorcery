@@ -25,10 +25,10 @@ import net.minecraft.client.renderer.model.ModelRenderer;
  */
 public class ModelLens extends CustomModel {
 
-    public ModelRenderer base;
-    public ModelRenderer frame1;
-    public ModelRenderer lens;
-    public ModelRenderer frame2;
+    public final ModelRenderer base;
+    public final ModelRenderer frame1;
+    public final ModelRenderer lens;
+    public final ModelRenderer frame2;
 
     public ModelLens() {
         super((resKey) -> RenderTypesAS.MODEL_LENS_SOLID);

@@ -14,9 +14,11 @@ import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.advancement.AltarCraftTrigger;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import net.minecraft.advancements.criterion.CriterionInstance;
+import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.loot.ConditionArraySerializer;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.JSONUtils;
@@ -34,11 +36,11 @@ import java.util.stream.Collectors;
  */
 public class AltarRecipeInstance extends CriterionInstance {
 
-    private Set<ResourceLocation> recipeNames = new HashSet<>();
-    private List<Ingredient> recipeOutputs = new ArrayList<>();
+    private final Set<ResourceLocation> recipeNames = new HashSet<>();
+    private final List<Ingredient> recipeOutputs = new ArrayList<>();
 
     private AltarRecipeInstance(ResourceLocation id) {
-        super(id);
+        super(id, EntityPredicate.AndPredicate.ANY_AND);
     }
 
     public static AltarRecipeInstance craftRecipe(ResourceLocation... recipeIds) {
@@ -76,8 +78,8 @@ public class AltarRecipeInstance extends CriterionInstance {
     }
 
     @Override
-    public JsonElement serialize() {
-        JsonObject out = new JsonObject();
+    public JsonObject serialize(ConditionArraySerializer conditions) {
+        JsonObject out = super.serialize(conditions);
         if (!this.recipeNames.isEmpty()) {
             JsonArray names = new JsonArray();
             for (ResourceLocation name : this.recipeNames) {

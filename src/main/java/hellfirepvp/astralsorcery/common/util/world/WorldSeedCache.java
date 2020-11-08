@@ -31,7 +31,7 @@ public class WorldSeedCache {
 
     private static int activeSession = 0;
 
-    private static Map<ResourceLocation, Long> cacheSeedLookup = new HashMap<>();
+    private static final Map<RegistryKey<World>, Long> cacheSeedLookup = new HashMap<>();
 
     @OnlyIn(Dist.CLIENT)
     public static void clearClient() {
@@ -40,7 +40,7 @@ public class WorldSeedCache {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void updateSeedCache(ResourceLocation dim, int session, long seed) {
+    public static void updateSeedCache(RegistryKey<World> dim, int session, long seed) {
         if (activeSession == session) {
             cacheSeedLookup.put(dim, seed);
         }
@@ -48,12 +48,9 @@ public class WorldSeedCache {
 
     @OnlyIn(Dist.CLIENT)
     public static Optional<Long> getSeedIfPresent(RegistryKey<World> dim) {
-        if (dim == null) return Optional.empty();
-        return getSeedIfPresent(dim.func_240901_a_());
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static Optional<Long> getSeedIfPresent(ResourceLocation dim) {
+        if (dim == null) {
+            return Optional.empty();
+        }
         if (!cacheSeedLookup.containsKey(dim)) {
             activeSession++;
             PktRequestSeed req = new PktRequestSeed(activeSession, dim);

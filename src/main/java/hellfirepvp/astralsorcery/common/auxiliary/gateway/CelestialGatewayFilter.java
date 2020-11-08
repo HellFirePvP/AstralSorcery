@@ -13,7 +13,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import java.io.File;
@@ -31,7 +34,7 @@ import java.util.Set;
 public class CelestialGatewayFilter {
 
     private final File gatewayFilter;
-    private Set<ResourceLocation> cache = new HashSet<>();
+    private Set<RegistryKey<World>> cache = new HashSet<>();
 
     CelestialGatewayFilter() {
         this.gatewayFilter = this.loadFilter();
@@ -55,13 +58,13 @@ public class CelestialGatewayFilter {
         return this.cache.contains(worldKey);
     }
 
-    void addDim(ResourceLocation worldKey) {
+    void addDim(RegistryKey<World> worldKey) {
         if (cache.add(worldKey)) {
             this.saveCache();
         }
     }
 
-    void removeDim(ResourceLocation worldKey) {
+    void removeDim(RegistryKey<World> worldKey) {
         if (cache.remove(worldKey)) {
             this.saveCache();
         }
@@ -73,8 +76,8 @@ public class CelestialGatewayFilter {
             ListNBT list = tag.getList("list", Constants.NBT.TAG_STRING);
             this.cache = new HashSet<>();
             for (int i = 0; i < list.size(); i++) {
-                String str = list.getString(i);
-                this.cache.add(new ResourceLocation(str));
+                ResourceLocation location = new ResourceLocation(list.getString(i));
+                this.cache.add(RegistryKey.getOrCreateKey(Registry.WORLD_KEY, location));
             }
         } catch (IOException ignored) {
             this.cache = new HashSet<>();
@@ -84,8 +87,8 @@ public class CelestialGatewayFilter {
     private void saveCache() {
         try {
             ListNBT list = new ListNBT();
-            for (ResourceLocation dimType : cache) {
-                list.add(StringNBT.valueOf(dimType.toString()));
+            for (RegistryKey<World> dimType : cache) {
+                list.add(StringNBT.valueOf(dimType.getLocation().toString()));
             }
             CompoundNBT cmp = new CompoundNBT();
             cmp.put("list", list);

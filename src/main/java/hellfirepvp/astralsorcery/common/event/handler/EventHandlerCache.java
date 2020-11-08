@@ -106,11 +106,11 @@ public class EventHandlerCache {
 
         SkyHandler.getInstance().informWorldUnload(w);
         TimeStopController.onWorldUnload(w);
-        StarlightTransmissionHandler.getInstance().informWorldUnload(w);
 
         if (w instanceof World) {
             World world = (World) w;
             SyncDataHolder.clearWorld(world);
+            StarlightTransmissionHandler.getInstance().informWorldUnload(world);
         }
     }
 

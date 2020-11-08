@@ -8,13 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.advancement;
 
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.advancement.instance.AltarRecipeInstance;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.ConditionArrayParser;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -33,8 +33,8 @@ public class AltarCraftTrigger extends ListenerCriterionTrigger<AltarRecipeInsta
     }
 
     @Override
-    public AltarRecipeInstance deserializeInstance(JsonObject json, JsonDeserializationContext context) {
-        return AltarRecipeInstance.deserialize(getId(), json);
+    public AltarRecipeInstance deserialize(JsonObject object, ConditionArrayParser conditions) {
+        return AltarRecipeInstance.deserialize(getId(), object);
     }
 
     public void trigger(ServerPlayerEntity player, SimpleAltarRecipe recipe, ItemStack output) {

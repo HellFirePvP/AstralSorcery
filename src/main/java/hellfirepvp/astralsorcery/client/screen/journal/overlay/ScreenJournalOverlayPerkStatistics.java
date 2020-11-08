@@ -147,12 +147,12 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
                 if (i > 0) {
                     drawX += 10;
                 }
-                RenderingDrawUtils.renderStringAtPos(drawX, offsetY + ((line + i) * 10), this.getGuiZLevel(),
+                RenderingDrawUtils.renderStringAt(drawX, offsetY + ((line + i) * 10), this.getGuiZLevel(),
                         this.font, statPart,
                         0xEE333333, false);
             }
 
-            RenderingDrawUtils.renderStringAtPos(offsetX + nameStrWidth, offsetY + (line * 10), this.getGuiZLevel(),
+            RenderingDrawUtils.renderStringAt(offsetX + nameStrWidth, offsetY + (line * 10), this.getGuiZLevel(),
                     this.font, stat.getPerkValue(),
                     0xEE333333, false);
 
@@ -163,7 +163,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
 
             line += additionalLines;
             if (!stat.getSuffix().isEmpty()) {
-                RenderingDrawUtils.renderStringAtPos(offsetX + 25, offsetY + (line * 10), this.getGuiZLevel(),
+                RenderingDrawUtils.renderStringAt(offsetX + 25, offsetY + (line * 10), this.getGuiZLevel(),
                         this.font, stat.getSuffix(),
                         0xEE333333, false);
                 line++;

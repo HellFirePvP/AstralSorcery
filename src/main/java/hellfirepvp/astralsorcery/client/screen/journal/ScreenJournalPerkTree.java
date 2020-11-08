@@ -424,7 +424,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         int availablePerks;
         if (prog.getAttunedConstellation() != null && (availablePerks = prog.getAvailablePerkPoints(player, LogicalSide.CLIENT)) > 0) {
-            RenderingDrawUtils.renderStringAtPos(guiLeft + 50, guiTop + 18, this.getGuiZLevel(), font,
+            RenderingDrawUtils.renderStringAt(guiLeft + 50, guiTop + 18, this.getGuiZLevel(), font,
                     I18n.format("perk.info.astralsorcery.points", availablePerks), 0xCCCCCC, false);
         }
 

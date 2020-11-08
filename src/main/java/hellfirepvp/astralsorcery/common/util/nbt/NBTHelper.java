@@ -109,7 +109,7 @@ public class NBTHelper {
                 if (dst.contains(s, Constants.NBT.TAG_LIST)) {
                     ListNBT dstList = (ListNBT) dst.get(s);
                     ListNBT srcList = (ListNBT) nbtElement;
-                    if (dstList.func_230528_d__() == srcList.func_230528_d__()) {
+                    if (dstList.getTagType() == srcList.getTagType()) {
                         deepMergeList(dstList, srcList);
                     } else {
                         dst.put(s, srcList.copy());

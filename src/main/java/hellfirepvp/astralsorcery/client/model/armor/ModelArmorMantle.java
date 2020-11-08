@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.model.armor;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.entity.LivingEntity;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,27 +20,27 @@ import net.minecraft.client.renderer.model.ModelRenderer;
  * Created by HellFirePvP
  * Date: 17.02.2020 / 21:21
  */
-public class ModelArmorMantle extends CustomArmorModel {
+public class ModelArmorMantle extends CustomArmorModel<LivingEntity> {
 
     //TODO adjust arms at some point
 
-    private ModelRenderer bodyReplacement, lArm, rArm, headReplacement;
+    private final ModelRenderer bodyReplacement, lArm, rArm, headReplacement;
 
-    private ModelRenderer cowl;
-    private ModelRenderer mantle_l;
-    private ModelRenderer mantle_r;
+    private final ModelRenderer cowl;
+    private final ModelRenderer mantle_l;
+    private final ModelRenderer mantle_r;
 
-    private ModelRenderer bodyAnchor;
-    private ModelRenderer body;
-    private ModelRenderer plate;
+    private final ModelRenderer bodyAnchor;
+    private final ModelRenderer body;
+    private final ModelRenderer plate;
 
-    private ModelRenderer armLAnchor;
-    private ModelRenderer armLpauldron;
-    private ModelRenderer fitting_l;
+    private final ModelRenderer armLAnchor;
+    private final ModelRenderer armLpauldron;
+    private final ModelRenderer fitting_l;
 
-    private ModelRenderer armRAnchor;
-    private ModelRenderer armRpauldron;
-    private ModelRenderer fitting_r;
+    private final ModelRenderer armRAnchor;
+    private final ModelRenderer armRpauldron;
+    private final ModelRenderer fitting_r;
 
     public ModelArmorMantle() {
         float s = 0.01F;

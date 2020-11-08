@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.client.event.effect;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -33,7 +32,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.TickEvent;
@@ -64,9 +62,9 @@ public class GatewayUIRenderHandler implements ITickHandler {
         return INSTANCE;
     }
 
-    public GatewayUI getOrCreateUI(IWorld world, BlockPos pos, Vector3 renderPos) {
+    public GatewayUI getOrCreateUI(World world, BlockPos pos, Vector3 renderPos) {
         if (currentUI == null ||
-                !currentUI.getDimType().equals(world.getDimension().getType().getRegistryName()) ||
+                !currentUI.getDimType().equals(world.getDimensionKey()) ||
                 !currentUI.getPos().equals(pos)) {
             currentUI = GatewayUI.create(world, pos, renderPos, 5.5D);
         }
@@ -88,7 +86,7 @@ public class GatewayUIRenderHandler implements ITickHandler {
         TileCelestialGateway gateway;
         if (world == null ||
                 this.currentUI.getVisibleTicks() <= 0 ||
-                !this.currentUI.getDimType().equals(world.getDimension().getType().getRegistryName()) ||
+                !this.currentUI.getDimType().equals(world.getDimensionKey()) ||
                 (gateway = MiscUtils.getTileAt(world, this.currentUI.getPos(), TileCelestialGateway.class, true)) == null ||
                 !gateway.doesSeeSky() ||
                 !gateway.hasMultiblock()) {
@@ -145,7 +143,7 @@ public class GatewayUIRenderHandler implements ITickHandler {
 
                 UUID targetUUID = playerRef.getPlayerUUID();
                 if ((node.getOwner().getPlayerUUID().equals(currentUUID) || targetUUID.equals(currentUUID)) && drawPos.equals(blockSelected)) {
-                    RenderingUtils.renderInWorldText(playerRef.getPlayerName().getFormattedText(), c, 1 / 48F, at.clone().addY(0.2),
+                    RenderingUtils.renderInWorldText(playerRef.getPlayerName(), c, 1 / 48F, at.clone().addY(0.2),
                             renderStack, pTicks, true);
                 }
             }
@@ -158,8 +156,7 @@ public class GatewayUIRenderHandler implements ITickHandler {
         GatewayUI.GatewayEntry entry = findMatchingEntry(MathHelper.wrapDegrees(player.rotationYaw), MathHelper.wrapDegrees(player.rotationPitch));
         if (entry != null) {
             ITextComponent display = entry.getNode().getDisplayName();
-            if (display != null && !display.getFormattedText().isEmpty()) {
-                String text = display.getFormattedText();
+            if (display != null && !display.getUnformattedComponentText().isEmpty()) {
                 Vector3 at = entry.getRelativePos().clone()
                         .add(renderOffset)
                         .addY(0.4F)
@@ -171,7 +168,7 @@ public class GatewayUIRenderHandler implements ITickHandler {
                     c = ColorUtils.flareColorFromDye(nodeColor);
                 }
 
-                RenderingUtils.renderInWorldText(text, c, at, renderStack, pTicks, true);
+                RenderingUtils.renderInWorldText(display, c, at, renderStack, pTicks, true);
             }
         }
     }

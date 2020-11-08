@@ -15,11 +15,12 @@ import hellfirepvp.astralsorcery.client.sky.astral.AstralSkyRenderer;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.world.DimensionRenderInfo;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraftforge.client.IRenderHandler;
-import net.minecraftforge.client.SkyRenderHandler;
+import net.minecraft.world.World;
+import net.minecraftforge.client.ISkyRenderHandler;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,43 +29,39 @@ import net.minecraftforge.client.SkyRenderHandler;
  * Created by HellFirePvP
  * Date: 13.01.2020 / 19:48
  */
-public class ChainingSkyRenderer implements SkyRenderHandler {
+public class ChainingSkyRenderer implements ISkyRenderHandler {
 
-    private IRenderHandler existingSkyRenderer;
+    private final ISkyRenderHandler existingSkyRenderer;
 
-    public ChainingSkyRenderer(IRenderHandler existingSkyRenderer) {
+    public ChainingSkyRenderer(ISkyRenderHandler existingSkyRenderer) {
         this.existingSkyRenderer = existingSkyRenderer;
     }
 
     @Override
     public void render(int ticks, float partialTicks, MatrixStack renderStack, ClientWorld world, Minecraft mc) {
         EventFlags.SKY_RENDERING.executeWithFlag(() -> {
-            int dimId = world.getDimension().getType().getId();
-            if (world.dimension.isSurfaceWorld()) {
-                if (RenderingConfig.CONFIG.weakSkyRenders.get().contains(dimId)) {
+            RegistryKey<World> dim = world.getDimensionKey();
+            if (world.func_239132_a_().func_241683_c_() == DimensionRenderInfo.FogType.NORMAL) {
+                if (RenderingConfig.CONFIG.weakSkyRenders.get().contains(dim.getLocation())) {
                     if (existingSkyRenderer != null) {
-                        if (existingSkyRenderer instanceof SkyRenderHandler) {
-                            ((SkyRenderHandler) existingSkyRenderer).render(ticks, partialTicks, renderStack, world, mc);
-                        } else {
-                            existingSkyRenderer.render(ticks, partialTicks, world, mc);
-                        }
+                        existingSkyRenderer.render(ticks, partialTicks, renderStack, world, mc);
                     } else {
-                        IRenderHandler existing = world.getDimension().getSkyRenderer();
-                        world.getDimension().setSkyRenderer(null);
+                        ISkyRenderHandler existing = world.func_239132_a_().getSkyRenderHandler();
+                        world.func_239132_a_().setSkyRenderHandler(null);
                         Minecraft.getInstance().worldRenderer.renderSky(renderStack, partialTicks);
-                        world.getDimension().setSkyRenderer(existing);
+                        world.func_239132_a_().setSkyRenderHandler(existing);
                     }
 
                     this.renderConstellations(world, renderStack, partialTicks);
                 } else {
-                    AstralSkyRenderer.INSTANCE.render(ticks, partialTicks, world, mc);
+                    AstralSkyRenderer.INSTANCE.render(ticks, partialTicks, renderStack, world, mc);
                 }
             } else {
-                IRenderHandler existing = world.getDimension().getSkyRenderer();
-                world.getDimension().setSkyRenderer(null);
+                ISkyRenderHandler existing = world.func_239132_a_().getSkyRenderHandler();
+                world.func_239132_a_().setSkyRenderHandler(null);
                 //Actually ends up calling renderEndSky
                 Minecraft.getInstance().worldRenderer.renderSky(renderStack, partialTicks);
-                world.getDimension().setSkyRenderer(existing);
+                world.func_239132_a_().setSkyRenderHandler(existing);
             }
         });
     }

@@ -32,60 +32,56 @@ import java.util.*;
  */
 public class DataLightBlockEndpoints extends AbstractData {
 
-    private final Map<ResourceLocation, Set<BlockPos>> serverPositions = new HashMap<>();
+    private final Map<RegistryKey<World>, Set<BlockPos>> serverPositions = new HashMap<>();
 
-    private final Map<ResourceLocation, Map<BlockPos, Boolean>> serverChangeBuffer = new HashMap<>();
-    private final Set<ResourceLocation> dimensionClearBuffer = new HashSet<>();
+    private final Map<RegistryKey<World>, Map<BlockPos, Boolean>> serverChangeBuffer = new HashMap<>();
+    private final Set<RegistryKey<World>> dimensionClearBuffer = new HashSet<>();
 
     private DataLightBlockEndpoints(ResourceLocation key) {
         super(key);
     }
 
     public void updateNewEndpoint(RegistryKey<World> dim, BlockPos pos) {
-        ResourceLocation dimKey = dim.func_240901_a_();
-        Map<BlockPos, Boolean> posMap = serverChangeBuffer.computeIfAbsent(dimKey, k -> new HashMap<>());
+        Map<BlockPos, Boolean> posMap = serverChangeBuffer.computeIfAbsent(dim, k -> new HashMap<>());
         posMap.put(pos, true);
 
-        Set<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimKey, k -> new HashSet<>());
+        Set<BlockPos> posBuffer = serverPositions.computeIfAbsent(dim, k -> new HashSet<>());
         posBuffer.add(pos);
         markDirty();
     }
 
     public void updateNewEndpoints(RegistryKey<World> dim, Collection<BlockPos> newPositions) {
-        ResourceLocation dimKey = dim.func_240901_a_();
-        Map<BlockPos, Boolean> posMap = serverChangeBuffer.computeIfAbsent(dimKey, k -> new HashMap<>());
+        Map<BlockPos, Boolean> posMap = serverChangeBuffer.computeIfAbsent(dim, k -> new HashMap<>());
         for (BlockPos pos : newPositions) {
             posMap.put(pos, true);
         }
 
-        Set<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimKey, k -> new HashSet<>());
+        Set<BlockPos> posBuffer = serverPositions.computeIfAbsent(dim, k -> new HashSet<>());
         posBuffer.addAll(newPositions);
         markDirty();
     }
 
     public void removeEndpoints(RegistryKey<World> dim, Collection<BlockPos> positions) {
-        ResourceLocation dimKey = dim.func_240901_a_();
-        Map<BlockPos, Boolean> posMap = serverChangeBuffer.computeIfAbsent(dimKey, k -> new HashMap<>());
+        Map<BlockPos, Boolean> posMap = serverChangeBuffer.computeIfAbsent(dim, k -> new HashMap<>());
         for (BlockPos pos : positions) {
             posMap.put(pos, false);
         }
 
-        Set<BlockPos> posBuffer = serverPositions.computeIfAbsent(dimKey, k -> new HashSet<>());
+        Set<BlockPos> posBuffer = serverPositions.computeIfAbsent(dim, k -> new HashSet<>());
         if (posBuffer.removeAll(positions)) {
             markDirty();
         }
     }
 
     public boolean doesPositionReceiveStarlightServer(World world, BlockPos pos) {
-        return this.serverPositions.getOrDefault(world.func_234923_W_().func_240901_a_(), Collections.emptySet()).contains(pos);
+        return this.serverPositions.getOrDefault(world.getDimensionKey(), Collections.emptySet()).contains(pos);
     }
 
     @Override
     public void clear(RegistryKey<World> dim) {
-        ResourceLocation dimKey = dim.func_240901_a_();
-        if (this.serverPositions.remove(dimKey) != null) {
-            this.serverChangeBuffer.remove(dimKey);
-            this.dimensionClearBuffer.add(dimKey);
+        if (this.serverPositions.remove(dim) != null) {
+            this.serverChangeBuffer.remove(dim);
+            this.dimensionClearBuffer.add(dim);
             markDirty();
         }
     }
@@ -99,8 +95,8 @@ public class DataLightBlockEndpoints extends AbstractData {
 
     @Override
     public void writeAllDataToPacket(CompoundNBT compound) {
-        for (ResourceLocation dimType : serverPositions.keySet()) {
-            Set<BlockPos> dat = serverPositions.get(dimType);
+        for (RegistryKey<World> dim : serverPositions.keySet()) {
+            Set<BlockPos> dat = serverPositions.get(dim);
 
             ListNBT dataList = new ListNBT();
             for (BlockPos pos : dat) {
@@ -109,24 +105,24 @@ public class DataLightBlockEndpoints extends AbstractData {
                 dataList.add(cmp);
             }
 
-            compound.put(dimType.toString(), dataList);
+            compound.put(dim.getLocation().toString(), dataList);
         }
     }
 
     @Override
     public void writeDiffDataToPacket(CompoundNBT compound) {
         ListNBT clearList = new ListNBT();
-        for (ResourceLocation dimType : this.dimensionClearBuffer) {
-            clearList.add(StringNBT.valueOf(dimType.toString()));
+        for (RegistryKey<World> dim : this.dimensionClearBuffer) {
+            clearList.add(StringNBT.valueOf(dim.getLocation().toString()));
         }
         compound.put("clear", clearList);
 
-        for (ResourceLocation dimType : this.serverChangeBuffer.keySet()) {
-            if (this.dimensionClearBuffer.contains(dimType)) {
+        for (RegistryKey<World> dim : this.serverChangeBuffer.keySet()) {
+            if (this.dimensionClearBuffer.contains(dim)) {
                 continue;
             }
 
-            Map<BlockPos, Boolean> data = this.serverChangeBuffer.get(dimType);
+            Map<BlockPos, Boolean> data = this.serverChangeBuffer.get(dim);
 
             ListNBT dataList = new ListNBT();
             for (BlockPos pos : data.keySet()) {
@@ -136,7 +132,7 @@ public class DataLightBlockEndpoints extends AbstractData {
                 dataList.add(cmp);
             }
 
-            compound.put(dimType.toString(), dataList);
+            compound.put(dim.getLocation().toString(), dataList);
         }
 
         this.dimensionClearBuffer.clear();

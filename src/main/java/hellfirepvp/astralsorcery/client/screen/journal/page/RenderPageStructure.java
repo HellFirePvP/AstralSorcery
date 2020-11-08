@@ -29,11 +29,11 @@ import hellfirepvp.observerlib.api.structure.Structure;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.LanguageMap;
 import net.minecraft.util.text.StringTextComponent;
 import org.lwjgl.opengl.GL11;
@@ -56,15 +56,15 @@ public class RenderPageStructure extends RenderablePage {
     private final StructureRenderer structureRenderer;
     private final Structure structure;
     private final Vector3 shift;
-    private final List<Tuple<ItemStack, ITextComponent>> contentStacks;
-    private final ITextComponent name;
+    private final List<Tuple<ItemStack, ITextProperties>> contentStacks;
+    private final ITextProperties name;
 
     private Optional<Integer> drawSlice = Optional.empty();
     private Rectangle.Float switchView = null, sliceUp = null, sliceDown = null, switchRequiredAir = null;
     private long totalRenderFrame = 0;
     private boolean showAirBlocks = false;
 
-    public RenderPageStructure(@Nullable ResearchNode node, int nodePage, Structure structure, @Nullable ITextComponent name, @Nonnull Vector3 shift) {
+    public RenderPageStructure(@Nullable ResearchNode node, int nodePage, Structure structure, @Nullable ITextProperties name, @Nonnull Vector3 shift) {
         super(node, nodePage);
         this.structure = structure;
         this.structureRenderer = new StructureRenderer(this.structure).setIsolateIndividualBlock(true);
@@ -72,7 +72,7 @@ public class RenderPageStructure extends RenderablePage {
         this.shift = shift;
         this.contentStacks = MapStream.ofKeys(
                 structure.getAsStacks(this.structureRenderer.getRenderWorld(), Minecraft.getInstance().player),
-                stack -> new StringTextComponent(stack.getCount() + "x ").appendSibling(stack.getDisplayName()))
+                stack -> (ITextProperties) new StringTextComponent(stack.getCount() + "x ").append(stack.getDisplayName()))
         .toTupleList();
     }
 
@@ -200,7 +200,7 @@ public class RenderPageStructure extends RenderablePage {
         return maxSlice;
     }
 
-    private void renderHeadline(float offsetX, float offsetY, float zLevel, ITextComponent title) {
+    private void renderHeadline(float offsetX, float offsetY, float zLevel, ITextProperties title) {
         float scale = 1.3F;
 
         RenderSystem.pushMatrix();
@@ -208,7 +208,7 @@ public class RenderPageStructure extends RenderablePage {
         RenderSystem.scaled(scale, scale, scale);
         RenderSystem.disableDepthTest();
 
-        RenderingDrawUtils.renderStringAtPos(0, 0, zLevel, null, title.getFormattedText(), 0x00DDDDDD, true);
+        RenderingDrawUtils.renderStringAt(0, 0, zLevel, null, title.getFormattedText(), 0x00DDDDDD, true);
 
         RenderSystem.enableDepthTest();
         RenderSystem.popMatrix();
@@ -226,7 +226,7 @@ public class RenderPageStructure extends RenderablePage {
         RenderSystem.pushMatrix();
         RenderSystem.translated(offsetX, offsetY, 0);
         RenderSystem.scaled(scale, scale, scale);
-        RenderingDrawUtils.renderStringAtPos(0, 0, zLevel, fr, desc, 0x00DDDDDD, true);
+        RenderingDrawUtils.renderStringAt(0, 0, zLevel, fr, desc, 0x00DDDDDD, true);
         RenderSystem.popMatrix();
 
         this.drawSlice.ifPresent(yLevel -> {
@@ -239,7 +239,7 @@ public class RenderPageStructure extends RenderablePage {
             RenderSystem.pushMatrix();
             RenderSystem.translated(offsetX, offsetY + 14, 0);
             RenderSystem.scaled(scale, scale, scale);
-            RenderingDrawUtils.renderStringAtPos(0, 0, zLevel, fr, sliceDescription, 0x00DDDDDD, true);
+            RenderingDrawUtils.renderStringAt(0, 0, zLevel, fr, sliceDescription, 0x00DDDDDD, true);
             RenderSystem.popMatrix();
         });
 
@@ -269,12 +269,12 @@ public class RenderPageStructure extends RenderablePage {
         }
 
         if (this.switchView != null && this.switchView.contains(mouseX, mouseY)) {
-            String switchInfo = LanguageMap.getInstance().translateKey("astralsorcery.journal.structure.switch_view");
+            String switchInfo = LanguageMap.getInstance().func_230503_a_("astralsorcery.journal.structure.switch_view");
             RenderingDrawUtils.renderBlueTooltipString(this.switchView.x + this.switchView.width / 2, this.switchView.y + this.switchView.height / 2, zLevel + 500,
                     Lists.newArrayList(switchInfo), RenderablePage.getFontRenderer(), false);
         }
         if (this.switchRequiredAir != null && this.switchRequiredAir.contains(mouseX, mouseY)) {
-            String switchInfo = LanguageMap.getInstance().translateKey("astralsorcery.journal.structure.required_air");
+            String switchInfo = LanguageMap.getInstance().func_230503_a_("astralsorcery.journal.structure.required_air");
             RenderingDrawUtils.renderBlueTooltipString(this.switchRequiredAir.x + this.switchRequiredAir.width / 2, this.switchRequiredAir.y + this.switchRequiredAir.height / 2, zLevel + 500,
                     Lists.newArrayList(switchInfo), RenderablePage.getFontRenderer(), false);
         }

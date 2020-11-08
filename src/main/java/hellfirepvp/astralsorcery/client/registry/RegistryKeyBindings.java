@@ -35,8 +35,8 @@ import static hellfirepvp.astralsorcery.client.lib.KeyBindingsAS.DISABLE_PERK_AB
  */
 public class RegistryKeyBindings {
 
-    private static Set<KeyBindingWrapper> watchedKeyBindings = new HashSet<>();
-    private static Set<KeyBindingWrapper> bindingsPressed = new HashSet<>();
+    private static final Set<KeyBindingWrapper> watchedKeyBindings = new HashSet<>();
+    private static final Set<KeyBindingWrapper> bindingsPressed = new HashSet<>();
 
     public static void init() {
         DISABLE_PERK_ABILITIES = register("disable_perk_abilities", GLFW.GLFW_KEY_V, KeyDisablePerkAbilities::new);

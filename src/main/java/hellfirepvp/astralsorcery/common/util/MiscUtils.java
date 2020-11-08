@@ -52,7 +52,6 @@ import org.apache.logging.log4j.util.TriConsumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.awt.Dimension;
 import java.util.List;
 import java.util.*;
 import java.util.function.*;
@@ -184,7 +183,7 @@ public class MiscUtils {
         if (!world.getChunkProvider().isChunkLoaded(new ChunkPos(at)) && !loadChunk) {
             return defaultValue;
         }
-        if (!world.getDimension().hasSkyLight()) {
+        if (!world.getDimensionType().hasSkyLight()) {
             return true;
         }
         return world.canBlockSeeSky(at);
@@ -402,7 +401,7 @@ public class MiscUtils {
             return null; //No transfers on clientside.
         }
         entity.setSneaking(false);
-        RegistryKey<World> src = entity.getEntityWorld().func_234923_W_();
+        RegistryKey<World> src = entity.getEntityWorld().getDimensionKey();
         if (!src.equals(target)) {
             if (!ForgeHooks.onTravelToDimension(entity, target)) {
                 return null;

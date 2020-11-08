@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class TickTokenMap<K, V extends TickTokenMap.TickMapToken<?>> extends TokenMap<K, V> implements ITickHandler {
 
-    private EnumSet<TickEvent.Type> tickTypes;
+    private final EnumSet<TickEvent.Type> tickTypes;
 
     public TickTokenMap(@Nonnull TickEvent.Type first, TickEvent.Type... restTypes) {
         this.tickTypes = EnumSet.of(first, restTypes);

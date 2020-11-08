@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.client.data.config.entry;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
@@ -31,8 +33,8 @@ public class RenderingConfig extends ConfigEntry {
     public ForgeConfigSpec.EnumValue<ParticleAmount> particleAmount;
     public ForgeConfigSpec.BooleanValue patreonEffects;
 
-    public ForgeConfigSpec.ConfigValue<List<? extends Integer>> skyRenderDimensions;
-    public ForgeConfigSpec.ConfigValue<List<? extends Integer>> weakSkyRenders;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> skyRenderDimensions;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> weakSkyRenders;
 
     private RenderingConfig() {
         super("rendering");
@@ -58,10 +60,10 @@ public class RenderingConfig extends ConfigEntry {
         skyRenderDimensions = cfgBuilder
                 .comment("Whitelist of dimension ID's that will have special astral sorcery sky rendering")
                 .translation(translationKey("skyRenderDimensions"))
-                .defineList("skyRenderDimensions", Lists.newArrayList(0), Predicates.alwaysTrue());
+                .defineList("skyRenderDimensions", Lists.newArrayList(World.OVERWORLD.getLocation().toString()), Predicates.alwaysTrue());
 
         weakSkyRenders = cfgBuilder
-                .comment("IF a dimensionId is listed in 'skySupportedDimensions' you can add it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.")
+                .comment("IF a world is listed in 'skySupportedDimensions' you can add it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.")
                 .translation(translationKey("weakSkyRenders"))
                 .defineList("weakSkyRenders", Lists.newArrayList(), Predicates.alwaysTrue());
     }

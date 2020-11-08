@@ -30,10 +30,12 @@ public class ScreenTextEntry {
     private final TextInputUtil inputUtil;
 
     public ScreenTextEntry() {
-        inputUtil = new TextInputUtil(Minecraft.getInstance(),
+        inputUtil = new TextInputUtil(
                 this::getText,
                 this::setText,
-                256);
+                TextInputUtil.getClipboardTextSupplier(Minecraft.getInstance()),
+                TextInputUtil.getClipboardTextSetter(Minecraft.getInstance()),
+                (text) -> text.length() < 256);
     }
 
     public void setChangeCallback(Runnable changeCallback) {
@@ -64,10 +66,10 @@ public class ScreenTextEntry {
         if (key >= GLFW.GLFW_KEY_RIGHT && key <= GLFW.GLFW_KEY_UP) {
             return false;
         }
-        return this.inputUtil.func_216897_a(key);
+        return this.inputUtil.specialKeyPressed(key);
     }
 
     public boolean charTyped(char charCode) {
-        return this.inputUtil.func_216894_a(charCode);
+        return this.inputUtil.putChar(charCode);
     }
 }

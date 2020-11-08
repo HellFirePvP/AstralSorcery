@@ -17,7 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -36,7 +36,7 @@ import java.util.*;
  */
 public class TimeStopController implements ITickHandler {
 
-    private static final Map<ResourceLocation, List<TimeStopZone>> activeTimeStopZones = new HashMap<>();
+    private static final Map<RegistryKey<World>, List<TimeStopZone>> activeTimeStopZones = new HashMap<>();
 
     public static final TimeStopController INSTANCE = new TimeStopController();
 
@@ -47,8 +47,7 @@ public class TimeStopController implements ITickHandler {
         if (world.isRemote) {
             return null;
         }
-        ResourceLocation dimKey = world.func_234923_W_().func_240901_a_();
-        List<TimeStopZone> zones = activeTimeStopZones.getOrDefault(dimKey, Collections.emptyList());
+        List<TimeStopZone> zones = activeTimeStopZones.getOrDefault(world.getDimensionKey(), Collections.emptyList());
         for (TimeStopZone zone : zones) {
             if (zone.offset.equals(pos)) {
                 return zone;
@@ -70,12 +69,11 @@ public class TimeStopController implements ITickHandler {
     @Nonnull
     public static TimeStopZone freezeWorldAt(@Nonnull TimeStopZone.EntityTargetController controller, @Nonnull World world, @Nonnull BlockPos offset, float range, int maxAge) {
         TimeStopZone stopZone = new TimeStopZone(controller, range, offset, world, maxAge);
-        ResourceLocation dimKey = world.func_234923_W_().func_240901_a_();
-        List<TimeStopZone> zones = activeTimeStopZones.computeIfAbsent(dimKey, (id) -> new LinkedList<>());
+        List<TimeStopZone> zones = activeTimeStopZones.computeIfAbsent(world.getDimensionKey(), (id) -> new LinkedList<>());
         zones.add(stopZone);
 
         SyncDataHolder.executeServer(SyncDataHolder.DATA_TIME_FREEZE_EFFECTS, DataTimeFreezeEffects.class, data -> {
-            data.addNewEffect(dimKey, TimeStopEffectHelper.fromZone(stopZone));
+            data.addNewEffect(world.getDimensionKey(), TimeStopEffectHelper.fromZone(stopZone));
         });
         return stopZone;
     }
@@ -85,7 +83,7 @@ public class TimeStopController implements ITickHandler {
             return;
         }
 
-        ResourceLocation dimKey = ((World) world).func_234923_W_().func_240901_a_();
+        RegistryKey<World> dimKey = ((World) world).getDimensionKey();
         for (TimeStopZone stop : activeTimeStopZones.getOrDefault(dimKey, Collections.emptyList())) {
             stop.stopEffect();
         }
@@ -119,8 +117,7 @@ public class TimeStopController implements ITickHandler {
                 }
             }
         }
-        ResourceLocation dimKey = e.getEntityWorld().func_234923_W_().func_240901_a_();
-        List<TimeStopZone> freezeAreas = activeTimeStopZones.get(dimKey);
+        List<TimeStopZone> freezeAreas = activeTimeStopZones.get(e.getEntityWorld().getDimensionKey());
         if (freezeAreas != null && !freezeAreas.isEmpty()) {
             for (TimeStopZone stop : freezeAreas) {
                 if (stop.interceptEntityTick(e)) {
@@ -136,7 +133,7 @@ public class TimeStopController implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        for (Map.Entry<ResourceLocation, List<TimeStopZone>> zoneMap : activeTimeStopZones.entrySet()) {
+        for (Map.Entry<RegistryKey<World>, List<TimeStopZone>> zoneMap : activeTimeStopZones.entrySet()) {
             Iterator<TimeStopZone> iterator = zoneMap.getValue().iterator();
             while (iterator.hasNext()) {
                 TimeStopZone zone = iterator.next();

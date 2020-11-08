@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class DataTimeFreezeEffects extends AbstractData {
 
-    private final Map<ResourceLocation, List<TimeStopEffectHelper>> serverActiveFreezeZones = new HashMap<>();
+    private final Map<RegistryKey<World>, List<TimeStopEffectHelper>> serverActiveFreezeZones = new HashMap<>();
 
     private final List<ServerSyncAction> scheduledServerSyncChanges = new LinkedList<>();
 
@@ -44,14 +44,14 @@ public class DataTimeFreezeEffects extends AbstractData {
         super(key);
     }
 
-    public void addNewEffect(ResourceLocation dim, TimeStopEffectHelper effectHelper) {
+    public void addNewEffect(RegistryKey<World> dim, TimeStopEffectHelper effectHelper) {
         List<TimeStopEffectHelper> zones = serverActiveFreezeZones.computeIfAbsent(dim, (id) -> new LinkedList<>());
         zones.add(effectHelper);
         scheduledServerSyncChanges.add(new ServerSyncAction(ServerSyncAction.ActionType.ADD, dim, effectHelper));
         markDirty();
     }
 
-    public void removeEffect(ResourceLocation dim, TimeStopEffectHelper effectHelper) {
+    public void removeEffect(RegistryKey<World> dim, TimeStopEffectHelper effectHelper) {
         if (serverActiveFreezeZones.containsKey(dim)) {
             serverActiveFreezeZones.get(dim).remove(effectHelper);
         }
@@ -61,7 +61,7 @@ public class DataTimeFreezeEffects extends AbstractData {
 
     @Override
     public void clear(RegistryKey<World> dim) {
-        this.serverActiveFreezeZones.remove(dim.func_240901_a_());
+        this.serverActiveFreezeZones.remove(dim);
     }
 
     @Override
@@ -73,12 +73,12 @@ public class DataTimeFreezeEffects extends AbstractData {
     @Override
     public void writeAllDataToPacket(CompoundNBT compound) {
         CompoundNBT dimTag = new CompoundNBT();
-        for (ResourceLocation dimKey : this.serverActiveFreezeZones.keySet()) {
+        for (RegistryKey<World> dim : this.serverActiveFreezeZones.keySet()) {
             ListNBT tagList = new ListNBT();
-            for (TimeStopEffectHelper effect : this.serverActiveFreezeZones.get(dimKey)) {
+            for (TimeStopEffectHelper effect : this.serverActiveFreezeZones.get(dim)) {
                 tagList.add(effect.serializeNBT());
             }
-            dimTag.put(dimKey.toString(), tagList);
+            dimTag.put(dim.getLocation().toString(), tagList);
         }
         compound.put("dimTypes", dimTag);
     }
@@ -98,10 +98,10 @@ public class DataTimeFreezeEffects extends AbstractData {
 
         private final ActionType type;
 
-        private final ResourceLocation dim;
+        private final RegistryKey<World> dim;
         private final TimeStopEffectHelper involvedEffect;
 
-        private ServerSyncAction(ActionType type, ResourceLocation dim, TimeStopEffectHelper involvedEffect) {
+        private ServerSyncAction(ActionType type, RegistryKey<World> dim, TimeStopEffectHelper involvedEffect) {
             this.type = type;
             this.dim = dim;
             this.involvedEffect = involvedEffect;
@@ -110,7 +110,7 @@ public class DataTimeFreezeEffects extends AbstractData {
         private CompoundNBT serializeNBT() {
             CompoundNBT out = new CompoundNBT();
             out.putInt("type", type.ordinal());
-            out.putString("dimType", this.dim.toString());
+            out.putString("dimType", this.dim.getLocation().toString());
             switch (type) {
                 case ADD:
                 case REMOVE:
@@ -123,6 +123,7 @@ public class DataTimeFreezeEffects extends AbstractData {
         public static ServerSyncAction deserializeNBT(CompoundNBT cmp) {
             ActionType type = MiscUtils.getEnumEntry(ActionType.class, cmp.getInt("type"));
             String dimKey = cmp.getString("dimType");
+            RegistryKey<World> dim = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(dimKey));
             TimeStopEffectHelper helper = null;
             switch (type) {
                 case ADD:
@@ -130,7 +131,7 @@ public class DataTimeFreezeEffects extends AbstractData {
                     helper = TimeStopEffectHelper.deserializeNBT(cmp.getCompound("effectTag"));
                     break;
             }
-            return new ServerSyncAction(type, new ResourceLocation(dimKey), helper);
+            return new ServerSyncAction(type, dim, helper);
         }
 
         @Nullable
@@ -138,7 +139,7 @@ public class DataTimeFreezeEffects extends AbstractData {
             return involvedEffect;
         }
 
-        public ResourceLocation getDimKey() {
+        public RegistryKey<World> getDimKey() {
             return dim;
         }
 

@@ -29,7 +29,7 @@ public enum MoonPhase {
     NEW, WAXING_1_4, WAXING_1_2, WAXING_3_4;
 
     public static MoonPhase fromWorld(IWorld world) {
-        return MiscUtils.getEnumEntry(MoonPhase.class, world.getDimension().getMoonPhase(world.getWorld().getDayTime()));
+        return MiscUtils.getEnumEntry(MoonPhase.class, world.getMoonPhase());
     }
 
     @OnlyIn(Dist.CLIENT)

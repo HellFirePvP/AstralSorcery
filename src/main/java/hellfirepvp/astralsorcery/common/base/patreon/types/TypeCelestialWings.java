@@ -79,7 +79,7 @@ public class TypeCelestialWings extends PatreonEffect implements ITickHandler {
                 shouldDoEffect(player) &&
                 (Minecraft.getInstance().player != null &&
                         Minecraft.getInstance().player.getUniqueID().equals(playerUUID) &&
-                        !Minecraft.getInstance().gameSettings.func_243230_g().func_243192_a())) { //Not-in-first-person
+                        !Minecraft.getInstance().gameSettings.getPointOfView().func_243192_a())) { //Not-in-first-person
             playEffects(player);
         }
     }

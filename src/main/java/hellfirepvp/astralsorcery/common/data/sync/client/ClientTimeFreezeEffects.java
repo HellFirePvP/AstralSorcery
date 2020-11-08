@@ -17,6 +17,7 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -32,20 +33,20 @@ import java.util.*;
  */
 public class ClientTimeFreezeEffects extends ClientData<ClientTimeFreezeEffects> {
 
-    private final Map<ResourceLocation, List<TimeStopEffectHelper>> clientActiveFreezeZones = new HashMap<>();
+    private final Map<RegistryKey<World>, List<TimeStopEffectHelper>> clientActiveFreezeZones = new HashMap<>();
 
     @Nonnull
     public List<TimeStopEffectHelper> getTimeStopEffects(World world) {
-        return getTimeStopEffects(world.func_234923_W_());
+        return getTimeStopEffects(world.getDimensionKey());
     }
 
     @Nonnull
     public List<TimeStopEffectHelper> getTimeStopEffects(RegistryKey<World> dim) {
-        return clientActiveFreezeZones.getOrDefault(dim.func_240901_a_(), Collections.emptyList());
+        return clientActiveFreezeZones.getOrDefault(dim, Collections.emptyList());
     }
 
     private void applyChange(DataTimeFreezeEffects.ServerSyncAction action) {
-        ResourceLocation worldKey = action.getDimKey();
+        RegistryKey<World> worldKey = action.getDimKey();
         switch (action.getType()) {
             case ADD:
                 List<TimeStopEffectHelper> zones = clientActiveFreezeZones.computeIfAbsent(worldKey, (id) -> new LinkedList<>());
@@ -66,7 +67,7 @@ public class ClientTimeFreezeEffects extends ClientData<ClientTimeFreezeEffects>
 
     @Override
     public void clear(RegistryKey<World> dim) {
-        this.clientActiveFreezeZones.remove(dim.func_240901_a_());
+        this.clientActiveFreezeZones.remove(dim);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class ClientTimeFreezeEffects extends ClientData<ClientTimeFreezeEffects>
 
             CompoundNBT dimTag = compound.getCompound("dimTypes");
             for (String dimKey : dimTag.keySet()) {
-                ResourceLocation dim = new ResourceLocation(dimKey);
+                RegistryKey<World> dim = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(dimKey));
 
                 List<TimeStopEffectHelper> effects = new LinkedList<>();
                 ListNBT listEffects = dimTag.getList(dimKey, Constants.NBT.TAG_COMPOUND);

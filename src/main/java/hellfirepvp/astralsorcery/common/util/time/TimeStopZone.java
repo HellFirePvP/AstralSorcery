@@ -9,22 +9,19 @@
 package hellfirepvp.astralsorcery.common.util.time;
 
 import hellfirepvp.astralsorcery.common.data.config.registry.TileAccelerationBlacklistRegistry;
-import hellfirepvp.astralsorcery.common.lib.EffectsAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.IPhase;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -47,11 +44,11 @@ public class TimeStopZone {
     final float range;
     final BlockPos offset;
     private final World world;
-    private int ticksToLive = 0;
+    private int ticksToLive;
 
     private boolean active = true;
 
-    private List<TileEntity> cachedTiles = new LinkedList<>();
+    private final List<TileEntity> cachedTiles = new LinkedList<>();
 
     TimeStopZone(EntityTargetController ctrl, float range, BlockPos offset, World world, int tickLivespan) {
         this.targetController = ctrl;
@@ -146,7 +143,7 @@ public class TimeStopZone {
         e.prevDistanceWalkedModified = e.distanceWalkedModified;
 
         if (!e.getEntityWorld().isRemote()) {
-            e.travel(Vec3d.ZERO);
+            e.travel(Vector3d.ZERO);
         }
 
         if (e instanceof EnderDragonEntity) {

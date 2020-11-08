@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  */
 public class TypeFlareColor extends PatreonEffect {
 
-    private Supplier<Color> colorProvider;
+    private final Supplier<Color> colorProvider;
 
     public TypeFlareColor(UUID uniqueId, Supplier<Color> colorProvider) {
         super(uniqueId, null);

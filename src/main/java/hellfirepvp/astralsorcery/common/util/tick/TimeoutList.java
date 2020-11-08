@@ -31,7 +31,7 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
     private final TimeoutDelegate<V> delegate;
     private final EnumSet<TickEvent.Type> tickTypes;
 
-    private List<TimeoutEntry<V>> tickEntries = new LinkedList<>();
+    private final List<TimeoutEntry<V>> tickEntries = new LinkedList<>();
 
     public TimeoutList(@Nullable TimeoutDelegate<V> delegate, TickEvent.Type... types) {
         this.delegate = delegate;

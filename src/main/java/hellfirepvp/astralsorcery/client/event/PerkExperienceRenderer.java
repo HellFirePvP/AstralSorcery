@@ -104,7 +104,7 @@ public class PerkExperienceRenderer implements ITickHandler {
         int c = 0x00DDDDDD;
         c |= ((int) (255F * visibilityReveal)) << 24;
         if (visibilityReveal > 0.1E-4) {
-            RenderingDrawUtils.renderStringAtPos(0, 0, 0, Minecraft.getInstance().fontRenderer, strLevel, c, true);
+            RenderingDrawUtils.renderStringAt(0, 0, 0, Minecraft.getInstance().fontRenderer, strLevel, c, true);
         }
         RenderSystem.popMatrix();
 

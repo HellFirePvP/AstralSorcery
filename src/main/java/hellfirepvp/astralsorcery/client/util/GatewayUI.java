@@ -17,9 +17,10 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nullable;
@@ -34,7 +35,7 @@ import java.util.*;
  */
 public class GatewayUI {
 
-    private final ResourceLocation dimType;
+    private final RegistryKey<World> dimType;
     private final BlockPos pos;
     private final Vector3 renderCenter;
     private final double sphereRadius;
@@ -43,7 +44,7 @@ public class GatewayUI {
 
     private int visibleTicks = 20;
 
-    private GatewayUI(ResourceLocation dimType, BlockPos pos, Vector3 renderCenter, double sphereRadius) {
+    private GatewayUI(RegistryKey<World> dimType, BlockPos pos, Vector3 renderCenter, double sphereRadius) {
         this.dimType = dimType;
         this.pos = pos;
         this.renderCenter = renderCenter;
@@ -66,12 +67,12 @@ public class GatewayUI {
         }
     }
 
-    public static GatewayUI create(IWorld world, BlockPos tilePos, Vector3 renderPos, double sphereRadius) {
+    public static GatewayUI create(World world, BlockPos tilePos, Vector3 renderPos, double sphereRadius) {
         GatewayCache.GatewayNode gatewayNode = CelestialGatewayHandler.INSTANCE.getGatewayNode(world, LogicalSide.CLIENT, tilePos);
         if (gatewayNode == null) {
             return null;
         }
-        ResourceLocation dimType = world.getDimension().getType().getRegistryName();
+        RegistryKey<World> dimType = world.getDimensionKey();
         GatewayUI ui = new GatewayUI(dimType, tilePos, renderPos, sphereRadius);
         PlayerEntity thisPlayer = Minecraft.getInstance().player;
 
@@ -96,7 +97,7 @@ public class GatewayUI {
         return ui;
     }
 
-    private static void appendEntry(GatewayUI ui, GatewayCache.GatewayNode node, ResourceLocation nodeDimType, boolean sameWorld, double sphereRadius) {
+    private static void appendEntry(GatewayUI ui, GatewayCache.GatewayNode node, RegistryKey<World> nodeDimType, boolean sameWorld, double sphereRadius) {
         Vector3 renderPos = ui.getRenderCenter();
 
         Vector3 nodePos = new Vector3(node.getPos());
@@ -160,7 +161,7 @@ public class GatewayUI {
         }
     }
 
-    public ResourceLocation getDimType() {
+    public RegistryKey<World> getDimType() {
         return dimType;
     }
 
@@ -205,13 +206,13 @@ public class GatewayUI {
     public static class GatewayEntry {
 
         private final GatewayCache.GatewayNode node;
-        private final ResourceLocation nodeDimension;
+        private final RegistryKey<World> nodeDimension;
 
         private final Vector3 relativePos;
 
         private final float yaw, pitch;
 
-        private GatewayEntry(GatewayCache.GatewayNode node, ResourceLocation nodeDimension, Vector3 relativePos) {
+        private GatewayEntry(GatewayCache.GatewayNode node, RegistryKey<World> nodeDimension, Vector3 relativePos) {
             this.node = node;
             this.nodeDimension = nodeDimension;
             this.relativePos = relativePos.clone();
@@ -228,7 +229,7 @@ public class GatewayUI {
             return node;
         }
 
-        public ResourceLocation getNodeDimension() {
+        public RegistryKey<World> getNodeDimension() {
             return nodeDimension;
         }
 

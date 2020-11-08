@@ -79,7 +79,7 @@ public class TreeType {
                 Tree treeFeature = ((SaplingBlock) state.getBlock()).tree;
                 return () -> {
                     List<BlockSnapshot> blockSnapshots = MiscUtils.captureBlockChanges(world, () -> {
-                        treeFeature.place(world, world.getChunkProvider().getChunkGenerator(), pos, state, rand);
+                        treeFeature.attemptGrowTree(world, world.getChunkProvider().getChunkGenerator(), pos, state, rand);
                     });
                     return blockSnapshots.stream()
                             .filter(snapshot -> {

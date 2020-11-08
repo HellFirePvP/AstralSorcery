@@ -21,9 +21,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,10 +44,10 @@ import java.util.Map;
  */
 public class BlockBreakHelper {
 
-    private static final Map<ResourceLocation, TickTokenMap<BlockPos, BreakEntry>> breakMap = new HashMap<>();
+    private static final Map<RegistryKey<World>, TickTokenMap<BlockPos, BreakEntry>> breakMap = new HashMap<>();
 
-    public static BreakEntry addProgress(IWorld world, BlockPos pos, float expectedHardness, float percStrength) {
-        TickTokenMap<BlockPos, BreakEntry> map = breakMap.computeIfAbsent(world.getDimension().getType().getRegistryName(), key -> {
+    public static BreakEntry addProgress(World world, BlockPos pos, float expectedHardness, float percStrength) {
+        TickTokenMap<BlockPos, BreakEntry> map = breakMap.computeIfAbsent(world.getDimensionKey(), key -> {
             TickTokenMap<BlockPos, BreakEntry> tkMap = new TickTokenMap<>(TickEvent.Type.SERVER);
             AstralSorcery.getProxy().getTickManager().register(tkMap);
             return tkMap;

@@ -37,7 +37,9 @@ public abstract class EntityCameraRenderView extends ClientPlayerEntity {
                 Minecraft.getInstance().world,
                 Minecraft.getInstance().player.connection,
                 Minecraft.getInstance().player.getStats(),
-                Minecraft.getInstance().player.getRecipeBook());
+                Minecraft.getInstance().player.getRecipeBook(),
+                false,
+                false);
 
         abilities.allowFlying = true;
         abilities.isFlying = true;
