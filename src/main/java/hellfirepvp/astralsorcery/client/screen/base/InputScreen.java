@@ -23,7 +23,7 @@ import java.util.Set;
  */
 public class InputScreen extends Screen {
 
-    private Set<Integer> heldKeys = new HashSet<>();
+    private final Set<Integer> heldKeys = new HashSet<>();
 
     private double oMouseX, oMouseY;
     private boolean dragging = false;

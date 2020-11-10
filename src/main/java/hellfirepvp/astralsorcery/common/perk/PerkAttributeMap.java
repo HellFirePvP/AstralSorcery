@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class PerkAttributeMap {
 
     private final LogicalSide side;
-    private final Map<PerkAttributeType, List<PerkAttributeModifier>> modifiers = new HashMap<>();
+    private final Map<PerkAttributeType, List<PerkAttributeModifier>> modifiers = Collections.synchronizedMap(new HashMap<>());
     private final List<PerkConverter> converters = new ArrayList<>();
 
     PerkAttributeMap(LogicalSide side) {

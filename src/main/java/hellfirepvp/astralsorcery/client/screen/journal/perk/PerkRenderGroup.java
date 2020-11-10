@@ -33,8 +33,8 @@ public class PerkRenderGroup {
     private static int counter = 0;
     private final int id;
 
-    private List<BatchPerkContext.TextureObjectGroup> addedGroups = Lists.newArrayList();
-    private Map<AbstractRenderableTexture, Integer> underlyingTextures = Maps.newHashMap();
+    private final List<BatchPerkContext.TextureObjectGroup> addedGroups = Lists.newArrayList();
+    private final Map<AbstractRenderableTexture, Integer> underlyingTextures = Maps.newHashMap();
 
     public PerkRenderGroup() {
         this.id = counter++;

@@ -108,7 +108,7 @@ public class GatewayCache extends GlobalWorldData {
     public void updateTick(World world) {}
 
     @Override
-    public void onLoad(IWorld world) {
+    public void onLoad(World world) {
         super.onLoad(world);
 
         LogUtil.info(LogCategory.GATEWAY_CACHE, () -> "Checking GatewayCache integrity for dimension " + world.getDimensionKey().getLocation());

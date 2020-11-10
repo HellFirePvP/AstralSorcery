@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.overlay;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalProgression;
@@ -43,10 +44,10 @@ public abstract class ScreenJournalOverlay extends ScreenJournal {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float pTicks) {
-        super.render(mouseX, mouseY, pTicks);
+    public void render(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
+        super.render(renderStack, mouseX, mouseY, pTicks);
 
-        origin.render(0, 0, pTicks);
+        origin.render(renderStack, 0, 0, pTicks);
     }
 
     @Override
@@ -55,13 +56,13 @@ public abstract class ScreenJournalOverlay extends ScreenJournal {
     }
 
     @Override
-    public void onClose() {
+    public void closeScreen() {
         Minecraft.getInstance().displayGuiScreen(this.origin);
     }
 
     @Override
-    public void removed() {
-        super.removed();
+    public void onClose() {
+        super.onClose();
 
         if (origin instanceof ScreenJournalProgression) {
             ((ScreenJournalProgression) origin).expectReInit();

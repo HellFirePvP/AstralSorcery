@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.base;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
@@ -51,22 +52,23 @@ public abstract class ScreenCustomContainer<T extends Container> extends Contain
         return this.container;
     }
 
+
     @Override
-    public void render(int mouseX, int mouseY, float pTicks) {
-        this.renderBackground();
-        super.render(mouseX, mouseY, pTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+    public void render(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
+        this.renderBackground(renderStack);
+        super.render(renderStack, mouseX, mouseY, pTicks);
+        this.renderHoveredTooltip(renderStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack renderStack, float partialTicks, int mouseX, int mouseY) {
         this.getBackgroundTexture().bindTexture();
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, this.guiLeft, this.guiTop, this.getBlitOffset(), this.sWidth, this.sHeight).draw();
+            RenderingGuiUtils.rect(buf, renderStack, this.guiLeft, this.guiTop, this.getBlitOffset(), this.sWidth, this.sHeight).draw();
         });
     }
 }

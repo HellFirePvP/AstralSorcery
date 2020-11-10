@@ -63,7 +63,7 @@ public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreeP
             RenderSystem.pushMatrix();
             RenderSystem.translated(posX, posY, zLevel);
             RenderSystem.scaled(scale, scale, scale);
-            RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), stack, 0, 0, null);
+            RenderingUtils.renderItemStackGUI(Minecraft.getInstance().getItemRenderer(), stack, 0, 0, null);
             RenderSystem.popMatrix();
         }
     }

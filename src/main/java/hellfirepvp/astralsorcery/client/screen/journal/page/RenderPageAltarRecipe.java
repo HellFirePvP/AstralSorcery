@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
@@ -51,21 +52,21 @@ public class RenderPageAltarRecipe extends RenderPageRecipeTemplate {
     }
 
     @Override
-    public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
+    public void render(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
         this.clearFrameRectangles();
 
-        this.renderRecipeGrid(offsetX, offsetY, zLevel, this.gridTexture);
-        this.renderExpectedItemStackOutput(offsetX + 78, offsetY + 25, zLevel, 1.4F,
+        this.renderRecipeGrid(renderStack, x, y, z, this.gridTexture);
+        this.renderExpectedItemStackOutput(renderStack, x + 78, y + 25, z, 1.4F,
                 this.recipe.getOutputForRender(Collections.emptyList()));
-        this.renderInfoStar(offsetX, offsetY, zLevel, pTicks);
-        this.renderRequiredConstellation(offsetX, offsetY, zLevel, this.recipe.getFocusConstellation());
+        this.renderInfoStar(renderStack, x, y, z, pTicks);
+        this.renderRequiredConstellation(renderStack, x, y, z, this.recipe.getFocusConstellation());
 
         int widthShift  = (AltarRecipeGrid.GRID_SIZE - recipe.getInputs().getWidth())  / 2;
         int heightShift = (AltarRecipeGrid.GRID_SIZE - recipe.getInputs().getHeight()) / 2;
 
         AltarType type = this.recipe.getAltarType();
-        float recipeX = offsetX + 30;
-        float recipeY = offsetY + 78;
+        float recipeX = x + 30;
+        float recipeY = y + 78;
         for (int xx = 0; xx < AltarRecipeGrid.GRID_SIZE; xx++) {
             for (int yy = 0; yy < AltarRecipeGrid.GRID_SIZE; yy++) {
                 int slot = xx + yy * AltarRecipeGrid.GRID_SIZE;
@@ -79,11 +80,11 @@ public class RenderPageAltarRecipe extends RenderPageRecipeTemplate {
                     float renderX = recipeX + 25 * xx;
                     float renderY = recipeY + 25 * yy;
 
-                    this.renderExpectedIngredientInput(renderX, renderY, zLevel, 1.1F, recipeIndex * 20, this.recipe.getInputs().getIngredient(recipeIndex));
+                    this.renderExpectedIngredientInput(renderStack, renderX, renderY, z, 1.1F, recipeIndex * 20, this.recipe.getInputs().getIngredient(recipeIndex));
                 }
             }
         }
-        this.renderExpectedRelayInputs(offsetX, offsetY, zLevel, this.recipe);
+        this.renderExpectedRelayInputs(renderStack, x, y, z, this.recipe);
     }
 
     @Override
@@ -92,11 +93,12 @@ public class RenderPageAltarRecipe extends RenderPageRecipeTemplate {
     }
 
     @Override
-    public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        this.renderHoverTooltips(mouseX, mouseY, zLevel, this.recipe.getId());
-        this.renderInfoStarTooltips(offsetX, offsetY, zLevel, mouseX, mouseY, (toolTip) -> {
+    public void postRender(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
+        this.renderHoverTooltips(renderStack, mouseX, mouseY, z, this.recipe.getId());
+        this.renderInfoStarTooltips(renderStack, x, y, z, mouseX, mouseY, (toolTip) -> {
             this.addAltarRecipeTooltip(this.recipe, toolTip);
             this.addConstellationInfoTooltip(this.recipe.getFocusConstellation(), toolTip);
         });
+        super.postRender(renderStack, x, y, z, pTicks, mouseX, mouseY);
     }
 }

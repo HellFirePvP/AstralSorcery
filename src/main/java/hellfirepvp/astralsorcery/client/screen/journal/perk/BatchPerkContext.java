@@ -35,7 +35,7 @@ public class BatchPerkContext {
     public static final int PRIORITY_FOREGROUND = 200;
     public static final int PRIORITY_OVERLAY    = 300;
 
-    private TreeMap<TextureObjectGroup, BufferContext> bufferGroups = new TreeMap<>();
+    private final TreeMap<TextureObjectGroup, BufferContext> bufferGroups = new TreeMap<>();
 
     public TextureObjectGroup addContext(AbstractRenderableTexture tex, int sortPriority) {
         TextureObjectGroup group = MiscUtils.iterativeSearch(bufferGroups.keySet(), gr -> gr.getResource().equals(tex));
@@ -69,7 +69,7 @@ public class BatchPerkContext {
         }
     }
 
-    public class TextureObjectGroup implements Comparable<TextureObjectGroup> {
+    public static class TextureObjectGroup implements Comparable<TextureObjectGroup> {
 
         private final AbstractRenderableTexture resource;
         private final int priority;

@@ -77,20 +77,20 @@ public class RenderPageStructure extends RenderablePage {
     }
 
     @Override
-    public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
+    public void render(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
         this.totalRenderFrame++;
 
-        this.renderStructure(offsetX, offsetY, pTicks);
-        float shift = this.renderSizeDescription(offsetX, offsetY + 5, zLevel);
+        this.renderStructure(renderStack, x, y, pTicks);
+        float shift = this.renderSizeDescription(renderStack, x, y + 5, z);
 
         if (this.name != null) {
-            renderHeadline(offsetX + shift, offsetY + 5, zLevel, this.name);
+            renderHeadline(renderStack, x + shift, y + 5, z, this.name);
         }
 
-        this.renderSliceButtons(offsetX, offsetY + 10, zLevel, mouseX, mouseY);
+        this.renderSliceButtons(renderStack, x, y + 10, z, mouseX, mouseY);
     }
 
-    private void renderSliceButtons(float offsetX, float offsetY, float zLevel, float mouseX, float mouseY) {
+    private void renderSliceButtons(MatrixStack renderStack, float offsetX, float offsetY, float zLevel, float mouseX, float mouseY) {
         TexturesAS.TEX_GUI_BOOK_STRUCTURE_ICONS.bindTexture();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -102,7 +102,9 @@ public class RenderPageStructure extends RenderablePage {
 
         this.switchView = new Rectangle.Float(offsetX + 152, offsetY + 10, 16, 16);
         float u = this.drawSlice.isPresent() ? 0.5F : 0;
-        RenderingGuiUtils.drawTexturedRect(switchView.x, switchView.y, zLevel, switchView.width, switchView.height,
+
+        RenderingGuiUtils.drawTexturedRect(renderStack, switchView.x, switchView.y, zLevel,
+                switchView.width, switchView.height,
                 u, 0, 0.5F, 0.25F);
 
         if (this.drawSlice.isPresent()) {
@@ -120,50 +122,51 @@ public class RenderPageStructure extends RenderablePage {
 
             if (minSlice <= yLevel - 1) {
                 sliceDown = new Rectangle.Float(offsetX + 160, offsetY + 28, 11, 16);
-                RenderSystem.pushMatrix();
-                RenderSystem.translatef(sliceDown.x + (sliceDown.width / 2), sliceDown.y + (sliceDown.height / 2), zLevel);
+                renderStack.push();
+                renderStack.translate(sliceDown.x + (sliceDown.width / 2), sliceDown.y + (sliceDown.height / 2), zLevel);
                 float v = 2F / 4F;
                 if (sliceDown.contains(mouseX, mouseY)) {
                     v = 1F / 4F;
-                    RenderSystem.scalef(1.1F, 1.1F, 1.1F);
+                    renderStack.scale(1.1F, 1.1F, 1F);
                 }
-                RenderSystem.translatef(-sliceDown.width / 2, -sliceDown.height / 2, 0);
-                RenderingGuiUtils.drawTexturedRect(0, 0, 0, sliceDown.width, sliceDown.height,
+                renderStack.translate(-sliceDown.width / 2, -sliceDown.height / 2, 0);
+                RenderingGuiUtils.drawTexturedRect(renderStack, sliceDown.width, sliceDown.height,
                         12F / 32F, v, 11F / 32F, 1F / 4F);
-                RenderSystem.popMatrix();
+                renderStack.pop();
             }
 
             if (maxSlice >= yLevel + 1) {
                 sliceUp = new Rectangle.Float(offsetX + 148, offsetY + 28, 11, 16);
-                RenderSystem.pushMatrix();
-                RenderSystem.translatef(sliceUp.x + (sliceUp.width / 2), sliceUp.y + (sliceUp.height / 2), zLevel);
+                renderStack.push();
+                renderStack.translate(sliceUp.x + (sliceUp.width / 2), sliceUp.y + (sliceUp.height / 2), zLevel);
                 float v = 2F / 4F;
                 if (sliceUp.contains(mouseX, mouseY)) {
                     v = 1F / 4F;
-                    RenderSystem.scalef(1.1F, 1.1F, 1.1F);
+                    renderStack.scale(1.1F, 1.1F, 1F);
                 }
-                RenderSystem.translatef(-sliceUp.width / 2, -sliceUp.height / 2, 0);
-                RenderingGuiUtils.drawTexturedRect(0, 0, 0, sliceUp.width, sliceUp.height,
-                        0, v, 11F / 32F, 1F / 4F);
-                RenderSystem.popMatrix();
+                renderStack.translate(-sliceUp.width / 2, -sliceUp.height / 2, 0);
+                RenderingGuiUtils.drawTexturedRect(renderStack, sliceUp.width, sliceUp.height,
+                        12F / 32F, v, 11F / 32F, 1F / 4F);
+                renderStack.pop();
             }
         }
 
         this.switchRequiredAir = new Rectangle.Float(offsetX + 134, offsetY + 10, 16, 16);
-        RenderingGuiUtils.drawTexturedRect(switchRequiredAir.x, switchRequiredAir.y, zLevel, switchRequiredAir.width, switchRequiredAir.height,
+        RenderingGuiUtils.drawTexturedRect(renderStack, switchRequiredAir.x, switchRequiredAir.y, zLevel, switchRequiredAir.width, switchRequiredAir.height,
                 0, 0.75F, 0.5F, 0.25F);
         if (this.showAirBlocks) {
             BlockAtlasTexture.getInstance().bindTexture();
             RenderSystem.depthMask(false);
 
             RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.BLOCK, buf -> {
-                MatrixStack renderStack = new MatrixStack();
+                renderStack.push();
                 renderStack.translate(switchRequiredAir.x + 13, switchRequiredAir.y + 11, zLevel + 60);
                 renderStack.scale(7, -7, 7);
                 renderStack.rotate(Vector3f.XP.rotationDegrees(30));
                 renderStack.rotate(Vector3f.YP.rotationDegrees(225));
 
                 RenderingUtils.renderSimpleBlockModel(Blocks.BLACK_STAINED_GLASS.getDefaultState(), renderStack, buf);
+                renderStack.pop();
             });
 
             RenderSystem.depthMask(true);
@@ -200,57 +203,56 @@ public class RenderPageStructure extends RenderablePage {
         return maxSlice;
     }
 
-    private void renderHeadline(float offsetX, float offsetY, float zLevel, ITextProperties title) {
+    private void renderHeadline(MatrixStack renderStack, float offsetX, float offsetY, float zLevel, ITextProperties title) {
         float scale = 1.3F;
-
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(offsetX, offsetY, 0);
-        RenderSystem.scaled(scale, scale, scale);
         RenderSystem.disableDepthTest();
 
-        RenderingDrawUtils.renderStringAt(0, 0, zLevel, null, title.getFormattedText(), 0x00DDDDDD, true);
+        renderStack.push();
+        renderStack.translate(offsetX, offsetY, zLevel);
+        renderStack.scale(scale, scale, scale);
+        RenderingDrawUtils.renderStringAt(title, renderStack, null, 0x00DDDDDD, true);
+        renderStack.pop();
 
         RenderSystem.enableDepthTest();
-        RenderSystem.popMatrix();
     }
 
-    private float renderSizeDescription(float offsetX, float offsetY, float zLevel) {
+    private float renderSizeDescription(MatrixStack renderStack, float offsetX, float offsetY, float zLevel) {
         Vector3 size = new Vector3(this.structure.getMaximumOffset()).subtract(this.structure.getMinimumOffset()).add(1, 1, 1);
         FontRenderer fr = RenderablePage.getFontRenderer();
         float scale = 1.3F;
-        String desc = String.format("%s - %s - %s", size.getBlockX(), size.getBlockY(), size.getBlockZ());
-        float length = fr.getStringWidth(desc) * scale;
+        ITextProperties description = new StringTextComponent(String.format("%s - %s - %s", size.getBlockX(), size.getBlockY(), size.getBlockZ()));
+        float length = fr.getStringPropertyWidth(description) * scale;
 
         RenderSystem.disableDepthTest();
 
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(offsetX, offsetY, 0);
-        RenderSystem.scaled(scale, scale, scale);
-        RenderingDrawUtils.renderStringAt(0, 0, zLevel, fr, desc, 0x00DDDDDD, true);
-        RenderSystem.popMatrix();
+        renderStack.push();
+        renderStack.translate(offsetX, offsetY, zLevel);
+        renderStack.scale(scale, scale, scale);
+        RenderingDrawUtils.renderStringAt(description, renderStack, fr, 0x00DDDDDD, true);
+        renderStack.pop();
 
         this.drawSlice.ifPresent(yLevel -> {
             int min = this.getCurrentMinSlice();
             int max = this.getCurrentMaxSlice();
             int height = max - min;
             int level = yLevel - min;
-            String sliceDescription = String.format("%s / %s", level + 1, height + 1);
+            ITextProperties slice = new StringTextComponent(String.format("%s / %s", level + 1, height + 1));
 
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(offsetX, offsetY + 14, 0);
-            RenderSystem.scaled(scale, scale, scale);
-            RenderingDrawUtils.renderStringAt(0, 0, zLevel, fr, sliceDescription, 0x00DDDDDD, true);
-            RenderSystem.popMatrix();
+            renderStack.push();
+            renderStack.translate(offsetX, offsetY + 14, zLevel);
+            renderStack.scale(scale, scale, scale);
+            RenderingDrawUtils.renderStringAt(slice, renderStack, fr, 0x00DDDDDD, true);
+            renderStack.pop();
         });
 
         RenderSystem.enableDepthTest();
         return length + 8F;
     }
 
-    private void renderStructure(float offsetX, float offsetY, float pTicks) {
+    private void renderStructure(MatrixStack renderStack, float offsetX, float offsetY, float pTicks) {
         Point.Double renderOffset = renderOffset(offsetX + 8, offsetY);
         this.structureRenderer.setRenderWithRequiredAir(this.showAirBlocks);
-        this.structureRenderer.render3DSliceGUI(new MatrixStack(), renderOffset.x + shift.getX(), renderOffset.y + shift.getY(), pTicks, drawSlice);
+        this.structureRenderer.render3DSliceGUI(renderStack, renderOffset.x + shift.getX(), renderOffset.y + shift.getY(), pTicks, drawSlice);
         this.structureRenderer.setRenderWithRequiredAir(false);
     }
 
@@ -259,23 +261,25 @@ public class RenderPageStructure extends RenderablePage {
     }
 
     @Override
-    public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        MatrixStack renderStack = new MatrixStack();
-        renderStack.translate(offsetX + 160, offsetY + 10, zLevel);
+    public void postRender(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
+        renderStack.push();
+        renderStack.translate(x + 160, y + 10, z);
         Rectangle rect = RenderingDrawUtils.drawInfoStar(renderStack, IDrawRenderTypeBuffer.defaultBuffer(), 15, pTicks);
-        rect.translate((int) (offsetX + 160), (int) (offsetY + 10));
+        rect.translate((int) (x + 160), (int) (y + 10));
+        renderStack.pop();
+
         if (rect.contains(mouseX, mouseY)) {
-            RenderingDrawUtils.renderBlueTooltip(offsetX + 160, offsetY + 10, zLevel + 650, this.contentStacks, RenderablePage.getFontRenderer(), false);
+            RenderingDrawUtils.renderBlueTooltip(renderStack, x + 160, y + 10, z + 650, this.contentStacks, RenderablePage.getFontRenderer(), false);
         }
 
         if (this.switchView != null && this.switchView.contains(mouseX, mouseY)) {
             String switchInfo = LanguageMap.getInstance().func_230503_a_("astralsorcery.journal.structure.switch_view");
-            RenderingDrawUtils.renderBlueTooltipString(this.switchView.x + this.switchView.width / 2, this.switchView.y + this.switchView.height / 2, zLevel + 500,
+            RenderingDrawUtils.renderBlueTooltipString(renderStack, this.switchView.x + this.switchView.width / 2, this.switchView.y + this.switchView.height / 2, z + 500,
                     Lists.newArrayList(switchInfo), RenderablePage.getFontRenderer(), false);
         }
         if (this.switchRequiredAir != null && this.switchRequiredAir.contains(mouseX, mouseY)) {
             String switchInfo = LanguageMap.getInstance().func_230503_a_("astralsorcery.journal.structure.required_air");
-            RenderingDrawUtils.renderBlueTooltipString(this.switchRequiredAir.x + this.switchRequiredAir.width / 2, this.switchRequiredAir.y + this.switchRequiredAir.height / 2, zLevel + 500,
+            RenderingDrawUtils.renderBlueTooltipString(renderStack, this.switchRequiredAir.x + this.switchRequiredAir.width / 2, this.switchRequiredAir.y + this.switchRequiredAir.height / 2, z + 500,
                     Lists.newArrayList(switchInfo), RenderablePage.getFontRenderer(), false);
         }
     }

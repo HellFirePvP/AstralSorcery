@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.base.NavigationArrowScreen;
@@ -44,7 +45,7 @@ public class ScreenJournalPages extends ScreenJournal implements NavigationArrow
     @Nullable
     private final Screen previous;
     private final ResearchNode researchNode;
-    private List<RenderablePage> pages;
+    private final List<RenderablePage> pages;
 
     private boolean informPreviousClose = true;
     private int currentPageOffset = 0; //* 2 = left page.
@@ -96,92 +97,90 @@ public class ScreenJournalPages extends ScreenJournal implements NavigationArrow
 
         if (origin != null) {
             origin.preventRefresh();
-            origin.setSize(width, height);
+            origin.width = width;
+            origin.height = height;
             origin.init();
         }
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float pTicks) {
-        super.render(mouseX, mouseY, pTicks);
+    public void render(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
+        super.render(renderStack, mouseX, mouseY, pTicks);
 
         if (origin != null) {
-            drawDefault(TexturesAS.TEX_GUI_BOOK_BLANK, mouseX, mouseY);
+            drawDefault(renderStack, TexturesAS.TEX_GUI_BOOK_BLANK, mouseX, mouseY);
         } else {
             RenderSystem.enableBlend();
             Blending.DEFAULT.apply();
-            drawWHRect(TexturesAS.TEX_GUI_BOOK_BLANK);
+            drawWHRect(renderStack, TexturesAS.TEX_GUI_BOOK_BLANK);
             RenderSystem.disableBlend();
         }
 
         this.setBlitOffset(100);
         int pageYOffset = 20;
 
-        //Draw headline
+        //Headline
         if (this.currentPageOffset == 0) {
-            RenderSystem.pushMatrix();
-
-            String headline = this.getTitle().getFormattedText();
-            double width = font.getStringWidth(headline);
-            RenderSystem.translated(guiLeft + 117, guiTop + 22, this.getGuiZLevel());
-            RenderSystem.scaled(1.3, 1.3, 1.3);
-            RenderSystem.translated(-(width / 2), 0, 0);
-            RenderingDrawUtils.renderStringAtCurrentPos(font, headline, 0x00DDDDDD);
-
-            RenderSystem.popMatrix();
-
+            int width = font.getStringPropertyWidth(this.getTitle());
             RenderSystem.enableBlend();
             Blending.DEFAULT.apply();
             TexturesAS.TEX_GUI_BOOK_UNDERLINE.bindTexture();
-            RenderingGuiUtils.drawRect(guiLeft + 30, guiTop + 35, this.getGuiZLevel(), 175, 6);
-            RenderSystem.disableBlend();
 
+            renderStack.push();
+            renderStack.translate(guiLeft + 117, guiTop + 22, this.getGuiZLevel());
+            renderStack.scale(1.3F, 1.3F, 1.3F);
+            renderStack.translate(-width / 2F, 0, 0);
+            RenderingDrawUtils.renderStringAt(font, renderStack, this.getTitle(), 0x00DDDDDD);
+            renderStack.pop();
+
+            RenderSystem.disableBlend();
             pageYOffset += 30;
         }
 
         int index = currentPageOffset * 2;
         if (pages.size() > index) {
             RenderablePage page = pages.get(index);
-            page.render    (guiLeft + 30, guiTop + pageYOffset, pTicks, this.getGuiZLevel(), mouseX, mouseY);
+            page.render(renderStack, guiLeft + 30, guiTop + pageYOffset, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
         index = index + 1;
         if (pages.size() > index) {
             RenderablePage page = pages.get(index);
-            page.render    (guiLeft + 220, guiTop + 20, pTicks, this.getGuiZLevel(), mouseX, mouseY);
+            page.render(renderStack, guiLeft + 220, guiTop + 20, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
 
         this.setBlitOffset(120);
-        drawNavArrows(pTicks, mouseX, mouseY);
+        drawNavArrows(renderStack, pTicks, mouseX, mouseY);
         this.setBlitOffset(100);
 
         index = currentPageOffset * 2;
         if (pages.size() > index) {
             RenderablePage page = pages.get(index);
-            page.postRender(guiLeft + 30, guiTop + pageYOffset, pTicks, this.getGuiZLevel(), mouseX, mouseY);
+            page.postRender(renderStack, guiLeft + 30, guiTop + pageYOffset, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
         index = index + 1;
         if (pages.size() > index) {
             RenderablePage page = pages.get(index);
-            page.postRender(guiLeft + 220, guiTop + 20, pTicks, this.getGuiZLevel(), mouseX, mouseY);
+            page.postRender(renderStack, guiLeft + 220, guiTop + 20, pTicks, this.getGuiZLevel(), mouseX, mouseY);
         }
+
         this.setBlitOffset(0);
     }
 
-    private void drawNavArrows(float partialTicks, int mouseX, int mouseY) {
+    private void drawNavArrows(MatrixStack renderStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
 
         this.rectNext = null;
         this.rectPrev = null;
-        this.rectBack = this.drawArrow(guiLeft + 197, guiTop + 230, this.getGuiZLevel(), Type.LEFT, mouseX, mouseY, partialTicks);
+        this.rectBack = this.drawArrow(renderStack, guiLeft + 197, guiTop + 230, this.getGuiZLevel(), Type.LEFT, mouseX, mouseY, partialTicks);
 
         int cIndex = currentPageOffset * 2;
         if (cIndex > 0) {
-            this.rectPrev = this.drawArrow(guiLeft + 25, guiTop + 220, this.getGuiZLevel(), Type.LEFT, mouseX, mouseY, partialTicks);
+            this.rectPrev = this.drawArrow(renderStack, guiLeft + 25, guiTop + 220, this.getGuiZLevel(), Type.LEFT, mouseX, mouseY, partialTicks);
         }
         int nextIndex = cIndex + 2;
         if (pages.size() >= (nextIndex + 1)) {
-            this.rectNext = this.drawArrow(guiLeft + 367, guiTop + 220, this.getGuiZLevel(), Type.RIGHT, mouseX, mouseY, partialTicks);
+            this.rectNext = this.drawArrow(renderStack, guiLeft + 367, guiTop + 220, this.getGuiZLevel(), Type.RIGHT, mouseX, mouseY, partialTicks);
         }
 
         RenderSystem.disableBlend();

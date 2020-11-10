@@ -17,7 +17,7 @@ package hellfirepvp.astralsorcery.client.screen.helper;
  */
 public final class ScreenRenderBoundingBox {
 
-    private double lx, ly, hx, hy;
+    private final double lx, ly, hx, hy;
 
     public ScreenRenderBoundingBox(double lx, double ly, double hx, double hy) {
         this.lx = lx;

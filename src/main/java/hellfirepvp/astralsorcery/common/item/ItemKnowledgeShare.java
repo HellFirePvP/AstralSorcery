@@ -73,15 +73,15 @@ public class ItemKnowledgeShare extends Item {
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         if (isCreative(stack)) {
-            tooltip.add(new TranslationTextComponent("astralsorcery.misc.knowledge.inscribed.creative").setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
+            tooltip.add(new TranslationTextComponent("astralsorcery.misc.knowledge.inscribed.creative").mergeStyle(TextFormatting.LIGHT_PURPLE));
             return;
         }
         if (getKnowledge(stack) == null) {
-            tooltip.add(new TranslationTextComponent("astralsorcery.misc.knowledge.missing").setStyle(new Style().setColor(TextFormatting.GRAY)));
+            tooltip.add(new TranslationTextComponent("astralsorcery.misc.knowledge.missing").mergeStyle(TextFormatting.GRAY));
         } else {
             String name = getKnowledgeOwnerName(stack);
             if (name != null) {
-                tooltip.add(new TranslationTextComponent("astralsorcery.misc.knowledge.inscribed", name).setStyle(new Style().setColor(TextFormatting.BLUE)));
+                tooltip.add(new TranslationTextComponent("astralsorcery.misc.knowledge.inscribed", name).mergeStyle(TextFormatting.BLUE));
             }
         }
     }

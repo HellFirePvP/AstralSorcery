@@ -59,7 +59,7 @@ public abstract class ConstellationDiscoveryScreen<D extends ConstellationDiscov
     private List<D> drawAreas = new LinkedList<>();
 
     private D currentDrawArea = null;
-    private List<DrawnLine> drawnLines = new LinkedList<>();
+    private final List<DrawnLine> drawnLines = new LinkedList<>();
     private Point dragStart, dragEnd;
 
     private boolean initialized = false;

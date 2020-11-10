@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.base;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.common.container.ContainerTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -29,10 +30,10 @@ public abstract class ContainerBaseScreen<T extends TileEntity, C extends Contai
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float pTicks) {
-        this.renderBackground();
-        super.render(mouseX, mouseY, pTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+    public void render(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
+        this.renderBackground(renderStack);
+        super.render(renderStack, mouseX, mouseY, pTicks);
+        this.renderHoveredTooltip(renderStack, mouseX, mouseY);
     }
 
     @Override

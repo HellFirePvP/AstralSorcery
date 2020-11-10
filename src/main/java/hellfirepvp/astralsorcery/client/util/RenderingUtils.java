@@ -22,6 +22,7 @@ import hellfirepvp.observerlib.common.util.RegistryUtil;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.DiggingParticle;
 import net.minecraft.client.particle.ParticleManager;
@@ -52,6 +53,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.LanguageMap;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockDisplayReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biomes;
@@ -59,6 +61,7 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.ObjectUtils;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -206,6 +209,13 @@ public class RenderingUtils {
         return fx.getPosition().distanceSquared(view) <= RenderingConfig.CONFIG.getMaxEffectRenderDistanceSq();
     }
 
+    public static void translate(MatrixStack renderStack, float x, float y, float z, Consumer<MatrixStack> fn) {
+        renderStack.push();
+        renderStack.translate(x, y, z);
+        fn.accept(renderStack);
+        renderStack.pop();
+    }
+
     public static void draw(int drawMode, VertexFormat format, Consumer<BufferBuilder> fn) {
         draw(drawMode, format, bufferBuilder -> {
             fn.accept(bufferBuilder);
@@ -277,25 +287,20 @@ public class RenderingUtils {
         ItemEntity ei = new ItemEntity(Minecraft.getInstance().world, x, y, z, stack);
         ei.age = age;
         ei.hoverStart = 0;
-        renderStack.push();
-        renderStack.translate(x, y, z);
-        Minecraft.getInstance().getRenderManager().renderEntityStatic(ei, 0, 0, 0, 0F, pTicks, renderStack, buffers, combinedLight);
-        renderStack.pop();
+        Minecraft.getInstance().getRenderManager().renderEntityStatic(ei, x, y, z, 0F, pTicks, renderStack, buffers, combinedLight);
     }
 
-    public static void renderItemStack(ItemRenderer itemRenderer, ItemStack stack, int x, int y, @Nullable String alternativeText) {
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(0, 0, 32);
-        itemRenderer.zLevel = 200;
+    public static void renderItemStackGUI(MatrixStack renderStack, ItemStack stack, @Nullable String alternativeText) {
+        renderStack.push();
+        renderStack.translate(0, 0, 100F);
         FontRenderer font = stack.getItem().getFontRenderer(stack);
         if (font == null) {
             font = Minecraft.getInstance().fontRenderer;
         }
-        itemRenderer.renderItemAndEffectIntoGUI(stack, x, y);
-        itemRenderer.renderItemOverlayIntoGUI(font, stack, x, y, alternativeText);
+        renderTranslucentItemStackModelGUI(stack, renderStack, Color.WHITE, Blending.DEFAULT, 255);
+        mcdefault_renderItemOverlayIntoGUI(font, renderStack, stack, Minecraft.getInstance().getRenderPartialTicks(), alternativeText);
 
-        itemRenderer.zLevel = 0;
-        RenderSystem.popMatrix();
+        renderStack.pop();
     }
 
     public static void renderTranslucentItemStack(ItemStack stack, MatrixStack renderStack, float pTicks) {
@@ -311,12 +316,12 @@ public class RenderingUtils {
         float ageRotate = ((ClientScheduler.getClientTick() + pTicks) / 20.0F);
         renderStack.rotate(Vector3f.YP.rotation(ageRotate));
 
-        renderTranslucentItemStackModel(stack, renderStack, overlayColor, Blending.PREALPHA, alpha);
+        renderTranslucentItemStackModelGround(stack, renderStack, overlayColor, Blending.PREALPHA, alpha);
 
         renderStack.pop();
     }
 
-    public static void renderTranslucentItemStackModel(ItemStack stack, MatrixStack renderStack, Color overlayColor, Blending blendMode, int alpha) {
+    public static void renderTranslucentItemStackModelGround(ItemStack stack, MatrixStack renderStack, Color overlayColor, Blending blendMode, int alpha) {
         IBakedModel bakedModel = getItemModel(stack);
         ForgeHooksClient.handleCameraTransforms(renderStack, bakedModel, ItemCameraTransforms.TransformType.GROUND, false);
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
@@ -355,7 +360,8 @@ public class RenderingUtils {
         renderStack.scale(16.0F, -16.0F, 16.0F);
 
         IBakedModel bakedModel = ForgeHooksClient.handleCameraTransforms(renderStack, getItemModel(stack), ItemCameraTransforms.TransformType.GUI, false);
-        if (!bakedModel.isSideLit()) {
+        boolean isSideLit = bakedModel.isSideLit();
+        if (!isSideLit) {
             RenderHelper.setupGuiFlatDiffuseLighting();
         }
 
@@ -364,7 +370,7 @@ public class RenderingUtils {
                     LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, MathHelper.clamp(alpha, 0, 255));
         });
 
-        if (!bakedModel.isSideLit()) {
+        if (!isSideLit) {
             RenderHelper.setupGui3DDiffuseLighting();
         }
 
@@ -373,6 +379,70 @@ public class RenderingUtils {
         RenderSystem.disableAlphaTest();
         RenderSystem.disableRescaleNormal();
         RenderSystem.enableDepthTest();
+        renderStack.pop();
+    }
+
+    //TODO wait for mojang to do their work and actually port this method so i don't have to do this myself
+    @Deprecated
+    public static void mcdefault_renderItemOverlayIntoGUI(FontRenderer fr, MatrixStack renderStack, ItemStack stack, float pTicks, @Nullable String text) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        renderStack.push();
+        renderStack.translate(0, 0, 200F);
+        if (stack.getCount() > 1 || text != null) {
+            ITextProperties display = new StringTextComponent(ObjectUtils.firstNonNull(text, String.valueOf(stack.getCount())));
+            int length = fr.getStringPropertyWidth(display);
+
+            renderStack.push();
+            renderStack.translate(17 - length, 9, 0);
+            RenderingDrawUtils.renderStringAt(display, renderStack, fr, 0xFFFFFF, true);
+            renderStack.pop();
+        }
+
+        if (stack.getItem().showDurabilityBar(stack)) {
+            RenderSystem.disableDepthTest();
+            RenderSystem.disableTexture();
+            RenderSystem.disableAlphaTest();
+            RenderSystem.disableBlend();
+
+            float health = (float) stack.getItem().getDurabilityForDisplay(stack);
+            float durabilityPercent = 13F - health * 13F;
+            int color = stack.getItem().getRGBDurabilityForDisplay(stack);
+
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                RenderingGuiUtils.rect(buf, renderStack, 2, 13, 0, 13, 2)
+                        .color(0, 0, 0, 255)
+                        .draw();
+                RenderingGuiUtils.rect(buf, renderStack, 2, 13, 0, durabilityPercent, 1)
+                        .color(color >> 16 & 255, color >> 8 & 255, color & 255, 255)
+                        .draw();
+            });
+
+            RenderSystem.enableBlend();
+            RenderSystem.enableAlphaTest();
+            RenderSystem.enableTexture();
+            RenderSystem.enableDepthTest();
+        }
+
+        ClientPlayerEntity player = Minecraft.getInstance().player;
+        float cooldownPercent = player == null ? 0F : player.getCooldownTracker().getCooldown(stack.getItem(), pTicks);
+        if (cooldownPercent > 0F) {
+            RenderSystem.disableDepthTest();
+            RenderSystem.disableTexture();
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+
+            RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
+                RenderingGuiUtils.rect(buf, renderStack, 0, 16F * (1F - cooldownPercent), 0, 16, 16F * cooldownPercent)
+                        .color(255, 255, 255, 127)
+                        .draw();
+            });
+
+            RenderSystem.enableTexture();
+            RenderSystem.enableDepthTest();
+        }
         renderStack.pop();
     }
 

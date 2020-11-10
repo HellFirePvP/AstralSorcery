@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.screen.base;
 import hellfirepvp.astralsorcery.common.util.tile.NamedInventoryTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,8 +37,11 @@ public class TileEntityScreen<T extends TileEntity & NamedInventoryTile> extends
     public void tick() {
         super.tick();
 
-        if (tile.isRemoved() || tile.getWorld().getDimension().getType() != Minecraft.getInstance().world.getDimension().getType()) {
-            this.onClose();
+        World clWorld = Minecraft.getInstance().world;
+        if (tile.isRemoved() ||
+                clWorld == null ||
+                !clWorld.getDimensionKey().equals(tile.getWorld().getDimensionKey())) {
+            this.closeScreen();
         }
     }
 }

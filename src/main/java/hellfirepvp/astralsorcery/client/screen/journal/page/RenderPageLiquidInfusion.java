@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
@@ -37,7 +38,7 @@ import javax.annotation.Nullable;
  */
 public class RenderPageLiquidInfusion extends RenderPageRecipeTemplate {
 
-    private LiquidInfusion recipe;
+    private final LiquidInfusion recipe;
 
     public RenderPageLiquidInfusion(@Nullable ResearchNode node, int nodePage, LiquidInfusion recipe) {
         super(node, nodePage);
@@ -45,40 +46,41 @@ public class RenderPageLiquidInfusion extends RenderPageRecipeTemplate {
     }
 
     @Override
-    public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
+    public void render(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
         this.clearFrameRectangles();
 
-        this.renderRecipeGrid(offsetX, offsetY, zLevel, TexturesAS.TEX_GUI_BOOK_GRID_INFUSION);
-        this.renderExpectedItemStackOutput(offsetX + 78, offsetY + 25, zLevel, 1.4F, this.recipe.getOutput(ItemStack.EMPTY));
-        this.renderInfoStar(offsetX, offsetY, zLevel, pTicks);
+        this.renderRecipeGrid(renderStack, x, y, z, TexturesAS.TEX_GUI_BOOK_GRID_INFUSION);
+        this.renderExpectedItemStackOutput(renderStack, x + 78, y + 25, z, 1.4F, this.recipe.getOutput(ItemStack.EMPTY));
+        this.renderInfoStar(renderStack, x, y, z, pTicks);
 
-        float renderX = offsetX + 80;
-        float renderY = offsetY + 128;
-        this.renderItemStack(renderX, renderY + 15, zLevel, 1.2F, new ItemStack(BlocksAS.INFUSER));
-        this.renderExpectedIngredientInput(renderX, renderY, zLevel, 1.2F, 0, this.recipe.getItemInput());
+        float renderX = x + 80;
+        float renderY = y + 128;
+        this.renderItemStack(renderStack, renderX, renderY + 15, z, 1.2F, new ItemStack(BlocksAS.INFUSER));
+        this.renderExpectedIngredientInput(renderStack, renderX, renderY, z, 1.2F, 0, this.recipe.getItemInput());
 
         BlockAtlasTexture.getInstance().bindTexture();
         TextureAtlasSprite tas = RenderingUtils.getParticleTexture(new FluidStack(this.recipe.getLiquidInput(), FluidAttributes.BUCKET_VOLUME));
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 1, 0);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 2, 0);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 3, 0);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 1, 4);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 2, 4);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 3, 4);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 0, 1);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 0, 2);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 0, 3);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 4, 1);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 4, 2);
-            this.renderLiquidInput(buf, offsetX, offsetY, zLevel, tas, 4, 3);
+            renderStack.push();
+            renderStack.translate(x, y, z);
+            this.renderLiquidInput(buf, renderStack, tas, 1, 0);
+            this.renderLiquidInput(buf, renderStack, tas, 2, 0);
+            this.renderLiquidInput(buf, renderStack, tas, 3, 0);
+            this.renderLiquidInput(buf, renderStack, tas, 1, 4);
+            this.renderLiquidInput(buf, renderStack, tas, 2, 4);
+            this.renderLiquidInput(buf, renderStack, tas, 3, 4);
+            this.renderLiquidInput(buf, renderStack, tas, 0, 1);
+            this.renderLiquidInput(buf, renderStack, tas, 0, 2);
+            this.renderLiquidInput(buf, renderStack, tas, 0, 3);
+            this.renderLiquidInput(buf, renderStack, tas, 4, 1);
+            this.renderLiquidInput(buf, renderStack, tas, 4, 2);
+            this.renderLiquidInput(buf, renderStack, tas, 4, 3);
+            renderStack.pop();
         });
     }
 
-    private void renderLiquidInput(BufferBuilder buf, float offsetX, float offsetY, float zLevel, TextureAtlasSprite tas, int x, int y) {
-        float liquidX = offsetX + 28;
-        float liquidY = offsetY + 76;
-        RenderingGuiUtils.rect(buf, liquidX + x * 25.15F, liquidY + y * 25.15F, zLevel, 22.3F, 22.3F)
+    private void renderLiquidInput(BufferBuilder buf, MatrixStack renderStack, TextureAtlasSprite tas, int x, int y) {
+        RenderingGuiUtils.rect(buf, renderStack, 28 + x * 25.15F, 76 + y * 25.15F, 0, 22.3F, 22.3F)
                 .tex(tas)
                 .draw();
     }
@@ -89,9 +91,9 @@ public class RenderPageLiquidInfusion extends RenderPageRecipeTemplate {
     }
 
     @Override
-    public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        this.renderHoverTooltips(mouseX, mouseY, zLevel, this.recipe.getId());
-        this.renderInfoStarTooltips(offsetX, offsetY, zLevel, mouseX, mouseY, (toolTip) -> {
+    public void postRender(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
+        this.renderHoverTooltips(renderStack, mouseX, mouseY, z, this.recipe.getId());
+        this.renderInfoStarTooltips(renderStack, x, y, z, mouseX, mouseY, (toolTip) -> {
             toolTip.add(new TranslationTextComponent("astralsorcery.journal.recipe.infusion.liquid",
                     this.recipe.getLiquidInput().getAttributes().getDisplayName(new FluidStack(this.recipe.getLiquidInput(), FluidAttributes.BUCKET_VOLUME))));
             toolTip.add(new TranslationTextComponent("astralsorcery.journal.recipe.infusion.chance.format",

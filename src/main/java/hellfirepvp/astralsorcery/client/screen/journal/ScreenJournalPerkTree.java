@@ -78,8 +78,8 @@ import java.util.Map;
  */
 public class ScreenJournalPerkTree extends ScreenJournal {
 
-    private static Rectangle rectSealBox = new Rectangle(29, 16, 16, 16);
-    private static Rectangle rectSearchTextEntry = new Rectangle(300, 16, 88, 15);
+    private static final Rectangle rectSealBox = new Rectangle(29, 16, 16, 16);
+    private static final Rectangle rectSearchTextEntry = new Rectangle(300, 16, 88, 15);
 
     private static Long lastPreparedBuffer = null;
     private static BatchPerkContext drawBuffer;
@@ -99,16 +99,16 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private int guiOffsetX, guiOffsetY;
     public boolean expectReinit = false;
 
-    private Map<AbstractPerk, Rectangle.Float> thisFramePerks = Maps.newHashMap();
-    private Map<AbstractPerk, Long> unlockEffects = Maps.newHashMap();
-    private Map<AbstractPerk, Long> breakEffects = Maps.newHashMap();
+    private final Map<AbstractPerk, Rectangle.Float> thisFramePerks = Maps.newHashMap();
+    private final Map<AbstractPerk, Long> unlockEffects = Maps.newHashMap();
+    private final Map<AbstractPerk, Long> breakEffects = Maps.newHashMap();
 
-    private ScreenTextEntry searchTextEntry = new ScreenTextEntry();
-    private List<AbstractPerk> searchMatches = Lists.newArrayList();
+    private final ScreenTextEntry searchTextEntry = new ScreenTextEntry();
+    private final List<AbstractPerk> searchMatches = Lists.newArrayList();
 
     private GemSlotPerk socketMenu = null;
     private Rectangle.Float rSocketMenu = null;
-    private Map<Rectangle.Float, Integer> slotsSocketMenu = Maps.newHashMap();
+    private final Map<Rectangle.Float, Integer> slotsSocketMenu = Maps.newHashMap();
     private Rectangle rStatStar = null;
 
     private ItemStack mouseSealStack = ItemStack.EMPTY;
@@ -224,7 +224,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         this.setBlitOffset(0);
 
         if (!this.mouseSealStack.isEmpty()) {
-            RenderingUtils.renderItemStack(this.itemRenderer, this.mouseSealStack, mouseX - 8, mouseY - 8, null);
+            RenderingUtils.renderItemStackGUI(this.itemRenderer, this.mouseSealStack, mouseX - 8, mouseY - 8, null);
         }
     }
 
@@ -258,7 +258,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         RenderSystem.disableBlend();
 
         if (!this.foundSeals.isEmpty()) {
-            RenderingUtils.renderItemStack(this.itemRenderer, this.foundSeals, guiLeft + rectSealBox.x, guiTop + rectSealBox.y, null);
+            RenderingUtils.renderItemStackGUI(this.itemRenderer, this.foundSeals, guiLeft + rectSealBox.x, guiTop + rectSealBox.y, null);
         }
     }
 
@@ -290,7 +290,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         if (!this.foundSeals.isEmpty() && rectSealBox.contains(mouseX - guiLeft, mouseY - guiTop)) {
             List<ITextComponent> toolTip = this.foundSeals.getTooltip(Minecraft.getInstance().player,
                     Minecraft.getInstance().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
-            toolTip.add(new StringTextComponent(""));
+            toolTip.add(StringTextComponent.EMPTY);
             toolTip.add(new TranslationTextComponent("perk.info.astralsorcery.sealed.usage").applyTextStyle(TextFormatting.GRAY));
             RenderingDrawUtils.renderBlueTooltipComponents(mouseX, mouseY, this.getGuiZLevel(), toolTip, font, false);
         } else {
@@ -332,7 +332,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                         }
                     }
                     if (Minecraft.getInstance().gameSettings.showDebugInfo) {
-                        toolTip.add(new StringTextComponent(""));
+                        toolTip.add(StringTextComponent.EMPTY);
                         toolTip.add(new StringTextComponent(perk.getRegistryName().toString()).applyTextStyle(TextFormatting.GRAY));
                         toolTip.add(new TranslationTextComponent("astralsorcery.misc.ctrlcopy").applyTextStyle(TextFormatting.GRAY));
                     }
@@ -409,7 +409,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 RenderSystem.pushMatrix();
                 RenderSystem.translated(offsetX + addedX + 1, offsetY + addedY + 1, 0);
                 RenderSystem.scaled(scale, scale, scale);
-                RenderingUtils.renderItemStack(this.itemRenderer, stack, 0, 0, null);
+                RenderingUtils.renderItemStackGUI(this.itemRenderer, stack, 0, 0, null);
                 RenderSystem.popMatrix();
 
                 slotsSocketMenu.put(r, slotId);

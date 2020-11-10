@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import net.minecraft.item.ItemStack;
@@ -66,21 +67,21 @@ public class RenderPageRecipe extends RenderPageRecipeTemplate {
     }
 
     @Override
-    public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
+    public void render(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
         this.clearFrameRectangles();
 
-        this.renderRecipeGrid(offsetX, offsetY, zLevel, TexturesAS.TEX_GUI_BOOK_GRID_T1);
-        this.renderExpectedItemStackOutput(offsetX + 78, offsetY + 25, zLevel, 1.4F, this.output);
+        this.renderRecipeGrid(renderStack, x, y, z, TexturesAS.TEX_GUI_BOOK_GRID_T1);
+        this.renderExpectedItemStackOutput(renderStack, x + 78, y + 25, z, 1.4F, this.output);
 
-        float recipeX = offsetX + 55;
-        float recipeY = offsetY + 103;
+        float recipeX = x + 55;
+        float recipeY = y + 103;
         for (int xx = 0; xx < 3; xx++) {
             for (int yy = 0; yy < 3; yy++) {
                 int slot = xx + yy * 3;
 
                 float renderX = recipeX + 25 * xx;
                 float renderY = recipeY + 25 * yy;
-                this.renderExpectedIngredientInput(renderX, renderY, zLevel, 1.1F, slot * 20, this.inputs.get(slot));
+                this.renderExpectedIngredientInput(renderStack, renderX, renderY, z, 1.1F, slot * 20, this.inputs.get(slot));
             }
         }
     }
@@ -91,7 +92,7 @@ public class RenderPageRecipe extends RenderPageRecipeTemplate {
     }
 
     @Override
-    public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        this.renderHoverTooltips(mouseX, mouseY, zLevel, this.recipeId);
+    public void postRender(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
+        this.renderHoverTooltips(renderStack, mouseX, mouseY, z, this.recipeId);
     }
 }

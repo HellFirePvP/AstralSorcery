@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.screen.journal;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
@@ -21,8 +22,8 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
@@ -65,22 +66,22 @@ public class ScreenJournal extends WidthHeightScreen {
         return true;
     }
 
-    protected void drawDefault(AbstractRenderableTexture texture, int mouseX, int mouseY) {
+    protected void drawDefault(MatrixStack renderStack, AbstractRenderableTexture texture, int mouseX, int mouseY) {
         this.setBlitOffset(100);
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
-        drawWHRect(texture);
+        drawWHRect(renderStack, texture);
         RenderSystem.disableBlend();
 
-        drawBookmarks(mouseX, mouseY);
+        drawBookmarks(renderStack, mouseX, mouseY);
         this.setBlitOffset(0);
     }
 
-    private void drawBookmarks(int mouseX, int mouseY) {
+    private void drawBookmarks(MatrixStack renderStack, int mouseX, int mouseY) {
         drawnBookmarks.clear();
 
-        float bookmarkWidth  = 67;
-        float bookmarkHeight = 15;
+        int bookmarkWidth  = 67;
+        int bookmarkHeight = 15;
         float bookmarkGap    = 18;
 
         float offsetX = guiLeft + guiWidth - 17.25F;
@@ -91,7 +92,7 @@ public class ScreenJournal extends WidthHeightScreen {
         for (BookmarkProvider bookmarkProvider : bookmarks) {
             if (bookmarkProvider.canSee()) {
                 Rectangle r = drawBookmark(
-                        offsetX, offsetY,
+                        renderStack, offsetX, offsetY,
                         bookmarkWidth, bookmarkHeight,
                         bookmarkWidth + (bookmarkIndex == bookmarkProvider.getIndex() ? 0 : 5),
                         this.getGuiZLevel(),
@@ -103,8 +104,9 @@ public class ScreenJournal extends WidthHeightScreen {
         }
     }
 
-    private Rectangle drawBookmark(float offsetX, float offsetY, float width, float height, float mouseOverWidth,
-                                   float zLevel, String title, int titleRGBColor, int mouseX, int mouseY,
+    private Rectangle drawBookmark(MatrixStack renderStack,
+                                   float offsetX, float offsetY, int width, int height, int mouseOverWidth,
+                                   float zLevel, IFormattableTextComponent title, int titleRGBColor, int mouseX, int mouseY,
                                    AbstractRenderableTexture texture, AbstractRenderableTexture textureStretched) {
         texture.bindTexture();
 
@@ -119,17 +121,17 @@ public class ScreenJournal extends WidthHeightScreen {
 
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
-        float actualWidth = width;
+        int actualWidth = width;
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, offsetX, offsetY, zLevel, actualWidth, height).draw();
+            RenderingGuiUtils.rect(buf, renderStack, offsetX, offsetY, zLevel, actualWidth, height).draw();
         });
         RenderSystem.disableBlend();
 
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(offsetX + 2, offsetY + 4, zLevel + 50);
-        RenderSystem.scaled(0.7, 0.7, 0.7);
-        RenderingDrawUtils.renderStringAtCurrentPos(null, I18n.format(title), titleRGBColor);
-        RenderSystem.popMatrix();
+        renderStack.push();
+        renderStack.translate(offsetX + 2, offsetY + 4, zLevel + 50);
+        renderStack.scale(0.7F, 0.7F, 0.7F);
+        RenderingDrawUtils.renderStringAt(null, renderStack, title, titleRGBColor);
+        renderStack.pop();
         return r;
     }
 

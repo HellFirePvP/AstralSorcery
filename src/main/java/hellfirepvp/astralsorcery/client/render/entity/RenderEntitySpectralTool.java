@@ -51,7 +51,7 @@ public class RenderEntitySpectralTool extends EntityRenderer<EntitySpectralTool>
             renderStack.rotate(Vector3f.ZP.rotationDegrees(270));
         }
 
-        RenderingUtils.renderTranslucentItemStackModel(stack, renderStack, ColorsAS.SPECTRAL_TOOL, Blending.CONSTANT_ALPHA, 63);
+        RenderingUtils.renderTranslucentItemStackModelGround(stack, renderStack, ColorsAS.SPECTRAL_TOOL, Blending.CONSTANT_ALPHA, 63);
 
         renderStack.pop();
     }

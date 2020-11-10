@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.container;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
@@ -52,17 +53,17 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack renderStack, int mouseX, int mouse) {
         SimpleAltarRecipe recipe = this.findRecipe(false);
         if (recipe != null) {
             ItemStack out = recipe.getOutputForRender(this.getContainer().getTileEntity().getInventory());
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(190, 35, 0);
-            RenderSystem.scaled(2.5, 2.5, 1);
+            renderStack.push();
+            renderStack.translate(190, 35, 0);
+            renderStack.scale(2.5F, 2.5F, 1F);
 
-            RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), out, 0, 0, null);
+            RenderingUtils.renderItemStackGUI(renderStack, out, null);
 
-            RenderSystem.popMatrix();
+            renderStack.pop();
         }
 
         RenderSystem.enableBlend();
@@ -80,7 +81,7 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
             float brightness = 0.3F + (RenderingConstellationUtils.stdFlicker(ClientScheduler.getClientTick(), pTicks, 10 + rand.nextInt(20))) * 0.6F;
 
             RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-                RenderingGuiUtils.rect(buf, 15 + x, 39 + y, this.getBlitOffset(), 5, 5)
+                RenderingGuiUtils.rect(buf, renderStack, 15 + x, 39 + y, this.getBlitOffset(), 5, 5)
                         .color(brightness, brightness, brightness, brightness)
                         .draw();
             });
@@ -91,7 +92,7 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
         if (c != null && altar.hasMultiblock() && ResearchHelper.getClientProgress().hasConstellationDiscovered(c)) {
             rand.setSeed(0x61FF25A5B7C24109L);
 
-            RenderingConstellationUtils.renderConstellationIntoGUI(c.getConstellationColor(), c,
+            RenderingConstellationUtils.renderConstellationIntoGUI(c.getConstellationColor(), c, renderStack,
                     16, 41, this.getBlitOffset(),
                     58, 58,
                     2, () -> 0.2F + 0.8F * RenderingConstellationUtils.conCFlicker(Minecraft.getInstance().world.getDayTime(), pTicks, 5 + rand.nextInt(5)),
@@ -103,7 +104,7 @@ public class ScreenContainerAltarRadiance extends ScreenContainerAltar<Container
     }
 
     @Override
-    public void renderGuiBackground(float partialTicks, int mouseX, int mouseY) {
-        this.renderStarlightBar(11, 104, 232, 10);
+    public void renderGuiBackground(MatrixStack renderStack, float partialTicks, int mouseX, int mouseY) {
+        this.renderStarlightBar(renderStack, 11, 104, 232, 10);
     }
 }

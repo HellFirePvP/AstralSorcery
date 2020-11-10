@@ -30,7 +30,6 @@ import net.minecraft.util.math.vector.Matrix3f;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.LanguageMap;
 import net.minecraft.util.text.StringTextComponent;
@@ -145,30 +144,36 @@ public class RenderingDrawUtils {
         vb.pos(matr, (float) offset.getX(), (float) offset.getY(), 0).tex(0, 0).endVertex();
     }
 
-    public static void renderBlueTooltipString(float x, float y, float zLevel, List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+    public static void renderBlueTooltipString(MatrixStack renderStack, float x, float y, float zLevel,
+                                               List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
         List<Tuple<ItemStack, ITextProperties>> stackTooltip = MapStream.ofValues(tooltipData, t -> ItemStack.EMPTY)
                 .mapValue(tip -> (ITextProperties) new StringTextComponent(tip))
                 .toTupleList();
-        renderBlueTooltip(x, y, zLevel, stackTooltip, fontRenderer, isFirstLineHeadline);
+        renderBlueTooltip(renderStack, x, y, zLevel, stackTooltip, fontRenderer, isFirstLineHeadline);
     }
 
-    public static void renderBlueTooltipComponents(float x, float y, float zLevel, List<ITextProperties> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+    public static void renderBlueTooltipComponents(MatrixStack renderStack, float x, float y, float zLevel,
+                                                   List<ITextProperties> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
         List<Tuple<ItemStack, ITextProperties>> stackTooltip = MapStream.ofValues(tooltipData, t -> ItemStack.EMPTY).toTupleList();
-        renderBlueTooltip(x, y, zLevel, stackTooltip, fontRenderer, isFirstLineHeadline);
+        renderBlueTooltip(renderStack, x, y, zLevel, stackTooltip, fontRenderer, isFirstLineHeadline);
     }
 
-    public static void renderBlueTooltip(float x, float y, float zLevel, List<Tuple<ItemStack, ITextProperties>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
-        renderTooltip(x, y, zLevel, tooltipData, 0xFF000027, 0xFF000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
+    public static void renderBlueTooltip(MatrixStack renderStack, float x, float y, float zLevel,
+                                         List<Tuple<ItemStack, ITextProperties>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+        renderTooltip(renderStack, x, y, zLevel, tooltipData, fontRenderer, isFirstLineHeadline, 0xFF000027, 0xFF000044, Color.WHITE);
     }
 
-    public static void renderBlueStackTooltip(float x, float y, float zLevel, List<Tuple<ItemStack, String>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+    public static void renderBlueStackTooltip(MatrixStack renderStack, float x, float y, float zLevel,
+                                              List<Tuple<ItemStack, String>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
         List<Tuple<ItemStack, ITextProperties>> stackTooltip = MapStream.of(tooltipData)
                 .mapValue(str -> (ITextProperties) new StringTextComponent(str))
                 .toTupleList();
-        renderTooltip(x, y, zLevel, stackTooltip, 0xFF000027, 0xFF000044, Color.WHITE, fontRenderer, isFirstLineHeadline);
+        renderTooltip(renderStack, x, y, zLevel, stackTooltip, fontRenderer, isFirstLineHeadline, 0xFF000027, 0xFF000044, Color.WHITE);
     }
 
-    public static void renderTooltip(float x, float y, float zLevel, List<Tuple<ItemStack, ITextProperties>> tooltipData, int color, int colorFade, Color strColor, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
+    public static void renderTooltip(MatrixStack renderStack, float x, float y, float zLevel,
+                                     List<Tuple<ItemStack, ITextProperties>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline,
+                                     int color, int colorFade, Color strColor) {
         int stackBoxSize = 18;
 
         if (!tooltipData.isEmpty()) {
@@ -245,14 +250,17 @@ public class RenderingDrawUtils {
 
             int offset = anyItemFound ? stackBoxSize : 0;
 
-            MatrixStack renderStack = new MatrixStack();
+            renderStack.push();
             renderStack.translate(pX, pY, 0);
             boolean first = true;
             for (Tuple<ItemStack, List<IReorderingProcessor>> toolTip : lengthLimitedToolTip) {
                 int minYShift = 10;
                 if (!toolTip.getA().isEmpty()) {
-                    //TODO string/item rendering changes
-                    RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), toolTip.getA(), Math.round(pX), Math.round(pY), null);
+                    renderStack.push();
+                    renderStack.translate(0, 0, zLevel);
+                    RenderingUtils.renderItemStackGUI(renderStack, toolTip.getA(), null);
+                    renderStack.pop();
+
                     minYShift = stackBoxSize;
                     renderStack.translate(0, 2, 0);
                 }
@@ -277,6 +285,7 @@ public class RenderingDrawUtils {
                 }
                 first = false;
             }
+            renderStack.pop();
         }
     }
 

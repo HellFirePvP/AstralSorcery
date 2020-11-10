@@ -236,10 +236,10 @@ public class AbstractPerk implements ModifierSource {
                 toolTip.add(new TranslationTextComponent(this.unlocalizedKey + ".desc." + count));
                 count++;
             }
-            toolTip.add(new StringTextComponent(""));
+            toolTip.add(StringTextComponent.EMPTY);
         } else if (I18n.hasKey(this.unlocalizedKey + ".desc")) {
             toolTip.add(new TranslationTextComponent(this.unlocalizedKey + ".desc"));
-            toolTip.add(new StringTextComponent(""));
+            toolTip.add(StringTextComponent.EMPTY);
         }
         return toolTip;
     }
@@ -265,7 +265,7 @@ public class AbstractPerk implements ModifierSource {
             int prevLength = tooltipCache.size();
             boolean shouldAdd = addLocalizedTooltip(tooltipCache);
             if (shouldAdd && prevLength != tooltipCache.size()) {
-                tooltipCache.add(new StringTextComponent(""));
+                tooltipCache.add(StringTextComponent.EMPTY);
             }
             tooltipCache.addAll(this.getDescription());
         } else {

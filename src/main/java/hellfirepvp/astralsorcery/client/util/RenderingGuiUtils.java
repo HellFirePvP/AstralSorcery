@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
@@ -33,12 +34,6 @@ public class RenderingGuiUtils {
     private static final MatrixStack EMPTY = new MatrixStack();
 
     @Deprecated
-    public static void drawTexturedRect(float offsetX, float offsetY, float zLevel, float width, float height, AbstractRenderableTexture tex) {
-        Tuple<Float, Float> uv = tex.getUVOffset();
-        drawTexturedRect(offsetX, offsetY, zLevel, width, height, uv.getA(), uv.getB(), tex.getUWidth(), tex.getVWidth());
-    }
-
-    @Deprecated
     public static void drawTexturedRectAtCurrentPos(float width, float height, float zLevel, float uFrom, float vFrom, float uWidth, float vWidth) {
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             rect(buf, 0, 0, zLevel, width, height)
@@ -53,51 +48,63 @@ public class RenderingGuiUtils {
     }
 
     @Deprecated
-    public static void drawRect(float offsetX, float offsetY, float zLevel, int width, int height) {
+    public static void drawRect(float offsetX, float offsetY, float zLevel, float width, float height) {
+        drawRect(new MatrixStack(), offsetX, offsetY, zLevel, width, height);
+    }
+
+    public static void drawRect(MatrixStack renderStack, float offsetX, float offsetY, float zLevel, float width, float height) {
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            rect(buf, offsetX, offsetY, zLevel, width, height)
+            rect(buf, renderStack, offsetX, offsetY, zLevel, width, height)
                     .draw();
         });
     }
 
+    public static void drawTexturedRect(MatrixStack renderStack, float offsetX, float offsetY, float zLevel, float width, float height, AbstractRenderableTexture tex) {
+        Tuple<Float, Float> uv = tex.getUVOffset();
+        drawTexturedRect(renderStack, offsetX, offsetY, zLevel, width, height, uv.getA(), uv.getB(), tex.getUWidth(), tex.getVWidth());
+    }
+
     @Deprecated
     public static void drawTexturedRect(float offsetX, float offsetY, float zLevel, float width, float height, float uFrom, float vFrom, float uWidth, float vWidth) {
+        drawTexturedRect(EMPTY, offsetX, offsetY, zLevel, width, height, uFrom, vFrom, uWidth, vWidth);
+    }
+
+    public static void drawTexturedRect(MatrixStack renderStack, float width, float height, float uFrom, float vFrom, float uWidth, float vWidth) {
+        drawTexturedRect(renderStack, 0, 0, 0, width, height, uFrom, vFrom, uWidth, vWidth);
+    }
+
+    public static void drawTexturedRect(MatrixStack renderStack, float offsetX, float offsetY, float zLevel, float width, float height, float uFrom, float vFrom, float uWidth, float vWidth) {
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            rect(buf, offsetX, offsetY, zLevel, width, height)
+            rect(buf, renderStack, offsetX, offsetY, zLevel, width, height)
                     .tex(uFrom, vFrom, uWidth, vWidth)
                     .draw();
         });
     }
 
     @Deprecated
-    public static DrawBuilder rect(BufferBuilder buf, WidthHeightScreen screen) {
+    public static DrawBuilder rect(IVertexBuilder buf, WidthHeightScreen screen) {
         return rect(buf, screen.getGuiLeft(), screen.getGuiTop(), screen.getGuiZLevel(), screen.getGuiWidth(), screen.getGuiHeight());
     }
 
     @Deprecated
-    public static DrawBuilder rect(BufferBuilder buf, float offsetX, float offsetY, float offsetZ, float width, float height) {
+    public static DrawBuilder rect(IVertexBuilder buf, float offsetX, float offsetY, float offsetZ, float width, float height) {
         return rect(buf, EMPTY, offsetX, offsetY, offsetZ, width, height);
     }
 
-    @Deprecated
-    public static DrawBuilder rect(BufferBuilder buf, MatrixStack renderStack, float offsetX, float offsetY, float offsetZ, float width, float height) {
+    public static DrawBuilder rect(IVertexBuilder buf, MatrixStack renderStack, float offsetX, float offsetY, float offsetZ, float width, float height) {
         return new DrawBuilder(buf, renderStack, offsetX, offsetY, offsetZ, width, height);
-    }
-
-    public static DrawBuilder rect(BufferBuilder buf, MatrixStack renderStack, float width, float height) {
-        return new DrawBuilder(buf, renderStack, 0, 0, 0, width, height);
     }
 
     public static class DrawBuilder {
 
-        private final BufferBuilder buf;
+        private final IVertexBuilder buf;
         private final MatrixStack renderStack;
         private float offsetX, offsetY, offsetZ;
         private float width, height;
         private float u = 0F, v = 0F, uWidth = 1F, vWidth = 1F;
         private Color color = Color.WHITE;
 
-        private DrawBuilder(BufferBuilder buf, MatrixStack renderStack, float offsetX, float offsetY, float offsetZ, float width, float height) {
+        private DrawBuilder(IVertexBuilder buf, MatrixStack renderStack, float offsetX, float offsetY, float offsetZ, float width, float height) {
             this.buf = buf;
             this.renderStack = renderStack;
             this.offsetX = offsetX;

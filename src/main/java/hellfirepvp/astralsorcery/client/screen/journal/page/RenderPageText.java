@@ -8,10 +8,12 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.page;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.text.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +28,7 @@ import java.util.List;
 public class RenderPageText extends RenderablePage {
 
     private final FontRenderer fontRenderer;
-    private List<String> localizedText;
+    private final List<IReorderingProcessor> localizedText;
 
     public RenderPageText(String unlocalized) {
         this(RenderablePage.getFontRenderer(), unlocalized);
@@ -38,21 +40,24 @@ public class RenderPageText extends RenderablePage {
         this.localizedText = buildLines(unlocalized);
     }
 
-    private List<String> buildLines(String unlocText) {
-        String text = I18n.format(unlocText);
-        List<String> lines = new LinkedList<>();
+    private List<IReorderingProcessor> buildLines(String unlocText) {
+        String text = LanguageMap.getInstance().func_230503_a_(unlocText);
+        List<IReorderingProcessor> lines = new LinkedList<>();
         for (String segment : text.split("<NL>")) {
-            lines.addAll(fontRenderer.listFormattedStringToWidth(segment, JournalPage.DEFAULT_WIDTH));
-            lines.add("");
+            lines.addAll(fontRenderer.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
+            lines.add(IReorderingProcessor.field_242232_a);
         }
         return lines;
     }
 
     @Override
-    public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        for (int i = 0; i < this.localizedText.size(); i++) {
-            String line = this.localizedText.get(i);
-            RenderingDrawUtils.renderStringAt(offsetX, offsetY + (i * 10), zLevel, this.fontRenderer, line, 0x00CCCCCC, false);
+    public void render(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
+        renderStack.push();
+        renderStack.translate(x, y, z);
+        for (IReorderingProcessor text : this.localizedText) {
+            RenderingDrawUtils.renderStringAt(text, renderStack, this.fontRenderer, 0x00CCCCCC, false);
+            renderStack.translate(0, 10, 0);
         }
+        renderStack.pop();
     }
 }

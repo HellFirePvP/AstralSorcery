@@ -54,8 +54,8 @@ public abstract class EffectCustomTexture extends Effect {
     @OnlyIn(Dist.CLIENT)
     public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, MatrixStack renderStack, int x, int y, float z) {
         float wh = 18;
-        //float offsetX = x + 6;
-        //float offsetY = y + 7;
+        float offsetX = x + 6;
+        float offsetY = y + 7;
         float red =   ((float) this.colorAsObj.getRed())   / 255F;
         float green = ((float) this.colorAsObj.getGreen()) / 255F;
         float blue =  ((float) this.colorAsObj.getBlue())  / 255F;
@@ -63,18 +63,13 @@ public abstract class EffectCustomTexture extends Effect {
         SpriteSheetResource ssr = getSpriteQuery().resolveSprite();
         ssr.bindTexture();
 
-        renderStack.push();
-        renderStack.translate(x + 6, y + 7, z);
-
         Tuple<Float, Float> uvTpl = ssr.getUVOffset(ClientScheduler.getClientTick());
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, renderStack, wh, wh)
+            RenderingGuiUtils.rect(buf, renderStack, offsetX, offsetY, z, wh, wh)
                     .color(red, green, blue, 1F)
                     .tex(uvTpl.getA(), uvTpl.getB(), ssr.getUWidth(), ssr.getVWidth())
                     .draw();
         });
-
-        renderStack.pop();
     }
 
     @Override
@@ -90,17 +85,12 @@ public abstract class EffectCustomTexture extends Effect {
         SpriteSheetResource ssr = getSpriteQuery().resolveSprite();
         ssr.bindTexture();
 
-        renderStack.push();
-        renderStack.translate(x + 3, y + 3, z);
-
         Tuple<Float, Float> uvTpl = ssr.getUVOffset(ClientScheduler.getClientTick());
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, renderStack, wh, wh)
+            RenderingGuiUtils.rect(buf, renderStack, offsetX, offsetY, z, wh, wh)
                     .color(red, green, blue, 1F)
                     .tex(uvTpl.getA(), uvTpl.getB(), ssr.getUWidth(), ssr.getVWidth())
                     .draw();
         });
-
-        renderStack.pop();
     }
 }

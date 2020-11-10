@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.screen.journal.overlay;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
@@ -28,7 +29,10 @@ import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaPerkAttributeTy
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -87,47 +91,48 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float pTicks) {
-        super.render(mouseX, mouseY, pTicks);
+    public void render(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
+        super.render(renderStack, mouseX, mouseY, pTicks);
 
-        int width = 275;
-        int height = 344;
+        float width = 275;
+        float height = 344;
 
         this.setBlitOffset(150);
         TexturesAS.TEX_GUI_PARCHMENT_BLANK.bindTexture();
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
-        RenderingGuiUtils.drawRect(guiLeft + guiWidth / 2 - width / 2, guiTop + guiHeight / 2 - height / 2, this.getGuiZLevel(), width, height);
+        RenderingGuiUtils.drawRect(renderStack, guiLeft + guiWidth / 2F - width / 2F, guiTop + guiHeight / 2F - height / 2F, this.getGuiZLevel(),
+                width, height);
         RenderSystem.disableBlend();
         this.setBlitOffset(0);
 
-        drawHeader();
-        drawPageText(mouseX, mouseY);
+        drawHeader(renderStack);
+        drawPageText(renderStack, mouseX, mouseY);
     }
 
-    private void drawHeader() {
-        String locTitle = I18n.format("perk.reader.astralsorcery.gui");
-        List<String> split = font.listFormattedStringToWidth(locTitle, MathHelper.floor(HEADER_WIDTH / 1.4));
+    private void drawHeader(MatrixStack renderStack) {
+        ITextProperties title = new TranslationTextComponent("perk.reader.astralsorcery.gui");
+        List<IReorderingProcessor> lines = font.trimStringToWidth(title, MathHelper.floor(HEADER_WIDTH / 1.4F));
         int step = 14;
+        float offsetTop = guiTop + 15 - (lines.size() * step) / 2F;
 
-        int offsetTop = guiTop + 15 - (split.size() * step) / 2;
+        renderStack.push();
+        renderStack.translate(0, offsetTop, 0);
 
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(0, offsetTop, 0);
-        for (int i = 0; i < split.size(); i++) {
-            String s = split.get(i);
+        for (int i = 0; i < lines.size(); i++) {
+            IReorderingProcessor line = lines.get(i);
+            float offsetLeft = width / 2F - (font.func_243245_a(line) * 1.4F) / 2F;
 
-            double offsetLeft = width / 2 - (font.getStringWidth(s) * 1.4) / 2;
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(offsetLeft, i * step, 0);
-            RenderSystem.scaled(1.4, 1.4, 1.4);
-            RenderingDrawUtils.renderStringAtCurrentPos(font, s, 0xEE333333);
-            RenderSystem.popMatrix();
+            renderStack.push();
+            renderStack.translate(offsetLeft, i * step, 0);
+            renderStack.scale(1.4F, 1.4F, 1F);
+            RenderingDrawUtils.renderStringAt(font, renderStack, line, 0xEE333333);
+            renderStack.pop();
         }
-        RenderSystem.popMatrix();
+        renderStack.pop();
     }
 
-    private void drawPageText(int mouseX, int mouseY) {
+    private void drawPageText(MatrixStack renderStack, int mouseX, int mouseY) {
         if (nameStrWidth == -1 || valueStrWidth == -1 || suffixStrWidth == -1) {
             buildDisplayWidth();
         }
@@ -137,35 +142,37 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         int offsetX = guiLeft + guiWidth / 2 - DEFAULT_WIDTH / 2;
         int line = 0;
         for (PerkStatistic stat : statistics) {
-            String statName = I18n.format(stat.getUnlocPerkTypeName());
-            List<String> split = font.listFormattedStringToWidth(statName, MathHelper.floor(HEADER_WIDTH / 1.5F));
-            int additionalLines = Math.max(split.size(), 0);
-            for (int i = 0; i < split.size(); i++) {
-                String statPart = split.get(i);
+            ITextProperties statName = new TranslationTextComponent(stat.getUnlocPerkTypeName());
+            List<IReorderingProcessor> statistics = font.trimStringToWidth(statName, MathHelper.floor(HEADER_WIDTH / 1.5F));
+            for (int i = 0; i < statistics.size(); i++) {
+                IReorderingProcessor statistic = statistics.get(i);
 
                 int drawX = offsetX;
                 if (i > 0) {
                     drawX += 10;
                 }
-                RenderingDrawUtils.renderStringAt(drawX, offsetY + ((line + i) * 10), this.getGuiZLevel(),
-                        this.font, statPart,
-                        0xEE333333, false);
+                renderStack.push();
+                renderStack.translate(drawX, offsetY + ((line + i) * 10), this.getGuiZLevel());
+                RenderingDrawUtils.renderStringAt(statistic, renderStack, font, 0xEE333333, false);
+                renderStack.pop();
             }
 
-            RenderingDrawUtils.renderStringAt(offsetX + nameStrWidth, offsetY + (line * 10), this.getGuiZLevel(),
-                    this.font, stat.getPerkValue(),
-                    0xEE333333, false);
+            renderStack.push();
+            renderStack.translate(offsetX + nameStrWidth, offsetY + (line * 10), this.getGuiZLevel());
+            RenderingDrawUtils.renderStringAt(new StringTextComponent(stat.getPerkValue()), renderStack, font, 0xEE333333, false);
+            renderStack.pop();
 
             int strLength = font.getStringWidth(stat.getPerkValue());
-            Rectangle rctValue = new Rectangle(offsetX + nameStrWidth, offsetY + (line * 10),
-                    strLength, 8);
+            Rectangle rctValue = new Rectangle(offsetX + nameStrWidth, offsetY + (line * 10), strLength, 8);
             valueStrMap.put(rctValue, stat);
 
-            line += additionalLines;
+            line += statistics.size();
             if (!stat.getSuffix().isEmpty()) {
-                RenderingDrawUtils.renderStringAt(offsetX + 25, offsetY + (line * 10), this.getGuiZLevel(),
-                        this.font, stat.getSuffix(),
-                        0xEE333333, false);
+                renderStack.push();
+                renderStack.translate(offsetX + 25, offsetY + (line * 10), this.getGuiZLevel());
+                RenderingDrawUtils.renderStringAt(new StringTextComponent(stat.getSuffix()), renderStack, font, 0xEE333333, false);
+                renderStack.pop();
+
                 line++;
             }
         }
@@ -173,12 +180,12 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         for (Rectangle rct : valueStrMap.keySet()) {
             if (rct.contains(mouseX, mouseY)) {
                 PerkStatistic stat = valueStrMap.get(rct);
-                drawCalculationDescription(rct.x + rct.width + 2, rct.y + 15, stat);
+                drawCalculationDescription(renderStack, rct.x + rct.width + 2, rct.y + 15, stat);
             }
         }
     }
 
-    private void drawCalculationDescription(int x, int y, PerkStatistic stat) {
+    private void drawCalculationDescription(MatrixStack renderStack, int x, int y, PerkStatistic stat) {
         PerkAttributeType type = stat.getType();
         PerkAttributeReader reader = type.getReader();
         if (reader == null) {
@@ -188,30 +195,30 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         PlayerEntity player = Minecraft.getInstance().player;
         PerkAttributeMap attrMap = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.CLIENT);
 
-        List<String> information = Lists.newArrayList();
-        information.add(I18n.format("perk.reader.astralsorcery.description.head",
+        List<ITextProperties> information = Lists.newArrayList();
+        information.add(new TranslationTextComponent("perk.reader.astralsorcery.description.head",
                 PerkAttributeReader.formatDecimal(reader.getDefaultValue(attrMap, player, LogicalSide.CLIENT))));
-        information.add(I18n.format("perk.reader.astralsorcery.description.addition",
+        information.add(new TranslationTextComponent("perk.reader.astralsorcery.description.addition",
                 PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, LogicalSide.CLIENT,
                         ModifierType.ADDITION) - 1)));
-        information.add(I18n.format("perk.reader.astralsorcery.description.increase",
+        information.add(new TranslationTextComponent("perk.reader.astralsorcery.description.increase",
                 PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, LogicalSide.CLIENT,
                         ModifierType.ADDED_MULTIPLY))));
-        information.add(I18n.format("perk.reader.astralsorcery.description.moreless",
+        information.add(new TranslationTextComponent("perk.reader.astralsorcery.description.moreless",
                 PerkAttributeReader.formatDecimal(reader.getModifierValueForMode(attrMap, player, LogicalSide.CLIENT,
                         ModifierType.STACKING_MULTIPLY))));
 
         if (!stat.getSuffix().isEmpty() || !stat.getPostProcessInfo().isEmpty()) {
-            information.add("");
+            information.add(StringTextComponent.EMPTY);
         }
         if (!stat.getSuffix().isEmpty()) {
-            information.add(stat.getSuffix());
+            information.add(new StringTextComponent(stat.getSuffix()));
         }
         if (!stat.getPostProcessInfo().isEmpty()) {
-            information.add(stat.getPostProcessInfo());
+            information.add(new StringTextComponent(stat.getPostProcessInfo()));
         }
 
-        RenderingDrawUtils.renderBlueTooltipString(x, y, this.getGuiZLevel(), information, this.font, false);
+        RenderingDrawUtils.renderBlueTooltipComponents(renderStack, x, y, this.getGuiZLevel(), information, this.font, false);
     }
 
     private void buildDisplayWidth() {
@@ -220,7 +227,8 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
         suffixStrWidth = -1;
 
         for (PerkStatistic stat : this.statistics) {
-            int nameWidth = Math.min(font.getStringWidth(I18n.format(stat.getUnlocPerkTypeName())), ((int) (HEADER_WIDTH / 1.5F)));
+            ITextProperties typeName = new TranslationTextComponent(stat.getUnlocPerkTypeName());
+            int nameWidth = Math.min(font.getStringPropertyWidth(typeName), ((int) (HEADER_WIDTH / 1.5F)));
             int valueWidth = font.getStringWidth(stat.getPerkValue());
             int suffixWidth = font.getStringWidth(stat.getSuffix());
 

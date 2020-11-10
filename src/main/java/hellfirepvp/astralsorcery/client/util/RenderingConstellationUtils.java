@@ -153,24 +153,29 @@ public class RenderingConstellationUtils {
         }
     }
 
-    public static Map<StarLocation, Rectangle.Float> renderConstellationIntoGUI(IConstellation c, float offsetX, float offsetY, float zLevel, float width, float height, double linebreadth, Supplier<Float> brightnessFn, boolean isKnown, boolean applyStarBrightness) {
+    public static Map<StarLocation, Rectangle.Float> renderConstellationIntoGUI(IConstellation c,
+                                                                                float offsetX, float offsetY, float zLevel,
+                                                                                float width, float height, double linebreadth,
+                                                                                Supplier<Float> brightnessFn,
+                                                                                boolean isKnown, boolean applyStarBrightness) {
         return renderConstellationIntoGUI(c.getTierRenderColor(), c, offsetX, offsetY, zLevel, width, height, linebreadth, brightnessFn, isKnown, applyStarBrightness);
     }
 
     @Deprecated
-    public static Map<StarLocation, Rectangle.Float> renderConstellationIntoGUI(Color col, IConstellation c, float offsetX, float offsetY, float zLevel, float width, float height, double linebreadth, Supplier<Float> brightnessFn, boolean isKnown, boolean applyStarBrightness) {
-        MatrixStack renderStack = new MatrixStack();
-        renderStack.translate(offsetX, offsetY, zLevel);
-        Map<StarLocation, Rectangle.Float> drawnStars = renderConstellationIntoGUI(col, c, renderStack, width, height, linebreadth, brightnessFn, isKnown, applyStarBrightness);
-
-        Map<StarLocation, Rectangle.Float> moved = new HashMap<>();
-        drawnStars.forEach((starLocation, rect) -> {
-            moved.put(starLocation, new Rectangle.Float(offsetX + rect.x, offsetY + rect.y, rect.width, rect.height));
-        });
-        return moved;
+    public static Map<StarLocation, Rectangle.Float> renderConstellationIntoGUI(Color col, IConstellation c,
+                                                                                float offsetX, float offsetY, float zLevel,
+                                                                                float width, float height, double linebreadth,
+                                                                                Supplier<Float> brightnessFn,
+                                                                                boolean isKnown, boolean applyStarBrightness) {
+        return renderConstellationIntoGUI(col, c, new MatrixStack(), offsetX, offsetY, zLevel, width, height, linebreadth, brightnessFn, isKnown, applyStarBrightness);
     }
 
-    public static Map<StarLocation, Rectangle.Float> renderConstellationIntoGUI(Color col, IConstellation c, MatrixStack renderStack, float width, float height, double linebreadth, Supplier<Float> brightnessFn, boolean isKnown, boolean applyStarBrightness) {
+    public static Map<StarLocation, Rectangle.Float> renderConstellationIntoGUI(Color col, IConstellation c, MatrixStack renderStack,
+                                                                                float offsetX, float offsetY, float zLevel,
+                                                                                float width, float height, double linebreadth,
+                                                                                Supplier<Float> brightnessFn,
+                                                                                boolean isKnown, boolean applyStarBrightness) {
+        Matrix4f offset = renderStack.getLast().getMatrix();
         float ulength = width / IConstellation.STAR_GRID_WIDTH_HEIGHT;
         float vlength = height / IConstellation.STAR_GRID_WIDTH_HEIGHT;
 
@@ -195,8 +200,8 @@ public class RenderingConstellationUtils {
                     for (StarConnection sc : c.getStarConnections()) {
                         int alpha = MathHelper.clamp((int) (brightnessFn.get() * brightness * 255F), 0, 255);
 
-                        Vector3 fromStar = new Vector3(sc.from.x * ulength, sc.from.y * vlength, 0);
-                        Vector3 toStar   = new Vector3(sc.to.x * ulength, sc.to.y * vlength, 0);
+                        Vector3 fromStar = new Vector3(offsetX + sc.from.x * ulength, offsetY + sc.from.y * vlength, zLevel);
+                        Vector3 toStar   = new Vector3(offsetX + sc.to.x   * ulength, offsetY + sc.to.y * vlength,   zLevel);
 
                         Vector3 dir = toStar.clone().subtract(fromStar);
                         Vector3 degLot = dir.clone().crossProduct(new Vector3(0, 0, 1)).normalize().multiply(linebreadth);
@@ -209,7 +214,7 @@ public class RenderingConstellationUtils {
                             int v = ((i + 2) & 2) >> 1;
 
                             Vector3 pos = vec00.clone().add(dir.clone().multiply(u)).add(vecV.clone().multiply(v));
-                            buf.pos(pos.getX(), pos.getY(), pos.getZ())
+                            buf.pos(offset, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ())
                                     .color(r, g, b, alpha)
                                     .tex(u, v)
                                     .endVertex();
@@ -229,14 +234,15 @@ public class RenderingConstellationUtils {
                 int starX = sl.x;
                 int starY = sl.y;
 
-                Vector3 starVec = new Vector3(starX * ulength - ulength, starY * vlength - vlength, 0);
+                Vector3 starVec = new Vector3(starX * ulength - ulength, starY * vlength - vlength, 0)
+                        .add(offsetX, offsetY, zLevel);
 
                 for (int i = 0; i < 4; i++) {
                     int u = ((i + 1) & 2) >> 1;
                     int v = ((i + 2) & 2) >> 1;
 
                     Vector3 pos = starVec.clone().addX(ulength * u * 2).addY(vlength * v * 2);
-                    buf.pos(pos.getX(), pos.getY(), pos.getZ())
+                    buf.pos(offset, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ())
                             .color(isKnown ? r : alpha,
                                     isKnown ? g : alpha,
                                     isKnown ? b : alpha,

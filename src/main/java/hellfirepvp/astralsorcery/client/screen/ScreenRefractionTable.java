@@ -158,7 +158,7 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
         RenderSystem.scaled(6, 6, 1);
         RenderSystem.disableDepthTest();
 
-        RenderingUtils.renderItemStack(this.itemRenderer, input, 0, 0, null);
+        RenderingUtils.renderItemStackGUI(this.itemRenderer, input, 0, 0, null);
 
         RenderSystem.enableDepthTest();
         RenderSystem.popMatrix();
@@ -274,7 +274,7 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
         ItemStack input = this.getTile().getInputStack();
         if (!input.isEmpty()) {
             Rectangle itemRct = new Rectangle(guiLeft + 111, guiTop + 8, 16, 16);
-            RenderingUtils.renderItemStack(itemRenderer, input, itemRct.x, itemRct.y, null);
+            RenderingUtils.renderItemStackGUI(itemRenderer, input, itemRct.x, itemRct.y, null);
             if (itemRct.contains(mouseX, mouseY)) {
                 FontRenderer custom = input.getItem().getFontRenderer(input);
                 if (custom != null) {
@@ -287,7 +287,7 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
         ItemStack glass = this.getTile().getGlassStack();
         if (!glass.isEmpty()) {
             Rectangle itemRct = new Rectangle(guiLeft + 129, guiTop + 8, 16, 16);
-            RenderingUtils.renderItemStack(itemRenderer, glass, itemRct.x, itemRct.y, null);
+            RenderingUtils.renderItemStackGUI(itemRenderer, glass, itemRct.x, itemRct.y, null);
             if (itemRct.contains(mouseX, mouseY)) {
                 FontRenderer custom = glass.getItem().getFontRenderer(glass);
                 if (custom != null) {

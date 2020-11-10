@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.container;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
@@ -39,22 +40,22 @@ public class ScreenContainerAltarConstellation extends ScreenContainerAltar<Cont
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack renderStack, int mouseX, int mouseY) {
         SimpleAltarRecipe recipe = this.findRecipe(false);
         if (recipe != null) {
             ItemStack out = recipe.getOutputForRender(this.getContainer().getTileEntity().getInventory());
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(190, 35, 0);
-            RenderSystem.scaled(2.5, 2.5, 1);
+            renderStack.push();
+            renderStack.translate(190, 35, 0);
+            renderStack.scale(2.5F, 2.5F, 1F);
 
-            RenderingUtils.renderItemStack(Minecraft.getInstance().getItemRenderer(), out, 0, 0, null);
+            RenderingUtils.renderItemStackGUI(renderStack, out, null);
 
-            RenderSystem.popMatrix();
+            renderStack.pop();
         }
     }
 
     @Override
-    public void renderGuiBackground(float partialTicks, int mouseX, int mouseY) {
-        this.renderStarlightBar(11, 104, 232, 10);
+    public void renderGuiBackground(MatrixStack renderStack, float partialTicks, int mouseX, int mouseY) {
+        this.renderStarlightBar(renderStack, 11, 104, 232, 10);
     }
 }

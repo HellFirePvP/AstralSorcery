@@ -38,8 +38,8 @@ import java.util.stream.Collectors;
  */
 public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
 
-    private BlockTransmutation recipe;
-    private List<ItemStack> inputOptions;
+    private final BlockTransmutation recipe;
+    private final List<ItemStack> inputOptions;
 
     public RenderPageBlockTransmutation(@Nullable ResearchNode node, int nodePage, BlockTransmutation blockTransmutation) {
         super(node, nodePage);
@@ -51,22 +51,22 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
     }
 
     @Override
-    public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
+    public void render(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
         this.clearFrameRectangles();
 
         RenderSystem.depthMask(false);
-        this.renderRecipeGrid(offsetX, offsetY, zLevel, TexturesAS.TEX_GUI_BOOK_GRID_TRANSMUTATION);
+        this.renderRecipeGrid(renderStack, x, y, z, TexturesAS.TEX_GUI_BOOK_GRID_TRANSMUTATION);
         RenderSystem.depthMask(true);
 
-        this.renderExpectedItemStackOutput(offsetX + 78, offsetY + 25, zLevel, 1.4F, this.recipe.getOutputDisplay());
+        this.renderExpectedItemStackOutput(renderStack, x + 78, y + 25, z, 1.4F, this.recipe.getOutputDisplay());
         if (this.recipe.getRequiredConstellation() != null) {
-            this.renderInfoStar(offsetX, offsetY, zLevel, pTicks);
-            this.renderRequiredConstellation(offsetX, offsetY, zLevel, this.recipe.getRequiredConstellation());
+            this.renderInfoStar(renderStack, x, y, z, pTicks);
+            this.renderRequiredConstellation(renderStack, x, y, z, this.recipe.getRequiredConstellation());
         }
 
-        float renderX = offsetX + 80;
-        float renderY = offsetY + 73;
-        this.renderExpectedIngredientInput(renderX, renderY + 80, zLevel, 1.2F, 0, this.inputOptions);
+        float renderX = x + 80;
+        float renderY = y + 73;
+        this.renderExpectedIngredientInput(renderStack, renderX, renderY + 80, z, 1.2F, 0, this.inputOptions);
 
         SpritesAS.SPR_LIGHTBEAM.bindTexture();
 
@@ -75,7 +75,7 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
         Blending.ADDITIVE_ALPHA.apply();
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, renderX - 15, renderY + 10, zLevel, 50, 120)
+            RenderingGuiUtils.rect(buf, renderStack, renderX - 15, renderY + 10, z, 50, 120)
                     .tex(SpritesAS.SPR_LIGHTBEAM)
                     .draw();
         });
@@ -86,15 +86,16 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
 
         RenderSystem.disableDepthTest();
 
-        MatrixStack renderStack = new MatrixStack();
-        renderStack.translate(renderX + 11, renderY + 11, zLevel);
+        renderStack.push();
+        renderStack.translate(renderX + 11, renderY + 11, z);
         renderStack.scale(40, 40, 0);
-
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR, buf -> {
             RenderingDrawUtils.renderLightRayFan(renderStack, (renderType) -> buf, ColorsAS.ROCK_CRYSTAL, getNodePage(), 9, 9, 20);
         });
+        renderStack.pop();
 
-        this.renderItemStack(renderX - 4, renderY - 4, zLevel, 1.75F, new ItemStack(BlocksAS.ROCK_COLLECTOR_CRYSTAL));
+        this.renderItemStack(renderStack, renderX - 4, renderY - 4, z, 1.75F, new ItemStack(BlocksAS.ROCK_COLLECTOR_CRYSTAL));
+
         RenderSystem.enableDepthTest();
     }
 
@@ -104,9 +105,9 @@ public class RenderPageBlockTransmutation extends RenderPageRecipeTemplate {
     }
 
     @Override
-    public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
-        this.renderHoverTooltips(mouseX, mouseY, zLevel, this.recipe.getId());
-        this.renderInfoStarTooltips(offsetX, offsetY, zLevel, mouseX, mouseY, (toolTip) -> {
+    public void postRender(MatrixStack renderStack, float x, float y, float z, float pTicks, float mouseX, float mouseY) {
+        this.renderHoverTooltips(renderStack, mouseX, mouseY, z, this.recipe.getId());
+        this.renderInfoStarTooltips(renderStack, x, y, z, mouseX, mouseY, (toolTip) -> {
             this.addConstellationInfoTooltip(this.recipe.getRequiredConstellation(), toolTip);
         });
     }

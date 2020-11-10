@@ -32,7 +32,7 @@ public interface PerkRender {
     @Nullable
     @OnlyIn(Dist.CLIENT)
     public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx,
-                                              AllocationStatus status, long spriteOffsetTick, float pTicks,
-                                              float x, float y, float zLevel, float scale);
+                                             AllocationStatus status, long spriteOffsetTick, float pTicks,
+                                             float x, float y, float zLevel, float scale);
 
 }
