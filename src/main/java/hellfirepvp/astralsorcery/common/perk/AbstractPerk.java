@@ -236,10 +236,10 @@ public class AbstractPerk implements ModifierSource {
                 toolTip.add(new TranslationTextComponent(this.unlocalizedKey + ".desc." + count));
                 count++;
             }
-            toolTip.add(StringTextComponent.EMPTY);
+            toolTip.add(new StringTextComponent(""));
         } else if (I18n.hasKey(this.unlocalizedKey + ".desc")) {
             toolTip.add(new TranslationTextComponent(this.unlocalizedKey + ".desc"));
-            toolTip.add(StringTextComponent.EMPTY);
+            toolTip.add(new StringTextComponent(""));
         }
         return toolTip;
     }
@@ -265,7 +265,7 @@ public class AbstractPerk implements ModifierSource {
             int prevLength = tooltipCache.size();
             boolean shouldAdd = addLocalizedTooltip(tooltipCache);
             if (shouldAdd && prevLength != tooltipCache.size()) {
-                tooltipCache.add(StringTextComponent.EMPTY);
+                tooltipCache.add(new StringTextComponent(""));
             }
             tooltipCache.addAll(this.getDescription());
         } else {
@@ -367,11 +367,11 @@ public class AbstractPerk implements ModifierSource {
 
     public static class PerkCategory {
 
-        private final String unlocName;
+        private final IFormattableTextComponent name;
         private final TextFormatting color;
 
         public PerkCategory(@Nonnull String unlocName, @Nonnull TextFormatting color) {
-            this.unlocName = unlocName;
+            this.name = new TranslationTextComponent("perk.category.astralsorcery." + unlocName + ".name");
             this.color = color;
         }
 
@@ -379,13 +379,8 @@ public class AbstractPerk implements ModifierSource {
             return color;
         }
 
-        public String getUnlocalizedName() {
-            return "perk.category.astralsorcery." + unlocName + ".name";
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public String getLocalizedName() {
-            return I18n.format(getUnlocalizedName());
+        public IFormattableTextComponent getName() {
+            return this.name;
         }
 
         @Override
@@ -393,12 +388,12 @@ public class AbstractPerk implements ModifierSource {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             PerkCategory that = (PerkCategory) o;
-            return Objects.equals(unlocName, that.unlocName);
+            return Objects.equals(name, that.name);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(unlocName);
+            return Objects.hash(name);
         }
     }
 }

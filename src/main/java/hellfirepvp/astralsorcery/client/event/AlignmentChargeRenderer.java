@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.event;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
@@ -71,6 +72,7 @@ public class AlignmentChargeRenderer implements ITickHandler {
             return;
         }
 
+        MatrixStack renderStack = event.getMatrixStack();
         MainWindow window = event.getWindow();
         int screenWidth = window.getScaledWidth();
         int screenHeight = window.getScaledHeight();
@@ -108,7 +110,7 @@ public class AlignmentChargeRenderer implements ITickHandler {
 
         SpritesAS.SPR_OVERLAY_CHARGE.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, offsetLeft, offsetTop, 10, width, 54)
+            RenderingGuiUtils.rect(buf, renderStack, offsetLeft, offsetTop, 10, width, 54)
                     .color(1F, 1F, 1F, this.alphaReveal)
                     .tex(uvColored.getA(), uvColored.getB() + 0.002F, uLengthCharge, SpritesAS.SPR_OVERLAY_CHARGE.getVWidth() - 0.002F)
                     .draw();
@@ -116,7 +118,7 @@ public class AlignmentChargeRenderer implements ITickHandler {
 
         SpritesAS.SPR_OVERLAY_CHARGE_COLORLESS.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, offsetLeft + width, offsetTop, 10, usageWidth, 54)
+            RenderingGuiUtils.rect(buf, renderStack, offsetLeft + width, offsetTop, 10, usageWidth, 54)
                     .color(usageColor.getRed(), usageColor.getGreen(), usageColor.getBlue(), (int) (this.alphaReveal * 255F))
                     .tex(uvColorless.getA() + uLengthCharge, uvColorless.getB() + 0.002F, uLengthUsage, SpritesAS.SPR_OVERLAY_CHARGE_COLORLESS.getVWidth() - 0.002F)
                     .draw();

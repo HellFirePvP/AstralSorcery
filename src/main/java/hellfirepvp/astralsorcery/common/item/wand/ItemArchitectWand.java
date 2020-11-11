@@ -131,9 +131,9 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean renderOverlay(ItemStack stack, float pTicks) {
+    public boolean renderOverlay(MatrixStack renderStack, ItemStack stack, float pTicks) {
         List<Tuple<ItemStack, Integer>> foundStacks = ItemBlockStorage.getInventoryMatchingItemStacks(Minecraft.getInstance().player, stack);
-        RenderingOverlayUtils.renderDefaultItemDisplay(foundStacks);
+        RenderingOverlayUtils.renderDefaultItemDisplay(renderStack, foundStacks);
         return true;
     }
 

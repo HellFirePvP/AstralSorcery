@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.screen;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
@@ -47,7 +48,7 @@ import java.util.*;
 public class ScreenHandTelescope extends ConstellationDiscoveryScreen<ConstellationDiscoveryScreen.DrawArea> {
 
     private static final int randomStars = 40;
-    private List<Point.Float> usedStars = new ArrayList<>(randomStars);
+    private final List<Point.Float> usedStars = new ArrayList<>(randomStars);
 
     public ScreenHandTelescope() {
         super(new TranslationTextComponent("screen.astralsorcery.hand_telescope"), 216, 216);
@@ -86,16 +87,16 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float pTicks) {
+    public void render(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
         RenderSystem.enableDepthTest();
-        super.render(mouseX, mouseY, pTicks);
+        super.render(renderStack, mouseX, mouseY, pTicks);
 
-        this.drawWHRect(TexturesAS.TEX_GUI_HAND_TELESCOPE);
+        this.drawWHRect(renderStack, TexturesAS.TEX_GUI_HAND_TELESCOPE);
 
-        this.drawTelescopeCell(pTicks);
+        this.drawTelescopeCell(renderStack, pTicks);
     }
 
-    private void drawTelescopeCell(float pTicks) {
+    private void drawTelescopeCell(MatrixStack renderStack, float pTicks) {
         boolean canSeeSky = this.canObserverSeeSky(Minecraft.getInstance().player.getPosition(), 1);
         float pitch = Minecraft.getInstance().player.getPitch(pTicks);
         float angleOpacity = 0F;
@@ -114,7 +115,7 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
         RenderSystem.disableAlphaTest();
 
         this.setBlitOffset(-10);
-        this.drawSkyBackground(pTicks, canSeeSky, angleOpacity);
+        this.drawSkyBackground(renderStack, pTicks, canSeeSky, angleOpacity);
 
         if (!this.isInitialized()) {
             this.setBlitOffset(0);
@@ -148,9 +149,7 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
                     brightness = this.multiplyStarBrightness(pTicks, brightness);
                     brightness *= brMultiplier;
 
-                    RenderingGuiUtils.rect(buf, this)
-                            .at(pos.x + this.getGuiLeft(), pos.y + this.getGuiTop())
-                            .dim(starSize, starSize)
+                    RenderingGuiUtils.rect(buf, renderStack, pos.x + this.getGuiLeft(), pos.y + this.getGuiTop(), getGuiZLevel(), starSize, starSize)
                             .color(brightness, brightness, brightness, brightness)
                             .draw();
                 }
@@ -184,8 +183,8 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
                                 MathHelper.floor((this.getGuiWidth() - 10) * guiFactor),
                                 MathHelper.floor((this.getGuiHeight() - 10) * guiFactor));
 
-                        Map<StarLocation, Rectangle> cstRenderInfo = RenderingConstellationUtils.renderConstellationIntoGUI(
-                                cst,
+                        Map<StarLocation, Rectangle.Float> cstRenderInfo = RenderingConstellationUtils.renderConstellationIntoGUI(
+                                cst.getTierRenderColor(), cst, renderStack,
                                 this.getGuiLeft() + wPart + MathHelper.floor((xFactor / guiFactor) * this.getGuiWidth()),
                                 this.getGuiTop() + hPart + MathHelper.floor((yFactor / guiFactor) * this.getGuiHeight()),
                                 this.getGuiZLevel(),
@@ -205,7 +204,7 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
             }
 
             this.setBlitOffset(-5);
-            this.renderDrawnLines(gen, pTicks);
+            this.renderDrawnLines(renderStack, gen, pTicks);
         }
 
         this.setBlitOffset(0);
@@ -248,9 +247,9 @@ public class ScreenHandTelescope extends ConstellationDiscoveryScreen<Constellat
         }
     }
 
-    private void drawSkyBackground(float pTicks, boolean canSeeSky, float angleOpacity) {
+    private void drawSkyBackground(MatrixStack renderStack, float pTicks, boolean canSeeSky, float angleOpacity) {
         Tuple<Color, Color> rgbFromTo = SkyScreen.getSkyGradient(canSeeSky, angleOpacity, pTicks);
-        RenderingDrawUtils.drawGradientRect(this.getGuiZLevel(),
+        RenderingDrawUtils.drawGradientRect(renderStack, this.getGuiZLevel(),
                 this.guiLeft + 4, this.guiTop + 4,
                 this.guiLeft + this.guiWidth - 8, this.guiTop + this.guiHeight - 8,
                 rgbFromTo.getA().getRGB(), rgbFromTo.getB().getRGB());

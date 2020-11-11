@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.screen;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
@@ -29,9 +30,11 @@ import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
@@ -118,17 +121,17 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
     }
 
     @Override
-    public void removed() {
-        super.removed();
+    public void onClose() {
+        super.onClose();
         EventFlags.GUI_CLOSING.executeWithFlag(() -> Minecraft.getInstance().player.closeScreen());
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float pTicks) {
+    public void render(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
         RenderSystem.enableDepthTest();
-        super.render(mouseX, mouseY, pTicks);
+        super.render(renderStack, mouseX, mouseY, pTicks);
 
-        Minecraft.getInstance().gameSettings.thirdPersonView = 0;
+        Minecraft.getInstance().gameSettings.setPointOfView(PointOfView.FIRST_PERSON);
 
         double guiFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
@@ -136,13 +139,13 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
                 MathHelper.floor((FRAME_TEXTURE_SIZE - 2) * guiFactor),
                 MathHelper.floor((this.getGuiWidth() + 2) * guiFactor),
                 MathHelper.floor((this.getGuiHeight() + 2) * guiFactor));
-        this.drawObservatoryScreen(pTicks);
+        this.drawObservatoryScreen(renderStack, pTicks);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
-        this.drawFrame();
+        this.drawFrame(renderStack);
     }
 
-    private void drawObservatoryScreen(float pTicks) {
+    private void drawObservatoryScreen(MatrixStack renderStack, float pTicks) {
         boolean canSeeSky = this.canObserverSeeSky(this.getTile().getPos(), 2);
         double guiFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
         float pitch = Minecraft.getInstance().player.getPitch(pTicks);
@@ -160,7 +163,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
         Blending.DEFAULT.apply();
 
         this.setBlitOffset(-10);
-        this.drawSkyBackground(pTicks, canSeeSky, angleOpacity);
+        this.drawSkyBackground(renderStack, pTicks, canSeeSky, angleOpacity);
 
         if (!this.isInitialized()) {
             this.setBlitOffset(0);
@@ -194,7 +197,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
                     brightness = this.multiplyStarBrightness(pTicks, brightness);
                     brightness *= brMultiplier;
 
-                    RenderingGuiUtils.rect(buf, this)
+                    RenderingGuiUtils.rect(buf, renderStack, this)
                             .at(FRAME_TEXTURE_SIZE + star.x, FRAME_TEXTURE_SIZE + star.y)
                             .dim(size, size)
                             .color(brightness, brightness, brightness, brightness)
@@ -222,8 +225,8 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
                         float xFactor = diffYaw   / 8F;
                         float yFactor = diffPitch / 8F;
 
-                        Map<StarLocation, Rectangle> cstRenderInfo = RenderingConstellationUtils.renderConstellationIntoGUI(
-                                cst,
+                        Map<StarLocation, Rectangle.Float> cstRenderInfo = RenderingConstellationUtils.renderConstellationIntoGUI(
+                                cst, renderStack,
                                 this.getGuiLeft() + wPart + MathHelper.floor((xFactor / guiFactor) * this.getGuiWidth()),
                                 this.getGuiTop() + hPart + MathHelper.floor((yFactor / guiFactor) * this.getGuiHeight()),
                                 this.getGuiZLevel(),
@@ -241,7 +244,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
             }
 
             this.setBlitOffset(-5);
-            this.renderDrawnLines(gen, pTicks);
+            this.renderDrawnLines(renderStack, gen, pTicks);
         }
 
         this.setBlitOffset(0);
@@ -250,35 +253,44 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
         RenderSystem.enableAlphaTest();
     }
 
-    private void drawFrame() {
+    private void drawFrame(MatrixStack renderStack) {
         this.setBlitOffset(10);
         TexturesAS.TEX_GUI_OBSERVATORY.bindTexture();
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingGuiUtils.rect(buf, this).at(0, 0).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
+            Matrix4f offset = renderStack.getLast().getMatrix();
+            RenderingGuiUtils.rect(buf, renderStack, this)
+                    .at(0, 0).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
                     .tex(0, 0, 8F / 20F, 8F / 20F).draw();
-            RenderingGuiUtils.rect(buf, this).at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, 0).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
+            RenderingGuiUtils.rect(buf, renderStack, this)
+                    .at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, 0).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
                     .tex(8F / 20F, 0, 8F / 20F, 8F / 20F).draw();
-            RenderingGuiUtils.rect(buf, this).at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
+            RenderingGuiUtils.rect(buf, renderStack, this)
+                    .at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
                     .tex(8F / 20F, 8F / 20F, 8F / 20F, 8F / 20F).draw();
-            RenderingGuiUtils.rect(buf, this).at(0, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
+            RenderingGuiUtils.rect(buf, renderStack, this)
+                    .at(0, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE)
                     .tex(0, 8F / 20F, 8F / 20F, 8F / 20F).draw();
 
-            RenderingGuiUtils.rect(buf, this).at(FRAME_TEXTURE_SIZE, 0).dim(this.getGuiWidth(), FRAME_TEXTURE_SIZE)
+            RenderingGuiUtils.rect(buf, renderStack, this)
+                    .at(FRAME_TEXTURE_SIZE, 0).dim(this.getGuiWidth(), FRAME_TEXTURE_SIZE)
                     .tex(16F / 20F, 0, 1F / 20F, 8F / 20F).draw();
-            RenderingGuiUtils.rect(buf, this).at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, this.getGuiHeight())
+            RenderingGuiUtils.rect(buf, renderStack, this)
+                    .at(this.getGuiWidth() + FRAME_TEXTURE_SIZE, FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, this.getGuiHeight())
                     .tex(0, 17F / 20F, 8F / 20F, 1F / 20F).draw();
-            RenderingGuiUtils.rect(buf, this).at(FRAME_TEXTURE_SIZE, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(this.getGuiWidth(), FRAME_TEXTURE_SIZE)
+            RenderingGuiUtils.rect(buf, renderStack, this)
+                    .at(FRAME_TEXTURE_SIZE, this.getGuiHeight() + FRAME_TEXTURE_SIZE).dim(this.getGuiWidth(), FRAME_TEXTURE_SIZE)
                     .tex(17F / 20F, 0, 1F / 20F, 8F / 20F).draw();
-            RenderingGuiUtils.rect(buf, this).at(0, FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, this.getGuiHeight())
+            RenderingGuiUtils.rect(buf, renderStack, this)
+                    .at(0, FRAME_TEXTURE_SIZE).dim(FRAME_TEXTURE_SIZE, this.getGuiHeight())
                     .tex(0, 16F / 20F, 8F / 20F, 1F / 20F).draw();
         });
         this.setBlitOffset(0);
     }
 
-    private void drawSkyBackground(float pTicks, boolean canSeeSky, float angleOpacity) {
+    private void drawSkyBackground(MatrixStack renderStack, float pTicks, boolean canSeeSky, float angleOpacity) {
         Tuple<Color, Color> rgbFromTo = SkyScreen.getSkyGradient(canSeeSky, angleOpacity, pTicks);
-        RenderingDrawUtils.drawGradientRect(this.getGuiZLevel(),
+        RenderingDrawUtils.drawGradientRect(renderStack, this.getGuiZLevel(),
                 this.guiLeft, this.guiTop,
                 this.guiLeft + this.guiWidth, this.guiTop + this.guiHeight,
                 rgbFromTo.getA().getRGB(), rgbFromTo.getB().getRGB());

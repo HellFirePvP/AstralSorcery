@@ -24,6 +24,10 @@ import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.ArrayList;
@@ -78,39 +82,33 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
 
     @Override
     public void render(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
-
-    }
-
-    @Override
-    public void render(int mouseX, int mouseY, float pTicks) {
         RenderSystem.enableDepthTest();
-        drawWHRect(TexturesAS.TEX_GUI_CONSTELLATION_PAPER);
-        drawHeader();
-        drawConstellation();
-        drawPhaseInformation();
+        drawWHRect(renderStack, TexturesAS.TEX_GUI_CONSTELLATION_PAPER);
+        drawHeader(renderStack);
+        drawConstellation(renderStack);
+        drawPhaseInformation(renderStack);
     }
 
-    private void drawHeader() {
-        String locName = this.constellation.getConstellationName().getFormattedText().toUpperCase();
-        double length = font.getStringWidth(locName) * 1.8;
+    private void drawHeader(MatrixStack renderStack) {
+        IFormattableTextComponent name = this.constellation.getConstellationName();
+        float length = font.getStringPropertyWidth(name) * 1.8F;
         double offsetLeft = (width >> 1) - (length / 2);
         int offsetTop = guiTop + 45;
 
-        RenderSystem.pushMatrix();
-        RenderSystem.translated(offsetLeft + 2, offsetTop, 0);
-        RenderSystem.scaled(1.8, 1.8, 1.8);
-        RenderingDrawUtils.renderStringAtCurrentPos(font, locName, 0xAA4D4D4D);
-        RenderSystem.popMatrix();
+        renderStack.push();
+        renderStack.translate(offsetLeft + 2, offsetTop, this.getGuiZLevel());
+        renderStack.scale(1.8F, 1.8F, 1F);
+        RenderingDrawUtils.renderStringAt(font, renderStack, name, 0xAA4D4D4D);
+        renderStack.pop();
     }
 
-    private void drawConstellation() {
+    private void drawConstellation(MatrixStack renderStack) {
         RenderSystem.enableBlend();
         Blending.DEFAULT.apply();
 
-        RenderingConstellationUtils.renderConstellationIntoGUI(
-                ColorsAS.CONSTELLATION_TYPE_BLANK,
-                constellation,
-                width / 2 - 145 / 2, guiTop + 84,
+        RenderingConstellationUtils.renderConstellationIntoGUI(ColorsAS.CONSTELLATION_TYPE_BLANK,
+                constellation, renderStack,
+                width / 2F - 145 / 2F, guiTop + 84,
                 this.getGuiZLevel(),
                 145, 145, 2F, () -> 0.5F,
                 true, false);
@@ -118,15 +116,16 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
         RenderSystem.disableBlend();
     }
 
-    private void drawPhaseInformation() {
+    private void drawPhaseInformation(MatrixStack renderStack) {
         if (this.phases == null) {
             this.resolvePhases();
         }
 
         List<MoonPhase> phases = this.phases == null ? Collections.emptyList() : this.phases;
         if (phases.isEmpty()) {
-            RenderingDrawUtils.renderStringCentered(Minecraft.getInstance().fontRenderer,
-                    "? ? ?", guiLeft + guiWidth / 2 + 25, guiTop + 239,
+            ITextProperties text = new TranslationTextComponent("astralsorcery.journal.constellation.unknown");
+            RenderingDrawUtils.renderStringCentered(Minecraft.getInstance().fontRenderer, renderStack,
+                    text, guiLeft + guiWidth / 2 + 25, guiTop + 239,
                     1.8F, 0xAA4D4D4D);
         } else {
             int size = 16;
@@ -136,7 +135,7 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
                 phases.get(i).getTexture().bindTexture();
                 RenderSystem.enableBlend();
                 Blending.DEFAULT.apply();
-                RenderingGuiUtils.drawRect(offsetX + (i * (size + 2)), offsetY, this.getGuiZLevel(), size, size);
+                RenderingGuiUtils.drawRect(renderStack, offsetX + (i * (size + 2)), offsetY, this.getGuiZLevel(), size, size);
                 RenderSystem.disableBlend();
             }
         }

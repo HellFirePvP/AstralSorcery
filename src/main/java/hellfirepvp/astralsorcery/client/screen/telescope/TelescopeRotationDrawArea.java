@@ -23,8 +23,8 @@ import java.awt.*;
  */
 public class TelescopeRotationDrawArea extends ConstellationDiscoveryScreen.DrawArea {
 
-    private ScreenTelescope screenTelescope;
-    private TileTelescope.TelescopeRotation rotation;
+    private final ScreenTelescope screenTelescope;
+    private final TileTelescope.TelescopeRotation rotation;
 
     public TelescopeRotationDrawArea(ScreenTelescope screenTelescope, TileTelescope.TelescopeRotation rotation, Rectangle area) {
         super(area);

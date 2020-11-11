@@ -54,7 +54,7 @@ public class RenderingDrawUtils {
     private static final Random rand = new Random();
     private static final MatrixStack EMPTY = new MatrixStack();
 
-    public static void renderStringCentered(@Nullable FontRenderer fr, ITextProperties text, int x, int y, float scale, int color) {
+    public static void renderStringCentered(@Nullable FontRenderer fr, MatrixStack renderStack, ITextProperties text, int x, int y, float scale, int color) {
         if (fr == null) {
             fr = Minecraft.getInstance().fontRenderer;
         }
@@ -62,10 +62,11 @@ public class RenderingDrawUtils {
         float strLength = fr.getStringPropertyWidth(text) * scale;
         float offsetLeft = x - strLength;
 
-        MatrixStack renderStack = new MatrixStack();
+        renderStack.push();
         renderStack.translate(offsetLeft, y, 0);
         renderStack.scale(scale, scale, scale);
         renderStringAt(fr, renderStack, text, color);
+        renderStack.pop();
     }
 
     public static float renderString(ITextProperties text) {
@@ -236,17 +237,17 @@ public class RenderingDrawUtils {
                 }
             }
 
-            drawGradientRect(zLevel, pX - 3,           pY - 4,                 pX + maxWidth + 3, pY - 3,                 color, colorFade);
-            drawGradientRect(zLevel, pX - 3,           pY + sumLineHeight + 3, pX + maxWidth + 3, pY + sumLineHeight + 4, color, colorFade);
-            drawGradientRect(zLevel, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY + sumLineHeight + 3, color, colorFade);
-            drawGradientRect(zLevel, pX - 4,           pY - 3,                 pX - 3,           pY + sumLineHeight + 3, color, colorFade);
-            drawGradientRect(zLevel, pX + maxWidth + 3,pY - 3,                 pX + maxWidth + 4, pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(renderStack, zLevel, pX - 3,           pY - 4,                 pX + maxWidth + 3, pY - 3,                 color, colorFade);
+            drawGradientRect(renderStack, zLevel, pX - 3,           pY + sumLineHeight + 3, pX + maxWidth + 3, pY + sumLineHeight + 4, color, colorFade);
+            drawGradientRect(renderStack, zLevel, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(renderStack, zLevel, pX - 4,           pY - 3,                 pX - 3,           pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(renderStack, zLevel, pX + maxWidth + 3,pY - 3,                 pX + maxWidth + 4, pY + sumLineHeight + 3, color, colorFade);
 
             int col = (color & 0x00FFFFFF) | color & 0xFF000000;
-            drawGradientRect(zLevel, pX - 3,           pY - 3 + 1,             pX - 3 + 1,       pY + sumLineHeight + 3 - 1, color, col);
-            drawGradientRect(zLevel, pX + maxWidth + 2,pY - 3 + 1,             pX + maxWidth + 3, pY + sumLineHeight + 3 - 1, color, col);
-            drawGradientRect(zLevel, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY - 3 + 1,                 col,   col);
-            drawGradientRect(zLevel, pX - 3,           pY + sumLineHeight + 2, pX + maxWidth + 3, pY + sumLineHeight + 3,     color, color);
+            drawGradientRect(renderStack, zLevel, pX - 3,           pY - 3 + 1,             pX - 3 + 1,       pY + sumLineHeight + 3 - 1, color, col);
+            drawGradientRect(renderStack, zLevel, pX + maxWidth + 2,pY - 3 + 1,             pX + maxWidth + 3, pY + sumLineHeight + 3 - 1, color, col);
+            drawGradientRect(renderStack, zLevel, pX - 3,           pY - 3,                 pX + maxWidth + 3, pY - 3 + 1,                 col,   col);
+            drawGradientRect(renderStack, zLevel, pX - 3,           pY + sumLineHeight + 2, pX + maxWidth + 3, pY + sumLineHeight + 3,     color, color);
 
             int offset = anyItemFound ? stackBoxSize : 0;
 
@@ -289,28 +290,28 @@ public class RenderingDrawUtils {
         }
     }
 
-    public static void renderBlueTooltipBox(int x, int y, int width, int height) {
-        renderTooltipBox(x, y, width, height, 0x000027, 0x000044);
+    public static void renderBlueTooltipBox(MatrixStack renderStack, int x, int y, int width, int height) {
+        renderTooltipBox(renderStack, x, y, width, height, 0x000027, 0x000044);
     }
 
-    public static void renderTooltipBox(int x, int y, int width, int height, int color, int colorFade) {
+    public static void renderTooltipBox(MatrixStack renderStack, int x, int y, int width, int height, int color, int colorFade) {
         int pX = x + 12;
         int pY = y - 12;
 
-        drawGradientRect(0, pX - 3,           pY - 4,          pX + width + 3, pY - 3,         color, colorFade);
-        drawGradientRect(0, pX - 3,           pY + height + 3, pX + width + 3, pY + height + 4, color, colorFade);
-        drawGradientRect(0, pX - 3,           pY - 3,          pX + width + 3, pY + height + 3, color, colorFade);
-        drawGradientRect(0, pX - 4,           pY - 3,          pX - 3,         pY + height + 3, color, colorFade);
-        drawGradientRect(0, pX + width + 3,   pY - 3,          pX + width + 4, pY + height + 3, color, colorFade);
+        drawGradientRect(renderStack, 0, pX - 3,           pY - 4,          pX + width + 3, pY - 3,         color, colorFade);
+        drawGradientRect(renderStack, 0, pX - 3,           pY + height + 3, pX + width + 3, pY + height + 4, color, colorFade);
+        drawGradientRect(renderStack, 0, pX - 3,           pY - 3,          pX + width + 3, pY + height + 3, color, colorFade);
+        drawGradientRect(renderStack, 0, pX - 4,           pY - 3,          pX - 3,         pY + height + 3, color, colorFade);
+        drawGradientRect(renderStack, 0, pX + width + 3,   pY - 3,          pX + width + 4, pY + height + 3, color, colorFade);
 
         int col = (color & 0x00FFFFFF) | color & 0xFF000000;
-        drawGradientRect(0, pX - 3,           pY - 3 + 1,      pX - 3 + 1,     pY + height + 3 - 1, color, col);
-        drawGradientRect(0, pX + width + 2,   pY - 3 + 1,      pX + width + 3, pY + height + 3 - 1, color, col);
-        drawGradientRect(0, pX - 3,           pY - 3,          pX + width + 3, pY - 3 + 1,          col,   col);
-        drawGradientRect(0, pX - 3,           pY + height + 2, pX + width + 3, pY + height + 3,     color, color);
+        drawGradientRect(renderStack, 0, pX - 3,           pY - 3 + 1,      pX - 3 + 1,     pY + height + 3 - 1, color, col);
+        drawGradientRect(renderStack, 0, pX + width + 2,   pY - 3 + 1,      pX + width + 3, pY + height + 3 - 1, color, col);
+        drawGradientRect(renderStack, 0, pX - 3,           pY - 3,          pX + width + 3, pY - 3 + 1,          col,   col);
+        drawGradientRect(renderStack, 0, pX - 3,           pY + height + 2, pX + width + 3, pY + height + 3,     color, color);
     }
 
-    public static void drawGradientRect(float zLevel, float left, float top, float right, float bottom, int startColor, int endColor) {
+    public static void drawGradientRect(MatrixStack renderStack, float zLevel, float left, float top, float right, float bottom, int startColor, int endColor) {
         float startAlpha = (float) (startColor >> 24 & 255) / 255.0F;
         float startRed   = (float) (startColor >> 16 & 255) / 255.0F;
         float startGreen = (float) (startColor >>  8 & 255) / 255.0F;
@@ -325,10 +326,11 @@ public class RenderingDrawUtils {
         RenderSystem.shadeModel(GL11.GL_SMOOTH);
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR, buf -> {
-            buf.pos(right,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
-            buf.pos( left,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
-            buf.pos( left, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
-            buf.pos(right, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
+            Matrix4f offset = renderStack.getLast().getMatrix();
+            buf.pos(offset, right,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+            buf.pos(offset,  left,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+            buf.pos(offset,  left, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
+            buf.pos(offset, right, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
         });
 
         RenderSystem.shadeModel(GL11.GL_FLAT);

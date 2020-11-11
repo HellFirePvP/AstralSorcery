@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.tree;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.BatchPerkContext;
@@ -54,27 +55,26 @@ public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreeP
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void renderAt(AllocationStatus status, long spriteOffsetTick, float pTicks, float x, float y, float zLevel, float scale) {
+    public void renderAt(AllocationStatus status, MatrixStack renderStack, long spriteOffsetTick, float pTicks, float x, float y, float zLevel, float scale) {
         ItemStack stack = this.getPerk().getContainedItem(Minecraft.getInstance().player, LogicalSide.CLIENT);
         if (!stack.isEmpty()) {
             float posX = x - (8 * scale);
             float posY = y - (8 * scale);
 
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(posX, posY, zLevel);
-            RenderSystem.scaled(scale, scale, scale);
-            RenderingUtils.renderItemStackGUI(Minecraft.getInstance().getItemRenderer(), stack, 0, 0, null);
-            RenderSystem.popMatrix();
+            renderStack.push();
+            renderStack.translate(posX, posY, zLevel);
+            renderStack.scale(scale, scale, 1F);
+            RenderingUtils.renderItemStackGUI(renderStack, stack, null);
+            renderStack.pop();
         }
     }
 
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)
-    public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx,
-                                                AllocationStatus status,
-                                                long spriteOffsetTick, float pTicks,
-                                                float x, float y, float zLevel, float scale) {
+    public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx, MatrixStack renderStack,
+                                             AllocationStatus status, long spriteOffsetTick, float pTicks,
+                                             float x, float y, float zLevel, float scale) {
         SpriteSheetResource tex = getHaloSprite(status);
         BatchPerkContext.TextureObjectGroup grp = PerkPointHaloRenderGroup.INSTANCE.getGroup(tex);
         if (grp == null) {
@@ -89,12 +89,12 @@ public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreeP
 
         Tuple<Float, Float> frameUV = tex.getUVOffset(spriteOffsetTick);
 
-        RenderingGuiUtils.rect(buf, x - haloSize, y - haloSize, zLevel, haloSize * 2F, haloSize * 2F)
+        RenderingGuiUtils.rect(buf, renderStack, x - haloSize, y - haloSize, zLevel, haloSize * 2F, haloSize * 2F)
                 .color(1F, 1F, 1F, 0.85F)
                 .tex(frameUV.getA(), frameUV.getB(), tex.getULength(), tex.getVLength())
                 .draw();
 
-        super.renderPerkAtBatch(drawCtx, status, spriteOffsetTick, pTicks, x, y, zLevel, scale);
+        super.renderPerkAtBatch(drawCtx, renderStack, status, spriteOffsetTick, pTicks, x, y, zLevel, scale);
 
         float actualSize = getRenderSize() * scale;
         return new Rectangle.Float(-actualSize, -actualSize, actualSize * 2, actualSize * 2);

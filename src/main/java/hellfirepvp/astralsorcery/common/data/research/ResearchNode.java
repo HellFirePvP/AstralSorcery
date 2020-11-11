@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;

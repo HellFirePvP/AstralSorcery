@@ -22,9 +22,12 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.LanguageMap;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -64,6 +67,10 @@ public class ScreenJournal extends WidthHeightScreen {
         }
         bookmarks.add(bookmarkProvider);
         return true;
+    }
+
+    protected IReorderingProcessor localize(ITextProperties txt) {
+        return LanguageMap.getInstance().func_241870_a(txt);
     }
 
     protected void drawDefault(MatrixStack renderStack, AbstractRenderableTexture texture, int mouseX, int mouseY) {

@@ -111,7 +111,7 @@ public class WidthHeightScreen extends InputScreen {
         }
 
         if (button == 1 && shouldRightClickCloseScreen(mouseX, mouseY)) {
-            this.onClose();
+            this.closeScreen();
 
             if (Minecraft.getInstance().currentScreen == null) {
                 Minecraft.getInstance().mouseHelper.grabMouse();
@@ -126,9 +126,5 @@ public class WidthHeightScreen extends InputScreen {
      */
     protected boolean shouldRightClickCloseScreen(double mouseX, double mouseY) {
         return false;
-    }
-
-    protected RenderingGuiUtils.DrawBuilder drawRect(BufferBuilder buf) {
-        return RenderingGuiUtils.rect(buf, this);
     }
 }

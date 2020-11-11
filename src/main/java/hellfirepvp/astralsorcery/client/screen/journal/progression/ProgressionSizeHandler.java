@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
  */
 public class ProgressionSizeHandler extends SizeHandler {
 
-    private ResearchProgression part;
+    private final ResearchProgression part;
 
     public ProgressionSizeHandler(ResearchProgression part) {
         this.part = part;

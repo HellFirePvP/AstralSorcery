@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class JournalProgressionClusterMapping {
 
-    private static Map<ResearchProgression, JournalCluster> clusterMapping = new HashMap<>();
+    private static final Map<ResearchProgression, JournalCluster> clusterMapping = new HashMap<>();
 
     static {
         AbstractRenderableTexture tex = TexturesAS.TEX_GUI_CLUSTER_DISCOVERY;

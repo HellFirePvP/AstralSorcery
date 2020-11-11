@@ -8,8 +8,10 @@
 
 package hellfirepvp.astralsorcery.client.event;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.common.item.base.client.ItemOverlayRender;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,24 +42,26 @@ public class OverlayRenderer {
             return;
         }
 
-        if (Minecraft.getInstance().player == null || Minecraft.getInstance().world == null) {
+        PlayerEntity player = Minecraft.getInstance().player;
+        if (player == null || Minecraft.getInstance().world == null) {
             return;
         }
 
+        MatrixStack renderStack = event.getMatrixStack();
         for (EquipmentSlotType type : EquipmentSlotType.values()) {
-            if (doHudRender(Minecraft.getInstance().player.getItemStackFromSlot(type), pTicks)) {
+            if (doHudRender(renderStack, player.getItemStackFromSlot(type), pTicks)) {
                 break;
             }
         }
     }
 
-    private boolean doHudRender(ItemStack heldItem, float pTicks) {
+    private boolean doHudRender(MatrixStack renderStack, ItemStack heldItem, float pTicks) {
         if (heldItem.isEmpty()) {
             return false;
         }
         Item held = heldItem.getItem();
         if (held instanceof ItemOverlayRender) {
-            return ((ItemOverlayRender) held).renderOverlay(heldItem, pTicks);
+            return ((ItemOverlayRender) held).renderOverlay(renderStack, heldItem, pTicks);
         }
         return false;
     }

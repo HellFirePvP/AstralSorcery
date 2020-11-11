@@ -672,6 +672,7 @@
   "astralsorcery.journal.constellation.type.major": "Bright",
   "astralsorcery.journal.constellation.type.weak": "Dim",
   "astralsorcery.journal.constellation.type.minor": "Faint",
+  "astralsorcery.journal.constellation.unknown": "? ? ?",
 
   "astralsorcery.constellation.discidia": "Discidia",
   "astralsorcery.constellation.discidia.tag": "Offense",

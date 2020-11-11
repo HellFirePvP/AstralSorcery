@@ -153,12 +153,21 @@ public class RenderingConstellationUtils {
         }
     }
 
+    @Deprecated
     public static Map<StarLocation, Rectangle.Float> renderConstellationIntoGUI(IConstellation c,
                                                                                 float offsetX, float offsetY, float zLevel,
                                                                                 float width, float height, double linebreadth,
                                                                                 Supplier<Float> brightnessFn,
                                                                                 boolean isKnown, boolean applyStarBrightness) {
-        return renderConstellationIntoGUI(c.getTierRenderColor(), c, offsetX, offsetY, zLevel, width, height, linebreadth, brightnessFn, isKnown, applyStarBrightness);
+        return renderConstellationIntoGUI(c.getTierRenderColor(), c, new MatrixStack(), offsetX, offsetY, zLevel, width, height, linebreadth, brightnessFn, isKnown, applyStarBrightness);
+    }
+
+    public static Map<StarLocation, Rectangle.Float> renderConstellationIntoGUI(IConstellation c, MatrixStack renderStack,
+                                                                                float offsetX, float offsetY, float zLevel,
+                                                                                float width, float height, double linebreadth,
+                                                                                Supplier<Float> brightnessFn,
+                                                                                boolean isKnown, boolean applyStarBrightness) {
+        return renderConstellationIntoGUI(c.getTierRenderColor(), c, renderStack, offsetX, offsetY, zLevel, width, height, linebreadth, brightnessFn, isKnown, applyStarBrightness);
     }
 
     @Deprecated

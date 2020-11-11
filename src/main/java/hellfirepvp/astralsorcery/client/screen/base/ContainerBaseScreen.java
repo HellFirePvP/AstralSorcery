@@ -42,7 +42,7 @@ public abstract class ContainerBaseScreen<T extends TileEntity, C extends Contai
 
         TileEntity te = this.container.getTileEntity();
         if (te.isRemoved() || !this.container.canInteractWith(Minecraft.getInstance().player)) {
-            this.onClose();
+            this.closeScreen();
         }
     }
 }

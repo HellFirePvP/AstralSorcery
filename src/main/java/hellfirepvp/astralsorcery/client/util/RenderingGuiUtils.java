@@ -86,6 +86,10 @@ public class RenderingGuiUtils {
         return rect(buf, screen.getGuiLeft(), screen.getGuiTop(), screen.getGuiZLevel(), screen.getGuiWidth(), screen.getGuiHeight());
     }
 
+    public static DrawBuilder rect(IVertexBuilder buf, MatrixStack renderStack, WidthHeightScreen screen) {
+        return rect(buf, renderStack, screen.getGuiLeft(), screen.getGuiTop(), screen.getGuiZLevel(), screen.getGuiWidth(), screen.getGuiHeight());
+    }
+
     @Deprecated
     public static DrawBuilder rect(IVertexBuilder buf, float offsetX, float offsetY, float offsetZ, float width, float height) {
         return rect(buf, EMPTY, offsetX, offsetY, offsetZ, width, height);

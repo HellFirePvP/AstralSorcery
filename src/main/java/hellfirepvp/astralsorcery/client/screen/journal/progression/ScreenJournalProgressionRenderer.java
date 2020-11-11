@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.screen.journal.progression;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
@@ -25,6 +26,8 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.text.ITextProperties;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -42,14 +45,14 @@ import java.util.Map;
  */
 public class ScreenJournalProgressionRenderer {
 
-    private GalaxySizeHandler sizeHandler;
-    private ScreenJournalProgression parentGui;
+    private final GalaxySizeHandler sizeHandler;
+    private final ScreenJournalProgression parentGui;
 
     public ScreenRenderBoundingBox realRenderBox;
     private int realCoordLowerX, realCoordLowerY;
     private int realRenderWidth, realRenderHeight;
 
-    private ScalingPoint mousePointScaled;
+    private final ScalingPoint mousePointScaled;
     private ScalingPoint previousMousePointScaled;
 
     private ResearchProgression focusedClusterZoom = null, focusedClusterMouse = null;
@@ -58,7 +61,7 @@ public class ScreenJournalProgressionRenderer {
     private long doubleClickLast = 0L;
 
     private boolean hasPrevOffset = false;
-    private Map<Rectangle, ResearchProgression> clusterRectMap = new HashMap<>();
+    private final Map<Rectangle, ResearchProgression> clusterRectMap = new HashMap<>();
 
     public ScreenJournalProgressionRenderer(ScreenJournalProgression gui) {
         this.parentGui = gui;
@@ -163,9 +166,9 @@ public class ScreenJournalProgressionRenderer {
         return false;
     }
 
-    public void drawMouseHighlight(float zLevel, int mouseX, int mouseY) {
+    public void drawMouseHighlight(MatrixStack renderStack, float zLevel, int mouseX, int mouseY) {
         if (clusterRenderer != null && sizeHandler.getScalingFactor() > 6) {
-            clusterRenderer.drawMouseHighlight(zLevel, mouseX, mouseY);
+            clusterRenderer.drawMouseHighlight(renderStack, zLevel, mouseX, mouseY);
         }
     }
 
@@ -249,10 +252,10 @@ public class ScreenJournalProgressionRenderer {
         updateMouseState();
     }
 
-    public void drawProgressionPart(float zLevel, int mouseX, int mouseY) {
-        drawBackground(zLevel);
+    public void drawProgressionPart(MatrixStack renderStack, float zLevel, int mouseX, int mouseY) {
+        drawBackground(renderStack, zLevel);
 
-        drawClusters(zLevel);
+        drawClusters(renderStack, zLevel);
 
         focusedClusterMouse = tryFocusCluster(mouseX, mouseY);
 
@@ -261,9 +264,9 @@ public class ScreenJournalProgressionRenderer {
 
         if (sizeHandler.getScalingFactor() >= 6.1D && focusedClusterZoom != null && clusterRenderer != null) {
             JournalCluster cluster = JournalProgressionClusterMapping.getClusterMapping(focusedClusterZoom);
-            drawClusterBackground(cluster.clusterBackgroundTexture, zLevel);
+            drawClusterBackground(renderStack, cluster.clusterBackgroundTexture, zLevel);
 
-            clusterRenderer.drawClusterScreen(this.parentGui, zLevel);
+            clusterRenderer.drawClusterScreen(renderStack, this.parentGui, zLevel);
             scaleX = clusterRenderer.getMouseX();
             scaleY = clusterRenderer.getMouseY();
         }
@@ -282,22 +285,21 @@ public class ScreenJournalProgressionRenderer {
                 br = 1F - ((scale - 6F) / 2F);
             }
 
-            String name = focusedClusterMouse.getName().getFormattedText();
-            float length = Minecraft.getInstance().fontRenderer.getStringWidth(name) * 1.4F;
-
-            RenderSystem.pushMatrix();
-            RenderSystem.translated(offset.x + (width / 2F) - length / 2D, offset.y + (height / 3F), 0);
-            RenderSystem.scaled(1.4, 1.4, 1.4);
+            ITextProperties name = focusedClusterMouse.getName();
+            float length = Minecraft.getInstance().fontRenderer.getStringPropertyWidth(name) * 1.4F;
             int alpha = 0xCC;
             alpha *= br;
             alpha = Math.max(alpha, 5);
             int color = 0x5A28FF | (alpha << 24);
-            RenderingDrawUtils.renderStringWithShadowAtCurrentPos(null, name, color);
 
-            RenderSystem.popMatrix();
+            renderStack.push();
+            renderStack.translate(offset.x + (width / 2F) - length / 2D, offset.y + (height / 3F), 0);
+            renderStack.scale(1.4F, 1.4F, 1F);
+            RenderingDrawUtils.renderStringAt(name, renderStack, null, color, true);
+            renderStack.pop();
         }
 
-        drawStarParallaxLayers(scaleX, scaleY, zLevel);
+        drawStarParallaxLayers(renderStack, scaleX, scaleY, zLevel);
     }
 
     @Nullable
@@ -310,22 +312,22 @@ public class ScreenJournalProgressionRenderer {
         return null;
     }
 
-    private void drawClusters(float zLevel) {
+    private void drawClusters(MatrixStack renderStack, float zLevel) {
         clusterRectMap.clear();
         if (sizeHandler.getScalingFactor() >= 8.01) return;
 
         PlayerProgress thisProgress = ResearchHelper.getClientProgress();
         for (ResearchProgression progress : thisProgress.getResearchProgression()) {
-            renderCluster(progress, JournalProgressionClusterMapping.getClusterMapping(progress), zLevel);
+            renderCluster(renderStack, progress, JournalProgressionClusterMapping.getClusterMapping(progress), zLevel);
         }
     }
 
-    private void renderCluster(ResearchProgression p, JournalCluster cluster, float zLevel) {
-        Point.Float offset = this.sizeHandler.scalePointToGui(this.parentGui, this.mousePointScaled, new Point.Float(cluster.x, cluster.y));
+    private void renderCluster(MatrixStack renderStack, ResearchProgression p, JournalCluster cluster, float zLevel) {
+        Point.Float pCluster = this.sizeHandler.scalePointToGui(this.parentGui, this.mousePointScaled, new Point.Float(cluster.x, cluster.y));
         float width  = this.sizeHandler.scaledDistanceX(cluster.x, cluster.maxX);
         float height = this.sizeHandler.scaledDistanceY(cluster.y, cluster.maxY);
 
-        Rectangle r = new Rectangle(MathHelper.floor(offset.x), MathHelper.floor(offset.y), MathHelper.floor(width), MathHelper.floor(height));
+        Rectangle r = new Rectangle(MathHelper.floor(pCluster.x), MathHelper.floor(pCluster.y), MathHelper.floor(width), MathHelper.floor(height));
         clusterRectMap.put(r, p);
 
         cluster.cloudTexture.bindTexture();
@@ -343,17 +345,18 @@ public class ScreenJournalProgressionRenderer {
         RenderSystem.enableBlend();
         Blending.ADDITIVEDARK.apply();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            buf.pos(offset.x + 0,     offset.y + height, zLevel).color(br, br, br, br).tex(0, 1).endVertex();
-            buf.pos(offset.x + width, offset.y + height, zLevel).color(br, br, br, br).tex(1, 1).endVertex();
-            buf.pos(offset.x + width, offset.y + 0,      zLevel).color(br, br, br, br).tex(1, 0).endVertex();
-            buf.pos(offset.x + 0,     offset.y + 0,      zLevel).color(br, br, br, br).tex(0, 0).endVertex();
+            Matrix4f offset = renderStack.getLast().getMatrix();
+            buf.pos(offset, pCluster.x + 0,     pCluster.y + height, zLevel).color(br, br, br, br).tex(0, 1).endVertex();
+            buf.pos(offset, pCluster.x + width, pCluster.y + height, zLevel).color(br, br, br, br).tex(1, 1).endVertex();
+            buf.pos(offset, pCluster.x + width, pCluster.y + 0,      zLevel).color(br, br, br, br).tex(1, 0).endVertex();
+            buf.pos(offset, pCluster.x + 0,     pCluster.y + 0,      zLevel).color(br, br, br, br).tex(0, 0).endVertex();
         });
 
         Blending.DEFAULT.apply();
         RenderSystem.disableBlend();
     }
 
-    private void drawClusterBackground(AbstractRenderableTexture tex, float zLevel) {
+    private void drawClusterBackground(MatrixStack renderStack, AbstractRenderableTexture tex, float zLevel) {
         float scale = sizeHandler.getScalingFactor();
         float br;
         if (scale > 8.01F) {
@@ -369,28 +372,30 @@ public class ScreenJournalProgressionRenderer {
         Blending.ADDITIVEDARK.apply();
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            buf.pos(realCoordLowerX,                   realCoordLowerY + realRenderHeight, zLevel).color(br, br, br, br).tex(0, 1).endVertex();
-            buf.pos(realCoordLowerX + realRenderWidth, realCoordLowerY + realRenderHeight, zLevel).color(br, br, br, br).tex(1, 1).endVertex();
-            buf.pos(realCoordLowerX + realRenderWidth, realCoordLowerY,                    zLevel).color(br, br, br, br).tex(1, 0).endVertex();
-            buf.pos(realCoordLowerX,                   realCoordLowerY,                    zLevel).color(br, br, br, br).tex(0, 0).endVertex();
+            Matrix4f offset = renderStack.getLast().getMatrix();
+            buf.pos(offset, realCoordLowerX,                   realCoordLowerY + realRenderHeight, zLevel).color(br, br, br, br).tex(0, 1).endVertex();
+            buf.pos(offset, realCoordLowerX + realRenderWidth, realCoordLowerY + realRenderHeight, zLevel).color(br, br, br, br).tex(1, 1).endVertex();
+            buf.pos(offset, realCoordLowerX + realRenderWidth, realCoordLowerY,                    zLevel).color(br, br, br, br).tex(1, 0).endVertex();
+            buf.pos(offset, realCoordLowerX,                   realCoordLowerY,                    zLevel).color(br, br, br, br).tex(0, 0).endVertex();
         });
 
-        Blending.DEFAULT.apply();
+        RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
     }
 
-    private void drawBackground(float zLevel) {
+    private void drawBackground(MatrixStack renderStack, float zLevel) {
         float br = 0.35F;
         TexturesAS.TEX_GUI_BACKGROUND_DEFAULT.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            buf.pos(realCoordLowerX,                   realCoordLowerY + realRenderHeight, zLevel).color(br, br, br, 1.0F).tex(0, 1).endVertex();
-            buf.pos(realCoordLowerX + realRenderWidth, realCoordLowerY + realRenderHeight, zLevel).color(br, br, br, 1.0F).tex(1, 1).endVertex();
-            buf.pos(realCoordLowerX + realRenderWidth, realCoordLowerY,                    zLevel).color(br, br, br, 1.0F).tex(1, 0).endVertex();
-            buf.pos(realCoordLowerX,                   realCoordLowerY,                    zLevel).color(br, br, br, 1.0F).tex(0, 0).endVertex();
+            Matrix4f offset = renderStack.getLast().getMatrix();
+            buf.pos(offset, realCoordLowerX,                   realCoordLowerY + realRenderHeight, zLevel).color(br, br, br, 1.0F).tex(0, 1).endVertex();
+            buf.pos(offset, realCoordLowerX + realRenderWidth, realCoordLowerY + realRenderHeight, zLevel).color(br, br, br, 1.0F).tex(1, 1).endVertex();
+            buf.pos(offset, realCoordLowerX + realRenderWidth, realCoordLowerY,                    zLevel).color(br, br, br, 1.0F).tex(1, 0).endVertex();
+            buf.pos(offset, realCoordLowerX,                   realCoordLowerY,                    zLevel).color(br, br, br, 1.0F).tex(0, 0).endVertex();
         });
     }
 
-    private void drawStarParallaxLayers(float scalePosX, float scalePosY, float zLevel) {
+    private void drawStarParallaxLayers(MatrixStack renderStack, float scalePosX, float scalePosY, float zLevel) {
         TexturesAS.TEX_GUI_STARFIELD_OVERLAY.bindTexture();
         RenderSystem.enableBlend();
         Blending.OVERLAYDARK.apply();
@@ -399,19 +404,19 @@ public class ScreenJournalProgressionRenderer {
         float offsetY = scalePosY / 1000F;
 
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            drawStarOverlay(buf, zLevel, offsetX, offsetY, 2F);
-            drawStarOverlay(buf, zLevel, offsetX, offsetY, 1.5F);
-            drawStarOverlay(buf, zLevel, offsetX, offsetY, 1F);
-            drawStarOverlay(buf, zLevel, offsetX, offsetY, 0.75F);
-            drawStarOverlay(buf, zLevel, offsetX, offsetY, 0.5F);
-            drawStarOverlay(buf, zLevel, offsetX, offsetY, 0.3F);
+            drawStarOverlay(buf, renderStack, zLevel, offsetX, offsetY, 2F);
+            drawStarOverlay(buf, renderStack, zLevel, offsetX, offsetY, 1.5F);
+            drawStarOverlay(buf, renderStack, zLevel, offsetX, offsetY, 1F);
+            drawStarOverlay(buf, renderStack, zLevel, offsetX, offsetY, 0.75F);
+            drawStarOverlay(buf, renderStack, zLevel, offsetX, offsetY, 0.5F);
+            drawStarOverlay(buf, renderStack, zLevel, offsetX, offsetY, 0.3F);
         });
 
-        Blending.DEFAULT.apply();
+        RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
     }
 
-    private void drawStarOverlay(IVertexBuilder buf, float zLevel, float scalePosX, float scalePosY, float scaleFactor) {
+    private void drawStarOverlay(IVertexBuilder buf, MatrixStack renderStack, float zLevel, float scalePosX, float scalePosY, float scaleFactor) {
         float scale = this.sizeHandler.getScalingFactor() / 40F;
 
         float x      = this.parentGui.getGuiLeft();
@@ -428,13 +433,14 @@ public class ScreenJournalProgressionRenderer {
             return;
         }
 
-        buf.pos(x, y + height, zLevel)
+        Matrix4f offset = renderStack.getLast().getMatrix();
+        buf.pos(offset, x, y + height, zLevel)
                 .color(0.75F, 0.75F, 0.75F, 0.7F).tex(u,  v + vL).endVertex();
-        buf.pos(x + width, y + height, zLevel)
+        buf.pos(offset, x + width, y + height, zLevel)
                 .color(0.75F, 0.75F, 0.75F, 0.7F).tex(u + uL, v + vL).endVertex();
-        buf.pos(x + width, y, zLevel)
+        buf.pos(offset, x + width, y, zLevel)
                 .color(0.75F, 0.75F, 0.75F, 0.7F).tex(u + uL, v).endVertex();
-        buf.pos(x, y, zLevel)
+        buf.pos(offset, x, y, zLevel)
                 .color(0.75F, 0.75F, 0.75F, 0.7F).tex(u, v).endVertex();
     }
 }

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.tree;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.BatchPerkContext;
@@ -73,9 +74,9 @@ public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)
-    public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx,
-                                              AllocationStatus status, long spriteOffsetTick, float pTicks,
-                                              float x, float y, float zLevel, float scale) {
+    public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx, MatrixStack renderStack,
+                                             AllocationStatus status, long spriteOffsetTick, float pTicks,
+                                             float x, float y, float zLevel, float scale) {
         SpriteSheetResource tex = getFlareSprite(status);
         BatchPerkContext.TextureObjectGroup grp = PerkPointRenderGroup.INSTANCE.getGroup(tex);
         if (grp == null) {
@@ -86,7 +87,7 @@ public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
         float size = renderSize * scale;
         Tuple<Float, Float> frameUV = tex.getUVOffset(spriteOffsetTick);
 
-        RenderingGuiUtils.rect(buf, x - size, y - size, zLevel, size * 2F, size * 2F)
+        RenderingGuiUtils.rect(buf, renderStack, x - size, y - size, zLevel, size * 2F, size * 2F)
                 .tex(frameUV.getA(), frameUV.getB(), tex.getULength(), tex.getVLength())
                 .draw();
         return new Rectangle.Float(-size, -size, size * 2, size * 2);
