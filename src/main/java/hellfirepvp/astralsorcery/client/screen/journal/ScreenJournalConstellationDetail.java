@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.GatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
@@ -46,6 +47,7 @@ import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -70,9 +72,10 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
     private RenderablePage lastFramePage = null;
     private Rectangle rectBack, rectNext, rectPrev;
 
-    private final List<IReorderingProcessor> locTextMain = new LinkedList<>();
-    private final List<IReorderingProcessor> locTextRitualEnch = new LinkedList<>();
-    private final List<IReorderingProcessor> locTextMantleCorruption = new LinkedList<>();
+    private final List<IReorderingProcessor> locTextMain = new ArrayList<>();
+    private final List<IReorderingProcessor> locTextRitual = new ArrayList<>();
+    private final List<IReorderingProcessor> locTextRefraction = new ArrayList<>();
+    private final List<IReorderingProcessor> locTextMantle = new ArrayList<>();
 
     public ScreenJournalConstellationDetail(ScreenJournal origin, IConstellation cst) {
         super(cst.getConstellationName(), NO_BOOKMARK);
@@ -84,11 +87,15 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
         this.detailed = ResearchHelper.getClientProgress().hasConstellationDiscovered(cst);
 
         PlayerProgress playerProgress = ResearchHelper.getClientProgress();
-        if (this.detailed && (GatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress) || GatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(playerProgress))) {
-            this.doublePages++;
-
-            if (GatedKnowledge.CONSTELLATION_CAPE.canSee(playerProgress) && !(constellation instanceof IMinorConstellation)) {
+        if (this.detailed) {
+            if (playerProgress.getTierReached().isThisLater(ProgressionTier.ATTUNEMENT)) {
                 this.doublePages++;
+            }
+            if (playerProgress.getTierReached().isThisLater(ProgressionTier.TRAIT_CRAFT)) {
+                if (!(constellation instanceof IMinorConstellation)) {
+                    this.doublePages++; //mantle info pages
+                }
+                this.doublePages++; //constellation paper page
             }
         }
 
@@ -105,85 +112,88 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
 
     private void buildCapeText() {
         if (this.constellation instanceof IWeakConstellation) {
-            if (GatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchHelper.getClientProgress())) {
+            if (ResearchHelper.getClientProgress().getTierReached().isThisLater(ProgressionTier.TRAIT_CRAFT)) {
                 ITextComponent txtMantle = ((IWeakConstellation) this.constellation).getInfoMantleEffect();
 
                 ITextProperties headTxt = new TranslationTextComponent("astralsorcery.journal.constellation.mantle");
-                locTextMantleCorruption.add(localize(headTxt));
-                locTextMantleCorruption.add(IReorderingProcessor.field_242232_a);
+                locTextMantle.add(localize(headTxt));
+                locTextMantle.add(IReorderingProcessor.field_242232_a);
 
                 List<IReorderingProcessor> lines = new LinkedList<>();
                 for (String segment : txtMantle.getUnformattedComponentText().split("<NL>")) {
                     lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
                     lines.add(IReorderingProcessor.field_242232_a);
                 }
-                locTextMantleCorruption.addAll(lines);
-                locTextMantleCorruption.add(IReorderingProcessor.field_242232_a);
-            }
-            if (GatedKnowledge.CONSTELLATION_CORRUPTION.canSee(ResearchHelper.getClientProgress())) {
-                ITextComponent txtCorruptedRitual = ((IWeakConstellation) this.constellation).getInfoCorruptedRitualEffect();
-
-                ITextProperties headTxt = new TranslationTextComponent("astralsorcery.journal.constellation.corruption");
-                locTextMantleCorruption.add(localize(headTxt));
-                locTextMantleCorruption.add(IReorderingProcessor.field_242232_a);
-
-                List<IReorderingProcessor> lines = new LinkedList<>();
-                for (String segment : txtCorruptedRitual.getUnformattedComponentText().split("<NL>")) {
-                    lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
-                    lines.add(IReorderingProcessor.field_242232_a);
-                }
-                locTextMantleCorruption.addAll(lines);
-                locTextMantleCorruption.add(IReorderingProcessor.field_242232_a);
+                locTextMantle.addAll(lines);
+                locTextMantle.add(IReorderingProcessor.field_242232_a);
             }
         }
     }
 
     private void buildEnchText() {
-        if (GatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(ResearchHelper.getClientProgress())) {
+        if (ResearchHelper.getClientProgress().getTierReached().isThisLater(ProgressionTier.CONSTELLATION_CRAFT)) {
             ITextComponent txtEnchantments = this.constellation.getConstellationEnchantmentDescription();
 
             ITextProperties headTxt = new TranslationTextComponent("astralsorcery.journal.constellation.enchantments");
-            locTextRitualEnch.add(localize(headTxt));
-            locTextRitualEnch.add(IReorderingProcessor.field_242232_a);
+            locTextRefraction.add(localize(headTxt));
+            locTextRefraction.add(IReorderingProcessor.field_242232_a);
 
             List<IReorderingProcessor> lines = new LinkedList<>();
             for (String segment : txtEnchantments.getUnformattedComponentText().split("<NL>")) {
                 lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
                 lines.add(IReorderingProcessor.field_242232_a);
             }
-            locTextRitualEnch.addAll(lines);
-            locTextRitualEnch.add(IReorderingProcessor.field_242232_a);
+            locTextRefraction.addAll(lines);
+            locTextRefraction.add(IReorderingProcessor.field_242232_a);
         }
     }
 
     private void buildRitualText() {
-        if (GatedKnowledge.CONSTELLATION_RITUAL.canSee(ResearchHelper.getClientProgress())) {
-            if (this.constellation instanceof IMinorConstellation) {
+        if (this.constellation instanceof IMinorConstellation) {
+            if (ResearchHelper.getClientProgress().getTierReached().isThisLater(ProgressionTier.TRAIT_CRAFT)) {
                 ITextComponent txtRitual = ((IMinorConstellation) this.constellation).getInfoTraitEffect();
 
                 ITextProperties headTxt = new TranslationTextComponent("astralsorcery.journal.constellation.ritual.trait");
-                locTextRitualEnch.add(localize(headTxt));
-                locTextRitualEnch.add(IReorderingProcessor.field_242232_a);
+                locTextRitual.add(localize(headTxt));
+                locTextRitual.add(IReorderingProcessor.field_242232_a);
 
                 List<IReorderingProcessor> lines = new LinkedList<>();
                 for (String segment : txtRitual.getUnformattedComponentText().split("<NL>")) {
                     lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
                     lines.add(IReorderingProcessor.field_242232_a);
                 }
-                locTextRitualEnch.addAll(lines);
-            } else if (this.constellation instanceof IWeakConstellation) {
+                locTextRitual.addAll(lines);
+            }
+        } else if (this.constellation instanceof IWeakConstellation) {
+            if (ResearchHelper.getClientProgress().getTierReached().isThisLater(ProgressionTier.ATTUNEMENT)) {
                 ITextComponent txtRitual = ((IWeakConstellation) this.constellation).getInfoRitualEffect();
 
                 ITextProperties headTxt = new TranslationTextComponent("astralsorcery.journal.constellation.ritual");
-                locTextRitualEnch.add(localize(headTxt));
-                locTextRitualEnch.add(IReorderingProcessor.field_242232_a);
+                locTextRitual.add(localize(headTxt));
+                locTextRitual.add(IReorderingProcessor.field_242232_a);
 
                 List<IReorderingProcessor> lines = new LinkedList<>();
                 for (String segment : txtRitual.getUnformattedComponentText().split("<NL>")) {
                     lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
                     lines.add(IReorderingProcessor.field_242232_a);
                 }
-                locTextRitualEnch.addAll(lines);
+                locTextRitual.addAll(lines);
+                locTextRitual.add(IReorderingProcessor.field_242232_a);
+            }
+            if (ResearchHelper.getClientProgress().getTierReached().isThisLater(ProgressionTier.TRAIT_CRAFT)) {
+                ITextComponent txtCorruptedRitual = ((IWeakConstellation) this.constellation).getInfoCorruptedRitualEffect();
+
+                ITextProperties headTxt = new TranslationTextComponent("astralsorcery.journal.constellation.corruption");
+                locTextRitual.add(localize(headTxt));
+                locTextRitual.add(IReorderingProcessor.field_242232_a);
+
+                List<IReorderingProcessor> lines = new LinkedList<>();
+                for (String segment : txtCorruptedRitual.getUnformattedComponentText().split("<NL>")) {
+                    lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
+                    lines.add(IReorderingProcessor.field_242232_a);
+                }
+                locTextRitual.addAll(lines);
+                locTextRitual.add(IReorderingProcessor.field_242232_a);
             }
         }
     }
@@ -233,10 +243,13 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
                 drawPageExtendedInformation(renderStack);
                 break;
             case 1:
-                drawEnchantingPotionPaperPageInformation(renderStack, mouseX, mouseY, pTicks);
+                drawRefractionTableInformation(renderStack, mouseX, mouseY, pTicks);
                 break;
             case 2:
                 drawCapeInformationPages(renderStack, mouseX, mouseY, pTicks);
+                break;
+            case 3:
+                drawConstellationPaperRecipePage(renderStack, mouseX, mouseY, pTicks);
                 break;
             default:
                 break;
@@ -244,16 +257,33 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
         this.setBlitOffset(0);
     }
 
+    private void drawRefractionTableInformation(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
+        for (int i = 0; i < locTextRitual.size(); i++) {
+            IReorderingProcessor line = locTextRitual.get(i);
+            renderStack.push();
+            renderStack.translate(guiLeft + 30, guiTop + 30 + i * 10, this.getGuiZLevel());
+            RenderingDrawUtils.renderStringAt(line, renderStack, font, 0xFFCCCCCC, true);
+            renderStack.pop();
+        }
+        for (int i = 0; i < locTextRefraction.size(); i++) {
+            IReorderingProcessor line = locTextRefraction.get(i);
+            renderStack.push();
+            renderStack.translate(guiLeft + 220, guiTop + 30 + i * 10, this.getGuiZLevel());
+            RenderingDrawUtils.renderStringAt(line, renderStack, font, 0xFFCCCCCC, true);
+            renderStack.pop();
+        }
+    }
+
     private void drawCapeInformationPages(MatrixStack renderStack, int mouseX, int mouseY, float partialTicks) {
-        for (int i = 0; i < locTextMantleCorruption.size(); i++) {
-            IReorderingProcessor line = locTextMantleCorruption.get(i);
+        for (int i = 0; i < locTextMantle.size(); i++) {
+            IReorderingProcessor line = locTextMantle.get(i);
             renderStack.push();
             renderStack.translate(guiLeft + 30, guiTop + 30 + i * 10, this.getGuiZLevel());
             RenderingDrawUtils.renderStringAt(line, renderStack, font, 0xFFCCCCCC, true);
             renderStack.pop();
         }
 
-        if (GatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchHelper.getClientProgress())) {
+        if (ResearchHelper.getClientProgress().getTierReached().isThisLater(ProgressionTier.TRAIT_CRAFT)) {
             SimpleAltarRecipe recipe = RecipeHelper.findAltarRecipeResult(stack ->
                     stack.getItem() instanceof ItemMantle &&
                             this.constellation.equals(ItemsAS.MANTLE.getConstellation(stack)));
@@ -266,24 +296,16 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
         }
     }
 
-    private void drawEnchantingPotionPaperPageInformation(MatrixStack renderStack, int mouseX, int mouseY, float partialTicks) {
-        for (int i = 0; i < locTextRitualEnch.size(); i++) {
-            IReorderingProcessor line = locTextRitualEnch.get(i);
-            renderStack.push();
-            renderStack.translate(guiLeft + 30, guiTop + 30 + i * 10, this.getGuiZLevel());
-            RenderingDrawUtils.renderStringAt(line, renderStack, font, 0xFFCCCCCC, true);
-            renderStack.pop();
-        }
-
-        if (GatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(ResearchHelper.getClientProgress())) {
+    private void drawConstellationPaperRecipePage(MatrixStack renderStack, int mouseX, int mouseY, float partialTicks) {
+        if (ResearchHelper.getClientProgress().getTierReached().isThisLater(ProgressionTier.TRAIT_CRAFT)) {
             SimpleAltarRecipe recipe = RecipeHelper.findAltarRecipeResult(stack ->
                     stack.getItem() instanceof ItemConstellationPaper &&
                     this.constellation.equals(ItemsAS.CONSTELLATION_PAPER.getConstellation(stack)));
 
             if (recipe != null) {
                 lastFramePage = new RenderPageAltarRecipe(null, -1, recipe);
-                lastFramePage.render    (renderStack, guiLeft + 220, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
-                lastFramePage.postRender(renderStack, guiLeft + 220, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
+                lastFramePage.render    (renderStack, guiLeft + 30, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
+                lastFramePage.postRender(renderStack, guiLeft + 30, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
             }
         }
     }

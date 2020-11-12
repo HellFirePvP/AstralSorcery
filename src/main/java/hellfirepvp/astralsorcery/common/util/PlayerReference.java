@@ -46,7 +46,7 @@ public class PlayerReference {
         if (txt instanceof IFormattableTextComponent) {
             return new PlayerReference(player.getUniqueID(), (IFormattableTextComponent) txt);
         }
-        return new PlayerReference(player.getUniqueID(), StringTextComponent.EMPTY.append(txt));
+        return new PlayerReference(player.getUniqueID(), new StringTextComponent("").append(txt));
     }
 
     public boolean isPlayer(PlayerEntity player) {

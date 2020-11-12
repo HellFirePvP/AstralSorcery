@@ -158,7 +158,7 @@ public class GatewayCache extends GlobalWorldData {
     public static class GatewayNode {
 
         private final BlockPos pos;
-        private IFormattableTextComponent display;
+        private ITextComponent display;
         private DyeColor color;
 
         private boolean locked = false;
@@ -179,7 +179,7 @@ public class GatewayCache extends GlobalWorldData {
         }
 
         @Nullable
-        public IFormattableTextComponent getDisplayName() {
+        public ITextComponent getDisplayName() {
             return display;
         }
 
@@ -300,11 +300,11 @@ public class GatewayCache extends GlobalWorldData {
 
         @Nullable
         @Override
-        public IFormattableTextComponent getDisplayName() {
+        public ITextComponent getDisplayName() {
             return this.decorated.getDisplayName();
         }
 
-        public void setDisplayName(@Nullable IFormattableTextComponent displayName) {
+        public void setDisplayName(@Nullable ITextComponent displayName) {
             this.decorated.display = displayName;
         }
 

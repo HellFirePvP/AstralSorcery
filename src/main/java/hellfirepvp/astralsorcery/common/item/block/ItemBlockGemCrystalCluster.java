@@ -32,8 +32,6 @@ public class ItemBlockGemCrystalCluster extends ItemBlockCustom {
 
     public ItemBlockGemCrystalCluster(Block block, Properties itemProperties) {
         super(block, itemProperties);
-        this.addPropertyOverride(new ResourceLocation("stage"),
-                (stack, world, entity) -> ((float) stack.getDamage()) / BlockGemCrystalCluster.STAGE.getAllowedValues().size());
     }
 
     @Override

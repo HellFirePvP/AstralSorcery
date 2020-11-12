@@ -43,8 +43,6 @@ public class ItemBlockCelestialCrystalCluster extends ItemBlockCustom implements
     public ItemBlockCelestialCrystalCluster(Block block, Properties itemProperties) {
         super(block, itemProperties
                 .rarity(CommonProxy.RARITY_CELESTIAL));
-        this.addPropertyOverride(new ResourceLocation("stage"),
-                (stack, world, entity) -> ((float) stack.getDamage()) / BlockCelestialCrystalCluster.STAGE.getAllowedValues().size());
     }
 
     @Override

@@ -20,6 +20,7 @@ import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.LecternTileEntity;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
@@ -66,13 +67,15 @@ public class EventHandlerMisc {
             ((Chunk) ch).getCapability(CapabilitiesAS.CHUNK_FLUID).ifPresent(entry -> {
                 if (!entry.isInitialized()) {
                     IWorld w = event.getWorld();
-                    long seed = w.getSeed();
-                    long chX = event.getChunk().getPos().x;
-                    long chZ = event.getChunk().getPos().z;
-                    seed ^= chX << 32;
-                    seed ^= chZ;
-                    entry.generate(seed);
-                    ((Chunk) ch).markDirty();
+                    if (w instanceof ISeedReader) {
+                        long seed = ((ISeedReader) w).getSeed();
+                        long chX = event.getChunk().getPos().x;
+                        long chZ = event.getChunk().getPos().z;
+                        seed ^= chX << 32;
+                        seed ^= chZ;
+                        entry.generate(seed);
+                        ((Chunk) ch).markDirty();
+                    }
                 }
             });
         }

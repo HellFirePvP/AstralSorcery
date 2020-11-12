@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
 import hellfirepvp.astralsorcery.common.block.base.CustomItemBlockProperties;
+import hellfirepvp.astralsorcery.common.block.tile.BlockCelestialCrystalCluster;
+import hellfirepvp.astralsorcery.common.block.tile.BlockGemCrystalCluster;
 import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.item.base.client.ItemDynamicColor;
@@ -29,13 +31,17 @@ import hellfirepvp.astralsorcery.common.item.lens.*;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.useables.*;
 import hellfirepvp.astralsorcery.common.item.wand.*;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import hellfirepvp.astralsorcery.common.util.dispenser.FluidContainerDispenseBehavior;
 import net.minecraft.block.Block;
 import net.minecraft.block.DispenserBlock;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -135,6 +141,28 @@ public class RegistryItems {
 
     public static void registerDispenseBehaviors() {
         DispenserBlock.registerDispenseBehavior(BUCKET_LIQUID_STARLIGHT, FluidContainerDispenseBehavior.getInstance());
+    }
+
+    public static void registerItemProperties() {
+        ItemModelsProperties.registerProperty(INFUSED_GLASS, new ResourceLocation("engraved"), (stack, world, entity) -> {
+            return ItemInfusedGlass.getEngraving(stack) != null ? 1 : 0;
+        });
+        ItemModelsProperties.registerProperty(KNOWLEDGE_SHARE, new ResourceLocation("written"), (stack, world, entity) -> {
+            return ItemKnowledgeShare.isCreative(stack) || ItemKnowledgeShare.getKnowledge(stack) != null ? 1 : 0;
+        });
+        ItemModelsProperties.registerProperty(RESONATOR, new ResourceLocation("upgrade"), (stack, world, entity) -> {
+            if (!(entity instanceof PlayerEntity)) {
+                return ItemResonator.ResonatorUpgrade.STARLIGHT.ordinal() / (float) ItemResonator.ResonatorUpgrade.values().length;
+            }
+            ItemResonator.ResonatorUpgrade current = ItemResonator.getCurrentUpgrade((PlayerEntity) entity, stack);
+            return current.ordinal() / (float) ItemResonator.ResonatorUpgrade.values().length;
+        });
+        ItemModelsProperties.registerProperty(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER.asItem(), new ResourceLocation("stage"), (stack, world, entity) -> {
+            return ((float) stack.getDamage()) / BlockCelestialCrystalCluster.STAGE.getAllowedValues().size();
+        });
+        ItemModelsProperties.registerProperty(BlocksAS.GEM_CRYSTAL_CLUSTER.asItem(), new ResourceLocation("stage"), (stack, world, entity) -> {
+            return ((float) stack.getDamage()) / BlockGemCrystalCluster.STAGE.getAllowedValues().size();
+        });
     }
 
     private static void registerItemBlock(CustomItemBlock block) {

@@ -80,7 +80,7 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
 
     private Function<Float, Float> getDistributionFunc() {
         if (enhanced) {
-            return (in) -> 0.6F + (1.1F * in);
+            return (in) -> 0.6F + (0.5F * in);
         } else {
             return (in) -> 0.2F + (0.8F * in);
         }

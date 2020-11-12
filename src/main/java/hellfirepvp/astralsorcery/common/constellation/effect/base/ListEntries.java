@@ -17,6 +17,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collections;
@@ -59,20 +61,20 @@ public class ListEntries {
             nbt.putString("entity", this.type.getRegistryName().toString());
         }
 
-        public static EntitySpawnEntry createEntry(World world, BlockPos pos, SpawnReason reason) {
+        public static EntitySpawnEntry createEntry(ServerWorld world, BlockPos pos, SpawnReason reason) {
             Biome b = world.getBiome(pos);
-            List<Biome.SpawnListEntry> applicable = new LinkedList<>();
+            List<MobSpawnInfo.Spawners> applicable = new LinkedList<>();
             if (DayTimeHelper.isNight(world)) {
-                applicable.addAll(b.getSpawns(EntityClassification.MONSTER));
+                applicable.addAll(b.getMobSpawnInfo().getSpawners(EntityClassification.MONSTER));
             } else {
-                applicable.addAll(b.getSpawns(EntityClassification.CREATURE));
+                applicable.addAll(b.getMobSpawnInfo().getSpawners(EntityClassification.CREATURE));
             }
             if (applicable.isEmpty()) {
                 return null; //Duh.
             }
             Collections.shuffle(applicable);
-            Biome.SpawnListEntry entry = applicable.get(world.rand.nextInt(applicable.size()));
-            EntityType<?> type = entry.entityType;
+            MobSpawnInfo.Spawners entry = applicable.get(world.rand.nextInt(applicable.size()));
+            EntityType<?> type = entry.type;
             if (type != null && EntityUtils.canEntitySpawnHere(world, pos, type, reason,
                     (e) -> e.addTag(ConstellationEffectRegistry.ENTITY_TAG_LUCERNA_SKIP_ENTITY))) {
                 return new EntitySpawnEntry(pos, type);
@@ -80,7 +82,7 @@ public class ListEntries {
             return null;
         }
 
-        public void spawn(World world, SpawnReason reason) {
+        public void spawn(ServerWorld world, SpawnReason reason) {
             if (this.type == null) {
                 return;
             }

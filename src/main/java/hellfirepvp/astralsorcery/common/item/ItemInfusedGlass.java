@@ -46,9 +46,6 @@ public class ItemInfusedGlass extends Item {
                 .maxStackSize(1)
                 .maxDamage(5)
                 .group(CommonProxy.ITEM_GROUP_AS));
-
-        this.addPropertyOverride(new ResourceLocation("engraved"),
-                (stack, world, entity) -> getEngraving(stack) != null ? 1 : 0);
     }
 
     @Override
@@ -60,16 +57,16 @@ public class ItemInfusedGlass extends Item {
                 IConstellation cst = ConstellationRegistry.getConstellation(key);
                 if (cst != null) {
                     String format = "item.astralsorcery.infused_glass.ttip";
-                    ITextComponent cstName = cst.getConstellationName().applyTextStyle(TextFormatting.BLUE);
+                    ITextComponent cstName = cst.getConstellationName().mergeStyle(TextFormatting.BLUE);
 
                     if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isCreative()) {
                         String percent = String.valueOf(Math.round(map.getDistribution(cst) * 100F));
                         ITextComponent creativeHint = new TranslationTextComponent("item.astralsorcery.infused_glass.ttip.creative", percent)
-                                .applyTextStyle(TextFormatting.LIGHT_PURPLE);
+                                .mergeStyle(TextFormatting.LIGHT_PURPLE);
 
-                        tooltip.add(new TranslationTextComponent(format, cstName, creativeHint).applyTextStyle(TextFormatting.GRAY));
+                        tooltip.add(new TranslationTextComponent(format, cstName, creativeHint).mergeStyle(TextFormatting.GRAY));
                     } else {
-                        tooltip.add(new TranslationTextComponent(format, cstName, "").applyTextStyle(TextFormatting.GRAY));
+                        tooltip.add(new TranslationTextComponent(format, cstName, "").mergeStyle(TextFormatting.GRAY));
                     }
                 }
             }

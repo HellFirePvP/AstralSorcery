@@ -92,12 +92,12 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
     };
 
     private boolean networkRegistered = false;
-    private IFormattableTextComponent displayText = null;
+    private ITextComponent displayText = null;
     private DyeColor color = null;
 
     private boolean locked = false;
     private PlayerReference owner = null;
-    private Map<Integer, PlayerReference> allowedUsers = new HashMap<>();
+    private final Map<Integer, PlayerReference> allowedUsers = new HashMap<>();
 
     private Object clientGatewaySphereEffect = null;
 
@@ -352,7 +352,7 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
         return OFFSETS_ALLOWED_PREVIEW[MathHelper.clamp(index, 0, OFFSETS_ALLOWED_PREVIEW.length - 1)];
     }
 
-    public void setDisplayText(@Nullable IFormattableTextComponent displayText) {
+    public void setDisplayText(@Nullable ITextComponent displayText) {
         this.displayText = displayText;
     }
 

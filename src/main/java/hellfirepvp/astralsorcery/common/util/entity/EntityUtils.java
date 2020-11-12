@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.util.entity;
 import com.google.common.base.Predicate;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,9 +23,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraft.loot.LootContext;
@@ -76,27 +80,28 @@ public class EntityUtils {
 
     @Nullable
     public static LivingEntity performWorldSpawningAt(ServerWorld world, BlockPos pos, EntityClassification category, SpawnReason reason, boolean ignoreWeighting) {
-        List<Biome.SpawnListEntry> spawnList = world.getChunkProvider().getChunkGenerator().getPossibleCreatures(EntityClassification.MONSTER, pos);
+        Biome b = world.getBiome(pos);
+        StructureManager mgr = world.func_241112_a_();
+        List<MobSpawnInfo.Spawners> spawnList = world.getChunkProvider().getChunkGenerator().func_230353_a_(b, mgr, EntityClassification.MONSTER, pos);
         spawnList = ForgeEventFactory.getPotentialSpawns(world, category, pos, spawnList);
-        spawnList.removeIf(s -> !s.entityType.isSummonable());
-        Biome.SpawnListEntry entry;
+        spawnList.removeIf(s -> !s.type.isSummonable());
+        MobSpawnInfo.Spawners entry;
         if (ignoreWeighting) {
             entry = MiscUtils.getRandomEntry(spawnList, rand);
         } else {
             entry = MiscUtils.getWeightedRandomEntry(spawnList, rand, ee -> ee.itemWeight);
         }
 
-        if (entry != null && WorldEntitySpawner.isSpawnableSpace(world, pos, world.getBlockState(pos), world.getFluidState(pos))) {
-
+        if (entry != null) {
             float x = pos.getX() + 0.5F;
             float y = pos.getY();
             float z = pos.getZ() + 0.5F;
 
-            if (isSpawnableAt(world, pos)) {
-
+            BlockState state = world.getBlockState(pos);
+            if (!state.isNormalCube(world, pos) && canEntitySpawnHere(world, pos, entry.type, reason, null)) {
                 MobEntity entity;
                 try {
-                    entity = (MobEntity) entry.entityType.create(world);
+                    entity = (MobEntity) entry.type.create(world);
                 } catch (Exception exception) {
                     return null;
                 }
@@ -105,7 +110,7 @@ public class EntityUtils {
                 }
 
                 entity.setLocationAndAngles(x, y, z, rand.nextFloat() * 360F, 0F);
-                int result = ForgeHooks.canEntitySpawn(entity, world, x, y, z, null, reason);
+                int result = ForgeHooks.canEntitySpawn(entity, world, x, y, z, null, reason); //We already did the default test before.
                 if (result == -1) {
                     return null;
                 }
@@ -114,29 +119,25 @@ public class EntityUtils {
                     entity.onInitialSpawn(world, world.getDifficultyForLocation(pos), reason, null, null);
                 }
 
-                if (world.addEntity(entity)) {
-                    return entity;
-                }
+                world.func_242417_l(entity);
+                return entity;
             }
         }
         return null;
     }
 
-    private static boolean isSpawnableAt(World world, BlockPos pos) {
-        BlockPos up = pos.up();
-        return WorldEntitySpawner.isSpawnableSpace(world, pos, world.getBlockState(pos), world.getFluidState(pos)) &&
-                WorldEntitySpawner.isSpawnableSpace(world, up, world.getBlockState(up), world.getFluidState(up));
-    }
-
-    public static boolean canEntitySpawnHere(World world, BlockPos at, EntityType<? extends Entity> type, SpawnReason spawnReason, @Nullable Consumer<Entity> preCheckEntity) {
+    public static boolean canEntitySpawnHere(ServerWorld world, BlockPos at, EntityType<? extends Entity> type, SpawnReason spawnReason, @Nullable Consumer<Entity> preCheckEntity) {
+        if (type.getClassification() == EntityClassification.MISC || !type.isSummonable()) {
+            return false;
+        }
         EntitySpawnPlacementRegistry.PlacementType placementType = EntitySpawnPlacementRegistry.getPlacementType(type);
         if (!world.getWorldBorder().contains(at) || !placementType.canSpawnAt(world, at, type)) {
             return false;
         }
-        if (!EntitySpawnPlacementRegistry.func_223515_a(type, world, spawnReason, at, world.rand)) {
+        if (!EntitySpawnPlacementRegistry.canSpawnEntity(type, world, spawnReason, at, rand)) {
             return false;
         }
-        if (world.hasNoCollisions(type.func_220328_a(at.getX() + 0.5, at.getY(), at.getZ() + 0.5))) {
+        if (!world.hasNoCollisions(type.getBoundingBoxWithSizeApplied(at.getX() + 0.5, at.getY(), at.getZ() + 0.5))) {
             return false;
         }
 

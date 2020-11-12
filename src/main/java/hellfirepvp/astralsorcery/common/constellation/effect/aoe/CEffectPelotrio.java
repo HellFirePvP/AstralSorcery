@@ -46,13 +46,17 @@ import java.util.List;
  */
 public class CEffectPelotrio extends CEffectAbstractList<ListEntries.EntitySpawnEntry> {
 
-    private static AxisAlignedBB PROXIMITY_BOX = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
+    private static final AxisAlignedBB PROXIMITY_BOX = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 
     public static PelotrioConfig CONFIG = new PelotrioConfig();
 
     public CEffectPelotrio(@Nonnull ILocatable origin) {
-        super(origin, ConstellationsAS.pelotrio, CONFIG.maxAmount.get(),
-                (world, pos, state) -> ListEntries.EntitySpawnEntry.createEntry(world, pos, SpawnReason.SPAWNER) != null);
+        super(origin, ConstellationsAS.pelotrio, CONFIG.maxAmount.get(), (world, pos, state) -> {
+            if (!(world instanceof ServerWorld)) {
+                return false;
+            }
+            return ListEntries.EntitySpawnEntry.createEntry((ServerWorld) world, pos, SpawnReason.SPAWNER) != null;
+        });
     }
 
     @Nullable
@@ -64,7 +68,10 @@ public class CEffectPelotrio extends CEffectAbstractList<ListEntries.EntitySpawn
     @Nullable
     @Override
     public ListEntries.EntitySpawnEntry createElement(World world, BlockPos pos) {
-        return ListEntries.EntitySpawnEntry.createEntry(world, pos, SpawnReason.SPAWNER);
+        if (!(world instanceof ServerWorld)) {
+            return null;
+        }
+        return ListEntries.EntitySpawnEntry.createEntry((ServerWorld) world, pos, SpawnReason.SPAWNER);
     }
 
     @Override
@@ -112,7 +119,7 @@ public class CEffectPelotrio extends CEffectAbstractList<ListEntries.EntitySpawn
             count++;
             entry.setCounter(count);
             if (count >= 40) {
-                entry.spawn(world, SpawnReason.SPAWNER);
+                entry.spawn((ServerWorld) world, SpawnReason.SPAWNER);
                 removeElement(entry);
             }
 

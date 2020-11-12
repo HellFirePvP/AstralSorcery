@@ -70,7 +70,7 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
     @OnlyIn(Dist.CLIENT)
     public boolean addLocalizedTooltip(Collection<IFormattableTextComponent> tooltip) {
         if (super.addLocalizedTooltip(tooltip)) {
-            tooltip.add(StringTextComponent.EMPTY);
+            tooltip.add(new StringTextComponent(""));
         }
         if (canSeeClient()) {
             this.addTooltipInfo(tooltip);
