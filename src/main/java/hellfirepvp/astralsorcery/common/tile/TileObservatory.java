@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.tile.NamedInventoryTile;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
@@ -144,11 +145,7 @@ public class TileObservatory extends TileEntityTick implements NamedInventoryTil
     public void readCustomNBT(CompoundNBT compound) {
         super.readCustomNBT(compound);
 
-        if (compound.hasUniqueId("entity")) {
-            this.entityHelperRef = compound.getUniqueId("entity");
-        } else {
-            this.entityHelperRef = null;
-        }
+        this.entityHelperRef = NBTHelper.getUUID(compound, "entity", null);
         this.observatoryYaw = compound.getFloat("oYaw");
         this.observatoryPitch = compound.getFloat("oPitch");
         this.prevObservatoryYaw = compound.getFloat("oYawPrev");

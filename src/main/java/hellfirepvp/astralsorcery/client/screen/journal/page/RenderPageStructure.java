@@ -36,6 +36,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.LanguageMap;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -146,7 +147,7 @@ public class RenderPageStructure extends RenderablePage {
                 }
                 renderStack.translate(-sliceUp.width / 2, -sliceUp.height / 2, 0);
                 RenderingGuiUtils.drawTexturedRect(renderStack, sliceUp.width, sliceUp.height,
-                        12F / 32F, v, 11F / 32F, 1F / 4F);
+                        0F / 32F, v, 11F / 32F, 1F / 4F);
                 renderStack.pop();
             }
         }
@@ -273,13 +274,13 @@ public class RenderPageStructure extends RenderablePage {
         }
 
         if (this.switchView != null && this.switchView.contains(mouseX, mouseY)) {
-            String switchInfo = LanguageMap.getInstance().func_230503_a_("astralsorcery.journal.structure.switch_view");
-            RenderingDrawUtils.renderBlueTooltipString(renderStack, this.switchView.x + this.switchView.width / 2, this.switchView.y + this.switchView.height / 2, z + 500,
+            ITextProperties switchInfo = new TranslationTextComponent("astralsorcery.journal.structure.switch_view");
+            RenderingDrawUtils.renderBlueTooltipComponents(renderStack, this.switchView.x + this.switchView.width / 2, this.switchView.y + this.switchView.height / 2, z + 500,
                     Lists.newArrayList(switchInfo), RenderablePage.getFontRenderer(), false);
         }
         if (this.switchRequiredAir != null && this.switchRequiredAir.contains(mouseX, mouseY)) {
-            String switchInfo = LanguageMap.getInstance().func_230503_a_("astralsorcery.journal.structure.required_air");
-            RenderingDrawUtils.renderBlueTooltipString(renderStack, this.switchRequiredAir.x + this.switchRequiredAir.width / 2, this.switchRequiredAir.y + this.switchRequiredAir.height / 2, z + 500,
+            ITextProperties switchInfo = new TranslationTextComponent("astralsorcery.journal.structure.required_air");
+            RenderingDrawUtils.renderBlueTooltipComponents(renderStack, this.switchRequiredAir.x + this.switchRequiredAir.width / 2, this.switchRequiredAir.y + this.switchRequiredAir.height / 2, z + 500,
                     Lists.newArrayList(switchInfo), RenderablePage.getFontRenderer(), false);
         }
     }

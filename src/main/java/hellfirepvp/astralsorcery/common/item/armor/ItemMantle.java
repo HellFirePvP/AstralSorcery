@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.source.provider.equipment.EquipmentAttributeModifierProvider;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import hellfirepvp.astralsorcery.common.util.object.CacheReference;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -60,8 +61,9 @@ import java.util.UUID;
  */
 public class ItemMantle extends ArmorItem implements ItemDynamicColor, ConstellationBaseItem, EquipmentAttributeModifierProvider, AlignmentChargeConsumer {
 
-    private static final DynamicAttributeModifier EVORSIO_MANTLE_MINING_SIZE =
-            new DynamicAttributeModifier(UUID.fromString("aae54b9d-e1c8-4e74-8ac6-efa06093bd1a"), PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, ModifierType.ADDITION, 2F);
+    private static final UUID MODIFIER_ID = UUID.fromString("aae54b9d-e1c8-4e74-8ac6-efa06093bd1a");
+    private static final CacheReference<DynamicAttributeModifier> MINING_SIZE_MODIFIER =
+            new CacheReference<>(() -> new DynamicAttributeModifier(MODIFIER_ID, PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, ModifierType.ADDITION, 2F));
 
     private static Object modelArmor = null;
 
@@ -120,7 +122,7 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
         if (ItemMantle.getEffect(stack, ConstellationsAS.evorsio) == null) {
             return Collections.emptyList();
         }
-        return Collections.singletonList(EVORSIO_MANTLE_MINING_SIZE);
+        return Collections.singletonList(MINING_SIZE_MODIFIER.get());
     }
 
     @Override

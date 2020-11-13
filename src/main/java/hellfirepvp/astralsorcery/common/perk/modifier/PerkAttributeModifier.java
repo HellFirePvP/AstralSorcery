@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.modifier;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
@@ -55,6 +56,8 @@ public class PerkAttributeModifier extends ForgeRegistryEntry<PerkAttributeModif
     private final Map<PerkConverter, Table<PerkAttributeType, ModifierType, PerkAttributeModifier>> cachedConverters = Maps.newHashMap();
 
     public PerkAttributeModifier(PerkAttributeType type, ModifierType mode, float value) {
+        Preconditions.checkNotNull(type, "Perk attribute type must not be null!");
+        Preconditions.checkNotNull(mode, "Modifier type must not be null!");
         this.comparisonKey = AstralSorcery.key("generic_perk_modifier_" + counter++);
         this.attributeType = type;
         this.mode = mode;

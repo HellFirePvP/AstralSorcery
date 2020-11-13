@@ -18,10 +18,13 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
@@ -33,13 +36,13 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class ReaderVanillaAttribute extends PerkAttributeReader {
 
-    protected final Attribute attribute;
+    protected final RegistryObject<Attribute> attribute;
 
     protected boolean formatAsDecimal = false;
 
-    public ReaderVanillaAttribute(PerkAttributeType type, Attribute vanillaAttribute) {
+    public ReaderVanillaAttribute(PerkAttributeType type, RegistryObject<Attribute> reference) {
         super(type);
-        this.attribute = vanillaAttribute;
+        this.attribute = reference;
     }
 
     public <T extends ReaderVanillaAttribute> T formatAsDecimal() {
@@ -49,7 +52,7 @@ public class ReaderVanillaAttribute extends PerkAttributeReader {
 
     @Override
     public double getDefaultValue(PerkAttributeMap statMap, PlayerEntity player, LogicalSide side) {
-        return player.getAttribute(this.attribute).getBaseValue();
+        return player.getAttribute(this.attribute.get()).getBaseValue();
     }
 
     @Override
@@ -73,7 +76,7 @@ public class ReaderVanillaAttribute extends PerkAttributeReader {
                 this.getType(), (float) value);
 
         String postProcess = "";
-        double post = AttributeEvent.postProcessVanilla(value, player.getAttribute(this.attribute));
+        double post = AttributeEvent.postProcessVanilla(value, player.getAttribute(this.attribute.get()));
         if (Math.abs(value - post) > 1E-4 &&
                 (limit == null || Math.abs(post - limit) > 1E-4)) {
             if (Math.abs(post) >= 1E-4) {

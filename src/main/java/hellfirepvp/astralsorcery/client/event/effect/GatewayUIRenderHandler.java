@@ -156,7 +156,7 @@ public class GatewayUIRenderHandler implements ITickHandler {
         GatewayUI.GatewayEntry entry = findMatchingEntry(MathHelper.wrapDegrees(player.rotationYaw), MathHelper.wrapDegrees(player.rotationPitch));
         if (entry != null) {
             ITextComponent display = entry.getNode().getDisplayName();
-            if (display != null && !display.getUnformattedComponentText().isEmpty()) {
+            if (display != null && !display.getString().isEmpty()) {
                 Vector3 at = entry.getRelativePos().clone()
                         .add(renderOffset)
                         .addY(0.4F)

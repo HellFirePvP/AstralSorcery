@@ -257,7 +257,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver<
 
         long seed = 3451968351053166105L;
         seed |= this.getLocationPos().toLong() * 31;
-        seed |= this.channelingType.getConstellationName().getUnformattedComponentText().hashCode() * 31;
+        seed |= this.channelingType.getSimpleName().hashCode() * 31;
         Random r = new Random(seed);
         for (int i = 0; i < this.getMirrorCount(); i++) {
             r.nextInt(TileRitualPedestal.RITUAL_CIRCLE_OFFSETS.size());

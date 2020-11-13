@@ -118,8 +118,8 @@ dependencies {
     compileOnly 'top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0:api'
     runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0')
 
-    compileOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.0.52')
-    runtimeOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.0.52')
+    compileOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.0.58')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.0.58')
 
 }
 

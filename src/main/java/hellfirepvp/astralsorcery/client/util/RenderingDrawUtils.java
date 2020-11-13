@@ -37,10 +37,8 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -145,14 +143,6 @@ public class RenderingDrawUtils {
         vb.pos(matr, (float) offset.getX(), (float) offset.getY(), 0).tex(0, 0).endVertex();
     }
 
-    public static void renderBlueTooltipString(MatrixStack renderStack, float x, float y, float zLevel,
-                                               List<String> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
-        List<Tuple<ItemStack, ITextProperties>> stackTooltip = MapStream.ofValues(tooltipData, t -> ItemStack.EMPTY)
-                .mapValue(tip -> (ITextProperties) new StringTextComponent(tip))
-                .toTupleList();
-        renderBlueTooltip(renderStack, x, y, zLevel, stackTooltip, fontRenderer, isFirstLineHeadline);
-    }
-
     public static void renderBlueTooltipComponents(MatrixStack renderStack, float x, float y, float zLevel,
                                                    List<ITextProperties> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
         List<Tuple<ItemStack, ITextProperties>> stackTooltip = MapStream.ofValues(tooltipData, t -> ItemStack.EMPTY).toTupleList();
@@ -162,14 +152,6 @@ public class RenderingDrawUtils {
     public static void renderBlueTooltip(MatrixStack renderStack, float x, float y, float zLevel,
                                          List<Tuple<ItemStack, ITextProperties>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
         renderTooltip(renderStack, x, y, zLevel, tooltipData, fontRenderer, isFirstLineHeadline, 0xFF000027, 0xFF000044, Color.WHITE);
-    }
-
-    public static void renderBlueStackTooltip(MatrixStack renderStack, float x, float y, float zLevel,
-                                              List<Tuple<ItemStack, String>> tooltipData, FontRenderer fontRenderer, boolean isFirstLineHeadline) {
-        List<Tuple<ItemStack, ITextProperties>> stackTooltip = MapStream.of(tooltipData)
-                .mapValue(str -> (ITextProperties) new StringTextComponent(str))
-                .toTupleList();
-        renderTooltip(renderStack, x, y, zLevel, stackTooltip, fontRenderer, isFirstLineHeadline, 0xFF000027, 0xFF000044, Color.WHITE);
     }
 
     public static void renderTooltip(MatrixStack renderStack, float x, float y, float zLevel,
@@ -209,7 +191,11 @@ public class RenderingDrawUtils {
                     customFR = fontRenderer;
                 }
 
-                lengthLimitedToolTip.add(new Tuple<>(toolTip.getA(), customFR.trimStringToWidth(toolTip.getB(), formatWidth)));
+                List<IReorderingProcessor> textLines = customFR.trimStringToWidth(toolTip.getB(), formatWidth);
+                if (textLines.isEmpty()) {
+                    textLines = Collections.singletonList(IReorderingProcessor.field_242232_a);
+                }
+                lengthLimitedToolTip.add(new Tuple<>(toolTip.getA(), textLines));
             }
 
             float pX = x + 12;
@@ -271,7 +257,7 @@ public class RenderingDrawUtils {
                         customFR = fontRenderer;
                     }
                     renderStack.push();
-                    renderStack.translate(offset, 0, 0);
+                    renderStack.translate(offset, 0, zLevel);
                     renderStringAt(text, renderStack, customFR, strColor.getRGB(), false);
                     renderStack.pop();
 

@@ -18,6 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Collection;
@@ -76,12 +77,12 @@ public class EquipmentModifierSource implements ModifierSource, AttributeModifie
         if (o == null || getClass() != o.getClass()) return false;
         EquipmentModifierSource that = (EquipmentModifierSource) o;
         return slot == that.slot &&
-                NBTHelper.getPersistentData(itemStack).getUniqueId(EquipmentSourceProvider.KEY_MOD_IDENTIFIER)
-                        .equals(NBTHelper.getPersistentData(that.itemStack).getUniqueId(EquipmentSourceProvider.KEY_MOD_IDENTIFIER));
+                NBTHelper.getUUID(NBTHelper.getPersistentData(itemStack), EquipmentSourceProvider.KEY_MOD_IDENTIFIER, Util.DUMMY_UUID)
+                        .equals(NBTHelper.getUUID(NBTHelper.getPersistentData(that.itemStack), EquipmentSourceProvider.KEY_MOD_IDENTIFIER, Util.DUMMY_UUID));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(slot, NBTHelper.getPersistentData(itemStack).getUniqueId(EquipmentSourceProvider.KEY_MOD_IDENTIFIER));
+        return Objects.hash(slot, NBTHelper.getUUID(NBTHelper.getPersistentData(itemStack), EquipmentSourceProvider.KEY_MOD_IDENTIFIER, Util.DUMMY_UUID));
     }
 }

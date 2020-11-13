@@ -84,7 +84,7 @@ public class RenderPageAltarRecipe extends RenderPageRecipeTemplate {
                 }
             }
         }
-        this.renderExpectedRelayInputs(renderStack, x, y, z, this.recipe);
+        this.renderExpectedRelayInputs(renderStack, x, y, z + 150, this.recipe);
     }
 
     @Override

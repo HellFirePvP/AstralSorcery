@@ -95,7 +95,7 @@ public class WidthHeightScreen extends InputScreen {
         }
 
         if (closeWithInventoryKey && Minecraft.getInstance().gameSettings.keyBindInventory.isKeyDown()) {
-            this.onClose();
+            this.closeScreen();
 
             if (Minecraft.getInstance().currentScreen == null) {
                 Minecraft.getInstance().mouseHelper.grabMouse();

@@ -329,7 +329,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                         toolTip.add(new TranslationTextComponent("perk.info.astralsorcery.locked").mergeStyle(TextFormatting.GRAY));
                     }
 
-                    if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
+                    if (Minecraft.getInstance().gameSettings.advancedItemTooltips && perk.getCategory() != AbstractPerk.CATEGORY_BASE) {
                         toolTip.add(perk.getCategory().getName().mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.ITALIC));
                     }
                     Collection<IFormattableTextComponent> modInfo = perk.getSource();
@@ -810,11 +810,11 @@ public class ScreenJournalPerkTree extends ScreenJournal {
             if (perk instanceof ProgressGatedPerk && !((ProgressGatedPerk) perk).canSeeClient()) {
                 continue;
             }
-            if (perk.getCategory().getName().getUnformattedComponentText().toLowerCase().contains(matchText)) {
+            if (perk.getCategory().getName().getString().toLowerCase().contains(matchText)) {
                 this.searchMatches.add(perk);
             } else {
                 for (IFormattableTextComponent tooltip : perk.getLocalizedTooltip()) {
-                    if (tooltip.getUnformattedComponentText().toLowerCase().contains(matchText)) {
+                    if (tooltip.getString().toLowerCase().contains(matchText)) {
                         this.searchMatches.add(perk);
                         break;
                     }
@@ -822,7 +822,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
             }
         }
         IFormattableTextComponent sealedInfo = new TranslationTextComponent("perk.info.astralsorcery.sealed");
-        if (sealedInfo.getUnformattedComponentText().toLowerCase().contains(matchText)) {
+        if (sealedInfo.getString().toLowerCase().contains(matchText)) {
             PlayerProgress prog = ResearchHelper.getClientProgress();
             for (AbstractPerk sealed : prog.getSealedPerks()) {
                 if (!this.searchMatches.contains(sealed)) {

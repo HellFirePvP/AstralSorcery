@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
@@ -100,9 +101,9 @@ public class ScreenJournalClusterRenderer {
                     ITextProperties name = clickableNodes.get(r).getName();
 
                     renderStack.push();
-                    renderStack.translate(r.getX(), r.getY(), 0);
+                    renderStack.translate(r.getX(), r.getY(), zLevel + 200);
                     renderStack.scale(progressionSizeHandler.getScalingFactor(), progressionSizeHandler.getScalingFactor(), 1F);
-                    RenderingDrawUtils.renderBlueTooltipComponents(renderStack, 0, 0, zLevel, Lists.newArrayList(name), Minecraft.getInstance().fontRenderer, false);
+                    RenderingDrawUtils.renderBlueTooltipComponents(renderStack, 0, 0, 0, Lists.newArrayList(name), Minecraft.getInstance().fontRenderer, false);
                     renderStack.pop();
                 }
             }
@@ -212,8 +213,11 @@ public class ScreenJournalClusterRenderer {
                 renderStack.translate(3, 3, 100);
                 renderStack.scale(0.75F, 0.75F, 1);
 
+                RenderHelper.enableStandardItemLighting();
                 RenderingUtils.renderTranslucentItemStackModelGUI(node.getRenderItemStack(ClientScheduler.getClientTick()),
                         renderStack, Color.WHITE, Blending.DEFAULT, MathHelper.clamp((int) (alpha * 255F), 0, 255));
+                RenderHelper.disableStandardItemLighting();
+
                 renderStack.pop();
                 break;
             case TEXTURE_SPRITE:
@@ -231,7 +235,6 @@ public class ScreenJournalClusterRenderer {
                 renderStack.push();
                 renderStack.translate(offsetX, offsetY, 0);
 
-                RenderSystem.enableTexture();
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
 
@@ -257,7 +260,6 @@ public class ScreenJournalClusterRenderer {
 
                 RenderSystem.defaultBlendFunc();
                 RenderSystem.disableBlend();
-                RenderSystem.disableTexture();
 
                 renderStack.pop();
                 break;
@@ -315,7 +317,6 @@ public class ScreenJournalClusterRenderer {
     }
 
     private void drawResearchItemBackground(double zoomedWH, double xAdd, double yAdd, float zLevel) {
-        RenderSystem.enableTexture();
         RenderSystem.enableBlend();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             buf.pos(xAdd,            yAdd + zoomedWH, zLevel).color(alpha, alpha, alpha, alpha).tex(0, 1).endVertex();
@@ -324,6 +325,5 @@ public class ScreenJournalClusterRenderer {
             buf.pos(xAdd,            yAdd,            zLevel).color(alpha, alpha, alpha, alpha).tex(0, 0).endVertex();
         });
         RenderSystem.disableBlend();
-        RenderSystem.disableTexture();
     }
 }

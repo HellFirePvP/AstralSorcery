@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaPerkAttributeType;
 import net.minecraft.entity.ai.attributes.Attribute;
 
@@ -24,16 +25,14 @@ import java.util.Map;
  */
 public class PerkAttributeTypeHelper {
 
-    private static final Map<Attribute, PerkAttributeType> vanillaTypes = new HashMap<>();
-
-    public static void register(PerkAttributeType type) {
-        if (type instanceof VanillaPerkAttributeType) {
-            vanillaTypes.put(((VanillaPerkAttributeType) type).getAttribute(), type);
-        }
-    }
-
     @Nullable
     public static PerkAttributeType findVanillaType(Attribute attribute) {
-        return vanillaTypes.get(attribute);
+        return RegistriesAS.REGISTRY_PERK_ATTRIBUTE_TYPES.getValues().stream()
+                .filter(type -> type instanceof VanillaPerkAttributeType)
+                .map(type -> (VanillaPerkAttributeType) type)
+                .filter(type -> type.getAttribute().equals(attribute))
+                .findFirst()
+                .map(type -> (PerkAttributeType) type)
+                .orElse(null);
     }
 }

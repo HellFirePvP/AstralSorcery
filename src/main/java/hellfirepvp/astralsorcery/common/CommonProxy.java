@@ -79,6 +79,7 @@ import net.minecraft.world.storage.FolderName;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -159,10 +160,6 @@ public class CommonProxy {
         RegistryGameRules.init();
         RegistryStructureTypes.init();
         PacketChannel.registerPackets();
-        RegistryPerkAttributeTypes.init();
-        RegistryPerkConverters.init();
-        RegistryPerkCustomModifiers.init();
-        RegistryPerkAttributeReaders.init();
         RegistryIngredientTypes.init();
         RegistryAdvancements.init();
         AltarRecipeTypeHandler.init();
@@ -203,7 +200,7 @@ public class CommonProxy {
         eventBus.addListener(this::onServerStopping);
         eventBus.addListener(this::onServerStarting);
         eventBus.addListener(this::onServerStarted);
-        eventBus.addListener(this::onServerAboutToStart);
+        eventBus.addListener(this::onRegisterReloadListeners);
 
         EventHandlerInteract.attachListeners(eventBus);
         EventHandlerCache.attachListeners(eventBus);
@@ -277,7 +274,7 @@ public class CommonProxy {
 
         ConstellationEffectRegistry.addConfigEntries(this.serverConfig);
         MantleEffectRegistry.addConfigEntries(this.serverConfig);
-        RegistryWorldGeneration.registerFeatureConfigurations(this.serverConfig);
+        //RegistryWorldGeneration.registerFeatureConfigurations(this.serverConfig);
     }
 
     public InternalRegistryPrimer getRegistryPrimer() {
@@ -342,7 +339,7 @@ public class CommonProxy {
         RegistryCapabilities.init(MinecraftForge.EVENT_BUS);
         StarlightNetworkRegistry.setupRegistry();
 
-        RegistryWorldGeneration.addFeaturesToBiomes();
+        //RegistryWorldGeneration.addFeaturesToBiomes();
 
         PatreonDataManager.loadPatreonEffects();
     }
@@ -357,12 +354,8 @@ public class CommonProxy {
 
     // Generic events
 
-    private void onServerAboutToStart(FMLServerAboutToStartEvent event) {
-        IResourceManager mgr = event.getServer().getDataPackRegistries().getResourceManager();
-
-        if (mgr instanceof IReloadableResourceManager) {
-            ((IReloadableResourceManager) mgr).addReloadListener(PerkTreeLoader.INSTANCE);
-        }
+    private void onRegisterReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(PerkTreeLoader.INSTANCE);
     }
 
     private void onServerStarted(FMLServerStartedEvent event) {

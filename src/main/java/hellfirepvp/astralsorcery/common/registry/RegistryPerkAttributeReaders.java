@@ -9,12 +9,17 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.perk.reader.*;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import static hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS.*;
 
@@ -30,15 +35,15 @@ public class RegistryPerkAttributeReaders {
     private RegistryPerkAttributeReaders() {}
 
     public static void init() {
-        register(new ReaderVanillaAttribute(ATTR_TYPE_MELEE_DAMAGE, Attributes.ATTACK_DAMAGE).formatAsDecimal());
-        register(new ReaderVanillaAttribute(ATTR_TYPE_HEALTH, Attributes.MAX_HEALTH));
-        register(new ReaderVanillaAttribute(ATTR_TYPE_MOVESPEED, Attributes.MOVEMENT_SPEED).formatAsDecimal());
-        register(new ReaderVanillaAttribute(ATTR_TYPE_SWIMSPEED, ForgeMod.SWIM_SPEED.get()).formatAsDecimal());
-        register(new ReaderVanillaAttribute(ATTR_TYPE_ARMOR, Attributes.ARMOR));
-        register(new ReaderVanillaAttribute(ATTR_TYPE_ARMOR_TOUGHNESS, Attributes.ARMOR_TOUGHNESS));
-        register(new ReaderVanillaAttribute(ATTR_TYPE_ATTACK_SPEED, Attributes.ATTACK_SPEED).formatAsDecimal());
-        register(new ReaderVanillaAttribute(ATTR_TYPE_REACH, ForgeMod.REACH_DISTANCE.get()).formatAsDecimal());
-        register(new ReaderVanillaAttribute(ATTR_TYPE_LUCK, Attributes.LUCK).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_MELEE_DAMAGE, ref("generic.attack_damage")).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_HEALTH, ref("generic.max_health")));
+        register(new ReaderVanillaAttribute(ATTR_TYPE_MOVESPEED, ref("generic.movement_speed")).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_SWIMSPEED, ForgeMod.SWIM_SPEED).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_ARMOR, ref("generic.armor")));
+        register(new ReaderVanillaAttribute(ATTR_TYPE_ARMOR_TOUGHNESS, ref("generic.armor_toughness")));
+        register(new ReaderVanillaAttribute(ATTR_TYPE_ATTACK_SPEED, ref("generic.attack_speed")).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_REACH, ForgeMod.REACH_DISTANCE).formatAsDecimal());
+        register(new ReaderVanillaAttribute(ATTR_TYPE_LUCK, ref("generic.luck")).formatAsDecimal());
         register(new ReaderFlatAttribute(ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM, 1000F)).formatAsDecimal();
         register(new ReaderFlatAttribute(ATTR_TYPE_MINING_SIZE, 0F));
 
@@ -59,6 +64,10 @@ public class RegistryPerkAttributeReaders {
         registerDefaultReader(ATTR_TYPE_COOLDOWN_REDUCTION);
 
         register(new ReaderBreakSpeed(ATTR_TYPE_INC_HARVEST_SPEED));
+    }
+
+    private static RegistryObject<Attribute> ref(String key) {
+        return RegistryObject.of(new ResourceLocation(key), ForgeRegistries.ATTRIBUTES);
     }
 
     private static PerkAttributeReader registerDefaultReader(PerkAttributeType type) {

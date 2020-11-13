@@ -122,18 +122,20 @@ public class ScreenJournalPages extends ScreenJournal implements NavigationArrow
         //Headline
         if (this.currentPageOffset == 0) {
             int width = font.getStringPropertyWidth(this.getTitle());
-            RenderSystem.enableBlend();
-            Blending.DEFAULT.apply();
-            TexturesAS.TEX_GUI_BOOK_UNDERLINE.bindTexture();
 
             renderStack.push();
             renderStack.translate(guiLeft + 117, guiTop + 22, this.getGuiZLevel());
-            renderStack.scale(1.3F, 1.3F, 1.3F);
+            renderStack.scale(1.3F, 1.3F, 1F);
             renderStack.translate(-width / 2F, 0, 0);
             RenderingDrawUtils.renderStringAt(font, renderStack, this.getTitle(), 0x00DDDDDD);
             renderStack.pop();
 
+            RenderSystem.enableBlend();
+            Blending.DEFAULT.apply();
+            TexturesAS.TEX_GUI_BOOK_UNDERLINE.bindTexture();
+            RenderingGuiUtils.drawRect(renderStack, guiLeft + 30, guiTop + 35, this.getGuiZLevel(), 175, 6);
             RenderSystem.disableBlend();
+
             pageYOffset += 30;
         }
 
@@ -198,7 +200,7 @@ public class ScreenJournalPages extends ScreenJournal implements NavigationArrow
     }
 
     @Override
-    public void onClose() {
+    public void closeScreen() {
         if (origin != null) {
             if (saveSite) {
                 openGuiInstance = this;
@@ -211,7 +213,7 @@ public class ScreenJournalPages extends ScreenJournal implements NavigationArrow
             }
         } else {
             if (previous != null && informPreviousClose) {
-                previous.onClose();
+                previous.closeScreen();
             }
             Minecraft.getInstance().displayGuiScreen(previous);
         }
@@ -261,11 +263,11 @@ public class ScreenJournalPages extends ScreenJournal implements NavigationArrow
             if (origin != null) {
                 origin.expectReInit();
                 saveSite = false;
-                this.onClose();
+                this.closeScreen();
                 return true;
             } else {
                 informPreviousClose = false;
-                this.onClose();
+                this.closeScreen();
                 return true;
             }
         }

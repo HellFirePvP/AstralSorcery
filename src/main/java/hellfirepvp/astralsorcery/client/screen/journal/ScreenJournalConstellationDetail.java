@@ -120,7 +120,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
                 locTextMantle.add(IReorderingProcessor.field_242232_a);
 
                 List<IReorderingProcessor> lines = new LinkedList<>();
-                for (String segment : txtMantle.getUnformattedComponentText().split("<NL>")) {
+                for (String segment : txtMantle.getString().split("<NL>")) {
                     lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
                     lines.add(IReorderingProcessor.field_242232_a);
                 }
@@ -139,7 +139,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
             locTextRefraction.add(IReorderingProcessor.field_242232_a);
 
             List<IReorderingProcessor> lines = new LinkedList<>();
-            for (String segment : txtEnchantments.getUnformattedComponentText().split("<NL>")) {
+            for (String segment : txtEnchantments.getString().split("<NL>")) {
                 lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
                 lines.add(IReorderingProcessor.field_242232_a);
             }
@@ -158,7 +158,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
                 locTextRitual.add(IReorderingProcessor.field_242232_a);
 
                 List<IReorderingProcessor> lines = new LinkedList<>();
-                for (String segment : txtRitual.getUnformattedComponentText().split("<NL>")) {
+                for (String segment : txtRitual.getString().split("<NL>")) {
                     lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
                     lines.add(IReorderingProcessor.field_242232_a);
                 }
@@ -173,7 +173,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
                 locTextRitual.add(IReorderingProcessor.field_242232_a);
 
                 List<IReorderingProcessor> lines = new LinkedList<>();
-                for (String segment : txtRitual.getUnformattedComponentText().split("<NL>")) {
+                for (String segment : txtRitual.getString().split("<NL>")) {
                     lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
                     lines.add(IReorderingProcessor.field_242232_a);
                 }
@@ -188,7 +188,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
                 locTextRitual.add(IReorderingProcessor.field_242232_a);
 
                 List<IReorderingProcessor> lines = new LinkedList<>();
-                for (String segment : txtCorruptedRitual.getUnformattedComponentText().split("<NL>")) {
+                for (String segment : txtCorruptedRitual.getString().split("<NL>")) {
                     lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
                     lines.add(IReorderingProcessor.field_242232_a);
                 }
@@ -202,7 +202,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
         ITextComponent txtDescription = this.constellation.getConstellationDescription();
 
         List<IReorderingProcessor> lines = new LinkedList<>();
-        for (String segment : txtDescription.getUnformattedComponentText().split("<NL>")) {
+        for (String segment : txtDescription.getString().split("<NL>")) {
             lines.addAll(font.trimStringToWidth(new StringTextComponent(segment), JournalPage.DEFAULT_WIDTH));
             lines.add(IReorderingProcessor.field_242232_a);
         }
@@ -474,7 +474,7 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
     }
 
     @Override
-    public void onClose() {
+    public void closeScreen() {
         Minecraft.getInstance().displayGuiScreen(origin);
     }
 

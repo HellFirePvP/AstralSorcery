@@ -139,10 +139,10 @@ public class ItemKnowledgeShare extends Item {
         if (isCreative(stack)) return null;
 
         CompoundNBT compound = NBTHelper.getPersistentData(stack);
-        if (!compound.hasUniqueId("knowledgeOwnerUUID")) {
+        UUID owner = NBTHelper.getUUID(compound, "knowledgeOwnerUUID", null);
+        if (owner == null) {
             return null;
         }
-        UUID owner = compound.getUniqueId("knowledgeOwnerUUID");
         return server.getPlayerList().getPlayerByUUID(owner);
     }
 
@@ -179,10 +179,10 @@ public class ItemKnowledgeShare extends Item {
         if (isCreative(stack)) return false;
 
         CompoundNBT compound = NBTHelper.getPersistentData(stack);
-        if (!compound.hasUniqueId("knowledgeOwnerUUID")) {
+        UUID owner = NBTHelper.getUUID(compound, "knowledgeOwnerUUID", null);
+        if (owner == null) {
             return true;
         }
-        UUID owner = compound.getUniqueId("knowledgeOwnerUUID");
         return player.getUniqueID().equals(owner);
     }
 

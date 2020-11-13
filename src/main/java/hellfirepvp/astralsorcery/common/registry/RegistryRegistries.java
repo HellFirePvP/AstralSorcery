@@ -97,9 +97,6 @@ public class RegistryRegistries {
         REGISTRY_PERK_ATTRIBUTE_TYPES = new RegistryBuilder<PerkAttributeType>()
                 .setName(REGISTRY_NAME_PERK_ATTRIBUTE_TYPES)
                 .setType(PerkAttributeType.class)
-                .add((IForgeRegistry.AddCallback<PerkAttributeType>) (owner, stage, id, obj, oldObj) -> {
-                    PerkAttributeTypeHelper.register(obj);
-                })
                 .disableSaving()
                 .disableOverrides()
                 .create();

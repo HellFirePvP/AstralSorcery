@@ -575,11 +575,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
         super.readCustomNBT(compound);
 
         this.inventory = this.inventory.deserialize(compound.getCompound("inventory"));
-        if (compound.hasUniqueId("ownerUUID")) {
-            this.ownerUUID = compound.getUniqueId("ownerUUID");
-        } else {
-            this.ownerUUID = null;
-        }
+        this.ownerUUID = NBTHelper.getUUID(compound, "ownerUUID", null);
         this.ritualLinkTo = NBTHelper.readFromSubTag(compound, "ritualLinkTo", NBTHelper::readBlockPosFromNBT);
         this.working = compound.getBoolean("working");
 

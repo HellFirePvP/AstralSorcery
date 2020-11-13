@@ -357,6 +357,13 @@ public class NBTHelper {
         compound.remove(key + "Least");
     }
 
+    public static UUID getUUID(CompoundNBT compoundNBT, String key, UUID _default) {
+        if (compoundNBT.hasUniqueId(key)) {
+            return compoundNBT.getUniqueId(key);
+        }
+        return _default;
+    }
+
     public static CompoundNBT writeBlockPosToNBT(BlockPos pos, CompoundNBT compound) {
         compound.putInt("bposX", pos.getX());
         compound.putInt("bposY", pos.getY());

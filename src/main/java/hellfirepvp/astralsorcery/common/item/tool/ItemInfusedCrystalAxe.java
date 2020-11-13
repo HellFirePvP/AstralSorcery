@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.perk.source.provider.equipment.Equipment
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.util.block.TreeDiscoverer;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.object.CacheReference;
 import hellfirepvp.observerlib.api.util.BlockArray;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,8 +41,9 @@ import java.util.UUID;
  */
 public class ItemInfusedCrystalAxe extends ItemCrystalAxe implements EquipmentAttributeModifierProvider {
 
-    private static final DynamicAttributeModifier INFUSED_AXE_MINING_SPEED =
-            new DynamicAttributeModifier(UUID.fromString("85c65b91-f44c-4aba-841d-7785eae32831"), PerkAttributeTypesAS.ATTR_TYPE_INC_HARVEST_SPEED, ModifierType.ADDED_MULTIPLY, 0.1F);
+    private static final UUID MODIFIER_ID = UUID.fromString("85c65b91-f44c-4aba-841d-7785eae32831");
+    private static final CacheReference<DynamicAttributeModifier> MINING_SPEED_MODIFIER =
+            new CacheReference<>(() -> new DynamicAttributeModifier(MODIFIER_ID, PerkAttributeTypesAS.ATTR_TYPE_INC_HARVEST_SPEED, ModifierType.ADDED_MULTIPLY, 0.1F));
 
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
@@ -77,6 +79,6 @@ public class ItemInfusedCrystalAxe extends ItemCrystalAxe implements EquipmentAt
 
     @Override
     public Collection<PerkAttributeModifier> getModifiers(ItemStack stack, PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
-        return Collections.singletonList(INFUSED_AXE_MINING_SPEED);
+        return Collections.singletonList(MINING_SPEED_MODIFIER.get());
     }
 }

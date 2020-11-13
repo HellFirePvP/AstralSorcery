@@ -37,6 +37,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.BiomeRegistry;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -53,7 +54,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
  */
 public class PrimerEventHandler {
 
-    private InternalRegistryPrimer registry;
+    private final InternalRegistryPrimer registry;
 
     public PrimerEventHandler(InternalRegistryPrimer registry) {
         this.registry = registry;
@@ -65,7 +66,8 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(Fluid.class, this::registerFluids);
         eventBus.addGenericListener(TileEntityType.class, this::registerTiles);
         eventBus.addGenericListener(EntityType.class, this::registerEntities);
-        eventBus.addGenericListener(Feature.class, this::registerFeatures);
+        //eventBus.addGenericListener(Feature.class, this::registerFeatures);
+        //eventBus.addGenericListener(Placement.class, this::registerPlacements);
         eventBus.addGenericListener(Effect.class, this::registerEffects);
         eventBus.addGenericListener(Enchantment.class, this::registerEnchantments);
         eventBus.addGenericListener(SoundEvent.class, this::registerSounds);
@@ -87,6 +89,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(CrystalProperty.class, this::registerCrystalProperties);
         eventBus.addGenericListener(PropertyUsage.class, this::registerCrystalUsages);
         eventBus.addGenericListener(AltarRecipeEffect.class, this::registerAltarRecipeEffects);
+
     }
 
     //This exists because you can't sort registries in any fashion or make one load after another in forge.
@@ -108,6 +111,11 @@ public class PrimerEventHandler {
 
         TransmissionClassRegistry.setupRegistry();
         SourceClassRegistry.setupRegistry();
+
+        RegistryPerkAttributeTypes.init();
+        RegistryPerkConverters.init();
+        RegistryPerkCustomModifiers.init();
+        RegistryPerkAttributeReaders.init();
     }
 
     private void registerItems(RegistryEvent.Register<Item> event) {
@@ -115,6 +123,7 @@ public class PrimerEventHandler {
         RegistryItems.registerItemBlocks();
         RegistryItems.registerFluidContainerItems();
         RegistryItems.registerDispenseBehaviors();
+        RegistryItems.registerItemProperties();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
 
         //Item registration happens after block registration. Register misc stuff here.
@@ -143,13 +152,15 @@ public class PrimerEventHandler {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
-    private void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
-        //Query ocean-biome key to start creating the biome instances
-        BiomeRegistry.getKeyFromID(0);
-
-        RegistryWorldGeneration.registerFeatures();
+    /*private void registerPlacements(RegistryEvent.Register<Placement<?>> event) {
+        RegistryWorldGeneration.registerPlacements();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
+
+    private void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
+        RegistryWorldGeneration.registerFeatures();
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }*/
 
     private void registerEffects(RegistryEvent.Register<Effect> event) {
         RegistryEffects.init();

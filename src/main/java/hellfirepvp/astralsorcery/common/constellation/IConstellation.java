@@ -104,15 +104,15 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
     }
 
     default public IConstellation addSignatureItem(ItemStack item) {
-        return this.addSignatureItem(Ingredient.fromStacks(item));
+        return this;//.addSignatureItem(Ingredient.fromStacks(item));
     }
 
     default public IConstellation addSignatureItem(IItemProvider item) {
-        return this.addSignatureItem(Ingredient.fromItems(item));
+        return this;//.addSignatureItem(Ingredient.fromItems(item));
     }
 
     default public IConstellation addSignatureItem(ITag<Item> tag) {
-        return this.addSignatureItem(Ingredient.fromTag(tag));
+        return this;//.addSignatureItem(Ingredient.fromTag(tag));
     }
 
     public IConstellation addSignatureItem(Ingredient item);

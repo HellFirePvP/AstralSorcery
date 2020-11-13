@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.util.block;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfiguredBlockStateList;
-import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;

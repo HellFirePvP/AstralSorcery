@@ -160,7 +160,7 @@ public class ScreenJournalProgression extends ScreenJournal {
     private void renderSearchView(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
         this.drawDefault(renderStack, TexturesAS.TEX_GUI_BOOK_BLANK, mouseX, mouseY);
 
-        this.setBlitOffset(150);
+        this.setBlitOffset(300);
         this.drawSearchResults(renderStack, mouseX, mouseY, pTicks);
         this.drawSearchBox(renderStack);
 
@@ -181,6 +181,7 @@ public class ScreenJournalProgression extends ScreenJournal {
         drawDefault(renderStack, TexturesAS.TEX_GUI_BOOK_FRAME_FULL, mouseX, mouseY);
         RenderSystem.enableDepthTest();
 
+        this.setBlitOffset(300);
         this.drawSearchBox(renderStack);
 
         this.setBlitOffset(150);
@@ -209,7 +210,7 @@ public class ScreenJournalProgression extends ScreenJournal {
             for (IReorderingProcessor line : nodeTitle) {
                 renderStack.push();
                 renderStack.translate(offsetX, offsetY, this.getGuiZLevel());
-                float length = RenderingDrawUtils.renderStringAt(line, renderStack, fr, 0x00D0D0D0, false) - offsetX;
+                float length = RenderingDrawUtils.renderStringAt(line, renderStack, fr, 0x00D0D0D0, false);
                 renderStack.pop();
 
                 if (length > maxLength) {
@@ -239,7 +240,7 @@ public class ScreenJournalProgression extends ScreenJournal {
             for (IReorderingProcessor line : nodeTitle) {
                 renderStack.push();
                 renderStack.translate(offsetX, offsetY, this.getGuiZLevel());
-                float length = RenderingDrawUtils.renderStringAt(line, renderStack, fr, 0x00D0D0D0, false) - offsetX;
+                float length = RenderingDrawUtils.renderStringAt(line, renderStack, fr, 0x00D0D0D0, false);
                 renderStack.pop();
 
                 if (length > maxLength) {
@@ -367,13 +368,13 @@ public class ScreenJournalProgression extends ScreenJournal {
             }
 
             for (ResearchNode node : research.getResearchNodes()) {
-                if (node.getName().getUnformattedComponentText().toLowerCase().contains(searchText) && !this.searchResult.contains(node)) {
+                if (node.getName().getString().toLowerCase().contains(searchText) && !this.searchResult.contains(node)) {
                     this.searchResult.add(node);
                 }
             }
         }
 
-        this.searchResult.sort(Comparator.comparing(node -> node.getName().getUnformattedComponentText()));
+        this.searchResult.sort(Comparator.comparing(node -> node.getName().getString()));
 
         FontRenderer fr = Minecraft.getInstance().fontRenderer;
         int addedPages = 0;

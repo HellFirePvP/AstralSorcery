@@ -9,9 +9,6 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.world.config.FeaturePlacementConfig;
-import hellfirepvp.astralsorcery.common.world.config.ReplacingFeaturePlacementConfig;
-import hellfirepvp.astralsorcery.common.world.config.StructurePlacementConfig;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
@@ -27,7 +24,7 @@ import net.minecraft.world.gen.feature.structure.Structure;
  */
 public class WorldGenerationAS {
 
-    public static final ResourceLocation KEY_ANCIENT_SHRINE = AstralSorcery.key("ancient_shrine");
+    /*public static final ResourceLocation KEY_ANCIENT_SHRINE = AstralSorcery.key("ancient_shrine");
     public static final ResourceLocation KEY_DESERT_SHRINE = AstralSorcery.key("desert_shrine");
     public static final ResourceLocation KEY_SMALL_SHRINE = AstralSorcery.key("small_shrine");
 
@@ -50,6 +47,6 @@ public class WorldGenerationAS {
         public static ReplacingFeaturePlacementConfig AQUAMARINE;
         public static FeaturePlacementConfig MARBLE;
 
-    }
+    }*/
 
 }

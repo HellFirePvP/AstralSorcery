@@ -29,6 +29,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.util.IngredientHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -134,6 +135,8 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
 
     protected void renderItemStack(MatrixStack renderStack, float offsetX, float offsetY, float zLevel, float scale, ItemStack stack) {
         RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
+        RenderHelper.enableStandardItemLighting();
 
         renderStack.push();
         renderStack.translate(offsetX, offsetY, zLevel);
@@ -141,6 +144,7 @@ public abstract class RenderPageRecipeTemplate extends RenderablePage {
         RenderingUtils.renderItemStackGUI(renderStack, stack, null);
         renderStack.pop();
 
+        RenderHelper.disableStandardItemLighting();
         RenderSystem.depthMask(false);
     }
 

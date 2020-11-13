@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileFakedState;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nullable;
@@ -44,11 +45,7 @@ public class TileTranslucentBlock extends TileFakedState {
     public void readCustomNBT(CompoundNBT compound) {
         super.readCustomNBT(compound);
 
-        if (compound.hasUniqueId("playerUUID")) {
-            this.playerUUID = compound.getUniqueId("playerUUID");
-        } else {
-            this.playerUUID = null;
-        }
+        this.playerUUID = NBTHelper.getUUID(compound, "playerUUID", null);
     }
 
     @Override

@@ -19,6 +19,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -65,9 +66,9 @@ public class AmuletEnchantmentHelper {
     @Nonnull
     private static UUID getWornPlayerUUID(ItemStack anyTool) {
         if (DynamicEnchantmentHelper.canHaveDynamicEnchantment(anyTool) && anyTool.hasTag()) {
-            return anyTool.getTag().getUniqueId(KEY_AS_OWNER);
+            return NBTHelper.getUUID(anyTool.getTag(), KEY_AS_OWNER, Util.DUMMY_UUID);
         }
-        return new UUID(0, 0);
+        return Util.DUMMY_UUID;
     }
 
     public static void applyAmuletOwner(ItemStack tool, PlayerEntity wearer) {

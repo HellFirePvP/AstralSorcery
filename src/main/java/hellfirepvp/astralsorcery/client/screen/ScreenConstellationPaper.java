@@ -26,7 +26,6 @@ import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextProperties;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -98,7 +97,7 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
         renderStack.push();
         renderStack.translate(offsetLeft + 2, offsetTop, this.getGuiZLevel());
         renderStack.scale(1.8F, 1.8F, 1F);
-        RenderingDrawUtils.renderStringAt(font, renderStack, name, 0xAA4D4D4D);
+        RenderingDrawUtils.renderStringAt(name, renderStack, font, 0xAA4D4D4D, false);
         renderStack.pop();
     }
 

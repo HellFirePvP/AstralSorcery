@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
 import hellfirepvp.astralsorcery.common.util.block.BlockPredicates;
+import hellfirepvp.astralsorcery.common.util.object.CacheReference;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -44,8 +45,9 @@ import java.util.UUID;
  */
 public class ItemInfusedCrystalPickaxe extends ItemCrystalPickaxe implements EquipmentAttributeModifierProvider {
 
-    private static final DynamicAttributeModifier INFUSED_PICKAXE_MINING_SIZE =
-            new DynamicAttributeModifier(UUID.fromString("ecf80c60-3da6-4952-90d0-5db5429ea44a"), PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, ModifierType.ADDITION, 1F);
+    private static final UUID MODIFIER_ID = UUID.fromString("ecf80c60-3da6-4952-90d0-5db5429ea44a");
+    private static final CacheReference<DynamicAttributeModifier> MINING_SIZE_MODIFIER =
+            new CacheReference<>(() -> new DynamicAttributeModifier(MODIFIER_ID, PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, ModifierType.ADDITION, 1F));
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
@@ -83,6 +85,6 @@ public class ItemInfusedCrystalPickaxe extends ItemCrystalPickaxe implements Equ
 
     @Override
     public Collection<PerkAttributeModifier> getModifiers(ItemStack stack, PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
-        return Collections.singletonList(INFUSED_PICKAXE_MINING_SIZE);
+        return Collections.singletonList(MINING_SIZE_MODIFIER.get());
     }
 }

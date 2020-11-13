@@ -369,11 +369,7 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
 
         this.starlight = compound.getFloat("starlight");
 
-        if (compound.hasUniqueId("playerUUID")) {
-            this.playerUUID = compound.getUniqueId("playerUUID");
-        } else {
-            this.playerUUID = null;
-        }
+        this.playerUUID = NBTHelper.getUUID(compound, "playerUUID", null);
     }
 
     @Override

@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[32,)"
+loaderVersion="[35,)"
 license="All rights reserved"
 issueTrackerURL="https://github.com/HellFirePvP/AstralSorcery/issues" #optional
 [[mods]]
@@ -14,24 +14,24 @@ description='''Magic mod that draws power from stars and their constellations'''
 [[dependencies.astralsorcery]]
     modId="forge"
     mandatory=true
-    versionRange="[32,)"
+    versionRange="[35,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.astralsorcery]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.1]"
+    versionRange="[1.16.4]"
     ordering="NONE"
     side="BOTH"
 [[dependencies.astralsorcery]]
     modId="observerlib"
     mandatory=true
-    versionRange="[1.16.1-1.3,]"
+    versionRange="[1.16.4-1.4,]"
     ordering="NONE"
     side="BOTH"
 [[dependencies.astralsorcery]]
     modId="curios"
     mandatory=true
-    versionRange="[FORGE-1.16.1-,)"
+    versionRange="[FORGE-1.16.3-,)"
     ordering="NONE"
     side="BOTH"
