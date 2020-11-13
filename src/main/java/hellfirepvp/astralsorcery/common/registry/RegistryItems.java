@@ -157,10 +157,10 @@ public class RegistryItems {
             ItemResonator.ResonatorUpgrade current = ItemResonator.getCurrentUpgrade((PlayerEntity) entity, stack);
             return current.ordinal() / (float) ItemResonator.ResonatorUpgrade.values().length;
         });
-        ItemModelsProperties.registerProperty(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER.asItem(), new ResourceLocation("stage"), (stack, world, entity) -> {
+        ItemModelsProperties.registerProperty(Item.getItemFromBlock(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER), new ResourceLocation("stage"), (stack, world, entity) -> {
             return ((float) stack.getDamage()) / BlockCelestialCrystalCluster.STAGE.getAllowedValues().size();
         });
-        ItemModelsProperties.registerProperty(BlocksAS.GEM_CRYSTAL_CLUSTER.asItem(), new ResourceLocation("stage"), (stack, world, entity) -> {
+        ItemModelsProperties.registerProperty(Item.getItemFromBlock(BlocksAS.GEM_CRYSTAL_CLUSTER), new ResourceLocation("stage"), (stack, world, entity) -> {
             return ((float) stack.getDamage()) / BlockGemCrystalCluster.STAGE.getAllowedValues().size();
         });
     }

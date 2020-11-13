@@ -388,6 +388,8 @@ public class RenderingUtils {
         if (stack.isEmpty()) {
             return;
         }
+        //TODO ugh.
+        RenderSystem.disableLighting();
 
         renderStack.push();
         renderStack.translate(0, 0, 200F);
@@ -397,7 +399,7 @@ public class RenderingUtils {
 
             renderStack.push();
             renderStack.translate(17 - length, 9, 0);
-            RenderingDrawUtils.renderStringAt(display, renderStack, fr, 0xFFFFFF, true);
+            RenderingDrawUtils.renderStringAt(display, renderStack, fr, 0xFFFFFFFF, true);
             renderStack.pop();
         }
 

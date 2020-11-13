@@ -39,6 +39,11 @@ public abstract class BaseHandlerRecipe<I extends IItemHandler> implements IHand
     }
 
     @Override
+    public boolean isDynamic() {
+        return true;
+    }
+
+    @Override
     public final ResourceLocation getId() {
         return this.recipeId;
     }

@@ -122,9 +122,7 @@ public class PacketChannel {
     }
 
     public static PacketDistributor.TargetPoint pointFromPos(World world, Vector3i pos, double range) {
-        LogicalSide side = world.isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
-        RegistryKey<World> key = RegistryUtil.side(side).getRegistryKey(Registry.WORLD_KEY, world);
-        return pointFromPos(key, pos, range);
+        return pointFromPos(world.getDimensionKey(), pos, range);
     }
 
     public static PacketDistributor.TargetPoint pointFromPos(RegistryKey<World> world, Vector3i pos, double range) {

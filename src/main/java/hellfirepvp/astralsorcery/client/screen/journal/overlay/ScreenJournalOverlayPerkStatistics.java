@@ -126,7 +126,7 @@ public class ScreenJournalOverlayPerkStatistics extends ScreenJournalOverlay {
             renderStack.push();
             renderStack.translate(offsetLeft, i * step, 0);
             renderStack.scale(1.4F, 1.4F, 1F);
-            RenderingDrawUtils.renderStringAt(font, renderStack, line, 0xEE333333);
+            RenderingDrawUtils.renderStringAt(line, renderStack, font, 0xEE333333, false);
             renderStack.pop();
         }
         renderStack.pop();

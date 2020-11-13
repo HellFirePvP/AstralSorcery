@@ -7,11 +7,21 @@ pipeline {
     stage('Prepare Build') {
       steps {
         sh '''cp -a /var/lib/jenkins/buildMetadata/AstralSorcery-1.16/. .
-rm -rf AS-Example.zs perkMapDraft.pdn README.html README.md AstralSorcery'''
+rm -rf perkMapDraft.pdn README.md AstralSorcery'''
       }
     }
-    stage('Build') {
+    stage('Build only') {
       when {
+        not {
+          branch 'master'
+        }
+      }
+      steps {
+        sh '''./gradlew build'''
+      }
+    }
+    stage('Build and Publish') {
+      when{
         branch 'master'
       }
       steps {

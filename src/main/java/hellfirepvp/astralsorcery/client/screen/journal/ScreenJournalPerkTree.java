@@ -434,7 +434,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
             renderStack.push();
             renderStack.translate(guiLeft + 50, guiTop + 18, this.getGuiZLevel());
             ITextProperties points = new TranslationTextComponent("perk.info.astralsorcery.points", availablePerks);
-            RenderingDrawUtils.renderStringAt(points, renderStack, font, 0xCCCCCC, false);
+            RenderingDrawUtils.renderStringAt(points, renderStack, font, 0xCCCCCC, true);
             renderStack.pop();
         }
 

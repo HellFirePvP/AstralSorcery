@@ -29,6 +29,7 @@ import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IJeiRuntime;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -64,10 +65,10 @@ public class IntegrationJEI implements IModPlugin {
         registry.useNbtForSubtypes(
                 ItemsAS.ATTUNED_ROCK_CRYSTAL,
                 ItemsAS.ATTUNED_CELESTIAL_CRYSTAL,
-                BlocksAS.ROCK_COLLECTOR_CRYSTAL.asItem(),
-                BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL.asItem(),
-                BlocksAS.CELESTIAL_CRYSTAL_CLUSTER.asItem(),
-                BlocksAS.GEM_CRYSTAL_CLUSTER.asItem()
+                Item.getItemFromBlock(BlocksAS.ROCK_COLLECTOR_CRYSTAL),
+                Item.getItemFromBlock(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL),
+                Item.getItemFromBlock(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER),
+                Item.getItemFromBlock(BlocksAS.GEM_CRYSTAL_CLUSTER)
         );
 
         registry.registerSubtypeInterpreter(ItemsAS.RESONATOR, stack -> ItemResonator.getUpgrades(stack)
