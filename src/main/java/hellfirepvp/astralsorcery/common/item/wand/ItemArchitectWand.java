@@ -143,17 +143,18 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         World world = context.getWorld();
-        ItemStack stack = context.getItem();
         PlayerEntity player = context.getPlayer();
+        ItemStack held = player.getHeldItem(context.getHand());
         BlockPos pos = context.getPos();
-        if (world.isRemote() || !(player instanceof ServerPlayerEntity) || stack.isEmpty()) {
+        if (world.isRemote() || !(player instanceof ServerPlayerEntity) || held.isEmpty()) {
             return ActionResultType.SUCCESS;
         }
         if (player.isSneaking()) {
-            ItemBlockStorage.storeBlockState(stack, world, pos);
+            ItemBlockStorage.storeBlockState(held, world, pos);
             return ActionResultType.SUCCESS;
+        } else {
+            return attemptPlaceBlocks(world, player, held).getType();
         }
-        return ActionResultType.FAIL;
     }
 
     @Override
@@ -169,7 +170,10 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
         if (world.isRemote()) {
             return ActionResult.resultSuccess(held);
         }
+        return attemptPlaceBlocks(world, player, held);
+    }
 
+    private ActionResult<ItemStack> attemptPlaceBlocks(World world, PlayerEntity player, ItemStack held) {
         Map<BlockPos, BlockState> placeStates = getPlayerPlaceableStates(player, held);
         if (placeStates.isEmpty()) {
             return ActionResult.resultFail(held);
@@ -214,7 +218,6 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
                 }
             }
         }
-
         return ActionResult.resultSuccess(held);
     }
 
@@ -362,7 +365,7 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
                 RaytraceAssist rta = new RaytraceAssist(origin, hit);
                 rta.forEachBlockPos(pos -> {
                     return MiscUtils.executeWithChunk(world, pos, () -> {
-                        if (BlockUtils.isReplaceable(world, pos)) {
+                        if (pos.distanceSq(origin) < 4 || BlockUtils.isReplaceable(world, pos)) {
                             line.add(pos);
                             return true;
                         }
