@@ -120,9 +120,6 @@ public class ItemMantle extends ArmorItem implements ItemDynamicColor, Constella
         if (ItemMantle.getEffect(stack, ConstellationsAS.evorsio) == null) {
             return Collections.emptyList();
         }
-        if (true) {
-            return Collections.singletonList(new DynamicAttributeModifier(UUID.fromString("aae54b9d-e1ff-4e74-8ac6-efa06093bd1a"), PerkAttributeTypesAS.ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM, ModifierType.ADDED_MULTIPLY, 0.5F));
-        }
         return Collections.singletonList(EVORSIO_MANTLE_MINING_SIZE);
     }
 
