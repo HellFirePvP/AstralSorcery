@@ -129,7 +129,7 @@
   "screen.astralsorcery.tome.perks.stats": "Perk Statistics",
   "screen.astralsorcery.tome": "Tome",
 
-  "key.astralsorcery.disable_perk_abilities": "Toggle Perk Abilities",
+  "key.astralsorcery.disable_perk_abilities": "Toggle Perk & Tool Abilities",
 
   "astralsorcery.progress.missing.knowledge": "Something seems to be here, but understanding of it is not yet revealed.",
   "astralsorcery.progress.gain.progress.chat": "Your vision expands.",
@@ -139,7 +139,7 @@
   "astralsorcery.progress.constellation.seen.track": "You add a tab to the Astral Tome to keep track of it.",
   "astralsorcery.progress.remove.attunement": "Your light fades...",
   "astralsorcery.progress.switch.attunement": "The light subtly shifts...",
-  "astralsorcery.progress.perk_abilities": "Perk abilities are now %s",
+  "astralsorcery.progress.perk_abilities": "Perk and tool abilities are now %s",
   "astralsorcery.progress.perk_abilities.enable": "enabled",
   "astralsorcery.progress.perk_abilities.disable": "disabled",
 

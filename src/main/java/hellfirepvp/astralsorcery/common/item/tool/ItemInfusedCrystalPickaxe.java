@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.item.tool;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.lib.TagsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -70,12 +72,14 @@ public class ItemInfusedCrystalPickaxe extends ItemCrystalPickaxe implements Equ
     private boolean doOreScan(World world, BlockPos origin, PlayerEntity player, ItemStack stack) {
         if (!world.isRemote() && player instanceof ServerPlayerEntity && !MiscUtils.isPlayerFakeMP((ServerPlayerEntity) player)) {
             if (stack.getItem() instanceof ItemInfusedCrystalPickaxe && !player.getCooldownTracker().hasCooldown(stack.getItem())) {
+                PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+                if (prog.doPerkAbilities()) {
+                    List<BlockPos> orePositions = BlockDiscoverer.searchForBlocksAround(world, origin, 16, BlockPredicates.isInTag(TagsAS.Blocks.ORES));
+                    PacketChannel.CHANNEL.sendToPlayer(player, new PktOreScan(orePositions));
 
-                List<BlockPos> orePositions = BlockDiscoverer.searchForBlocksAround(world, origin, 16, BlockPredicates.isInTag(TagsAS.Blocks.ORES));
-                PacketChannel.CHANNEL.sendToPlayer(player, new PktOreScan(orePositions));
-
-                player.getCooldownTracker().setCooldown(stack.getItem(), 120);
-                return true;
+                    player.getCooldownTracker().setCooldown(stack.getItem(), 120);
+                    return true;
+                }
             }
         }
         return false;

@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.item.tool;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.modifier.DynamicAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
@@ -50,8 +52,11 @@ public class ItemInfusedCrystalSword extends ItemCrystalSword implements Equipme
                     !serverPlayer.isSneaking() &&
                     !serverPlayer.getCooldownTracker().hasCooldown(sword.getItem())) {
 
-                CelestialStrike.play(serverPlayer, serverPlayer.getEntityWorld(), Vector3.atEntityCorner(entity), Vector3.atEntityCorner(entity));
-                serverPlayer.getCooldownTracker().setCooldown(sword.getItem(), 120);
+                PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+                if (prog.doPerkAbilities()) {
+                    CelestialStrike.play(serverPlayer, serverPlayer.getEntityWorld(), Vector3.atEntityCorner(entity), Vector3.atEntityCorner(entity));
+                    serverPlayer.getCooldownTracker().setCooldown(sword.getItem(), 120);
+                }
             }
         }
         return false;

@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.item.tool;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -51,26 +53,29 @@ public class ItemInfusedCrystalAxe extends ItemCrystalAxe implements EquipmentAt
                 !player.getCooldownTracker().hasCooldown(itemstack.getItem()) &&
                 player instanceof ServerPlayerEntity) {
 
-            EventFlags.CHAIN_MINING.executeWithFlag(() -> {
-                BlockArray tree = TreeDiscoverer.findTreeAt(world, pos, true, 9);
-                if (!tree.getContents().isEmpty()) {
-                    ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+            PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+            if (prog.doPerkAbilities()) {
+                EventFlags.CHAIN_MINING.executeWithFlag(() -> {
+                    BlockArray tree = TreeDiscoverer.findTreeAt(world, pos, true, 9);
+                    if (!tree.getContents().isEmpty()) {
+                        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 
-                    tree.getContents().keySet().forEach(at -> {
-                        BlockState currentState = world.getBlockState(at);
-                        if (serverPlayer.interactionManager.tryHarvestBlock(at)) {
-                            PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
-                                    .addData(buf -> {
-                                        ByteBufUtils.writePos(buf, at);
-                                        ByteBufUtils.writeBlockState(buf, currentState);
-                                    });
-                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 32));
-                        }
-                    });
+                        tree.getContents().keySet().forEach(at -> {
+                            BlockState currentState = world.getBlockState(at);
+                            if (serverPlayer.interactionManager.tryHarvestBlock(at)) {
+                                PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
+                                        .addData(buf -> {
+                                            ByteBufUtils.writePos(buf, at);
+                                            ByteBufUtils.writeBlockState(buf, currentState);
+                                        });
+                                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 32));
+                            }
+                        });
 
-                    serverPlayer.getCooldownTracker().setCooldown(itemstack.getItem(), 120);
-                }
-            });
+                        serverPlayer.getCooldownTracker().setCooldown(itemstack.getItem(), 120);
+                    }
+                });
+            }
         }
         return super.onBlockStartBreak(itemstack, pos, player);
     }
