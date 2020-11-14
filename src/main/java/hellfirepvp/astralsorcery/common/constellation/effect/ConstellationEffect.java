@@ -170,7 +170,7 @@ public abstract class ConstellationEffect {
                     .translation(translationKey("enabled"))
                     .define("enabled", this.defaultEnabled);
             this.range = cfgBuilder
-                    .comment("Defines the radius (in blocks) in which the ritual will allow the players to fly in.")
+                    .comment("Defines the radius (in blocks) in which the ritual will do its effects.")
                     .translation(translationKey("range"))
                     .defineInRange("range", this.defaultRange, 1, 512);
             this.rangePerLens = cfgBuilder

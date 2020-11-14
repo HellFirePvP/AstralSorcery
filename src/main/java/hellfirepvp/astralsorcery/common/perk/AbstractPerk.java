@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.event.ASRegistryEvents;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
+import hellfirepvp.astralsorcery.common.util.CacheEventBus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -58,6 +59,7 @@ public class AbstractPerk implements ModifierSource {
     public static final PerkCategory CATEGORY_FOCUS = new PerkCategory("focus", TextFormatting.GOLD);
 
     private final ResourceLocation registryName;
+    private final CacheEventBus busWrapper;
     protected final Point.Float offset;
     private String unlocalizedKey;
     private PerkCategory category = CATEGORY_BASE;
@@ -71,8 +73,8 @@ public class AbstractPerk implements ModifierSource {
 
     public AbstractPerk(ResourceLocation name, float x, float y) {
         this.registryName = name;
+        this.busWrapper = CacheEventBus.of(MinecraftForge.EVENT_BUS);
         this.offset = new Point.Float(x, y);
-        this.attachListeners(MinecraftForge.EVENT_BUS);
         this.unlocalizedKey = String.format("perk.%s.%s", name.getNamespace(), name.getPath());
     }
 
@@ -80,7 +82,16 @@ public class AbstractPerk implements ModifierSource {
         return new PerkTreePoint<>(this, this.getOffset());
     }
 
-    protected void attachListeners(IEventBus bus) {}
+    protected void invalidate(LogicalSide side) {
+        this.busWrapper.unregisterAll();
+        PerkCooldownHelper.removePerkCooldowns(side, this);
+    }
+
+    protected void validate(LogicalSide side) {
+        this.attachListeners(side, busWrapper);
+    }
+
+    protected void attachListeners(LogicalSide side, IEventBus bus) {}
 
     @Nonnull
     public Point.Float getOffset() {

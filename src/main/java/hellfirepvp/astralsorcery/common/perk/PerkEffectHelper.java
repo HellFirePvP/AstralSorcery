@@ -25,6 +25,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -144,7 +145,7 @@ public class PerkEffectHelper {
             ((AttributeConverterProvider) add).getConverters(player, side, false)
                     .forEach((c) -> attrMap.applyConverter(player, c));
         }
-        applyModifiers(add, attrMap, player, side);
+        Collection<PerkAttributeModifier> newModifiers = applyModifiers(add, attrMap, player, side);
 
         sources.forEach(source -> {
             applyModifiers(source, attrMap, player, side);
@@ -152,14 +153,17 @@ public class PerkEffectHelper {
         });
         //Add new source.
         ModifierManager.addModifier(player, side, add);
+        newModifiers.forEach(mod -> mod.getAttributeType().onApply(player, side, add));
     }
 
-    private static void applyModifiers(ModifierSource source, PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side) {
+    private static Collection<PerkAttributeModifier> applyModifiers(ModifierSource source, PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side) {
+        Collection<PerkAttributeModifier> addedModifiers = new ArrayList<>();
         if (source instanceof AttributeModifierProvider) {
             for (PerkAttributeModifier modifier : ((AttributeModifierProvider) source).getModifiers(player, side, false)) {
-                attrMap.applyModifier(player, modifier, source);
+                addedModifiers.addAll(attrMap.applyModifier(player, modifier, source));
             }
         }
+        return addedModifiers;
     }
 
     private static void removeSource(PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side, ModifierSource remove) {
@@ -172,7 +176,7 @@ public class PerkEffectHelper {
             ModifierManager.removeModifier(player, side, source);
         });
 
-        removeModifiers(remove, attrMap, player, side);
+        Collection<PerkAttributeModifier> removedModifiers = removeModifiers(remove, attrMap, player, side);
         if (remove instanceof AttributeConverterProvider) {
             ((AttributeConverterProvider) remove).getConverters(player, side, false)
                     .forEach((c) -> attrMap.removeConverter(player, c));
@@ -182,14 +186,21 @@ public class PerkEffectHelper {
             applyModifiers(source, attrMap, player, side);
             ModifierManager.addModifier(player, side, source);
         });
+
+        PerkAttributeMap map = PerkAttributeHelper.getOrCreateMap(player, side);
+        removedModifiers.forEach(mod -> {
+            mod.getAttributeType().onRemove(player, side, !map.hasModifiers(mod.getAttributeType()), remove);
+        });
     }
 
-    private static void removeModifiers(ModifierSource source, PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side) {
+    private static Collection<PerkAttributeModifier> removeModifiers(ModifierSource source, PerkAttributeMap attrMap, PlayerEntity player, LogicalSide side) {
+        Collection<PerkAttributeModifier> removedModifiers = new ArrayList<>();
         if (source instanceof AttributeModifierProvider) {
             for (PerkAttributeModifier modifier : ((AttributeModifierProvider) source).getModifiers(player, side, false)) {
-                attrMap.removeModifier(player, modifier, source);
+                removedModifiers.addAll(attrMap.removeModifier(player, modifier, source));
             }
         }
+        return removedModifiers;
     }
 
     public static enum Action {

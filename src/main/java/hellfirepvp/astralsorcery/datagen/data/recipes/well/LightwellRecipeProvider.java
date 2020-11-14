@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.datagen.data.recipes.well;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.builder.WellRecipeBuilder;
+import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.FluidsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.data.IFinishedRecipe;
@@ -48,7 +49,7 @@ public class LightwellRecipeProvider {
         WellRecipeBuilder.builder(AstralSorcery.key("starlight_rock_crystal"))
                 .setItemInput(ItemsAS.ROCK_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
-                .color(new Color(0x00A7FF))
+                .color(ColorsAS.ROCK_CRYSTAL)
                 .productionMultiplier(0.07F)
                 .shatterMultiplier(2F)
                 .build(registrar);
@@ -56,7 +57,7 @@ public class LightwellRecipeProvider {
         WellRecipeBuilder.builder(AstralSorcery.key("starlight_attuned_rock_crystal"))
                 .setItemInput(ItemsAS.ATTUNED_ROCK_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
-                .color(new Color(0x00A7FF))
+                .color(ColorsAS.ROCK_CRYSTAL)
                 .productionMultiplier(0.09F)
                 .shatterMultiplier(5F)
                 .build(registrar);
@@ -64,7 +65,7 @@ public class LightwellRecipeProvider {
         WellRecipeBuilder.builder(AstralSorcery.key("starlight_celestial_crystal"))
                 .setItemInput(ItemsAS.CELESTIAL_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
-                .color(new Color(0x00A7FF))
+                .color(ColorsAS.CELESTIAL_CRYSTAL)
                 .productionMultiplier(0.1F)
                 .shatterMultiplier(4F)
                 .build(registrar);
@@ -72,7 +73,7 @@ public class LightwellRecipeProvider {
         WellRecipeBuilder.builder(AstralSorcery.key("starlight_attuned_celestial_crystal"))
                 .setItemInput(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
-                .color(new Color(0x00A7FF))
+                .color(ColorsAS.CELESTIAL_CRYSTAL)
                 .productionMultiplier(0.11F)
                 .shatterMultiplier(8F)
                 .build(registrar);

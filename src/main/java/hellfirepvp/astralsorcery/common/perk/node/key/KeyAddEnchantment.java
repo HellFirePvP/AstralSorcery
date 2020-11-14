@@ -44,9 +44,13 @@ public class KeyAddEnchantment extends KeyPerk {
     }
 
     @Override
-    public void attachListeners(IEventBus bus) {
-        super.attachListeners(bus);
-        bus.addListener(this::onEnchantmentAdd);
+    public void attachListeners(LogicalSide side, IEventBus bus) {
+        super.attachListeners(side, bus);
+        if (side.isServer()) {
+            bus.addListener(this::onEnchantmentAddServer);
+        } else {
+            bus.addListener(this::onEnchantmentAddClient);
+        }
     }
 
     public KeyAddEnchantment addEnchantment(Enchantment ench, int level) {
@@ -63,9 +67,23 @@ public class KeyAddEnchantment extends KeyPerk {
         return this;
     }
 
-    private void onEnchantmentAdd(DynamicEnchantmentEvent.Add event) {
+    private void onEnchantmentAddClient(DynamicEnchantmentEvent.Add event) {
         PlayerEntity player = event.getResolvedPlayer();
         LogicalSide side = this.getSide(player);
+        if (side.isClient()) {
+            addEnchantments(player, side, event);
+        }
+    }
+
+    private void onEnchantmentAddServer(DynamicEnchantmentEvent.Add event) {
+        PlayerEntity player = event.getResolvedPlayer();
+        LogicalSide side = this.getSide(player);
+        if (side.isServer()) {
+            addEnchantments(player, side, event);
+        }
+    }
+
+    private void addEnchantments(PlayerEntity player, LogicalSide side, DynamicEnchantmentEvent.Add event) {
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
         if (prog.hasPerkEffect(this)) {
             List<DynamicEnchantment> listedEnchantments = event.getEnchantmentsToApply();

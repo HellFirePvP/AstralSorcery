@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.type;
 
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaAttributeType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.LogicalSide;
@@ -28,8 +29,8 @@ public class AttributeTypePerkEffect extends PerkAttributeType {
     }
 
     @Override
-    public void onApply(PlayerEntity player, LogicalSide side) {
-        super.onApply(player, side);
+    public void onApply(PlayerEntity player, LogicalSide side, ModifierSource source) {
+        super.onApply(player, side, source);
 
         RegistriesAS.REGISTRY_PERK_ATTRIBUTE_TYPES.getValues()
                 .stream()
@@ -38,8 +39,8 @@ public class AttributeTypePerkEffect extends PerkAttributeType {
     }
 
     @Override
-    public void onRemove(PlayerEntity player, LogicalSide side, boolean removedCompletely) {
-        super.onRemove(player, side, removedCompletely);
+    public void onRemove(PlayerEntity player, LogicalSide side, boolean removedCompletely, ModifierSource source) {
+        super.onRemove(player, side, removedCompletely, source);
 
         RegistriesAS.REGISTRY_PERK_ATTRIBUTE_TYPES.getValues()
                 .stream()

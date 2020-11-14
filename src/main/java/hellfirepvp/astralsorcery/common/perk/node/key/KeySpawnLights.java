@@ -44,11 +44,6 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
     }
 
     @Override
-    public void attachListeners(IEventBus bus) {
-        super.attachListeners(bus);
-    }
-
-    @Override
     public void onPlayerTick(PlayerEntity player, LogicalSide side) {
         if (side.isServer()) {
             PlayerProgress prog = ResearchHelper.getProgress(player, side);

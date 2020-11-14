@@ -108,7 +108,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver<
         double maxDrain = 15;
         maxDrain *= CrystalCalculations.getRitualCostReductionFactor(this, this.attributes);
         maxDrain /= Math.max(1F, ((float) (this.getMirrorCount() - 1)) * 0.33F);
-        int ritualStrength = MathHelper.floor(collectedStarlight * properties.getPotency() / maxDrain);
+        int ritualStrength = MathHelper.ceil(collectedStarlight * properties.getPotency() / maxDrain);
 
         BlockPos to = getLocationPos();
         if (this.ritualLinkPos != null) {

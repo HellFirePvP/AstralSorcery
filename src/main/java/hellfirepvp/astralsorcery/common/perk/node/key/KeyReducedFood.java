@@ -30,7 +30,7 @@ public class KeyReducedFood extends KeyPerk implements PlayerTickPerk {
 
     @Override
     public void onPlayerTick(PlayerEntity player, LogicalSide side) {
-        if (side.isServer() && rand.nextFloat() < 0.01) {
+        if (side.isServer() && rand.nextFloat() < 0.1) {
             FoodStats stats = player.getFoodStats();
             if (stats.getFoodLevel() < 20 || stats.getSaturationLevel() < 5) {
                 stats.addStats(1, 0.3F);

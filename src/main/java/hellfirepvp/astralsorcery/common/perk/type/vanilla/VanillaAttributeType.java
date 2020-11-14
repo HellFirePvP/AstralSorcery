@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.type.vanilla;
 
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -36,15 +37,15 @@ public abstract class VanillaAttributeType extends PerkAttributeType implements 
     }
 
     @Override
-    public void onApply(PlayerEntity player, LogicalSide side) {
-        super.onApply(player, side);
+    public void onApply(PlayerEntity player, LogicalSide side, ModifierSource source) {
+        super.onApply(player, side, source);
 
         refreshAttribute(player);
     }
 
     @Override
-    public void onRemove(PlayerEntity player, LogicalSide side, boolean removedCompletely) {
-        super.onRemove(player, side, removedCompletely);
+    public void onRemove(PlayerEntity player, LogicalSide side, boolean removedCompletely, ModifierSource source) {
+        super.onRemove(player, side, removedCompletely, source);
 
         refreshAttribute(player);
     }

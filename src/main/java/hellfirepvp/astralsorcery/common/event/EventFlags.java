@@ -38,7 +38,7 @@ public class EventFlags {
 
     public static class BooleanFlag {
 
-        private boolean originalState;
+        private final boolean originalState;
         private boolean flag;
 
         private BooleanFlag(boolean flag) {
@@ -50,7 +50,7 @@ public class EventFlags {
             return originalState != flag;
         }
 
-        public void executeWithFlag(Runnable run) {
+        public synchronized void executeWithFlag(Runnable run) {
             if (originalState == flag) {
                 flag = !flag;
                 try {
