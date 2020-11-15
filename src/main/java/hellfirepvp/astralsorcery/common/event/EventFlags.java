@@ -50,7 +50,7 @@ public class EventFlags {
             return originalState != flag;
         }
 
-        public void executeWithFlag(Runnable run) {
+        public synchronized void executeWithFlag(Runnable run) {
             if (originalState == flag) {
                 flag = !flag;
                 try {

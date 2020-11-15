@@ -54,22 +54,18 @@ import java.util.Map;
  */
 public class ASMHookEndpoint {
 
-    //ported
     public static Map<Enchantment, Integer> applyNewEnchantmentLevels(Map<Enchantment, Integer> enchantments, ItemStack stack) {
         return DynamicEnchantmentHelper.addNewLevels(enchantments, stack);
     }
 
-    //ported
     public static int getNewEnchantmentLevel(int current, Enchantment enchantment, ItemStack stack) {
         return DynamicEnchantmentHelper.getNewEnchantmentLevel(current, enchantment, stack, null);
     }
 
-    //ported
     public static ListNBT addNewEnchantmentLevelsTag(ListNBT list, ItemStack stack) {
         return DynamicEnchantmentHelper.modifyEnchantmentTags(list, stack);
     }
 
-    //ported
     @OnlyIn(Dist.CLIENT)
     public static void addTooltipPreEnchantments(ItemStack stack, List<ITextComponent> tooltip) {
         List<ITextComponent> addition = new ArrayList<>();
@@ -91,7 +87,6 @@ public class ASMHookEndpoint {
         tooltip.addAll(addition);
     }
 
-    //ported
     @OnlyIn(Dist.CLIENT)
     public static float overrideSunBrightnessClient(float prevBrightness, World world) {
         WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
@@ -104,7 +99,6 @@ public class ASMHookEndpoint {
         return prevBrightness;
     }
 
-    // TODO 1.16.2 this needs way more work
     public static int overrideSunBrightnessServer(int prevSkyLight, World world) {
         WorldContext ctx = SkyHandler.getContext(world);
         if (ctx != null && ctx.getCelestialHandler().isSolarEclipseActive()) {
@@ -113,7 +107,6 @@ public class ASMHookEndpoint {
         return prevSkyLight;
     }
 
-    //ported
     public static int fireCooldownEvent(CooldownTracker tracker, Item item, int ticks) {
         if (tracker instanceof ServerCooldownTracker) {
             CooldownSetEvent event = new CooldownSetEvent(((ServerCooldownTracker) tracker).player, item, ticks);
@@ -123,7 +116,6 @@ public class ASMHookEndpoint {
         return ticks;
     }
 
-    //ported
     public static float getLivingEntityWaterSlowDown(float slowDownIn, LivingEntity entity) {
         if (!entity.getItemStackFromSlot(EquipmentSlotType.CHEST).isEmpty()) {
             if (MantleEffectOctans.shouldPreventWaterSlowdown(entity.getItemStackFromSlot(EquipmentSlotType.CHEST), entity)) {
@@ -133,18 +125,15 @@ public class ASMHookEndpoint {
         return slowDownIn;
     }
 
-    //ported
     public static AttributeModifierManager markPlayer(AttributeModifierManager map, LivingEntity entity) {
         AttributeEvent.setEntity(map, entity);
         return map;
     }
 
-    //ported
     public static double postProcessVanilla(double value, ModifiableAttributeInstance attributeInstance) {
         return AttributeEvent.postProcessVanilla(value, attributeInstance);
     }
 
-    //ported
     public static double getOverriddenSeenEntityReachMaximum(ServerPlayNetHandler handler, double original) {
         PlayerEntity player = handler.player;
         PlayerProgress prog = ResearchHelper.getProgress(player, player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER);
@@ -154,7 +143,6 @@ public class ASMHookEndpoint {
         return original;
     }
 
-    //ported
     @OnlyIn(Dist.CLIENT)
     public static double getOverriddenCreativeEntityReach(double original, double blockReach) {
         PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);
@@ -164,7 +152,6 @@ public class ASMHookEndpoint {
         return original;
     }
 
-    //ported
     @OnlyIn(Dist.CLIENT)
     public static boolean doesOverrideDistanceRuling(boolean original) {
         PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);

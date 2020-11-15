@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import hellfirepvp.observerlib.api.block.MatchableState;
 import hellfirepvp.observerlib.api.client.StructureRenderer;
@@ -44,6 +45,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,7 +74,9 @@ public class RenderPageStructure extends RenderablePage {
         this.name = name;
         this.shift = shift;
         this.contentStacks = MapStream.ofKeys(
-                structure.getAsStacks(this.structureRenderer.getRenderWorld(), Minecraft.getInstance().player),
+                structure.getAsStacks(this.structureRenderer.getRenderWorld(), Minecraft.getInstance().player).stream()
+                        .map(stack -> ItemUtils.copyStackWithSize(stack, 1))
+                        .collect(Collectors.toList()),
                 stack -> (ITextProperties) new StringTextComponent(stack.getCount() + "x ").append(stack.getDisplayName()))
         .toTupleList();
     }

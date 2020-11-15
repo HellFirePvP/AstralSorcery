@@ -29,6 +29,7 @@ import java.util.Optional;
  */
 public class WorldSeedCache {
 
+    private static long lastServerQuery = 0L;
     private static int activeSession = 0;
 
     private static final Map<RegistryKey<World>, Long> cacheSeedLookup = new HashMap<>();
@@ -52,9 +53,13 @@ public class WorldSeedCache {
             return Optional.empty();
         }
         if (!cacheSeedLookup.containsKey(dim)) {
-            activeSession++;
-            PktRequestSeed req = new PktRequestSeed(activeSession, dim);
-            PacketChannel.CHANNEL.sendToServer(req);
+            long current = System.currentTimeMillis();
+            if (current - lastServerQuery > 5_000) {
+                lastServerQuery = current;
+                activeSession++;
+                PktRequestSeed req = new PktRequestSeed(activeSession, dim);
+                PacketChannel.CHANNEL.sendToServer(req);
+            }
             return Optional.empty();
         }
         return Optional.of(cacheSeedLookup.get(dim));
