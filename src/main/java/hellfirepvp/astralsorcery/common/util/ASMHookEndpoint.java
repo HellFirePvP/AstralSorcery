@@ -29,6 +29,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.network.play.ServerPlayNetHandler;
 import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.ServerCooldownTracker;
 import net.minecraft.util.text.ITextComponent;
@@ -144,28 +145,32 @@ public class ASMHookEndpoint {
     }
 
     //ported
-    public static double getOverriddenSeenEntityReachMaximum(PlayerEntity player) {
+    public static double getOverriddenSeenEntityReachMaximum(ServerPlayNetHandler handler, double original) {
+        PlayerEntity player = handler.player;
         PlayerProgress prog = ResearchHelper.getProgress(player, player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER);
         if (prog.isValid() && prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
             return 999_999_999.0;
         }
-        return 36.0;
+        return original;
     }
 
     //ported
     @OnlyIn(Dist.CLIENT)
-    public static double getOverriddenCreativeEntityReach(double blockReach) {
+    public static double getOverriddenCreativeEntityReach(double original, double blockReach) {
         PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);
         if (prog.isValid() && prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
             return blockReach;
         }
-        return 6.0;
+        return original;
     }
 
     //ported
     @OnlyIn(Dist.CLIENT)
-    public static boolean doesOverrideDistanceRuling() {
+    public static boolean doesOverrideDistanceRuling(boolean original) {
         PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);
-        return !prog.isValid() || !prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach);
+        if (prog.isValid() && prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
+            return false;
+        }
+        return original;
     }
 }

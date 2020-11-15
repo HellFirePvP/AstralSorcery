@@ -23,23 +23,19 @@ function initializeCoreMod() {
                         extendedReachName,
                         '()Z');
 
-
                 var setExtendedReach = extendedReach;
                 do {
                     setExtendedReach = ASMAPI.findFirstInstructionAfter(method,
                         Opcodes.LDC,
                         method.instructions.indexOf(setExtendedReach));
-                } while (setExtendedReach.cst.doubleValue() != 6.0);
+                } while (typeof setExtendedReach.cst.doubleValue !== 'function' || setExtendedReach.cst.doubleValue() != 6.0);
 
-                var prevSetExtendedReach = setExtendedReach.getPrevious();
-                method.instructions.remove(setExtendedReach);
-
-                method.instructions.insert(prevSetExtendedReach, ASMAPI.buildMethodCall(
+                method.instructions.insert(setExtendedReach, ASMAPI.buildMethodCall(
                     'hellfirepvp/astralsorcery/common/util/ASMHookEndpoint',
                     'getOverriddenCreativeEntityReach',
-                    '(D)D',
+                    '(DD)D',
                     ASMAPI.MethodType.STATIC));
-                method.instructions.insert(prevSetExtendedReach, new VarInsnNode(Opcodes.DLOAD, 3));
+                method.instructions.insert(setExtendedReach, new VarInsnNode(Opcodes.DLOAD, 3));
 
 
                 var setOverreachFlag = extendedReach;
@@ -50,11 +46,10 @@ function initializeCoreMod() {
                 } while (setOverreachFlag.var != 6);
 
 
-                method.instructions.insert(setOverreachFlag, new VarInsnNode(Opcodes.ISTORE, 6));
-                method.instructions.insert(setOverreachFlag, ASMAPI.buildMethodCall(
+                method.instructions.insert(setOverreachFlag.getPrevious(), ASMAPI.buildMethodCall(
                     'hellfirepvp/astralsorcery/common/util/ASMHookEndpoint',
                     'doesOverrideDistanceRuling',
-                    '()Z',
+                    '(Z)Z',
                     ASMAPI.MethodType.STATIC));
 
                 ASMAPI.log('INFO', 'Added \'reach_set_client_renderer\' ASM patch!');
