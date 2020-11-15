@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -92,19 +93,23 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
         return new PerkAttributeModifier(this, mode, modifier);
     }
 
-    public void onApply(PlayerEntity player, LogicalSide side) {
+    public void onApply(PlayerEntity player, LogicalSide side, ModifierSource source) {
         Set<UUID> applied = applicationCache.computeIfAbsent(side, s -> new HashSet<>());
         applied.add(player.getUniqueID());
     }
 
-    public void onRemove(PlayerEntity player, LogicalSide side, boolean removedCompletely) {
+    public void onRemove(PlayerEntity player, LogicalSide side, boolean removedCompletely, ModifierSource source) {
         if (removedCompletely) {
             applicationCache.computeIfAbsent(side, s -> new HashSet<>()).remove(player.getUniqueID());
         }
     }
 
+    //Called if no modifiers of this type were applied on the player, but now there is at least 1 added.
+    //Called before any modifiers are actually applied!
     public void onModeApply(PlayerEntity player, ModifierType mode, LogicalSide side) {}
 
+    //Called if no more modifiers of this type are applied on the player.
+    //Called after that last modifier is removed!
     public void onModeRemove(PlayerEntity player, ModifierType mode, LogicalSide side, boolean removedCompletely) {}
 
     public boolean hasTypeApplied(PlayerEntity player, LogicalSide side) {

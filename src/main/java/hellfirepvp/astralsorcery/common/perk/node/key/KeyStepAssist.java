@@ -37,8 +37,8 @@ public class KeyStepAssist extends KeyPerk implements PlayerTickPerk, CooldownPe
     }
 
     @Override
-    protected void attachListeners(IEventBus bus) {
-        super.attachListeners(bus);
+    public void attachListeners(LogicalSide side, IEventBus bus) {
+        super.attachListeners(side, bus);
         bus.addListener(EventPriority.LOWEST, this::onTeleport);
     }
 

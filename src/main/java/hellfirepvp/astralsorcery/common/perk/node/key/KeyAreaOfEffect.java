@@ -42,8 +42,8 @@ public class KeyAreaOfEffect extends KeyAddEnchantment {
     }
 
     @Override
-    public void attachListeners(IEventBus bus) {
-        super.attachListeners(bus);
+    public void attachListeners(LogicalSide side, IEventBus bus) {
+        super.attachListeners(side, bus);
         bus.addListener(EventPriority.HIGH, this::onDamage);
     }
 

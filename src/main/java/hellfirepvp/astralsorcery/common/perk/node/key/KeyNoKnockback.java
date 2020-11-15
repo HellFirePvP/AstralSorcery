@@ -32,8 +32,8 @@ public class KeyNoKnockback extends KeyPerk {
     }
 
     @Override
-    public void attachListeners(IEventBus bus) {
-        super.attachListeners(bus);
+    public void attachListeners(LogicalSide side, IEventBus bus) {
+        super.attachListeners(side, bus);
 
         bus.addListener(this::onKnockback);
     }

@@ -17,6 +17,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -52,6 +53,22 @@ public class TimeoutListContainer<K, V> implements ITickHandler {
         TimeoutList<V> ret = timeoutListMap.remove(key);
         ret.forEach((v) -> delegate.onContainerTimeout(key, v));
         return ret;
+    }
+
+    public boolean removeList(Predicate<V> valueTest) {
+        boolean removed = false;
+        for (Map.Entry<K, TimeoutList<V>> entry : timeoutListMap.entrySet()) {
+            Iterator<V> iterator = entry.getValue().iterator();
+            while (iterator.hasNext()) {
+                V value = iterator.next();
+                if (valueTest.test(value)) {
+                    delegate.onContainerTimeout(entry.getKey(), value);
+                    iterator.remove();
+                    removed = true;
+                }
+            }
+        }
+        return removed;
     }
 
     public TimeoutList<V> getOrCreateList(K key) {

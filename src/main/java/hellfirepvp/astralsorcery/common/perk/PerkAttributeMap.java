@@ -42,8 +42,9 @@ public class PerkAttributeMap {
         this.side = side;
     }
 
-    void applyModifier(@Nonnull PlayerEntity player, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
+    Collection<PerkAttributeModifier> applyModifier(@Nonnull PlayerEntity player, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
         PlayerProgress prog = ResearchHelper.getProgress(player, this.side);
+        List<PerkAttributeModifier> added = new ArrayList<>();
 
         List<PerkAttributeModifier> modify = Lists.newArrayList();
         modify.add(modifier);
@@ -57,10 +58,13 @@ public class PerkAttributeMap {
 
             PerkAttributeModifier postMod = mod;
             LogCategory.PERKS.info(() -> "Applying converted modifier " + postMod.getComparisonKey());
-            if (!this.cacheModifier(player, mod.getAttributeType(), mod)) {
+            if (this.cacheModifier(player, mod.getAttributeType(), mod)) {
+                added.add(mod);
+            } else {
                 LogCategory.PERKS.warn(() -> "Could not apply modifier " + postMod.getComparisonKey() + " - already applied!");
             }
         }
+        return added;
     }
 
     private boolean cacheModifier(PlayerEntity player, PerkAttributeType type, PerkAttributeModifier modifier) {
@@ -77,8 +81,9 @@ public class PerkAttributeMap {
         return modifiers.add(modifier);
     }
 
-    void removeModifier(@Nonnull PlayerEntity player, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
+    Collection<PerkAttributeModifier> removeModifier(@Nonnull PlayerEntity player, @Nonnull PerkAttributeModifier modifier, @Nullable ModifierSource owningSource) {
         PlayerProgress prog = ResearchHelper.getProgress(player, this.side);
+        List<PerkAttributeModifier> removed = new ArrayList<>();
 
         List<PerkAttributeModifier> modify = Lists.newArrayList();
         modify.add(modifier);
@@ -92,10 +97,13 @@ public class PerkAttributeMap {
 
             PerkAttributeModifier postMod = mod;
             LogCategory.PERKS.info(() -> "Removing converted modifier " + postMod.getComparisonKey());
-            if (!this.dropModifier(player, mod.getAttributeType(), mod)) {
+            if (this.dropModifier(player, mod.getAttributeType(), mod)) {
+                removed.add(mod);
+            } else {
                 LogCategory.PERKS.warn(() -> "Could not remove modifier " + postMod.getComparisonKey() + " - not applied!");
             }
         }
+        return removed;
     }
 
     private boolean dropModifier(PlayerEntity player, PerkAttributeType type, PerkAttributeModifier modifier) {
@@ -173,6 +181,10 @@ public class PerkAttributeMap {
 
             throw new IllegalStateException("Trying to modify PerkConverters while modifiers are applied!");
         }
+    }
+
+    public boolean hasModifiers(PerkAttributeType type) {
+        return !modifiers.getOrDefault(type, Collections.emptyList()).isEmpty();
     }
 
     private List<PerkAttributeModifier> getModifiersByType(PerkAttributeType type, ModifierType mode) {

@@ -31,7 +31,7 @@ public class DynamicEnchantmentEvent {
     @Cancelable
     public static class Add extends Event {
 
-        private List<DynamicEnchantment> enchantmentsToApply = new LinkedList<>();
+        private final List<DynamicEnchantment> enchantmentsToApply = new LinkedList<>();
         private final ItemStack itemStack;
         private final PlayerEntity resolvedPlayer;
 
@@ -58,9 +58,9 @@ public class DynamicEnchantmentEvent {
     @Cancelable
     public static class Modify extends Event {
 
-        private List<DynamicEnchantment> enchantmentsToApply;
+        private final List<DynamicEnchantment> enchantmentsToApply;
         private final ItemStack itemStack;
-        private PlayerEntity resolvedPlayer;
+        private final PlayerEntity resolvedPlayer;
 
         public Modify(ItemStack itemStack, List<DynamicEnchantment> enchantmentsToApply, @Nonnull PlayerEntity resolvedPlayer) {
             this.itemStack = itemStack;

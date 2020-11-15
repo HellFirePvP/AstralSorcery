@@ -95,20 +95,34 @@ public class PerkTree {
 
     @OnlyIn(Dist.CLIENT)
     public void receivePerkTree(PreparedPerkTreeData serverTreeData) {
-        this.treeData.setData(LogicalSide.CLIENT, serverTreeData);
+        this.updateTreeData(LogicalSide.CLIENT, serverTreeData);
     }
 
     public void clearCache(LogicalSide side) {
         this.getData(side).ifPresent(data -> data.clearPerkCache(side));
-        this.treeData.setData(side, null);
+        this.updateTreeData(side, null);
     }
 
     public void setupServerPerkTree() {
         if (this.loadedPerkTree != null) {
-            this.treeData.setData(LogicalSide.SERVER, this.loadedPerkTree.prepare());
+            this.updateTreeData(LogicalSide.SERVER, this.loadedPerkTree.prepare());
             AstralSorcery.log.info("Loaded PerkTree!");
         } else {
             AstralSorcery.log.info("No PerkTree data found!");
+        }
+    }
+
+    private void updateTreeData(LogicalSide side, @Nullable PreparedPerkTreeData newData) {
+        this.treeData.getData(side).ifPresent(data -> {
+            data.getPerkPoints().stream()
+                    .map(PerkTreePoint::getPerk)
+                    .forEach(perk -> perk.invalidate(side));
+        });
+        this.treeData.setData(side, newData);
+        if (newData != null) {
+            newData.getPerkPoints().stream()
+                    .map(PerkTreePoint::getPerk)
+                    .forEach(perk -> perk.validate(side));
         }
     }
 }

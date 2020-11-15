@@ -19,6 +19,7 @@ import net.minecraftforge.fml.LogicalSide;
  * Created by HellFirePvP
  * Date: 31.03.2020 / 20:45
  */
+//Each ModifierSource should be a AttributeModifierProvider in some way or subclass.
 public interface ModifierSource {
 
     boolean canApplySource(PlayerEntity player, LogicalSide dist);

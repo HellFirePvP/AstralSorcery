@@ -38,7 +38,7 @@ public class EventFlags {
 
     public static class BooleanFlag {
 
-        private boolean originalState;
+        private final boolean originalState;
         private boolean flag;
 
         private BooleanFlag(boolean flag) {

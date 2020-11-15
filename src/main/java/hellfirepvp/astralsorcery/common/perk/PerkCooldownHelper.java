@@ -60,6 +60,14 @@ public class PerkCooldownHelper {
         }
     }
 
+    public static void removePerkCooldowns(LogicalSide side, AbstractPerk perk) {
+        if (!(perk instanceof CooldownPerk)) return;
+
+        TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> container = side.isClient() ?
+                perkCooldownsClient : perkCooldowns;
+        container.removeList(key -> key.equals(perk.getRegistryName()));
+    }
+
     public static boolean isCooldownActiveForPlayer(PlayerEntity player, AbstractPerk perk) {
         if (!(perk instanceof CooldownPerk)) return false;
 
