@@ -34,7 +34,7 @@ import java.util.Set;
 public class RockCrystalBuffer extends SectionWorldData<RockCrystalBuffer.BufferSection> {
 
     public RockCrystalBuffer(WorldCacheDomain.SaveKey<?> key) {
-        super(key, PRECISION_AREA);
+        super(key, 10);
     }
 
     @Override
