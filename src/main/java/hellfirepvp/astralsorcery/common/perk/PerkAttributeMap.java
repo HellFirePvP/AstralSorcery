@@ -74,7 +74,6 @@ public class PerkAttributeMap {
             return false;
         }
 
-        type.onApply(player, side);
         if (noModifiers) {
             type.onModeApply(player, modifier.getMode(), side);
         }
@@ -109,7 +108,6 @@ public class PerkAttributeMap {
     private boolean dropModifier(PlayerEntity player, PerkAttributeType type, PerkAttributeModifier modifier) {
         if (modifiers.computeIfAbsent(type, t -> Lists.newArrayList()).remove(modifier)) {
             boolean completelyRemoved = modifiers.get(type).isEmpty();
-            type.onRemove(player, side, completelyRemoved);
             if (getModifiersByType(type, modifier.getMode()).isEmpty()) {
                 type.onModeRemove(player, modifier.getMode(), side, completelyRemoved);
             }
