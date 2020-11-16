@@ -135,20 +135,22 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
 
     @Override
     public Iterator<V> iterator() {
+        Iterator<TimeoutEntry<V>> entryIterator = tickEntries.iterator();
         return new Iterator<V>() {
-
-            private int index = 0;
 
             @Override
             public boolean hasNext() {
-                return index < tickEntries.size();
+                return entryIterator.hasNext();
             }
 
             @Override
             public V next() {
-                V val = tickEntries.get(index).value;
-                index++;
-                return val;
+                return entryIterator.next().value;
+            }
+
+            @Override
+            public void remove() {
+                entryIterator.remove();
             }
         };
     }
