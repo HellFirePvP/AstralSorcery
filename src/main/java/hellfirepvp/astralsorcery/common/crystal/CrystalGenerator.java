@@ -33,7 +33,7 @@ import static hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS.Propertie
 public class CrystalGenerator {
 
     private static final int COUNT_PHYSICAL_PROPERTY_TIERS = 5;
-    private static final float CHANCE_PHYSICAL_PROPERTIES = 0.8F;
+    private static final float CHANCE_PHYSICAL_PROPERTIES = 0.65F;
     private static final List<CrystalProperty> PHYSICAL_PROPERTIES = Lists.newArrayList(
             PROPERTY_SIZE,
             PROPERTY_SHAPE,
@@ -41,7 +41,7 @@ public class CrystalGenerator {
     );
 
     private static final int COUNT_USAGE_PROPERTY_TIERS = 4;
-    private static final float CHANCE_USAGE_PROPERTIES = 0.75F;
+    private static final float CHANCE_USAGE_PROPERTIES = 0.55F;
     private static final List<CrystalProperty> USAGE_PROPERTIES = Lists.newArrayList(
             PROPERTY_TOOL_DURABILITY,
             PROPERTY_TOOL_EFFICIENCY,

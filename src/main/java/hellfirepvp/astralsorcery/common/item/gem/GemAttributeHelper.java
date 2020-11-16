@@ -35,8 +35,9 @@ public class GemAttributeHelper {
 
     private static final Random rand = new Random();
 
-    private static float chance3Modifiers = 0.2F;
-    private static float chance4Modifiers = 0.05F;
+    //TODO this. at some point.
+    private static float chance3Modifiers = 0.4F;
+    private static float chance4Modifiers = 0.15F;
 
     private static boolean allowDuplicateTypes = false;
     private static float incModifierLower = 0.05F;
@@ -110,7 +111,9 @@ public class GemAttributeHelper {
             if (lower > higher) {
                 value = lower;
             } else {
-                value = lower + (MathHelper.clamp(random.nextFloat() * gemType.amplifierModifier, 0F, 1F) * (higher - lower));
+                float exp = 1F / gemType.amplifierModifier;
+                float multiplierScale = (float) Math.pow(random.nextFloat(), exp);
+                value = lower + (MathHelper.clamp(multiplierScale, 0F, 1F) * (higher - lower));
             }
 
             ModifierType mode = isMultiplicative ? ModifierType.STACKING_MULTIPLY : ModifierType.ADDED_MULTIPLY;
@@ -157,9 +160,9 @@ public class GemAttributeHelper {
 
     private static int getPotentialMods(Random random, float countModifier) {
         int mods = 2;
-        if (random.nextFloat() < (chance3Modifiers * countModifier)) {
+        if (random.nextFloat() < (chance3Modifiers + countModifier)) {
             mods++;
-            if (random.nextFloat() < (chance4Modifiers * countModifier)) {
+            if (random.nextFloat() < (chance4Modifiers + countModifier)) {
                 mods++;
             }
         }

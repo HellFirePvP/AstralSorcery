@@ -8,13 +8,13 @@
     "modifiers": [
       {
         "type": "astralsorcery:chargeregeneration",
-        "mode": "ADDED_MULTIPLY",
-        "value": 0.15
+        "mode": "STACKING_MULTIPLY",
+        "value": 1.5
       },
       {
         "type": "astralsorcery:chargecap",
         "mode": "STACKING_MULTIPLY",
-        "value": 0.7
+        "value": 0.75
       }
     ]
   },

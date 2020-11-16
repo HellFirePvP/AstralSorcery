@@ -1285,8 +1285,8 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .build(registrar);
         PerkDataBuilder.ofType(KEY_CHARGE_BALANCING)
                 .create(key("core_charge_cave_3"), 44, 35)
-                .addModifier(0.7F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
+                .addModifier(0.75F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
+                .addModifier(1.5F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
                 .setName(name("key.charge_regen"))
                 .connect(key("core_charge_cave_2"))
                 .build(registrar);
