@@ -95,6 +95,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
                 foundPoint = tryEmptyPlace(placed.values(), gen);
             } while (foundPoint == null);
             area.addConstellationToArea(cst, new PlayerAngledConstellationInformation(DEFAULT_CONSTELLATION_SIZE, foundPoint.y, foundPoint.x));
+            placed.put(cst, foundPoint);
         }
 
         for (int i = 0; i < randomStars; i++) {

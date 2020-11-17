@@ -107,9 +107,7 @@ public class SyncDataHolder implements ITickHandler {
     public static void clearWorld(IWorld world) {
         DimensionType dimType = world.getDimension().getType();
         for (ResourceLocation key : SyncDataRegistry.getKnownKeys()) {
-            if (world.isRemote()) {
-                executeClient(key, ClientData.class, data -> data.clear(dimType));
-            } else {
+            if (!world.isRemote()) {
                 executeServer(key, AbstractData.class, data -> data.clear(dimType));
             }
         }
