@@ -20,6 +20,7 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.IBooleanFunction;
@@ -82,6 +83,11 @@ public class BlockIlluminator extends ContainerBlock implements CustomItemBlock 
     @Override
     public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
         return this.shape;
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+        return false;
     }
 
     @Override

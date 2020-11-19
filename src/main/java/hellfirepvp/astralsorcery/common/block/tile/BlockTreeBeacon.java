@@ -20,6 +20,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -80,6 +81,11 @@ public class BlockTreeBeacon extends BlockStarlightNetwork implements CustomItem
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
         return hasSolidSideOnTop(world, pos.down());
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+        return false;
     }
 
     @Override

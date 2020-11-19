@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -65,6 +66,11 @@ public class BlockAttunementAltar extends ContainerBlock implements CustomItemBl
     @Override
     public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return ATTUNEMENT_ALTAR_COLLISION;
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+        return false;
     }
 
     @Nullable

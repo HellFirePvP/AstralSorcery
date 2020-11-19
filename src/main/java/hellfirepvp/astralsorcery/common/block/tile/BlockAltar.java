@@ -25,6 +25,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -115,6 +116,11 @@ public abstract class BlockAltar extends BlockStarlightNetwork implements Custom
                 }
             }
         }
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+        return false;
     }
 
     @Override

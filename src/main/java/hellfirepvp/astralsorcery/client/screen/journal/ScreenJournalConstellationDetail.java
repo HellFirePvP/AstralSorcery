@@ -247,6 +247,9 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
                 break;
             case 2:
                 drawCapeInformationPages(renderStack, mouseX, mouseY, pTicks);
+                if (this.constellation instanceof IMinorConstellation) { //Doesn't have a 3rd double page
+                    drawConstellationPaperRecipePage(renderStack, mouseX, mouseY, pTicks);
+                }
                 break;
             case 3:
                 drawConstellationPaperRecipePage(renderStack, mouseX, mouseY, pTicks);
@@ -290,8 +293,8 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
 
             if (recipe != null) {
                 lastFramePage = new RenderPageAltarRecipe(null, -1, recipe);
-                lastFramePage.render    (renderStack, guiLeft + 220, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
-                lastFramePage.postRender(renderStack, guiLeft + 220, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
+                lastFramePage.render    (renderStack, guiLeft + 220, guiTop + 20, this.getGuiZLevel(), partialTicks, mouseX, mouseY);
+                lastFramePage.postRender(renderStack, guiLeft + 220, guiTop + 20, this.getGuiZLevel(), partialTicks, mouseX, mouseY);
             }
         }
     }
@@ -304,8 +307,8 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
 
             if (recipe != null) {
                 lastFramePage = new RenderPageAltarRecipe(null, -1, recipe);
-                lastFramePage.render    (renderStack, guiLeft + 30, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
-                lastFramePage.postRender(renderStack, guiLeft + 30, guiTop + 20, partialTicks, this.getGuiZLevel(), mouseX, mouseY);
+                lastFramePage.render    (renderStack, guiLeft + 30, guiTop + 20, this.getGuiZLevel(), partialTicks, mouseX, mouseY);
+                lastFramePage.postRender(renderStack, guiLeft + 30, guiTop + 20, this.getGuiZLevel(), partialTicks, mouseX, mouseY);
             }
         }
     }

@@ -24,6 +24,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -115,11 +116,6 @@ public class BlockLens extends BlockStarlightNetwork implements CustomItemBlock 
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
-    }
-
-    @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         switch (state.get(PLACED_AGAINST)) {
             case UP:
@@ -136,6 +132,16 @@ public class BlockLens extends BlockStarlightNetwork implements CustomItemBlock 
             case DOWN:
                 return LENS_DOWN;
         }
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+        return false;
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     @Nullable

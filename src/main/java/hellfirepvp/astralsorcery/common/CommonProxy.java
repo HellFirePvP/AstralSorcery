@@ -69,8 +69,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextFormatting;
@@ -87,7 +85,10 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.server.*;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
 import java.io.File;
 import java.util.List;
@@ -211,6 +212,8 @@ public class CommonProxy {
         EventHelperEntityFreeze.attachListeners(eventBus);
         PerkAttributeLimiter.attachListeners(eventBus);
 
+        eventBus.addListener(RegistryWorldGeneration::loadBiomeFeatures);
+
         eventBus.addListener(PlayerAmuletHandler::onEnchantmentAdd);
         eventBus.addListener(BlockDropCaptureAssist.INSTANCE::onDrop);
         eventBus.addListener(CelestialGatewayHandler.INSTANCE::onWorldInit);
@@ -271,10 +274,12 @@ public class CommonProxy {
         RegistryPerks.initConfig(PerkConfig.CONFIG::newSubSection);
 
         this.commonConfig.addConfigEntry(CommonGeneralConfig.CONFIG);
+        this.commonConfig.addConfigEntry(WorldGenConfig.CONFIG);
+
+        RegistryWorldGeneration.addConfigEntries(WorldGenConfig.CONFIG::newSubSection);
 
         ConstellationEffectRegistry.addConfigEntries(this.serverConfig);
         MantleEffectRegistry.addConfigEntries(this.serverConfig);
-        //RegistryWorldGeneration.registerFeatureConfigurations(this.serverConfig);
     }
 
     public InternalRegistryPrimer getRegistryPrimer() {
@@ -339,9 +344,9 @@ public class CommonProxy {
         RegistryCapabilities.init(MinecraftForge.EVENT_BUS);
         StarlightNetworkRegistry.setupRegistry();
 
-        //RegistryWorldGeneration.addFeaturesToBiomes();
-
         PatreonDataManager.loadPatreonEffects();
+
+        event.enqueueWork(RegistryWorldGeneration::registerStructureGeneration);
     }
 
     private void onRegisterCommands(RegisterCommandsEvent event) {

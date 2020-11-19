@@ -21,6 +21,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -130,6 +131,11 @@ public class BlockSpectralRelay extends BlockStarlightNetwork implements CustomI
             return tsr.getInventory().getStackInSlot(0).isEmpty() ? 0 : 15;
         }
         return 0;
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+        return false;
     }
 
     @Override

@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -134,11 +135,6 @@ public class BlockCelestialCrystalCluster extends BlockCrystalContainer implemen
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
-    }
-
-    @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             super.onReplaced(state, world, pos, newState, isMoving);
@@ -148,6 +144,16 @@ public class BlockCelestialCrystalCluster extends BlockCrystalContainer implemen
                             new Vector3(pos).add(state.getOffset(world, pos)).add(0.5, 0.4, 0.5)));
             PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(world, pos, 32));
         }
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+        return false;
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     @Nullable

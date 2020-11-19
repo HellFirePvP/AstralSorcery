@@ -37,6 +37,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.BiomeRegistry;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
@@ -89,7 +90,7 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(CrystalProperty.class, this::registerCrystalProperties);
         eventBus.addGenericListener(PropertyUsage.class, this::registerCrystalUsages);
         eventBus.addGenericListener(AltarRecipeEffect.class, this::registerAltarRecipeEffects);
-
+        eventBus.addGenericListener(Structure.class, this::registerStructureTemplates);
     }
 
     //This exists because you can't sort registries in any fashion or make one load after another in forge.
@@ -100,6 +101,7 @@ public class PrimerEventHandler {
         RegistryEngravingEffects.init();
 
         RegistryStructures.init();
+        RegistryWorldGeneration.init();
 
         RegistryCrystalPropertyUsages.init();
         RegistryCrystalProperties.init();
@@ -245,6 +247,10 @@ public class PrimerEventHandler {
     }
 
     private void registerStructureTypes(RegistryEvent.Register<StructureType> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerStructureTemplates(RegistryEvent.Register<Structure<?>> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
