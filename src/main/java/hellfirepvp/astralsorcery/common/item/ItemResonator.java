@@ -41,11 +41,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -168,8 +170,8 @@ public class ItemResonator extends Item implements OverrideInteractItem {
             int offsetZ = center.getZ();
             BlockPos.Mutable mPos = new BlockPos.Mutable();
 
-            for (int xx = -30; xx <= 30; xx++) {
-                for (int zz = -30; zz <= 30; zz++) {
+            for (int xx = -48; xx <= 48; xx++) {
+                for (int zz = -48; zz <= 48; zz++) {
                     mPos.setPos(world.getHeight(Heightmap.Type.WORLD_SURFACE, mPos.setPos(offsetX + xx, 0, offsetZ + zz)));
 
                     float perc = SkyCollectionHelper.getSkyNoiseDistributionClient(world.getDimensionKey(), mPos).get();

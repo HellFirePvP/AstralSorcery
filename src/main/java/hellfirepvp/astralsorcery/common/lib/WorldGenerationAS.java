@@ -11,7 +11,13 @@ package hellfirepvp.astralsorcery.common.lib;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.world.FeatureGenerationConfig;
 import hellfirepvp.astralsorcery.common.world.StructureGenerationConfig;
+import hellfirepvp.astralsorcery.common.world.feature.ReplaceBlockFeature;
+import hellfirepvp.astralsorcery.common.world.feature.RockCrystalFeature;
+import hellfirepvp.astralsorcery.common.world.placement.ChancePlacement;
+import hellfirepvp.astralsorcery.common.world.placement.RiverbedPlacement;
+import hellfirepvp.astralsorcery.common.world.placement.WorldFilteredPlacement;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
@@ -54,22 +60,61 @@ public class WorldGenerationAS {
         public static final ResourceLocation KEY_AQUAMARINE = AstralSorcery.key("aquamarine");
         public static final ResourceLocation KEY_MARBLE = AstralSorcery.key("marble");
 
-        public static ConfiguredFeature<?, ?> MARBLE;
+        public static final ResourceLocation KEY_FEATURE_REPLACE_BLOCK = AstralSorcery.key("replace_block");
+        public static final ResourceLocation KEY_FEATURE_ROCK_CRYSTAL = AstralSorcery.key("rock_crystal");
+
+        public static final ReplaceBlockFeature REPLACE_BLOCK = new ReplaceBlockFeature();
+        public static final RockCrystalFeature ROCK_CRYSTAL = new RockCrystalFeature();
+
+        public static ConfiguredFeature<?, ?> GEN_GLOW_FLOWER;
+        public static ConfiguredFeature<?, ?> GEN_ROCK_CRYSTAL;
+        public static ConfiguredFeature<?, ?> GEN_AQUAMARINE;
+        public static ConfiguredFeature<?, ?> GEN_MARBLE;
+
+    }
+
+    public static class Placements {
+
+        public static final ResourceLocation KEY_PLACEMENT_CHANCE = AstralSorcery.key("chance");
+        public static final ResourceLocation KEY_PLACEMENT_RIVERBED = AstralSorcery.key("riverbed");
+        public static final ResourceLocation KEY_PLACEMENT_WORLD_FILTER = AstralSorcery.key("world_filter");
+
+        public static final ChancePlacement CHANCE = new ChancePlacement();
+        public static final RiverbedPlacement RIVERBED = new RiverbedPlacement();
+        public static final WorldFilteredPlacement WORLD_FILTER = new WorldFilteredPlacement();
 
     }
 
     public static class Config {
 
         public static StructureGenerationConfig CFG_ANCIENT_SHRINE =
-                new StructureGenerationConfig(Structures.KEY_ANCIENT_SHRINE, 12, 5, Arrays.asList(ICY, EXTREME_HILLS));
+                new StructureGenerationConfig(Structures.KEY_ANCIENT_SHRINE, 12, 5)
+                        .generatesInBiomes(Arrays.asList(ICY, EXTREME_HILLS))
+                        .generatesInWorlds(Collections.singletonList(World.OVERWORLD));
         public static StructureGenerationConfig CFG_DESERT_SHRINE =
-                new StructureGenerationConfig(Structures.KEY_DESERT_SHRINE, 12, 5, Arrays.asList(MESA, DESERT, SAVANNA));
+                new StructureGenerationConfig(Structures.KEY_DESERT_SHRINE, 12, 5)
+                        .generatesInBiomes(Arrays.asList(MESA, DESERT, SAVANNA))
+                        .generatesInWorlds(Collections.singletonList(World.OVERWORLD));
         public static StructureGenerationConfig CFG_SMALL_SHRINE =
-                new StructureGenerationConfig(Structures.KEY_SMALL_SHRINE, 12, 8, Arrays.asList(FOREST, PLAINS));
+                new StructureGenerationConfig(Structures.KEY_SMALL_SHRINE, 12, 8)
+                        .generatesInBiomes(Arrays.asList(FOREST, PLAINS))
+                        .generatesInWorlds(Collections.singletonList(World.OVERWORLD));
 
+        public static FeatureGenerationConfig CFG_GLOW_FLOWER =
+                new FeatureGenerationConfig(Features.KEY_GLOW_FLOWER)
+                        .generatesInBiomes(Arrays.asList(ICY, EXTREME_HILLS))
+                        .generatesInWorlds(Collections.singletonList(World.OVERWORLD));
+        public static FeatureGenerationConfig CFG_ROCK_CRYSTAL =
+                new FeatureGenerationConfig(Features.KEY_ROCK_CRYSTAL)
+                        .setGenerateEveryBiome()
+                        .generatesInWorlds(Collections.singletonList(World.OVERWORLD));
+        public static FeatureGenerationConfig CFG_AQUAMARINE =
+                new FeatureGenerationConfig(Features.KEY_AQUAMARINE)
+                        .setGenerateEveryBiome()
+                        .generatesInWorlds(Collections.singletonList(World.OVERWORLD));
         public static FeatureGenerationConfig CFG_MARBLE =
-                new FeatureGenerationConfig(Features.KEY_MARBLE, Collections.emptyList())
-                        .setGenerateEverywhere();
-
+                new FeatureGenerationConfig(Features.KEY_MARBLE)
+                        .setGenerateEveryBiome()
+                        .setGenerateEveryWorld();
     }
 }

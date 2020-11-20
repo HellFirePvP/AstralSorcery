@@ -35,7 +35,6 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.biome.BiomeRegistry;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.Placement;
@@ -67,8 +66,8 @@ public class PrimerEventHandler {
         eventBus.addGenericListener(Fluid.class, this::registerFluids);
         eventBus.addGenericListener(TileEntityType.class, this::registerTiles);
         eventBus.addGenericListener(EntityType.class, this::registerEntities);
-        //eventBus.addGenericListener(Feature.class, this::registerFeatures);
-        //eventBus.addGenericListener(Placement.class, this::registerPlacements);
+        eventBus.addGenericListener(Feature.class, this::registerFeatures);
+        eventBus.addGenericListener(Placement.class, this::registerPlacements);
         eventBus.addGenericListener(Effect.class, this::registerEffects);
         eventBus.addGenericListener(Enchantment.class, this::registerEnchantments);
         eventBus.addGenericListener(SoundEvent.class, this::registerSounds);
@@ -251,6 +250,14 @@ public class PrimerEventHandler {
     }
 
     private void registerStructureTemplates(RegistryEvent.Register<Structure<?>> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
+        fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+    }
+
+    private void registerPlacements(RegistryEvent.Register<Placement<?>> event) {
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

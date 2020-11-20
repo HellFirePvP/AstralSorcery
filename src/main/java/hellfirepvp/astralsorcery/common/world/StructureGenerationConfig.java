@@ -1,11 +1,8 @@
 package hellfirepvp.astralsorcery.common.world;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraftforge.common.ForgeConfigSpec;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,12 +18,12 @@ public class StructureGenerationConfig extends FeatureGenerationConfig {
     private ForgeConfigSpec.IntValue spacing;
     private ForgeConfigSpec.IntValue separation;
 
-    public StructureGenerationConfig(ResourceLocation featureName, int spacing, int separation, List<Biome.Category> categories) {
-        this(featureName.getPath(), spacing, separation, categories);
+    public StructureGenerationConfig(ResourceLocation featureName, int spacing, int separation) {
+        this(featureName.getPath(), spacing, separation);
     }
 
-    public StructureGenerationConfig(String featureName, int spacing, int separation, List<Biome.Category> categories) {
-        super(featureName, categories);
+    public StructureGenerationConfig(String featureName, int spacing, int separation) {
+        super(featureName);
         this.defaultSpacing = spacing;
         this.defaultSeparation = separation;
     }

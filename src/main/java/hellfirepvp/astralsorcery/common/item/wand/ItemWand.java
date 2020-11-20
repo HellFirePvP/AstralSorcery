@@ -72,7 +72,7 @@ public class ItemWand extends Item implements OverrideInteractItem {
                     RockCrystalBuffer buf = DataAS.DOMAIN_AS.getData(world, DataAS.KEY_ROCK_CRYSTAL_BUFFER);
 
                     ChunkPos pos = new ChunkPos(entity.getPosition());
-                    for (BlockPos rPos : buf.collectPositions(pos, 4)) {
+                    for (BlockPos rPos : buf.collectPositions(pos, 6)) {
                         BlockState state = world.getBlockState(rPos);
                         if (!(state.getBlock() instanceof BlockRockCrystalOre)) {
                             buf.removeOre(rPos);

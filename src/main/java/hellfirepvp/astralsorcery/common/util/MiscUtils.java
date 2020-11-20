@@ -302,7 +302,7 @@ public class MiscUtils {
             return null;
         }
         if (state.getBlock() instanceof FlowingFluidBlock) {
-            FluidState fluidState = state.getBlock().getFluidState(state);
+            FluidState fluidState = state.getFluidState();
             if (!fluidState.isEmpty()) {
                 return fluidState.getFluid();
             }
