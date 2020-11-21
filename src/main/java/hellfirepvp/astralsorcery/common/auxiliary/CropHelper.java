@@ -294,8 +294,11 @@ public class CropHelper {
             BlockPos cache = pos;
             for (int i = 1; i < 3; i++) {
                 cache = cache.up();
-                if (world.isAirBlock(cache)) {
+                BlockState state = world.getBlockState(cache);
+                if (state.isAir(world, cache)) {
                     return true;
+                } else if (!(state.getBlock() instanceof CactusBlock)) {
+                    break;
                 }
             }
             return false;
@@ -306,12 +309,15 @@ public class CropHelper {
             BlockPos cache = pos;
             for (int i = 1; i < 3; i++) {
                 cache = cache.up();
-                if (world.isAirBlock(cache)) {
+                BlockState state = world.getBlockState(cache);
+                if (state.isAir(world, cache)) {
                     if (rand.nextBoolean()) {
                         return world.setBlockState(cache, Blocks.CACTUS.getDefaultState(), Constants.BlockFlags.DEFAULT);
                     } else {
                         return false;
                     }
+                } else if (!(state.getBlock() instanceof CactusBlock)) {
+                    break;
                 }
             }
             return false;
@@ -365,8 +371,11 @@ public class CropHelper {
             BlockPos cache = pos;
             for (int i = 1; i < 3; i++) {
                 cache = cache.up();
-                if (world.isAirBlock(cache)) {
+                BlockState state = world.getBlockState(cache);
+                if (state.isAir(world, cache)) {
                     return true;
+                } else if (!(state.getBlock() instanceof SugarCaneBlock)) {
+                    break;
                 }
             }
             return false;
@@ -377,12 +386,15 @@ public class CropHelper {
             BlockPos cache = pos;
             for (int i = 1; i < 3; i++) {
                 cache = cache.up();
-                if (world.isAirBlock(cache)) {
+                BlockState state = world.getBlockState(cache);
+                if (state.isAir(world, cache)) {
                     if (rand.nextBoolean()) {
                         return world.setBlockState(cache, Blocks.SUGAR_CANE.getDefaultState(), Constants.BlockFlags.DEFAULT);
                     } else {
                         return false;
                     }
+                } else if (!(state.getBlock() instanceof SugarCaneBlock)) {
+                    break;
                 }
             }
             return false;
