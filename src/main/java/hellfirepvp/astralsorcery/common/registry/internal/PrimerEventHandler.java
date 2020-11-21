@@ -124,7 +124,6 @@ public class PrimerEventHandler {
         RegistryItems.registerItemBlocks();
         RegistryItems.registerFluidContainerItems();
         RegistryItems.registerDispenseBehaviors();
-        RegistryItems.registerItemProperties();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
 
         //Item registration happens after block registration. Register misc stuff here.

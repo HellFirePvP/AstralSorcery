@@ -329,7 +329,7 @@ public class RenderingUtils {
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
 
-        IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
         renderItemModelWithColor(stack, ItemCameraTransforms.TransformType.GROUND, bakedModel, renderStack, (renderType) -> {
             RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(renderType, () -> {
                 RenderSystem.enableBlend();
@@ -365,10 +365,10 @@ public class RenderingUtils {
             RenderHelper.setupGuiFlatDiffuseLighting();
         }
 
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.ENTITY, buf -> {
-            renderItemModelWithColor(stack, ItemCameraTransforms.TransformType.GUI, bakedModel, renderStack, (renderType) -> buf,
-                    LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, MathHelper.clamp(alpha, 0, 255));
-        });
+        IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        renderItemModelWithColor(stack, ItemCameraTransforms.TransformType.GUI, bakedModel, renderStack, buffer,
+                LightmapUtil.getPackedFullbrightCoords(), OverlayTexture.NO_OVERLAY, overlayColor, MathHelper.clamp(alpha, 0, 255));
+        buffer.finish();
 
         if (!isSideLit) {
             RenderHelper.setupGui3DDiffuseLighting();
@@ -482,7 +482,6 @@ public class RenderingUtils {
                 RenderType rType = RenderTypeLookup.func_239219_a_(stack, true);
                 IVertexBuilder vertexBuilder;
 
-                //TODO check correct VBs are being returned from ItemRenderer calls
                 //Wth are you doing here mojang. Taken from ItemRenderer#renderItem
                 if (stack.getItem() instanceof CompassItem && stack.hasEffect()) {
                     renderStack.push();
@@ -499,7 +498,7 @@ public class RenderingUtils {
                     vertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(buffer, rType, true, stack.hasEffect());
                 }
 
-                renderColoredItemModel(stack, model, renderStack, vertexBuilder,combinedLight, combinedOverlay, c, alpha);
+                renderColoredItemModel(stack, model, renderStack, vertexBuilder, combinedLight, combinedOverlay, c, alpha);
             }
 
             renderStack.pop();

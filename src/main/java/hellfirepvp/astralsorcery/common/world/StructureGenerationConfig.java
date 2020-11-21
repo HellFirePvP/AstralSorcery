@@ -32,7 +32,6 @@ public class StructureGenerationConfig extends FeatureGenerationConfig {
     public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
         super.createEntries(cfgBuilder);
 
-
         this.spacing = cfgBuilder
                 .comment("Defines the structure spacing for worldgen")
                 .translation(translationKey("spacing"))
@@ -44,6 +43,6 @@ public class StructureGenerationConfig extends FeatureGenerationConfig {
     }
 
     public StructureSeparationSettings createSettings() {
-        return new StructureSeparationSettings(this.spacing.get(), this.separation.get(), this.getFullPath().hashCode());
+        return new StructureSeparationSettings(this.spacing.get(), this.separation.get(), Math.abs(this.getFullPath().hashCode()));
     }
 }
