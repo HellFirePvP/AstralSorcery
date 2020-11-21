@@ -281,9 +281,7 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
 
         List<Vector3> list = Lists.newLinkedList();
         Vector3 interpThrower = RenderingVectorUtils.interpolatePosition(thrower, partial);
-        interpThrower.add(thrower.getWidth() / 2, 0, thrower.getWidth() / 2);
         Vector3 interpHook = RenderingVectorUtils.interpolatePosition(this, partial);
-        interpHook.add(getWidth() / 2, 0, getWidth() / 2);
         Vector3 origin = new Vector3();
         Vector3 to = interpThrower.clone().subtract(interpHook).addY(thrower.getHeight() / 4);
         float lineLength = (float) (to.length() * 5);
