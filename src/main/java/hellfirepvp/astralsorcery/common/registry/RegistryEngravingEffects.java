@@ -75,7 +75,7 @@ public class RegistryEngravingEffects {
                         .addApplicableType(EnchantmentType.DIGGER));
         VICIO = newEffect(ConstellationsAS.vicio)
                 .addEffect(new EngravingEffect.PotionEffect(() -> Effects.SPEED, 1, 3))
-                .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.FEATHER_FALLING, 0, 4))
+                .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.FEATHER_FALLING, 1, 4))
                 .addEffect(new EngravingEffect.EnchantmentEffect(() -> Enchantments.RIPTIDE, 1, 5))
                 .addEffect(new EngravingEffect.ModifierEffect(() -> PerkAttributeTypesAS.ATTR_TYPE_ATTACK_SPEED, ModifierType.ADDED_MULTIPLY, 0.15F, 0.25F)
                         .addApplicableType(EnchantmentType.WEAPON)

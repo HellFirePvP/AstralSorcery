@@ -53,6 +53,17 @@
   "potion.potency.9": "X",
   "potion.astralsorcery.crafted.name": "Stardew",
 
+  "entity.astralsorcery.nocturnal_spark": "Nocturnal Spark",
+  "entity.astralsorcery.illumination_spark": "Illumination Spark",
+  "entity.astralsorcery.flare": "Flare",
+  "entity.astralsorcery.spectral_tool": "Spectral Tool",
+  "entity.astralsorcery.item_highlighted": "Item",
+  "entity.astralsorcery.item_explosion_resistant": "Item",
+  "entity.astralsorcery.item_crystal": "Crystal",
+  "entity.astralsorcery.item_starmetal": "Starmetal Ingot",
+  "entity.astralsorcery.observatory_helper": "",
+  "entity.astralsorcery.grappling_hook": "",
+
   "structure.astralsorcery.pattern_altar_attunement.name": "Starlight Crafting Altar",
   "structure.astralsorcery.pattern_altar_constellation.name": "Celestial Altar",
   "structure.astralsorcery.pattern_altar_trait.name": "Iridescent Altar",
