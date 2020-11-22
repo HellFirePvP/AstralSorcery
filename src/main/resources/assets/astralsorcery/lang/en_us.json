@@ -736,7 +736,7 @@
   "astralsorcery.constellation.lucerna.tag": "Light",
   "astralsorcery.constellation.lucerna.description": "The light of this constellation seems immensely bright despite it being far away. Bright enough that it may trick some into thinking it day.",
   "astralsorcery.constellation.lucerna.enchantments": "This constellation saturates potions to grant the ability to see in the dark. Helmets can be enchanted to have this same effect.<NL>Armor enchanted by Lucerna may increase a wearer's maximum Starlight Charge, and weapons and tools may improve Starlight Charge regeneration.",
-  "astralsorcery.constellation.lucerna.ritual": "While only Starlight, the fundamental brightness contained within prevents hostile creatures from arising in the area. The reach of the ritual increases based on the number of balancing lenses active on the ritual.",
+  "astralsorcery.constellation.lucerna.ritual": "While only Starlight, the fundamental brightness contained within the area of the ritual prevents creatures arising from darkness in the area; unless they have a strong malicious intent. The reach of the ritual increases based on the number of balancing lenses active on the ritual.",
   "astralsorcery.constellation.lucerna.mantle": "This mantle reveals all creatures, spawners and containers within 3 dozen paces, even through walls.",
   "astralsorcery.constellation.lucerna.corruption": "Light is stretched, and the time of Starlight lasts far longer.",
 
