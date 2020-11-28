@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.registry;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
@@ -75,9 +76,9 @@ public class RegistryWorldGeneration {
 
         GEN_GLOW_FLOWER = registerConfiguredFeature(KEY_GLOW_FLOWER, GenerationStage.Decoration.VEGETAL_DECORATION, CFG_GLOW_FLOWER,
                 Feature.FLOWER.withConfiguration(new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(BlocksAS.GLOW_FLOWER.getDefaultState()), SimpleBlockPlacer.PLACER)
-                        .tries(20)
+                        .tries(12)
                         .build())
-                        .func_242732_c(8)
+                        .func_242732_c(6)
                         .withPlacement(Features.Placements.VEGETATION_PLACEMENT)
                         .withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT)
                         .withPlacement(WORLD_FILTER.configure(CFG_GLOW_FLOWER.worldFilterConfig())));
@@ -111,6 +112,11 @@ public class RegistryWorldGeneration {
             }
         });
         DimensionStructuresSettings.field_236191_b_ = builder.build();
+
+        Structure.field_236384_t_ = ImmutableList.<Structure<?>>builder()
+                .addAll(Structure.field_236384_t_)
+                .add(STRUCTURE_ANCIENT_SHRINE, STRUCTURE_DESERT_SHRINE, STRUCTURE_SMALL_SHRINE)
+                .build();
     }
 
     public static void loadBiomeFeatures(BiomeLoadingEvent event) {
@@ -167,6 +173,7 @@ public class RegistryWorldGeneration {
         AstralSorcery.getProxy().getRegistryPrimer().register(structure.setRegistryName(key));
         Structure.NAME_STRUCTURE_BIMAP.put(structure.getStructureName(), structure);
         STRUCTURES.put(structure, cfg);
+        WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, key, structure.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         return structure;
     }
 }

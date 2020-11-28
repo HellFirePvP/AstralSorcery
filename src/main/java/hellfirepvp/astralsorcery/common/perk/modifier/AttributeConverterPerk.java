@@ -56,7 +56,7 @@ public class AttributeConverterPerk extends ProgressGatedPerk implements Attribu
         if (modifiersDisabled(player, side)) {
             return Collections.emptyList();
         }
-        if (!ignoreRequirements && ResearchHelper.getProgress(player, side).isPerkSealed(this)) {
+        if (!ignoreRequirements && ResearchHelper.getProgress(player, side).getPerkData().isPerkSealed(this)) {
             return Collections.emptyList();
         }
 

@@ -4,9 +4,13 @@ import hellfirepvp.astralsorcery.common.world.marker.MarkerManagerAS;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IServerWorld;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.TemplateStructurePiece;
 import net.minecraft.world.gen.feature.template.BlockIgnoreStructureProcessor;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
@@ -23,6 +27,8 @@ import java.util.Random;
  * Date: 18.11.2020 / 20:45
  */
 public abstract class TemplateStructure extends TemplateStructurePiece {
+
+    private int yOffset = 0;
 
     public TemplateStructure(IStructurePieceType structurePieceTypeIn, TemplateManager mgr, BlockPos templatePosition) {
         super(structurePieceTypeIn, 0);
@@ -43,10 +49,33 @@ public abstract class TemplateStructure extends TemplateStructurePiece {
         this.setup(tpl, this.templatePosition, settings);
     }
 
+    public <T extends TemplateStructure> T setYOffset(int yOffset) {
+        this.yOffset = yOffset;
+        return (T) this;
+    }
+
     public abstract ResourceLocation getStructureName();
 
     @Override
+    public boolean func_230383_a_(ISeedReader world, StructureManager mgr, ChunkGenerator gen, Random rand, MutableBoundingBox box, ChunkPos chunkPos, BlockPos structCenter) {
+        MutableBoundingBox genBox = new MutableBoundingBox(box);
+        genBox.offset(0, this.yOffset, 0);
+
+        BlockPos original = this.templatePosition;
+        this.templatePosition = original.up(this.yOffset);
+        try {
+            return super.func_230383_a_(world, mgr, gen, rand, genBox, chunkPos, structCenter.up(yOffset));
+        } finally {
+            this.templatePosition = original;
+            this.placeSettings.setBoundingBox(box);
+            this.boundingBox = this.template.getMutableBoundingBox(this.placeSettings, this.templatePosition);
+        }
+    }
+
+    @Override
     protected void handleDataMarker(String function, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox sbb) {
-        MarkerManagerAS.handleMarker(function, pos, worldIn, rand, boundingBox);
+        if (sbb.isVecInside(pos)) {
+            MarkerManagerAS.handleMarker(function, pos, worldIn, rand, boundingBox);
+        }
     }
 }

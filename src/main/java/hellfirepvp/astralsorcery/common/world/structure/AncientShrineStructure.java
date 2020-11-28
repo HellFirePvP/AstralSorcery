@@ -18,10 +18,12 @@ public class AncientShrineStructure extends TemplateStructure {
 
     public AncientShrineStructure(TemplateManager mgr, BlockPos templatePosition) {
         super(WorldGenerationAS.Structures.ANCIENT_SHRINE_PIECE, mgr, templatePosition);
+        this.setYOffset(-7);
     }
 
     public AncientShrineStructure(TemplateManager mgr, CompoundNBT nbt) {
         super(WorldGenerationAS.Structures.ANCIENT_SHRINE_PIECE, mgr, nbt);
+        this.setYOffset(-7);
     }
 
     @Override

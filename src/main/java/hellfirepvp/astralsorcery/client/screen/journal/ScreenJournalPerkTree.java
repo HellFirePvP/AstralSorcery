@@ -26,14 +26,17 @@ import hellfirepvp.astralsorcery.client.screen.journal.perk.BatchPerkContext;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.DynamicPerkRender;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkRenderGroup;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkTreeSizeHandler;
-import hellfirepvp.astralsorcery.client.util.*;
+import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.ScreenTextEntry;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.item.useables.ItemPerkSeal;
-import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -51,7 +54,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -65,10 +67,10 @@ import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.awt.Color;
-import java.util.*;
+import java.awt.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -309,6 +311,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     List<ITextProperties> toolTip = new LinkedList<>();
                     AbstractPerk perk = rctPerk.getKey();
                     PlayerProgress prog = ResearchHelper.getClientProgress();
+                    PlayerPerkData perkData = prog.getPerkData();
 
                     perk.getLocalizedTooltip().forEach(line -> {
                         Style style = line.getStyle();
@@ -318,10 +321,10 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                         toolTip.add(line);
                     });
 
-                    if (prog.isPerkSealed(perk)) {
+                    if (perkData.isPerkSealed(perk)) {
                         toolTip.add(new TranslationTextComponent("perk.info.astralsorcery.sealed").mergeStyle(TextFormatting.RED));
                         toolTip.add(new TranslationTextComponent("perk.info.astralsorcery.sealed.break").mergeStyle(TextFormatting.RED));
-                    } else if (prog.hasPerkUnlocked(perk)) {
+                    } else if (perkData.hasPerkEffect(perk)) {
                         toolTip.add(new TranslationTextComponent("perk.info.astralsorcery.active").mergeStyle(TextFormatting.GREEN));
                     } else if (perk.mayUnlockPerk(prog, player)) {
                         toolTip.add(new TranslationTextComponent("perk.info.astralsorcery.available").mergeStyle(TextFormatting.BLUE));
@@ -430,7 +433,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         PlayerEntity player = Minecraft.getInstance().player;
 
         int availablePerks;
-        if (prog.getAttunedConstellation() != null && (availablePerks = prog.getAvailablePerkPoints(player, LogicalSide.CLIENT)) > 0) {
+        if (prog.isAttuned() && (availablePerks = prog.getPerkData().getAvailablePerkPoints(player, LogicalSide.CLIENT)) > 0) {
             renderStack.push();
             renderStack.translate(guiLeft + 50, guiTop + 18, this.getGuiZLevel());
             ITextProperties points = new TranslationTextComponent("perk.info.astralsorcery.points", availablePerks);
@@ -479,6 +482,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private void drawPerkTree(MatrixStack renderStack, float partialTicks) {
         PlayerEntity player = Minecraft.getInstance().player;
         PlayerProgress progress = ResearchHelper.getClientProgress();
+        PlayerPerkData perkData = progress.getPerkData();
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -489,15 +493,15 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 AllocationStatus status;
 
                 int alloc = 0;
-                if (progress.hasPerkUnlocked(perkConnection.getA())) {
+                if (perkData.hasPerkAllocation(perkConnection.getA(), PlayerPerkData.AllocationType.UNLOCKED)) {
                     alloc++;
                 }
-                if (progress.hasPerkUnlocked(perkConnection.getB())) {
+                if (perkData.hasPerkAllocation(perkConnection.getB(), PlayerPerkData.AllocationType.UNLOCKED)) {
                     alloc++;
                 }
                 if (alloc == 2) {
                     status = AllocationStatus.ALLOCATED;
-                } else if (alloc == 1 && progress.hasFreeAllocationPoint(player, LogicalSide.CLIENT)) {
+                } else if (alloc == 1 && progress.getPerkData().hasFreeAllocationPoint(player, LogicalSide.CLIENT)) {
                     status = AllocationStatus.UNLOCKABLE;
                 } else {
                     status = AllocationStatus.UNALLOCATED;
@@ -517,7 +521,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
             Point.Float offset = perkPoint.getOffset();
             Rectangle.Float perkRect = drawPerk(drawBuffer, renderStack, perkPoint,
                     partialTicks, ClientScheduler.getClientTick() + (int) offset.x + (int) offset.y,
-                    progress.isPerkSealed(perkPoint.getPerk()),
+                    perkData.isPerkSealed(perkPoint.getPerk()),
                     renderDynamic);
             if (perkRect != null) {
                 this.thisFramePerks.put(perkPoint.getPerk(), perkRect);
@@ -707,20 +711,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private void drawConnection(BufferBuilder vb, MatrixStack renderStack, AllocationStatus status, Point.Float source, Point.Float target, long effectTick) {
         Point.Float offsetSrc = this.sizeHandler.scalePointToGui(this, this.mousePosition, source);
         Point.Float offsetDst = this.sizeHandler.scalePointToGui(this, this.mousePosition, target);
-        Color overlay = Color.WHITE;
-        switch (status) {
-            case UNALLOCATED:
-                overlay = ColorsAS.PERK_CONNECTION_UNALLOCATED;
-                break;
-            case ALLOCATED:
-                overlay = ColorsAS.PERK_CONNECTION_ALLOCATED;
-                break;
-            case UNLOCKABLE:
-                overlay = ColorsAS.PERK_CONNECTION_UNLOCKABLE;
-                break;
-            default:
-                break;
-        }
+        Color overlay = status.getPerkConnectionColor();
 
         double effectPart = (Math.sin(Math.toRadians(((effectTick) * 8) % 360D)) + 1D) / 4D;
         float br = 0.1F + 0.4F * (2F - ((float) effectPart));
@@ -829,7 +820,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         IFormattableTextComponent sealedInfo = new TranslationTextComponent("perk.info.astralsorcery.sealed");
         if (sealedInfo.getString().toLowerCase().contains(matchText)) {
             PlayerProgress prog = ResearchHelper.getClientProgress();
-            for (AbstractPerk sealed : prog.getSealedPerks()) {
+            for (AbstractPerk sealed : prog.getPerkData().getSealedPerks()) {
                 if (!this.searchMatches.contains(sealed)) {
                     this.searchMatches.add(sealed);
                 }
@@ -857,11 +848,11 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 return false;
             }
 
-            PlayerProgress prog = ResearchHelper.getClientProgress();
+            PlayerPerkData perkData = ResearchHelper.getClientProgress().getPerkData();
             for (Map.Entry<AbstractPerk, Rectangle.Float> rctPerk : this.thisFramePerks.entrySet()) {
                 if (rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
-                    if (prog.hasPerkUnlocked(rctPerk.getKey()) &&
-                            !prog.isPerkSealed(rctPerk.getKey()) &&
+                    if (perkData.hasPerkEffect(rctPerk.getKey()) &&
+                            !perkData.isPerkSealed(rctPerk.getKey()) &&
                             ItemPerkSeal.useSeal(player, true)) {
                         PktRequestPerkSealAction pkt = new PktRequestPerkSealAction(rctPerk.getKey(), true);
                         PacketChannel.CHANNEL.sendToServer(pkt);
@@ -995,6 +986,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         }
 
         PlayerProgress prog = ResearchHelper.getClientProgress();
+        PlayerPerkData perkData = prog.getPerkData();
         for (Map.Entry<AbstractPerk, Rectangle.Float> rctPerk : this.thisFramePerks.entrySet()) {
             if (rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                 AbstractPerk perk = rctPerk.getKey();
@@ -1005,7 +997,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     break;
                 }
                 if (mouseButton == 1) {
-                    if (prog.hasPerkEffect(perk) && perk instanceof GemSlotPerk) {
+                    if (perkData.hasPerkEffect(perk) && perk instanceof GemSlotPerk) {
                         if (((GemSlotPerk) perk).hasItem(mc.player, LogicalSide.CLIENT)) {
                             PktPerkGemModification pkt = PktPerkGemModification.dropItem(perk);
                             PacketChannel.CHANNEL.sendToServer(pkt);
@@ -1025,12 +1017,12 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                         return true;
                     }
 
-                    if (!prog.hasPerkUnlocked(perk) && perk.mayUnlockPerk(prog, mc.player)) {
+                    if (!perkData.hasPerkAllocation(perk) && perk.mayUnlockPerk(prog, mc.player)) {
                         this.unlockPrimed = perk;
                     } else if (this.sealBreakPrimed != null && this.tickSealBreak > 0) {
                         PktRequestPerkSealAction pkt = new PktRequestPerkSealAction(perk, false);
                         PacketChannel.CHANNEL.sendToServer(pkt);
-                    } else if (prog.isPerkSealed(perk)) {
+                    } else if (prog.getPerkData().isPerkSealed(perk)) {
                         this.sealBreakPrimed = perk;
                         this.tickSealBreak = 4;
                     }

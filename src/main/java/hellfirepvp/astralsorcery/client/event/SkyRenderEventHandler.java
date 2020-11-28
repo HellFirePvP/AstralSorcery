@@ -13,13 +13,11 @@ import hellfirepvp.astralsorcery.client.sky.ChainingSkyRenderer;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientChunkProvider;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.client.world.DimensionRenderInfo;
 import net.minecraftforge.client.ISkyRenderHandler;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.LogicalSide;
 
 /**
@@ -55,8 +53,8 @@ public class SkyRenderEventHandler {
 
                 WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
 
-                if (ctx != null && ctx.getCelestialHandler().isSolarEclipseActive()) {
-                    float perc = ctx.getCelestialHandler().getSolarEclipsePercent();
+                if (ctx != null && ctx.getCelestialEventHandler().getSolarEclipse().isActiveNow()) {
+                    float perc = ctx.getCelestialEventHandler().getSolarEclipsePercent();
                     perc = 0.05F + (perc * 0.95F);
 
                     event.setRed(event.getRed() * perc);

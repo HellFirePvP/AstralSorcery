@@ -52,7 +52,7 @@ public class PerkTreeMajor<T extends MajorPerk> extends PerkTreePoint<T> {
     public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx, MatrixStack renderStack,
                                              AllocationStatus status, long spriteOffsetTick, float pTicks,
                                               float x, float y, float zLevel, float scale) {
-        SpriteSheetResource tex = getHaloSprite(status);
+        SpriteSheetResource tex = status.getPerkTreeHaloSprite();
         BatchPerkContext.TextureObjectGroup grp = PerkPointHaloRenderGroup.INSTANCE.getGroup(tex);
         if (grp == null) {
             return new Rectangle.Float();
@@ -60,7 +60,7 @@ public class PerkTreeMajor<T extends MajorPerk> extends PerkTreePoint<T> {
         BufferBuilder buf = drawCtx.getContext(grp);
 
         float haloSize = getRenderSize() * 0.8F * scale;
-        if (status == AllocationStatus.ALLOCATED) {
+        if (status.isAllocated()) {
             haloSize *= 1.5;
         }
 

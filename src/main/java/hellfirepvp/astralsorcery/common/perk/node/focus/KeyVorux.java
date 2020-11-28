@@ -13,8 +13,6 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
-import hellfirepvp.astralsorcery.common.perk.node.ConstellationPerk;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -27,11 +25,10 @@ import net.minecraftforge.fml.LogicalSide;
  * Created by HellFirePvP
  * Date: 25.08.2019 / 19:38
  */
-public class KeyVorux extends ConstellationPerk {
+public class KeyVorux extends FocusPerk {
 
     public KeyVorux(ResourceLocation name, float x, float y) {
         super(name, ConstellationsAS.vorux, x, y);
-        this.setCategory(CATEGORY_FOCUS);
     }
 
     @Override
@@ -49,11 +46,5 @@ public class KeyVorux extends ConstellationPerk {
                 ev.setValue(0);
             }
         }
-    }
-
-    @Override
-    public boolean mayUnlockPerk(PlayerProgress progress, PlayerEntity player) {
-        return super.mayUnlockPerk(progress, player) &&
-                !MiscUtils.contains(progress.getAppliedPerks(), perk -> perk.getCategory().equals(CATEGORY_FOCUS));
     }
 }

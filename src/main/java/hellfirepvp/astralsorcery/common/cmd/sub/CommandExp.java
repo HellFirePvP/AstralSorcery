@@ -50,10 +50,10 @@ public class CommandExp implements Command<CommandSource> {
 
         if (ResearchManager.setExp(player, exp)) {
             context.getSource().sendFeedback(
-                    new StringTextComponent(TextFormatting.GREEN + "Success! Player exp has been set to " + exp), true);
+                    new StringTextComponent("Success! Player exp has been set to " + exp).mergeStyle(TextFormatting.GREEN), true);
         } else {
             context.getSource().sendFeedback(
-                    new StringTextComponent(TextFormatting.RED + "Failed! Player specified doesn't seem to have a research progress!"), true);
+                    new StringTextComponent("Failed! Player specified doesn't seem to have a research progress!").mergeStyle(TextFormatting.RED), true);
         }
         return 0;
     }

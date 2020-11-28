@@ -11,16 +11,20 @@ package hellfirepvp.astralsorcery.common.util.block;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
+import net.minecraft.potion.EffectUtils;
+import net.minecraft.potion.Effects;
 import net.minecraft.state.Property;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -91,6 +95,50 @@ public class BlockUtils {
         }
         BlockItemUseContext ctx = TestBlockUseContext.getHandContext(world, null, Hand.MAIN_HAND, pos, Direction.UP);
         return state.isReplaceable(ctx);
+    }
+
+    //Same as PlayerEntity#getDigSpeed, but without firing an event and not position-based
+    public static float getSimpleBreakSpeed(LivingEntity entity, ItemStack tool, BlockState state) {
+        float breakSpeed = tool.getDestroySpeed(state);
+        if (breakSpeed > 1.0F) {
+            float efficiencyLevel = EnchantmentHelper.getEfficiencyModifier(entity);
+            if (efficiencyLevel > 0 && !tool.isEmpty()) {
+                breakSpeed += efficiencyLevel * efficiencyLevel + 1;
+            }
+        }
+
+        if (EffectUtils.hasMiningSpeedup(entity)) {
+            breakSpeed *= 1.0F + (EffectUtils.getMiningSpeedup(entity) + 1F) * 0.2F;
+        }
+
+        if (entity.isPotionActive(Effects.MINING_FATIGUE)) {
+            float fatigueMultiplier;
+            switch (entity.getActivePotionEffect(Effects.MINING_FATIGUE).getAmplifier()) {
+                case 0:
+                    fatigueMultiplier = (float) Math.pow(0.3F, 1);
+                    break;
+                case 1:
+                    fatigueMultiplier = (float) Math.pow(0.3F, 2);
+                    break;
+                case 2:
+                    fatigueMultiplier = (float) Math.pow(0.3F, 3);
+                    break;
+                case 3:
+                default:
+                    fatigueMultiplier = (float) Math.pow(0.3F, 4);
+            }
+
+            breakSpeed *= fatigueMultiplier;
+        }
+
+        if (entity.areEyesInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(entity)) {
+            breakSpeed /= 5.0F;
+        }
+
+        if (!entity.isOnGround()) {
+            breakSpeed /= 5.0F;
+        }
+        return breakSpeed;
     }
 
     public static boolean isFluidBlock(World world, BlockPos pos) {

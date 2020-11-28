@@ -9,13 +9,8 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -55,18 +50,8 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public double getPerkExp() {
-        return 0;
-    }
-
-    @Override
-    public int getPerkLevel(PlayerEntity player, LogicalSide side) {
-        return 0;
-    }
-
-    @Override
-    public float getPercentToNextLevel(PlayerEntity player, LogicalSide side) {
-        return 0F;
+    public PlayerPerkData getPerkData() {
+        return new PlayerPerkData();
     }
 
     @Override
@@ -80,22 +65,6 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public List<AbstractPerk> getAppliedPerks() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<AbstractPerk> getSealedPerks() {
-        return Collections.emptyList();
-    }
-
-    @Nullable
-    @Override
-    public CompoundNBT getPerkData(AbstractPerk perk) {
-        return null;
-    }
-
-    @Override
     public boolean hasSeenConstellation(ResourceLocation constellation) {
         return false;
     }
@@ -103,36 +72,6 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     @Override
     public boolean hasConstellationDiscovered(ResourceLocation constellation) {
         return false;
-    }
-
-    @Override
-    public boolean grantFreeAllocationPoint(String freePointToken) {
-        return false;
-    }
-
-    @Override
-    public List<String> getFreePointTokens() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public int getAvailablePerkPoints(PlayerEntity player, LogicalSide side) {
-        return 0;
-    }
-
-    @Override
-    public boolean hasFreeAllocationPoint(PlayerEntity player, LogicalSide side) {
-        return false;
-    }
-
-    @Override
-    public boolean hasPerkUnlocked(AbstractPerk perk) {
-        return false;
-    }
-
-    @Override
-    public boolean isPerkSealed(AbstractPerk perk) {
-        return true;
     }
 
     @Override

@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.perk.tree;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.BatchPerkContext;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.DynamicPerkRender;
@@ -75,7 +74,7 @@ public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreeP
     public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx, MatrixStack renderStack,
                                              AllocationStatus status, long spriteOffsetTick, float pTicks,
                                              float x, float y, float zLevel, float scale) {
-        SpriteSheetResource tex = getHaloSprite(status);
+        SpriteSheetResource tex = status.getPerkTreeHaloSprite();
         BatchPerkContext.TextureObjectGroup grp = PerkPointHaloRenderGroup.INSTANCE.getGroup(tex);
         if (grp == null) {
             return new Rectangle.Float();
@@ -83,7 +82,7 @@ public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreeP
         BufferContext buf = drawCtx.getContext(grp);
 
         float haloSize = getRenderSize() * 0.8F * scale;
-        if (status == AllocationStatus.ALLOCATED) {
+        if (status.isAllocated()) {
             haloSize *= 1.5;
         }
 

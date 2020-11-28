@@ -20,7 +20,6 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.journal.JournalPage;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
-import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
@@ -35,7 +34,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextProperties;
-import net.minecraft.util.text.LanguageMap;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
@@ -43,9 +41,9 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -73,12 +71,12 @@ public class RenderPageStructure extends RenderablePage {
         this.structureRenderer = new StructureRenderer(this.structure).setIsolateIndividualBlock(true);
         this.name = name;
         this.shift = shift;
-        this.contentStacks = MapStream.ofKeys(
-                structure.getAsStacks(this.structureRenderer.getRenderWorld(), Minecraft.getInstance().player).stream()
-                        .map(stack -> ItemUtils.copyStackWithSize(stack, 1))
-                        .collect(Collectors.toList()),
-                stack -> (ITextProperties) new StringTextComponent(stack.getCount() + "x ").append(stack.getDisplayName()))
-        .toTupleList();
+        this.contentStacks = new ArrayList<>();
+        structure.getAsStacks(this.structureRenderer.getRenderWorld(), Minecraft.getInstance().player).forEach(stack -> {
+            ItemStack display = ItemUtils.copyStackWithSize(stack, 1);
+            ITextProperties description = new StringTextComponent(stack.getCount() + "x ").append(stack.getDisplayName());
+            this.contentStacks.add(new Tuple<>(display, description));
+        });
     }
 
     @Override

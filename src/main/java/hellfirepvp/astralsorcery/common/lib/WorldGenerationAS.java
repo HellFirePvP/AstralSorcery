@@ -88,15 +88,15 @@ public class WorldGenerationAS {
     public static class Config {
 
         public static StructureGenerationConfig CFG_ANCIENT_SHRINE =
-                new StructureGenerationConfig(Structures.KEY_ANCIENT_SHRINE, 12, 5)
+                new StructureGenerationConfig(Structures.KEY_ANCIENT_SHRINE, 18, 4)
                         .generatesInBiomes(Arrays.asList(ICY, EXTREME_HILLS))
                         .generatesInWorlds(Collections.singletonList(World.OVERWORLD));
         public static StructureGenerationConfig CFG_DESERT_SHRINE =
-                new StructureGenerationConfig(Structures.KEY_DESERT_SHRINE, 12, 5)
+                new StructureGenerationConfig(Structures.KEY_DESERT_SHRINE, 18, 4)
                         .generatesInBiomes(Arrays.asList(MESA, DESERT, SAVANNA))
                         .generatesInWorlds(Collections.singletonList(World.OVERWORLD));
         public static StructureGenerationConfig CFG_SMALL_SHRINE =
-                new StructureGenerationConfig(Structures.KEY_SMALL_SHRINE, 12, 8)
+                new StructureGenerationConfig(Structures.KEY_SMALL_SHRINE, 18, 4)
                         .generatesInBiomes(Arrays.asList(FOREST, PLAINS))
                         .generatesInWorlds(Collections.singletonList(World.OVERWORLD));
 

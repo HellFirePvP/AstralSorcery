@@ -30,9 +30,9 @@ public class PropertySize extends CrystalProperty {
 
         this.addUsage(ctx -> ctx.uses(USE_COLLECTOR_CRYSTAL));
         this.addModifier((value, originalValue, propertyLevel, context) ->
-                context.withUse(USE_COLLECTOR_CRYSTAL, value, () -> value * (1.0 + (0.3 * propertyLevel))));
+                context.withUse(USE_COLLECTOR_CRYSTAL, value, () -> value * (1.0 + (0.2 * propertyLevel))));
         this.addUsage(ctx -> ctx.uses(USE_TOOL_DURABILITY));
         this.addModifier((value, originalValue, propertyLevel, context) ->
-                context.withUse(USE_TOOL_DURABILITY, value, () -> value * (1.0 + (0.4 * propertyLevel))));
+                context.withUse(USE_TOOL_DURABILITY, value, () -> value * (1.0 + (0.15 * propertyLevel))));
     }
 }

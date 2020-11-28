@@ -23,6 +23,10 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,6 +40,7 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
     private Type type = null;
     private ResourceLocation perkKey = null;
     private CompoundNBT newData = null, oldData = null;
+    private List<ResourceLocation> perkKeys = new ArrayList<>();
 
     public PktSyncPerkActivity() {}
 
@@ -53,6 +58,11 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
         this.newData = newData;
     }
 
+    public PktSyncPerkActivity(List<ResourceLocation> removals) {
+        this.type = Type.REMOVE_LISTED;
+        this.perkKeys = removals;
+    }
+
     @Nonnull
     @Override
     public Encoder<PktSyncPerkActivity> encoder() {
@@ -62,6 +72,8 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
             ByteBufUtils.writeOptional(buffer, packet.perkKey, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeOptional(buffer, packet.newData, ByteBufUtils::writeNBTTag);
             ByteBufUtils.writeOptional(buffer, packet.oldData, ByteBufUtils::writeNBTTag);
+
+            ByteBufUtils.writeCollection(buffer, packet.perkKeys, ByteBufUtils::writeResourceLocation);
         };
     }
 
@@ -76,6 +88,8 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
             pkt.perkKey = ByteBufUtils.readOptional(buffer, ByteBufUtils::readResourceLocation);
             pkt.newData = ByteBufUtils.readOptional(buffer, ByteBufUtils::readNBTTag);
             pkt.oldData = ByteBufUtils.readOptional(buffer, ByteBufUtils::readNBTTag);
+
+            pkt.perkKeys = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             return pkt;
         };
     }
@@ -96,6 +110,14 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
                     switch (packet.type) {
                         case CLEARALL:
                             PerkEffectHelper.clientClearAllPerks();
+                            break;
+                        case REMOVE_LISTED:
+                            List<AbstractPerk> perks = packet.perkKeys.stream()
+                                    .map(key -> PerkTree.PERK_TREE.getPerk(LogicalSide.CLIENT, key))
+                                    .filter(Optional::isPresent)
+                                    .map(Optional::get)
+                                    .collect(Collectors.toList());
+                            PerkEffectHelper.modifySources(player, LogicalSide.CLIENT, perks, PerkEffectHelper.Action.REMOVE);
                             break;
                         case UNLOCKALL:
                             PerkEffectHelper.clientRefreshAllPerks();
@@ -119,6 +141,7 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
     public static enum Type {
 
         CLEARALL,
+        REMOVE_LISTED,
         UNLOCKALL,
         DATACHANGE
 

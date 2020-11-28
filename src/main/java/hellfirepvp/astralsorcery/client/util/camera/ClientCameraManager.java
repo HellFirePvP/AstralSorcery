@@ -28,7 +28,7 @@ public class ClientCameraManager implements ITickHandler {
 
     public static final ClientCameraManager INSTANCE = new ClientCameraManager();
 
-    private TreeSet<ICameraTransformer> transformers = new TreeSet<>(Comparator.comparingInt(ICameraTransformer::getPriority));
+    private final TreeSet<ICameraTransformer> transformers = new TreeSet<>(Comparator.comparingInt(ICameraTransformer::getPriority));
     private ICameraTransformer lastTransformer = null;
 
     @Override

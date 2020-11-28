@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.16.4-1.13.2'
+version = '1.16.4-1.13.3'
 group = 'hellfirepvp.astralsorcery'
 archivesBaseName = 'astralsorcery'
 String build_version = ""
@@ -112,8 +112,8 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:1.16.4-35.0.18'
 
-    compileOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.4.3.v69'
-    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.4.3.v69:deobf'
+    compileOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.4.4.v72'
+    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.4.4.v72:deobf'
 
     compileOnly 'top.theillusivec4.curios:curios-forge:1.16.4-4.0.2.1:api'
     runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.4-4.0.2.1')

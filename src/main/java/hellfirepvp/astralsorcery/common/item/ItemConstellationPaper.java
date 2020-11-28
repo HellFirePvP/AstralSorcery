@@ -172,17 +172,7 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
             }
             if (!has) {
                 if (cst.canDiscover((PlayerEntity) entity, progress) && ResearchManager.memorizeConstellation(cst, (PlayerEntity) entity)) {
-                    entity.sendMessage(
-                            new TranslationTextComponent("astralsorcery.progress.constellation.seen.chat",
-                                    cst.getConstellationName().mergeStyle(TextFormatting.GRAY))
-                                    .mergeStyle(TextFormatting.BLUE),
-                            Util.DUMMY_UUID);
-                    if (ResearchHelper.getClientProgress().getSeenConstellations().size() == 1) {
-                        entity.sendMessage(
-                                new TranslationTextComponent("astralsorcery.progress.constellation.seen.track")
-                                        .mergeStyle(TextFormatting.BLUE),
-                                Util.DUMMY_UUID);
-                    }
+                    ResearchHelper.sendConstellationMemorizationMessage(entity, progress, cst);
                 }
             }
         }

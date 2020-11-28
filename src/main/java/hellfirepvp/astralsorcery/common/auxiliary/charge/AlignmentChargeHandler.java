@@ -133,7 +133,7 @@ public class AlignmentChargeHandler implements ITickHandler {
 
         float dayMultiplier = underground ? 0.85F : 0.3F + 0.7F * DayTimeHelper.getCurrentDaytimeDistribution(player.getEntityWorld());
         float caveMultiplier = underground ? 0.25F : 1F;
-        if (progress.hasPerkEffect(p -> p instanceof KeyChargeBalancing)) {
+        if (progress.getPerkData().hasPerkEffect(p -> p instanceof KeyChargeBalancing)) {
             dayMultiplier = 0.6F + dayMultiplier * 0.4F;
             caveMultiplier = 0.6F + caveMultiplier * 0.4F;
         }

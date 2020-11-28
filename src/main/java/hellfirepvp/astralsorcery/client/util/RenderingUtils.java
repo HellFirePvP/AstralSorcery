@@ -254,7 +254,8 @@ public class RenderingUtils {
     }
 
     public static void renderInWorldText(ITextProperties text, Color color, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
-        renderInWorldText(text, color, 1 / 80F, at, renderStack, pTicks, facePlayer);
+        float scale = (float) Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
+        renderInWorldText(text, color, 0.02F * (Minecraft.getInstance().gameSettings.guiScale / scale), at, renderStack, pTicks, facePlayer);
     }
 
     public static void renderInWorldText(ITextProperties text, Color color, float scale, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
@@ -392,7 +393,7 @@ public class RenderingUtils {
         RenderSystem.disableLighting();
 
         renderStack.push();
-        renderStack.translate(0, 0, 200F);
+        renderStack.translate(0, 0, 100F);
         if (stack.getCount() > 1 || text != null) {
             ITextProperties display = new StringTextComponent(ObjectUtils.firstNonNull(text, String.valueOf(stack.getCount())));
             int length = fr.getStringPropertyWidth(display);

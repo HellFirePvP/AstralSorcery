@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.perk.tree;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import hellfirepvp.astralsorcery.client.lib.SpritesAS;
 import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.BatchPerkContext;
 import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkRender;
@@ -77,7 +76,7 @@ public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
     public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx, MatrixStack renderStack,
                                              AllocationStatus status, long spriteOffsetTick, float pTicks,
                                              float x, float y, float zLevel, float scale) {
-        SpriteSheetResource tex = getFlareSprite(status);
+        SpriteSheetResource tex = status.getPerkTreeSprite();
         BatchPerkContext.TextureObjectGroup grp = PerkPointRenderGroup.INSTANCE.getGroup(tex);
         if (grp == null) {
             return new Rectangle.Float();
@@ -91,42 +90,6 @@ public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
                 .tex(frameUV.getA(), frameUV.getB(), tex.getULength(), tex.getVLength())
                 .draw();
         return new Rectangle.Float(-size, -size, size * 2, size * 2);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    protected SpriteSheetResource getFlareSprite(AllocationStatus status) {
-        SpriteSheetResource tex;
-        switch (status) {
-            case ALLOCATED:
-                tex = SpritesAS.SPR_PERK_ACTIVE;
-                break;
-            case UNLOCKABLE:
-                tex = SpritesAS.SPR_PERK_ACTIVATEABLE;
-                break;
-            case UNALLOCATED:
-            default:
-                tex = SpritesAS.SPR_PERK_INACTIVE;
-                break;
-        }
-        return tex;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    protected SpriteSheetResource getHaloSprite(AllocationStatus status) {
-        SpriteSheetResource tex;
-        switch (status) {
-            case ALLOCATED:
-                tex = SpritesAS.SPR_PERK_HALO_ACTIVE;
-                break;
-            case UNLOCKABLE:
-                tex = SpritesAS.SPR_PERK_HALO_ACTIVATEABLE;
-                break;
-            case UNALLOCATED:
-            default:
-                tex = SpritesAS.SPR_PERK_HALO_INACTIVE;
-                break;
-        }
-        return tex;
     }
 
     @Override

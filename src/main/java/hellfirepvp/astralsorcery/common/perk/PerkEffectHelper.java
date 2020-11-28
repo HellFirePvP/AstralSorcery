@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -69,9 +70,12 @@ public class PerkEffectHelper {
         }
 
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.CLIENT);
-        progress.applyPerk(perk, oldData);
+        PlayerPerkData perkData = progress.getPerkData();
+
+        perkData.applyPerkAllocation(perk, PlayerPerkData.AllocationType.UNLOCKED);
+        perkData.updatePerkData(perk, oldData);
         modifySource(player, LogicalSide.CLIENT, perk, Action.REMOVE);
-        progress.applyPerk(perk, newData);
+        perkData.updatePerkData(perk, newData);
         modifySource(player, LogicalSide.CLIENT, perk, Action.ADD);
     }
 
@@ -88,7 +92,9 @@ public class PerkEffectHelper {
 
         PerkAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.CLIENT);
         for (ModifierSource source : ModifierManager.getAppliedModifiers(player, LogicalSide.CLIENT)) {
-            removeSource(attr, player, LogicalSide.CLIENT, source);
+            if (source instanceof AbstractPerk) {
+                removeSource(attr, player, LogicalSide.CLIENT, source);
+            }
         }
     }
 
@@ -108,8 +114,28 @@ public class PerkEffectHelper {
      **************************************************************************************************** */
 
     private static void modifyAllPerks(PlayerEntity player, LogicalSide side, Action action) {
-        ResearchHelper.getProgress(player, side).getAppliedPerks()
+        ResearchHelper.getProgress(player, side).getPerkData().getEffectGrantingPerks()
                 .forEach(perk -> modifySource(player, side, perk, action));
+    }
+
+    public static <T extends ModifierSource> void modifySources(PlayerEntity player, LogicalSide side, Collection<T> sources, Action action) {
+        PlayerProgress progress = ResearchHelper.getProgress(player, side);
+        if (!progress.isValid()) {
+            return;
+        }
+
+        PerkAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
+        for (T src : sources) {
+            if (action.isRemove()) {
+                if (ModifierManager.isModifierApplied(player, side, src)) {
+                    removeSource(attributeMap, player, side, src);
+                }
+            } else {
+                if (!ModifierManager.isModifierApplied(player, side, src) && src.canApplySource(player, side)) {
+                    applySource(attributeMap, player, side, src);
+                }
+            }
+        }
     }
 
     public static void modifySource(PlayerEntity player, LogicalSide side, ModifierSource source, Action action) {

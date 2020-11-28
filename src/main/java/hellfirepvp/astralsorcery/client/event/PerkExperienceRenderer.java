@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.item.base.PerkExperienceRevealer;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
@@ -63,7 +64,7 @@ public class PerkExperienceRenderer implements ITickHandler {
         if (this.visibilityReveal <= 0) {
             return;
         }
-        if (ResearchHelper.getClientProgress().getAttunedConstellation() == null) {
+        if (!ResearchHelper.getClientProgress().isAttuned()) {
             return;
         }
 
@@ -84,7 +85,8 @@ public class PerkExperienceRenderer implements ITickHandler {
                     .draw();
         });
 
-        float perc = ResearchHelper.getClientProgress().getPercentToNextLevel(player, LogicalSide.CLIENT);
+        PlayerPerkData perkData = ResearchHelper.getClientProgress().getPerkData();
+        float perc = perkData.getPercentToNextLevel(player, LogicalSide.CLIENT);
         float expHeight  =  78F * perc;
         float expWidth   =  32F;
         float expOffsetX =   0F;
@@ -98,7 +100,7 @@ public class PerkExperienceRenderer implements ITickHandler {
                     .draw();
         });
 
-        String strLevel = String.valueOf(ResearchHelper.getClientProgress().getPerkLevel(player, LogicalSide.CLIENT));
+        String strLevel = String.valueOf(perkData.getPerkLevel(player, LogicalSide.CLIENT));
         StringTextComponent txtLevel = new StringTextComponent(strLevel);
         int strLength = Minecraft.getInstance().fontRenderer.getStringPropertyWidth(txtLevel);
 

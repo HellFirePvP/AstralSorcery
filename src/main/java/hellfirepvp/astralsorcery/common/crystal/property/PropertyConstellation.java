@@ -41,7 +41,7 @@ public class PropertyConstellation extends CrystalProperty {
             if (context.isSource(SOURCE_COLLECTOR_CRYSTAL) || context.isSource(SOURCE_TILE_COLLECTOR_CRYSTAL)) {
                 Crystal crystal = context.getSource();
                 if (crystal != null && cst.equals(crystal.getAttunedConstellation())) {
-                    return value * (1.0 + (0.15 * propertyLevel));
+                    return value * (1.0 + (0.3 * propertyLevel));
                 }
             }
             return value;
@@ -52,7 +52,7 @@ public class PropertyConstellation extends CrystalProperty {
             if (context.isSource(SOURCE_RITUAL_PEDESTAL) || context.isSource(SOURCE_TILE_RITUAL_PEDESTAL)) {
                 Ritual ritual = context.getSource();
                 if (ritual != null && cst.equals(ritual.getAttunedConstellation())) {
-                    return value * (1.0 + (0.2 * propertyLevel));
+                    return value * (1.0 + (0.35 * propertyLevel));
                 }
             }
             return value;

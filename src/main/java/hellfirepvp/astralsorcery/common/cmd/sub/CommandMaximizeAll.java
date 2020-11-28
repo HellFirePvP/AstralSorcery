@@ -40,7 +40,7 @@ public class CommandMaximizeAll implements Command<CommandSource> {
                 .then(Commands.argument("player", EntityArgument.player())
                         .executes(ctx -> {
                             PlayerEntity target = (PlayerEntity) ctx.getArgument("player", EntitySelector.class).selectOne(ctx.getSource());
-                            ctx.getSource().sendFeedback(new StringTextComponent(TextFormatting.GREEN + "Success!"), true);
+                            ctx.getSource().sendFeedback(new StringTextComponent("Success!").mergeStyle(TextFormatting.GREEN), true);
                             maximizeAll(target);
                             return 0;
                         }))
@@ -50,7 +50,7 @@ public class CommandMaximizeAll implements Command<CommandSource> {
     @Override
     public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
         maximizeAll(context.getSource().asPlayer());
-        context.getSource().sendFeedback(new StringTextComponent(TextFormatting.GREEN + "Success!"), true);
+        context.getSource().sendFeedback(new StringTextComponent("Success!").mergeStyle(TextFormatting.GREEN), true);
         return 0;
     }
 

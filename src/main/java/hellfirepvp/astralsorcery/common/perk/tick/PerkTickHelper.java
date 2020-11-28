@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.tick;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
@@ -37,8 +38,9 @@ public class PerkTickHelper implements ITickHandler {
         LogicalSide side = (LogicalSide) context[1];
         PlayerProgress prog = ResearchHelper.getProgress(ticked, side);
         if (prog.isValid()) {
-            for (AbstractPerk perk : prog.getAppliedPerks()) {
-                if (perk instanceof PlayerTickPerk && prog.hasPerkEffect(perk)) {
+            PlayerPerkData perkData = prog.getPerkData();
+            for (AbstractPerk perk : perkData.getEffectGrantingPerks()) {
+                if (perk instanceof PlayerTickPerk) {
                     ((PlayerTickPerk) perk).onPlayerTick(ticked, side);
                 }
             }

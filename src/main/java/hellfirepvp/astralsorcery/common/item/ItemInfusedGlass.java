@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.common.constellation.engraving.EngravedStarMap;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.MendingEnchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -39,7 +41,6 @@ import java.util.List;
  * Date: 01.05.2020 / 07:29
  */
 public class ItemInfusedGlass extends Item {
-
 
     public ItemInfusedGlass() {
         super(new Properties()
@@ -71,6 +72,14 @@ public class ItemInfusedGlass extends Item {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        if (enchantment instanceof MendingEnchantment) {
+            return false;
+        }
+        return super.canApplyAtEnchantingTable(stack, enchantment);
     }
 
     @Override

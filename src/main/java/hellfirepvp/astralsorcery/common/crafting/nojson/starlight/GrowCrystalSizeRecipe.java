@@ -85,8 +85,17 @@ public class GrowCrystalSizeRecipe extends LiquidStarlightRecipe {
             ItemStack stack = trigger.getItem();
             CrystalAttributes attr = ((ItemCrystalBase) stack.getItem()).getAttributes(stack);
             if (attr != null && world.setBlockState(at, Blocks.AIR.getDefaultState())) {
-                attr = attr.modifyLevel(CrystalPropertiesAS.Properties.PROPERTY_SIZE, 1);
-                ((ItemCrystalBase) stack.getItem()).setAttributes(stack, attr);
+                if (attr.getTotalTierLevel() >= ((ItemCrystalBase) stack.getItem()).getMaxPropertyTiers()) {
+                    return;
+                }
+                float chance = 1;
+                if (attr.getTotalTierLevel() >= ((ItemCrystalBase) stack.getItem()).getGeneratedPropertyTiers()) {
+                    chance = 0.5F;
+                }
+                if (rand.nextFloat() < chance) {
+                    attr = attr.modifyLevel(CrystalPropertiesAS.Properties.PROPERTY_SIZE, 1);
+                    ((ItemCrystalBase) stack.getItem()).setAttributes(stack, attr);
+                }
             }
         }
     }

@@ -59,7 +59,7 @@ public class LootModifierPerkVoidTrash extends LootModifier {
         }
         PlayerEntity player = (PlayerEntity) e;
         PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if (!prog.isValid() || !prog.hasPerkEffect(perk -> perk instanceof KeyVoidTrash)) {
+        if (!prog.isValid() || !prog.getPerkData().hasPerkEffect(perk -> perk instanceof KeyVoidTrash)) {
             return generatedLoot;
         }
         if (!PerkTree.PERK_TREE.getPerk(LogicalSide.SERVER, perk -> perk instanceof KeyVoidTrash).isPresent()) {

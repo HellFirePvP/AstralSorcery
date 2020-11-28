@@ -29,7 +29,7 @@ public enum ProgressionTier {
     }
 
     public ProgressionTier next() {
-        return values()[Math.min(values().length, ordinal() + 1)];
+        return values()[Math.min(values().length - 1, ordinal() + 1)];
     }
 
     public boolean isThisLaterOrEqual(ProgressionTier other) {

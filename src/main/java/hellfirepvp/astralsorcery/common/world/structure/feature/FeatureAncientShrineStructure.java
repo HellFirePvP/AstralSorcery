@@ -37,7 +37,7 @@ public class FeatureAncientShrineStructure extends TemplateStructureFeature {
         public void func_230364_a_(DynamicRegistries registries, ChunkGenerator gen, TemplateManager mgr, int chunkX, int chunkZ, Biome biome, NoFeatureConfig cfg) {
             int x = chunkX * 16 + rand.nextInt(16);
             int z = chunkZ * 16 + rand.nextInt(16);
-            int y = gen.getHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG) - 7;
+            int y = gen.getHeight(x, z, Heightmap.Type.MOTION_BLOCKING);
             AncientShrineStructure structure = new AncientShrineStructure(mgr, new BlockPos(x, y, z));
             this.components.add(structure);
             this.recalculateStructureSize();

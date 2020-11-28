@@ -123,11 +123,13 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
                 BlockPos offset = entry.getPos().subtract(pos);
                 if (world.isAirBlock(entry.getPos()) &&
                         (this.isLinkedRitual || Math.abs(offset.getX()) > 5 || Math.abs(offset.getZ()) > 5 || offset.getY() < 0)) {
-                    if (world.setBlockState(entry.getPos(), Blocks.WATER.getDefaultState())) {
-                        for (int i = 0; i < 3; i++) {
-                            spawnFishingDropsAt((ServerWorld) world, entry.getPos());
+                    if (!world.getDimensionType().isUltrawarm()) {
+                        if (world.setBlockState(entry.getPos(), Blocks.WATER.getDefaultState())) {
+                            for (int i = 0; i < 3; i++) {
+                                spawnFishingDropsAt((ServerWorld) world, entry.getPos());
+                            }
+                            world.neighborChanged(entry.getPos(), Blocks.WATER, entry.getPos());
                         }
-                        world.neighborChanged(entry.getPos(), Blocks.WATER, entry.getPos());
                     }
                 } else if (BlockUtils.isFluidBlock(state)) {
                     if (state.getBlock() == Blocks.WATER) {

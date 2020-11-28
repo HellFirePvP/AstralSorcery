@@ -43,7 +43,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
@@ -153,9 +152,11 @@ public class BlockCelestialGateway extends ContainerBlock implements CustomItemB
     @Override
     public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader world, BlockPos pos) {
         TileCelestialGateway gateway = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, true);
-        if (gateway != null && gateway.isLocked() && gateway.getOwner() != null && gateway.getOwner().isPlayer(player)) {
-            int i = ForgeHooks.canHarvestBlock(state, player, world, pos) ? 30 : 100;
-            return player.getDigSpeed(state, pos) / i;
+        if (gateway != null) {
+            if (!gateway.isLocked() || (gateway.getOwner() != null && gateway.getOwner().isPlayer(player))) {
+                int i = ForgeHooks.canHarvestBlock(state, player, world, pos) ? 30 : 100;
+                return player.getDigSpeed(state, pos) / 2.5F / i;
+            }
         }
         return super.getPlayerRelativeBlockHardness(state, player, world, pos);
     }
@@ -194,6 +195,10 @@ public class BlockCelestialGateway extends ContainerBlock implements CustomItemB
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
+        TileCelestialGateway gateway = MiscUtils.getTileAt(world, pos, TileCelestialGateway.class, true);
+        if (gateway != null && gateway.isLocked()) {
+            return true;
+        }
         return hasSolidSideOnTop(world, pos.down());
     }
 

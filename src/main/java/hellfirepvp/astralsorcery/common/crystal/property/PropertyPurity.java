@@ -37,7 +37,7 @@ public class PropertyPurity extends CrystalProperty {
             if (context.uses(USE_COLLECTOR_CRYSTAL) ||
                     context.uses(USE_RITUAL_EFFECT) ||
                     context.uses(USE_RITUAL_RANGE)) {
-                return value * (1.0 + (0.25 * propertyLevel));
+                return value * (1.0 + (0.3 * propertyLevel));
             }
             return value;
         });

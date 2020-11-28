@@ -95,7 +95,7 @@ public class EventHandlerMisc {
 
     private static void onPlayerSleepEclipse(PlayerSleepInBedEvent event) {
         WorldContext ctx = SkyHandler.getContext(event.getEntityLiving().getEntityWorld());
-        if (ctx != null && ctx.getCelestialHandler().isSolarEclipseActive()) {
+        if (ctx != null && ctx.getCelestialEventHandler().getSolarEclipse().isActiveNow()) {
             if (event.getResultStatus() == null) {
                 event.setResult(PlayerEntity.SleepResult.NOT_POSSIBLE_NOW);
             }

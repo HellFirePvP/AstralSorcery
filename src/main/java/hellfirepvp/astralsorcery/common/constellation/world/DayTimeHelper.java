@@ -38,14 +38,4 @@ public class DayTimeHelper {
     public static boolean isDay(World world) {
         return getCurrentDaytimeDistribution(world) <= 0.05;
     }
-
-    //For effect purposes to determine how long those events are/last
-    public static int getSolarEclipseHalfDuration() {
-        return GeneralConfig.CONFIG.dayLength.get() / 10;
-    }
-
-    public static int getLunarEclipseHalfDuration() {
-        return GeneralConfig.CONFIG.dayLength.get() / 10;
-    }
-
 }

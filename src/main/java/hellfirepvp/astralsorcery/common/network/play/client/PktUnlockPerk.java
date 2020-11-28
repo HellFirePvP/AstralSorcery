@@ -93,7 +93,7 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
                     PerkTree.PERK_TREE.getPerk(side, packet.perkKey).ifPresent(perk -> {
                         PlayerEntity player = context.getSender();
                         PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-                        if (!prog.hasPerkUnlocked(perk) && prog.isValid()) {
+                        if (!prog.hasPerkEffect(perk) && prog.isValid()) {
                             if (perk.mayUnlockPerk(prog, player) && ResearchManager.applyPerk(player, perk)) {
                                 packet.replyWith(new PktUnlockPerk(true, perk), context);
                             }

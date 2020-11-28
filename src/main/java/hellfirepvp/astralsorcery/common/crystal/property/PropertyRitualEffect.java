@@ -30,7 +30,7 @@ public class PropertyRitualEffect extends CrystalProperty {
         this.addUsage(ctx -> ctx.uses(USE_RITUAL_EFFECT));
         this.addModifier((value, originalValue, propertyLevel, context) -> {
             if (context.uses(USE_RITUAL_EFFECT)) {
-                return value * (1.0 + (0.25 * propertyLevel));
+                return value * (1.0 + (0.3 * propertyLevel));
             }
             return value;
         });

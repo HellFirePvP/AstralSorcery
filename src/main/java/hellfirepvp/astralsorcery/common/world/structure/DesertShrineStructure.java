@@ -18,10 +18,12 @@ public class DesertShrineStructure extends TemplateStructure {
 
     public DesertShrineStructure(TemplateManager mgr, BlockPos templatePosition) {
         super(WorldGenerationAS.Structures.DESERT_SHRINE_PIECE, mgr, templatePosition);
+        this.setYOffset(-11);
     }
 
     public DesertShrineStructure(TemplateManager mgr, CompoundNBT nbt) {
         super(WorldGenerationAS.Structures.DESERT_SHRINE_PIECE, mgr, nbt);
+        this.setYOffset(-11);
     }
 
     @Override

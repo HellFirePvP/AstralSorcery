@@ -22,10 +22,11 @@ import java.util.Objects;
  */
 public class AltarCollectionCategory {
 
-    public static final AltarCollectionCategory HEIGHT          = new AltarCollectionCategory(AstralSorcery.key("height"));
-    public static final AltarCollectionCategory FOSIC_FIELD     = new AltarCollectionCategory(AstralSorcery.key("fosic_field"));
-    public static final AltarCollectionCategory RELAY           = new AltarCollectionCategory(AstralSorcery.key("relay"));
-    public static final AltarCollectionCategory FOCUSED_NETWORK = new AltarCollectionCategory(AstralSorcery.key("focused_network"));
+    public static final AltarCollectionCategory HEIGHT              = new AltarCollectionCategory(AstralSorcery.key("height"));
+    public static final AltarCollectionCategory FOSIC_FIELD         = new AltarCollectionCategory(AstralSorcery.key("fosic_field"));
+    public static final AltarCollectionCategory RELAY               = new AltarCollectionCategory(AstralSorcery.key("relay"));
+    public static final AltarCollectionCategory FOCUSED_NETWORK     = new AltarCollectionCategory(AstralSorcery.key("focused_network"));
+    public static final AltarCollectionCategory CONDENSED_STARLIGHT = new AltarCollectionCategory(AstralSorcery.key("condensed_starlight"));
 
     private final ResourceLocation key;
 

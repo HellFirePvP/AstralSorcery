@@ -69,10 +69,10 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
 
     public EntityGrapplingHook(LivingEntity thrower, World world) {
         super(EntityTypesAS.GRAPPLING_HOOK, thrower, world);
-        float f = -MathHelper.sin(thrower.rotationYaw * 0.017453292F) * MathHelper.cos(thrower.rotationPitch * 0.017453292F);
-        float f1 = -MathHelper.sin((thrower.rotationPitch) * 0.017453292F);
-        float f2 = MathHelper.cos(thrower.rotationYaw * 0.017453292F) * MathHelper.cos(thrower.rotationPitch * 0.017453292F);
-        this.shoot((double) f, (double) f1, (double) f2, 1.7F, 0F);
+        float x = -MathHelper.sin(thrower.rotationYaw * 0.017453292F) * MathHelper.cos(thrower.rotationPitch * 0.017453292F);
+        float y = -MathHelper.sin((thrower.rotationPitch) * 0.017453292F);
+        float z = MathHelper.cos(thrower.rotationYaw * 0.017453292F) * MathHelper.cos(thrower.rotationPitch * 0.017453292F);
+        this.shoot(x, y, z, 1.7F, 0F);
         this.throwingEntity = thrower;
     }
 
@@ -147,7 +147,6 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
 
         if (func_234616_v_() == null || !func_234616_v_().isAlive()) {
             setDespawning();
-            return;
         }
         if (!isPulling() && ticksExisted >= 30) {
             setDespawning();

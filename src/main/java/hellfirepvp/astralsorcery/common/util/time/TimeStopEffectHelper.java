@@ -152,6 +152,10 @@ public class TimeStopEffectHelper {
         if (rand.nextInt(4) == 0) {
             Vector3 rand1 = Vector3.random().normalize().multiply(rand.nextFloat() * range).add(position);
             Vector3 rand2 = Vector3.random().normalize().multiply(rand.nextFloat() * range).add(position);
+            if (rand1.distance(rand2) > 10) {
+                Vector3 dir = rand1.vectorFromHereTo(rand2);
+                rand2 = rand1.clone().add(dir.normalize().multiply(10));
+            }
             EffectHelper.of(EffectTemplatesAS.LIGHTNING)
                     .spawn(rand1)
                     .makeDefault(rand2)

@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.client.screen.journal.bookmark.BookmarkProvider
 import hellfirepvp.astralsorcery.client.util.AreaOfInfluencePreview;
 import hellfirepvp.astralsorcery.client.util.ColorizationHelper;
 import hellfirepvp.astralsorcery.client.util.MouseUtil;
+import hellfirepvp.astralsorcery.client.util.camera.CameraEventHelper;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.draw.RenderInfo;
 import hellfirepvp.astralsorcery.client.util.word.RandomWordGenerator;
@@ -123,6 +124,7 @@ public class ClientProxy extends CommonProxy {
         ItemHeldEffectRenderer.INSTANCE.attachEventListeners(eventBus);
         OverlayRenderer.INSTANCE.attachEventListeners(eventBus);
 
+        CameraEventHelper.attachEventListeners(eventBus);
         MouseUtil.attachEventListeners(eventBus);
         GatewayInteractionHandler.attachEventListeners(eventBus);
 
@@ -189,7 +191,7 @@ public class ClientProxy extends CommonProxy {
                 () -> !ResearchHelper.getClientProgress().getSeenConstellations().isEmpty()));
         ScreenJournal.addBookmark(new BookmarkProvider("screen.astralsorcery.tome.perks", 30,
                 ScreenJournalPerkTree::new,
-                () -> ResearchHelper.getClientProgress().getAttunedConstellation() != null));
+                () -> ResearchHelper.getClientProgress().isAttuned()));
     }
 
 }

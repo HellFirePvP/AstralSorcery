@@ -55,7 +55,7 @@ public class WorldContext {
     }
 
     @Nonnull
-    public CelestialEventHandler getCelestialHandler() {
+    public CelestialEventHandler getCelestialEventHandler() {
         return celestialHandler;
     }
 

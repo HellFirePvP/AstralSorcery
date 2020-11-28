@@ -21,7 +21,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -72,7 +71,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk implements Att
         if (modifiersDisabled(player, side)) {
             return Collections.emptyList();
         }
-        if (!ignoreRequirements && ResearchHelper.getProgress(player, side).isPerkSealed(this)) {
+        if (!ignoreRequirements && ResearchHelper.getProgress(player, side).getPerkData().isPerkSealed(this)) {
             return Collections.emptyList();
         }
 

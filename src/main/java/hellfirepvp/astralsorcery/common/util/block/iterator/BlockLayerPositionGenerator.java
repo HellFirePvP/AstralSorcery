@@ -39,7 +39,7 @@ public class BlockLayerPositionGenerator extends BlockPositionGenerator {
         while (currentPositions.isEmpty()) {
             generatePositions(size);
         }
-        return null;
+        return this.currentPositions.pop();
     }
 
     private void generatePositions(int maxLayers) {

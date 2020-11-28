@@ -11,10 +11,8 @@ package hellfirepvp.astralsorcery.common.data.config.registry;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.config.registry.sets.TileAccelerationBlacklistEntry;
+import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
-import hellfirepvp.astralsorcery.common.tile.TileObservatory;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileSourceBase;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileTransmissionBase;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -78,7 +76,11 @@ public class TileAccelerationBlacklistRegistry extends ConfigDataAdapter<TileAcc
                 new TileAccelerationBlacklistEntry(TileAltar.class.getName()),
                 new TileAccelerationBlacklistEntry(TileAttunementAltar.class.getName()),
                 new TileAccelerationBlacklistEntry(TileObservatory.class.getName()),
-                new TileAccelerationBlacklistEntry(TileRitualPedestal.class.getName())
+                new TileAccelerationBlacklistEntry(TileRitualLink.class.getName()),
+                new TileAccelerationBlacklistEntry(TileRitualPedestal.class.getName()),
+                new TileAccelerationBlacklistEntry(TileTranslucentBlock.class.getName()),
+                new TileAccelerationBlacklistEntry(TileTreeBeaconComponent.class.getName()),
+                new TileAccelerationBlacklistEntry(TileVanishing.class.getName())
         );
     }
 

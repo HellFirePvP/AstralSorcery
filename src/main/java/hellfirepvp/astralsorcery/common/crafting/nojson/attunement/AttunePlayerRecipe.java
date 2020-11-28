@@ -98,7 +98,7 @@ public class AttunePlayerRecipe extends AttunementRecipe<ActivePlayerAttunementR
 
             return prog.isValid() &&
                     attuneTo instanceof IMajorConstellation &&
-                    prog.getAttunedConstellation() == null &&
+                    !prog.isAttuned() &&
                     prog.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT) &&
                     prog.hasConstellationDiscovered(attuneTo);
         }

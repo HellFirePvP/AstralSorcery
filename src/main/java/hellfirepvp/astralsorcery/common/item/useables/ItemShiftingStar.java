@@ -34,7 +34,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -90,7 +89,7 @@ public class ItemShiftingStar extends Item implements PerkExperienceRevealer {
                     return stack;
                 }
 
-                double perkExp = prog.getPerkExp();
+                double perkExp = prog.getPerkData().getPerkExp();
                 if (ResearchManager.setAttunedConstellation(player, cst)) {
                     ResearchManager.setExp(player, MathHelper.lfloor(perkExp));
                     player.sendMessage(new TranslationTextComponent("astralsorcery.progress.switch.attunement").mergeStyle(TextFormatting.BLUE), Util.DUMMY_UUID);

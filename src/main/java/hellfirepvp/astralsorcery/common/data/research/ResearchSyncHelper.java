@@ -33,9 +33,10 @@ public class ResearchSyncHelper {
 
     @OnlyIn(Dist.CLIENT)
     public static void recieveProgressFromServer(PktSyncKnowledge packet, PlayerEntity player) {
-        int currentLvl = ResearchHelper.getClientProgress().getPerkLevel(player, LogicalSide.CLIENT);
+        PlayerPerkData perkData = ResearchHelper.getClientProgress().getPerkData();
+        int currentLvl = perkData.getPerkLevel(player, LogicalSide.CLIENT);
         ResearchHelper.updateClientResearch(packet);
-        if (ResearchHelper.getClientProgress().getPerkLevel(player, LogicalSide.CLIENT) > currentLvl) {
+        if (perkData.getPerkLevel(player, LogicalSide.CLIENT) > currentLvl) {
             PerkExperienceRenderer.INSTANCE.revealExperience(160);
         }
     }

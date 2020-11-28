@@ -68,7 +68,7 @@ public class ASRegistryEvents {
      */
     public static class ModifierSourceRegister extends Event {
 
-        private Consumer<ModifierSourceProvider<?>> registrar;
+        private final Consumer<ModifierSourceProvider<?>> registrar;
 
         public ModifierSourceRegister(Consumer<ModifierSourceProvider<?>> registrar) {
             this.registrar = registrar;

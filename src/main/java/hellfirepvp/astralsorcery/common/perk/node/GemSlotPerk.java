@@ -73,7 +73,7 @@ public interface GemSlotPerk {
             throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
         }
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
-        if (!prog.hasPerkUnlocked((AbstractPerk) this)) {
+        if (!prog.hasPerkEffect((AbstractPerk) this)) {
             return false;
         }
         boolean updateData = dataOvr == null;

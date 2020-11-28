@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node.key;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
@@ -40,13 +41,13 @@ public class KeyTreeConnector extends MajorPerk {
 
     @Override
     public boolean mayUnlockPerk(PlayerProgress progress, PlayerEntity player) {
-        if (!progress.hasFreeAllocationPoint(player, getSide(player)) ||
+        if (!progress.getPerkData().hasFreeAllocationPoint(player, getSide(player)) ||
                 !canSee(player, progress)) return false;
 
         LogicalSide side = getSide(player);
         boolean hasAllAdjacent = true;
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(side, this)) {
-            if (!progress.hasPerkUnlocked(otherPerks)) {
+            if (!progress.hasPerkEffect(otherPerks)) {
                 hasAllAdjacent = false;
                 break;
             }
@@ -55,7 +56,7 @@ public class KeyTreeConnector extends MajorPerk {
             return PerkTree.PERK_TREE.getPerkPoints(getSide(player)).stream()
                     .map(PerkTreePoint::getPerk)
                     .filter(perk -> perk instanceof KeyTreeConnector)
-                    .anyMatch(progress::hasPerkUnlocked);
+                    .anyMatch(progress::hasPerkEffect);
         } else {
             return true;
         }
@@ -68,9 +69,9 @@ public class KeyTreeConnector extends MajorPerk {
         ListNBT listTokens = new ListNBT();
         for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(LogicalSide.SERVER, this)) {
             if (ResearchManager.forceApplyPerk(player, otherPerk)) {
-                String token = "connector-tk-" + otherPerk.getRegistryName().toString();
+                ResourceLocation token = AstralSorcery.key("connector-tk-" + otherPerk.getRegistryName().getPath());
                 if (ResearchManager.grantFreePerkPoint(player, token)) {
-                    listTokens.add(StringNBT.valueOf(token));
+                    listTokens.add(StringNBT.valueOf(token.toString()));
                 }
             }
         }
@@ -83,7 +84,7 @@ public class KeyTreeConnector extends MajorPerk {
 
         ListNBT list = dataStorage.getList("pointtokens", Constants.NBT.TAG_STRING);
         for (int i = 0; i < list.size(); i++) {
-            ResearchManager.revokeFreePoint(player, list.getString(i));
+            ResearchManager.revokeFreePoint(player, new ResourceLocation(list.getString(i)));
         }
     }
 

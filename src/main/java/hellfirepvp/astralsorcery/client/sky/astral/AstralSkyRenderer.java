@@ -22,7 +22,6 @@ import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.world.ActiveCelestialsHandler;
-import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -40,7 +39,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ISkyRenderHandler;
-import net.minecraftforge.client.SkyRenderHandler;
 import net.minecraftforge.fml.LogicalSide;
 import org.lwjgl.opengl.GL11;
 
@@ -112,8 +110,8 @@ public class AstralSkyRenderer implements ISkyRenderHandler {
         float skyB = (float) color.z;
         WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
 
-        if (ctx != null && ctx.getCelestialHandler().isSolarEclipseActive()) {
-            float perc = ctx.getCelestialHandler().getSolarEclipsePercent();
+        if (ctx != null && ctx.getCelestialEventHandler().getSolarEclipse().isActiveNow()) {
+            float perc = ctx.getCelestialEventHandler().getSolarEclipsePercent();
             perc = 0.05F + (perc * 0.95F);
 
             skyR *= perc;
@@ -283,22 +281,22 @@ public class AstralSkyRenderer implements ISkyRenderHandler {
         float rainAlpha = 1F - world.getRainStrength(pTicks);
         RenderSystem.color4f(1F, 1F, 1F, rainAlpha);
 
-        if (ctx != null && ctx.getCelestialHandler().isSolarEclipseActive()) {
-            this.renderSolarEclipseSun(renderStack, ctx.getCelestialHandler().getSolarEclipseTick());
+        if (ctx != null && ctx.getCelestialEventHandler().getSolarEclipse().isActiveNow()) {
+            this.renderSolarEclipseSun(renderStack, ctx);
         } else {
             this.renderSun(renderStack);
         }
 
-        if (ctx != null && ctx.getCelestialHandler().isLunarEclipseActive()) {
-            int lunarHalf = DayTimeHelper.getLunarEclipseHalfDuration();
+        if (ctx != null && ctx.getCelestialEventHandler().getLunarEclipse().isActiveNow()) {
+            int lunarHalf = ctx.getCelestialEventHandler().getLunarEclipse().getEventDuration() / 2;
 
-            int eclTick = ctx.getCelestialHandler().getLunarEclipseTick();
+            float eclTick = ctx.getCelestialEventHandler().getLunarEclipse().getEffectTick(0F);
             if (eclTick >= lunarHalf) { //fading out
                 eclTick -= lunarHalf;
             } else {
                 eclTick = lunarHalf - eclTick;
             }
-            float perc = ((float) eclTick) / DayTimeHelper.getLunarEclipseHalfDuration();
+            float perc = ((float) eclTick) / lunarHalf;
             RenderSystem.color4f(1F, 0.4F + (0.6F * perc), 0.4F + (0.6F * perc), rainAlpha);
             this.renderMoon(renderStack, world);
         } else {
@@ -307,10 +305,11 @@ public class AstralSkyRenderer implements ISkyRenderHandler {
         RenderSystem.color4f(1F, 1F, 1F, 1F);
     }
 
-    private void renderSolarEclipseSun(MatrixStack renderStack, int eclipseTick) {
+    private void renderSolarEclipseSun(MatrixStack renderStack, WorldContext ctx) {
         float sunSize = 30F;
 
-        float part = ((float) DayTimeHelper.getSolarEclipseHalfDuration() * 2) / 7F;
+        float eclipseTick = ctx.getCelestialEventHandler().getSolarEclipse().getEffectTick(0F);
+        float part = ctx.getCelestialEventHandler().getSolarEclipse().getEventDuration() / 7F;
         float u = 0;
         float tick = eclipseTick;
         while (tick - part > 0) {

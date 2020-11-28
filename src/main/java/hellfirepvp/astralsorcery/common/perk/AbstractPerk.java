@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
+import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.ASRegistryEvents;
@@ -142,7 +143,7 @@ public class AbstractPerk implements ModifierSource {
 
     @Override
     public boolean canApplySource(PlayerEntity player, LogicalSide dist) {
-        return !ResearchHelper.getProgress(player, dist).isPerkSealed(this);
+        return !ResearchHelper.getProgress(player, dist).getPerkData().isPerkSealed(this);
     }
 
     @Override
@@ -173,13 +174,14 @@ public class AbstractPerk implements ModifierSource {
 
     @Nullable
     public CompoundNBT getPerkData(PlayerEntity player, LogicalSide dist) {
-        return ResearchHelper.getProgress(player, dist).getPerkData(this);
+        return ResearchHelper.getProgress(player, dist).getPerkData().getData(this);
     }
 
     /**
      * Called when the perk is in any way modified in regards to its 'contents' for a specific player e.g. gems
      * Called AFTER the perk has been re-applied with the new data.
      */
+    @Deprecated
     public void modifyPerkServer(PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {}
 
     /**
@@ -214,18 +216,23 @@ public class AbstractPerk implements ModifierSource {
         if (!progress.isValid()) {
             return AllocationStatus.UNALLOCATED;
         }
-        if (progress.hasPerkUnlocked(this)) {
+        PlayerPerkData perkData = progress.getPerkData();
+        if (perkData.hasPerkAllocation(this, PlayerPerkData.AllocationType.UNLOCKED)) {
             return AllocationStatus.ALLOCATED;
+        }
+        if (perkData.hasPerkAllocation(this)) {
+            return AllocationStatus.GRANTED;
         }
 
         return mayUnlockPerk(progress, player) ? AllocationStatus.UNLOCKABLE : AllocationStatus.UNALLOCATED;
     }
 
     public boolean mayUnlockPerk(PlayerProgress progress, PlayerEntity player) {
-        if (!progress.hasFreeAllocationPoint(player, getSide(player))) return false;
+        PlayerPerkData perkData = progress.getPerkData();
+        if (!perkData.hasFreeAllocationPoint(player, getSide(player))) return false;
 
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(getSide(player), this)) {
-            if (progress.hasPerkUnlocked(otherPerks)) {
+            if (perkData.hasPerkAllocation(otherPerks, PlayerPerkData.AllocationType.UNLOCKED)) {
                 return true;
             }
         }

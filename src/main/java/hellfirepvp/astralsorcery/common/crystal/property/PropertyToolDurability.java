@@ -29,6 +29,6 @@ public class PropertyToolDurability extends CrystalProperty {
 
         this.addUsage(ctx -> ctx.uses(USE_TOOL_DURABILITY));
         this.addModifier((value, originalValue, propertyLevel, context) ->
-                context.withUse(USE_TOOL_DURABILITY, value, () -> value * (1.0 + (0.4 * propertyLevel))));
+                context.withUse(USE_TOOL_DURABILITY, value, () -> value * (1.0 + (0.25 * propertyLevel))));
     }
 }

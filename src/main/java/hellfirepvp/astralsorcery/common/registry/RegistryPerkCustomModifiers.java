@@ -41,7 +41,7 @@ public class RegistryPerkCustomModifiers {
 
             @Override
             public float getValue(PlayerEntity player, PlayerProgress progress) {
-                return getRawValue() * (progress.getAppliedPerks().size() - progress.getSealedPerks().size());
+                return getRawValue() * progress.getPerkData().getEffectGrantingPerks().size();
             }
 
             @Override
@@ -61,7 +61,7 @@ public class RegistryPerkCustomModifiers {
             @Override
             public float getValue(PlayerEntity player, PlayerProgress progress) {
                 LogicalSide side = player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
-                return 1F + (0.05F * progress.getAvailablePerkPoints(player, side));
+                return 1F + (0.05F * progress.getPerkData().getAvailablePerkPoints(player, side));
             }
 
             @Override
@@ -80,7 +80,7 @@ public class RegistryPerkCustomModifiers {
 
             @Override
             public float getValue(PlayerEntity player, PlayerProgress progress) {
-                return getRawValue() * (progress.getAppliedPerks().size() - progress.getSealedPerks().size());
+                return getRawValue() * progress.getPerkData().getEffectGrantingPerks().size();
             }
 
             @Override

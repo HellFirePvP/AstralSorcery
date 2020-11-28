@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.advancement.instance;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.common.advancement.PerkLevelTrigger;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -55,6 +54,6 @@ public class PerkLevelInstance extends CriterionInstance {
     }
 
     public boolean test(ServerPlayerEntity player) {
-        return ResearchHelper.getProgress(player, LogicalSide.SERVER).getPerkLevel(player, LogicalSide.SERVER) >= this.levelNeeded;
+        return ResearchHelper.getProgress(player, LogicalSide.SERVER).getPerkData().getPerkLevel(player, LogicalSide.SERVER) >= this.levelNeeded;
     }
 }

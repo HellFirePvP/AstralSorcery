@@ -90,8 +90,8 @@ public class ASMHookEndpoint {
     @OnlyIn(Dist.CLIENT)
     public static float overrideSunBrightnessClient(float prevBrightness, World world) {
         WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
-        if (ctx != null && ctx.getCelestialHandler().isSolarEclipseActive()) {
-            float perc = ctx.getCelestialHandler().getSolarEclipsePercent();
+        if (ctx != null && ctx.getCelestialEventHandler().getSolarEclipse().isActiveNow()) {
+            float perc = ctx.getCelestialEventHandler().getSolarEclipsePercent();
             perc = 0.05F + (perc * 0.95F);
 
             return prevBrightness * perc;
@@ -101,8 +101,8 @@ public class ASMHookEndpoint {
 
     public static int overrideSunBrightnessServer(int prevSkyLight, World world) {
         WorldContext ctx = SkyHandler.getContext(world);
-        if (ctx != null && ctx.getCelestialHandler().isSolarEclipseActive()) {
-            return 11 - Math.round(ctx.getCelestialHandler().getSolarEclipsePercent() * 11F);
+        if (ctx != null && ctx.getCelestialEventHandler().getSolarEclipse().isActiveNow()) {
+            return 11 - Math.round(ctx.getCelestialEventHandler().getSolarEclipsePercent() * 11F);
         }
         return prevSkyLight;
     }
@@ -137,7 +137,7 @@ public class ASMHookEndpoint {
     public static double getOverriddenSeenEntityReachMaximum(ServerPlayNetHandler handler, double original) {
         PlayerEntity player = handler.player;
         PlayerProgress prog = ResearchHelper.getProgress(player, player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER);
-        if (prog.isValid() && prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
+        if (prog.isValid() && prog.getPerkData().hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
             return 999_999_999.0;
         }
         return original;
@@ -146,7 +146,7 @@ public class ASMHookEndpoint {
     @OnlyIn(Dist.CLIENT)
     public static double getOverriddenCreativeEntityReach(double original, double blockReach) {
         PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);
-        if (prog.isValid() && prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
+        if (prog.isValid() && prog.getPerkData().hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
             return blockReach;
         }
         return original;
@@ -155,7 +155,7 @@ public class ASMHookEndpoint {
     @OnlyIn(Dist.CLIENT)
     public static boolean doesOverrideDistanceRuling(boolean original) {
         PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);
-        if (prog.isValid() && prog.hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
+        if (prog.isValid() && prog.getPerkData().hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
             return false;
         }
         return original;

@@ -263,7 +263,7 @@ public class RegistryConstellations {
             public boolean doesShowUp(World world, long day) {
                 WorldContext ctx = SkyHandler.getContext(world);
                 if (ctx != null) {
-                    return ctx.getCelestialHandler().isDayOfSolarEclipse();
+                    return ctx.getCelestialEventHandler().getSolarEclipse().isActiveDay();
                 }
                 return false;
             }

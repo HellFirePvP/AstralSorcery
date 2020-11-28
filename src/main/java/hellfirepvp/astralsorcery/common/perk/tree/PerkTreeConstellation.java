@@ -92,7 +92,7 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
     public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx, MatrixStack renderStack,
                                              AllocationStatus status, long spriteOffsetTick, float pTicks,
                                              float x, float y, float zLevel, float scale) {
-        SpriteSheetResource tex = getHaloSprite(status);
+        SpriteSheetResource tex = status.getPerkTreeHaloSprite();
         BatchPerkContext.TextureObjectGroup grp = PerkPointHaloRenderGroup.INSTANCE.getGroup(tex);
         if (grp == null) {
             return new Rectangle.Float();
@@ -100,7 +100,7 @@ public class PerkTreeConstellation<T extends AbstractPerk> extends PerkTreePoint
         BufferContext buf = drawCtx.getContext(grp);
 
         float haloSize = perkSpriteSize * scale;
-        if (status == AllocationStatus.ALLOCATED) {
+        if (status.isAllocated()) {
             haloSize *= 1.3F;
         }
 

@@ -55,7 +55,7 @@ public class LootModifierMagnetDrops extends LootModifier {
         }
         PlayerEntity player = (PlayerEntity) e;
         PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-        if (!prog.isValid() || !prog.hasPerkEffect(perk -> perk instanceof KeyMagnetDrops)) {
+        if (!prog.isValid() || !prog.getPerkData().hasPerkEffect(perk -> perk instanceof KeyMagnetDrops)) {
             return generatedLoot;
         }
 
