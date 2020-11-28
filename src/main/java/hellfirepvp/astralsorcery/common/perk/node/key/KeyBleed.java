@@ -55,7 +55,7 @@ public class KeyBleed extends KeyPerk {
             PlayerEntity player = (PlayerEntity) source.getTrueSource();
             LogicalSide side = this.getSide(player);
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
-            if (prog.hasPerkEffect(this)) {
+            if (prog.getPerkData().hasPerkEffect(this)) {
                 LivingEntity target = event.getEntityLiving();
 
                 double chance = this.applyMultiplierD(CONFIG.bleedChance.get());

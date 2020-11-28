@@ -42,7 +42,7 @@ public class KeyVorux extends FocusPerk {
             PlayerEntity player = ev.getPlayer();
             LogicalSide side = this.getSide(player);
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
-            if (prog.hasPerkEffect(this)) {
+            if (prog.getPerkData().hasPerkEffect(this)) {
                 ev.setValue(0);
             }
         }

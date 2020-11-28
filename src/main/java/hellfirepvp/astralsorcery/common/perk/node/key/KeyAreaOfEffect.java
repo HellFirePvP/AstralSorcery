@@ -58,7 +58,7 @@ public class KeyAreaOfEffect extends KeyAddEnchantment {
             PlayerEntity player = (PlayerEntity) source.getTrueSource();
             LogicalSide side = this.getSide(player);
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
-            if (prog.hasPerkEffect(this)) {
+            if (prog.getPerkData().hasPerkEffect(this)) {
                 LivingEntity attacked = event.getEntityLiving();
                 float sweepPerc = EnchantmentHelper.getSweepingDamageRatio(player);
                 if (sweepPerc > 0) {

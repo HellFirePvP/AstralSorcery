@@ -60,7 +60,7 @@ public class KeyCleanseBadPotions extends KeyPerk {
             }
             EffectInstance effect = badEffects.get(rand.nextInt(badEffects.size()));
             PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-            if (prog.hasPerkEffect(this)) {
+            if (prog.getPerkData().hasPerkEffect(this)) {
                 float inclChance = 0.1F;
                 inclChance = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.SERVER)
                         .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, inclChance);

@@ -44,11 +44,12 @@ public class KeyTreeConnector extends MajorPerk {
     public boolean mayUnlockPerk(PlayerProgress progress, PlayerEntity player) {
         if (!progress.getPerkData().hasFreeAllocationPoint(player, getSide(player)) ||
                 !canSee(player, progress)) return false;
+        PlayerPerkData perkData = progress.getPerkData();
 
         LogicalSide side = getSide(player);
         boolean hasAllAdjacent = true;
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(side, this)) {
-            if (!progress.hasPerkEffect(otherPerks)) {
+            if (!perkData.hasPerkAllocation(otherPerks, PlayerPerkData.AllocationType.UNLOCKED)) {
                 hasAllAdjacent = false;
                 break;
             }
@@ -57,7 +58,7 @@ public class KeyTreeConnector extends MajorPerk {
             return PerkTree.PERK_TREE.getPerkPoints(getSide(player)).stream()
                     .map(PerkTreePoint::getPerk)
                     .filter(perk -> perk instanceof KeyTreeConnector)
-                    .anyMatch(progress::hasPerkEffect);
+                    .anyMatch(perk -> perkData.hasPerkAllocation(perk, PlayerPerkData.AllocationType.UNLOCKED));
         } else {
             return true;
         }

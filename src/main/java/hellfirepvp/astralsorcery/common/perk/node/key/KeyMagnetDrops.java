@@ -51,7 +51,7 @@ public class KeyMagnetDrops extends KeyPerk {
             PlayerEntity player = (PlayerEntity) source.getTrueSource();
             LogicalSide side = this.getSide(player);
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
-            if (prog.hasPerkEffect(this)) {
+            if (prog.getPerkData().hasPerkEffect(this)) {
                 List<ItemEntity> remaining = new ArrayList<>();
                 for (ItemEntity drop : event.getDrops()) {
                     ItemStack remain = ItemUtils.dropItemToPlayer(player, drop.getItem());

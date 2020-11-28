@@ -44,7 +44,7 @@ public class KeyNoKnockback extends KeyPerk {
             PlayerEntity player = (PlayerEntity) attacked;
             LogicalSide side = this.getSide(player);
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
-            if (prog.hasPerkEffect(this)) {
+            if (prog.getPerkData().hasPerkEffect(this)) {
                 event.setCanceled(true);
             }
         }

@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.network.play.server.PktSyncKnowledge;
-import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.nbt.CompoundNBT;
@@ -233,11 +232,6 @@ public class PlayerProgress {
     protected void setAttunedConstellation(IMajorConstellation constellation) {
         this.attunedConstellation = constellation;
         this.wasOnceAttuned = true;
-    }
-
-    @Deprecated
-    public boolean hasPerkEffect(AbstractPerk perk) {
-        return getPerkData().hasPerkEffect(perk);
     }
 
     public Collection<ResearchProgression> getResearchProgression() {

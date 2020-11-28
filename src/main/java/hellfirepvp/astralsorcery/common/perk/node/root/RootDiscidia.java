@@ -77,7 +77,7 @@ public class RootDiscidia extends RootPerk {
         }
 
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
-        if (!prog.hasPerkEffect(this)) {
+        if (!prog.getPerkData().hasPerkEffect(this)) {
             return;
         }
 

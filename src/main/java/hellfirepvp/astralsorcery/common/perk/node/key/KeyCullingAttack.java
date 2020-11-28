@@ -56,7 +56,7 @@ public class KeyCullingAttack extends KeyPerk {
             PlayerEntity player = (PlayerEntity) source.getTrueSource();
             LogicalSide side = this.getSide(player);
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
-            if (side.isServer() && prog.hasPerkEffect(this)) {
+            if (side.isServer() && prog.getPerkData().hasPerkEffect(this)) {
                 LivingEntity attacked = event.getEntityLiving();
                 float actCull = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.cullHealth.get()));

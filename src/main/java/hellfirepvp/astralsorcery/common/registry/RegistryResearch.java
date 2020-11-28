@@ -21,7 +21,6 @@ import hellfirepvp.astralsorcery.common.lib.StructureTypesAS;
 import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.IItemProvider;
 
 import java.util.function.Predicate;
@@ -282,7 +281,6 @@ public class RegistryResearch {
                 .addPage(text("CEL_CRYSTAL_GROW.1"))
                 .addPage(text("CEL_CRYSTAL_GROW.2"))
                 .addPage(text("CEL_CRYSTAL_GROW.3"))
-                .addPage(text("CEL_CRYSTAL_GROW.4"))
                 .addTomeLookup(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER, 0, ResearchProgression.CONSTELLATION)
                 .register(ResearchProgression.CONSTELLATION);
 

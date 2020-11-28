@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -73,7 +74,7 @@ public interface GemSlotPerk {
             throw new UnsupportedOperationException("Cannot do perk-specific socketing logic on something that's not a perk!");
         }
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
-        if (!prog.hasPerkEffect((AbstractPerk) this)) {
+        if (!prog.getPerkData().hasPerkEffect((AbstractPerk) this)) {
             return false;
         }
         boolean updateData = dataOvr == null;
@@ -139,11 +140,12 @@ public interface GemSlotPerk {
         if (!prog.isValid()) {
             return;
         }
+        PlayerPerkData perkData = prog.getPerkData();
 
         ItemStack contained = getContainedItem(Minecraft.getInstance().player, LogicalSide.CLIENT);
         if (contained.isEmpty()) {
             tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.empty").mergeStyle(TextFormatting.GRAY));
-            if (prog.hasPerkEffect((AbstractPerk) this)) {
+            if (perkData.hasPerkEffect((AbstractPerk) this)) {
                 tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.empty").mergeStyle(TextFormatting.GRAY));
 
                 boolean has = !ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getInstance().player,
@@ -156,7 +158,7 @@ public interface GemSlotPerk {
         } else {
             tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.content.item", contained.getDisplayName())
                     .mergeStyle(TextFormatting.GRAY));
-            if (prog.hasPerkEffect((AbstractPerk) this)) {
+            if (perkData.hasPerkEffect((AbstractPerk) this)) {
                 tooltip.add(new TranslationTextComponent("perk.info.astralsorcery.gem.remove").mergeStyle(TextFormatting.GRAY));
             }
         }

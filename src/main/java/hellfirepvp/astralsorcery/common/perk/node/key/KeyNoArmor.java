@@ -54,7 +54,7 @@ public class KeyNoArmor extends KeyPerk {
         PlayerEntity player = (PlayerEntity) event.getEntityLiving();
         LogicalSide side = this.getSide(player);
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
-        if (prog.hasPerkEffect(this)) {
+        if (prog.getPerkData().hasPerkEffect(this)) {
             int eq = 0;
             for (ItemStack stack : player.getArmorInventoryList()) {
                 if (!stack.isEmpty()) {

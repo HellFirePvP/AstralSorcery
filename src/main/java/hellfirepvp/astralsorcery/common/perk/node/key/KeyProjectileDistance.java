@@ -55,7 +55,7 @@ public class KeyProjectileDistance extends KeyPerk {
                 PlayerEntity player = (PlayerEntity) source.getTrueSource();
                 LogicalSide side = this.getSide(player);
                 PlayerProgress prog = ResearchHelper.getProgress(player, side);
-                if (prog.hasPerkEffect(this)) {
+                if (prog.getPerkData().hasPerkEffect(this)) {
                     float added = (float) this.applyMultiplierD(CONFIG.maxAdditionalMultiplier.get());
                     added *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
 

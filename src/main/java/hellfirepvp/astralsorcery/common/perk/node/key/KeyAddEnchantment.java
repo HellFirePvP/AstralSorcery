@@ -84,7 +84,7 @@ public class KeyAddEnchantment extends KeyPerk {
 
     private void addEnchantments(PlayerEntity player, LogicalSide side, DynamicEnchantmentEvent.Add event) {
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
-        if (prog.hasPerkEffect(this)) {
+        if (prog.getPerkData().hasPerkEffect(this)) {
             List<DynamicEnchantment> listedEnchantments = event.getEnchantmentsToApply();
             for (DynamicEnchantment ench : this.enchantments) {
                 DynamicEnchantment added = MiscUtils.iterativeSearch(listedEnchantments, e ->
