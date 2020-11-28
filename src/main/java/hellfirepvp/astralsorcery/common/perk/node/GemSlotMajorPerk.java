@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.lib.PerkNamesAS;
@@ -20,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -61,9 +61,12 @@ public class GemSlotMajorPerk extends MajorPerk implements GemSlotPerk {
     }
 
     @Override
-    public void onRemovePerkServer(PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {
-        super.onRemovePerkServer(player, progress, dataStorage);
-        dropItemToPlayer(player, dataStorage);
+    public void onRemovePerkServer(PlayerEntity player, PlayerPerkData.AllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {
+        super.onRemovePerkServer(player, allocationType, progress, dataStorage);
+
+        if (progress.getPerkData().getAllocationTypes(this).size() <= 1) {
+            dropItemToPlayer(player, dataStorage);
+        }
     }
 
     @Override

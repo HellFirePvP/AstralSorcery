@@ -81,6 +81,12 @@ public class PlayerPerkData {
                 .orElse(false);
     }
 
+    public Collection<AllocationType> getAllocationTypes(AbstractPerk perk) {
+        return Collections.unmodifiableCollection(this.findAppliedPerk(perk)
+                .map(AppliedPerk::getApplicationTypes)
+                .orElse(Collections.emptySet()));
+    }
+
     protected boolean canSealPerk(AbstractPerk perk) {
         return !isPerkSealed(perk) && hasPerkAllocation(perk);
     }
@@ -256,7 +262,8 @@ public class PlayerPerkData {
                 AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(LogicalSide.SERVER, progress.getAttunedConstellation());
                 if (root != null) {
                     AppliedPerk newPerk = new AppliedPerk(root);
-                    root.onUnlockPerkServer(null, progress, newPerk.getPerkData());
+                    newPerk.applicationTypes.add(AllocationType.UNLOCKED);
+                    root.onUnlockPerkServer(null, AllocationType.UNLOCKED, progress, newPerk.getPerkData());
                     this.perks.put(root, newPerk);
                 }
             }
@@ -339,7 +346,8 @@ public class PlayerPerkData {
                 AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(LogicalSide.SERVER, progress.getAttunedConstellation());
                 if (root != null) {
                     AppliedPerk newPerk = new AppliedPerk(root);
-                    root.onUnlockPerkServer(null, progress, newPerk.getPerkData());
+                    newPerk.applicationTypes.add(AllocationType.UNLOCKED);
+                    root.onUnlockPerkServer(null, AllocationType.UNLOCKED, progress, newPerk.getPerkData());
                     this.perks.put(root, newPerk);
                 }
             }

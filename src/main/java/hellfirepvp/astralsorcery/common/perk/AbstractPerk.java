@@ -178,25 +178,18 @@ public class AbstractPerk implements ModifierSource {
     }
 
     /**
-     * Called when the perk is in any way modified in regards to its 'contents' for a specific player e.g. gems
-     * Called AFTER the perk has been re-applied with the new data.
-     */
-    @Deprecated
-    public void modifyPerkServer(PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {}
-
-    /**
      * Called ONCE when the perk is unlocked
      * You may use the CompoundNBT to save data to remove it again later
      * The player might be null for root perks on occasion.
      */
-    public void onUnlockPerkServer(@Nullable PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {}
+    public void onUnlockPerkServer(@Nullable PlayerEntity player, PlayerPerkData.AllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {}
 
     /**
      * Clean up and remove the perk from that single player.
      * Data in the dataStorage is filled with the data set in onUnlockPerkServer
      * Called after the perk is already removed from the player
      */
-    public void onRemovePerkServer(PlayerEntity player, PlayerProgress progress, CompoundNBT dataStorage) {}
+    public void onRemovePerkServer(PlayerEntity player, PlayerPerkData.AllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {}
 
     public <T extends AbstractPerk> T setName(String name) {
         this.unlocalizedKey = name;
