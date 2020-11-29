@@ -14,7 +14,7 @@ import hellfirepvp.astralsorcery.common.perk.ProgressGatedPerk;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeConverterPerk;
 import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.perk.node.ConstellationPerk;
-import hellfirepvp.astralsorcery.common.perk.node.GemSlotMajorPerk;
+import hellfirepvp.astralsorcery.common.perk.node.socket.GemSocketMajorPerk;
 import hellfirepvp.astralsorcery.common.perk.node.KeyPerk;
 import hellfirepvp.astralsorcery.common.perk.node.MajorPerk;
 import hellfirepvp.astralsorcery.common.perk.node.focus.KeyAlcara;
@@ -86,7 +86,7 @@ public class PerkTypeHandler {
     public static final Type<KeyPerk> KEY_PERK = registerConverter(AstralSorcery.key("key_perk"), KeyPerk::new);
     public static final Type<ConstellationPerk> CONSTELLATION_PERK = registerConverter(AstralSorcery.key("constellation_perk"), ConstellationPerk::convertToThis);
     public static final Type<MajorPerk> MAJOR_PERK = registerConverter(AstralSorcery.key("major_perk"), MajorPerk::new);
-    public static final Type<GemSlotMajorPerk> GEM_SLOT_PERK = registerConverter(AstralSorcery.key("gem_slot_perk"), GemSlotMajorPerk::new);
+    public static final Type<GemSocketMajorPerk> GEM_SLOT_PERK = registerConverter(AstralSorcery.key("gem_slot_perk"), GemSocketMajorPerk::new);
     public static final Type<AttributeModifierPerk> MODIFIER_PERK = registerConverter(AstralSorcery.key("modifier_perk"), AttributeModifierPerk::new);
     public static final Type<AttributeConverterPerk> CONVERTER_PERK = registerConverter(AstralSorcery.key("converter_perk"), AttributeConverterPerk::new);
     public static final Type<ProgressGatedPerk> GATED_PERK = registerConverter(AstralSorcery.key("gated_perk"), ProgressGatedPerk::new);

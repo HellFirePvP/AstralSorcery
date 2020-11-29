@@ -35,7 +35,6 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
 import hellfirepvp.astralsorcery.common.item.useables.ItemPerkSeal;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
@@ -44,7 +43,8 @@ import hellfirepvp.astralsorcery.common.network.play.client.PktPerkGemModificati
 import hellfirepvp.astralsorcery.common.network.play.client.PktRequestPerkSealAction;
 import hellfirepvp.astralsorcery.common.network.play.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.perk.*;
-import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
+import hellfirepvp.astralsorcery.common.perk.node.socket.GemSocketItem;
+import hellfirepvp.astralsorcery.common.perk.node.socket.GemSocketPerk;
 import hellfirepvp.astralsorcery.common.perk.source.AttributeConverterProvider;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -109,7 +109,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private final ScreenTextEntry searchTextEntry = new ScreenTextEntry();
     private final List<AbstractPerk> searchMatches = Lists.newArrayList();
 
-    private GemSlotPerk socketMenu = null;
+    private GemSocketPerk socketMenu = null;
     private Rectangle.Float rSocketMenu = null;
     private final Map<Rectangle.Float, Integer> slotsSocketMenu = Maps.newHashMap();
     private Rectangle rStatStar = null;
@@ -203,8 +203,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         double guiFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(MathHelper.floor((guiLeft + 27) * guiFactor), MathHelper.floor((guiTop + 27) * guiFactor),
-                MathHelper.floor((guiWidth - 54) * guiFactor), MathHelper.floor((guiHeight - 54) * guiFactor));
+        GL11.glScissor(MathHelper.floor((guiLeft + 39) * guiFactor), MathHelper.floor((guiTop + 44) * guiFactor),
+                MathHelper.floor((guiWidth - 76) * guiFactor), MathHelper.floor((guiHeight - 71) * guiFactor));
 
         this.setBlitOffset(-50);
         this.drawBackground(renderStack);
@@ -353,14 +353,19 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         }
     }
 
-    private void drawSocketContextMenu(MatrixStack renderStack) {
+    private <T extends AbstractPerk & GemSocketPerk> void drawSocketContextMenu(MatrixStack renderStack) {
         this.rSocketMenu = null;
         this.slotsSocketMenu.clear();
 
         if (socketMenu != null) {
-            AbstractPerk sMenuPerk = (AbstractPerk) socketMenu;
-            Map<Integer, ItemStack> found = ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getInstance().player,
-                    s -> !s.isEmpty() && s.getItem() instanceof ItemPerkGem && !DynamicModifierHelper.getStaticModifiers(s).isEmpty());
+            T sMenuPerk = (T) socketMenu;
+            Map<Integer, ItemStack> found = ItemUtils.findItemsIndexedInPlayerInventory(Minecraft.getInstance().player, stack -> {
+                if (stack.isEmpty() || !(stack.getItem() instanceof GemSocketItem)) {
+                    return false;
+                }
+                GemSocketItem item = (GemSocketItem) stack.getItem();
+                return item.canBeInserted(stack, sMenuPerk, Minecraft.getInstance().player, ResearchHelper.getClientProgress(), LogicalSide.CLIENT);
+            });
             if (found.isEmpty()) { // Close then.
                 closeSocketMenu();
                 return;
@@ -926,7 +931,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         for (Map.Entry<AbstractPerk, Rectangle.Float> rctPerk : this.thisFramePerks.entrySet()) {
             if (rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                 AbstractPerk perk = rctPerk.getKey();
-                if (perk instanceof GemSlotPerk) {
+                if (perk instanceof GemSocketPerk) {
                     return false;
                 }
             }
@@ -954,15 +959,9 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 for (Rectangle.Float r : slotsSocketMenu.keySet()) {
                     if (r.contains(mouseX, mouseY) && !socketMenu.hasItem(mc.player, LogicalSide.CLIENT)) {
                         int slotId = slotsSocketMenu.get(r);
-                        ItemStack potentialStack = mc.player.inventory.getStackInSlot(slotId);
-                        if (!potentialStack.isEmpty() &&
-                                !DynamicModifierHelper.getStaticModifiers(potentialStack).isEmpty()) {
-                            PktPerkGemModification pkt = PktPerkGemModification.insertItem((AbstractPerk) socketMenu, slotId);
-                            PacketChannel.CHANNEL.sendToServer(pkt);
-                            closeSocketMenu();
-                            SoundHelper.playSoundClient(SoundEvents.BLOCK_GLASS_PLACE, .35F, 9f);
+                        if (tryInsertGem(slotId, socketMenu)) {
+                            return true;
                         }
-                        return true;
                     }
                 }
             }
@@ -997,8 +996,8 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     break;
                 }
                 if (mouseButton == 1) {
-                    if (perkData.hasPerkEffect(perk) && perk instanceof GemSlotPerk) {
-                        if (((GemSlotPerk) perk).hasItem(mc.player, LogicalSide.CLIENT)) {
+                    if (perkData.hasPerkEffect(perk) && perk instanceof GemSocketPerk) {
+                        if (((GemSocketPerk) perk).hasItem(mc.player, LogicalSide.CLIENT)) {
                             PktPerkGemModification pkt = PktPerkGemModification.dropItem(perk);
                             PacketChannel.CHANNEL.sendToServer(pkt);
                             AstralSorcery.getProxy().scheduleClientside(() -> {
@@ -1008,7 +1007,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                             }, 10);
                             SoundHelper.playSoundClient(SoundEvents.BLOCK_GLASS_PLACE, .35F, 9f);
                         } else {
-                            this.socketMenu = (GemSlotPerk) perk;
+                            this.socketMenu = (GemSocketPerk) perk;
                         }
                         return true;
                     }
@@ -1028,6 +1027,28 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     }
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    private <T extends AbstractPerk & GemSocketPerk> boolean tryInsertGem(int slotId, GemSocketPerk perk) {
+        if (!(perk instanceof AbstractPerk)) {
+            return false;
+        }
+        T socketPerk = (T) perk;
+
+        ItemStack potentialStack = minecraft.player.inventory.getStackInSlot(slotId);
+        if (!potentialStack.isEmpty() &&
+                potentialStack.getItem() instanceof GemSocketItem) {
+            GemSocketItem gemItem = (GemSocketItem) potentialStack.getItem();
+            if (gemItem.canBeInserted(potentialStack, socketPerk, minecraft.player, ResearchHelper.getClientProgress(), LogicalSide.CLIENT)) {
+                PktPerkGemModification pkt = PktPerkGemModification.insertItem(socketPerk, slotId);
+                PacketChannel.CHANNEL.sendToServer(pkt);
+
+                closeSocketMenu();
+                SoundHelper.playSoundClient(SoundEvents.BLOCK_GLASS_PLACE, .35F, 9f);
+                return true;
             }
         }
         return false;

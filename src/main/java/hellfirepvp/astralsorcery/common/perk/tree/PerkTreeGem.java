@@ -19,7 +19,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.AllocationStatus;
-import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
+import hellfirepvp.astralsorcery.common.perk.node.socket.GemSocketPerk;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
@@ -38,7 +38,7 @@ import java.util.Collection;
  * Created by HellFirePvP
  * Date: 25.08.2019 / 18:33
  */
-public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreePoint<T> implements DynamicPerkRender {
+public class PerkTreeGem<T extends AbstractPerk & GemSocketPerk> extends PerkTreePoint<T> implements DynamicPerkRender {
 
     public PerkTreeGem(T perk, Point.Float offset) {
         super(perk, offset);
@@ -61,7 +61,7 @@ public class PerkTreeGem<T extends AbstractPerk & GemSlotPerk> extends PerkTreeP
             float posY = y - (8 * scale);
 
             renderStack.push();
-            renderStack.translate(posX, posY, zLevel);
+            renderStack.translate(posX, posY, zLevel - 50F);
             renderStack.scale(scale, scale, 1F);
             RenderingUtils.renderItemStackGUI(renderStack, stack, null);
             renderStack.pop();

@@ -187,7 +187,7 @@ public class AbstractPerk implements ModifierSource {
     /**
      * Clean up and remove the perk from that single player.
      * Data in the dataStorage is filled with the data set in onUnlockPerkServer
-     * Called after the perk is already removed from the player
+     * Called after the perk is already removed from the player, but still in the player's perkData
      */
     public void onRemovePerkServer(PlayerEntity player, PlayerPerkData.AllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {}
 

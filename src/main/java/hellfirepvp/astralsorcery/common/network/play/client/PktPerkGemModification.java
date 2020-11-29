@@ -8,12 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.network.play.client;
 
-import hellfirepvp.astralsorcery.common.item.gem.ItemPerkGem;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
-import hellfirepvp.astralsorcery.common.perk.node.GemSlotPerk;
+import hellfirepvp.astralsorcery.common.perk.node.socket.GemSocketItem;
+import hellfirepvp.astralsorcery.common.perk.node.socket.GemSocketPerk;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.entity.player.PlayerEntity;
@@ -85,25 +86,17 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
             context.enqueueWork(() -> {
                 PerkTree.PERK_TREE.getPerk(side, packet.perkKey).ifPresent(perk -> {
                     PlayerEntity player = context.getSender();
-                    if (!(perk instanceof GemSlotPerk)) { //Exclusively for socketable gem perks.
+                    if (!(perk instanceof GemSocketPerk)) { //Exclusively for socketable gem perks.
                         return;
                     }
 
                     switch (packet.action) {
                         case 0:
-                            ItemStack stack = player.inventory.getStackInSlot(packet.slotId);
-                            ItemStack toInsert = ItemUtils.copyStackWithSize(stack, 1);
-                            if (!toInsert.isEmpty() &&
-                                    toInsert.getItem() instanceof ItemPerkGem &&
-                                    !DynamicModifierHelper.getStaticModifiers(toInsert).isEmpty() &&
-                                    !((GemSlotPerk) perk).hasItem(player, LogicalSide.SERVER) &&
-                                    ((GemSlotPerk) perk).setContainedItem(player, LogicalSide.SERVER, toInsert)) {
-                                player.inventory.setInventorySlotContents(packet.slotId, ItemUtils.copyStackWithSize(stack, stack.getCount() - 1));
-                            }
+                            this.tryInsertPerk(perk, player, packet);
                             break;
                         case 1:
-                            if (((GemSlotPerk) perk).hasItem(player, LogicalSide.SERVER)) {
-                                ((GemSlotPerk) perk).dropItemToPlayer(player);
+                            if (((GemSocketPerk) perk).hasItem(player, LogicalSide.SERVER)) {
+                                ((GemSocketPerk) perk).dropItemToPlayer(player);
                             }
                             break;
                         default:
@@ -112,5 +105,27 @@ public class PktPerkGemModification extends ASPacket<PktPerkGemModification> {
                 });
             });
         };
+    }
+
+    private <T extends AbstractPerk & GemSocketPerk> void tryInsertPerk(AbstractPerk perk, PlayerEntity player, PktPerkGemModification packet) {
+        PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+        if (!prog.isValid()) {
+            return;
+        }
+        T socketPerk = (T) perk;
+
+        ItemStack stack = player.inventory.getStackInSlot(packet.slotId);
+        if (stack.isEmpty()) {
+            return;
+        }
+        ItemStack toInsert = ItemUtils.copyStackWithSize(stack, 1);
+        if (!toInsert.isEmpty() && toInsert.getItem() instanceof GemSocketItem) {
+            GemSocketItem socketItem = (GemSocketItem) toInsert.getItem();
+            if (socketItem.canBeInserted(toInsert, socketPerk, player, prog, LogicalSide.SERVER) &&
+                    !socketPerk.hasItem(player, LogicalSide.SERVER) &&
+                    socketPerk.setContainedItem(player, LogicalSide.SERVER, toInsert)) {
+                player.inventory.setInventorySlotContents(packet.slotId, ItemUtils.copyStackWithSize(stack, stack.getCount() - 1));
+            }
+        }
     }
 }

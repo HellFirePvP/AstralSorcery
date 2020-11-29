@@ -72,7 +72,9 @@ public class PerkEffectHelper {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.CLIENT);
         PlayerPerkData perkData = progress.getPerkData();
 
-        perkData.applyPerkAllocation(perk, PlayerPerkData.AllocationType.UNLOCKED);
+        if (!perkData.hasPerkAllocation(perk)) {
+            return;
+        }
         perkData.updatePerkData(perk, oldData);
         modifySource(player, LogicalSide.CLIENT, perk, Action.REMOVE);
         perkData.updatePerkData(perk, newData);
