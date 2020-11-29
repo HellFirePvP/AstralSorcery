@@ -9,9 +9,7 @@
 package hellfirepvp.astralsorcery.common.perk.node.key;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.data.research.*;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
 import hellfirepvp.astralsorcery.common.perk.node.MajorPerk;
@@ -49,7 +47,7 @@ public class KeyTreeConnector extends MajorPerk {
         LogicalSide side = getSide(player);
         boolean hasAllAdjacent = true;
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(side, this)) {
-            if (!perkData.hasPerkAllocation(otherPerks, PlayerPerkData.AllocationType.UNLOCKED)) {
+            if (!perkData.hasPerkAllocation(otherPerks, PerkAllocationType.UNLOCKED)) {
                 hasAllAdjacent = false;
                 break;
             }
@@ -58,20 +56,20 @@ public class KeyTreeConnector extends MajorPerk {
             return PerkTree.PERK_TREE.getPerkPoints(getSide(player)).stream()
                     .map(PerkTreePoint::getPerk)
                     .filter(perk -> perk instanceof KeyTreeConnector)
-                    .anyMatch(perk -> perkData.hasPerkAllocation(perk, PlayerPerkData.AllocationType.UNLOCKED));
+                    .anyMatch(perk -> perkData.hasPerkAllocation(perk, PerkAllocationType.UNLOCKED));
         } else {
             return true;
         }
     }
 
     @Override
-    public void onUnlockPerkServer(@Nullable PlayerEntity player, PlayerPerkData.AllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {
+    public void onUnlockPerkServer(@Nullable PlayerEntity player, PerkAllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {
         super.onUnlockPerkServer(player, allocationType, progress, dataStorage);
 
-        if (allocationType == PlayerPerkData.AllocationType.UNLOCKED) {
+        if (allocationType == PerkAllocationType.UNLOCKED) {
             ListNBT listTokens = new ListNBT();
             for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(LogicalSide.SERVER, this)) {
-                if (ResearchManager.forceApplyPerk(player, otherPerk, allocationType)) {
+                if (ResearchManager.forceApplyPerk(player, otherPerk, PlayerPerkAllocation.unlock())) {
                     ResourceLocation token = AstralSorcery.key("connector-tk-" + otherPerk.getRegistryName().getPath());
                     if (ResearchManager.grantFreePerkPoint(player, token)) {
                         listTokens.add(StringNBT.valueOf(token.toString()));
@@ -83,10 +81,10 @@ public class KeyTreeConnector extends MajorPerk {
     }
 
     @Override
-    public void onRemovePerkServer(PlayerEntity player, PlayerPerkData.AllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {
+    public void onRemovePerkServer(PlayerEntity player, PerkAllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {
         super.onRemovePerkServer(player, allocationType, progress, dataStorage);
 
-        if (allocationType == PlayerPerkData.AllocationType.UNLOCKED) {
+        if (allocationType == PerkAllocationType.UNLOCKED) {
             ListNBT list = dataStorage.getList("pointtokens", Constants.NBT.TAG_STRING);
             for (int i = 0; i < list.size(); i++) {
                 ResearchManager.revokeFreePoint(player, new ResourceLocation(list.getString(i)));

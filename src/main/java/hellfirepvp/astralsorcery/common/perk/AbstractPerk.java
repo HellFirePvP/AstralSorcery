@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.perk;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
+import hellfirepvp.astralsorcery.common.data.research.PerkAllocationType;
 import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -182,14 +183,14 @@ public class AbstractPerk implements ModifierSource {
      * You may use the CompoundNBT to save data to remove it again later
      * The player might be null for root perks on occasion.
      */
-    public void onUnlockPerkServer(@Nullable PlayerEntity player, PlayerPerkData.AllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {}
+    public void onUnlockPerkServer(@Nullable PlayerEntity player, PerkAllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {}
 
     /**
      * Clean up and remove the perk from that single player.
      * Data in the dataStorage is filled with the data set in onUnlockPerkServer
      * Called after the perk is already removed from the player, but still in the player's perkData
      */
-    public void onRemovePerkServer(PlayerEntity player, PlayerPerkData.AllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {}
+    public void onRemovePerkServer(PlayerEntity player, PerkAllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {}
 
     public <T extends AbstractPerk> T setName(String name) {
         this.unlocalizedKey = name;
@@ -210,7 +211,7 @@ public class AbstractPerk implements ModifierSource {
             return AllocationStatus.UNALLOCATED;
         }
         PlayerPerkData perkData = progress.getPerkData();
-        if (perkData.hasPerkAllocation(this, PlayerPerkData.AllocationType.UNLOCKED)) {
+        if (perkData.hasPerkAllocation(this, PerkAllocationType.UNLOCKED)) {
             return AllocationStatus.ALLOCATED;
         }
         if (perkData.hasPerkAllocation(this)) {
@@ -225,7 +226,7 @@ public class AbstractPerk implements ModifierSource {
         if (!perkData.hasFreeAllocationPoint(player, getSide(player))) return false;
 
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(getSide(player), this)) {
-            if (perkData.hasPerkAllocation(otherPerks, PlayerPerkData.AllocationType.UNLOCKED)) {
+            if (perkData.hasPerkAllocation(otherPerks, PerkAllocationType.UNLOCKED)) {
                 return true;
             }
         }

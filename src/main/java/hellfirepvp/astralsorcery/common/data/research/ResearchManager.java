@@ -201,7 +201,7 @@ public class ResearchManager {
         progress.setAttunedConstellation(constellation);
         AbstractPerk root;
         if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(LogicalSide.SERVER, constellation)) != null) {
-            doApplyPerk(progress, perkData, player, root, PlayerPerkData.AllocationType.UNLOCKED);
+            doApplyPerk(progress, perkData, player, root, PlayerPerkAllocation.unlock());
         }
 
         AdvancementsAS.ATTUNE_SELF.trigger((ServerPlayerEntity) player, constellation);
@@ -228,17 +228,18 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean applyPerk(PlayerEntity player, @Nonnull AbstractPerk perk, PlayerPerkData.AllocationType allocationType) {
+    public static boolean applyPerk(PlayerEntity player, @Nonnull AbstractPerk perk, PlayerPerkAllocation allocation) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!progress.isValid()) return false;
         PlayerPerkData perkData = progress.getPerkData();
-        if (perkData.hasPerkAllocation(perk, allocationType)) return false;
 
-        if (allocationType == PlayerPerkData.AllocationType.UNLOCKED) {
+        if (allocation.getType() == PerkAllocationType.UNLOCKED) {
             if (!perkData.hasFreeAllocationPoint(player, LogicalSide.SERVER)) return false;
         }
 
-        doApplyPerk(progress, perkData, player, perk, allocationType);
+        if (!doApplyPerk(progress, perkData, player, perk, allocation)) {
+            return false;
+        }
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -313,27 +314,29 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean forceApplyPerk(PlayerEntity player, @Nonnull AbstractPerk perk, PlayerPerkData.AllocationType allocationType) {
+    public static boolean forceApplyPerk(PlayerEntity player, @Nonnull AbstractPerk perk, PlayerPerkAllocation allocation) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!progress.isValid()) return false;
         PlayerPerkData perkData = progress.getPerkData();
-        if (perkData.hasPerkAllocation(perk, allocationType)) return false;
 
-        doApplyPerk(progress, perkData, player, perk, allocationType);
+        if (!doApplyPerk(progress, perkData, player, perk, allocation)) {
+            return false;
+        }
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
         return true;
     }
 
-    @Deprecated
-    public static boolean removePerk(PlayerEntity player, AbstractPerk perk) {
+    public static boolean removePerk(PlayerEntity player, AbstractPerk perk, PlayerPerkAllocation allocation) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!progress.isValid()) return false;
+        PlayerPerkData perkData = progress.getPerkData();
+        if (!perkData.hasPerkAllocation(perk, allocation.getType())) return false;
 
-        doRemovePerk(progress, player, LogicalSide.SERVER, perk, PlayerPerkData.AllocationType.UNLOCKED);
-
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.REMOVE));
+        if (!doRemovePerk(progress, player, LogicalSide.SERVER, perk, allocation, true)) {
+            return false;
+        }
 
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
@@ -353,44 +356,63 @@ public class ResearchManager {
 
     private static void removeAllAllocatedPerks(PlayerProgress progress, PlayerEntity player) {
         PlayerPerkData perkData = progress.getPerkData();
-        List<AbstractPerk> allocatedPerks = new ArrayList<>(perkData.getAllocatedPerks(PlayerPerkData.AllocationType.UNLOCKED));
+        List<AbstractPerk> allocatedPerks = new ArrayList<>(perkData.getAllocatedPerks(PerkAllocationType.UNLOCKED));
+        List<AbstractPerk> syncRemovable = new ArrayList<>();
         for (AbstractPerk perk : allocatedPerks) {
-            doRemovePerk(progress, player, LogicalSide.SERVER, perk, PlayerPerkData.AllocationType.UNLOCKED);
+            if (doRemovePerk(progress, player, LogicalSide.SERVER, perk, PlayerPerkAllocation.unlock(), false)) {
+                syncRemovable.add(perk);
+            }
         }
-        List<ResourceLocation> removals = allocatedPerks.stream().map(AbstractPerk::getRegistryName).collect(Collectors.toList());
+        List<ResourceLocation> removals = syncRemovable.stream().map(AbstractPerk::getRegistryName).collect(Collectors.toList());
         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncPerkActivity(removals));
     }
 
-    private static void doRemovePerk(PlayerProgress progress, PlayerEntity player, LogicalSide side, AbstractPerk perk, PlayerPerkData.AllocationType allocationType) {
+    private static boolean doRemovePerk(PlayerProgress progress, PlayerEntity player, LogicalSide side, AbstractPerk perk, PlayerPerkAllocation allocation, boolean sync) {
         PlayerPerkData perkData = progress.getPerkData();
-        if (perkData.hasPerkAllocation(perk, allocationType)) {
+        if (perkData.hasPerkAllocation(perk, allocation.getType())) {
             CompoundNBT data = perkData.getData(perk);
             if (data != null) {
-                if (perkData.getAllocationTypes(perk).size() > 1) {
-                    perk.onRemovePerkServer(player, allocationType, progress, data);
-                    progress.getPerkData().removePerkAllocation(perk, allocationType);
-                } else {
-                    PerkEffectHelper.modifySource(player, side, perk, PerkEffectHelper.Action.REMOVE);
-                    perk.onRemovePerkServer(player, allocationType, progress, data);
-                    progress.getPerkData().removePerkAllocation(perk, allocationType);
+                PerkRemovalResult removeResult = perkData.removePerkAllocation(perk, allocation, true);
+                if (removeResult.isFailure()) {
+                    return false;
                 }
+                if (removeResult.removesPerk()) {
+                    PerkEffectHelper.modifySource(player, side, perk, PerkEffectHelper.Action.REMOVE);
+                }
+                PerkRemovalResult actualResult = perkData.removePerkAllocation(perk, allocation, false);
+                if (actualResult.removesAllocationType()) {
+                    perk.onRemovePerkServer(player, allocation.getType(), progress, data);
+                }
+                if (actualResult.removesPerk()) {
+                    if (sync) {
+                        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.REMOVE));
+                    }
+                }
+                return true;
             }
         }
+        return false;
     }
 
-    private static void doApplyPerk(PlayerProgress progress, PlayerPerkData perkData, PlayerEntity player, AbstractPerk perk, PlayerPerkData.AllocationType allocationType) {
+    private static boolean doApplyPerk(PlayerProgress progress, PlayerPerkData perkData, PlayerEntity player, AbstractPerk perk, PlayerPerkAllocation allocation) {
+        if (!perkData.applyPerkAllocation(perk, allocation, true)) {
+            return false;
+        }
         if (perkData.hasPerkAllocation(perk)) {
-            CompoundNBT data = perkData.getData(perk);
-            perk.onUnlockPerkServer(player, allocationType, progress, data);
-            perkData.applyPerkAllocation(perk, allocationType);
+            if (!perkData.hasPerkAllocation(perk, allocation.getType())) {
+                CompoundNBT data = perkData.getData(perk);
+                perk.onUnlockPerkServer(player, allocation.getType(), progress, data);
+            }
+            return perkData.applyPerkAllocation(perk, allocation, false);
         } else {
             CompoundNBT data = new CompoundNBT();
-            perk.onUnlockPerkServer(player, allocationType, progress, data);
-            perkData.applyPerkAllocation(perk, allocationType);
+            perk.onUnlockPerkServer(player, allocation.getType(), progress, data);
+            perkData.applyPerkAllocation(perk, allocation, false);
             perkData.updatePerkData(perk, data);
 
             PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
             PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.ADD));
+            return true;
         }
     }
 

@@ -24,6 +24,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,9 +59,9 @@ public class PktSyncPerkActivity extends ASPacket<PktSyncPerkActivity> {
         this.newData = newData;
     }
 
-    public PktSyncPerkActivity(List<ResourceLocation> removals) {
+    public PktSyncPerkActivity(Collection<ResourceLocation> removals) {
         this.type = Type.REMOVE_LISTED;
-        this.perkKeys = removals;
+        this.perkKeys = new ArrayList<>(removals);
     }
 
     @Nonnull

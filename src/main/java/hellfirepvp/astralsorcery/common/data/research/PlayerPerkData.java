@@ -61,7 +61,7 @@ public class PlayerPerkData {
                 .collect(Collectors.toList());
     }
 
-    public Collection<AbstractPerk> getAllocatedPerks(AllocationType type) {
+    public Collection<AbstractPerk> getAllocatedPerks(PerkAllocationType type) {
         return this.perks.values().stream()
                 .filter(appliedPerk -> appliedPerk.isAllocated(type))
                 .map(AppliedPerk::getPerk)
@@ -84,16 +84,22 @@ public class PlayerPerkData {
         return this.findAppliedPerk(perk).isPresent();
     }
 
-    public boolean hasPerkAllocation(AbstractPerk perk, AllocationType type) {
+    public boolean hasPerkAllocation(AbstractPerk perk, PerkAllocationType type) {
         return this.findAppliedPerk(perk)
                 .map(appliedPerk -> appliedPerk.isAllocated(type))
                 .orElse(false);
     }
 
-    public Collection<AllocationType> getAllocationTypes(AbstractPerk perk) {
-        return Collections.unmodifiableCollection(this.findAppliedPerk(perk)
-                .map(AppliedPerk::getApplicationTypes)
-                .orElse(Collections.emptySet()));
+    public int getAllocations(AbstractPerk perk, PerkAllocationType type) {
+        return this.findAppliedPerk(perk)
+                .map(appliedPerk -> appliedPerk.getAllocationCount(type))
+                .orElse(0);
+    }
+
+    public int getTotalAllocations(AbstractPerk perk) {
+        return this.findAppliedPerk(perk)
+                .map(AppliedPerk::getTotalAllocationCount)
+                .orElse(0);
     }
 
     protected boolean canSealPerk(AbstractPerk perk) {
@@ -137,36 +143,31 @@ public class PlayerPerkData {
         return true;
     }
 
-    public boolean applyPerkAllocation(AbstractPerk perk, AllocationType type) {
-        AppliedPerk appliedPerk = this.perks.get(perk);
-        if (appliedPerk == null) {
-            appliedPerk = new AppliedPerk(perk);
-            this.perks.put(perk, appliedPerk);
-            return appliedPerk.applicationTypes.add(type);
-        } else {
-            if (appliedPerk.isAllocated(type)) {
-                return false;
-            }
-            return appliedPerk.applicationTypes.add(type);
+    public boolean applyPerkAllocation(AbstractPerk perk, PlayerPerkAllocation allocation, boolean simulate) {
+        if (simulate && !this.perks.containsKey(perk)) {
+            return true;
         }
+        AppliedPerk appliedPerk = this.perks.computeIfAbsent(perk, AppliedPerk::new);
+        return appliedPerk.addAllocation(allocation, simulate);
     }
 
-    public boolean removePerkAllocation(AbstractPerk perk, AllocationType type) {
+    public PerkRemovalResult removePerkAllocation(AbstractPerk perk, PlayerPerkAllocation allocation, boolean simulate) {
         AppliedPerk appliedPerk = this.perks.get(perk);
         if (appliedPerk == null) {
-            return false;
+            return PerkRemovalResult.FAILURE;
         }
-        if (appliedPerk.isAllocated(type)) {
-            if (!appliedPerk.removeAllocation(type)) {
-                return false;
+        if (appliedPerk.isAllocated(allocation.getType())) {
+            PerkRemovalResult result = appliedPerk.removeAllocation(allocation, simulate);
+            if (result.isFailure()) {
+                return result;
             }
-            if (appliedPerk.getApplicationTypes().isEmpty()) {
-                if (this.perks.remove(perk) != null) {
-                    return true;
-                }
+
+            if (!simulate && result == PerkRemovalResult.REMOVE_PERK) {
+                this.perks.remove(perk);
             }
+            return result;
         }
-        return false;
+        return PerkRemovalResult.FAILURE;
     }
 
     @Nullable
@@ -211,7 +212,7 @@ public class PlayerPerkData {
     }
 
     public int getAvailablePerkPoints(PlayerEntity player, LogicalSide side) {
-        int allocatedPerks = (int) this.perks.values().stream().filter(perk -> perk.isAllocated(AllocationType.UNLOCKED)).count() - 1;
+        int allocatedPerks = (int) this.perks.values().stream().filter(perk -> perk.isAllocated(PerkAllocationType.UNLOCKED)).count() - 1;
         int allocationLevels = PerkLevelManager.getLevel(getPerkExp(), player, side);
         return (allocationLevels + this.freePointTokens.size()) - allocatedPerks;
     }
@@ -271,8 +272,8 @@ public class PlayerPerkData {
                 AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(LogicalSide.SERVER, progress.getAttunedConstellation());
                 if (root != null) {
                     AppliedPerk newPerk = new AppliedPerk(root);
-                    newPerk.applicationTypes.add(AllocationType.UNLOCKED);
-                    root.onUnlockPerkServer(null, AllocationType.UNLOCKED, progress, newPerk.getPerkData());
+                    newPerk.addAllocation(PlayerPerkAllocation.unlock(), false);
+                    root.onUnlockPerkServer(null, PerkAllocationType.UNLOCKED, progress, newPerk.getPerkData());
                     this.perks.put(root, newPerk);
                 }
             }
@@ -355,8 +356,8 @@ public class PlayerPerkData {
                 AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(LogicalSide.SERVER, progress.getAttunedConstellation());
                 if (root != null) {
                     AppliedPerk newPerk = new AppliedPerk(root);
-                    newPerk.applicationTypes.add(AllocationType.UNLOCKED);
-                    root.onUnlockPerkServer(null, AllocationType.UNLOCKED, progress, newPerk.getPerkData());
+                    newPerk.addAllocation(PlayerPerkAllocation.unlock(), false);
+                    root.onUnlockPerkServer(null, PerkAllocationType.UNLOCKED, progress, newPerk.getPerkData());
                     this.perks.put(root, newPerk);
                 }
             }
@@ -369,7 +370,7 @@ public class PlayerPerkData {
                     CompoundNBT data = tag.getCompound("perkData");
                     PerkTree.PERK_TREE.getPerk(LogicalSide.SERVER, new ResourceLocation(perkRegName)).ifPresent(perk -> {
                         AppliedPerk appliedPerk = new AppliedPerk(perk);
-                        appliedPerk.applicationTypes.add(AllocationType.UNLOCKED);
+                        appliedPerk.addAllocation(PlayerPerkAllocation.unlock(), false);
                         appliedPerk.perkData = data;
                         this.perks.put(perk, appliedPerk);
                     });
@@ -405,11 +406,12 @@ public class PlayerPerkData {
     public static class AppliedPerk {
 
         private static final String SEALED_KEY = "sealed";
+        private static final String APPLICATION_KEYS = "application";
 
         private final AbstractPerk perk;
         private CompoundNBT perkData = new CompoundNBT();
         private CompoundNBT applicationData = new CompoundNBT();
-        private Set<AllocationType> applicationTypes = new HashSet<>();
+        private Set<PerkAllocationType> applicationTypes = new HashSet<>();
 
         public AppliedPerk(AbstractPerk perk) {
             this.perk = perk;
@@ -440,15 +442,120 @@ public class PlayerPerkData {
             return this.applicationData;
         }
 
-        public boolean isAllocated(AllocationType type) {
+        private int getTotalAllocationCount() {
+            int sum = 0;
+            for (PerkAllocationType type : PerkAllocationType.values()) {
+                sum += getAllocationCount(type);
+            }
+            return sum;
+        }
+
+        private int getAllocationCount(PerkAllocationType type) {
+            CompoundNBT metaData = this.getApplicationData();
+            if (!metaData.contains(APPLICATION_KEYS, Constants.NBT.TAG_COMPOUND)) {
+                return 0;
+            }
+            CompoundNBT applicationMeta = metaData.getCompound(APPLICATION_KEYS);
+            ListNBT allocations = applicationMeta.getList(type.getSaveKey(), Constants.NBT.TAG_COMPOUND);
+            return allocations.size();
+        }
+
+        public boolean isAllocated(PerkAllocationType type) {
             return this.applicationTypes.contains(type);
         }
 
-        private boolean removeAllocation(AllocationType type) {
-            return this.applicationTypes.remove(type);
+        private PerkRemovalResult removeAllocation(PlayerPerkAllocation type, boolean simulate) {
+            CompoundNBT metaData = this.getApplicationData();
+            if (!metaData.contains(APPLICATION_KEYS, Constants.NBT.TAG_COMPOUND)) {
+                return PerkRemovalResult.FAILURE;
+            }
+            CompoundNBT applicationMeta = metaData.getCompound(APPLICATION_KEYS);
+            ListNBT allocations = applicationMeta.getList(type.getType().getSaveKey(), Constants.NBT.TAG_COMPOUND);
+            if (allocations.isEmpty()) {
+                return PerkRemovalResult.FAILURE;
+            }
+
+            boolean removedMatch = false;
+            UUID removeUUID = type.getLockUUID();
+            for (int i = 0; i < allocations.size(); i++) {
+                CompoundNBT tag = allocations.getCompound(i);
+                UUID lockUUID = tag.getUniqueId("uuid");
+                if (lockUUID.equals(removeUUID)) {
+                    if (!simulate) {
+                        allocations.remove(i);
+                    }
+                    removedMatch = true;
+                    break;
+                }
+            }
+            if (!removedMatch) {
+                return PerkRemovalResult.FAILURE;
+            }
+
+            if (simulate && allocations.size() <= 1) {
+                if (this.applicationTypes.size() > 1) {
+                    return PerkRemovalResult.REMOVE_ALLOCATION_TYPE;
+                } else {
+                    return PerkRemovalResult.REMOVE_PERK;
+                }
+            }
+            if (allocations.isEmpty()) {
+                this.applicationTypes.remove(type.getType());
+                if (this.applicationTypes.isEmpty()) {
+                    return PerkRemovalResult.REMOVE_PERK;
+                }
+                return PerkRemovalResult.REMOVE_ALLOCATION_TYPE;
+            }
+            return PerkRemovalResult.REMOVE_ALLOCATION;
         }
 
-        public Set<AllocationType> getApplicationTypes() {
+        public boolean addAllocation(PlayerPerkAllocation type, boolean simulate) {
+            if (!simulate) {
+                this.applicationTypes.add(type.getType());
+            }
+
+            CompoundNBT metaData = this.getApplicationData();
+            if (!metaData.contains(APPLICATION_KEYS, Constants.NBT.TAG_COMPOUND)) {
+                if (simulate) {
+                    return true;
+                }
+                metaData.put(APPLICATION_KEYS, new CompoundNBT());
+            }
+            CompoundNBT applicationMeta = metaData.getCompound(APPLICATION_KEYS);
+
+            String key = type.getType().getSaveKey();
+            if (!applicationMeta.contains(key, Constants.NBT.TAG_LIST)) {
+                if (simulate) {
+                    return true;
+                }
+                applicationMeta.put(key, new ListNBT());
+            }
+            ListNBT allocations = applicationMeta.getList(key, Constants.NBT.TAG_COMPOUND);
+
+            UUID newUUID = type.getLockUUID();
+            CompoundNBT newKeyTag = new CompoundNBT();
+            newKeyTag.putUniqueId("uuid", newUUID);
+
+            if (allocations.isEmpty()) {
+                if (!simulate) {
+                    allocations.add(newKeyTag);
+                }
+                return true;
+            }
+            for (int i = 0; i < allocations.size(); i++) {
+                CompoundNBT tag = allocations.getCompound(i);
+                UUID lockUUID = tag.getUniqueId("uuid");
+                if (lockUUID.equals(newUUID)) {
+                    return false;
+                }
+            }
+            if (simulate) {
+                return true;
+            }
+            return allocations.add(newKeyTag);
+        }
+
+        public Set<PerkAllocationType> getApplicationTypes() {
             return this.applicationTypes;
         }
 
@@ -473,7 +580,7 @@ public class PlayerPerkData {
                         appliedPerk.applicationData = tag.getCompound("applicationData");
                         int[] types = tag.getIntArray("applicationTypes");
                         appliedPerk.applicationTypes = IntStream.of(types)
-                                .mapToObj(type -> AllocationType.values()[type])
+                                .mapToObj(type -> PerkAllocationType.values()[type])
                                 .collect(Collectors.toSet());
                         return appliedPerk;
                     });
@@ -488,7 +595,7 @@ public class PlayerPerkData {
         private void read(PacketBuffer buf) {
             this.perkData = ByteBufUtils.readNBTTag(buf);
             this.applicationData = ByteBufUtils.readNBTTag(buf);
-            this.applicationTypes = ByteBufUtils.readSet(buf, buffer -> ByteBufUtils.readEnumValue(buffer, AllocationType.class));
+            this.applicationTypes = ByteBufUtils.readSet(buf, buffer -> ByteBufUtils.readEnumValue(buffer, PerkAllocationType.class));
         }
 
         @Override
@@ -503,12 +610,5 @@ public class PlayerPerkData {
         public int hashCode() {
             return Objects.hash(perk.getRegistryName());
         }
-    }
-
-    public enum AllocationType {
-
-        UNLOCKED,
-        GRANTED
-
     }
 }

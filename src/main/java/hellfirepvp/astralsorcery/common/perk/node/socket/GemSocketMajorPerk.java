@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk.node.socket;
 
-import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
+import hellfirepvp.astralsorcery.common.data.research.PerkAllocationType;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.lib.PerkNamesAS;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
@@ -60,10 +60,10 @@ public class GemSocketMajorPerk extends MajorPerk implements GemSocketPerk {
     }
 
     @Override
-    public void onRemovePerkServer(PlayerEntity player, PlayerPerkData.AllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {
+    public void onRemovePerkServer(PlayerEntity player, PerkAllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {
         super.onRemovePerkServer(player, allocationType, progress, dataStorage);
 
-        if (progress.getPerkData().getAllocationTypes(this).size() <= 1) {
+        if (!progress.getPerkData().hasPerkAllocation(this)) {
             dropItemToPlayer(player, dataStorage);
         }
     }

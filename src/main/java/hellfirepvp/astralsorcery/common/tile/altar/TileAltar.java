@@ -311,7 +311,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
                     posDistribution = 0.3F;
                 }
             }
-            float fieldAmount = posDistribution * posDistribution;
+            float fieldAmount = MathHelper.sqrt(posDistribution);
             fieldAmount *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
             this.collectStarlight(fieldAmount * altarTier * 65F, AltarCollectionCategory.FOSIC_FIELD);
         }
@@ -463,7 +463,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
 
         this.altarType = AltarType.values()[compound.getInt("altarType")];
         this.inventory = this.inventory.deserialize(compound.getCompound("inventory"));
-        this.focusItem = NBTHelper.readFromSubTag(compound, "focusItem", ItemStack::read);
+        this.focusItem = NBTHelper.getStack(compound, "focusItem");
         this.storedStarlight = compound.getInt("storedStarlight");
 
         if (compound.contains("activeRecipe", Constants.NBT.TAG_COMPOUND)) {
@@ -479,7 +479,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
 
         compound.putInt("altarType", this.altarType.ordinal());
         compound.put("inventory", this.inventory.serialize());
-        NBTHelper.setAsSubTag(compound, "focusItem", this.focusItem::write);
+        NBTHelper.setStack(compound, "focusItem", this.focusItem);
         compound.putInt("storedStarlight", this.storedStarlight);
 
         if (this.activeRecipe != null) {

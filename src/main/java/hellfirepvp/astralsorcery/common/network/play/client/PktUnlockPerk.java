@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.play.client;
 
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournalPerkTree;
-import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.data.research.*;
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.PerkTree;
@@ -96,8 +93,8 @@ public class PktUnlockPerk extends ASPacket<PktUnlockPerk> {
                         PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
                         if (prog.isValid()) {
                             PlayerPerkData perkData = prog.getPerkData();
-                            if (!perkData.hasPerkAllocation(perk, PlayerPerkData.AllocationType.UNLOCKED)) {
-                                if (perk.mayUnlockPerk(prog, player) && ResearchManager.applyPerk(player, perk, PlayerPerkData.AllocationType.UNLOCKED)) {
+                            if (!perkData.hasPerkAllocation(perk)) {
+                                if (perk.mayUnlockPerk(prog, player) && ResearchManager.applyPerk(player, perk, PlayerPerkAllocation.unlock())) {
                                     packet.replyWith(new PktUnlockPerk(true, perk), context);
                                 }
                             }

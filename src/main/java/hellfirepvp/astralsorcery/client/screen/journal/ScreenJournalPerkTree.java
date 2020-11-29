@@ -32,6 +32,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.ScreenTextEntry;
 import hellfirepvp.astralsorcery.client.util.draw.BufferContext;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.data.research.PerkAllocationType;
 import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
@@ -498,10 +499,10 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                 AllocationStatus status;
 
                 int alloc = 0;
-                if (perkData.hasPerkAllocation(perkConnection.getA(), PlayerPerkData.AllocationType.UNLOCKED)) {
+                if (perkData.hasPerkAllocation(perkConnection.getA(), PerkAllocationType.UNLOCKED)) {
                     alloc++;
                 }
-                if (perkData.hasPerkAllocation(perkConnection.getB(), PlayerPerkData.AllocationType.UNLOCKED)) {
+                if (perkData.hasPerkAllocation(perkConnection.getB(), PerkAllocationType.UNLOCKED)) {
                     alloc++;
                 }
                 if (alloc == 2) {
@@ -873,7 +874,10 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         for (Map.Entry<AbstractPerk, Rectangle.Float> rctPerk : this.thisFramePerks.entrySet()) {
             if (this.unlockPrimed.equals(rctPerk.getKey()) && rctPerk.getValue().contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
-                if (rctPerk.getKey().mayUnlockPerk(ResearchHelper.getClientProgress(), player)) {
+                AbstractPerk perk = rctPerk.getKey();
+                PlayerProgress prog = ResearchHelper.getClientProgress();
+                PlayerPerkData perkData = prog.getPerkData();
+                if (!perkData.hasPerkAllocation(perk) && perk.mayUnlockPerk(prog, player)) {
                     PktUnlockPerk pkt = new PktUnlockPerk(false, rctPerk.getKey());
                     PacketChannel.CHANNEL.sendToServer(pkt);
                     break;

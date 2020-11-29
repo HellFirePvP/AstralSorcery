@@ -29,6 +29,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
+import org.apache.commons.lang3.ObjectUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -341,7 +342,7 @@ public class NBTHelper {
     }
 
     public static ItemStack getStack(CompoundNBT compound, String tag) {
-        return readFromSubTag(compound, tag, ItemStack::read);
+        return ObjectUtils.firstNonNull(readFromSubTag(compound, tag, ItemStack::read), ItemStack.EMPTY);
     }
 
     public static void setFluid(CompoundNBT compound, String tag, FluidStack stack) {
@@ -349,7 +350,7 @@ public class NBTHelper {
     }
 
     public static FluidStack getFluid(CompoundNBT compound, String tag) {
-        return readFromSubTag(compound, tag, FluidStack::loadFluidStackFromNBT);
+        return ObjectUtils.firstNonNull(readFromSubTag(compound, tag, FluidStack::loadFluidStackFromNBT), FluidStack.EMPTY);
     }
 
     public static void removeUUID(CompoundNBT compound, String key) {
