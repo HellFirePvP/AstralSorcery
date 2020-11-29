@@ -379,10 +379,10 @@ public class ResearchManager {
                 if (removeResult.removesPerk()) {
                     PerkEffectHelper.modifySource(player, side, perk, PerkEffectHelper.Action.REMOVE);
                 }
-                PerkRemovalResult actualResult = perkData.removePerkAllocation(perk, allocation, false);
-                if (actualResult.removesAllocationType()) {
+                if (removeResult.removesAllocationType()) {
                     perk.onRemovePerkServer(player, allocation.getType(), progress, data);
                 }
+                PerkRemovalResult actualResult = perkData.removePerkAllocation(perk, allocation, false);
                 if (actualResult.removesPerk()) {
                     if (sync) {
                         PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.REMOVE));

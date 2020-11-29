@@ -63,7 +63,8 @@ public class GemSocketMajorPerk extends MajorPerk implements GemSocketPerk {
     public void onRemovePerkServer(PlayerEntity player, PerkAllocationType allocationType, PlayerProgress progress, CompoundNBT dataStorage) {
         super.onRemovePerkServer(player, allocationType, progress, dataStorage);
 
-        if (!progress.getPerkData().hasPerkAllocation(this)) {
+        // Will be removed?
+        if (progress.getPerkData().getAllocationTypes(this).size() <= 1) {
             dropItemToPlayer(player, dataStorage);
         }
     }

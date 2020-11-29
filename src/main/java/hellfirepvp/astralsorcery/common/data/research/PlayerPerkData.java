@@ -68,6 +68,12 @@ public class PlayerPerkData {
                 .collect(Collectors.toList());
     }
 
+    public Collection<PerkAllocationType> getAllocationTypes(AbstractPerk perk) {
+        return this.findAppliedPerk(perk)
+                .map(AppliedPerk::getApplicationTypes)
+                .orElse(Collections.emptySet());
+    }
+
     public boolean hasPerkEffect(Predicate<AbstractPerk> perkMatch) {
         return hasPerkAllocation(perkMatch) && !isPerkSealed(perkMatch);
     }
@@ -88,18 +94,6 @@ public class PlayerPerkData {
         return this.findAppliedPerk(perk)
                 .map(appliedPerk -> appliedPerk.isAllocated(type))
                 .orElse(false);
-    }
-
-    public int getAllocations(AbstractPerk perk, PerkAllocationType type) {
-        return this.findAppliedPerk(perk)
-                .map(appliedPerk -> appliedPerk.getAllocationCount(type))
-                .orElse(0);
-    }
-
-    public int getTotalAllocations(AbstractPerk perk) {
-        return this.findAppliedPerk(perk)
-                .map(AppliedPerk::getTotalAllocationCount)
-                .orElse(0);
     }
 
     protected boolean canSealPerk(AbstractPerk perk) {
