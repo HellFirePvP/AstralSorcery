@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.block.infusedwood.*;
 import hellfirepvp.astralsorcery.common.block.marble.*;
 import hellfirepvp.astralsorcery.common.block.ore.BlockAquamarineSandOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockRockCrystalOre;
+import hellfirepvp.astralsorcery.common.block.ore.BlockStarmetal;
 import hellfirepvp.astralsorcery.common.block.ore.BlockStarmetalOre;
 import hellfirepvp.astralsorcery.common.block.tile.*;
 import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarAttunement;
@@ -90,6 +91,7 @@ public class RegistryBlocks {
         AQUAMARINE_SAND_ORE   = registerBlock(new BlockAquamarineSandOre());
         ROCK_CRYSTAL_ORE      = registerBlock(new BlockRockCrystalOre());
         STARMETAL_ORE         = registerBlock(new BlockStarmetalOre());
+        STARMETAL             = registerBlock(new BlockStarmetal());
         GLOW_FLOWER           = registerBlock(new BlockGlowFlower());
 
         SPECTRAL_RELAY              = registerBlock(new BlockSpectralRelay());

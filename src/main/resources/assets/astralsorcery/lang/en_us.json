@@ -634,8 +634,9 @@
   "block.astralsorcery.infused_wood_slab": "Infused Wood Slab",
 
   "block.astralsorcery.rock_crystal_ore": "Rock Crystal Ore",
-  "block.astralsorcery.starmetal_ore": "Starmetal Ore",
   "block.astralsorcery.aquamarine_sand_ore": "Aquamarine Shale",
+  "block.astralsorcery.starmetal_ore": "Starmetal Ore",
+  "block.astralsorcery.starmetal": "Block of Starmetal",
   "block.astralsorcery.glow_flower": "Faint Amaranth",
 
   "block.astralsorcery.rock_collector_crystal": "Collector Crystal",

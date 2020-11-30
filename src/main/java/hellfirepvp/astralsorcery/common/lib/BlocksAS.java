@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.block.infusedwood.*;
 import hellfirepvp.astralsorcery.common.block.marble.*;
 import hellfirepvp.astralsorcery.common.block.ore.BlockAquamarineSandOre;
 import hellfirepvp.astralsorcery.common.block.ore.BlockRockCrystalOre;
+import hellfirepvp.astralsorcery.common.block.ore.BlockStarmetal;
 import hellfirepvp.astralsorcery.common.block.ore.BlockStarmetalOre;
 import hellfirepvp.astralsorcery.common.block.tile.*;
 import hellfirepvp.astralsorcery.common.block.tile.altar.BlockAltarAttunement;
@@ -71,6 +72,7 @@ public class BlocksAS {
     public static BlockAquamarineSandOre AQUAMARINE_SAND_ORE;
     public static BlockRockCrystalOre    ROCK_CRYSTAL_ORE;
     public static BlockStarmetalOre      STARMETAL_ORE;
+    public static BlockStarmetal         STARMETAL;
     public static BlockGlowFlower        GLOW_FLOWER;
 
     public static BlockSpectralRelay             SPECTRAL_RELAY;

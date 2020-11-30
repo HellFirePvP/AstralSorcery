@@ -211,11 +211,11 @@ public class RadianceAltarRecipeProvider {
                 .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
                 .build(registrar);
 
-        registerShiftingStarRecipe(registrar, ConstellationsAS.aevitas, ItemsAS.SHIFTING_STAR_AEVITAS);
-        registerShiftingStarRecipe(registrar, ConstellationsAS.armara, ItemsAS.SHIFTING_STAR_ARMARA);
-        registerShiftingStarRecipe(registrar, ConstellationsAS.discidia, ItemsAS.SHIFTING_STAR_DISCIDIA);
-        registerShiftingStarRecipe(registrar, ConstellationsAS.evorsio, ItemsAS.SHIFTING_STAR_EVORSIO);
-        registerShiftingStarRecipe(registrar, ConstellationsAS.vicio, ItemsAS.SHIFTING_STAR_VICIO);
+        //registerShiftingStarRecipe(registrar, ConstellationsAS.aevitas, ItemsAS.SHIFTING_STAR_AEVITAS);
+        //registerShiftingStarRecipe(registrar, ConstellationsAS.armara, ItemsAS.SHIFTING_STAR_ARMARA);
+        //registerShiftingStarRecipe(registrar, ConstellationsAS.discidia, ItemsAS.SHIFTING_STAR_DISCIDIA);
+        //registerShiftingStarRecipe(registrar, ConstellationsAS.evorsio, ItemsAS.SHIFTING_STAR_EVORSIO);
+        //registerShiftingStarRecipe(registrar, ConstellationsAS.vicio, ItemsAS.SHIFTING_STAR_VICIO);
     }
 
     private static void registerShiftingStarRecipe(Consumer<IFinishedRecipe> registrar, IMajorConstellation constellation, Item shiftingStarItem) {
@@ -248,9 +248,9 @@ public class RadianceAltarRecipeProvider {
     private static void registerConstellationRecipes(Consumer<IFinishedRecipe> registrar) {
         RegistriesAS.REGISTRY_CONSTELLATIONS.forEach(cst -> {
             if (Mods.ASTRAL_SORCERY.owns(cst)) {
-                registerConstellationPaperRecipe(registrar, cst);
+                //registerConstellationPaperRecipe(registrar, cst);
                 if (cst instanceof IWeakConstellation) {
-                    registerMantleRecipe(registrar, (IWeakConstellation) cst);
+                    //registerMantleRecipe(registrar, (IWeakConstellation) cst);
                 }
             }
         });

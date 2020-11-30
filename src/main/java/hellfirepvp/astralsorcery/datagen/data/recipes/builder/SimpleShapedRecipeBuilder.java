@@ -143,7 +143,7 @@ public class SimpleShapedRecipeBuilder {
         }
     }
 
-    public class Result implements IFinishedRecipe {
+    public static class Result implements IFinishedRecipe {
 
         private final ResourceLocation id;
         private final ItemStack result;

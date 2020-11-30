@@ -63,6 +63,7 @@ public class RegistryBlockRenderTypes {
         setRenderLayer(AQUAMARINE_SAND_ORE, RenderType.getSolid(), RenderType.getTranslucent());
         setRenderLayer(ROCK_CRYSTAL_ORE,    RenderType.getSolid(), RenderType.getTranslucent());
         setRenderLayer(STARMETAL_ORE,       RenderType.getSolid(), RenderType.getTranslucent());
+        setRenderLayer(STARMETAL,           RenderType.getSolid());
         setRenderLayer(GLOW_FLOWER,         RenderType.getCutout());
 
         setRenderLayer(SPECTRAL_RELAY,              RenderType.getSolid(), RenderType.getTranslucent());

@@ -93,6 +93,7 @@ public class AstralBlockStateMappingProvider extends BlockStateProvider {
         this.multiLayerBlockState(BlocksAS.AQUAMARINE_SAND_ORE);
         this.multiLayerBlockState(BlocksAS.ROCK_CRYSTAL_ORE);
         this.multiLayerBlockState(BlocksAS.STARMETAL_ORE);
+        this.simpleBlockState(BlocksAS.STARMETAL);
         this.simpleBlockState(BlocksAS.GLOW_FLOWER);
 
         this.multiLayerBlockState(BlocksAS.SPECTRAL_RELAY);

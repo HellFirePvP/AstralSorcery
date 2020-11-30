@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.datagen.data.recipes.vanilla;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
@@ -202,6 +201,16 @@ public class VanillaTypedRecipeProvider {
                 .key('M', BlocksAS.BLACK_MARBLE_RAW)
                 .subDirectory("black_marble")
                 .build(registrar);
+
+        SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.STARMETAL)
+                .patternLine("III")
+                .patternLine("III")
+                .patternLine("III")
+                .key('I', ItemsAS.STARMETAL_INGOT)
+                .build(registrar);
+        //ShapelessRecipeBuilder.shapelessRecipe(ItemsAS.STARMETAL_INGOT, 9) TODO i guess..
+        //        .addIngredient(BlocksAS.STARMETAL)
+        //        .build(registrar);
     }
 
     public static void registerCookingRecipes(Consumer<IFinishedRecipe> registrar) {

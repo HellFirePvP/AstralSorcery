@@ -42,6 +42,14 @@ public class PropertiesMisc {
                 .sound(SoundType.STONE);
     }
 
+    public static Block.Properties defaultMetal(MaterialColor color) {
+        return Block.Properties.create(Material.IRON, color)
+                .hardnessAndResistance(1.5F, 6.0F)
+                .harvestTool(ToolType.PICKAXE)
+                .harvestLevel(1)
+                .sound(SoundType.METAL);
+    }
+
     public static Block.Properties defaultPlant() {
         return Block.Properties.create(Material.PLANTS)
                 .doesNotBlockMovement()

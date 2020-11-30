@@ -85,6 +85,7 @@ public class BlockLootTableProvider extends BlockLootTables {
                     );
         });
         this.registerDropSelfLootTable(STARMETAL_ORE);
+        this.registerDropSelfLootTable(STARMETAL);
         this.registerLootTable(GLOW_FLOWER, (block) -> {
             return droppingWithShears(block,
                     ItemLootEntry.builder(Items.GLOWSTONE_DUST)
