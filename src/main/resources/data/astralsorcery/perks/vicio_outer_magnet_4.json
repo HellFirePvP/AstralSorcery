@@ -4,6 +4,7 @@
   "x": 28.0,
   "y": 74.0,
   "name": "perk.astralsorcery.key.magnet_drops",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:vicio_outer_magnet_3"

@@ -4,6 +4,7 @@
   "x": 31.0,
   "y": 20.0,
   "name": "perk.astralsorcery.generic.inc.move_speed",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:evorsio"

@@ -4,6 +4,7 @@
   "x": 25.0,
   "y": 53.0,
   "name": "perk.astralsorcery.key.plant_growth",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:aevitas_plant_growth_2"

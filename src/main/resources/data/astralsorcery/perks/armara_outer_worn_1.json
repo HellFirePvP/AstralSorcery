@@ -4,17 +4,18 @@
   "x": 70.0,
   "y": 62.0,
   "name": "perk.astralsorcery.hybrid.armor_armor_toughness",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
-      {
-        "type": "astralsorcery:armor",
-        "mode": "ADDITION",
-        "value": 1.0
-      },
       {
         "type": "astralsorcery:armortoughness",
         "mode": "ADDITION",
         "value": 0.5
+      },
+      {
+        "type": "astralsorcery:armor",
+        "mode": "ADDITION",
+        "value": 1.0
       }
     ]
   },

@@ -4,15 +4,16 @@
   "x": 21.0,
   "y": 22.0,
   "name": "perk.astralsorcery.hybrid.reach_movespeed",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {
-        "type": "astralsorcery:perkeffect",
+        "type": "astralsorcery:movespeed",
         "mode": "ADDED_MULTIPLY",
         "value": 0.02
       },
       {
-        "type": "astralsorcery:movespeed",
+        "type": "astralsorcery:perkeffect",
         "mode": "ADDED_MULTIPLY",
         "value": 0.02
       },

@@ -4,6 +4,7 @@
   "x": 40.0,
   "y": 70.0,
   "name": "perk.astralsorcery.vicio",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:vicio"

@@ -98,15 +98,6 @@ public class SimpleShapedRecipeBuilder {
         this.build(consumerIn, ForgeRegistries.ITEMS.getKey(this.result.getItem()));
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
-        ResourceLocation resourcelocation = ForgeRegistries.ITEMS.getKey(this.result.getItem());
-        if ((new ResourceLocation(save)).equals(resourcelocation)) {
-            throw new IllegalStateException("Shaped Recipe " + save + " should remove its 'save' argument");
-        } else {
-            this.build(consumerIn, new ResourceLocation(save));
-        }
-    }
-
     public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
         this.validate(id);
         String path = id.getPath();

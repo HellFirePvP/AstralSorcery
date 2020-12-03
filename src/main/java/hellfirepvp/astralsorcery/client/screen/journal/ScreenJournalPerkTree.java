@@ -496,6 +496,10 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         TexturesAS.TEX_GUI_LINE_CONNECTION.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             for (Tuple<AbstractPerk, AbstractPerk> perkConnection : PerkTree.PERK_TREE.getConnections()) {
+                if (!perkConnection.getA().isVisible(progress, player) ||
+                        !perkConnection.getB().isVisible(progress, player)) {
+                    continue;
+                }
                 AllocationStatus status;
 
                 int alloc = 0;
@@ -524,13 +528,17 @@ public class ScreenJournalPerkTree extends ScreenJournal {
 
         List<Runnable> renderDynamic = Lists.newArrayList();
         for (PerkTreePoint<?> perkPoint : PerkTree.PERK_TREE.getPerkPoints(LogicalSide.CLIENT)) {
+            AbstractPerk perk = perkPoint.getPerk();
+            if (!perk.isVisible(progress, player)) {
+                continue;
+            }
             Point.Float offset = perkPoint.getOffset();
             Rectangle.Float perkRect = drawPerk(drawBuffer, renderStack, perkPoint,
                     partialTicks, ClientScheduler.getClientTick() + (int) offset.x + (int) offset.y,
-                    perkData.isPerkSealed(perkPoint.getPerk()),
+                    perkData.isPerkSealed(perk),
                     renderDynamic);
             if (perkRect != null) {
-                this.thisFramePerks.put(perkPoint.getPerk(), perkRect);
+                this.thisFramePerks.put(perk, perkRect);
             }
         }
 

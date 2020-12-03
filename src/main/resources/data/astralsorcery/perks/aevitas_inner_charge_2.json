@@ -4,6 +4,7 @@
   "x": 30.0,
   "y": 50.0,
   "name": "perk.astralsorcery.hybrid.charge_max_regen",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

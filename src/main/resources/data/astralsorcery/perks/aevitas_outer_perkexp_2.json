@@ -4,6 +4,7 @@
   "x": 4.0,
   "y": 47.0,
   "name": "perk.astralsorcery.named.sage",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

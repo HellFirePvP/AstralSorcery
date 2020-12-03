@@ -5,6 +5,9 @@
 
   "astralsorcery.command.argument.constellation.notfound": "Constellation not found.",
 
+  "death.attack.astralsorcery.stellar": "%1$s disintegrated into Stardust",
+  "death.attack.astralsorcery.bleed": "%1$s bled to death",
+
   "jei.category.astralsorcery.well": "Lightwell",
   "jei.category.astralsorcery.infuser": "Starlight Infusion",
   "jei.category.astralsorcery.interaction": "Liquid Interaction",
@@ -810,7 +813,6 @@
   "perk.info.astralsorcery.available": "Available",
   "perk.info.astralsorcery.active": "Active",
   "perk.info.astralsorcery.points": "Available points: %s",
-  "perk.info.astralsorcery.disabled": "Perk effects disabled in your modpack.",
   "perk.info.astralsorcery.missing_progress": "You're unable to grasp the effects of this perk.",
   "perk.info.astralsorcery.sealed": "Sealed",
   "perk.info.astralsorcery.sealed.break": "[Double-click to break]",

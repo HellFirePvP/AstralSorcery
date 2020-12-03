@@ -4,6 +4,7 @@
   "x": 34.0,
   "y": 21.0,
   "name": "perk.astralsorcery.key.dig_types",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:evorsio_digtypes_2"

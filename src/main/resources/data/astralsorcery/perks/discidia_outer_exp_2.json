@@ -4,6 +4,7 @@
   "x": 71.0,
   "y": 19.0,
   "name": "perk.astralsorcery.generic.inc.proj_speed",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

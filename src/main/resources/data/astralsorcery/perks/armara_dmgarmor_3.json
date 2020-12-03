@@ -4,6 +4,7 @@
   "x": 51.0,
   "y": 51.0,
   "name": "perk.astralsorcery.key.damage_armor",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:armara_dmgarmor_2"

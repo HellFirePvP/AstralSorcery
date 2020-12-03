@@ -47,6 +47,7 @@
   ],
   "effects": [
     "astralsorcery:built_in_effect_constellation_finish",
+    "astralsorcery:liquid_burst",
     "astralsorcery:built_in_effect_trait_relay_highlight",
     "astralsorcery:built_in_effect_discovery_central_beam",
     "astralsorcery:built_in_effect_trait_focus_circle",

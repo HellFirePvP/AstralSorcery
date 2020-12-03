@@ -29,6 +29,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -104,18 +105,18 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
     }
 
     default public IConstellation addSignatureItem(ItemStack item) {
-        return this;//.addSignatureItem(Ingredient.fromStacks(item));
+        return this.addSignatureItem(() -> Ingredient.fromStacks(item));
     }
 
     default public IConstellation addSignatureItem(IItemProvider item) {
-        return this;//.addSignatureItem(Ingredient.fromItems(item));
+        return this.addSignatureItem(() -> Ingredient.fromItems(item));
     }
 
     default public IConstellation addSignatureItem(ITag<Item> tag) {
-        return this;//.addSignatureItem(Ingredient.fromTag(tag));
+        return this.addSignatureItem(() -> Ingredient.fromTag(tag));
     }
 
-    public IConstellation addSignatureItem(Ingredient item);
+    public IConstellation addSignatureItem(Supplier<Ingredient> ingredient);
 
     public Color getConstellationColor();
 

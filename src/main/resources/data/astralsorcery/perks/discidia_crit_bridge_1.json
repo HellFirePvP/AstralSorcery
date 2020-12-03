@@ -4,6 +4,7 @@
   "x": 53.0,
   "y": 24.0,
   "name": "perk.astralsorcery.generic.add.crit_chance",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:discidia"

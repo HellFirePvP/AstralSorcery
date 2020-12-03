@@ -4,18 +4,19 @@
   "x": 42.0,
   "y": 2.0,
   "name": "perk.astralsorcery.special.connector.discidia",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:discidia"
     ],
     "modifiers": [
       {
-        "type": "astralsorcery:perkeffect",
+        "type": "astralsorcery:expgain",
         "mode": "ADDED_MULTIPLY",
         "value": 0.02
       },
       {
-        "type": "astralsorcery:expgain",
+        "type": "astralsorcery:perkeffect",
         "mode": "ADDED_MULTIPLY",
         "value": 0.02
       }

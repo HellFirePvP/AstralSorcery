@@ -4,6 +4,7 @@
   "x": 38.0,
   "y": 67.0,
   "name": "perk.astralsorcery.generic.inc.reach",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:vicio"

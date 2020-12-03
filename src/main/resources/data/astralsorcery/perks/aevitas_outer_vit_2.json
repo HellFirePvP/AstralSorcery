@@ -4,6 +4,7 @@
   "x": 2.0,
   "y": 41.0,
   "name": "perk.astralsorcery.generic.inc.life_recovery",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

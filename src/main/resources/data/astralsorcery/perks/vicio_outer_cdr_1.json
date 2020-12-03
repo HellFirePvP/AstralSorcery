@@ -4,6 +4,7 @@
   "x": 47.0,
   "y": 76.0,
   "name": "perk.astralsorcery.generic.inc.cooldown_reduction",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

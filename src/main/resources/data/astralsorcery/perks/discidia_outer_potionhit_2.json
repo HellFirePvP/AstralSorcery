@@ -4,6 +4,7 @@
   "x": 66.0,
   "y": 25.0,
   "name": "perk.astralsorcery.generic.inc.attack_speed",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

@@ -4,6 +4,7 @@
   "x": 16.0,
   "y": 8.0,
   "name": "perk.astralsorcery.named.geologic_prowess",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

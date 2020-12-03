@@ -4,6 +4,7 @@
   "x": 59.0,
   "y": 8.0,
   "name": "perk.astralsorcery.generic.inc.bleed_duration",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

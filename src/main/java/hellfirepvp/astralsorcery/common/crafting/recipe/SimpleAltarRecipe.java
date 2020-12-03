@@ -92,10 +92,10 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
             case RADIANCE:
                 this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_TRAIT_FOCUS_CIRCLE);
                 this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_TRAIT_RELAY_HIGHLIGHT);
-                this.addAltarEffect(AltarRecipeEffectsAS.ALTAR_DEFAULT_SPARKLE);
             case CONSTELLATION:
                 this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_CONSTELLATION_LINES);
                 this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_CONSTELLATION_FINISH);
+                this.addAltarEffect(AltarRecipeEffectsAS.ALTAR_DEFAULT_SPARKLE);
             case ATTUNEMENT:
                 this.addAltarEffect(AltarRecipeEffectsAS.BUILTIN_ATTUNEMENT_SPARKLE);
             case DISCOVERY:

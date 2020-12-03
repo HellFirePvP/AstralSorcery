@@ -4,6 +4,7 @@
   "x": 32.0,
   "y": 41.0,
   "name": "perk.astralsorcery.key.aoe_effect",
+  "hiddenUnlessAllocated": false,
   "data": {
     "enchantments": [
       {

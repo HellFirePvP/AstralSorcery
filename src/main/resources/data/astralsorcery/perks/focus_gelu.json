@@ -4,6 +4,7 @@
   "x": 10.0,
   "y": 11.0,
   "name": "perk.astralsorcery.special.focus.gelu",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:gelu"

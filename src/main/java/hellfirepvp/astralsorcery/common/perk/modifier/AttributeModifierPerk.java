@@ -60,17 +60,7 @@ public class AttributeModifierPerk extends AttributeConverterPerk implements Att
     }
 
     @Override
-    protected void applyEffectMultiplier(float multiplier) {
-        super.applyEffectMultiplier(multiplier);
-
-        this.modifiers.forEach(t -> t.multiplyValue(multiplier));
-    }
-
-    @Override
     public Collection<PerkAttributeModifier> getModifiers(PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
-        if (modifiersDisabled(player, side)) {
-            return Collections.emptyList();
-        }
         if (!ignoreRequirements && ResearchHelper.getProgress(player, side).getPerkData().isPerkSealed(this)) {
             return Collections.emptyList();
         }

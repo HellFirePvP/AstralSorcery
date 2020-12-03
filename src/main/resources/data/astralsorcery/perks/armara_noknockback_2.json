@@ -4,6 +4,7 @@
   "x": 60.0,
   "y": 40.0,
   "name": "perk.astralsorcery.generic.add.life",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

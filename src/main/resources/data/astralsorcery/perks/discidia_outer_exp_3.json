@@ -4,17 +4,18 @@
   "x": 70.0,
   "y": 18.0,
   "name": "perk.astralsorcery.named.finesse",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
-      {
-        "type": "astralsorcery:expgain",
-        "mode": "ADDED_MULTIPLY",
-        "value": 0.14
-      },
       {
         "type": "astralsorcery:projectilespeed",
         "mode": "ADDED_MULTIPLY",
         "value": 0.08
+      },
+      {
+        "type": "astralsorcery:expgain",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.14
       }
     ]
   },

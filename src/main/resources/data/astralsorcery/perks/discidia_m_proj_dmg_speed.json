@@ -4,20 +4,21 @@
   "x": 55.0,
   "y": 23.0,
   "name": "perk.astralsorcery.named.deadly_draw",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:discidia"
     ],
     "modifiers": [
       {
-        "type": "astralsorcery:projectilespeed",
-        "mode": "ADDED_MULTIPLY",
-        "value": 0.2
-      },
-      {
         "type": "astralsorcery:projectileattackdamage",
         "mode": "ADDED_MULTIPLY",
         "value": 0.05
+      },
+      {
+        "type": "astralsorcery:projectilespeed",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.2
       }
     ]
   },

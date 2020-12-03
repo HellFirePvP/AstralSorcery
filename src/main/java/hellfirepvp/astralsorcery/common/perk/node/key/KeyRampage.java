@@ -57,12 +57,12 @@ public class KeyRampage extends KeyPerk {
             LogicalSide side = this.getSide(player);
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
             if (side.isServer() && prog.getPerkData().hasPerkEffect(this)) {
-                float ch = (float) this.applyMultiplierD(CONFIG.rampageChance.get());
+                float ch = CONFIG.rampageChance.get().floatValue();
                 ch = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, ch);
                 if (rand.nextFloat() < ch) {
 
-                    int dur = (int) this.applyMultiplierD(CONFIG.rampageDuration.get());
+                    int dur = CONFIG.rampageDuration.get();
                     dur = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_RAMPAGE_DURATION, dur));
                     dur = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)

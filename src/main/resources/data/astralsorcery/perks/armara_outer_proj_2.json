@@ -4,6 +4,7 @@
   "x": 76.0,
   "y": 31.0,
   "name": "perk.astralsorcery.generic.inc.damage_proj",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

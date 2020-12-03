@@ -60,7 +60,7 @@ public class KeyDisarm extends KeyPerk {
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
             if (prog.getPerkData().hasPerkEffect(this)) {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.dropChance.get()));
+                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, CONFIG.dropChance.get().floatValue());
                 float currentChance = MathHelper.clamp(chance, 0F, 1F);
                 for (EquipmentSlotType slot : EquipmentSlotType.values()) {
                     if (rand.nextFloat() >= currentChance) {

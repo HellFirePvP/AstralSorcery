@@ -32,7 +32,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -85,7 +84,7 @@ public class CategoryAltar extends JEICategory<SimpleAltarRecipe> {
             RenderSystem.enableBlend();
             Blending.DEFAULT.apply();
             IConstellation cst = recipe.getFocusConstellation();
-            RenderingConstellationUtils.renderConstellationIntoGUI(Color.BLACK, cst,
+            RenderingConstellationUtils.renderConstellationIntoGUI(Color.BLACK, cst, matrixStack,
                     0, 0, 0,
                     50, 50, 1.2F,
                     () -> 0.9F, true, false);

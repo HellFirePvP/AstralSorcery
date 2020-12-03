@@ -4,6 +4,7 @@
   "x": 40.0,
   "y": 40.0,
   "name": "perk.astralsorcery.gem_socket",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": []
 }

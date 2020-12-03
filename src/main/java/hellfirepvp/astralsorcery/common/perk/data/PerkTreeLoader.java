@@ -74,6 +74,9 @@ public class PerkTreeLoader extends JsonReloadListener {
                 String name = JSONUtils.getString(serializedPerkData, "name");
                 perk.setName(name);
             }
+            if (serializedPerkData.has("hiddenUnlessAllocated")) {
+                perk.setHiddenUnlessAllocated(JSONUtils.getBoolean(serializedPerkData, "hiddenUnlessAllocated"));
+            }
 
             if (serializedPerkData.has("data")) {
                 JsonObject perkData = JSONUtils.getJsonObject(serializedPerkData, "data");

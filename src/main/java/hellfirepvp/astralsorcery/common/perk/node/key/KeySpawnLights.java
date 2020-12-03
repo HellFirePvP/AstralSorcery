@@ -21,7 +21,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
 /**
@@ -50,12 +49,12 @@ public class KeySpawnLights extends KeyPerk implements PlayerTickPerk {
             if (!prog.isValid() || !prog.doPerkAbilities()) {
                 return;
             }
-            int spawnRate = this.applyMultiplierI(CONFIG.lightSpawnRate.get());
+            int spawnRate = CONFIG.lightSpawnRate.get();
             spawnRate = Math.max(spawnRate, 1);
             if (player.ticksExisted % spawnRate == 0) {
                 int attempts = 4;
                 while (attempts > 0) {
-                    int radius = this.applyMultiplierI(CONFIG.lightSpawnRadius.get());
+                    int radius = CONFIG.lightSpawnRadius.get();
                     BlockPos pos = player.getPosition().add(
                             rand.nextInt(radius) * (rand.nextBoolean() ? 1 : -1),
                             rand.nextInt(radius) * (rand.nextBoolean() ? 1 : -1),

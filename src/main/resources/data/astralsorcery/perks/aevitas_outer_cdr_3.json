@@ -4,17 +4,18 @@
   "x": 16.0,
   "y": 65.0,
   "name": "perk.astralsorcery.named.vivid_growth",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
-      {
-        "type": "astralsorcery:maxhealth",
-        "mode": "ADDITION",
-        "value": 0.5
-      },
       {
         "type": "astralsorcery:cooldown_reduction",
         "mode": "ADDED_MULTIPLY",
         "value": 0.08
+      },
+      {
+        "type": "astralsorcery:maxhealth",
+        "mode": "ADDITION",
+        "value": 0.5
       }
     ]
   },

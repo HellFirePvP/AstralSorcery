@@ -4,6 +4,7 @@
   "x": 45.0,
   "y": 76.0,
   "name": "perk.astralsorcery.named.fleet_footed",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

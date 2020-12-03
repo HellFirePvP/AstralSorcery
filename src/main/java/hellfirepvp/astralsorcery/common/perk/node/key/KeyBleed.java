@@ -58,14 +58,14 @@ public class KeyBleed extends KeyPerk {
             if (prog.getPerkData().hasPerkEffect(this)) {
                 LivingEntity target = event.getEntityLiving();
 
-                double chance = this.applyMultiplierD(CONFIG.bleedChance.get());
+                double chance = CONFIG.bleedChance.get();
                 chance = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_BLEED_CHANCE, (float) chance);
                 if (rand.nextFloat() < chance) {
                     int stackCap = 3; //So the "real" stackcap is 'amplifier = 3' that means we always have to be lower than this value.
                     stackCap = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_BLEED_STACKS, stackCap));
-                    int duration = this.applyMultiplierI(CONFIG.bleedDuration.get());
+                    int duration = CONFIG.bleedDuration.get();
                     duration = Math.round(PerkAttributeHelper.getOrCreateMap(player, side)
                             .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_BLEED_DURATION, duration));
 

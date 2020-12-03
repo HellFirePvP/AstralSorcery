@@ -62,7 +62,7 @@ public class KeyNoArmor extends KeyPerk {
                 }
             }
             if (eq < 2) {
-                float multiplier = (float) this.applyMultiplierD(CONFIG.damageTakenMultiplier.get());
+                float multiplier = CONFIG.damageTakenMultiplier.get().floatValue();
                 float effMulti = PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
                 event.setAmount(event.getAmount() * (multiplier * (1F / effMulti)));
             }

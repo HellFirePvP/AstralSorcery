@@ -4,6 +4,7 @@
   "x": 53.0,
   "y": 38.0,
   "name": "perk.astralsorcery.generic.inc.starlight_charge_max",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

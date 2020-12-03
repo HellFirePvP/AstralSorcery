@@ -4,17 +4,18 @@
   "x": 44.0,
   "y": 35.0,
   "name": "perk.astralsorcery.key.charge_regen",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
-      {
-        "type": "astralsorcery:chargeregeneration",
-        "mode": "STACKING_MULTIPLY",
-        "value": 1.5
-      },
       {
         "type": "astralsorcery:chargecap",
         "mode": "STACKING_MULTIPLY",
         "value": 0.75
+      },
+      {
+        "type": "astralsorcery:chargeregeneration",
+        "mode": "STACKING_MULTIPLY",
+        "value": 1.5
       }
     ]
   },

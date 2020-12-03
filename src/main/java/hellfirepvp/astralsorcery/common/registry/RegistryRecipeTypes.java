@@ -62,7 +62,7 @@ public class RegistryRecipeTypes {
         BUILTIN_TRAIT_FOCUS_CIRCLE = registerEffect(new BuiltInEffectTraitFocusCircle());
         BUILTIN_TRAIT_RELAY_HIGHLIGHT = registerEffect(new BuiltInEffectTraitRelayHighlight());
 
-        ALTAR_DEFAULT_LIGHTBEAMS = registerEffect(new EffectAltarDefaultLightbeams());
+        ALTAR_DEFAULT_LIGHTBEAM = registerEffect(new EffectAltarDefaultLightbeams());
         ALTAR_DEFAULT_SPARKLE = registerEffect(new EffectAltarDefaultSparkle());
         ALTAR_FOCUS_SPARKLE = registerEffect(new EffectAltarFocusSparkle());
         ALTAR_RANDOM_SPARKLE = registerEffect(new EffectAltarRandomSparkle());
@@ -71,7 +71,6 @@ public class RegistryRecipeTypes {
         GATEWAY_EDGE = registerEffect(new EffectGatewayEdge());
         LARGE_DUST_SWIRL = registerEffect(new EffectLargeDustSwirl());
         LIQUID_BURST = registerEffect(new EffectLiquidBurst());
-        LUMINESCENCE_BURST = registerEffect(new EffectLuminescenceBurst());
         LUMINESCENCE_FLARE = registerEffect(new EffectLuminescenceFlare());
         PILLAR_LIGHTBEAMS = registerEffect(new EffectPillarLightbeams());
         PILLAR_SPARKLE = registerEffect(new EffectPillarSparkle());

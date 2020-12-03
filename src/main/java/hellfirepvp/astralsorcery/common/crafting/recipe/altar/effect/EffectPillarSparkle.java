@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
@@ -31,17 +32,24 @@ public class EffectPillarSparkle extends AltarRecipeEffect {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state) {
-        if (state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE &&
-                rand.nextInt(10) == 0) {
-            Vector3 at = new Vector3(altar).add(getRandomPillarOffset(altar.getAltarType()));
-            at.addY(rand.nextFloat() * getPillarHeight(altar.getAltarType()));
-            at.add(-0.3 + 1.6 * rand.nextFloat(), 0, -0.3 + 1.6 * rand.nextFloat());
+        if (state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE) {
+            double scale = Math.abs(getRandomPillarOffset(altar.getAltarType()).getX()) + 1;
+            for (int i = 0; i < 3; i++) {
 
-            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                    .spawn(at)
-                    .alpha(VFXAlphaFunction.FADE_OUT)
-                    .setGravityStrength(-0.01F + rand.nextFloat() * -0.02F)
-                    .setScaleMultiplier(0.2F + rand.nextFloat() * 0.4F);
+                Vector3 at = new Vector3(altar).add(
+                        scale * (rand.nextBoolean() ? 1 : -1),
+                        0,
+                        scale * (rand.nextBoolean() ? 1 : -1));
+                at.addY(rand.nextFloat() * getPillarHeight(altar.getAltarType()));
+                at.add(-0.3 + 1.6 * rand.nextFloat(), 0, -0.3 + 1.6 * rand.nextFloat());
+
+                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                        .spawn(at)
+                        .alpha(VFXAlphaFunction.FADE_OUT)
+                        .color(VFXColorFunction.WHITE)
+                        .setGravityStrength(-0.001F + rand.nextFloat() * -0.002F)
+                        .setScaleMultiplier(0.2F + rand.nextFloat() * 0.4F);
+            }
         }
     }
 

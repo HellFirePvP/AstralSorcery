@@ -4,6 +4,7 @@
   "x": 55.0,
   "y": 74.0,
   "name": "perk.astralsorcery.generic.inc.damage_melee",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

@@ -59,7 +59,7 @@ public class KeyCullingAttack extends KeyPerk {
             if (side.isServer() && prog.getPerkData().hasPerkEffect(this)) {
                 LivingEntity attacked = event.getEntityLiving();
                 float actCull = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.cullHealth.get()));
+                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, CONFIG.cullHealth.get().floatValue());
                 float lifePerc = attacked.getHealth() / attacked.getMaxHealth();
                 if (lifePerc < actCull && AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false)) {
                     attacked.setHealth(0); // Try faithfully...

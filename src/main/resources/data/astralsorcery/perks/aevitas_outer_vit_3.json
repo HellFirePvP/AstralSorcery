@@ -4,6 +4,7 @@
   "x": 3.0,
   "y": 40.0,
   "name": "perk.astralsorcery.named.vitality",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

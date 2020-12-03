@@ -4,17 +4,18 @@
   "x": 26.0,
   "y": 39.0,
   "name": "perk.astralsorcery.hybrid.life_movespeed",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
-      {
-        "type": "astralsorcery:movespeed",
-        "mode": "ADDED_MULTIPLY",
-        "value": -0.03
-      },
       {
         "type": "astralsorcery:maxhealth",
         "mode": "ADDED_MULTIPLY",
         "value": 0.02
+      },
+      {
+        "type": "astralsorcery:movespeed",
+        "mode": "ADDED_MULTIPLY",
+        "value": -0.03
       }
     ]
   },

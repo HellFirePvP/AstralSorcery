@@ -4,6 +4,7 @@
   "x": 77.0,
   "y": 32.0,
   "name": "perk.astralsorcery.named.arrow_slits",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

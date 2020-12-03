@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.item.tool;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import hellfirepvp.astralsorcery.common.item.base.TypeEnchantableItem;
 import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -36,7 +37,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 17.08.2019 / 18:26
  */
-public class ItemCrystalShovel extends ItemCrystalTierItem {
+public class ItemCrystalShovel extends ItemCrystalTierItem implements TypeEnchantableItem {
 
     private static final Map<Block, BlockState> BLOCK_PAVE_MAP = new ImmutableMap.Builder<Block, BlockState>()
             .put(Blocks.GRASS_BLOCK, Blocks.GRASS_PATH.getDefaultState())
@@ -53,6 +54,11 @@ public class ItemCrystalShovel extends ItemCrystalTierItem {
             CrystalPropertiesAS.CREATIVE_CRYSTAL_TOOL_ATTRIBUTES.store(stack);
             stacks.add(stack);
         }
+    }
+
+    @Override
+    public boolean canEnchantItem(ItemStack stack, EnchantmentType type) {
+        return type == EnchantmentType.BREAKABLE || type == EnchantmentType.DIGGER;
     }
 
     @Override

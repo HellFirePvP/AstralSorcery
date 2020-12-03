@@ -4,6 +4,7 @@
   "x": 69.0,
   "y": 37.0,
   "name": "perk.astralsorcery.key.revive",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:armara_outer_revive_3"

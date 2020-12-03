@@ -4,6 +4,7 @@
   "x": 65.0,
   "y": 66.0,
   "name": "perk.astralsorcery.generic.inc.perk_exp",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

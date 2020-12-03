@@ -4,6 +4,7 @@
   "x": 52.0,
   "y": 31.0,
   "name": "perk.astralsorcery.generic.inc.crit_multiplier",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

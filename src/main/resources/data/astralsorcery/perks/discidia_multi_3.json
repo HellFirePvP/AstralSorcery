@@ -4,6 +4,7 @@
   "x": 53.0,
   "y": 30.0,
   "name": "perk.astralsorcery.named.combat_focus",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

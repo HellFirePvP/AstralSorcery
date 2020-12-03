@@ -4,17 +4,18 @@
   "x": 45.0,
   "y": 51.0,
   "name": "perk.astralsorcery.named.haste",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
-      {
-        "type": "astralsorcery:chargeregeneration",
-        "mode": "ADDED_MULTIPLY",
-        "value": 0.1
-      },
       {
         "type": "astralsorcery:harvestspeed",
         "mode": "ADDED_MULTIPLY",
         "value": 0.04
+      },
+      {
+        "type": "astralsorcery:chargeregeneration",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.1
       }
     ]
   },

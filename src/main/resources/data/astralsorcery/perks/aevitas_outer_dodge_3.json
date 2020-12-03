@@ -4,6 +4,7 @@
   "x": 8.0,
   "y": 38.0,
   "name": "perk.astralsorcery.named.adaptive",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

@@ -4,6 +4,7 @@
   "x": 21.0,
   "y": 39.0,
   "name": "perk.astralsorcery.key.cleansing",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:aevitas_cleanse_2"

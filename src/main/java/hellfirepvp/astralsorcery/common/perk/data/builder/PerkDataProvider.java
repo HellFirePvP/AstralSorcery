@@ -21,10 +21,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -49,20 +47,22 @@ public abstract class PerkDataProvider implements IDataProvider {
     public void act(DirectoryCache cache) throws IOException {
         Path path = this.generator.getOutputFolder();
 
-        Set<FinishedPerk> builtPerks = new HashSet<>();
+        List<FinishedPerk> builtPerks = new ArrayList<>();
         this.registerPerks(finishedPerk -> {
             ResourceLocation perkName = finishedPerk.perk.getRegistryName();
             Point.Float offset = finishedPerk.perk.getOffset();
             if (builtPerks.stream().anyMatch(knownPerk -> knownPerk.perk.getOffset().equals(offset))) {
                 throw new IllegalArgumentException("Duplicate perk registration at " + offset + " for " + perkName);
             }
-            if (!builtPerks.add(finishedPerk)) {
+            if (builtPerks.contains(finishedPerk)) {
                 throw new IllegalArgumentException("Duplicate perk registry name: " + perkName);
             }
+            builtPerks.add(finishedPerk);
             this.savePerkFile(cache, finishedPerk.serialize(), path.resolve(String.format("data/%s/perks/%s.json", perkName.getNamespace(), perkName.getPath())));
         });
 
         JsonObject allPerks = new JsonObject();
+        builtPerks.sort(Comparator.naturalOrder());
         builtPerks.forEach(perk -> allPerks.add(perk.perk.getRegistryName().toString(), perk.serialize()));
         this.savePerkFile(cache, allPerks, path.resolve("data/astralsorcery/perks/_full_tree.json"));
     }
@@ -90,7 +90,7 @@ public abstract class PerkDataProvider implements IDataProvider {
         return "Perks";
     }
 
-    public static class FinishedPerk {
+    public static class FinishedPerk implements Comparable<FinishedPerk> {
 
         private final AbstractPerk perk;
         private final List<ResourceLocation> connections;
@@ -108,6 +108,24 @@ public abstract class PerkDataProvider implements IDataProvider {
             }
             object.add("connection", array);
             return object;
+        }
+
+        @Override
+        public int compareTo(FinishedPerk that) {
+            return this.perk.getRegistryName().compareTo(that.perk.getRegistryName());
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            FinishedPerk that = (FinishedPerk) o;
+            return Objects.equals(perk.getRegistryName(), that.perk.getRegistryName());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(perk.getRegistryName());
         }
     }
 }

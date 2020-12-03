@@ -4,6 +4,7 @@
   "x": 54.0,
   "y": 75.0,
   "name": "perk.astralsorcery.named.dervish",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

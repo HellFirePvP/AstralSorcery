@@ -4,17 +4,18 @@
   "x": 44.0,
   "y": 26.0,
   "name": "perk.astralsorcery.hybrid.attack_speed_rampage",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
-      {
-        "type": "astralsorcery:attackspeed",
-        "mode": "ADDED_MULTIPLY",
-        "value": 0.03
-      },
       {
         "type": "astralsorcery:rampageduration",
         "mode": "ADDED_MULTIPLY",
         "value": 0.2
+      },
+      {
+        "type": "astralsorcery:attackspeed",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.03
       }
     ]
   },

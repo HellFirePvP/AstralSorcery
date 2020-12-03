@@ -4,20 +4,21 @@
   "x": 16.0,
   "y": 44.0,
   "name": "perk.astralsorcery.named.thick_skin",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:aevitas"
     ],
     "modifiers": [
       {
-        "type": "astralsorcery:maxhealth",
-        "mode": "ADDITION",
-        "value": 1.0
-      },
-      {
         "type": "astralsorcery:armor",
         "mode": "ADDED_MULTIPLY",
         "value": 0.05
+      },
+      {
+        "type": "astralsorcery:maxhealth",
+        "mode": "ADDITION",
+        "value": 1.0
       }
     ]
   },

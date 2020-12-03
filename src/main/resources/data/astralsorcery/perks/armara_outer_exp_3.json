@@ -4,6 +4,7 @@
   "x": 66.0,
   "y": 65.0,
   "name": "perk.astralsorcery.named.clarity",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

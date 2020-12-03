@@ -4,6 +4,7 @@
   "x": 56.0,
   "y": 53.0,
   "name": "perk.astralsorcery.hybrid.armor_armor_toughness",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

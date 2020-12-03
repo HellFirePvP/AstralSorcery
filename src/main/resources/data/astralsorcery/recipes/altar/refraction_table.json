@@ -39,7 +39,10 @@
   "effects": [
     "astralsorcery:built_in_effect_constellation_finish",
     "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:altar_default_lightbeams",
+    "astralsorcery:altar_default_sparkle",
     "astralsorcery:built_in_effect_constellation_lines",
-    "astralsorcery:built_in_effect_attunement_sparkle"
+    "astralsorcery:built_in_effect_attunement_sparkle",
+    "astralsorcery:altar_random_sparkle"
   ]
 }

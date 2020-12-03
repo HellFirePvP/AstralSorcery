@@ -4,6 +4,7 @@
   "x": 50.0,
   "y": 5.0,
   "name": "perk.astralsorcery.special.arc_chain_1",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

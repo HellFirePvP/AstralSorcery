@@ -4,6 +4,7 @@
   "x": 47.0,
   "y": 9.0,
   "name": "perk.astralsorcery.generic.inc.perk_effect",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

@@ -4,15 +4,16 @@
   "x": 18.0,
   "y": 55.0,
   "name": "perk.astralsorcery.generic.inc.attack_speed",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {
-        "type": "astralsorcery:perkeffect",
+        "type": "astralsorcery:attackspeed",
         "mode": "ADDED_MULTIPLY",
         "value": 0.02
       },
       {
-        "type": "astralsorcery:attackspeed",
+        "type": "astralsorcery:perkeffect",
         "mode": "ADDED_MULTIPLY",
         "value": 0.02
       }

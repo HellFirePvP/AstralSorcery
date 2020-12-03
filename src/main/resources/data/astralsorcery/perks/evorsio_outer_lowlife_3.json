@@ -4,6 +4,7 @@
   "x": 30.0,
   "y": 8.0,
   "name": "perk.astralsorcery.key.low_life",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:evorsio_outer_lowlife_2"

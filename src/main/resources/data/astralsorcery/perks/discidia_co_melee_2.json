@@ -4,13 +4,9 @@
   "x": 51.0,
   "y": 12.0,
   "name": "perk.astralsorcery.hybrid.melee_crit_chance",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
-      {
-        "type": "astralsorcery:critchance",
-        "mode": "ADDED_MULTIPLY",
-        "value": 0.1
-      },
       {
         "type": "astralsorcery:meleeattackdamage",
         "mode": "ADDED_MULTIPLY",
@@ -20,6 +16,11 @@
         "type": "astralsorcery:perkeffect",
         "mode": "ADDED_MULTIPLY",
         "value": 0.02
+      },
+      {
+        "type": "astralsorcery:critchance",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.1
       }
     ]
   },

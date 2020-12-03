@@ -10,8 +10,6 @@ package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.MoonPhase;
-import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
-import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
@@ -21,11 +19,12 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,7 +37,7 @@ public abstract class Constellation extends BaseConstellation implements IConste
 
     private static int counter = 0;
 
-    private final List<Ingredient> signatureItems = new LinkedList<>();
+    private final List<Supplier<Ingredient>> signatureItems = new LinkedList<>();
 
     private final String name, simpleName;
     private final Color color;
@@ -62,14 +61,17 @@ public abstract class Constellation extends BaseConstellation implements IConste
         this.color = color;
     }
 
-    public Constellation addSignatureItem(Ingredient handle) {
-        this.signatureItems.add(handle);
+    @Override
+    public IConstellation addSignatureItem(Supplier<Ingredient> ingredient) {
+        this.signatureItems.add(ingredient);
         return this;
     }
 
     @Override
     public List<Ingredient> getConstellationSignatureItems() {
-        return Collections.unmodifiableList(this.signatureItems);
+        return this.signatureItems.stream()
+                .map(Supplier::get)
+                .collect(Collectors.toList());
     }
 
     public boolean canDiscover(PlayerEntity player, PlayerProgress progress) {

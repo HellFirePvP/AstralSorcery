@@ -4,6 +4,7 @@
   "x": 39.0,
   "y": 4.0,
   "name": "perk.astralsorcery.special.connector.key.discidia",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:discidia"

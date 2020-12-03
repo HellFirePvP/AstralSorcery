@@ -4,6 +4,7 @@
   "x": 15.0,
   "y": 26.0,
   "name": "perk.astralsorcery.key.entity_reach",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:evorsio_outer_entity_reach_2"

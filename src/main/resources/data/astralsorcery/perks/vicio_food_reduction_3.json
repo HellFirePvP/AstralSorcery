@@ -4,6 +4,7 @@
   "x": 45.0,
   "y": 56.0,
   "name": "perk.astralsorcery.key.reduced_food",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:vicio_food_reduction_2"

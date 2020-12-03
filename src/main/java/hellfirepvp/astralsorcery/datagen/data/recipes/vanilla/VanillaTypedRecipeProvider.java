@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.datagen.data.recipes.builder.ResultCookingRecipeBuilder;
 import hellfirepvp.astralsorcery.datagen.data.recipes.builder.SimpleShapedRecipeBuilder;
+import hellfirepvp.astralsorcery.datagen.data.recipes.builder.SimpleShapelessRecipeBuilder;
 import hellfirepvp.astralsorcery.datagen.data.recipes.builder.StoneCuttingRecipeBuilder;
 import net.minecraft.data.CustomRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
@@ -208,9 +209,9 @@ public class VanillaTypedRecipeProvider {
                 .patternLine("III")
                 .key('I', ItemsAS.STARMETAL_INGOT)
                 .build(registrar);
-        //ShapelessRecipeBuilder.shapelessRecipe(ItemsAS.STARMETAL_INGOT, 9) TODO i guess..
-        //        .addIngredient(BlocksAS.STARMETAL)
-        //        .build(registrar);
+        SimpleShapelessRecipeBuilder.shapelessRecipe(ItemsAS.STARMETAL_INGOT, 9)
+                .addIngredient(BlocksAS.STARMETAL)
+                .build(registrar);
     }
 
     public static void registerCookingRecipes(Consumer<IFinishedRecipe> registrar) {

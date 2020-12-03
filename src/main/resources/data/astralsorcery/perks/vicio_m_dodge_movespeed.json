@@ -4,20 +4,21 @@
   "x": 45.0,
   "y": 63.0,
   "name": "perk.astralsorcery.named.agility",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:vicio"
     ],
     "modifiers": [
       {
-        "type": "astralsorcery:dodge",
-        "mode": "ADDED_MULTIPLY",
-        "value": 0.1
-      },
-      {
         "type": "astralsorcery:movespeed",
         "mode": "ADDED_MULTIPLY",
         "value": 0.04
+      },
+      {
+        "type": "astralsorcery:dodge",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.1
       }
     ]
   },

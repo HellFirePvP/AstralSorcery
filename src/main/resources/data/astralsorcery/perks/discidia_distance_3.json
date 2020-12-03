@@ -4,6 +4,7 @@
   "x": 54.0,
   "y": 26.0,
   "name": "perk.astralsorcery.key.projectile_distance",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:discidia_distance_2"

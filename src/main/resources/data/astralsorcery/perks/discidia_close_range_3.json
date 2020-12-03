@@ -4,6 +4,7 @@
   "x": 47.0,
   "y": 21.0,
   "name": "perk.astralsorcery.key.projectile_close_range",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:discidia_close_range_2"

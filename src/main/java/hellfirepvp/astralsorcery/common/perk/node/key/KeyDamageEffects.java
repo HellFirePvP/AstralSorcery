@@ -59,7 +59,7 @@ public class KeyDamageEffects extends KeyPerk {
             if (prog.getPerkData().hasPerkEffect(this)) {
                 LivingEntity attacked = event.getEntityLiving();
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
-                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.applicationChance.get()));
+                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, CONFIG.applicationChance.get().floatValue());
                 if (rand.nextFloat() < chance) {
                     switch (rand.nextInt(3)) {
                         case 0:

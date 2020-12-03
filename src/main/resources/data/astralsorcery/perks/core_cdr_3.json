@@ -4,6 +4,7 @@
   "x": 40.0,
   "y": 47.0,
   "name": "perk.astralsorcery.named.tilted_pendulum",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

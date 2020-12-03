@@ -42,6 +42,7 @@
   ],
   "effects": [
     "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:gateway_edge",
     "astralsorcery:built_in_effect_attunement_sparkle"
   ]
 }

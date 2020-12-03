@@ -4,6 +4,7 @@
   "x": 37.0,
   "y": 24.0,
   "name": "perk.astralsorcery.named.bloom",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

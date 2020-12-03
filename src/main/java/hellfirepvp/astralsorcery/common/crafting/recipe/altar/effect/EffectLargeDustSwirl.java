@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.crafting.recipe.altar.effect;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
+import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.ActiveSimpleAltarRecipe;
@@ -35,7 +37,7 @@ public class EffectLargeDustSwirl extends AltarRecipeEffect {
             long tick = getClientTick();
             float interval = 200F;
             float cycle = (float) (((tick % interval) / interval) * 2 * Math.PI);
-            int parts = 6;
+            int parts = 5;
             for (int i = 0; i < parts; i++) {
 
                 //inner
@@ -44,15 +46,19 @@ public class EffectLargeDustSwirl extends AltarRecipeEffect {
                 Vector3 v = Vector3.RotAxis.X_AXIS.clone();
                 float originalAngle = (((float) i) / ((float) parts)) * 360F;
                 double angle = originalAngle + (MathHelper.sin(cycle) * angleSwirl);
-                v.rotate(Math.toRadians(angle), Vector3.RotAxis.Y_AXIS).normalize().multiply(2.2);
+                v.rotate(Math.toRadians(angle), Vector3.RotAxis.Y_AXIS).normalize().multiply(2.5);
                 Vector3 pos = center.clone().add(v);
 
                 Vector3 mot = center.clone().subtract(pos).normalize().multiply(0.09);
 
-                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                EntityVisualFX iEffect = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                         .spawn(pos)
                         .setMotion(mot)
                         .setScaleMultiplier(0.15F + rand.nextFloat() * 0.4F);
+                if (rand.nextInt(3) == 0) {
+                    iEffect.color(VFXColorFunction.WHITE)
+                            .setScaleMultiplier(iEffect.getScaleMultiplier() * 1.3F);
+                }
 
                 //outer
                 angleSwirl = 180F;
@@ -60,16 +66,20 @@ public class EffectLargeDustSwirl extends AltarRecipeEffect {
                 v = new Vector3(1, 0, 0);
                 originalAngle = (((float) i) / ((float) parts)) * 360F;
                 angle = originalAngle + (MathHelper.sin(cycle) * angleSwirl);
-                v.rotate(-Math.toRadians(angle), Vector3.RotAxis.Y_AXIS).normalize().multiply(4);
+                v.rotate(-Math.toRadians(angle), Vector3.RotAxis.Y_AXIS).normalize().multiply(5);
                 pos = center.clone().add(v);
 
                 mot = center.clone().subtract(pos).normalize().multiply(0.15);
 
-                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                EntityVisualFX oEffect = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                         .spawn(pos)
                         .setMotion(mot)
                         .setScaleMultiplier(0.27F + rand.nextFloat() * 0.4F)
                         .setMaxAge(50);
+                if (rand.nextInt(3) == 0) {
+                    oEffect.color(VFXColorFunction.WHITE)
+                            .setScaleMultiplier(iEffect.getScaleMultiplier() * 1.3F);
+                }
             }
         }
     }

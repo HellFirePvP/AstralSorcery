@@ -110,6 +110,7 @@ public class AttunementAltarRecipeProvider {
                         .key('N', ItemsAS.NOCTURNAL_POWDER)
                 )
                 .addOutput(BlocksAS.GATEWAY)
+                .addAltarEffect(AltarRecipeEffectsAS.GATEWAY_EDGE)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
@@ -166,7 +167,9 @@ public class AttunementAltarRecipeProvider {
                         .key('R', BlocksAS.MARBLE_RUNED)
                 )
                 .addOutput(BlocksAS.ATTUNEMENT_ALTAR)
-                .addAltarEffect(AltarRecipeEffectsAS.PILLAR_LIGHTBEAMS)
+                .addAltarEffect(AltarRecipeEffectsAS.ALTAR_DEFAULT_SPARKLE)
+                .addAltarEffect(AltarRecipeEffectsAS.ALTAR_DEFAULT_LIGHTBEAM)
+                .addAltarEffect(AltarRecipeEffectsAS.PILLAR_SPARKLE)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()

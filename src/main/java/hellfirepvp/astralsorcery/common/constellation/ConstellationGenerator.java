@@ -16,14 +16,13 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -152,7 +151,7 @@ public class ConstellationGenerator {
         }
 
         @Override
-        public IConstellation addSignatureItem(Ingredient item) {
+        public IConstellation addSignatureItem(Supplier<Ingredient> ingredient) {
             return this;
         }
 

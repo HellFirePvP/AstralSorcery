@@ -4,6 +4,7 @@
   "x": 59.0,
   "y": 39.0,
   "name": "perk.astralsorcery.key.no_knockback",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:armara_noknockback_2"

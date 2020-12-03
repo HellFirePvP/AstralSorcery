@@ -4,17 +4,18 @@
   "x": 36.0,
   "y": 77.0,
   "name": "perk.astralsorcery.named.dazzling_barrier",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
-      {
-        "type": "astralsorcery:chargecap",
-        "mode": "ADDED_MULTIPLY",
-        "value": 0.1
-      },
       {
         "type": "astralsorcery:allres",
         "mode": "ADDED_MULTIPLY",
         "value": 0.06
+      },
+      {
+        "type": "astralsorcery:chargecap",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.1
       }
     ]
   },

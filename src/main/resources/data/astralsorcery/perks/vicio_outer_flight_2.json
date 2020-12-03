@@ -4,6 +4,7 @@
   "x": 43.0,
   "y": 78.0,
   "name": "perk.astralsorcery.generic.inc.allres",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

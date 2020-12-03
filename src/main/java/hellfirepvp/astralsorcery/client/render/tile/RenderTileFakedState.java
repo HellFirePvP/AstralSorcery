@@ -46,7 +46,7 @@ public class RenderTileFakedState extends CustomTileEntityRenderer<TileFakedStat
         Color blendColor = tile.getOverlayColor();
         int[] color = new int[] { blendColor.getRed(), blendColor.getGreen(), blendColor.getBlue(), 128 };
 
-        RenderType type = RenderTypeLookup.func_239220_a_(fakedState, true);
+        RenderType type = RenderTypeLookup.func_239221_b_(fakedState);
         RenderTypeDecorator decorated = RenderTypeDecorator.wrapSetup(type, () -> {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();

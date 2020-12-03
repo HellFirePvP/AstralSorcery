@@ -15,19 +15,19 @@ import hellfirepvp.astralsorcery.common.data.research.PerkAllocationType;
 import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.event.ASRegistryEvents;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.util.CacheEventBus;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -65,13 +65,13 @@ public class AbstractPerk implements ModifierSource {
     protected final Point.Float offset;
     private String unlocalizedKey;
     private PerkCategory category = CATEGORY_BASE;
+    private boolean hiddenUnlessAllocated = false;
     private PerkTreePoint<? extends AbstractPerk> treePoint = null;
 
     private ResourceLocation customPerkType = null;
 
     private List<IFormattableTextComponent> tooltipCache = null;
     private boolean cacheTooltip = true;
-    private float cacheEffectMultiplier = 1.0F;
 
     public AbstractPerk(ResourceLocation name, float x, float y) {
         this.registryName = name;
@@ -116,30 +116,9 @@ public class AbstractPerk implements ModifierSource {
         return (T) this;
     }
 
-    //TODO crafttweaker?
-    //@Optional.Method(modid = "crafttweaker")
-    //public final void adjustMultipliers() {
-    //    double multiplier = hellfirepvp.astralsorcery.common.integration.mods.crafttweaker.tweaks.PerkTree.getMultiplier(this);
-    //    applyEffectMultiplier(multiplier);
-    //}
-
-    protected void applyEffectMultiplier(float multiplier) {
-        this.cacheEffectMultiplier = multiplier;
-    }
-
-    protected int applyMultiplierI(double val) {
-        return MathHelper.floor(val * this.cacheEffectMultiplier);
-    }
-
-    protected double applyMultiplierD(double val) {
-        return val * this.cacheEffectMultiplier;
-    }
-
-    //Return true to display that the perk's modifiers got disabled by pack's configurations
-    public boolean modifiersDisabled(PlayerEntity player, LogicalSide dist) {
-        ASRegistryEvents.PerkDisable event = new ASRegistryEvents.PerkDisable(this, player, dist);
-        MinecraftForge.EVENT_BUS.post(event);
-        return event.isPerkDisabled();
+    public <T> T setHiddenUnlessAllocated(boolean hiddenUnlessAllocated) {
+        this.hiddenUnlessAllocated = hiddenUnlessAllocated;
+        return (T) this;
     }
 
     @Override
@@ -149,19 +128,11 @@ public class AbstractPerk implements ModifierSource {
 
     @Override
     public final void onApply(PlayerEntity player, LogicalSide dist) {
-        if (modifiersDisabled(player, dist)) {
-            return;
-        }
-
         this.applyPerkLogic(player, dist);
     }
 
     @Override
     public final void onRemove(PlayerEntity player, LogicalSide dist) {
-        if (modifiersDisabled(player, dist)) {
-            return;
-        }
-
         this.removePerkLogic(player, dist);
     }
 
@@ -233,6 +204,11 @@ public class AbstractPerk implements ModifierSource {
         return false;
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public boolean isVisible(PlayerProgress progress, PlayerEntity player) {
+        return !this.hiddenUnlessAllocated || progress.getPerkData().hasPerkAllocation(this);
+    }
+
     public IFormattableTextComponent getName() {
         return new TranslationTextComponent(this.unlocalizedKey + ".name")
                 .mergeStyle(this.getCategory().getTextFormatting());
@@ -266,12 +242,9 @@ public class AbstractPerk implements ModifierSource {
         if (cacheTooltip && tooltipCache != null) {
             return tooltipCache;
         }
-
         tooltipCache = Lists.newArrayList();
-        if (modifiersDisabled(Minecraft.getInstance().player, LogicalSide.CLIENT)) {
-            tooltipCache.add(new TranslationTextComponent("perk.info.astralsorcery.disabled")
-                    .mergeStyle(TextFormatting.GRAY));
-        } else if (!(this instanceof ProgressGatedPerk) || ((ProgressGatedPerk) this).canSeeClient()) {
+
+        if (!(this instanceof ProgressGatedPerk) || ((ProgressGatedPerk) this).canSeeClient()) {
             tooltipCache.add(this.getName());
 
             int prevLength = tooltipCache.size();
@@ -370,6 +343,7 @@ public class AbstractPerk implements ModifierSource {
         data.addProperty("x", this.getOffset().x);
         data.addProperty("y", this.getOffset().y);
         data.addProperty("name", this.unlocalizedKey);
+        data.addProperty("hiddenUnlessAllocated", this.hiddenUnlessAllocated);
 
         JsonObject perkData = new JsonObject();
         this.serializeData(perkData);

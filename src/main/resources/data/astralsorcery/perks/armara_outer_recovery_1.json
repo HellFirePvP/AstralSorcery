@@ -4,6 +4,7 @@
   "x": 62.0,
   "y": 60.0,
   "name": "perk.astralsorcery.hybrid.life_recovery_cooldown_reduction",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

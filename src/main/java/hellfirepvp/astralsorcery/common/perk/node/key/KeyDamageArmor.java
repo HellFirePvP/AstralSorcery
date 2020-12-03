@@ -67,7 +67,7 @@ public class KeyDamageArmor extends KeyPerk {
                     return;
                 }
 
-                double dmgArmor = applyMultiplierD(CONFIG.damagePerArmor.get());
+                double dmgArmor = CONFIG.damagePerArmor.get();
                 float dmg = event.getAmount();
                 dmg *= ((dmgArmor * armorPieces) * PerkAttributeHelper.getOrCreateMap(player, side)
                         .getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT));

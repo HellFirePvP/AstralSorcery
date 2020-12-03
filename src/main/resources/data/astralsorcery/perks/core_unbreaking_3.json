@@ -4,6 +4,7 @@
   "x": 34.0,
   "y": 46.0,
   "name": "perk.astralsorcery.key.enduring",
+  "hiddenUnlessAllocated": false,
   "data": {
     "enchantments": [
       {

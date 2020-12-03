@@ -4,6 +4,7 @@
   "x": 30.0,
   "y": 67.0,
   "name": "perk.astralsorcery.named.hushed_steps",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

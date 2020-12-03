@@ -4,6 +4,7 @@
   "x": 34.0,
   "y": 36.0,
   "name": "perk.astralsorcery.generic.inc.ench_effect",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

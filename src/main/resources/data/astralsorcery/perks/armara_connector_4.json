@@ -4,6 +4,7 @@
   "x": 76.0,
   "y": 24.0,
   "name": "perk.astralsorcery.special.connector.key.armara",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:armara"

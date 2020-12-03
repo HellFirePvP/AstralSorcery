@@ -4,6 +4,7 @@
   "x": 68.0,
   "y": 15.0,
   "name": "perk.astralsorcery.generic.inc.perk_effect",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:ulteria"

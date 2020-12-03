@@ -4,6 +4,7 @@
   "x": 19.0,
   "y": 36.0,
   "name": "perk.astralsorcery.generic.inc.armor",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:aevitas"

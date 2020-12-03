@@ -51,12 +51,12 @@ public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
     public void onPlayerTick(PlayerEntity player, LogicalSide side) {
         if (side.isServer()) {
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
-            float modChance = (float) this.applyMultiplierD(CONFIG.chanceToEnrich.get());
+            float modChance = (float) CONFIG.chanceToEnrich.get();
             modChance /= PerkAttributeHelper.getOrCreateMap(player, side)
                     .getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
             if (rand.nextInt(Math.round(Math.max(modChance, 1))) == 0 &&
                     AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
-                float radius = (float) this.applyMultiplierD(CONFIG.enrichmentRadius.get());
+                float radius = (float) CONFIG.enrichmentRadius.get();
                 radius *= PerkAttributeHelper.getOrCreateMap(player, side)
                         .getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
 

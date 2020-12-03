@@ -4,6 +4,7 @@
   "x": 44.0,
   "y": 52.0,
   "name": "perk.astralsorcery.hybrid.charge_regen_mining",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

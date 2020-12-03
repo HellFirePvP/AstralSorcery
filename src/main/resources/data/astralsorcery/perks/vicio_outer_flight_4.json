@@ -4,6 +4,7 @@
   "x": 43.0,
   "y": 80.0,
   "name": "perk.astralsorcery.key.mantle_flight",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:vicio_outer_flight_3"

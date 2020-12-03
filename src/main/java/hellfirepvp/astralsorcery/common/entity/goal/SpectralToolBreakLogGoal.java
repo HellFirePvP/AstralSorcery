@@ -132,7 +132,7 @@ public class SpectralToolBreakLogGoal extends SpectralToolGoal {
                     this.selectedBreakPos.getZ() + 0.5,
                     this.getSpeed());
 
-            if (Vector3.atEntityCorner(this.getEntity()).distance(this.selectedBreakPos) <= 4) {
+            if (Vector3.atEntityCorner(this.getEntity()).distanceSquared(this.selectedBreakPos) <= 9) {
                 this.actionCooldown++;
                 if (this.actionCooldown >= MantleEffectPelotrio.CONFIG.ticksPerAxeLogBreak.get() && world instanceof ServerWorld) {
                     LivingEntity owner = this.getEntity().getOwningEntity();

@@ -4,6 +4,7 @@
   "x": 54.0,
   "y": 7.0,
   "name": "perk.astralsorcery.generic.add.bleed_stacks",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

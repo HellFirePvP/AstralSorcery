@@ -72,7 +72,7 @@ public class MantleEffectAevitas extends MantleEffect {
             FoodStats stats = player.getFoodStats();
             if (stats.getFoodLevel() < 20 || stats.getSaturationLevel() < 5) {
                 if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerFood.get())) {
-                    stats.addStats(CONFIG.foodPerCycle.get().intValue() / 2, CONFIG.foodPerCycle.get().floatValue());
+                    stats.addStats(CONFIG.foodPerCycle.get().intValue(), 0.5F);
                     AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerFood.get(), false);
                 }
             }
@@ -94,14 +94,14 @@ public class MantleEffectAevitas extends MantleEffect {
 
     public static class AevitasConfig extends Config {
 
-        private final int defaultHealChance = 20;
-        private final int defaultFeedChance = 40;
-        private final double defaultHealthPerCycle = 0.25F;
-        private final double defaultFoodPerCycle = 0.5F;
+        private final int defaultHealChance = 80;
+        private final int defaultFeedChance = 80;
+        private final double defaultHealthPerCycle = 0.5F;
+        private final double defaultFoodPerCycle = 1F;
 
         private final int defaultChargeCostPerBlock = 2;
-        private final int defaultChargeCostPerHeal = 15;
-        private final int defaultChargeCostPerFood = 15;
+        private final int defaultChargeCostPerHeal = 100;
+        private final int defaultChargeCostPerFood = 100;
 
         public ForgeConfigSpec.IntValue healChance;
         public ForgeConfigSpec.IntValue feedChance;

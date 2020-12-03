@@ -4,6 +4,7 @@
   "x": 70.0,
   "y": 45.0,
   "name": "perk.astralsorcery.generic.inc.mining_speed",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

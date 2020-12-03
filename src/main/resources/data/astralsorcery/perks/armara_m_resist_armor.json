@@ -4,6 +4,7 @@
   "x": 64.0,
   "y": 44.0,
   "name": "perk.astralsorcery.named.bulwark",
+  "hiddenUnlessAllocated": false,
   "data": {
     "neededConstellations": [
       "astralsorcery:armara"

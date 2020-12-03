@@ -4,6 +4,7 @@
   "x": 55.0,
   "y": 38.0,
   "name": "perk.astralsorcery.named.ample_semblance",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

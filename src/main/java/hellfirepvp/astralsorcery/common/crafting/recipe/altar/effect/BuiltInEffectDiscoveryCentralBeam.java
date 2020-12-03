@@ -37,7 +37,7 @@ public class BuiltInEffectDiscoveryCentralBeam extends AltarRecipeEffect {
             MiscUtils.applyRandomOffset(from, rand, 0.26F);
             EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
                     .spawn(from)
-                    .setup(from.clone().addY(4 + rand.nextInt(2)), 1F, 1F)
+                    .setup(from.clone().addY(4 * rand.nextFloat() * 2), 1F, 1F)
                     .setMaxAge(64);
         }
     }

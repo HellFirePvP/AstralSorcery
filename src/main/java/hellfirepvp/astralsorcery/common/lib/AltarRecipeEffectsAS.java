@@ -28,7 +28,7 @@ public class AltarRecipeEffectsAS {
     public static AltarRecipeEffect BUILTIN_TRAIT_FOCUS_CIRCLE;
     public static AltarRecipeEffect BUILTIN_TRAIT_RELAY_HIGHLIGHT;
 
-    public static AltarRecipeEffect ALTAR_DEFAULT_LIGHTBEAMS;
+    public static AltarRecipeEffect ALTAR_DEFAULT_LIGHTBEAM;
     public static AltarRecipeEffect ALTAR_DEFAULT_SPARKLE;
     public static AltarRecipeEffect ALTAR_FOCUS_SPARKLE;
     public static AltarRecipeEffect ALTAR_RANDOM_SPARKLE;
@@ -37,7 +37,6 @@ public class AltarRecipeEffectsAS {
     public static AltarRecipeEffect GATEWAY_EDGE;
     public static AltarRecipeEffect LARGE_DUST_SWIRL;
     public static AltarRecipeEffect LIQUID_BURST;
-    public static AltarRecipeEffect LUMINESCENCE_BURST;
     public static AltarRecipeEffect LUMINESCENCE_FLARE;
     public static AltarRecipeEffect PILLAR_LIGHTBEAMS;
     public static AltarRecipeEffect PILLAR_SPARKLE;

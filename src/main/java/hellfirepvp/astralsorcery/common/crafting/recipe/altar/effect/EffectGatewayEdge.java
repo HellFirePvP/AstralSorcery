@@ -33,9 +33,9 @@ public class EffectGatewayEdge extends AltarRecipeEffect {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state) {
-        double scale = getRandomPillarOffset(altar.getAltarType()).getX();
+        double scale = Math.abs(getRandomPillarOffset(altar.getAltarType()).getX());
         double edgeScale = (scale * 2 + 1);
-        for (int amount = 0; amount < 3; amount++) {
+        for (int amount = 0; amount < 6; amount++) {
 
             Vector3 offset = new Vector3(altar).add(-scale, 0, -scale);
             if (rand.nextBoolean()) {
@@ -45,7 +45,7 @@ public class EffectGatewayEdge extends AltarRecipeEffect {
             }
             FXFacingParticle particle = EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                     .spawn(offset)
-                    .setGravityStrength(-0.003F)
+                    .setGravityStrength(-0.0005F)
                     .setScaleMultiplier(0.25F + rand.nextFloat() * 0.15F)
                     .color(VFXColorFunction.constant(ColorsAS.DEFAULT_GENERIC_PARTICLE))
                     .setMaxAge(20 + rand.nextInt(30));

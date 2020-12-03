@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.crystal.CalculationContext;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeItem;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalCalculations;
+import hellfirepvp.astralsorcery.common.item.base.TypeEnchantableItem;
 import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WebBlock;
@@ -44,7 +45,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 17.08.2019 / 18:34
  */
-public class ItemCrystalSword extends SwordItem implements CrystalAttributeItem {
+public class ItemCrystalSword extends SwordItem implements CrystalAttributeItem, TypeEnchantableItem {
 
     public ItemCrystalSword() {
         super(CrystalToolTier.getInstance(),
@@ -139,6 +140,11 @@ public class ItemCrystalSword extends SwordItem implements CrystalAttributeItem 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         return false;
+    }
+
+    @Override
+    public boolean canEnchantItem(ItemStack stack, EnchantmentType type) {
+        return type == EnchantmentType.BREAKABLE || type == EnchantmentType.WEAPON;
     }
 
     @Override

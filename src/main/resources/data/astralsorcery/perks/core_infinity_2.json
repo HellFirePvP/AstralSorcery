@@ -4,6 +4,7 @@
   "x": 43.0,
   "y": 41.0,
   "name": "perk.astralsorcery.key.endless_munitions",
+  "hiddenUnlessAllocated": false,
   "data": {
     "enchantments": [
       {

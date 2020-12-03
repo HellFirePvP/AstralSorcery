@@ -4,6 +4,7 @@
   "x": 40.0,
   "y": 44.0,
   "name": "perk.astralsorcery.named.profane_chemistry",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

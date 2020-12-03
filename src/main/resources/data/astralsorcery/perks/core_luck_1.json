@@ -4,6 +4,7 @@
   "x": 38.0,
   "y": 36.0,
   "name": "perk.astralsorcery.generic.add.luck",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

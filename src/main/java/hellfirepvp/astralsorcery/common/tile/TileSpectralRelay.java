@@ -25,7 +25,6 @@ import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockDiscoverer;
-import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -143,7 +142,8 @@ public class TileSpectralRelay extends TileEntityTick {
                     TileSpectralRelay relay;
                     return state.getBlock() instanceof BlockSpectralRelay &&
                             (relay = MiscUtils.getTileAt(world1, pos1, TileSpectralRelay.class, false)) != null &&
-                            relay.hasGlassLens();
+                            relay.hasGlassLens() &&
+                            relay.hasMultiblock();
                 }));
         nearbyRelays.forEach(relayPos -> {
             TileSpectralRelay relay = MiscUtils.getTileAt(world, relayPos, TileSpectralRelay.class, false);

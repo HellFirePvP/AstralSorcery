@@ -4,6 +4,7 @@
   "x": 43.0,
   "y": 37.0,
   "name": "perk.astralsorcery.generic.inc.potion_duration",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

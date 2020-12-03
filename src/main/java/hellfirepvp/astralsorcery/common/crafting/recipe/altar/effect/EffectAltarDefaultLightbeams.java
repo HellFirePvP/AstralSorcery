@@ -32,11 +32,12 @@ public class EffectAltarDefaultLightbeams extends AltarRecipeEffect {
     @OnlyIn(Dist.CLIENT)
     public void onTick(TileAltar altar, ActiveSimpleAltarRecipe.CraftingState state) {
         if (state == ActiveSimpleAltarRecipe.CraftingState.ACTIVE &&
-                rand.nextInt(10) == 0) {
+                rand.nextInt(8) == 0) {
             float scale = (float) getRandomPillarOffset(altar.getAltarType()).getX();
 
-            Vector3 from = new Vector3(altar).add(0.5, -0.6, 0.5);
+            Vector3 from = new Vector3(altar).add(0.5, 0, 0.5);
             MiscUtils.applyRandomOffset(from, rand, scale * 0.85F);
+            from.setY(altar.getPos().getY() - 0.6F);
 
             EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
                     .spawn(from)

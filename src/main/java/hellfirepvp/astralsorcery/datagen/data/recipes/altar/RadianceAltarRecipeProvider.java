@@ -137,6 +137,7 @@ public class RadianceAltarRecipeProvider {
                 .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
                 .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
                 .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
+                .addAltarEffect(AltarRecipeEffectsAS.LIQUID_BURST)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
@@ -160,6 +161,7 @@ public class RadianceAltarRecipeProvider {
                 .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
                 .addRelayInput(ItemsAS.NOCTURNAL_POWDER)
                 .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
+                .addAltarEffect(AltarRecipeEffectsAS.VORTEX_PLANE)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
@@ -211,11 +213,11 @@ public class RadianceAltarRecipeProvider {
                 .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
                 .build(registrar);
 
-        //registerShiftingStarRecipe(registrar, ConstellationsAS.aevitas, ItemsAS.SHIFTING_STAR_AEVITAS);
-        //registerShiftingStarRecipe(registrar, ConstellationsAS.armara, ItemsAS.SHIFTING_STAR_ARMARA);
-        //registerShiftingStarRecipe(registrar, ConstellationsAS.discidia, ItemsAS.SHIFTING_STAR_DISCIDIA);
-        //registerShiftingStarRecipe(registrar, ConstellationsAS.evorsio, ItemsAS.SHIFTING_STAR_EVORSIO);
-        //registerShiftingStarRecipe(registrar, ConstellationsAS.vicio, ItemsAS.SHIFTING_STAR_VICIO);
+        registerShiftingStarRecipe(registrar, ConstellationsAS.aevitas, ItemsAS.SHIFTING_STAR_AEVITAS);
+        registerShiftingStarRecipe(registrar, ConstellationsAS.armara, ItemsAS.SHIFTING_STAR_ARMARA);
+        registerShiftingStarRecipe(registrar, ConstellationsAS.discidia, ItemsAS.SHIFTING_STAR_DISCIDIA);
+        registerShiftingStarRecipe(registrar, ConstellationsAS.evorsio, ItemsAS.SHIFTING_STAR_EVORSIO);
+        registerShiftingStarRecipe(registrar, ConstellationsAS.vicio, ItemsAS.SHIFTING_STAR_VICIO);
     }
 
     private static void registerShiftingStarRecipe(Consumer<IFinishedRecipe> registrar, IMajorConstellation constellation, Item shiftingStarItem) {
@@ -242,15 +244,18 @@ public class RadianceAltarRecipeProvider {
                 .addRelayInput(signature)
                 .addRelayInput(ItemsAS.ILLUMINATION_POWDER)
                 .addRelayInput(TagsAS.Items.DUSTS_STARDUST)
+                .addAltarEffect(AltarRecipeEffectsAS.FOCUS_DUST_SWIRL)
+                .addAltarEffect(AltarRecipeEffectsAS.FOCUS_EDGE)
+                .addAltarEffect(AltarRecipeEffectsAS.ALTAR_FOCUS_SPARKLE)
                 .build(registrar);
     }
 
     private static void registerConstellationRecipes(Consumer<IFinishedRecipe> registrar) {
         RegistriesAS.REGISTRY_CONSTELLATIONS.forEach(cst -> {
             if (Mods.ASTRAL_SORCERY.owns(cst)) {
-                //registerConstellationPaperRecipe(registrar, cst);
+                registerConstellationPaperRecipe(registrar, cst);
                 if (cst instanceof IWeakConstellation) {
-                    //registerMantleRecipe(registrar, (IWeakConstellation) cst);
+                    registerMantleRecipe(registrar, (IWeakConstellation) cst);
                 }
             }
         });

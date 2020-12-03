@@ -24,13 +24,13 @@
   "output": [
     {
       "item": "astralsorcery:infused_glass",
-      "count": 1,
-      "nbt": "{Damage:0}"
+      "count": 1
     }
   ],
   "effects": [
     "astralsorcery:built_in_effect_constellation_finish",
     "astralsorcery:built_in_effect_discovery_central_beam",
+    "astralsorcery:altar_default_sparkle",
     "astralsorcery:built_in_effect_constellation_lines",
     "astralsorcery:built_in_effect_attunement_sparkle"
   ]

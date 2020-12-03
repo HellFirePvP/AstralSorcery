@@ -58,10 +58,10 @@ public class KeyGrowables extends KeyPerk implements PlayerTickPerk {
 
         PlayerProgress prog = ResearchHelper.getProgress(player, side);
         float cChance = PerkAttributeHelper.getOrCreateMap(player, side)
-                .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, (float) this.applyMultiplierD(CONFIG.chanceToBonemeal.get()));
+                .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, CONFIG.chanceToBonemeal.get().floatValue());
         if (rand.nextFloat() < cChance && AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
             float fRadius = PerkAttributeHelper.getOrCreateMap(player, side)
-                    .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, this.applyMultiplierI(CONFIG.radius.get()));
+                    .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, CONFIG.radius.get());
             int rRadius = Math.max(MathHelper.floor(fRadius), 1);
 
             BlockPos pos = player.getPosition().add(

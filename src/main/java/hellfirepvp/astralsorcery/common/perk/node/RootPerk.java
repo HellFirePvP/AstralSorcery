@@ -65,7 +65,7 @@ public abstract class RootPerk extends AttributeModifierPerk {
     }
 
     protected double getExpMultiplier() {
-        return this.applyMultiplierD(this.config.expMultiplier.get());
+        return this.config.expMultiplier.get();
     }
 
     protected float getDiminishingReturns(PlayerEntity player) {

@@ -4,6 +4,7 @@
   "x": 47.0,
   "y": 24.0,
   "name": "perk.astralsorcery.generic.inc.crit_chance",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

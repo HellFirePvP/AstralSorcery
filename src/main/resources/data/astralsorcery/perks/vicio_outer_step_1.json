@@ -4,6 +4,7 @@
   "x": 51.0,
   "y": 69.0,
   "name": "perk.astralsorcery.generic.inc.move_speed",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

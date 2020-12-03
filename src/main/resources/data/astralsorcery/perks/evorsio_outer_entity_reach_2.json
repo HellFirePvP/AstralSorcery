@@ -4,6 +4,7 @@
   "x": 16.0,
   "y": 25.0,
   "name": "perk.astralsorcery.generic.inc.reach",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

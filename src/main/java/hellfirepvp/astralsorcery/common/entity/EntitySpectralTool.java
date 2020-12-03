@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectPelotrio;
 import hellfirepvp.astralsorcery.common.entity.goal.SpectralToolBreakBlockGoal;
+import hellfirepvp.astralsorcery.common.entity.goal.SpectralToolBreakLogGoal;
 import hellfirepvp.astralsorcery.common.entity.goal.SpectralToolGoal;
 import hellfirepvp.astralsorcery.common.entity.goal.SpectralToolMeleeAttackGoal;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
@@ -31,14 +32,12 @@ import net.minecraft.item.Items;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 
 /**
@@ -217,7 +216,7 @@ public class EntitySpectralTool extends FlyingEntity {
             return new ToolTask(MantleEffectPelotrio.CONFIG.durationAxe.get(),
                     MantleEffectPelotrio.CONFIG.speedAxe.get(),
                     new ItemStack(Items.DIAMOND_AXE),
-                    SpectralToolBreakBlockGoal::new);
+                    SpectralToolBreakLogGoal::new);
         }
 
         public static ToolTask createAttackTask() {

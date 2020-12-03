@@ -13,10 +13,7 @@ import hellfirepvp.astralsorcery.common.crafting.builder.SimpleAltarRecipeBuilde
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeGrid;
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.FluidsAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.lib.TagsAS;
+import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
@@ -57,6 +54,9 @@ public class CelestialAltarRecipeProvider {
                         .key('R', BlocksAS.MARBLE_RUNED)
                 )
                 .addOutput(BlocksAS.ALTAR_RADIANCE)
+                .addAltarEffect(AltarRecipeEffectsAS.PILLAR_SPARKLE) //doesn't work?
+                //misses lots of blue/white random sparkles!
+                .addAltarEffect(AltarRecipeEffectsAS.LUMINESCENCE_FLARE)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
@@ -94,6 +94,8 @@ public class CelestialAltarRecipeProvider {
                         .key('P', BlocksAS.INFUSED_WOOD_COLUMN)
                 )
                 .addOutput(BlocksAS.REFRACTION_TABLE)
+                .addAltarEffect(AltarRecipeEffectsAS.ALTAR_RANDOM_SPARKLE)
+                .addAltarEffect(AltarRecipeEffectsAS.ALTAR_DEFAULT_LIGHTBEAM)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
@@ -149,6 +151,7 @@ public class CelestialAltarRecipeProvider {
                         .key('S', TagsAS.Items.DUSTS_STARDUST)
                 )
                 .addOutput(ItemsAS.ENCHANTMENT_AMULET)
+                .addAltarEffect(AltarRecipeEffectsAS.LARGE_DUST_SWIRL)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
@@ -166,6 +169,7 @@ public class CelestialAltarRecipeProvider {
                         .key('S', TagsAS.Items.DUSTS_STARDUST)
                 )
                 .addOutput(ItemsAS.ENCHANTMENT_AMULET)
+                .addAltarEffect(AltarRecipeEffectsAS.LARGE_DUST_SWIRL)
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()

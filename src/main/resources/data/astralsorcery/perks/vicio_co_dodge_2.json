@@ -4,6 +4,7 @@
   "x": 45.0,
   "y": 69.0,
   "name": "perk.astralsorcery.generic.inc.dodge",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

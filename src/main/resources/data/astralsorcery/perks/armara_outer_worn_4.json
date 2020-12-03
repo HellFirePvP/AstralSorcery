@@ -4,6 +4,7 @@
   "x": 71.0,
   "y": 61.0,
   "name": "perk.astralsorcery.key.no_armor",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:armara_outer_worn_3"

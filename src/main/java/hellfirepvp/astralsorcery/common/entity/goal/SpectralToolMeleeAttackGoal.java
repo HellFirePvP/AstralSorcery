@@ -100,7 +100,7 @@ public class SpectralToolMeleeAttackGoal extends SpectralToolGoal {
         } else {
             this.getEntity().getMoveHelper().setMoveTo(selectedTarget.getPosX(), selectedTarget.getPosY() + selectedTarget.getHeight() / 2, selectedTarget.getPosZ(), this.getSpeed());
 
-            if (Vector3.atEntityCorner(this.getEntity()).distance(this.selectedTarget) <= 4) {
+            if (Vector3.atEntityCorner(this.getEntity()).distanceSquared(this.selectedTarget) <= 16) {
                 this.actionCooldown++;
                 if (this.actionCooldown >= MantleEffectPelotrio.CONFIG.ticksPerSwordAttack.get()) {
                     DamageUtil.attackEntityFrom(this.selectedTarget, CommonProxy.DAMAGE_SOURCE_STELLAR, MantleEffectPelotrio.CONFIG.swordDamage.get().floatValue());

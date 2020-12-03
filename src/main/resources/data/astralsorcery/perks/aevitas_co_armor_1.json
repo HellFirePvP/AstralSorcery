@@ -4,6 +4,7 @@
   "x": 12.0,
   "y": 43.0,
   "name": "perk.astralsorcery.generic.add.armor",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

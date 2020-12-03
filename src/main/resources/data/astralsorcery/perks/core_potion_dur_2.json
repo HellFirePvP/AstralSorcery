@@ -4,6 +4,7 @@
   "x": 42.0,
   "y": 38.0,
   "name": "perk.astralsorcery.named.alchemists_flasks",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

@@ -4,8 +4,14 @@
   "x": 59.0,
   "y": 21.0,
   "name": "perk.astralsorcery.hybrid.proj_dmg_speed",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
+      {
+        "type": "astralsorcery:projectilespeed",
+        "mode": "ADDED_MULTIPLY",
+        "value": 0.03
+      },
       {
         "type": "astralsorcery:perkeffect",
         "mode": "ADDED_MULTIPLY",
@@ -13,11 +19,6 @@
       },
       {
         "type": "astralsorcery:projectileattackdamage",
-        "mode": "ADDED_MULTIPLY",
-        "value": 0.03
-      },
-      {
-        "type": "astralsorcery:projectilespeed",
         "mode": "ADDED_MULTIPLY",
         "value": 0.03
       }

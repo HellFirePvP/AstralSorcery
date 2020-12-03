@@ -4,6 +4,7 @@
   "x": 26.0,
   "y": 27.0,
   "name": "perk.astralsorcery.named.illusory_hammer",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

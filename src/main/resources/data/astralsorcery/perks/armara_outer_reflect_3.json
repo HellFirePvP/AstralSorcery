@@ -4,6 +4,7 @@
   "x": 77.0,
   "y": 46.0,
   "name": "perk.astralsorcery.generic.inc.thorns",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {

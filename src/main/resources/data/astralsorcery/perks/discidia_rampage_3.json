@@ -4,6 +4,7 @@
   "x": 44.0,
   "y": 24.0,
   "name": "perk.astralsorcery.key.rampage",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:discidia_rampage_2"

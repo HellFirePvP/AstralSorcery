@@ -4,15 +4,16 @@
   "x": 23.0,
   "y": 53.0,
   "name": "perk.astralsorcery.hybrid.reach_mining",
+  "hiddenUnlessAllocated": false,
   "data": {
     "modifiers": [
       {
-        "type": "astralsorcery:reach",
+        "type": "astralsorcery:harvestspeed",
         "mode": "ADDED_MULTIPLY",
         "value": 0.03
       },
       {
-        "type": "astralsorcery:harvestspeed",
+        "type": "astralsorcery:reach",
         "mode": "ADDED_MULTIPLY",
         "value": 0.03
       }

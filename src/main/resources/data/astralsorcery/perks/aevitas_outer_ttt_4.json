@@ -4,6 +4,7 @@
   "x": 22.0,
   "y": 62.0,
   "name": "perk.astralsorcery.key.void_trash",
+  "hiddenUnlessAllocated": false,
   "data": {},
   "connection": [
     "astralsorcery:aevitas_outer_ttt_3"
