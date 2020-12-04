@@ -30,7 +30,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -87,7 +86,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
                 }
                 ItemStack result = RecipeHelper.findSmeltingResult(entity.getEntityWorld(), current).orElse(ItemStack.EMPTY);
                 if (!result.isEmpty()) {
-                    Vector3 entityPos = Vector3.atEntityCenter(entity);
+                    Vector3 entityPos = Vector3.atEntityCorner(entity);
                     ItemUtils.dropItemNaturally(entity.getEntityWorld(), entityPos.getX(), entityPos.getY(), entityPos.getZ(), ItemUtils.copyStackWithSize(result, result.getCount()));
                     if (current.getCount() > 1) {
                         current.shrink(1);

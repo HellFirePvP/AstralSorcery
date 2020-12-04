@@ -65,7 +65,7 @@ public class CameraPath extends EntityCameraRenderView implements ICameraPersist
         if (delegate != null) {
             delegate.onCameraTick(entity, replacement);
         }
-        setCameraFocus(Vector3.atEntityCenter(replacement));
+        setCameraFocus(Vector3.atEntityCorner(replacement));
         this.expired = this.ticksExisted > totalTickDuration;
         if (pathPoints.isEmpty()) {
             this.expired = true;

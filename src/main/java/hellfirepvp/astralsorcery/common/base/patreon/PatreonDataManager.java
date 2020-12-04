@@ -91,8 +91,7 @@ public class PatreonDataManager {
             try {
                 /*PatreonEffect effect = PatreonEffectType.CRYSTAL_FOOTPRINTS.getProvider().buildEffect(hellfire,
                         Arrays.asList("777971c5-fb58-4519-a975-b1b5766e44d1",
-                                "DARK_GREEN",
-                                "7865553"));
+                                "null"));
                 effect.initialize();
                 effect.attachEventListeners(MinecraftForge.EVENT_BUS);
                 effect.attachTickListeners(AstralSorcery.getProxy().getTickManager()::register);

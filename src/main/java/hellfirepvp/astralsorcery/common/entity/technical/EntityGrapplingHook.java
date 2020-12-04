@@ -69,10 +69,7 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
 
     public EntityGrapplingHook(LivingEntity thrower, World world) {
         super(EntityTypesAS.GRAPPLING_HOOK, thrower, world);
-        float x = -MathHelper.sin(thrower.rotationYaw * 0.017453292F) * MathHelper.cos(thrower.rotationPitch * 0.017453292F);
-        float y = -MathHelper.sin((thrower.rotationPitch) * 0.017453292F);
-        float z = MathHelper.cos(thrower.rotationYaw * 0.017453292F) * MathHelper.cos(thrower.rotationPitch * 0.017453292F);
-        this.shoot(x, y, z, 1.7F, 0F);
+        this.shoot(Vector3.directionFromYawPitch(thrower.rotationYaw, thrower.rotationPitch), 1.5F);
         this.throwingEntity = thrower;
     }
 
@@ -296,6 +293,10 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
         list.add(to.clone());
 
         return list;
+    }
+
+    public void shoot(Vector3 dir, float velocity) {
+        super.shoot(dir.getX(), dir.getY(), dir.getZ(), velocity, 0F);
     }
 
     @Override

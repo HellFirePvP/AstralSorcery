@@ -69,7 +69,7 @@ public class MantleEffectVicio extends MantleEffect {
         super.tickClient(player);
 
         if (player.isElytraFlying() || (!(player.isCreative() || player.isSpectator()) && player.abilities.isFlying)) {
-            if (Minecraft.getInstance().gameSettings.getPointOfView().func_243193_b()) {
+            if (!Minecraft.getInstance().gameSettings.getPointOfView().func_243193_b()) {
                 this.playCapeSparkles(player, 0.1F);
             } else {
                 this.playCapeSparkles(player, 0.7F);
