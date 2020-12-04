@@ -16,13 +16,14 @@ import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
 import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.enchantment.QuickChargeEnchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -39,9 +40,12 @@ import java.util.*;
 public class DynamicEnchantmentHelper {
 
     private static int getNewEnchantmentLevel(int current, String enchStr, ItemStack item, @Nullable List<DynamicEnchantment> context) {
-        Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(enchStr));
-        if (ench != null) {
-            return getNewEnchantmentLevel(current, ench, item, context);
+        Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(enchStr));
+        if (enchantment != null) {
+            current = getNewEnchantmentLevel(current, enchantment, item, context);
+            if (enchantment instanceof QuickChargeEnchantment) {
+                current = MathHelper.clamp(current, 0, 5);
+            }
         }
         return current;
     }
@@ -76,6 +80,9 @@ public class DynamicEnchantmentHelper {
                 default:
                     break;
             }
+        }
+        if (enchantment instanceof QuickChargeEnchantment) {
+            current = MathHelper.clamp(current, 0, 5);
         }
         return current;
     }
