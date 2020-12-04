@@ -813,18 +813,18 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private void updateSearchHighlight() {
         this.searchMatches.clear();
 
-        String matchText = this.searchTextEntry.getText().toLowerCase();
+        String matchText = this.searchTextEntry.getText().toLowerCase(Locale.ROOT);
         if (matchText.length() < 3) return;
         for (PerkTreePoint<?> point : PerkTree.PERK_TREE.getPerkPoints(LogicalSide.CLIENT)) {
             AbstractPerk perk = point.getPerk();
             if (perk instanceof ProgressGatedPerk && !((ProgressGatedPerk) perk).canSeeClient()) {
                 continue;
             }
-            if (perk.getCategory().getName().getString().toLowerCase().contains(matchText)) {
+            if (perk.getCategory().getName().getString().toLowerCase(Locale.ROOT).contains(matchText)) {
                 this.searchMatches.add(perk);
             } else {
                 for (IFormattableTextComponent tooltip : perk.getLocalizedTooltip()) {
-                    if (tooltip.getString().toLowerCase().contains(matchText)) {
+                    if (tooltip.getString().toLowerCase(Locale.ROOT).contains(matchText)) {
                         this.searchMatches.add(perk);
                         break;
                     }
@@ -832,7 +832,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
             }
         }
         IFormattableTextComponent sealedInfo = new TranslationTextComponent("perk.info.astralsorcery.sealed");
-        if (sealedInfo.getString().toLowerCase().contains(matchText)) {
+        if (sealedInfo.getString().toLowerCase(Locale.ROOT).contains(matchText)) {
             PlayerProgress prog = ResearchHelper.getClientProgress();
             for (AbstractPerk sealed : prog.getPerkData().getSealedPerks()) {
                 if (!this.searchMatches.contains(sealed)) {

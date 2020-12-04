@@ -19,6 +19,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 
+import java.util.Locale;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -67,7 +69,7 @@ public class AttributeTypeAllElementalResist extends PerkAttributeType {
         if (key == null) {
             return false;
         }
-        key = key.toLowerCase();
+        key = key.toLowerCase(Locale.ROOT);
         return key.contains("fire") || key.contains("heat") || key.contains("lightning") ||
                 key.contains("cold") || key.contains("freez") || key.contains("discharg") ||
                 key.contains("electr") || key.contains("froze") || key.contains("ice");

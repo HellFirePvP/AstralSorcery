@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.block.WorldBlockPos;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.tick.TickTokenMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -149,17 +150,17 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
                         continue;
                     }
 
-                    entity.addPotionEffect(new EffectInstance(Effects.SPEED, 100, potionAmplifier + 4));
-                    entity.addPotionEffect(new EffectInstance(Effects.REGENERATION, 100, potionAmplifier + 4));
-                    entity.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 100, potionAmplifier + 2));
-                    entity.addPotionEffect(new EffectInstance(Effects.STRENGTH, 100, potionAmplifier + 4));
-                    entity.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 100, potionAmplifier + 4));
-                    entity.addPotionEffect(new EffectInstance(Effects.HASTE, 100, potionAmplifier + 4));
-                    entity.addPotionEffect(new EffectInstance(EffectsAS.EFFECT_DROP_MODIFIER, 100, 5));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.SPEED, 100, potionAmplifier + 4));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.REGENERATION, 100, potionAmplifier + 4));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.RESISTANCE, 100, potionAmplifier + 2));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.STRENGTH, 100, potionAmplifier + 4));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.WATER_BREATHING, 100, potionAmplifier + 4));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.HASTE, 100, potionAmplifier + 4));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(EffectsAS.EFFECT_DROP_MODIFIER, 100, 5));
                 } else {
-                    entity.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 30, Math.min(potionAmplifier, 3), true, true));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.RESISTANCE, 30, Math.min(potionAmplifier, 3), true, true));
                     if (entity instanceof PlayerEntity) {
-                        entity.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 30, potionAmplifier, true, false));
+                        EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.ABSORPTION, 30, potionAmplifier, true, false));
                     }
                 }
             }

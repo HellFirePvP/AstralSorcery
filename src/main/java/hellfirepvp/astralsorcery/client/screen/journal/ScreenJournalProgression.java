@@ -34,10 +34,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -361,14 +359,14 @@ public class ScreenJournalProgression extends ScreenJournal {
 
         this.searchResult.clear();
         this.searchResultPageIndex.clear();
-        String searchText = this.searchTextEntry.getText().toLowerCase();
+        String searchText = this.searchTextEntry.getText().toLowerCase(Locale.ROOT);
         for (ResearchProgression research : ResearchProgression.values()) {
             if (!prog.hasResearch(research)) {
                 continue;
             }
 
             for (ResearchNode node : research.getResearchNodes()) {
-                if (node.getName().getString().toLowerCase().contains(searchText) && !this.searchResult.contains(node)) {
+                if (node.getName().getString().toLowerCase(Locale.ROOT).contains(searchText) && !this.searchResult.contains(node)) {
                     this.searchResult.add(node);
                 }
             }

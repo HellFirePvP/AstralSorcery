@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -37,8 +38,8 @@ public class LogConfig extends ConfigEntry {
         for (LogCategory category : LogCategory.values()) {
             ForgeConfigSpec.BooleanValue bValLogging = cfgBuilder
                     .comment("Set to true to enable this logging category. Only do this if you have to debug this section of code! May spam your log HEAVILY!")
-                    .translation(translationKey(category.name().toLowerCase()))
-                    .define(category.name().toLowerCase(), false);
+                    .translation(translationKey(category.name().toLowerCase(Locale.ROOT)))
+                    .define(category.name().toLowerCase(Locale.ROOT), false);
 
             loggingConfigurations.put(category, bValLogging);
         }

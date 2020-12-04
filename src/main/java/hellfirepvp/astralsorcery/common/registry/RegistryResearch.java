@@ -23,6 +23,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
 
+import java.util.Locale;
 import java.util.function.Predicate;
 
 /**
@@ -831,6 +832,6 @@ public class RegistryResearch {
     }
 
     private static JournalPage text(String identifier) {
-        return new JournalPageText(AstralSorcery.MODID.toLowerCase() + ".journal." + identifier + ".text");
+        return new JournalPageText(AstralSorcery.MODID.toLowerCase(Locale.ROOT) + ".journal." + identifier + ".text");
     }
 }

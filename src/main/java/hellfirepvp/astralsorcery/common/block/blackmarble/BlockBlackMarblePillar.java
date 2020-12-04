@@ -31,6 +31,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Locale;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -135,7 +136,7 @@ public class BlockBlackMarblePillar extends BlockBlackMarbleTemplate implements 
 
         @Override
         public String getString() {
-            return name().toLowerCase();
+            return name().toLowerCase(Locale.ROOT);
         }
 
         @Override

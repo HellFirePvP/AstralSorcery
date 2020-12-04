@@ -143,7 +143,7 @@ public class CommonProxy {
     private PrimerEventHandler registryEventHandler;
     private CommonScheduler commonScheduler;
     private TickManager tickManager;
-    private List<ServerLifecycleListener> serverLifecycleListeners = Lists.newArrayList();
+    private final List<ServerLifecycleListener> serverLifecycleListeners = Lists.newArrayList();
 
     private CommonConfig commonConfig;
     private ServerConfig serverConfig;
@@ -167,6 +167,7 @@ public class CommonProxy {
         PerkTypeHandler.init();
         ModifierManager.init();
         RegistryConstellations.init();
+        RegistryArgumentTypes.init();
 
         this.initializeConfigurations();
         ConfigRegistries.getRegistries().buildDataRegistries(this.serverConfig);

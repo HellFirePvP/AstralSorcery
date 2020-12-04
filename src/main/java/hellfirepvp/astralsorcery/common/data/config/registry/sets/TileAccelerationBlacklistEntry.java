@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import java.util.Locale;
 import java.util.function.Predicate;
 
 /**
@@ -38,7 +39,7 @@ public class TileAccelerationBlacklistEntry implements ConfigDataSet, Predicate<
 
     @Override
     public boolean test(TileEntity tile) {
-        String testStr = this.filterString.toLowerCase();
+        String testStr = this.filterString.toLowerCase(Locale.ROOT);
         if (testStr.isEmpty()) {
             return false;
         }
@@ -48,11 +49,11 @@ public class TileAccelerationBlacklistEntry implements ConfigDataSet, Predicate<
         }
 
         ResourceLocation key = tile.getType().getRegistryName();
-        if (key != null && key.toString().toLowerCase().startsWith(testStr)) {
+        if (key != null && key.toString().toLowerCase(Locale.ROOT).startsWith(testStr)) {
             return true;
         }
 
-        String className = tile.getClass().getName().toLowerCase();
+        String className = tile.getClass().getName().toLowerCase(Locale.ROOT);
         return className.startsWith(testStr);
     }
 

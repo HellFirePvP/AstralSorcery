@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
@@ -120,12 +121,12 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
         for (LivingEntity entity : entities) {
             if (entity.isAlive()) {
                 if (properties.isCorrupted()) {
-                    entity.addPotionEffect(new EffectInstance(EffectsAS.EFFECT_BLEED, 200, amplifier * 2));
-                    entity.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 200, amplifier * 3));
-                    entity.addPotionEffect(new EffectInstance(Effects.HUNGER, 200, amplifier * 4));
-                    entity.addPotionEffect(new EffectInstance(Effects.MINING_FATIGUE, 200, amplifier * 2));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(EffectsAS.EFFECT_BLEED, 120, amplifier * 2));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.WEAKNESS, 120, amplifier * 3));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.HUNGER, 120, amplifier * 4));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.MINING_FATIGUE, 120, amplifier * 2));
                 } else {
-                    entity.addPotionEffect(new EffectInstance(Effects.REGENERATION, 200, amplifier));
+                    EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.REGENERATION, 120, amplifier));
                 }
             }
         }

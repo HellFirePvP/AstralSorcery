@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -63,6 +64,6 @@ public enum ModifierType {
 
     public String getUnlocalizedModifierName(boolean positive) {
         String base = positive ? "perk.modifier.astralsorcery.%s.add" : "perk.modifier.astralsorcery.%s.sub";
-        return String.format(base, name().toLowerCase());
+        return String.format(base, name().toLowerCase(Locale.ROOT));
     }
 }
