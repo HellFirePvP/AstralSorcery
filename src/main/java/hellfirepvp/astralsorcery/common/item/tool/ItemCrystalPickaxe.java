@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
 import com.google.common.collect.Sets;
+import hellfirepvp.astralsorcery.common.item.base.TypeEnchantableItem;
 import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -25,7 +26,7 @@ import net.minecraftforge.common.ToolType;
  * Created by HellFirePvP
  * Date: 17.08.2019 / 18:03
  */
-public class ItemCrystalPickaxe extends ItemCrystalTierItem {
+public class ItemCrystalPickaxe extends ItemCrystalTierItem implements TypeEnchantableItem {
 
     public ItemCrystalPickaxe() {
         super(ToolType.PICKAXE, new Properties(), Sets.newHashSet(Material.ROCK, Material.IRON, Material.ANVIL));
@@ -38,6 +39,11 @@ public class ItemCrystalPickaxe extends ItemCrystalTierItem {
             CrystalPropertiesAS.CREATIVE_CRYSTAL_TOOL_ATTRIBUTES.store(stack);
             stacks.add(stack);
         }
+    }
+
+    @Override
+    public boolean canEnchantItem(ItemStack stack, EnchantmentType type) {
+        return type == EnchantmentType.BREAKABLE || type == EnchantmentType.DIGGER;
     }
 
     @Override

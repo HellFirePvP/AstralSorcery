@@ -143,7 +143,8 @@ public class TileSpectralRelay extends TileEntityTick {
                     TileSpectralRelay relay;
                     return state.getBlock() instanceof BlockSpectralRelay &&
                             (relay = MiscUtils.getTileAt(world1, pos1, TileSpectralRelay.class, false)) != null &&
-                            relay.hasGlassLens();
+                            relay.hasGlassLens() &&
+                            relay.hasMultiblock();
                 }));
         nearbyRelays.forEach(relayPos -> {
             TileSpectralRelay relay = MiscUtils.getTileAt(world, relayPos, TileSpectralRelay.class, false);
