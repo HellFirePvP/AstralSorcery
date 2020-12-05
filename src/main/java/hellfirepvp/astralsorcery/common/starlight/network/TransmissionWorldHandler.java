@@ -71,7 +71,7 @@ public class TransmissionWorldHandler {
             if (!cachedSourceChain.containsKey(source)) {
                 if (!sourcePosBuilding.contains(at)) {
                     sourcePosBuilding.add(at);
-                    buildSourceNetworkThreaded(world, source, handler, at);
+                    buildNetworkChain(world, source, handler, at);
                 }
                 continue; //No chain for that source (yet)
             }
@@ -128,11 +128,11 @@ public class TransmissionWorldHandler {
         }
     }
 
-    private void buildSourceNetworkThreaded(World world, IIndependentStarlightSource source, WorldNetworkHandler handler, BlockPos sourcePos) {
-        TransmissionChain.threadedBuildTransmissionChain(world, this, source, handler, sourcePos);
+    private void buildNetworkChain(World world, IIndependentStarlightSource source, WorldNetworkHandler handler, BlockPos sourcePos) {
+        TransmissionChain.buildNetworkChain(world, this, source, handler, sourcePos);
     }
 
-    void threadTransmissionChainCallback(World world, TransmissionChain chain, IIndependentStarlightSource source, WorldNetworkHandler handle, BlockPos sourcePos) {
+    void updateNetworkData(World world, TransmissionChain chain, IIndependentStarlightSource source, WorldNetworkHandler handle, BlockPos sourcePos) {
         sourcePosBuilding.remove(sourcePos);
 
         cachedSourceChain.put(source, chain);

@@ -53,19 +53,15 @@ public class TransmissionChain {
         this.sourceNode = sourceNode;
     }
 
-    public static void threadedBuildTransmissionChain(World world, TransmissionWorldHandler handle, IIndependentStarlightSource source, WorldNetworkHandler netHandler, BlockPos sourcePos) {
-        Thread tr = new Thread(() -> {
-            TransmissionChain chain = buildFromSource(netHandler, sourcePos);
-            handle.threadTransmissionChainCallback(world, chain, source, netHandler, sourcePos);
-            SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS, DataLightConnections.class, data -> {
-                data.updateNewConnectionsThreaded(netHandler.getWorld().getDimension().getType(), chain.getFoundConnections());
-            });
-            SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
-                data.updateNewEndpoints(netHandler.getWorld().getDimension().getType(), chain.getResolvedNormalBlockPositions());
-            });
+    public static void buildNetworkChain(World world, TransmissionWorldHandler handle, IIndependentStarlightSource source, WorldNetworkHandler netHandler, BlockPos sourcePos) {
+        TransmissionChain chain = buildFromSource(netHandler, sourcePos);
+        handle.updateNetworkData(world, chain, source, netHandler, sourcePos);
+        SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS, DataLightConnections.class, data -> {
+            data.updateNewConnectionsThreaded(netHandler.getWorld().getDimension().getType(), chain.getFoundConnections());
         });
-        tr.setName("TrChainCalculationThread");
-        tr.start();
+        SyncDataHolder.executeServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS, DataLightBlockEndpoints.class, data -> {
+            data.updateNewEndpoints(netHandler.getWorld().getDimension().getType(), chain.getResolvedNormalBlockPositions());
+        });
     }
 
     private static TransmissionChain buildFromSource(WorldNetworkHandler netHandler, BlockPos at) {
