@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectPelotrio;
 import hellfirepvp.astralsorcery.common.entity.goal.SpectralToolBreakBlockGoal;
+import hellfirepvp.astralsorcery.common.entity.goal.SpectralToolBreakLogGoal;
 import hellfirepvp.astralsorcery.common.entity.goal.SpectralToolGoal;
 import hellfirepvp.astralsorcery.common.entity.goal.SpectralToolMeleeAttackGoal;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
@@ -220,7 +221,7 @@ public class EntitySpectralTool extends FlyingEntity {
             return new ToolTask(MantleEffectPelotrio.CONFIG.durationAxe.get(),
                     MantleEffectPelotrio.CONFIG.speedAxe.get(),
                     new ItemStack(Items.DIAMOND_AXE),
-                    SpectralToolBreakBlockGoal::new);
+                    SpectralToolBreakLogGoal::new);
         }
 
         public static ToolTask createAttackTask() {

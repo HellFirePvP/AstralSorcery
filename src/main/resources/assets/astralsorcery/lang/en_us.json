@@ -5,6 +5,9 @@
 
   "astralsorcery.command.argument.constellation.notfound": "Constellation not found.",
 
+  "death.attack.astralsorcery.stellar": "%1$s disintegrated into Stardust",
+  "death.attack.astralsorcery.bleed": "%1$s bled to death",
+
   "jei.category.astralsorcery.well": "Lightwell",
   "jei.category.astralsorcery.infuser": "Starlight Infusion",
   "jei.category.astralsorcery.interaction": "Liquid Interaction",

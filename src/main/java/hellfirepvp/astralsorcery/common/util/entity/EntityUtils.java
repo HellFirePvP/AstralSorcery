@@ -16,6 +16,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -57,6 +58,17 @@ import java.util.function.Supplier;
 public class EntityUtils {
 
     private static final Random rand = new Random();
+
+    public static void applyPotionEffectAtHalf(LivingEntity entity, EffectInstance effect) {
+        EffectInstance activeEffect = entity.getActivePotionEffect(effect.getPotion());
+        if (activeEffect != null) {
+            if (activeEffect.duration <= effect.duration / 2) {
+                entity.addPotionEffect(effect);
+            }
+        } else {
+            entity.addPotionEffect(effect);
+        }
+    }
 
     public static void applyVortexMotion(Supplier<Vector3> positionSupplier, Consumer<Vector3> addMotion, Vector3 to, double vortexRange, double multiplier) {
         Vector3 pos = positionSupplier.get();

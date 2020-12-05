@@ -88,20 +88,6 @@ public class MantleEffectPelotrio extends MantleEffect {
                 ItemMantle.getEffect(player, ConstellationsAS.pelotrio) != null) {
 
             BlockState state = event.getState();
-            if ((state.getHarvestTool() == ToolType.PICKAXE || state.getMaterial().isToolNotRequired()) &&
-                    !player.getHeldItemMainhand().isEmpty() &&
-                    player.getHeldItemMainhand().getToolTypes().contains(ToolType.PICKAXE)) {
-
-                if (rand.nextFloat() < CONFIG.chanceSpawnPickaxe.get()) {
-                    if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerPickaxe.get())) {
-                        if (world.addEntity(new EntitySpectralTool((World) world, player.getPosition(), player, EntitySpectralTool.ToolTask.createPickaxeTask()))) {
-                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerPickaxe.get(), false);
-                        }
-                    }
-                }
-                return;
-            }
-
             if ((state.getHarvestTool() == ToolType.AXE || state.getMaterial().isToolNotRequired()) &&
                     (state.isIn(BlockTags.LOGS) || state.isIn(BlockTags.LEAVES)) &&
                     !player.getHeldItemMainhand().isEmpty() &&
@@ -111,6 +97,19 @@ public class MantleEffectPelotrio extends MantleEffect {
                     if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerAxe.get())) {
                         if (world.addEntity(new EntitySpectralTool((World) world, player.getPosition(), player, EntitySpectralTool.ToolTask.createLogTask()))) {
                             AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerAxe.get(), false);
+                        }
+                    }
+                }
+                return;
+            }
+            if ((state.getHarvestTool() == ToolType.PICKAXE || state.getMaterial().isToolNotRequired()) &&
+                    !player.getHeldItemMainhand().isEmpty() &&
+                    player.getHeldItemMainhand().getToolTypes().contains(ToolType.PICKAXE)) {
+
+                if (rand.nextFloat() < CONFIG.chanceSpawnPickaxe.get()) {
+                    if (AlignmentChargeHandler.INSTANCE.hasCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerPickaxe.get())) {
+                        if (world.addEntity(new EntitySpectralTool((World) world, player.getPosition(), player, EntitySpectralTool.ToolTask.createPickaxeTask()))) {
+                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerPickaxe.get(), false);
                         }
                     }
                 }
