@@ -191,7 +191,7 @@ public class ResearchManager {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!progress.isValid()) return false;
 
-        if (constellation != null && !progress.getKnownConstellations().contains(constellation.getRegistryName())) {
+        if (constellation != null && !progress.hasConstellationDiscovered(constellation)) {
             return false;
         }
         PlayerPerkData perkData = progress.getPerkData();
