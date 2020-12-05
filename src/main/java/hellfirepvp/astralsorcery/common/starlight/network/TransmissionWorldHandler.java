@@ -22,11 +22,9 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -74,9 +72,8 @@ public class TransmissionWorldHandler {
             if (!cachedSourceChain.containsKey(source)) {
                 if (!sourcePosBuilding.contains(at)) {
                     sourcePosBuilding.add(at);
-                    buildSourceNetworkThreaded(world, source, handler, at);
+                    buildNetworkChain(world, source, handler, at);
                 }
-                continue; //No chain for that source (yet)
             }
 
             List<ChunkPos> activeChunks = activeChunkMap.get(source);
@@ -131,11 +128,11 @@ public class TransmissionWorldHandler {
         }
     }
 
-    private void buildSourceNetworkThreaded(World world, IIndependentStarlightSource source, WorldNetworkHandler handler, BlockPos sourcePos) {
-        TransmissionChain.threadedBuildTransmissionChain(world, this, source, handler, sourcePos);
+    private void buildNetworkChain(World world, IIndependentStarlightSource source, WorldNetworkHandler handler, BlockPos sourcePos) {
+        TransmissionChain.buildNetworkChain(world, this, source, handler, sourcePos);
     }
 
-    void threadTransmissionChainCallback(World world, TransmissionChain chain, IIndependentStarlightSource source, WorldNetworkHandler handle, BlockPos sourcePos) {
+    void updateNetworkChainData(World world, TransmissionChain chain, IIndependentStarlightSource source, WorldNetworkHandler handle, BlockPos sourcePos) {
         sourcePosBuilding.remove(sourcePos);
 
         cachedSourceChain.put(source, chain);

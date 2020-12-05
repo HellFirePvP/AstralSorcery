@@ -153,7 +153,7 @@ public class TypeStarHalo extends PatreonEffect implements ITickHandler {
     }
 
     private boolean shouldDoEffect(PlayerEntity player) {
-        return /*player.getUniqueID().equals(playerUUID) &&*/
+        return player.getUniqueID().equals(playerUUID) &&
                 (player.getPose() == Pose.STANDING || player.getPose() == Pose.CROUCHING) &&
                 !player.isPotionActive(Effects.INVISIBILITY);
     }
