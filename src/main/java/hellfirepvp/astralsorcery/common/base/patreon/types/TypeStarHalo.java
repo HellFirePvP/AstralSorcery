@@ -77,7 +77,7 @@ public class TypeStarHalo extends PatreonEffect implements ITickHandler {
 
         for (int i = 0; i < 3; i++) {
             Vector3 offset = MiscUtils.getRandomCirclePosition(new Vector3(), Vector3.RotAxis.Y_AXIS, 0.3F);
-            float scale = 0.2F + rand.nextFloat() * 0.15F;
+            float scale = 0.16F + rand.nextFloat() * 0.12F;
             int age = 20 + rand.nextInt(10);
             MiscUtils.applyRandomOffset(offset, rand, 0.02F);
 
@@ -86,8 +86,8 @@ public class TypeStarHalo extends PatreonEffect implements ITickHandler {
                     .setAlphaMultiplier(0.8F)
                     .alpha(((VFXAlphaFunction<EntityVisualFX>) (fx, alphaIn, pTicks) -> {
                         if (shouldDoEffect(player) && Minecraft.getInstance().gameSettings.getPointOfView().func_243192_a()) {
-                            if (player.rotationPitch < -35) {
-                                return MathHelper.clamp(1F - (Math.abs(player.rotationPitch) - 35F) / 15F, 0, 1F) * alphaIn;
+                            if (player.rotationPitch < -30) {
+                                return MathHelper.clamp(1F - (Math.abs(player.rotationPitch) - 30F) / 15F, 0, 1F) * alphaIn;
                             }
                         }
                         return alphaIn;
@@ -107,8 +107,8 @@ public class TypeStarHalo extends PatreonEffect implements ITickHandler {
                         .color(VFXColorFunction.WHITE)
                         .alpha(((VFXAlphaFunction<EntityVisualFX>) (fx, alphaIn, pTicks) -> {
                             if (shouldDoEffect(player) && Minecraft.getInstance().gameSettings.getPointOfView().func_243192_a()) {
-                                if (player.rotationPitch < -35) {
-                                    return MathHelper.clamp(1F - (Math.abs(player.rotationPitch) - 35F) / 15F, 0, 1F) * alphaIn;
+                                if (player.rotationPitch < -30) {
+                                    return MathHelper.clamp(1F - (Math.abs(player.rotationPitch) - 30F) / 15F, 0, 1F) * alphaIn;
                                 }
                             }
                             return alphaIn;
@@ -123,7 +123,9 @@ public class TypeStarHalo extends PatreonEffect implements ITickHandler {
                     @Override
                     public Vector3 updatePosition(@Nonnull EntityVisualFX fx, @Nonnull Vector3 position, @Nonnull Vector3 motionToBeMoved) {
                         if (shouldDoEffect(player)) {
-                            return Vector3.atEntityCorner(player).addY(player.getEyeHeight(player.getPose()))
+                            Vector3 diff = new Vector3(player.prevPosX - player.getPosX(), player.prevPosY - player.getPosY(), player.prevPosZ - player.getPosZ());
+                            diff.divide(4);
+                            return Vector3.atEntityCorner(player).add(diff).addY(player.getEyeHeight(player.getPose()))
                                     .addY(0.4F)
                                     .add(offset);
                         }
@@ -136,7 +138,9 @@ public class TypeStarHalo extends PatreonEffect implements ITickHandler {
                         @Override
                         public Vector3 updatePosition(@Nonnull EntityVisualFX fx, @Nonnull Vector3 position, @Nonnull Vector3 motionToBeMoved) {
                             if (shouldDoEffect(player)) {
-                                return Vector3.atEntityCorner(player).addY(player.getEyeHeight(player.getPose()))
+                                Vector3 diff = new Vector3(player.prevPosX - player.getPosX(), player.prevPosY - player.getPosY(), player.prevPosZ - player.getPosZ());
+                                diff.divide(4);
+                                return Vector3.atEntityCorner(player).add(diff).addY(player.getEyeHeight(player.getPose()))
                                         .addY(0.4F)
                                         .add(offset);
                             }
@@ -149,7 +153,7 @@ public class TypeStarHalo extends PatreonEffect implements ITickHandler {
     }
 
     private boolean shouldDoEffect(PlayerEntity player) {
-        return player.getUniqueID().equals(playerUUID) &&
+        return /*player.getUniqueID().equals(playerUUID) &&*/
                 (player.getPose() == Pose.STANDING || player.getPose() == Pose.CROUCHING) &&
                 !player.isPotionActive(Effects.INVISIBILITY);
     }

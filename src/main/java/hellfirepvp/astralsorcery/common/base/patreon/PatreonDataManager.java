@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -89,14 +90,14 @@ public class PatreonDataManager {
 
             UUID hellfire = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1");
             try {
-                /*PatreonEffect effect = PatreonEffectType.CRYSTAL_FOOTPRINTS.getProvider().buildEffect(hellfire,
+                PatreonEffect effect = PatreonEffectType.STAR_HALO.getProvider().buildEffect(hellfire,
                         Arrays.asList("777971c5-fb58-4519-a975-b1b5766e44d1",
                                 "null"));
                 effect.initialize();
                 effect.attachEventListeners(MinecraftForge.EVENT_BUS);
                 effect.attachTickListeners(AstralSorcery.getProxy().getTickManager()::register);
                 PatreonEffectHelper.playerEffectMap.computeIfAbsent(hellfire, uuid -> new ArrayList<>()).add(effect);
-                PatreonEffectHelper.effectMap.put(effect.getEffectUUID(), effect);*/
+                PatreonEffectHelper.effectMap.put(effect.getEffectUUID(), effect);
             } catch (Exception e) {
                 e.printStackTrace();
             }

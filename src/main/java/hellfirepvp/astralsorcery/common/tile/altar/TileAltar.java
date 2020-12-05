@@ -207,8 +207,8 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
             return;
         }
         if (this.activeRecipe.isFinished()) {
-            //this.finishRecipe();
-            //return;
+            this.finishRecipe();
+            return;
         }
 
         this.activeRecipe.setState(this.activeRecipe.tick(this));

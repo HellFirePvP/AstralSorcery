@@ -88,7 +88,7 @@ public class FXLightning extends EntityVisualFX {
         rootVertices.add(this.root);
 
         double l = directionVector.length();
-        int iterations = Math.max(MathHelper.floor(Math.round(Math.sqrt(l))), 400);
+        int iterations = Math.min(MathHelper.floor(Math.round(Math.sqrt(l))), 200);
         for (int i = 0; i < iterations; i++) {
             LinkedList<LightningVertex> newRootVertices = new LinkedList<>();
             for (LightningVertex sourceVertex : rootVertices) {

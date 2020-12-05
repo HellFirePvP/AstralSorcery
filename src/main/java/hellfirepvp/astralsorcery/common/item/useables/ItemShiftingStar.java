@@ -94,14 +94,15 @@ public class ItemShiftingStar extends Item implements PerkExperienceRevealer {
                     ResearchManager.setExp(player, MathHelper.lfloor(perkExp));
                     player.sendMessage(new TranslationTextComponent("astralsorcery.progress.switch.attunement").mergeStyle(TextFormatting.BLUE), Util.DUMMY_UUID);
                     SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, worldIn, entityLiving.getPosition(), 1F, 1F);
-
+                    return ItemStack.EMPTY;
                 }
             } else if (ResearchManager.setAttunedConstellation(player, null)) {
                 player.sendMessage(new TranslationTextComponent("astralsorcery.progress.remove.attunement").mergeStyle(TextFormatting.BLUE), Util.DUMMY_UUID);
                 SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, worldIn, entityLiving.getPosition(), 1F, 1F);
+                return ItemStack.EMPTY;
             }
         }
-        return ItemStack.EMPTY;
+        return stack;
     }
 
     @Override
