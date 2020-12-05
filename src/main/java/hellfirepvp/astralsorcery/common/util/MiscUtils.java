@@ -597,6 +597,17 @@ public class MiscUtils {
         return selection[r.nextInt(selection.length)].get();
     }
 
+    public static <T> Optional<T> tryMultiple(Supplier<T>... suppliers) {
+        for (Supplier<T> supplier : suppliers) {
+            try {
+                return Optional.ofNullable(supplier.get());
+            } catch (Exception exc) {
+                AstralSorcery.log.error(exc);
+            }
+        }
+        return Optional.empty();
+    }
+
     public static boolean isPlayerFakeMP(ServerPlayerEntity player) {
         if (player instanceof FakePlayer) {
             return true;

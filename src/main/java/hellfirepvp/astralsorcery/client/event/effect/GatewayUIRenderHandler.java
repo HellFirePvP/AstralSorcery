@@ -213,6 +213,9 @@ public class GatewayUIRenderHandler implements ITickHandler {
                 int b = blue;
                 DyeColor nodeColor = entry.getNode().getColor();
                 if (nodeColor != null) {
+                    if (nodeColor == DyeColor.BLACK) {
+                        nodeColor = DyeColor.GRAY; //Avoid practical invisibility
+                    }
                     Color ovr = ColorUtils.flareColorFromDye(nodeColor);
                     r = ovr.getRed();
                     g = ovr.getGreen();

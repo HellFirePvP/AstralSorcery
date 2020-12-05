@@ -146,7 +146,6 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
 
         if (getThrower() == null || !getThrower().isAlive()) {
             setDespawning();
-            return;
         }
         if (!isPulling() && ticksExisted >= 30) {
             setDespawning();
