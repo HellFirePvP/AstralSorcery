@@ -92,6 +92,7 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
                     if (pl.interactionManager.getGameType().isSurvivalOrAdventure()) {
                         boolean prev = pl.abilities.allowFlying;
                         pl.abilities.allowFlying = false;
+                        pl.abilities.isFlying = false;
                         if (prev) {
                             pl.sendPlayerAbilities();
                         }

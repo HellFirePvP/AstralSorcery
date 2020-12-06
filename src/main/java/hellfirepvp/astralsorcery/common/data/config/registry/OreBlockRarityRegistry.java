@@ -69,11 +69,11 @@ public class OreBlockRarityRegistry extends ConfigDataAdapter<OreBlockRarityEntr
         return Lists.newArrayList(
                 new OreBlockRarityEntry(Tags.Blocks.ORES_COAL,     5200),
                 new OreBlockRarityEntry(Tags.Blocks.ORES_IRON,     2500),
-                new OreBlockRarityEntry(Tags.Blocks.ORES_GOLD,      550),
-                new OreBlockRarityEntry(Tags.Blocks.ORES_LAPIS,     360),
-                new OreBlockRarityEntry(Tags.Blocks.ORES_REDSTONE,  700),
-                new OreBlockRarityEntry(Tags.Blocks.ORES_DIAMOND,   120),
-                new OreBlockRarityEntry(Tags.Blocks.ORES_EMERALD,   100)
+                new OreBlockRarityEntry(Tags.Blocks.ORES_GOLD,      440),
+                new OreBlockRarityEntry(Tags.Blocks.ORES_LAPIS,     200),
+                new OreBlockRarityEntry(Tags.Blocks.ORES_REDSTONE,  600),
+                new OreBlockRarityEntry(Tags.Blocks.ORES_EMERALD,    60),
+                new OreBlockRarityEntry(Tags.Blocks.ORES_DIAMOND,    40)
         );
     }
 

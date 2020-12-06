@@ -32,8 +32,8 @@ public class RenderingConfig extends ConfigEntry {
     public ForgeConfigSpec.EnumValue<ParticleAmount> particleAmount;
     public ForgeConfigSpec.BooleanValue patreonEffects;
 
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> skyRenderDimensions;
-    public ForgeConfigSpec.ConfigValue<List<? extends String>> weakSkyRenders;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> dimensionsWithSkyRendering;
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> dimensionsWithOnlyConstellationRendering;
 
     private RenderingConfig() {
         super("rendering");
@@ -47,7 +47,7 @@ public class RenderingConfig extends ConfigEntry {
                 .defineInRange("maxEffectRenderDistance", 64.0, 1, 512);
 
         particleAmount = cfgBuilder
-                .comment("Sets the amount of particles/effects: MINIMAL, LOWERED, ALL")
+                .comment("Sets the amount of particles/effects")
                 .translation(translationKey("particleAmount"))
                 .defineEnum("particleAmount", ParticleAmount.ALL);
 
@@ -56,15 +56,15 @@ public class RenderingConfig extends ConfigEntry {
                 .translation(translationKey("patreonEffects"))
                 .define("patreonEffects", true);
 
-        skyRenderDimensions = cfgBuilder
+        dimensionsWithSkyRendering = cfgBuilder
                 .comment("Whitelist of dimension ID's that will have special astral sorcery sky rendering")
-                .translation(translationKey("skyRenderDimensions"))
-                .defineList("skyRenderDimensions", Lists.newArrayList(World.OVERWORLD.getLocation().toString()), Predicates.alwaysTrue());
+                .translation(translationKey("skyRenderingEnabled"))
+                .defineList("skyRenderingEnabled", Lists.newArrayList(World.OVERWORLD.getLocation().toString()), Predicates.alwaysTrue());
 
-        weakSkyRenders = cfgBuilder
-                .comment("IF a world is listed in 'skyRenderDimensions' you can add it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.")
-                .translation(translationKey("weakSkyRenders"))
-                .defineList("weakSkyRenders", Lists.newArrayList(), Predicates.alwaysTrue());
+        dimensionsWithOnlyConstellationRendering = cfgBuilder
+                .comment("If a dimension is listed here, the skyrender will only render constellations on top of the existing skybox.")
+                .translation(translationKey("skyRenderingConstellations"))
+                .defineList("skyRenderingConstellations", Lists.newArrayList(), Predicates.alwaysTrue());
     }
 
     public double getMaxEffectRenderDistanceSq() {
@@ -80,8 +80,8 @@ public class RenderingConfig extends ConfigEntry {
                 return false;
             }
         },
-        MINIMAL(30),
-        LOWERED(6),
+        MINIMAL(10),
+        LOWERED(4),
         ALL(1);
 
         private final int rChance;

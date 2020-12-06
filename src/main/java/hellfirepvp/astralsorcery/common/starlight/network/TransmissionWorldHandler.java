@@ -78,7 +78,7 @@ public class TransmissionWorldHandler {
 
             List<ChunkPos> activeChunks = activeChunkMap.get(source);
             if (activeChunks == null || activeChunks.isEmpty()) {
-                continue; //Not producing anything.
+                continue; //Not producing anything as no part of this chain is loaded.
             }
 
             TransmissionChain chain = cachedSourceChain.get(source);

@@ -42,7 +42,7 @@ public class ChainingSkyRenderer implements ISkyRenderHandler {
         EventFlags.SKY_RENDERING.executeWithFlag(() -> {
             RegistryKey<World> dim = world.getDimensionKey();
             if (world.func_239132_a_().func_241683_c_() == DimensionRenderInfo.FogType.NORMAL) {
-                if (RenderingConfig.CONFIG.weakSkyRenders.get().contains(dim.getLocation())) {
+                if (RenderingConfig.CONFIG.dimensionsWithOnlyConstellationRendering.get().contains(dim.getLocation())) {
                     if (existingSkyRenderer != null) {
                         existingSkyRenderer.render(ticks, partialTicks, renderStack, world, mc);
                     } else {

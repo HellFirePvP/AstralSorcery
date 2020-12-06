@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectOctans;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
@@ -90,7 +91,10 @@ public class ASMHookEndpoint {
     @OnlyIn(Dist.CLIENT)
     public static float overrideSunBrightnessClient(float prevBrightness, World world) {
         WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);
-        if (ctx != null && ctx.getCelestialEventHandler().getSolarEclipse().isActiveNow()) {
+        String strDimKey = world.getDimensionKey().getLocation().toString();
+        if (ctx != null &&
+                RenderingConfig.CONFIG.dimensionsWithSkyRendering.get().contains(strDimKey) &&
+                ctx.getCelestialEventHandler().getSolarEclipse().isActiveNow()) {
             float perc = ctx.getCelestialEventHandler().getSolarEclipsePercent();
             perc = 0.05F + (perc * 0.95F);
 
@@ -101,7 +105,9 @@ public class ASMHookEndpoint {
 
     public static int overrideSunBrightnessServer(int prevSkyLight, World world) {
         WorldContext ctx = SkyHandler.getContext(world);
-        if (ctx != null && ctx.getCelestialEventHandler().getSolarEclipse().isActiveNow()) {
+        String strDimKey = world.getDimensionKey().getLocation().toString();
+        if (ctx != null &&
+                ctx.getCelestialEventHandler().getSolarEclipse().isActiveNow()) {
             return 11 - Math.round(ctx.getCelestialEventHandler().getSolarEclipsePercent() * 11F);
         }
         return prevSkyLight;

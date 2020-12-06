@@ -57,8 +57,8 @@ public class OreItemRarityEntry implements ConfigDataSet {
             return null;
         }
         ResourceLocation keyItemTag = new ResourceLocation(split[0]);
-        ITag<Item> itemTag = ItemTags.getCollection().get(keyItemTag);
-        if (!(itemTag instanceof ITag.INamedTag)) {
+        ITag.INamedTag<Item> itemTag = MiscUtils.iterativeSearch(ItemTags.getAllTags(), namedTag -> namedTag.getName().equals(keyItemTag));
+        if (itemTag == null) {
             return null;
         }
         String strWeight = split[1];
@@ -68,7 +68,7 @@ public class OreItemRarityEntry implements ConfigDataSet {
         } catch (NumberFormatException exc) {
             return null;
         }
-        return new OreItemRarityEntry((ITag.INamedTag<Item>) itemTag, weight);
+        return new OreItemRarityEntry(itemTag, weight);
     }
 
     @Nonnull

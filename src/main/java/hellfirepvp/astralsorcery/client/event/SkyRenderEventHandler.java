@@ -35,7 +35,7 @@ public class SkyRenderEventHandler {
             ISkyRenderHandler render = world.func_239132_a_().getSkyRenderHandler();
             if (!(render instanceof ChainingSkyRenderer)) {
                 String strDimKey = world.getDimensionKey().getLocation().toString();
-                if (RenderingConfig.CONFIG.skyRenderDimensions.get().contains(strDimKey)) {
+                if (RenderingConfig.CONFIG.dimensionsWithSkyRendering.get().contains(strDimKey)) {
                     world.func_239132_a_().setSkyRenderHandler(new ChainingSkyRenderer(world.func_239132_a_().getSkyRenderHandler()));
                 }
             }
@@ -47,8 +47,8 @@ public class SkyRenderEventHandler {
         if (world != null) {
             String strDimKey = world.getDimensionKey().getLocation().toString();
             if (world.func_239132_a_().func_241683_c_() == DimensionRenderInfo.FogType.NORMAL &&
-                    RenderingConfig.CONFIG.skyRenderDimensions.get().contains(strDimKey) &&
-                    !RenderingConfig.CONFIG.weakSkyRenders.get().contains(strDimKey) &&
+                    RenderingConfig.CONFIG.dimensionsWithSkyRendering.get().contains(strDimKey) &&
+                    !RenderingConfig.CONFIG.dimensionsWithOnlyConstellationRendering.get().contains(strDimKey) &&
                     world.func_239132_a_().getSkyRenderHandler() instanceof ChainingSkyRenderer) {
 
                 WorldContext ctx = SkyHandler.getContext(world, LogicalSide.CLIENT);

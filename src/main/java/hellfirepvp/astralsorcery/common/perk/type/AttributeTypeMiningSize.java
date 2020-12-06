@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.event.EventFlags;
 import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -72,11 +73,15 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                     BlockRayTraceResult brtr = MiscUtils.rayTraceLookBlock(player, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE);
                     if (brtr != null && brtr.getType() == RayTraceResult.Type.BLOCK) {
                         int levelBroken = event.getState().getHarvestLevel();
+                        float hardnessBroken = event.getState().getBlockHardness(world, event.getPos());
+                        BlockPredicate miningTest = (worldIn, posIn, stateIn) ->
+                                stateIn.getHarvestLevel() <= levelBroken &&
+                                        stateIn.getBlockHardness(worldIn, posIn) <= hardnessBroken;
                         Direction dir = brtr.getFace();
                         if (dir.getAxis() == Direction.Axis.Y) {
-                            this.breakBlocksPlaneHorizontal((ServerPlayerEntity) player, dir, (World) world, event.getPos(), levelBroken, MathHelper.floor(size));
+                            this.breakBlocksPlaneHorizontal((ServerPlayerEntity) player, dir, (World) world, event.getPos(), miningTest, MathHelper.floor(size));
                         } else {
-                            this.breakBlocksPlaneVertical((ServerPlayerEntity) player, dir, (World) world, event.getPos(), levelBroken, MathHelper.floor(size));
+                            this.breakBlocksPlaneVertical((ServerPlayerEntity) player, dir, (World) world, event.getPos(), miningTest, MathHelper.floor(size));
                         }
                     }
                 }
@@ -84,7 +89,7 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
         }
     }
 
-    private void breakBlocksPlaneVertical(ServerPlayerEntity player, Direction sideBroken, World world, BlockPos at, int levelBroken, int size) {
+    private void breakBlocksPlaneVertical(ServerPlayerEntity player, Direction sideBroken, World world, BlockPos at, BlockPredicate miningTest, int size) {
         if (size <= 0) {
             return;
         }
@@ -98,10 +103,10 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                     BlockPos other = at.add(xx, yy, zz);
                     BlockState otherState = world.getBlockState(other);
                     if (otherState.getBlockHardness(world, other) != -1 &&
-                            (player.isCreative() || otherState.getHarvestLevel() <= levelBroken) &&
+                            (player.isCreative() || miningTest.test(world, other, otherState)) &&
                             AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
                         BlockState state = world.getBlockState(other);
-                        if (!BlockUtils.isFluidBlock(state) && player.interactionManager.tryHarvestBlock(other)) {
+                        if (!BlockUtils.isFluidBlock(state) && (player.isCreative() || otherState.canHarvestBlock(world, other, player)) && player.interactionManager.tryHarvestBlock(other)) {
                             AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
                         }
                     }
@@ -110,7 +115,7 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
         }
     }
 
-    private void breakBlocksPlaneHorizontal(ServerPlayerEntity player, Direction sideBroken, World world, BlockPos at, int levelBroken, int size) {
+    private void breakBlocksPlaneHorizontal(ServerPlayerEntity player, Direction sideBroken, World world, BlockPos at, BlockPredicate miningTest, int size) {
         if (size <= 0) {
             return;
         }
@@ -122,10 +127,10 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                 BlockPos other = at.add(xx, 0, zz);
                 BlockState otherState = world.getBlockState(other);
                 if (otherState.getBlockHardness(world, other) != -1 &&
-                        (player.isCreative() || otherState.getHarvestLevel() <= levelBroken) &&
+                        (player.isCreative() || miningTest.test(world, other, otherState)) &&
                         AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
                     BlockState state = world.getBlockState(other);
-                    if (!BlockUtils.isFluidBlock(state) && player.interactionManager.tryHarvestBlock(other)) {
+                    if (!BlockUtils.isFluidBlock(state) && (player.isCreative() || otherState.canHarvestBlock(world, other, player)) && player.interactionManager.tryHarvestBlock(other)) {
                         AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
                     }
                 }

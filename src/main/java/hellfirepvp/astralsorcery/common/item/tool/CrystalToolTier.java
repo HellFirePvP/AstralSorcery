@@ -35,12 +35,12 @@ public class CrystalToolTier implements IItemTier {
 
     @Override
     public float getEfficiency() {
-        return 7.0F;
+        return 4.5F;
     }
 
     @Override
     public float getAttackDamage() {
-        return 5.5F;
+        return 2.5F;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CrystalToolTier implements IItemTier {
 
     @Override
     public int getEnchantability() {
-        return 40;
+        return 24;
     }
 
     @Override

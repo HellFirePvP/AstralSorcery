@@ -14,7 +14,6 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
@@ -58,8 +57,8 @@ public class OreBlockRarityEntry implements ConfigDataSet {
             return null;
         }
         ResourceLocation keyBlockTag = new ResourceLocation(split[0]);
-        ITag<Block> blockTag = BlockTags.getCollection().get(keyBlockTag);
-        if (!(blockTag instanceof ITag.INamedTag)) {
+        ITag.INamedTag<Block> blockTag = MiscUtils.iterativeSearch(BlockTags.getAllTags(), namedTag -> namedTag.getName().equals(keyBlockTag));
+        if (blockTag == null) {
             return null;
         }
         String strWeight = split[1];
@@ -69,7 +68,7 @@ public class OreBlockRarityEntry implements ConfigDataSet {
         } catch (NumberFormatException exc) {
             return null;
         }
-        return new OreBlockRarityEntry((ITag.INamedTag<Block>) blockTag, weight);
+        return new OreBlockRarityEntry(blockTag, weight);
     }
 
     @Nonnull
