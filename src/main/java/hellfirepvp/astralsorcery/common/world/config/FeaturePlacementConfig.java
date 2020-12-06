@@ -24,6 +24,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -65,7 +66,7 @@ public class FeaturePlacementConfig extends ConfigEntry implements IPlacementCon
                                   List<DimensionType> defaultApplicableDimensionTypes,
                                   int defaultMinY, int defaultMaxY,
                                   int defaultGenerationChance, int defaultGenerationAmount) {
-        super(String.format("world.generation.%s", featureName.toLowerCase()));
+        super(String.format("world.generation.%s", featureName.toLowerCase(Locale.ROOT)));
         this.defaultWhitelistBiomeSpecification = defaultWhitelistBiomeSpecification;
         this.defaultWhitelistDimensionSpecification = defaultWhitelistDimensionSpecification;
         this.defaultApplicableBiomeTypes = defaultApplicableBiomeTypes;

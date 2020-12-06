@@ -25,6 +25,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -95,9 +96,9 @@ public class BlockStateHelper {
         boolean hasProperties = isMissingStateInformation(serialized);
         ResourceLocation key;
         if (hasProperties) {
-            key = new ResourceLocation(serialized.substring(0, propIndex).toLowerCase());
+            key = new ResourceLocation(serialized.substring(0, propIndex).toLowerCase(Locale.ROOT));
         } else {
-            key = new ResourceLocation(serialized.toLowerCase());
+            key = new ResourceLocation(serialized.toLowerCase(Locale.ROOT));
         }
         Block block = ForgeRegistries.BLOCKS.getValue(key);
         BlockState state = block.getDefaultState();

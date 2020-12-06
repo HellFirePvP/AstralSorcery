@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.resource.query.SpriteQuery;
 
 import java.awt.*;
+import java.util.Locale;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +48,7 @@ public enum FlareColor {
     }
 
     public SpriteQuery getSpriteQuery() {
-        return new SpriteQuery(AssetLoader.TextureLocation.EFFECT, 1, 48, "patreonflares", name().toLowerCase());
+        return new SpriteQuery(AssetLoader.TextureLocation.EFFECT, 1, 48, "patreonflares", name().toLowerCase(Locale.ROOT));
     }
 
 }

@@ -12,6 +12,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -66,7 +67,7 @@ public class ConfigRegistries {
         }
 
         private String registrySubSection(String section) {
-            return String.format("%s.%s", section.toLowerCase(), section.toLowerCase());
+            return String.format("%s.%s", section.toLowerCase(Locale.ROOT), section.toLowerCase(Locale.ROOT));
         }
     }
 

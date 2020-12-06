@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.common.util.data.ASDataSerializers;
 import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraftforge.registries.DataSerializerEntry;
 
+import java.util.Locale;
+
 import static hellfirepvp.astralsorcery.common.lib.DataSerializersAS.*;
 
 /**
@@ -34,7 +36,7 @@ public class RegistryDataSerializers {
 
     private static <V, T extends IDataSerializer<V>> T register(T dataSerializer, String name) {
         DataSerializerEntry entry = new DataSerializerEntry(dataSerializer);
-        entry.setRegistryName(AstralSorcery.key(name.toLowerCase()));
+        entry.setRegistryName(AstralSorcery.key(name.toLowerCase(Locale.ROOT)));
         AstralSorcery.getProxy().getRegistryPrimer().register(entry);
         return dataSerializer;
     }

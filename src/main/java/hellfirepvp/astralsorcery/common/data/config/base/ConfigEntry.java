@@ -14,6 +14,7 @@ import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -33,7 +34,7 @@ public abstract class ConfigEntry implements Consumer<ForgeConfigSpec.Builder> {
     private ModConfig.Type configType;
 
     public ConfigEntry(String section) {
-        this.path = section.toLowerCase();
+        this.path = section.toLowerCase(Locale.ROOT);
     }
 
     public ConfigEntry newSubSection(ConfigEntry entry) {

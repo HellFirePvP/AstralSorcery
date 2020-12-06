@@ -48,7 +48,7 @@ public enum ResearchProgression implements IExtensibleEnum {
     private ResearchProgression(ProgressionTier requiredProgress, List<ResearchProgression> preConditions) {
         this.preConditions.addAll(preConditions);
         this.requiredProgress = requiredProgress;
-        this.unlocName = AstralSorcery.MODID + ".journal.research." + name().toLowerCase();
+        this.unlocName = AstralSorcery.MODID + ".journal.research." + name().toLowerCase(Locale.ROOT);
     }
 
     public Consumer<ResearchNode> getRegistrar() {

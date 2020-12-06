@@ -64,10 +64,8 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -792,7 +790,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
     private void updateSearchHighlight() {
         this.searchMatches.clear();
 
-        String matchText = this.searchTextEntry.getText().toLowerCase();
+        String matchText = this.searchTextEntry.getText().toLowerCase(Locale.ROOT);
         if (matchText.length() < 3) return;
         for (PerkTreePoint<?> point : PerkTree.PERK_TREE.getPerkPoints(LogicalSide.CLIENT)) {
             AbstractPerk perk = point.getPerk();
@@ -800,18 +798,18 @@ public class ScreenJournalPerkTree extends ScreenJournal {
                     !((ProgressGatedPerk) perk).canSeeClient()) {
                 continue;
             }
-            if (I18n.hasKey(perk.getCategory().getUnlocalizedName()) && perk.getCategory().getLocalizedName().toLowerCase().contains(matchText)) {
+            if (I18n.hasKey(perk.getCategory().getUnlocalizedName()) && perk.getCategory().getLocalizedName().toLowerCase(Locale.ROOT).contains(matchText)) {
                 this.searchMatches.add(perk);
             } else {
                 for (ITextComponent tooltip : perk.getLocalizedTooltip()) {
-                    if (tooltip.getFormattedText().toLowerCase().contains(matchText)) {
+                    if (tooltip.getFormattedText().toLowerCase(Locale.ROOT).contains(matchText)) {
                         this.searchMatches.add(perk);
                         break;
                     }
                 }
             }
         }
-        if (I18n.format("perk.info.astralsorcery.sealed").toLowerCase().contains(matchText)) {
+        if (I18n.format("perk.info.astralsorcery.sealed").toLowerCase(Locale.ROOT).contains(matchText)) {
             PlayerProgress prog = ResearchHelper.getClientProgress();
             for (AbstractPerk sealed : prog.getSealedPerks()) {
                 if (!this.searchMatches.contains(sealed)) {

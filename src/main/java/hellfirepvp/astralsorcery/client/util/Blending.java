@@ -13,6 +13,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.client.renderer.RenderState;
 
+import java.util.Locale;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -52,7 +54,7 @@ public enum Blending {
     }
 
     public RenderState.TransparencyState asState() {
-        return new RenderState.TransparencyState(AstralSorcery.key("blending_" + this.name().toLowerCase()).toString(), () -> {
+        return new RenderState.TransparencyState(AstralSorcery.key("blending_" + this.name().toLowerCase(Locale.ROOT)).toString(), () -> {
             RenderSystem.enableBlend();
             this.apply();
         }, () -> {

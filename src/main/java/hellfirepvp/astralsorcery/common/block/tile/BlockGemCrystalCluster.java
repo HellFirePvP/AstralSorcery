@@ -40,6 +40,7 @@ import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Locale;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -205,7 +206,7 @@ public class BlockGemCrystalCluster extends ContainerBlock implements CustomItem
 
         @Override
         public String getName() {
-            return name().toLowerCase();
+            return name().toLowerCase(Locale.ROOT);
         }
 
         @Override

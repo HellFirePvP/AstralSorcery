@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.enchantment.dynamic;
 
+import java.util.Locale;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -36,7 +38,7 @@ public enum DynamicEnchantmentType {
     }
 
     public String getDisplayName() {
-        return String.format("astralsorcery.amulet.enchantment.%s.name", this.name().toLowerCase());
+        return String.format("astralsorcery.amulet.enchantment.%s.name", this.name().toLowerCase(Locale.ROOT));
     }
 
 }

@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
 
 import javax.annotation.Nonnull;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -32,7 +33,7 @@ public abstract class RandomWordGenerator {
         if (lang == null) {
             return fallback;
         }
-        lang = lang.toLowerCase();
+        lang = lang.toLowerCase(Locale.ROOT);
         RandomWordGenerator gen;
         if ((gen = localizedProviders.get(lang)) == null) {
             gen = fallback;
