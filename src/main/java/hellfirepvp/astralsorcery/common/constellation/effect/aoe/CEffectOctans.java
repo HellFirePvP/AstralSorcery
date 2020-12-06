@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.BubbleColumnBlock;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantments;
@@ -62,10 +63,11 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
     public CEffectOctans(@Nonnull ILocatable origin) {
         super(origin, ConstellationsAS.octans, CONFIG.maxAmount.get(), (world, pos, state) -> {
             return corruptedSkipWaterCheck || (
-                    state.getBlock() instanceof FlowingFluidBlock &&
-                            state.getMaterial() == Material.WATER &&
-                            state.get(FlowingFluidBlock.LEVEL) == 0 &&
-                            world.isAirBlock(pos.up())
+                    world.isAirBlock(pos.up()) &&
+                            (state.getBlock() instanceof FlowingFluidBlock &&
+                                    state.getMaterial() == Material.WATER &&
+                                    state.get(FlowingFluidBlock.LEVEL) == 0) ||
+                            state.getBlock() instanceof BubbleColumnBlock
                     );
         });
         this.excludeRitualColumn();
@@ -135,6 +137,10 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
                         }
                     } else {
                         world.setBlockState(entry.getPos(), Blocks.SAND.getDefaultState());
+                    }
+                } else if (state.getBlock() instanceof BubbleColumnBlock) {
+                    if (rand.nextInt(70) == 0) {
+                        spawnFishingDropsAt((ServerWorld) world, entry.getPos());
                     }
                 }
                 return true;
