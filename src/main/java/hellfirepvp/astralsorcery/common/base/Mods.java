@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.versions.forge.ForgeVersion;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
 public enum Mods {
 
     MINECRAFT("minecraft", true),
-    FORGE("forge", true),
+    FORGE(ForgeVersion.MOD_ID, true),
     ASTRAL_SORCERY(AstralSorcery.MODID, true),
     DRACONIC_EVOLUTION("draconicevolution"),
     CURIOS("curios"),

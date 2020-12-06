@@ -36,7 +36,7 @@ import java.util.*;
  */
 public class TransmissionChain {
 
-    private final List<ChunkPos> involvedChunks = new LinkedList<>();
+    private final Set<ChunkPos> involvedChunks = new HashSet<>();
     private final List<LightConnection> foundConnections = new LinkedList<>();
     private final Map<BlockPos, Float> remainMultiplierMap = new HashMap<>();
 
@@ -121,7 +121,7 @@ public class TransmissionChain {
                 if (!prevPath.contains(nextPos)) { //Saves us from cycles. cyclic starlight transmission to a cyclic node means 100% loss.
 
                     //This never exceeds 1F
-                    remainMultiplierMap.merge(nextPos, nextLoss, (current, newNext) -> current + newNext);
+                    remainMultiplierMap.merge(nextPos, nextLoss, Float::sum);
 
                     if (trNode != null) {
                         if (trNode instanceof ITransmissionReceiver) { //Tile endpoint
@@ -144,8 +144,7 @@ public class TransmissionChain {
     //After calculating everything...
     private void calculateInvolvedChunks() {
         for (BlockPos nodePos : remainMultiplierMap.keySet()) {
-            ChunkPos ch = new ChunkPos(nodePos);
-            if (!involvedChunks.contains(ch)) involvedChunks.add(ch);
+            involvedChunks.add(new ChunkPos(nodePos));
         }
     }
 
@@ -167,7 +166,7 @@ public class TransmissionChain {
         return transmissionUpdateList;
     }
 
-    public List<ChunkPos> getInvolvedChunks() {
+    public Collection<ChunkPos> getInvolvedChunks() {
         return involvedChunks;
     }
 

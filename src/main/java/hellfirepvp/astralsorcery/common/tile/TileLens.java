@@ -29,7 +29,6 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -81,6 +80,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
     public void transmissionTick() {
         this.lensEffectTimeout = 20;
         markForUpdate();
+        preventNetworkSync();
     }
 
     private void doColorEffects() {
@@ -88,6 +88,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
         if (!world.isRemote() && !this.occupiedConnections.isEmpty()) {
             this.occupiedConnections.clear();
             markForUpdate();
+            preventNetworkSync();
         }
 
         if (lensEffectTimeout > 0) {
