@@ -22,7 +22,7 @@
   "advancements.astralsorcery.attune_crystal.title": "Picking up good vibrations",
   "advancements.astralsorcery.attune_crystal.desc": "Attune a crystal to a Constellation.",
   "advancements.astralsorcery.attune_self.title": "I can see the light",
-  "advancements.astralsorcery.attune_self.desc": "Attune yourself to a Bright constellation.",
+  "advancements.astralsorcery.attune_self.desc": "Attune yourself to a Bright Constellation.",
   "advancements.astralsorcery.attune_trait.title": "We have to go deeper",
   "advancements.astralsorcery.attune_trait.desc": "Further modify the attunement of a crystal by adding a Faint trait.",
   "advancements.astralsorcery.celestial_crystals.title": "Homegrown is best",
@@ -769,7 +769,7 @@
 
   "astralsorcery.constellation.fornax": "Fornax",
   "astralsorcery.constellation.fornax.tag": "Heat",
-  "astralsorcery.constellation.fornax.description": "A strong and intense heat follow closely to this constellation's light.",
+  "astralsorcery.constellation.fornax.description": "A strong and intense heat follows closely to this constellation's light.",
   "astralsorcery.constellation.fornax.enchantments": "This constellation saturates potions to grant Immunity to Fire damage. Enchanted weapons set foes on fire and tools automatically smelt their mined blocks.<NL>Enchanted weapons may land a critical hit more easily. Enchanted armor may boost the strength of critical hits.",
   "astralsorcery.constellation.fornax.ritual": "Distributing of the energies of this constellation prevent it from setting open fires, but the sustained heat will cause nearby mundane blocks to melt or simply burn. The speed of this depends on the amount of channeled Starlight.",
   "astralsorcery.constellation.fornax.mantle": "While wearing this mantle, a part of the damage sustained from fire is regenerated.",
