@@ -26,7 +26,9 @@ import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -88,15 +90,17 @@ public class CEffectDiscidia extends ConstellationEffectEntityCollect<LivingEnti
                 DamageSourceUtil.withEntityDirect(CommonProxy.DAMAGE_SOURCE_STELLAR, owner);
         List<LivingEntity> entities = this.collectEntities(world, pos, properties);
         for (LivingEntity entity : entities) {
-            if (rand.nextInt(10) != 0) {
+            if (rand.nextInt(6) != 0) {
                 continue;
             }
-            if (properties.isCorrupted()) {
+            if (properties.isCorrupted() && entity instanceof MobEntity && entity.getClassification(false) == EntityClassification.MONSTER) {
                 entity.heal(damage);
                 entity.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 30, 1));
             } else {
-                if (entity instanceof PlayerEntity &&
-                        !MiscUtils.canPlayerAttackServer(null, entity)) {
+                if (entity instanceof PlayerEntity && !MiscUtils.canPlayerAttackServer(null, entity)) {
+                    continue;
+                }
+                if (entity.equals(owner)) {
                     continue;
                 }
                 DamageUtil.shotgunAttack(entity, e -> DamageUtil.attackEntityFrom(entity, src, damage));

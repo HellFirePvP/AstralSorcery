@@ -15,7 +15,6 @@ import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.server.ServerWorld;
@@ -75,7 +74,7 @@ public class ListEntries {
             Collections.shuffle(applicable);
             MobSpawnInfo.Spawners entry = applicable.get(world.rand.nextInt(applicable.size()));
             EntityType<?> type = entry.type;
-            if (type != null && EntityUtils.canEntitySpawnHere(world, pos, type, reason,
+            if (type != null && EntityUtils.canEntitySpawnHere(world, pos, type, reason, true,
                     (e) -> e.addTag(ConstellationEffectRegistry.ENTITY_TAG_LUCERNA_SKIP_ENTITY))) {
                 return new EntitySpawnEntry(pos, type);
             }

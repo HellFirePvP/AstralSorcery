@@ -112,8 +112,9 @@ public class CEffectMineralis extends CEffectAbstractList<ListEntries.PosEntry> 
             BlockPos at = entry.getPos();
             BlockState atState = world.getBlockState(at);
             if (properties.isCorrupted()) {
-                if (world.isAirBlock(entry.getPos())) {
-                    if (rand.nextInt(25) == 0) {
+                boolean generateOre = rand.nextInt(25) == 0;
+                if (atState.isAir(world, at) || (generateOre && atState.getBlock() == Blocks.STONE)) {
+                    if (generateOre) {
                         Block ore = OreBlockRarityRegistry.MINERALIS_RITUAL.getRandomBlock(rand);
                         if (ore != null) {
                             return world.setBlockState(at, ore.getDefaultState());

@@ -542,6 +542,13 @@
   "item.astralsorcery.glass_lens": "Glass Lens",
   "item.astralsorcery.resonating_gem": "Resonating Gem",
   "item.astralsorcery.parchment": "Parchment",
+  "item.astralsorcery.concentrated_starlight": "Concentrated Starlight",
+  "item.astralsorcery.concentrated_starlight.broken": "Broken",
+  "item.astralsorcery.concentrated_starlight.flawed": "Flawed",
+  "item.astralsorcery.concentrated_starlight.mundane": "Mundane",
+  "item.astralsorcery.concentrated_starlight.clear": "Clear",
+  "item.astralsorcery.concentrated_starlight.gleaming": "Gleaming",
+  "item.astralsorcery.concentrated_starlight.flawless": "Flawless",
 
   "item.astralsorcery.perk_gem_day": "Ilium Gem",
   "item.astralsorcery.perk_gem_night": "Fengarum Gem",

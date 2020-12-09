@@ -118,7 +118,7 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
 
     private Predicate<BlockPos> createExcludeRitualColumnPredicate() {
         return pos -> (this.isLinkedRitual && !(pos.getX() == 0 && pos.getZ() == 0)) ||
-                (!this.isLinkedRitual && StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(new BlockPos(pos.getX(), -1, pos.getZ())));
+                (!this.isLinkedRitual && !StructuresAS.STRUCT_RITUAL_PEDESTAL.hasBlockAt(new BlockPos(pos.getX(), -1, pos.getZ())));
     }
 
     public int getCount() {
@@ -127,6 +127,10 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
 
     public void clear() {
         this.elements.clear();
+    }
+
+    public boolean isValid(World world, T element) {
+        return this.verifier.test(world, element.getPos(), world.getBlockState(element.getPos()));
     }
 
     @Nullable

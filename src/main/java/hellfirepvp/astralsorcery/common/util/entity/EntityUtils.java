@@ -107,7 +107,7 @@ public class EntityUtils {
             float z = pos.getZ() + 0.5F;
 
             BlockState state = world.getBlockState(pos);
-            if (!state.isNormalCube(world, pos) && canEntitySpawnHere(world, pos, entry.type, reason, null)) {
+            if (!state.isNormalCube(world, pos) && canEntitySpawnHere(world, pos, entry.type, reason, false, null)) {
                 MobEntity entity;
                 try {
                     entity = (MobEntity) entry.type.create(world);
@@ -135,16 +135,18 @@ public class EntityUtils {
         return null;
     }
 
-    public static boolean canEntitySpawnHere(ServerWorld world, BlockPos at, EntityType<? extends Entity> type, SpawnReason spawnReason, @Nullable Consumer<Entity> preCheckEntity) {
-        if (type.getClassification() == EntityClassification.MISC || !type.isSummonable()) {
+    public static boolean canEntitySpawnHere(ServerWorld world, BlockPos at, EntityType<? extends Entity> type, SpawnReason spawnReason, boolean ignorePlacementRules, @Nullable Consumer<Entity> preCheckEntity) {
+        if (type.getClassification() == EntityClassification.MISC || !type.isSummonable() || !world.getWorldBorder().contains(at)) {
             return false;
         }
-        EntitySpawnPlacementRegistry.PlacementType placementType = EntitySpawnPlacementRegistry.getPlacementType(type);
-        if (!world.getWorldBorder().contains(at) || !placementType.canSpawnAt(world, at, type)) {
-            return false;
-        }
-        if (!EntitySpawnPlacementRegistry.canSpawnEntity(type, world, spawnReason, at, rand)) {
-            return false;
+        if (!ignorePlacementRules) {
+            EntitySpawnPlacementRegistry.PlacementType placementType = EntitySpawnPlacementRegistry.getPlacementType(type);
+            if (!placementType.canSpawnAt(world, at, type)) {
+                return false;
+            }
+            if (!EntitySpawnPlacementRegistry.canSpawnEntity(type, world, spawnReason, at, rand)) {
+                return false;
+            }
         }
         if (!world.hasNoCollisions(type.getBoundingBoxWithSizeApplied(at.getX() + 0.5, at.getY(), at.getZ() + 0.5))) {
             return false;

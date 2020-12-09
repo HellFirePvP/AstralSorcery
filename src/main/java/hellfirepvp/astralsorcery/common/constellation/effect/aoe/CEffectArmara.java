@@ -82,7 +82,6 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
             }
         }
 
-        PlayerEntity owner = pedestal.getOwner();
         List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, BOX.offset(pos).grow(prop.getSize()));
         if (!projectiles.isEmpty()) {
             for (Entity e : projectiles) {
@@ -117,8 +116,6 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
             rememberedTimeout = Math.min(400, rememberedTimeout + toAdd);
             EventHelperSpawnDeny.spawnDenyRegions.put(at, new TickTokenMap.SimpleTickToken<>(properties.getSize(), rememberedTimeout));
         }
-
-        PlayerEntity owner = this.getOwningPlayerInWorld(world, pos);
 
         if (!properties.isCorrupted()) {
             List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, BOX.offset(pos).grow(properties.getSize()));

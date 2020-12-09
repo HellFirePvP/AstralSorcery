@@ -28,6 +28,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -55,6 +56,7 @@ public class CEffectPelotrio extends CEffectAbstractList<ListEntries.EntitySpawn
             if (!(world instanceof ServerWorld)) {
                 return false;
             }
+            pos = world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, pos).up();
             return ListEntries.EntitySpawnEntry.createEntry((ServerWorld) world, pos, SpawnReason.SPAWNER) != null;
         });
     }
@@ -71,6 +73,7 @@ public class CEffectPelotrio extends CEffectAbstractList<ListEntries.EntitySpawn
         if (!(world instanceof ServerWorld)) {
             return null;
         }
+        pos = world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, pos).up();
         return ListEntries.EntitySpawnEntry.createEntry((ServerWorld) world, pos, SpawnReason.SPAWNER);
     }
 
@@ -118,6 +121,7 @@ public class CEffectPelotrio extends CEffectAbstractList<ListEntries.EntitySpawn
             int count = entry.getCounter();
             count++;
             entry.setCounter(count);
+            sendConstellationPing(world, new Vector3(entry.getPos()).add(0.5, 0.5, 0.5));
             if (count >= 40) {
                 entry.spawn((ServerWorld) world, SpawnReason.SPAWNER);
                 removeElement(entry);

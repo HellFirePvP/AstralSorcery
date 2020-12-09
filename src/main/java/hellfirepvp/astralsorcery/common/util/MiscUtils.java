@@ -598,6 +598,10 @@ public class MiscUtils {
         return executeWithChunk(world, pos, apply(run, () -> obj), _default);
     }
 
+    public static <T> Function<T, T> mapWithChunk(IWorldReader world, Function<T, BlockPos> posFn) {
+        return (val) -> executeWithChunk(world, posFn.apply(val), val, Function.identity());
+    }
+
     public static <T> T eitherOf(Random r, T... selection) {
         if (selection.length == 0) {
             return null;

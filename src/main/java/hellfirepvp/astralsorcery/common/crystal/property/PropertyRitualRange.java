@@ -30,7 +30,7 @@ public class PropertyRitualRange extends CrystalProperty {
         this.addUsage(ctx -> ctx.uses(USE_RITUAL_RANGE));
         this.addModifier((value, originalValue, propertyLevel, context) -> {
             if (context.uses(USE_RITUAL_RANGE)) {
-                return value * (1.0 + (0.15 * propertyLevel));
+                return value * (1.0 + (0.1 * propertyLevel));
             }
             return value;
         });

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.world;
 import hellfirepvp.astralsorcery.common.constellation.world.event.CelestialEvent;
 import hellfirepvp.astralsorcery.common.constellation.world.event.LunarEclipse;
 import hellfirepvp.astralsorcery.common.constellation.world.event.SolarEclipse;
+import hellfirepvp.astralsorcery.common.constellation.world.event.StarFall;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
@@ -31,12 +32,14 @@ public class CelestialEventHandler {
 
     private final SolarEclipse solarEclipseEvent;
     private final LunarEclipse lunarEclipseEvent;
+    private final StarFall starFallNight;
 
     CelestialEventHandler(WorldContext context) {
         this.ctx = context;
 
         this.solarEclipseEvent = this.addTrackedEvent(new SolarEclipse());
         this.lunarEclipseEvent = this.addTrackedEvent(new LunarEclipse());
+        this.starFallNight     = this.addTrackedEvent(new StarFall());
     }
 
     public <T extends CelestialEvent> T addTrackedEvent(T event) {
@@ -50,6 +53,10 @@ public class CelestialEventHandler {
 
     public LunarEclipse getLunarEclipse() {
         return lunarEclipseEvent;
+    }
+
+    public StarFall getStarFallEvent() {
+        return starFallNight;
     }
 
     public float getSolarEclipsePercent() {

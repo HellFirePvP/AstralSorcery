@@ -23,7 +23,7 @@ public class FurnaceMeltableRecipe extends ItemMeltableRecipe {
 
     public FurnaceMeltableRecipe() {
         super(AstralSorcery.key("all_furnace_meltable"),
-                (world, pos, state) -> !RecipeHelper.findSmeltingResult(world, state).isPresent(),
+                (world, pos, state) -> RecipeHelper.findSmeltingResult(world, state).isPresent(),
                 (worldPos, state) -> RecipeHelper.findSmeltingResult(worldPos.getWorld(), state).orElse(ItemStack.EMPTY));
     }
 }

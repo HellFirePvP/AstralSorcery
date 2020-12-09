@@ -99,7 +99,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
 
         Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
         List<BlockPos> linked = getLinkedPositions();
-        float str = (1F / ((float) linked.size())) * 0.15F;
+        float str = (1F / ((float) linked.size())) * 0.25F;
 
         for (BlockPos linkedTo : linked) {
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);

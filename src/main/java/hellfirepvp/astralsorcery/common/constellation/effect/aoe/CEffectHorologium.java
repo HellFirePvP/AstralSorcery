@@ -118,7 +118,7 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
         if (entry != null) {
             if (MiscUtils.executeWithChunk(world, entry.getPos(), () -> {
                 TileEntity tile = MiscUtils.getTileAt(world, entry.getPos(), TileEntity.class, true);
-                if (tile != null && TileAccelerationBlacklistRegistry.INSTANCE.canBeInfluenced(tile)) {
+                if (tile != null && isValid(world, entry)) {
                     sendConstellationPing(world, new Vector3(entry.getPos()).add(Vector3.positiveRandom()));
                     sendConstellationPing(world, new Vector3(entry.getPos()).add(Vector3.positiveRandom()));
                     try {

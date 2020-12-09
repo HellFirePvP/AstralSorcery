@@ -121,6 +121,7 @@ public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
                     freezingRecipe.doOutput(world, at, world.getBlockState(at), dropResult);
                     return true;
                 }
+                sendConstellationPing(world, new Vector3(at).add(0.5, 0.5, 0.5));
                 return false;
             }
 
@@ -129,9 +130,8 @@ public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
                 meltRecipe.doOutput(world, at, world.getBlockState(at), dropResult);
                 return true;
             }
+            sendConstellationPing(world, new Vector3(at).add(0.5, 0.5, 0.5));
             return false;
-        }).ifRight(attemptedBreak -> {
-            sendConstellationPing(world, new Vector3(attemptedBreak).add(0.5, 0.5, 0.5));
         }).left().orElse(false);
     }
 

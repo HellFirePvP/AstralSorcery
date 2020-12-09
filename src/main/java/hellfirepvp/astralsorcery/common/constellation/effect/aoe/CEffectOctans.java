@@ -39,6 +39,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -63,6 +64,9 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
 
     public CEffectOctans(@Nonnull ILocatable origin) {
         super(origin, ConstellationsAS.octans, CONFIG.maxAmount.get(), (world, pos, state) -> {
+            if (!corruptedSkipWaterCheck) {
+                pos = world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, pos).down();
+            }
             return corruptedSkipWaterCheck || (
                     world.isAirBlock(pos.up()) &&
                             (state.getBlock() instanceof FlowingFluidBlock &&
@@ -83,6 +87,7 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
     @Nullable
     @Override
     public ListEntries.CounterMaxEntry createElement(World world, BlockPos pos) {
+        pos = world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, pos).down();
         return new ListEntries.CounterMaxEntry(pos, 1);
     }
 
@@ -153,7 +158,7 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
         ListEntries.CounterMaxEntry entry = getRandomElementChanced();
         if (entry != null) {
             if (MiscUtils.canEntityTickAt(world, entry.getPos())) {
-                if (!verifier.test(world, entry.getPos(), world.getBlockState(entry.getPos()))) {
+                if (!isValid(world, entry)) {
                     removeElement(entry);
                 } else {
                     sendConstellationPing(world, new Vector3(entry.getPos()).add(0.5, 1, 0.5));
@@ -177,7 +182,7 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
         }
 
         if (findNewPosition(world, pos, properties)
-                .ifRight(attemptedPos -> sendConstellationPing(world, new Vector3(attemptedPos).add(0.5, 0.5, 0.5)))
+                .ifRight(attemptedPos -> sendConstellationPing(world, new Vector3(world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, attemptedPos).down()).add(0.5, 0.5, 0.5)))
                 .left().isPresent()) {
             update = true;
         }
@@ -194,7 +199,7 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
         builder.withRandom(rand);
         builder.withParameter(LootParameters.TOOL, tool);
         builder.withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos));
-        LootTable table = world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING);
+        LootTable table = world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING_FISH);
         for (ItemStack loot : table.generate(builder.build(LootParameterSets.FISHING))) {
             ItemEntity ei = ItemUtils.dropItemNaturally(world, dropLoc.getX(), dropLoc.getY(), dropLoc.getZ(), loot);
             Vector3 motion = new Vector3(ei.getMotion());
@@ -210,29 +215,29 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
 
     private static class OctansConfig extends CountConfig {
 
-        private final int defaultMinFishTickTime = 100;
-        private final int defaultMaxFishTickTime = 500;
+        private final int defaultMinFishTickTime = 10;
+        private final int defaultMaxFishTickTime = 50;
 
         public ForgeConfigSpec.IntValue minFishTickTime;
         public ForgeConfigSpec.IntValue maxFishTickTime;
 
         public OctansConfig() {
-            super("octans", 12D, 2D, 5);
+            super("octans", 8D, 1D, 64);
         }
 
         @Override
         public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
             super.createEntries(cfgBuilder);
 
-            this.maxFishTickTime = cfgBuilder
-                    .comment("Defines the maximum default tick-time until a fish may be fished by the ritual. Gets reduced internally the more starlight was provided at the ritual. Has to be bigger as the minimum time; if it isn't it'll be set to the minimum.")
-                    .translation(translationKey("maxFishTickTime"))
-                    .defineInRange("maxFishTickTime", this.defaultMaxFishTickTime, 20, Integer.MAX_VALUE);
-
             this.minFishTickTime = cfgBuilder
                     .comment("Defines the minimum default tick-time until a fish may be fished by the ritual. Gets reduced internally the more starlight was provided at the ritual.")
                     .translation(translationKey("minFishTickTime"))
-                    .defineInRange("minFishTickTime", this.defaultMinFishTickTime, 20, Integer.MAX_VALUE);
+                    .defineInRange("minFishTickTime", this.defaultMinFishTickTime, 5, Integer.MAX_VALUE);
+
+            this.maxFishTickTime = cfgBuilder
+                    .comment("Defines the maximum default tick-time until a fish may be fished by the ritual. Gets reduced internally the more starlight was provided at the ritual. Has to be bigger as the minimum time; if it isn't it'll be set to the minimum.")
+                    .translation(translationKey("maxFishTickTime"))
+                    .defineInRange("maxFishTickTime", this.defaultMaxFishTickTime, 10, Integer.MAX_VALUE);
         }
     }
 }
