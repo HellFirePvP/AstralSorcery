@@ -62,7 +62,7 @@ import static hellfirepvp.astralsorcery.common.lib.WorldGenerationAS.Structures.
  */
 public class RegistryWorldGeneration {
 
-    private static final Map<TemplateStructureFeature, StructureGenerationConfig> STRUCTURES = new HashMap<>();
+    private static final Map<StructureFeature<?, ?>, StructureGenerationConfig> STRUCTURES = new HashMap<>();
     private static final Map<ConfiguredFeature<?, ?>, FeatureGenerationConfig> FEATURES = new HashMap<>();
     private static final Map<ConfiguredFeature<?, ?>, GenerationStage.Decoration> FEATURE_STAGE = new HashMap<>();
 
@@ -112,11 +112,11 @@ public class RegistryWorldGeneration {
         Map<Structure<?>, StructureSeparationSettings> defaultStructureSettings = DimensionSettings.field_242740_q.getStructures().func_236195_a_();
         ImmutableMap.Builder<Structure<?>, StructureSeparationSettings> builder = ImmutableMap.builder();
         builder.putAll(DimensionStructuresSettings.field_236191_b_);
-        STRUCTURES.forEach((structure, cfg) -> {
+        STRUCTURES.forEach((structureFeature, cfg) -> {
             if (cfg.isEnabled()) {
                 StructureSeparationSettings settings = cfg.createSettings();
-                builder.put(structure, settings);
-                defaultStructureSettings.put(structure, settings);
+                builder.put(structureFeature.field_236268_b_, settings);
+                defaultStructureSettings.put(structureFeature.field_236268_b_, settings);
             }
         });
         DimensionStructuresSettings.field_236191_b_ = builder.build();
@@ -129,9 +129,9 @@ public class RegistryWorldGeneration {
 
     public static void loadBiomeFeatures(BiomeLoadingEvent event) {
         BiomeGenerationSettingsBuilder gen = event.getGeneration();
-        STRUCTURES.forEach((structure, cfg) -> {
+        STRUCTURES.forEach((structureFeature, cfg) -> {
             if (cfg.isEnabled() && cfg.canGenerateIn(event.getCategory())) {
-                gen.withStructure(structure.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                gen.withStructure(structureFeature);
             }
         });
         FEATURES.forEach((feature, cfg) -> {
@@ -180,8 +180,9 @@ public class RegistryWorldGeneration {
     private static <S extends TemplateStructureFeature> S registerStructure(ResourceLocation key, StructureGenerationConfig cfg, S structure) {
         AstralSorcery.getProxy().getRegistryPrimer().register(structure.setRegistryName(key));
         Structure.NAME_STRUCTURE_BIMAP.put(structure.getStructureName(), structure);
-        STRUCTURES.put(structure, cfg);
-        WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, key, structure.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+        StructureFeature<?, ?> structureFeature = structure.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG);
+        STRUCTURES.put(structureFeature, cfg);
+        WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, key, structureFeature);
         return structure;
     }
 }
