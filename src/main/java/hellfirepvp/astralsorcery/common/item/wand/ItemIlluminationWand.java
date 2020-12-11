@@ -106,7 +106,7 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
                 TileTranslucentBlock tb = MiscUtils.getTileAt(world, pos, TileTranslucentBlock.class, true);
                 if (tb != null && (tb.getPlayerUUID() == null || tb.getPlayerUUID().equals(player.getUniqueID()))) {
                     if (tb.revert()) {
-                        SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_UNHIGHLIGHT, SoundCategory.BLOCKS, world, pos, 1F, 0.9F + random.nextFloat() * 0.2F);
+                        SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_UNHIGHLIGHT, SoundCategory.BLOCKS, world, pos, 0.7F, 1.9F + random.nextFloat() * 0.1F);
                     }
                 }
             } else {
@@ -117,7 +117,7 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
                         VoxelShapes.fullCube().equals(world.getBlockState(pos).getShape(world, pos))) {
                     if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_ILLUMINATION, false)) {
                         if (world.setBlockState(pos, BlocksAS.TRANSLUCENT_BLOCK.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
-                            SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_HIGHLIGHT, SoundCategory.BLOCKS, world, pos, 1F, 0.9F + random.nextFloat() * 0.2F);
+                            SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_HIGHLIGHT, SoundCategory.BLOCKS, world, pos, 0.7F, 1.9F + random.nextFloat() * 0.1F);
                             TileTranslucentBlock tb = MiscUtils.getTileAt(world, pos, TileTranslucentBlock.class, true);
                             if (tb != null) {
                                 tb.setFakedState(state);
@@ -137,7 +137,7 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
         TileIlluminator illum = MiscUtils.getTileAt(world, pos, TileIlluminator.class, true);
         if (illum != null) {
             illum.onWandUsed(stack);
-            SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_LIGHT, SoundCategory.BLOCKS, world, pos, 1F, 1F);
+            SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_LIGHT, SoundCategory.BLOCKS, world, pos, 0.7F, 1F);
             return ActionResultType.SUCCESS;
         }
 
@@ -155,13 +155,13 @@ public class ItemIlluminationWand extends Item implements ItemDynamicColor, Alig
         if (player.canPlayerEdit(placePos, dir, stack)) {
             if (world.getBlockState(placePos).equals(placeState)) {
                 if (world.setBlockState(placePos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
-                    SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_LIGHT, SoundCategory.BLOCKS, world, pos, 1F, 1F);
+                    SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_LIGHT, SoundCategory.BLOCKS, world, pos, 0.7F, 1F);
                 }
             } else if (placeState.isValidPosition(world, placePos) &&
                     world.func_226663_a_(placeState, placePos, selContext)) {
                 if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_FLARE, false)) {
                     if (world.setBlockState(placePos, placeState, Constants.BlockFlags.DEFAULT_AND_RERENDER)) {
-                        SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_LIGHT, SoundCategory.BLOCKS, world, pos, 1F, 1F);
+                        SoundHelper.playSoundAround(SoundsAS.ILLUMINATION_WAND_LIGHT, SoundCategory.BLOCKS, world, pos, 0.7F, 1F);
                     }
                 }
             }
