@@ -87,7 +87,7 @@
   "astralsorcery.misc.input.tag": "Any item with tag '%s'",
   "astralsorcery.misc.input.fluid": "Any item containing 1 bucket of %s",
   "astralsorcery.misc.input.fluid.chain": "%s or %s",
-  "astralsorcery.misc.recipename": "Recipe Registry name: %s",
+  "astralsorcery.misc.recipename": "Recipe Registry Name: %s",
   "astralsorcery.misc.knowledge.missing": "An empty and sparkly scroll",
   "astralsorcery.misc.knowledge.inscribed": "Contains knowledge from %s",
   "astralsorcery.misc.knowledge.inscribed.creative": "Contains a lot of knowledge",
@@ -421,7 +421,7 @@
   "astralsorcery.journal.node.COLL_CRYSTAL.name": "Collector Crystal",
   "astralsorcery.journal.COLL_CRYSTAL.1.text": "Attuned Rock Crystals serve as good filters for Starlight, but only have the same receptivity as any other block. By using a Celestial Altar to apply a coating of several substances that are more receptive to Starlight, this receptivity can be greatly enhanced. The Collector Crystal crafted in this fashion will gather all Starlight within 8 meters of itself, discarding the light that does not match its Attunement.",
   "astralsorcery.journal.COLL_CRYSTAL.3.text": "These Crystals operate like the ones in the Academy-provided study temples and can be used in the same fashion, but with the ability to move them for convenience. Due to the reach of each crystal, placing them too close together will see diminishing returns in total gathered starlight. <NL>For best performance, care should be taken in selecting the qualities of the crystal used to craft these Collectors, as once crafted, they cannot be changed.",
-  "astralsorcery.journal.COLL_CRYSTAL.4.text": "Furthermore, the Academy warns that using unorthodox methods of moving Collector Crystals other than breaking and placing, such as cardboard boxes, may cripple their magical field, leading to unprecedented effects on the efflux of Starlight."
+  "astralsorcery.journal.COLL_CRYSTAL.4.text": "Furthermore, the Academy warns that using unorthodox methods of moving Collector Crystals other than breaking and placing, such as cardboard boxes, may cripple their magical field, leading to unprecedented effects on the efflux of Starlight.",
   
   "astralsorcery.journal.node.CEL_CRYSTAL_GROW.name": "Crystal Clusters",
   "astralsorcery.journal.CEL_CRYSTAL_GROW.1.text": "Studies into the internal structure of Rock Crystals show that there are limits to how large they can grow along with limits to their qualities. Purified iron is weaker than when adding some carbon to make steel, and in the same fashion Rock Crystals need an introduced impurity to alter their internal structure for superior performance. <NL>Stardust is this impurity, but a magical crucible is needed to bring this change to bloom, though it is a two-step process.",
