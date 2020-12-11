@@ -756,7 +756,7 @@
   "astralsorcery.constellation.octans.tag": "Ocean",
   "astralsorcery.constellation.octans.description": "This constellation's light makes water softly bubble, and sea life seems much more abundant under its rays.",
   "astralsorcery.constellation.octans.enchantments": "This constellation saturates potions to grant the ability to breathe and see under the sea. Enchanted helmets endow the user with enhanced underwater Respiration.<NL>Enchanted armor may improve swim speed.",
-  "astralsorcery.constellation.octans.ritual": "The light of this constellation improves the harvest when fishing, and pulls fish and other objects to the surface of the water. The frequency of this harvest is based on the amount of Starlight channeled into the ritual.",
+  "astralsorcery.constellation.octans.ritual": "The light of this constellation improves the harvest when fishing, and pulls fish and other objects to the surface of the water. This works best when used in the ocean, and the frequency of this harvest increases with channeled Starlight.",
   "astralsorcery.constellation.octans.mantle": "A mantle infused with this constellation makes moving through water as effortlessly as in air, granting the ability to breathe underwater and handle tools and weapons as though there was no water at all.",
   "astralsorcery.constellation.octans.corruption": "The ocean rebels, with a sea forming around the pedestal, a violent deluge of fish falling from the sky, and other nearby liquids drying to sand.",
 
