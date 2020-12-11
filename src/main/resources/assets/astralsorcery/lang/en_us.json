@@ -817,11 +817,11 @@
   "perk.info.astralsorcery.sealed": "Sealed",
   "perk.info.astralsorcery.sealed.break": "[Double-click to break seal]",
   "perk.info.astralsorcery.sealed.usage": "Drag and drop a seal onto the perk you want to seal.",
-  "perk.info.astralsorcery.gem.empty": "Empty Dynamism Gem Socket",
+  "perk.info.astralsorcery.gem.empty": "Empty Gem Socket",
   "perk.info.astralsorcery.gem.remove": "Right-click to remove gem and add it to your inventory.",
   "perk.info.astralsorcery.gem.content.item": "Socketed Gem: %s",
   "perk.info.astralsorcery.gem.content.empty": "Right-click to choose a gem from your inventory.",
-  "perk.info.astralsorcery.gem.content.empty.none": "You have no dynamism gems in your inventory!",
+  "perk.info.astralsorcery.gem.content.empty.none": "You have no gems in your inventory!",
 
   "perk.category.astralsorcery.root.name": "Root Perk",
   "perk.category.astralsorcery.major.name": "Major Perk",
