@@ -8,8 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public abstract class BaseConstellation extends ForgeRegistryEntry<IConstellatio
 
     private final List<StarLocation> starLocations = new ArrayList<>(); //31x31 locations are valid. 0-indexed.
     private final List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
+    private AbstractRenderableTexture background;
+    private RenderType renderType;
 
     @Override
     public StarLocation addStar(int x, int y) {
@@ -41,6 +45,18 @@ public abstract class BaseConstellation extends ForgeRegistryEntry<IConstellatio
     }
 
     @Override
+    public IConstellation setTexture(AbstractRenderableTexture tex) {
+        background = tex;
+        return this;
+    }
+
+    @Override
+    public IConstellation setRenderType(RenderType type) {
+        renderType = type;
+        return this;
+    }
+
+    @Override
     public StarConnection addConnection(StarLocation star1, StarLocation star2) {
         if (star1.equals(star2)) return null;
         StarConnection sc = new StarConnection(star1, star2);
@@ -49,6 +65,16 @@ public abstract class BaseConstellation extends ForgeRegistryEntry<IConstellatio
             return sc;
         }
         return null;
+    }
+
+    @Override
+    public AbstractRenderableTexture getTexture() {
+        return background;
+    }
+
+    @Override
+    public RenderType getRenderType() {
+        return renderType;
     }
 
     @Override

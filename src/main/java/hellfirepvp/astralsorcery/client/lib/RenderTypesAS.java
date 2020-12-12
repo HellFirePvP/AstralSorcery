@@ -49,6 +49,22 @@ public class RenderTypesAS {
     //Constellations
     public static RenderType CONSTELLATION_WORLD_STAR;
     public static RenderType CONSTELLATION_WORLD_CONNECTION;
+    public static RenderType CONSTELLATION_DISCIDIA_BACKGROUND;
+    public static RenderType CONSTELLATION_ARMARA_BACKGROUND;
+    public static RenderType CONSTELLATION_VICIO_BACKGROUND;
+    public static RenderType CONSTELLATION_AEVITAS_BACKGROUND;
+    public static RenderType CONSTELLATION_EVORSIO_BACKGROUND;
+    public static RenderType CONSTELLATION_LUCERNA_BACKGROUND;
+    public static RenderType CONSTELLATION_MINERALIS_BACKGROUND;
+    public static RenderType CONSTELLATION_HOROLOGIUM_BACKGROUND;
+    public static RenderType CONSTELLATION_OCTANS_BACKGROUND;
+    public static RenderType CONSTELLATION_BOOTES_BACKGROUND;
+    public static RenderType CONSTELLATION_FORNAX_BACKGROUND;
+    public static RenderType CONSTELLATION_PELOTRIO_BACKGROUND;
+    public static RenderType CONSTELLATION_GELU_BACKGROUND;
+    public static RenderType CONSTELLATION_ULTERIA_BACKGROUND;
+    public static RenderType CONSTELLATION_ALCARA_BACKGROUND;
+    public static RenderType CONSTELLATION_VORUX_BACKGROUND;
 
     //Models
     public static RenderType MODEL_ATTUNEMENT_ALTAR;

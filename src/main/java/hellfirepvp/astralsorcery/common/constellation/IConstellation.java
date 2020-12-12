@@ -8,12 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.common.constellation.engraving.EngravingEffect;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -59,6 +61,10 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
     public List<StarLocation> getStars();
 
     public List<StarConnection> getStarConnections();
+
+    public AbstractRenderableTexture getTexture();
+
+    public RenderType getRenderType();
 
     public String getSimpleName();
 
@@ -116,6 +122,10 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
     }
 
     public IConstellation addSignatureItem(Ingredient item);
+
+    public IConstellation setTexture(AbstractRenderableTexture tex);
+
+    public IConstellation setRenderType(RenderType type);
 
     public Color getConstellationColor();
 
