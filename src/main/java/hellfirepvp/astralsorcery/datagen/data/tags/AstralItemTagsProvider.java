@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.datagen.data.tags;
 
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
@@ -16,6 +17,7 @@ import net.minecraft.data.TagsProvider;
 import net.minecraft.item.Item;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
+import net.minecraftforge.common.Tags;
 
 import static hellfirepvp.astralsorcery.common.lib.TagsAS.Items.*;
 
@@ -55,6 +57,11 @@ public class AstralItemTagsProvider extends ItemTagsProvider {
                 .add(ItemsAS.STARDUST);
         this.tag(INGOTS_STARMETAL)
                 .add(ItemsAS.STARMETAL_INGOT);
+
+        this.tag(Tags.Items.ORES)
+                .add(BlocksAS.STARMETAL_ORE.asItem())
+                .add(BlocksAS.AQUAMARINE_SAND_ORE.asItem())
+                .add(BlocksAS.ROCK_CRYSTAL_ORE.asItem());
     }
 
     private TagsProvider.Builder<Item> tag(ITag.INamedTag<Item> tag) {

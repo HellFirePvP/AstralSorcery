@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:infuser",
+  "fluidInput": "astralsorcery:liquid_starlight",
+  "input": {
+    "item": "minecraft:ancient_debris"
+  },
+  "output": {
+    "item": "minecraft:netherite_scrap",
+    "count": 2
+  },
+  "consumptionChance": 0.2,
+  "duration": 120,
+  "consumeMultipleFluids": true,
+  "acceptChaliceInput": true,
+  "copyNBTToOutputs": false
+}

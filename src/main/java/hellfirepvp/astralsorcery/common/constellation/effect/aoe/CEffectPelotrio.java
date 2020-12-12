@@ -122,7 +122,7 @@ public class CEffectPelotrio extends CEffectAbstractList<ListEntries.EntitySpawn
             count++;
             entry.setCounter(count);
             sendConstellationPing(world, new Vector3(entry.getPos()).add(0.5, 0.5, 0.5));
-            if (count >= 40) {
+            if (count >= 10) {
                 entry.spawn((ServerWorld) world, SpawnReason.SPAWNER);
                 removeElement(entry);
             }

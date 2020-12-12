@@ -20,7 +20,6 @@ import hellfirepvp.astralsorcery.common.structure.types.StructureType;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.tile.FluidTankAccess;
 import hellfirepvp.astralsorcery.common.util.tile.SimpleSingleFluidTank;
 import net.minecraft.block.BlockState;
@@ -29,7 +28,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -127,7 +125,7 @@ public class TileFountain extends TileEntityTick {
         FountainEffect.OperationSegment segment = ByteBufUtils.readEnumValue(pktPlayEffect.getExtraData(), FountainEffect.OperationSegment.class);
         FountainEffect.OperationSegment nextSegment = ByteBufUtils.readEnumValue(pktPlayEffect.getExtraData(), FountainEffect.OperationSegment.class);
 
-        World world = Minecraft.getInstance().world;;
+        World world = Minecraft.getInstance().world;
         if (world == null) {
             return;
         }
@@ -145,7 +143,7 @@ public class TileFountain extends TileEntityTick {
     @OnlyIn(Dist.CLIENT)
     public static void replaceEffect(PktPlayEffect pktPlayEffect) {
         BlockPos at = ByteBufUtils.readPos(pktPlayEffect.getExtraData());
-        World world = Minecraft.getInstance().world;;
+        World world = Minecraft.getInstance().world;
         if (world == null) {
             return;
         }

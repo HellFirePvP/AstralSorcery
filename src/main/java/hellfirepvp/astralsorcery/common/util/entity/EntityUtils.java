@@ -33,6 +33,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.Event;
@@ -88,7 +89,7 @@ public class EntityUtils {
     }
 
     @Nullable
-    public static LivingEntity performWorldSpawningAt(ServerWorld world, BlockPos pos, EntityClassification category, SpawnReason reason, boolean ignoreWeighting) {
+    public static LivingEntity performWorldSpawningAt(ServerWorld world, BlockPos pos, EntityClassification category, SpawnReason reason, boolean ignoreWeighting, int ignoreSpawnCheckFlags) {
         Biome b = world.getBiome(pos);
         StructureManager mgr = world.func_241112_a_();
         List<MobSpawnInfo.Spawners> spawnList = world.getChunkProvider().getChunkGenerator().func_230353_a_(b, mgr, EntityClassification.MONSTER, pos);
@@ -107,7 +108,7 @@ public class EntityUtils {
             float z = pos.getZ() + 0.5F;
 
             BlockState state = world.getBlockState(pos);
-            if (!state.isNormalCube(world, pos) && canEntitySpawnHere(world, pos, entry.type, reason, false, null)) {
+            if (!state.isNormalCube(world, pos) && canEntitySpawnHere(world, pos, entry.type, reason, ignoreSpawnCheckFlags, null)) {
                 MobEntity entity;
                 try {
                     entity = (MobEntity) entry.type.create(world);
@@ -135,21 +136,23 @@ public class EntityUtils {
         return null;
     }
 
-    public static boolean canEntitySpawnHere(ServerWorld world, BlockPos at, EntityType<? extends Entity> type, SpawnReason spawnReason, boolean ignorePlacementRules, @Nullable Consumer<Entity> preCheckEntity) {
+    public static boolean canEntitySpawnHere(ServerWorld world, BlockPos at, EntityType<? extends Entity> type, SpawnReason spawnReason, int ignoreCheckFlags, @Nullable Consumer<Entity> preCheckEntity) {
         if (type.getClassification() == EntityClassification.MISC || !type.isSummonable() || !world.getWorldBorder().contains(at)) {
             return false;
         }
-        if (!ignorePlacementRules) {
+        if (!SpawnConditionFlags.isSet(ignoreCheckFlags, SpawnConditionFlags.IGNORE_PLACEMENT_RULES)) {
             EntitySpawnPlacementRegistry.PlacementType placementType = EntitySpawnPlacementRegistry.getPlacementType(type);
-            if (!placementType.canSpawnAt(world, at, type)) {
+            if (!WorldEntitySpawner.canSpawnAtBody(placementType, world, at, type)) {
                 return false;
             }
             if (!EntitySpawnPlacementRegistry.canSpawnEntity(type, world, spawnReason, at, rand)) {
                 return false;
             }
         }
-        if (!world.hasNoCollisions(type.getBoundingBoxWithSizeApplied(at.getX() + 0.5, at.getY(), at.getZ() + 0.5))) {
-            return false;
+        if (!SpawnConditionFlags.isSet(ignoreCheckFlags, SpawnConditionFlags.IGNORE_BLOCK_COLLISION)) {
+            if (!world.hasNoCollisions(type.getBoundingBoxWithSizeApplied(at.getX() + 0.5, at.getY(), at.getZ() + 0.5))) {
+                return false;
+            }
         }
 
         Entity entity = type.create(world);
@@ -168,8 +171,15 @@ public class EntityUtils {
                 if (canSpawn == Event.Result.DENY) {
                     return false;
                 } else if (canSpawn == Event.Result.DEFAULT) {
-                    if (!mobEntity.canSpawn(world, spawnReason) || !mobEntity.isNotColliding(world)) {
-                        return false;
+                    if (!SpawnConditionFlags.isSet(ignoreCheckFlags, SpawnConditionFlags.IGNORE_ENTITY_SPAWN_CONDITIONS)) {
+                        if (!mobEntity.canSpawn(world, spawnReason)) {
+                            return false;
+                        }
+                    }
+                    if (!SpawnConditionFlags.isSet(ignoreCheckFlags, SpawnConditionFlags.IGNORE_ENTITY_COLLISION)) {
+                        if (!mobEntity.isNotColliding(world)) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -222,7 +232,7 @@ public class EntityUtils {
         };
     }
 
-    public static Predicate<? super Entity> selectItemClassInstaceof(Class<?> itemClass) {
+    public static Predicate<? super Entity> selectItemClassInstanceof(Class<?> itemClass) {
         return (Predicate<Entity>) entity -> {
             if (entity == null || !entity.isAlive()) return false;
             if (!(entity instanceof ItemEntity)) return false;
@@ -268,4 +278,20 @@ public class EntityUtils {
         return closestElement;
     }
 
+    public static class SpawnConditionFlags {
+
+        public static final int IGNORE_PLACEMENT_RULES         = 0b0001;
+        public static final int IGNORE_ENTITY_COLLISION        = 0b0010;
+        public static final int IGNORE_BLOCK_COLLISION         = 0b0100;
+        public static final int IGNORE_ENTITY_SPAWN_CONDITIONS = 0b1000;
+
+        public static final int IGNORE_COLLISIONS = IGNORE_BLOCK_COLLISION | IGNORE_ENTITY_COLLISION;
+        public static final int IGNORE_SPAWN_CONDITIONS = IGNORE_PLACEMENT_RULES | IGNORE_ENTITY_SPAWN_CONDITIONS;
+        public static final int IGNORE_ALL = IGNORE_COLLISIONS | IGNORE_SPAWN_CONDITIONS; //Why would you actually use this? Consider not calling the method..
+
+        public static boolean isSet(int flags, int flag) {
+            return (flags & flag) != 0;
+        }
+
+    }
 }

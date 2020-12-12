@@ -14,7 +14,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -91,8 +90,14 @@ public abstract class LensColorType {
         ANY,
         ENTITY,
         BLOCK,
-        NONE
+        NONE;
 
+        public boolean doEntityInteraction() {
+            return this == ANY || this == ENTITY;
+        }
+
+        public boolean doBlockInteraction() {
+            return this == ANY || this == BLOCK;
+        }
     }
-
 }

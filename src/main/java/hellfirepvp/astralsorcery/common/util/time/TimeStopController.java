@@ -19,7 +19,7 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 
@@ -108,8 +108,13 @@ public class TimeStopController implements ITickHandler {
                 shouldFreeze = false;
             }
             if (shouldFreeze) {
-                if (e.world.isRemote() && e.world.rand.nextInt(5) == 0) {
-                    TimeStopEffectHelper.playEntityParticles(e);
+                if (e.world.isRemote()) {
+                    int amt = (int) MathHelper.sqrt(e.getWidth() * e.getHeight());
+                    for (int i = 0; i < amt; i++) {
+                        if (e.world.rand.nextInt(5) == 0) {
+                            TimeStopEffectHelper.playEntityParticles(e);
+                        }
+                    }
                 }
                 if (!e.getEntityWorld().isRemote()) {
                     TimeStopZone.handleImportantEntityTicks(e);

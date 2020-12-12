@@ -36,7 +36,7 @@ public class PropertyShape extends CrystalProperty {
             }
             if (context.uses(USE_COLLECTOR_CRYSTAL) ||
                     context.uses(USE_RITUAL_EFFECT)) {
-                return value * (1.0 + (0.1 * propertyLevel));
+                return value * (1.0 + (0.25 * propertyLevel));
             }
             return value;
         });

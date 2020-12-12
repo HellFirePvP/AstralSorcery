@@ -36,6 +36,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -194,13 +195,18 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
         ItemStack tool = new ItemStack(Items.FISHING_ROD);
         tool.addEnchantment(Enchantments.LUCK_OF_THE_SEA, 2);
 
+        ResourceLocation fromTable = LootTables.GAMEPLAY_FISHING_FISH;
+        if (rand.nextFloat() < 0.1F) {
+            fromTable = LootTables.GAMEPLAY_FISHING_TREASURE;
+        }
+
         LootContext.Builder builder = new LootContext.Builder(world);
         builder.withLuck(rand.nextInt(2) * rand.nextFloat());
         builder.withRandom(rand);
         builder.withParameter(LootParameters.TOOL, tool);
         builder.withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos));
-        LootTable table = world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING_FISH);
-        for (ItemStack loot : table.generate(builder.build(LootParameterSets.FISHING))) {
+        LootTable lootTable = world.getServer().getLootTableManager().getLootTableFromLocation(fromTable);
+        for (ItemStack loot : lootTable.generate(builder.build(LootParameterSets.FISHING))) {
             ItemEntity ei = ItemUtils.dropItemNaturally(world, dropLoc.getX(), dropLoc.getY(), dropLoc.getZ(), loot);
             Vector3 motion = new Vector3(ei.getMotion());
             motion.setY(Math.abs(motion.getY()));
@@ -215,8 +221,8 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
 
     private static class OctansConfig extends CountConfig {
 
-        private final int defaultMinFishTickTime = 10;
-        private final int defaultMaxFishTickTime = 50;
+        private final int defaultMinFishTickTime = 20;
+        private final int defaultMaxFishTickTime = 60;
 
         public ForgeConfigSpec.IntValue minFishTickTime;
         public ForgeConfigSpec.IntValue maxFishTickTime;

@@ -104,7 +104,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
         for (BlockPos linkedTo : linked) {
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
             RaytraceAssist rta = new RaytraceAssist(thisVec, to).includeEndPoint();
-            if (colorType.getType() == LensColorType.TargetType.BLOCK || colorType.getType() == LensColorType.TargetType.ANY) {
+            if (colorType.getType().doBlockInteraction()) {
                 if (!rta.isClear(world) && rta.positionHit() != null) {
                     BlockPos posHit = rta.positionHit();
 
@@ -120,7 +120,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
                     }
                 }
             }
-            if (colorType.getType() == LensColorType.TargetType.ENTITY || colorType.getType() == LensColorType.TargetType.ANY) {
+            if (colorType.getType().doEntityInteraction()) {
                 rta.setCollectEntities(0.5);
                 rta.isClear(world);
                 List<Entity> found = rta.collectedEntities(world);

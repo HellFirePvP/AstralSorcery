@@ -44,6 +44,23 @@ public class InfuserRecipeProvider {
                 .setFluidConsumptionChance(0.1F)
                 .build(registrar);
 
+        LiquidInfusionBuilder.builder(Blocks.NETHER_GOLD_ORE)
+                .setLiquidInput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
+                .setItemInput(Blocks.NETHER_GOLD_ORE)
+                .setOutput(new ItemStack(Items.GOLD_NUGGET, 21))
+                .multiplyDuration(0.6F)
+                .setFluidConsumptionChance(0.1F)
+                .build(registrar);
+
+        LiquidInfusionBuilder.builder(Blocks.ANCIENT_DEBRIS)
+                .setLiquidInput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
+                .setItemInput(Blocks.ANCIENT_DEBRIS)
+                .setOutput(new ItemStack(Items.NETHERITE_SCRAP, 2))
+                .multiplyDuration(0.6F)
+                .setFluidConsumptionChance(0.2F)
+                .setConsumeMultipleFluids(true)
+                .build(registrar);
+
         LiquidInfusionBuilder.builder(Items.SAND)
                 .setLiquidInput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .setItemInput(Tags.Items.SAND)
@@ -52,7 +69,7 @@ public class InfuserRecipeProvider {
                 .setFluidConsumptionChance(0.1F)
                 .build(registrar);
 
-        LiquidInfusionBuilder.builder(Items.GRASS_BLOCK)
+        LiquidInfusionBuilder.builder(Blocks.DIRT)
                 .setLiquidInput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .setItemInput(Blocks.DIRT)
                 .setOutput(Items.GRASS_BLOCK)

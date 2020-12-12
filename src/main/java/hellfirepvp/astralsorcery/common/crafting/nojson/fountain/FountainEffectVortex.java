@@ -116,7 +116,7 @@ public class FountainEffectVortex extends FountainEffect<VortexContext> {
         }
 
         float upkeep = Math.max(0, density / boxCapacity);
-        fountain.consumeLiquidStarlight(MathHelper.ceil(MathHelper.sqrt(upkeep)));
+        fountain.consumeLiquidStarlight(MathHelper.ceil(upkeep / 3F));
 
 
         List<LivingEntity> pulling = fountain.getWorld().getEntitiesWithinAABB(LivingEntity.class, pullBox);
@@ -129,8 +129,12 @@ public class FountainEffectVortex extends FountainEffect<VortexContext> {
 
             EntityUtils.applyVortexMotion(() -> Vector3.atEntityCorner(le), (v) -> {
                 if (le instanceof EnderDragonEntity) {
-                    Vector3 nextPos = new Vector3(le.getPosition()).add(v);
-                    le.setPositionAndRotation(nextPos.getX(), nextPos.getY(), nextPos.getZ(), le.rotationYaw, le.rotationPitch);
+                    Vector3 nextPos = Vector3.atEntityCorner(le).add(v);
+                    if (le.isServerWorld()) {
+                        le.setPositionAndUpdate(nextPos.getX(), nextPos.getY(), nextPos.getZ());
+                    } else {
+                        le.setPositionAndRotation(nextPos.getX(), nextPos.getY(), nextPos.getZ(), le.rotationYaw, le.rotationPitch);
+                    }
                     le.setMotion(Vector3d.ZERO);
                 } else {
                     le.setMotion(le.getMotion().add(v.getX(), v.getY() * 2.5, v.getZ()));

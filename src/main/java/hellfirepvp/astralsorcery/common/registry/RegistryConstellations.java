@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.base.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -376,7 +377,13 @@ public class RegistryConstellations {
         register(pelotrio);
 
         // CAP/Capricornus
-        gelu = new Constellation.Minor("gelu", CONSTELLATION_GELU, MoonPhase.NEW, MoonPhase.WAXING_1_4, MoonPhase.WAXING_1_2);
+        gelu = new Constellation.Minor("gelu", CONSTELLATION_GELU, MoonPhase.NEW, MoonPhase.WAXING_1_4, MoonPhase.WAXING_1_2) {
+            @Override
+            public void affectConstellationEffect(ConstellationEffectProperties properties) {
+                properties.multiplyPotency(1.4F);
+                properties.multiplySize(2);
+            }
+        };
         sl1 = gelu.addStar(21, 28);
         sl2 = gelu.addStar(27, 13);
         sl3 = gelu.addStar(29, 4);
@@ -393,7 +400,14 @@ public class RegistryConstellations {
         register(gelu);
 
         // GRU/Grus
-        ulteria = new Constellation.Minor("ulteria", CONSTELLATION_ULTERIA, MoonPhase.WANING_1_2, MoonPhase.WANING_3_4, MoonPhase.NEW);
+        ulteria = new Constellation.Minor("ulteria", CONSTELLATION_ULTERIA, MoonPhase.WANING_1_2, MoonPhase.WANING_3_4, MoonPhase.NEW) {
+            @Override
+            public void affectConstellationEffect(ConstellationEffectProperties properties) {
+                properties.multiplyEffectAmplifier(2.5F);
+                properties.multiplyPotency(1.5F);
+                properties.multiplySize(3);
+            }
+        };
         sl1 = ulteria.addStar(4, 28);
         sl2 = ulteria.addStar(7, 22);
         sl3 = ulteria.addStar(9, 14);
@@ -410,7 +424,13 @@ public class RegistryConstellations {
         register(ulteria);
 
         // CYG/Cygnus
-        alcara = new Constellation.Minor("alcara", CONSTELLATION_ALCARA, MoonPhase.WANING_1_2, MoonPhase.WAXING_1_2);
+        alcara = new Constellation.Minor("alcara", CONSTELLATION_ALCARA, MoonPhase.WANING_1_2, MoonPhase.WAXING_1_2) {
+            @Override
+            public void affectConstellationEffect(ConstellationEffectProperties properties) {
+                properties.setCorrupted(true);
+                properties.multiplySize(1.2F);
+            }
+        };
         sl1 = alcara.addStar(24, 27);
         sl2 = alcara.addStar(17, 16);
         sl3 = alcara.addStar(12, 9);
@@ -430,7 +450,14 @@ public class RegistryConstellations {
         register(alcara);
 
         // COL/Columba
-        vorux = new Constellation.Minor("vorux", CONSTELLATION_VORUX, MoonPhase.FULL, MoonPhase.WAXING_3_4, MoonPhase.WANING_3_4);
+        vorux = new Constellation.Minor("vorux", CONSTELLATION_VORUX, MoonPhase.FULL, MoonPhase.WAXING_3_4, MoonPhase.WANING_3_4) {
+            @Override
+            public void affectConstellationEffect(ConstellationEffectProperties properties) {
+                properties.multiplyEffectAmplifier(0.8F);
+                properties.multiplyPotency(5F);
+                properties.multiplySize(1.2F);
+            }
+        };
         sl1 = vorux.addStar(7, 29);
         sl2 = vorux.addStar(15, 12);
         sl3 = vorux.addStar(23, 7);

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "astralsorcery:starmetal_ore",
+    "astralsorcery:aquamarine_sand_ore",
+    "astralsorcery:rock_crystal_ore"
+  ]
+}

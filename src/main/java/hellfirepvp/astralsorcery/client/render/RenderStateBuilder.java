@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.BlockAtlasTexture;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderStateUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import org.lwjgl.opengl.GL11;
@@ -114,6 +115,11 @@ public class RenderStateBuilder {
         return this;
     }
 
+    public RenderStateBuilder particleShaderTarget() {
+        this.builder.target(ParticleTarget.INSTANCE);
+        return this;
+    }
+
     public RenderType.State.Builder vanillaBuilder() {
         return this.builder;
     }
@@ -124,5 +130,22 @@ public class RenderStateBuilder {
 
     public RenderType.State build() {
         return this.builder.build(false);
+    }
+
+    private static class ParticleTarget extends RenderState.TargetState {
+
+        private static final ParticleTarget INSTANCE = new ParticleTarget();
+
+        private ParticleTarget() {
+            super("as_particle_target", () -> {
+                if (Minecraft.isFabulousGraphicsEnabled()) {
+                    Minecraft.getInstance().worldRenderer.func_239228_q_().bindFramebuffer(false);
+                }
+            }, () -> {
+                if (Minecraft.isFabulousGraphicsEnabled()) {
+                    Minecraft.getInstance().getFramebuffer().bindFramebuffer(false);
+                }
+            });
+        }
     }
 }

@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:infuser",
+  "fluidInput": "astralsorcery:liquid_starlight",
+  "input": {
+    "item": "minecraft:nether_gold_ore"
+  },
+  "output": {
+    "item": "minecraft:gold_nugget",
+    "count": 21
+  },
+  "consumptionChance": 0.1,
+  "duration": 120,
+  "consumeMultipleFluids": false,
+  "acceptChaliceInput": true,
+  "copyNBTToOutputs": false
+}

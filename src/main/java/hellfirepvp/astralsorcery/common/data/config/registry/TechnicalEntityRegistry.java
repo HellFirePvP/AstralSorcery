@@ -45,7 +45,6 @@ public class TechnicalEntityRegistry extends ConfigDataAdapter<EntityTechnicalEn
     public List<EntityTechnicalEntry> getDefaultValues() {
         return Lists.newArrayList(
                 new EntityTechnicalEntry(Mods.MINECRAFT, "ender_pearl"),
-                new EntityTechnicalEntry(Mods.MINECRAFT, "firework_rocket"),
                 new EntityTechnicalEntry(Mods.ASTRAL_SORCERY, "observatory_helper"),
                 new EntityTechnicalEntry(Mods.ASTRAL_SORCERY, "nocturnal_spark"),
                 new EntityTechnicalEntry(Mods.ASTRAL_SORCERY, "illumination_spark"),

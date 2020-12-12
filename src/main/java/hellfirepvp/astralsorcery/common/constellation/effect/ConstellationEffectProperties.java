@@ -8,9 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
-import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
-import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -21,8 +18,8 @@ import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 public class ConstellationEffectProperties {
 
     private double size;
-    private double potency = 1;
-    private double effectAmplifier = 1;
+    private float potency = 1;
+    private float effectAmplifier = 1;
     private boolean corrupted = false;
 
     public ConstellationEffectProperties(double size) {
@@ -37,40 +34,28 @@ public class ConstellationEffectProperties {
         this.size *= multiplier;
     }
 
-    public double getPotency() {
+    public float getPotency() {
         return potency;
     }
 
-    public double getEffectAmplifier() {
+    public void multiplyPotency(float multiplier) {
+        this.potency *= multiplier;
+    }
+
+    public float getEffectAmplifier() {
         return effectAmplifier;
+    }
+
+    public void multiplyEffectAmplifier(float multiplier) {
+        this.effectAmplifier *= multiplier;
     }
 
     public boolean isCorrupted() {
         return corrupted;
     }
 
-    public ConstellationEffectProperties modify(IMinorConstellation trait) {
-        if (trait != null) {
-            if (trait.equals(ConstellationsAS.gelu)) {
-                potency *= 1.4F;
-                size *= 2F;
-            }
-            if (trait.equals(ConstellationsAS.ulteria)) {
-                effectAmplifier *= 2F;
-                size *= 0.4F;
-            }
-            if (trait.equals(ConstellationsAS.alcara)) {
-                size *= 1.5F;
-                corrupted = true;
-            }
-            if (trait.equals(ConstellationsAS.vorux)) {
-                potency *= 4F;
-                effectAmplifier *= 0.8F;
-                size *= 2F;
-            }
-        }
-        return this;
+    public void setCorrupted(boolean corrupted) {
+        this.corrupted = corrupted;
     }
-
 }
 

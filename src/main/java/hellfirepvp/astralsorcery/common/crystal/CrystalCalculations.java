@@ -56,7 +56,7 @@ public class CrystalCalculations {
         return calculate(1.0F, attributes, ctx);
     }
 
-    // Range: 1.0 - 7.53375
+    // Range: 1.0 - 5.985
     public static double getRitualCostReductionFactor(StarlightReceiverRitualPedestal pedestal,
                                                       CrystalAttributes attributes) {
         CalculationContext ctx = CalculationContext.Builder.newBuilder()

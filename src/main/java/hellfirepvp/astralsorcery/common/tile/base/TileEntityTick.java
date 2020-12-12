@@ -57,6 +57,12 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
         return null;
     }
 
+    //Since no-sky worlds count always as "can't see sky" even if it's exposed to the sky
+    //Set to true to always count as seeing the sky in no-sky worlds.
+    public boolean seesSkyInNoSkyWorlds() {
+        return false;
+    }
+
     protected void onFirstTick() {}
 
     public int getTicksExisted() {
@@ -72,7 +78,7 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
             lastUpdateTick = ticksExisted;
 
             boolean prevSky = doesSeeSky;
-            boolean newSky = MiscUtils.canSeeSky(this.getWorld(), this.getPos().up(), true, this.doesSeeSky);
+            boolean newSky = MiscUtils.canSeeSky(this.getWorld(), this.getPos().up(), true, this.seesSkyInNoSkyWorlds(), this.doesSeeSky);
             if (prevSky != newSky) {
                 this.notifySkyStateUpdate(prevSky, newSky);
                 this.doesSeeSky = newSky;

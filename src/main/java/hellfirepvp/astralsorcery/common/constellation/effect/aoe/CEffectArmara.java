@@ -76,9 +76,11 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
         ItemStack socket = pedestal.getCurrentCrystal();
         if (!socket.isEmpty() && socket.getItem() instanceof ItemAttunedCrystalBase) {
             IMinorConstellation trait = ((ItemAttunedCrystalBase) socket.getItem()).getTraitConstellation(socket);
-            prop.modify(trait);
-            if (prop.isCorrupted()) {
-                return;
+            if (trait != null) {
+                trait.affectConstellationEffect(prop);
+                if (prop.isCorrupted()) {
+                    return;
+                }
             }
         }
 

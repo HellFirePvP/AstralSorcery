@@ -213,7 +213,7 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
         ConstellationEffectProperties properties = effect.createProperties(this.getMirrorCount());
         if (properties != null) {
             if (this.getRitualTrait() != null) {
-                properties.modify(this.getRitualTrait());
+                this.getRitualTrait().affectConstellationEffect(properties);
             }
             if (!this.getCurrentCrystal().isEmpty()) {
                 CrystalAttributes attributes = CrystalAttributes.getCrystalAttributes(this.getCurrentCrystal());

@@ -60,7 +60,6 @@ public class TypeStarHalo extends PatreonEffect implements ITickHandler {
         registrar.accept(this);
     }
 
-
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         PlayerEntity player = (PlayerEntity) context[0];

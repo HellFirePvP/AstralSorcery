@@ -74,7 +74,7 @@ public class ListEntries {
             Collections.shuffle(applicable);
             MobSpawnInfo.Spawners entry = applicable.get(world.rand.nextInt(applicable.size()));
             EntityType<?> type = entry.type;
-            if (type != null && EntityUtils.canEntitySpawnHere(world, pos, type, reason, true,
+            if (type != null && EntityUtils.canEntitySpawnHere(world, pos, type, reason, EntityUtils.SpawnConditionFlags.IGNORE_SPAWN_CONDITIONS,
                     (e) -> e.addTag(ConstellationEffectRegistry.ENTITY_TAG_LUCERNA_SKIP_ENTITY))) {
                 return new EntitySpawnEntry(pos, type);
             }

@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileSourceBase;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileTransmissionBase;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.PistonTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nullable;
@@ -64,6 +65,8 @@ public class TileAccelerationBlacklistRegistry extends ConfigDataAdapter<TileAcc
     @Override
     public List<TileAccelerationBlacklistEntry> getDefaultValues() {
         return Lists.newArrayList(
+                new TileAccelerationBlacklistEntry(PistonTileEntity.class.getName()),
+
                 // Accelerating storage system components looks like a bad idea
                 new TileAccelerationBlacklistEntry("appeng"),
                 new TileAccelerationBlacklistEntry("raoulvdberge.refinedstorage"),

@@ -118,7 +118,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
             if (blockStack.isEmpty()) {
                 return;
             }
-            ItemStack result = RecipeHelper.findSmeltingResult((World) world, blockStack).orElse(ItemStack.EMPTY);
+            ItemStack result = RecipeHelper.findSmeltingResult(world, blockStack).orElse(ItemStack.EMPTY);
             if (result.isEmpty()) {
                 return;
             }
@@ -134,7 +134,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
             if (resState != null) {
                 world.setBlockState(pos, resState, Constants.BlockFlags.DEFAULT);
             } else if (world.setBlockState(pos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT)) {
-                ItemUtils.dropItemNaturally((World) world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, result);
+                ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, result);
             }
         }
     }

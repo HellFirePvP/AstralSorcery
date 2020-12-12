@@ -8,11 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.block.ore;
 
-import hellfirepvp.astralsorcery.common.block.base.template.BlockRockTemplate;
+import hellfirepvp.astralsorcery.common.block.base.CustomItemBlock;
+import hellfirepvp.astralsorcery.common.block.properties.PropertiesMisc;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
+import net.minecraftforge.common.ToolType;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,11 +24,12 @@ import net.minecraft.world.IWorldReader;
  * Created by HellFirePvP
  * Date: 21.07.2019 / 08:12
  */
-public class BlockRockCrystalOre extends BlockRockTemplate {
+public class BlockRockCrystalOre extends Block implements CustomItemBlock {
 
-    @Override
-    public int getHarvestLevel(BlockState state) {
-        return 2;
+    public BlockRockCrystalOre() {
+        super(PropertiesMisc.defaultRock()
+                .harvestLevel(2)
+                .harvestTool(ToolType.PICKAXE));
     }
 
     @Override

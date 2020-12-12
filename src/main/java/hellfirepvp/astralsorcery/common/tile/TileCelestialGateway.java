@@ -37,13 +37,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.INameable;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -53,8 +51,8 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -364,6 +362,11 @@ public class TileCelestialGateway extends TileEntityTick implements INameable, T
     @Override
     public StructureType getRequiredStructureType() {
         return StructureTypesAS.PTYPE_CELESTIAL_GATEWAY;
+    }
+
+    @Override
+    public boolean seesSkyInNoSkyWorlds() {
+        return true;
     }
 
     @Override

@@ -78,9 +78,9 @@ public class TimeStopEffectHelper {
     @OnlyIn(Dist.CLIENT)
     static void playEntityParticles(LivingEntity e) {
         EntitySize size = e.getSize(e.getPose());
-        double x = e.getPosX() - size.width + rand.nextFloat() * size.width * 2;
+        double x = e.getPosX() - size.width / 2F + rand.nextFloat() * size.width;
         double y = e.getPosY() + rand.nextFloat() * size.height;
-        double z = e.getPosZ() - size.width + rand.nextFloat() * size.width * 2;
+        double z = e.getPosZ() - size.width / 2F + rand.nextFloat() * size.width;
         playParticles(x, y, z);
     }
 

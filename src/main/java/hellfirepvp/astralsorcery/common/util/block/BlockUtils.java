@@ -30,6 +30,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
@@ -83,6 +84,15 @@ public class BlockUtils {
             it = it.up();
         }
         return it;
+    }
+
+    public static BlockPos firstSolidDown(IBlockReader world, BlockPos at) {
+        BlockState state = world.getBlockState(at);
+        while (at.getY() > 0 && !state.getMaterial().blocksMovement() && state.getFluidState().isEmpty()) {
+            at = at.down();
+            state = world.getBlockState(at);
+        }
+        return at;
     }
 
     public static boolean isReplaceable(World world, BlockPos pos) {
