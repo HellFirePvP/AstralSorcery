@@ -48,7 +48,9 @@ public class EntityItemHighlighted extends ItemEntity {
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);
         if(skipPhysicRenderer != null)
-            skipPhysicRenderer.setBoolean(this, true);
+            try {
+                skipPhysicRenderer.setBoolean(this, true);
+            } catch (IllegalArgumentException | IllegalAccessException e) {}
     }
 
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world, double x, double y, double z) {
