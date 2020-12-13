@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.entity.item;
 
+import java.lang.reflect.Field;
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
@@ -39,8 +40,8 @@ public class EntityItemHighlighted extends ItemEntity {
     
     static {
         try {
-			skipPhysicRenderer = ObfuscationReflectionHelper.findField(ItemEntity.class, "skipPhysicRenderer");
-		} catch (UnableToFindFieldException e) {}
+            skipPhysicRenderer = ObfuscationReflectionHelper.findField(ItemEntity.class, "skipPhysicRenderer");
+        } catch (UnableToFindFieldException e) {}
     }
 
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world) {
