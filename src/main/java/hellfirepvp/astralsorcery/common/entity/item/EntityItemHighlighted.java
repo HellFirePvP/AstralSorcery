@@ -37,7 +37,7 @@ public class EntityItemHighlighted extends ItemEntity {
     private static final DataParameter<Integer> DATA_COLOR = EntityDataManager.createKey(EntityItemHighlighted.class, DataSerializers.VARINT);
     private static final int NO_COLOR = 0xFF000000;
     
-    private static final Field skipPhysicRenderer;
+    private static Field skipPhysicRenderer;
     
     static {
         try {
