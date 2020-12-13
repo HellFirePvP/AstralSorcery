@@ -18,6 +18,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper.UnableToFindFieldException;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -33,9 +34,19 @@ public class EntityItemHighlighted extends ItemEntity {
 
     private static final DataParameter<Integer> DATA_COLOR = EntityDataManager.createKey(EntityItemHighlighted.class, DataSerializers.VARINT);
     private static final int NO_COLOR = 0xFF000000;
+    
+    private static final Field skipPhysicRenderer;
+    
+    static {
+        try {
+			skipPhysicRenderer = ObfuscationReflectionHelper.findField(ItemEntity.class, "skipPhysicRenderer");
+		} catch (UnableToFindFieldException e) {}
+    }
 
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);
+        if(skipPhysicRenderer != null)
+            skipPhysicRenderer.setBoolean(this, true);
     }
 
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world, double x, double y, double z) {
