@@ -103,6 +103,14 @@ public class CrystalCalculations {
         return MathHelper.clamp((float) calculate(1F, attributes, ctx), 0F, 1F);
     }
 
+    // Range: 1.0 - 1.6
+    public static float getThroughputEffectMultiplier(CrystalAttributes attributes) {
+        CalculationContext ctx = CalculationContext.Builder.newBuilder()
+                .addUsage(USE_LENS_EFFECT)
+                .build();
+        return MathHelper.clamp((float) calculate(1F, attributes, ctx), 0F, 1F);
+    }
+
     // Range: 1.0 - 11.56 (Multiplier)
     public static int getToolDurability(int durability, ItemStack tool) {
         if (tool.getItem() instanceof CrystalAttributeItem) {

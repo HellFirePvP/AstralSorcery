@@ -72,6 +72,7 @@ public class CrystalPropertiesAS {
         public static PropertyUsage USE_RITUAL_RANGE;
         public static PropertyUsage USE_COLLECTOR_CRYSTAL;
         public static PropertyUsage USE_LENS_TRANSFER;
+        public static PropertyUsage USE_LENS_EFFECT;
         public static PropertyUsage USE_TOOL_DURABILITY;
         public static PropertyUsage USE_TOOL_EFFECTIVENESS;
 

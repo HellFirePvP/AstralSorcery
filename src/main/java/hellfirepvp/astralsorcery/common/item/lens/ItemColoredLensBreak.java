@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
+import hellfirepvp.astralsorcery.common.util.PartialEffectExecutor;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
@@ -21,7 +22,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 /**
@@ -51,27 +51,31 @@ public class ItemColoredLensBreak extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {}
+        public void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, PartialEffectExecutor executor) {}
 
         @Override
-        public void blockInBeam(World world, BlockPos pos, BlockState state, float beamStrength) {
+        public void blockInBeam(World world, BlockPos pos, BlockState state, PartialEffectExecutor executor) {
             if (world.isRemote()) {
                 return;
             }
 
-            float hardness = state.getBlockHardness(world, pos);
-            if (hardness < 0) {
-                return;
+            boolean ranOnce = executor.executeAll(() -> {
+                BlockBreakHelper.addProgress(world, pos, 0.4F, () -> {
+                    float hardness = state.getBlockHardness(world, pos);
+                    if (hardness < 0) {
+                        return null;
+                    }
+                    return hardness * Math.max(1, state.getHarvestLevel());
+                });
+            });
+            if (ranOnce) {
+                PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.BEAM_BREAK)
+                        .addData((buf) -> {
+                            ByteBufUtils.writePos(buf, pos);
+                            buf.writeInt(Block.getStateId(state));
+                        });
+                PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
             }
-            hardness *= 1.5F;
-
-            BlockBreakHelper.addProgress(world, pos, hardness, beamStrength * 4F);
-            PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.BEAM_BREAK)
-                    .addData((buf) -> {
-                        ByteBufUtils.writePos(buf, pos);
-                        buf.writeInt(Block.getStateId(state));
-                    });
-            PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
         }
     }
 }

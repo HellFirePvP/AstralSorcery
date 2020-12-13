@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.block.tile.BlockLens;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeTile;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.item.lens.LensColorType;
@@ -19,6 +20,7 @@ import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileTransmissionBase;
 import hellfirepvp.astralsorcery.common.tile.network.StarlightTransmissionLens;
+import hellfirepvp.astralsorcery.common.util.PartialEffectExecutor;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -52,7 +54,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
     private CrystalAttributes attributes = null;
     private LensColorType colorType = null;
 
-    private int lensEffectTimeout = 0;
+    private float accumulatedStarlight = 0;
 
     //So we can tell the client to render beams eventhough the actual connection doesn't exist.
     private List<BlockPos> occupiedConnections = new LinkedList<>();
@@ -77,8 +79,8 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
         }
     }
 
-    public void transmissionTick() {
-        this.lensEffectTimeout = 20;
+    public void transmissionTick(float starlightAmt, IWeakConstellation type) {
+        this.accumulatedStarlight += starlightAmt;
         markForUpdate();
         preventNetworkSync();
     }
@@ -91,15 +93,19 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
             preventNetworkSync();
         }
 
-        if (lensEffectTimeout > 0) {
-            lensEffectTimeout--;
-        } else {
+        if (accumulatedStarlight <= 0) {
+            return;
+        }
+        float effectMultiplier = accumulatedStarlight *= 1.4F;
+        accumulatedStarlight = 0;
+
+        List<BlockPos> linked = getLinkedPositions();
+        if (linked.isEmpty()) {
             return;
         }
 
+        PartialEffectExecutor exec = new PartialEffectExecutor((1F / ((float) linked.size())) * effectMultiplier, rand);
         Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
-        List<BlockPos> linked = getLinkedPositions();
-        float str = (1F / ((float) linked.size())) * 0.25F;
 
         for (BlockPos linkedTo : linked) {
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
@@ -109,7 +115,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
                     BlockPos posHit = rta.positionHit();
 
                     BlockState stateHit = world.getBlockState(posHit);
-                    colorType.blockInBeam(world, posHit, stateHit, str);
+                    colorType.blockInBeam(world, posHit, stateHit, exec);
 
                     if (!world.isRemote()) {
                         this.occupiedConnections.add(posHit);
@@ -124,10 +130,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
                 rta.setCollectEntities(0.5);
                 rta.isClear(world);
                 List<Entity> found = rta.collectedEntities(world);
-                found.forEach(e -> colorType.entityInBeam(world, thisVec, to, e, str));
-                for (Entity entity : found) {
-                    colorType.entityInBeam(world, thisVec, to, entity, str);
-                }
+                found.forEach(e -> colorType.entityInBeam(world, thisVec, to, e, exec));
             }
         }
     }
@@ -211,7 +214,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
     @Override
     public void readNetNBT(CompoundNBT compound) {
         super.readNetNBT(compound);
-        this.lensEffectTimeout = compound.getInt("lensEffectTimeout");
+        this.accumulatedStarlight = compound.getFloat("accumulatedStarlight");
     }
 
     @Override
@@ -231,7 +234,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
     @Override
     public void writeNetNBT(CompoundNBT compound) {
         super.writeNetNBT(compound);
-        compound.putInt("lensEffectTimeout", this.lensEffectTimeout);
+        compound.putFloat("lensEffectTimeout", this.accumulatedStarlight);
     }
 
     @Nonnull

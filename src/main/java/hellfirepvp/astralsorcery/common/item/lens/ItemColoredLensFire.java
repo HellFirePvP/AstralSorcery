@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
+import hellfirepvp.astralsorcery.common.util.PartialEffectExecutor;
 import hellfirepvp.astralsorcery.common.util.RecipeHelper;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -75,17 +76,23 @@ public class ItemColoredLensFire extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
-            if (world.isRemote() || random.nextFloat() > beamStrength) {
+        public void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, PartialEffectExecutor executor) {
+            if (world.isRemote()) {
                 return;
             }
             if (entity instanceof ItemEntity) {
                 ItemStack current = ((ItemEntity) entity).getItem();
-                if (random.nextInt(10) != 0) {
+
+                ItemStack result = RecipeHelper.findSmeltingResult(entity.getEntityWorld(), current).orElse(ItemStack.EMPTY);
+                if (result.isEmpty()) {
                     return;
                 }
-                ItemStack result = RecipeHelper.findSmeltingResult(entity.getEntityWorld(), current).orElse(ItemStack.EMPTY);
-                if (!result.isEmpty()) {
+                while (executor.canExecute()) {
+                    executor.markExecution();
+
+                    if (random.nextInt(10) != 0) {
+                        continue;
+                    }
                     Vector3 entityPos = Vector3.atEntityCorner(entity);
                     ItemUtils.dropItemNaturally(entity.getEntityWorld(), entityPos.getX(), entityPos.getY(), entityPos.getZ(), ItemUtils.copyStackWithSize(result, result.getCount()));
                     if (current.getCount() > 1) {
@@ -94,6 +101,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
                     } else {
                         entity.remove();
                     }
+                    return;
                 }
             } else if (entity instanceof LivingEntity) {
                 if (entity instanceof PlayerEntity) {
@@ -104,13 +112,13 @@ public class ItemColoredLensFire extends ItemColoredLens {
                     }
                 }
                 entity.attackEntityFrom(DamageSource.ON_FIRE, 0.5F);
-                entity.setFire(3);
+                entity.setFire(5);
             }
         }
 
         @Override
-        public void blockInBeam(World world, BlockPos pos, BlockState state, float beamStrength) {
-            if (!(world instanceof ServerWorld) || random.nextFloat() > beamStrength) {
+        public void blockInBeam(World world, BlockPos pos, BlockState state, PartialEffectExecutor executor) {
+            if (!(world instanceof ServerWorld)) {
                 return;
             }
 
@@ -126,15 +134,20 @@ public class ItemColoredLensFire extends ItemColoredLens {
             PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.MELT_BLOCK)
                     .addData(buf -> ByteBufUtils.writeVector(buf, new Vector3(pos)));
             PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 16));
-            if (random.nextInt(10) != 0) {
-                return;
-            }
 
-            BlockState resState = ItemUtils.createBlockState(result);
-            if (resState != null) {
-                world.setBlockState(pos, resState, Constants.BlockFlags.DEFAULT);
-            } else if (world.setBlockState(pos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT)) {
-                ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, result);
+            while (executor.canExecute()) {
+                executor.markExecution();
+                if (random.nextInt(6) != 0) {
+                    continue;
+                }
+
+                BlockState resState = ItemUtils.createBlockState(result);
+                if (resState != null) {
+                    world.setBlockState(pos, resState, Constants.BlockFlags.DEFAULT);
+                } else if (world.setBlockState(pos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT)) {
+                    ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, result);
+                }
+                return;
             }
         }
     }

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionNode;
@@ -39,20 +40,22 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
         super(thisPos);
     }
 
-    public void updateAdditionalLoss(float loss) {
+    public boolean updateAdditionalLoss(float loss) {
+        boolean didChange = this.additionalLoss != loss;
         this.additionalLoss = loss;
+        return didChange;
     }
 
     @Override
-    public void onTransmissionTick(World world) {
+    public void onTransmissionTick(World world, float starlightAmt, IWeakConstellation type) {
         TileLens lens = MiscUtils.getTileAt(world, getLocationPos(), TileLens.class, false);
         if (lens != null) {
-            lens.transmissionTick();
+            lens.transmissionTick(starlightAmt, type);
         }
     }
 
     @Override
-    public float getAdditionalTransmissionLossMultiplier() {
+    public float getTransmissionConsumptionMultiplier() {
         return additionalLoss;
     }
 
@@ -97,5 +100,4 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
         }
 
     }
-
 }

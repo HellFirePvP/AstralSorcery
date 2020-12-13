@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.entity.item;
 
-import java.lang.reflect.Field;
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
+import hellfirepvp.astralsorcery.common.util.reflection.ReflectionHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -19,8 +19,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper.UnableToFindFieldException;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -36,21 +34,10 @@ public class EntityItemHighlighted extends ItemEntity {
 
     private static final DataParameter<Integer> DATA_COLOR = EntityDataManager.createKey(EntityItemHighlighted.class, DataSerializers.VARINT);
     private static final int NO_COLOR = 0xFF000000;
-    
-    private static Field skipPhysicRenderer;
-    
-    static {
-        try {
-            skipPhysicRenderer = ObfuscationReflectionHelper.findField(ItemEntity.class, "skipPhysicRenderer");
-        } catch (UnableToFindFieldException e) {}
-    }
 
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);
-        if(skipPhysicRenderer != null)
-            try {
-                skipPhysicRenderer.setBoolean(this, true);
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
+        ReflectionHelper.setSkipItemPhysicsRender(this);
     }
 
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world, double x, double y, double z) {

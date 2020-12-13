@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item.lens;
 
+import hellfirepvp.astralsorcery.common.util.PartialEffectExecutor;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -45,7 +46,7 @@ public abstract class LensColorType {
         this.name = name;
         this.type = type;
         this.color = color;
-        this.flowReduction = 1F - flowReduction;
+        this.flowReduction = flowReduction;
         this.ignoresBlockCollision = ignoresBlockCollision;
         this.itemSupplier = itemSupplier;
 
@@ -81,9 +82,9 @@ public abstract class LensColorType {
         return BY_NAME.get(name);
     }
 
-    public abstract void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, float beamStrength);
+    public abstract void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, PartialEffectExecutor executor);
 
-    public abstract void blockInBeam(World world, BlockPos pos, BlockState state, float beamStrength);
+    public abstract void blockInBeam(World world, BlockPos pos, BlockState state, PartialEffectExecutor executor);
 
     public static enum TargetType {
 

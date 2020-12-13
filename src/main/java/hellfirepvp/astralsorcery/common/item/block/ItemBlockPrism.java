@@ -44,8 +44,9 @@ public class ItemBlockPrism extends ItemBlockCustom implements CrystalAttributeI
         super.addInformation(stack, worldIn, tooltip, flagIn);
         CrystalAttributes attr = getAttributes(stack);
         if (attr != null) {
-            attr.addTooltip(tooltip, CalculationContext.Builder
-                    .withUsage(CrystalPropertiesAS.Usages.USE_LENS_TRANSFER)
+            attr.addTooltip(tooltip, CalculationContext.Builder.newBuilder()
+                    .addUsage(CrystalPropertiesAS.Usages.USE_LENS_EFFECT)
+                    .addUsage(CrystalPropertiesAS.Usages.USE_LENS_TRANSFER)
                     .build());
         }
     }
