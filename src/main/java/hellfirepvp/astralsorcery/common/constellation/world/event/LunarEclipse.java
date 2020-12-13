@@ -70,6 +70,11 @@ public class LunarEclipse extends CelestialEvent {
         return this.prevEventTick + ((this.eventTick - this.prevEventTick) * pTicks);
     }
 
+    @Override
+    public long getSeedModifier() {
+        return 0xA595C3B735D5BFB9L;
+    }
+
     public int getEventDuration() {
         return GeneralConfig.CONFIG.dayLength.get() / 5;
     }

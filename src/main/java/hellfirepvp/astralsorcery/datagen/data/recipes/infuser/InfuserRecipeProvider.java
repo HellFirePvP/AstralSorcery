@@ -151,7 +151,7 @@ public class InfuserRecipeProvider {
 
         LiquidInfusionBuilder.builder(Items.GOLD_ORE)
                 .setLiquidInput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
-                .setItemInput(Tags.Items.ORES_GOLD)
+                .setItemInput(Blocks.GOLD_ORE)
                 .setOutput(new ItemStack(Items.GOLD_INGOT, 3))
                 .multiplyDuration(0.5F)
                 .setFluidConsumptionChance(0.1F)

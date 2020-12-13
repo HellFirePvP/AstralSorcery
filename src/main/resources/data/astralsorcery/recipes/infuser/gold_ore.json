@@ -2,7 +2,7 @@
   "type": "astralsorcery:infuser",
   "fluidInput": "astralsorcery:liquid_starlight",
   "input": {
-    "tag": "forge:ores/gold"
+    "item": "minecraft:gold_ore"
   },
   "output": {
     "item": "minecraft:gold_ingot",

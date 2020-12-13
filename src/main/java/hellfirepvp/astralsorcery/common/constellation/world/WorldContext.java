@@ -45,7 +45,11 @@ public class WorldContext {
 
     @Nonnull
     public Random getRandom() {
-        return new Random(this.seed);
+        return this.getRandom(0L);
+    }
+
+    public Random getRandom(long seedModifier) {
+        return new Random(this.seed + seedModifier);
     }
 
     @Nonnull

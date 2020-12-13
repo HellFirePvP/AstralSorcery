@@ -36,6 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.TickEvent;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL11C;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -107,6 +108,12 @@ public class GatewayUIRenderHandler implements ITickHandler {
         double dst = renderOffset.distance(Vector3.atEntityCorner(player).addY(1.5));
         if(dst > 3) {
             return;
+        }
+
+        if (Minecraft.isFabulousGraphicsEnabled()) {
+            //If you found this while wanting to report seeing stars behind blocks on the gateway:
+            //Yes i am aware of it, it'd need a ton of work to fix. So i'll fix it eventually, not right now.
+            RenderSystem.clear(GL11C.GL_DEPTH_BUFFER_BIT, Minecraft.IS_RUNNING_ON_MAC);
         }
 
         this.renderGatewayShieldOverlay(renderStack, renderOffset, dst, pTicks);
@@ -195,14 +202,13 @@ public class GatewayUIRenderHandler implements ITickHandler {
         TexturesAS.TEX_STAR_1.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             for (int i = 0; i < 300; i++) {
-                Vector3 dir = Vector3.random(rand).normalize().multiply(this.currentUI.getSphereRadius() * 0.9);
-                float a = RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, rand.nextInt(7) + 6);
-                a *= alpha;
-                RenderingDrawUtils.renderFacingFullQuadVB(buf, renderStack,
-                        renderOffset.getX() + dir.getX(),
-                        renderOffset.getY() + dir.getY(),
-                        renderOffset.getZ() + dir.getZ(),
-                        0.07F, 0, 255, 255, 255, (int) (a * 255F));
+                Vector3 at = Vector3.random(rand).normalize().multiply(this.currentUI.getSphereRadius() * 0.9).add(renderOffset);
+                if (at.getY() >= this.currentUI.getPos().getY()) {
+                    float a = RenderingConstellationUtils.conCFlicker(ClientScheduler.getClientTick(), pTicks, rand.nextInt(7) + 6);
+                    a *= alpha;
+                    RenderingDrawUtils.renderFacingFullQuadVB(buf, renderStack, at.getX(), at.getY(), at.getZ(),
+                            0.07F, rand.nextFloat(), 255, 255, 255, (int) (a * 255F));
+                }
             }
             for (GatewayUI.GatewayEntry entry : this.currentUI.getGatewayEntries()) {
                 int r = red;

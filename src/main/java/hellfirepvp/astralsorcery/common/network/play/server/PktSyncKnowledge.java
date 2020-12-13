@@ -70,7 +70,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         return (packet, buffer) -> {
             buffer.writeByte(packet.state);
 
-            packet.perkData.write(buffer);
+            ByteBufUtils.writeOptional(buffer, packet.perkData, (buf, perkData) -> perkData.write(buf));
             ByteBufUtils.writeCollection(buffer, packet.knownConstellations, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeCollection(buffer, packet.seenConstellations, ByteBufUtils::writeResourceLocation);
             ByteBufUtils.writeCollection(buffer, packet.storedConstellationPapers, ByteBufUtils::writeResourceLocation);
@@ -87,7 +87,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         return buffer -> {
             PktSyncKnowledge pkt = new PktSyncKnowledge(buffer.readByte());
 
-            pkt.perkData = PlayerPerkData.read(buffer, LogicalSide.CLIENT);
+            pkt.perkData = ByteBufUtils.readOptional(buffer, buf -> PlayerPerkData.read(buf, LogicalSide.CLIENT));
             pkt.knownConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.seenConstellations = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);
             pkt.storedConstellationPapers = ByteBufUtils.readList(buffer, ByteBufUtils::readResourceLocation);

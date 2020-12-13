@@ -14,6 +14,7 @@
   "add_enchantment_helper_apply_modifier": "coremods/add_enchantment_helper_apply_modifier.js",
   "add_enchantment_helper_enchantments": "coremods/add_enchantment_helper_enchantments.js",
   "add_enchantment_helper_levels": "coremods/add_enchantment_helper_levels.js",
+  "render_particles": "coremods/render_particles.js",
 
   "sun_brightness_server": "coremods/sun_brightness_server.js"
 }

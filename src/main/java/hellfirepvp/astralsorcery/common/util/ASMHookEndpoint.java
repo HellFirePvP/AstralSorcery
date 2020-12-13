@@ -8,7 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
+import hellfirepvp.astralsorcery.client.effect.handler.EffectHandler;
 import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectOctans;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
@@ -165,5 +169,18 @@ public class ASMHookEndpoint {
             return false;
         }
         return original;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void renderParticles(MatrixStack renderStack, float pTicks) {
+        EffectHandler.getInstance().render(renderStack, pTicks);
+
+        //Setup GL states again
+        //Seriously, keep a clean GL state for once mojang.
+        RenderSystem.enableAlphaTest();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableDepthTest();
+        GlStateManager.enableTexture();
     }
 }

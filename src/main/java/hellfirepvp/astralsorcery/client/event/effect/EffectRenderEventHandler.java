@@ -38,7 +38,6 @@ public class EffectRenderEventHandler {
     public void attachEventListeners(IEventBus bus) {
         bus.addListener(this::onDebugText);
         bus.addListener(ClientMiscEventHandler::onRender);
-        bus.addListener(EffectHandler.getInstance()::render);
         bus.addListener(EventPriority.LOW, GatewayUIRenderHandler.getInstance()::render);
     }
 

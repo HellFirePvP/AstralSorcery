@@ -39,7 +39,7 @@ public enum Blending {
     private final GlStateManager.DestFactor colorDstFactor, alphaDstFactor;
 
     Blending(GlStateManager.SourceFactor src, GlStateManager.DestFactor dst) {
-        this(src, dst, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        this(src, dst, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
     }
 
     Blending(GlStateManager.SourceFactor src, GlStateManager.DestFactor dst, GlStateManager.SourceFactor srcAlpha, GlStateManager.DestFactor dstAlpha) {

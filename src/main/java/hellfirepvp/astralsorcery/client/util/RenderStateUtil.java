@@ -68,6 +68,12 @@ public class RenderStateUtil {
         @Override
         public void clearRenderState() {
             super.clearRenderState();
+            if (depthMask) {
+                RenderSystem.depthMask(true);
+            }
+            if (colorMask) {
+                RenderSystem.colorMask(true, true, true, true);
+            }
         }
     }
 }

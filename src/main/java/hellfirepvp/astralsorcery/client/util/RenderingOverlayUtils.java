@@ -124,10 +124,10 @@ public class RenderingOverlayUtils {
             int length = fontRenderer.getStringPropertyWidth(prop);
 
             renderStack.push();
-            renderStack.translate(-length / 3F, 0, 0);
-            renderStack.scale(0.7F, 0.7F, 0.7F);
+            renderStack.translate(-length / 3F, 0, 500);
+            renderStack.scale(0.7F, 0.7F, 1F);
             if (amountStr.length() > 3) {
-                renderStack.scale(0.9F, 0.9F, 0.9F);
+                renderStack.scale(0.9F, 0.9F, 1F);
             }
             RenderingDrawUtils.renderStringAt(fr, renderStack, prop, txtColor);
             renderStack.pop();

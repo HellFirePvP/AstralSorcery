@@ -111,8 +111,7 @@ public class RenderStateBuilder {
     }
 
     public RenderStateBuilder defaultAlpha() {
-        this.builder.alpha(new RenderState.AlphaState(1F / 255F));
-        return this;
+        return alpha(1F / 255F);
     }
 
     public RenderStateBuilder particleShaderTarget() {
@@ -139,7 +138,7 @@ public class RenderStateBuilder {
         private ParticleTarget() {
             super("as_particle_target", () -> {
                 if (Minecraft.isFabulousGraphicsEnabled()) {
-                    Minecraft.getInstance().worldRenderer.func_239228_q_().bindFramebuffer(false);
+                    Minecraft.getInstance().worldRenderer.func_239230_s_().bindFramebuffer(false);
                 }
             }, () -> {
                 if (Minecraft.isFabulousGraphicsEnabled()) {
