@@ -274,6 +274,7 @@ public class RegistryResearch {
                 .addTomeLookup(BlocksAS.ROCK_COLLECTOR_CRYSTAL, 1, ResearchProgression.CONSTELLATION)
                 .addTomeLookup(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL, 1, ResearchProgression.CONSTELLATION)
                 .addPage(text("COLL_CRYSTAL.3"))
+                .addPage(text("COLL_CRYSTAL.4"))
                 .register(ResearchProgression.CONSTELLATION);
 
         ItemStack celestialCrystalCluster = new ItemStack(BlocksAS.CELESTIAL_CRYSTAL_CLUSTER);

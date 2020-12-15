@@ -59,7 +59,13 @@ public class ScreenTextEntry {
     }
 
     public boolean keyTyped(int key) {
-        if (key == GLFW.GLFW_KEY_ESCAPE || key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER) {
+        if (key == GLFW.GLFW_KEY_ESCAPE ||
+                key == GLFW.GLFW_KEY_ENTER ||
+                key == GLFW.GLFW_KEY_KP_ENTER ||
+                key == GLFW.GLFW_KEY_HOME ||
+                key == GLFW.GLFW_KEY_END ||
+                key == GLFW.GLFW_KEY_INSERT ||
+                key == GLFW.GLFW_KEY_DELETE) {
             return false;
         }
         //Arrow keys
