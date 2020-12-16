@@ -11,9 +11,11 @@ package hellfirepvp.astralsorcery.common.util.reflection;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -26,16 +28,36 @@ import java.util.function.Function;
  */
 public class ReflectionHelper {
 
-    private static Field itemEntitySkipPhysicRenderer;
+    private static BiConsumer<ItemEntity, Boolean> itemEntitySkipPhysicRenderer;
 
     public static void setSkipItemPhysicsRender(ItemEntity entity) {
         if (itemEntitySkipPhysicRenderer == null) {
-            itemEntitySkipPhysicRenderer = ObfuscationReflectionHelper.findField(ItemEntity.class, "skipPhysicRenderer");
+            itemEntitySkipPhysicRenderer = getFieldSetter(ItemEntity.class, "skipPhysicRenderer", (f, e, bool) -> f.setBoolean(entity, bool));
         }
 
+        itemEntitySkipPhysicRenderer.accept(entity, true);
+    }
+
+    private static <T, V> BiConsumer<T, V> getFieldSetter(Class<T> owningClass, String fieldName, FieldSetter<T, V> fieldSetter) {
+        final Field field = findField(owningClass, fieldName);
+        if (field == null) {
+            return (object, value) -> {};
+        } else {
+            return (object, value) -> {
+                try {
+                    fieldSetter.setFieldValue(field, object, value);
+                } catch (Exception ignored) {}
+            };
+        }
+    }
+
+    @Nullable
+    private static <T> Field findField(Class<T> owningClass, String fieldName) {
         try {
-            itemEntitySkipPhysicRenderer.setBoolean(entity, true);
-        } catch (IllegalAccessException e) {}
+            return ObfuscationReflectionHelper.findField(owningClass, fieldName);
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     private static Function<Object[], Object> resolveConstructor(Class<?> owningClass, Class<?>... parameters) {
@@ -60,5 +82,11 @@ public class ReflectionHelper {
                 throw new ReflectionException("Failed to resolve/call Method!", e);
             }
         };
+    }
+
+    private static interface FieldSetter<T, V> {
+
+        void setFieldValue(Field f, T object, V value) throws IllegalAccessException;
+
     }
 }
