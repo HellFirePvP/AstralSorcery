@@ -63,9 +63,7 @@ public class ItemColoredLensDamage extends ItemColoredLens {
                         return;
                     }
                 }
-                DamageUtil.shotgunAttack((LivingEntity) entity, e -> {
-                    DamageUtil.attackEntityFrom(e, CommonProxy.DAMAGE_SOURCE_STELLAR, 1.5F);
-                });
+                DamageUtil.attackEntityFrom(entity, CommonProxy.DAMAGE_SOURCE_STELLAR, 1.5F);
             });
         }
 

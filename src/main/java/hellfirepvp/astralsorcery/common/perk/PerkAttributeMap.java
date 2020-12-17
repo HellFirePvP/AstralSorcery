@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.LogicalSide;
@@ -23,6 +24,10 @@ import net.minecraftforge.fml.LogicalSide;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +39,7 @@ import java.util.stream.Collectors;
  */
 public class PerkAttributeMap {
 
+    private final ReadWriteLock accessLock = new ReentrantReadWriteLock(true);
     private final LogicalSide side;
     private final Map<PerkAttributeType, List<PerkAttributeModifier>> modifiers = Collections.synchronizedMap(new HashMap<>());
     private final List<PerkConverter> converters = new ArrayList<>();
@@ -182,7 +188,7 @@ public class PerkAttributeMap {
     }
 
     public boolean hasModifiers(PerkAttributeType type) {
-        return !modifiers.getOrDefault(type, Collections.emptyList()).isEmpty();
+        return this.read(() -> !modifiers.getOrDefault(type, Collections.emptyList()).isEmpty());
     }
 
     private List<PerkAttributeModifier> getModifiersByType(PerkAttributeType type, ModifierType mode) {
@@ -192,56 +198,89 @@ public class PerkAttributeMap {
     }
 
     public float getModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeType type) {
-        return getModifier(player, progress, type, Arrays.asList(ModifierType.values()));
+        return getModifier(player, progress, type, EnumSet.allOf(ModifierType.class));
     }
 
     public float getModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeType type, ModifierType mode) {
-        return getModifier(player, progress, type, Lists.newArrayList(mode));
+        return getModifier(player, progress, type, EnumSet.of(mode));
     }
 
     public float getModifier(PlayerEntity player, PlayerProgress progress, PerkAttributeType type, Collection<ModifierType> applicableModes) {
-        float mod = 1F;
-
-        float perkEffectModifier = 1F;
+        float perkEffectModifier;
         if (!type.equals(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT)) {
-            perkEffectModifier = modifyValue(player, progress, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, 1F);
+            perkEffectModifier = getModifier(player, progress, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
+        } else {
+            perkEffectModifier = 1F;
         }
 
-        if (applicableModes.contains(ModifierType.ADDITION)) {
-            for (PerkAttributeModifier modifier : getModifiersByType(type, ModifierType.ADDITION)) {
-                mod += (modifier.getValue(player, progress) * perkEffectModifier);
+        return this.read(() -> {
+            float mod = 1F;
+            if (applicableModes.contains(ModifierType.ADDITION)) {
+                for (PerkAttributeModifier modifier : getModifiersByType(type, ModifierType.ADDITION)) {
+                    mod += (modifier.getValue(player, progress) * perkEffectModifier);
+                }
             }
-        }
-        if (applicableModes.contains(ModifierType.ADDED_MULTIPLY)) {
-            float multiply = mod;
-            for (PerkAttributeModifier modifier : getModifiersByType(type, ModifierType.ADDED_MULTIPLY)) {
-                mod += multiply * (modifier.getValue(player, progress) * perkEffectModifier);
+            if (applicableModes.contains(ModifierType.ADDED_MULTIPLY)) {
+                float multiply = mod;
+                for (PerkAttributeModifier modifier : getModifiersByType(type, ModifierType.ADDED_MULTIPLY)) {
+                    mod += multiply * (modifier.getValue(player, progress) * perkEffectModifier);
+                }
             }
-        }
-        if (applicableModes.contains(ModifierType.STACKING_MULTIPLY)) {
-            for (PerkAttributeModifier modifier : getModifiersByType(type, ModifierType.STACKING_MULTIPLY)) {
-                mod *= ((modifier.getValue(player, progress) - 1F) * perkEffectModifier) + 1;
+            if (applicableModes.contains(ModifierType.STACKING_MULTIPLY)) {
+                for (PerkAttributeModifier modifier : getModifiersByType(type, ModifierType.STACKING_MULTIPLY)) {
+                    mod *= ((modifier.getValue(player, progress) - 1F) * perkEffectModifier) + 1;
+                }
             }
-        }
-        return mod;
+            return mod;
+        });
     }
 
     public float modifyValue(PlayerEntity player, PlayerProgress progress, PerkAttributeType type, float value) {
-        float perkEffectModifier = 1F;
+        float perkEffectModifier;
         if (!type.equals(PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT)) {
             perkEffectModifier = modifyValue(player, progress, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, 1F);
+        } else {
+            perkEffectModifier = 1F;
         }
 
-        for (PerkAttributeModifier mod : getModifiersByType(type, ModifierType.ADDITION)) {
-            value += (mod.getValue(player, progress) * perkEffectModifier);
+        return this.read(() -> {
+            float val = value;
+            for (PerkAttributeModifier mod : getModifiersByType(type, ModifierType.ADDITION)) {
+                val += (mod.getValue(player, progress) * perkEffectModifier);
+            }
+            float multiply = val;
+            for (PerkAttributeModifier mod : getModifiersByType(type, ModifierType.ADDED_MULTIPLY)) {
+                val += multiply * (mod.getValue(player, progress) * perkEffectModifier);
+            }
+            for (PerkAttributeModifier mod : getModifiersByType(type, ModifierType.STACKING_MULTIPLY)) {
+                val *= ((mod.getValue(player, progress) - 1F) * perkEffectModifier) + 1F;
+            }
+            return val;
+        });
+    }
+
+    <T> T write(Supplier<T> fn) {
+        return this.lock(this.accessLock::writeLock, fn);
+    }
+
+    void write(Runnable run) {
+        this.lock(this.accessLock::writeLock, MiscUtils.nullSupplier(run));
+    }
+
+    <T> T read(Supplier<T> fn) {
+        return this.lock(this.accessLock::readLock, fn);
+    }
+
+    void read(Runnable run) {
+        this.lock(this.accessLock::readLock, MiscUtils.nullSupplier(run));
+    }
+
+    private <T> T lock(Supplier<Lock> lock, Supplier<T> fn) {
+        lock.get().lock();
+        try {
+            return fn.get();
+        } finally {
+            lock.get().unlock();
         }
-        float multiply = value;
-        for (PerkAttributeModifier mod : getModifiersByType(type, ModifierType.ADDED_MULTIPLY)) {
-            value += multiply * (mod.getValue(player, progress) * perkEffectModifier);
-        }
-        for (PerkAttributeModifier mod : getModifiersByType(type, ModifierType.STACKING_MULTIPLY)) {
-            value *= ((mod.getValue(player, progress) - 1F) * perkEffectModifier) + 1F;
-        }
-        return value;
     }
 }

@@ -130,11 +130,11 @@ public class PerkEffectHelper {
         for (T src : sources) {
             if (action.isRemove()) {
                 if (ModifierManager.isModifierApplied(player, side, src)) {
-                    removeSource(attributeMap, player, side, src);
+                    attributeMap.write(() -> removeSource(attributeMap, player, side, src));
                 }
             } else {
                 if (!ModifierManager.isModifierApplied(player, side, src) && src.canApplySource(player, side)) {
-                    applySource(attributeMap, player, side, src);
+                    attributeMap.write(() -> applySource(attributeMap, player, side, src));
                 }
             }
         }
@@ -149,11 +149,11 @@ public class PerkEffectHelper {
         PerkAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
         if (action.isRemove()) {
             if (ModifierManager.isModifierApplied(player, side, source)) {
-                removeSource(attributeMap, player, side, source);
+                attributeMap.write(() -> removeSource(attributeMap, player, side, source));
             }
         } else {
             if (!ModifierManager.isModifierApplied(player, side, source) && source.canApplySource(player, side)) {
-                applySource(attributeMap, player, side, source);
+                attributeMap.write(() -> applySource(attributeMap, player, side, source));
             }
         }
     }

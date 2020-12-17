@@ -36,7 +36,7 @@ public class EffectBleed extends EffectCustomTexture {
 
     @Override
     public boolean isReady(int duration, int amplifier) {
-        return true;
+        return duration % 20 == 0;
     }
 
     @Override
