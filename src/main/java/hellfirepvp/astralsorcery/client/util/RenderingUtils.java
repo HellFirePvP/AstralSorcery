@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.reflection.ReflectionHelper;
 import hellfirepvp.observerlib.client.util.BufferDecoratorBuilder;
 import hellfirepvp.observerlib.client.util.RenderTypeDecorator;
 import hellfirepvp.observerlib.common.util.RegistryUtil;
@@ -288,6 +289,7 @@ public class RenderingUtils {
         ItemEntity ei = new ItemEntity(Minecraft.getInstance().world, x, y, z, stack);
         ei.age = age;
         ei.hoverStart = 0;
+        ReflectionHelper.setSkipItemPhysicsRender(ei);
         Minecraft.getInstance().getRenderManager().renderEntityStatic(ei, x, y, z, 0F, pTicks, renderStack, buffers, combinedLight);
     }
 
