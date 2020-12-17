@@ -8,16 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.util.reflection;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.GameRules;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,35 +28,36 @@ import java.util.function.Supplier;
  */
 public class ReflectionHelper {
 
-    private static BiFunction<Object, Object[], ?> createGameRuleMethod = null;
-    private static Function<Object[], ?> gameRuleTypeConstructor = null;
+    private static BiConsumer<ItemEntity, Boolean> itemEntitySkipPhysicRenderer;
 
-    public static <T extends GameRules.RuleValue<T>> GameRules.RuleKey<T> registerGameRule(String name,
-                                                                                           GameRules.RuleType<T> type) {
-
-        if (createGameRuleMethod == null) {
-            createGameRuleMethod = resolveMethod(
-                    GameRules.class,
-                    "register",
-                    String.class, GameRules.RuleType.class
-            );
+    public static void setSkipItemPhysicsRender(ItemEntity entity) {
+        if (itemEntitySkipPhysicRenderer == null) {
+            itemEntitySkipPhysicRenderer = getFieldSetter(ItemEntity.class, "skipPhysicRenderer", (f, e, bool) -> f.setBoolean(entity, bool));
         }
-        return (GameRules.RuleKey<T>) createGameRuleMethod.apply(null,
-                new Object[] { name, type });
+
+        itemEntitySkipPhysicRenderer.accept(entity, true);
     }
 
-    public static GameRules.RuleType<GameRules.BooleanValue> newBooleanType(Supplier<ArgumentType<?>> argumentSupplier,
-                                                                            Function<GameRules.RuleType<GameRules.BooleanValue>, GameRules.BooleanValue> typeExtractor,
-                                                                            BiConsumer<MinecraftServer, GameRules.BooleanValue> ruleAcceptor) {
-
-        if (gameRuleTypeConstructor == null) {
-            gameRuleTypeConstructor = resolveConstructor(
-                    GameRules.RuleType.class,
-                    Supplier.class, Function.class, BiConsumer.class
-            );
+    private static <T, V> BiConsumer<T, V> getFieldSetter(Class<T> owningClass, String fieldName, FieldSetter<T, V> fieldSetter) {
+        final Field field = findField(owningClass, fieldName);
+        if (field == null) {
+            return (object, value) -> {};
+        } else {
+            return (object, value) -> {
+                try {
+                    fieldSetter.setFieldValue(field, object, value);
+                } catch (Exception ignored) {}
+            };
         }
-        return (GameRules.RuleType<GameRules.BooleanValue>) gameRuleTypeConstructor.apply(
-                new Object[] { argumentSupplier, typeExtractor, ruleAcceptor });
+    }
+
+    @Nullable
+    private static <T> Field findField(Class<T> owningClass, String fieldName) {
+        try {
+            return ObfuscationReflectionHelper.findField(owningClass, fieldName);
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     private static Function<Object[], Object> resolveConstructor(Class<?> owningClass, Class<?>... parameters) {
@@ -83,4 +84,9 @@ public class ReflectionHelper {
         };
     }
 
+    private static interface FieldSetter<T, V> {
+
+        void setFieldValue(Field f, T object, V value) throws IllegalAccessException;
+
+    }
 }

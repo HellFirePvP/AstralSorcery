@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.PartialEffectExecutor;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -126,16 +127,13 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver<
         float max = 10F * properties.getEffectAmplifier();
         float stretch = 10F / properties.getPotency();
 
-        double executeTimes = Math.atan(ritualStrength / stretch) * max;
+        float executeTimes = (float) Math.atan(ritualStrength / stretch) * max;
         if (properties.isCorrupted()) {
             executeTimes *= Math.max(rand.nextDouble() * 1.4, 0.1);
         }
-        while (executeTimes > 0) {
-            boolean execute = executeTimes >= 1 || rand.nextFloat() < executeTimes;
-            executeTimes--;
-            if (!execute) {
-                continue;
-            }
+        PartialEffectExecutor exec = new PartialEffectExecutor(executeTimes, rand);
+        while (exec.canExecute()) {
+            exec.markExecution();
             if (this.effect.getConfig().enabled.get()) {
                 boolean didEffectExecute;
                 if (this.effect.needsChunkToBeLoaded()) {

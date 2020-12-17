@@ -135,6 +135,7 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
             return true;
         }
 
+        RenderSystem.enableTexture();
         BlockAtlasTexture.getInstance().bindTexture();
 
         int[] fullBright = new int[] { 15, 15 };

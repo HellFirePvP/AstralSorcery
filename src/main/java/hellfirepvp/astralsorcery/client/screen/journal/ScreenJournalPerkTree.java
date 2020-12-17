@@ -804,7 +804,7 @@ public class ScreenJournalPerkTree extends ScreenJournal {
         TexturesAS.TEX_GUI_BACKGROUND_PERKS.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             RenderingGuiUtils.rect(buf, renderStack, guiLeft - 10, guiTop - 10, this.getGuiZLevel(), guiWidth + 20, guiHeight + 20)
-                    .color(0.65F ,0.65F, 0.65F, 1F)
+                    .color(0.5F ,0.5F, 0.5F, 1F)
                     .draw();
         });
         RenderSystem.disableAlphaTest();

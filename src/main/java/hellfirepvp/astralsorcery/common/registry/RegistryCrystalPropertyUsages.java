@@ -29,6 +29,7 @@ public class RegistryCrystalPropertyUsages {
         USE_RITUAL_RANGE = createUsage("ritual.range");
         USE_COLLECTOR_CRYSTAL = createUsage("collector");
         USE_LENS_TRANSFER = createUsage("lens.transfer");
+        USE_LENS_EFFECT = createUsage("lens.effect");
         USE_TOOL_DURABILITY = createUsage("tool.durability");
         USE_TOOL_EFFECTIVENESS = createUsage("tool.effectiveness");
     }

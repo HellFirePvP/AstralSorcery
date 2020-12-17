@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.item.ItemStarmetalIngot;
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.reflection.ReflectionHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -39,6 +40,7 @@ public class EntityStarmetal extends ItemEntity implements InteractableEntity {
 
     public EntityStarmetal(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);
+        ReflectionHelper.setSkipItemPhysicsRender(this);
     }
 
     public EntityStarmetal(EntityType<? extends ItemEntity> type, World world, double x, double y, double z) {

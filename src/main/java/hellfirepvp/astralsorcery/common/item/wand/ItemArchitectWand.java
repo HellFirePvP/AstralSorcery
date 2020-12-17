@@ -101,6 +101,7 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
             return true;
         }
 
+        RenderSystem.enableTexture();
         BlockAtlasTexture.getInstance().bindTexture();
 
         int[] fullBright = new int[] { 15, 15 };

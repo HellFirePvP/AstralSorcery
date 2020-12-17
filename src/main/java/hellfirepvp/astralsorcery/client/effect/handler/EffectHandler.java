@@ -25,10 +25,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.order.DependencySorter;
 import hellfirepvp.observerlib.common.util.AlternatingSet;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import java.io.IOException;
 import java.util.*;
@@ -67,15 +64,12 @@ public final class EffectHandler {
         return c.getValue();
     }
 
-    public void render(RenderWorldLastEvent event) {
+    public void render(MatrixStack renderStack, float pTicks) {
         if (this.orderedEffects == null || AssetLibrary.isReloading()) {
             return;
         }
 
-        float pTicks = event.getPartialTicks();
-        MatrixStack renderStack = event.getMatrixStack();
-        IRenderTypeBuffer.Impl renderTypeBuffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        IDrawRenderTypeBuffer drawBuffer = IDrawRenderTypeBuffer.of(renderTypeBuffer);
+        IDrawRenderTypeBuffer drawBuffer = IDrawRenderTypeBuffer.defaultBuffer();
         this.acceptsNewEffects = false;
 
         for (BatchRenderContext<?> ctx : this.orderedEffects) {

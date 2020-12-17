@@ -30,4 +30,6 @@ public abstract class CelestialEvent {
 
     public abstract float getEffectTick(float pTicks);
 
+    public abstract long getSeedModifier();
+
 }

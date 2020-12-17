@@ -41,4 +41,9 @@ public class StarFall extends CelestialEvent {
     public float getEffectTick(float pTicks) {
         return 0;
     }
+
+    @Override
+    public long getSeedModifier() {
+        return 0L;
+    }
 }

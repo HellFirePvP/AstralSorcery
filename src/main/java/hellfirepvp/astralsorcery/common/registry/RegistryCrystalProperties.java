@@ -120,6 +120,7 @@ public class RegistryCrystalProperties {
         LENS_PRISM_CREATIVE_ATTRIBUTES =
                 CrystalAttributes.Builder.newBuilder(false)
                         .addProperty(PROPERTY_PURITY, 2)
+                        .addProperty(PROPERTY_SHAPE, 3)
                         .build();
     }
 

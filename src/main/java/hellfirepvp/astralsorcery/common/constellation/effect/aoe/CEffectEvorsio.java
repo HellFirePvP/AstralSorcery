@@ -41,7 +41,9 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -123,9 +125,7 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
             TileRitualPedestal pedestal = getPedestal(world, pos);
             if (pedestal != null) {
                 BlockState state = world.getBlockState(at);
-                Collection<BlockState> blacklist = pedestal.getConfiguredBlockStates();
-                this.addDefaultBreakBlacklist(blacklist);
-                if (this.canBreakBlock(world, at, state, blacklist)) {
+                if (this.canBreakBlock(world, at, state, buildFilter(pedestal))) {
                     BlockDropCaptureAssist.startCapturing();
                     try {
                         BlockUtils.breakBlockWithoutPlayer((ServerWorld) world, at, state,
@@ -145,8 +145,8 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
         }).left().orElse(false);
     }
 
-    private boolean canBreakBlock(World world, BlockPos pos, BlockState state, Collection<BlockState> blacklist) {
-        if (blacklist.contains(state)) {
+    private boolean canBreakBlock(World world, BlockPos pos, BlockState state, Predicate<BlockState> blacklist) {
+        if (blacklist.test(state)) {
             return false;
         }
         float hardness = state.getBlockHardness(world, pos);
@@ -156,11 +156,26 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
         return !state.isAir(world, pos);
     }
 
-    private void addDefaultBreakBlacklist(Collection<BlockState> blacklist) {
-        blacklist.add(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL.getDefaultState());
-        blacklist.add(BlocksAS.ROCK_COLLECTOR_CRYSTAL.getDefaultState());
-        blacklist.add(BlocksAS.LENS.getDefaultState());
-        blacklist.add(BlocksAS.PRISM.getDefaultState());
+    private Predicate<BlockState> buildFilter(TileRitualPedestal pedestal) {
+        List<Predicate<BlockState>> filteredBlocks = pedestal.getConfiguredBlockStates().stream()
+                .map(blockState -> (Predicate<BlockState>) blockState::equals)
+                .collect(Collectors.toList());
+        this.addDefaultBreakBlacklist(filteredBlocks);
+        return blockState -> {
+            for (Predicate<BlockState> filterTest : filteredBlocks) {
+                if (filterTest.test(blockState)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+    }
+
+    private void addDefaultBreakBlacklist(List<Predicate<BlockState>> out) {
+        out.add((state) -> state.getBlock().equals(BlocksAS.CELESTIAL_COLLECTOR_CRYSTAL));
+        out.add((state) -> state.getBlock().equals(BlocksAS.ROCK_COLLECTOR_CRYSTAL));
+        out.add((state) -> state.getBlock().equals(BlocksAS.LENS));
+        out.add((state) -> state.getBlock().equals(BlocksAS.PRISM));
     }
 
     @Override

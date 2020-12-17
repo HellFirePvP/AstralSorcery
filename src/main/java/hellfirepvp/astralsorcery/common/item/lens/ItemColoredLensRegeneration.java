@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.DamageUtil;
+import hellfirepvp.astralsorcery.common.util.PartialEffectExecutor;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -21,7 +22,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 /**
@@ -51,25 +51,29 @@ public class ItemColoredLensRegeneration extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {
+        public void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, PartialEffectExecutor executor) {
             if (world.isRemote() || !(entity instanceof LivingEntity) || !entity.isAlive()) {
                 return;
             }
             if (entity instanceof PlayerEntity && !GeneralConfig.CONFIG.doColoredLensesAffectPlayers.get()) {
                 return;
             }
-            if (random.nextFloat() > beamStrength) {
-                return;
-            }
             LivingEntity le = (LivingEntity) entity;
-            if (le.isEntityUndead()) {
-                DamageUtil.attackEntityFrom(le, CommonProxy.DAMAGE_SOURCE_STELLAR, 7F * beamStrength);
-            } else {
-                le.heal(5F * beamStrength);
-            }
+            executor.executeAll(() -> {
+                if (random.nextInt(8) != 0) {
+                    return;
+                }
+                if (le.isEntityUndead()) {
+                    DamageUtil.shotgunAttack(le, e -> {
+                        DamageUtil.attackEntityFrom(e, CommonProxy.DAMAGE_SOURCE_STELLAR, 0.5F);
+                    });
+                } else {
+                    le.heal(0.5F);
+                }
+            });
         }
 
         @Override
-        public void blockInBeam(World world, BlockPos pos, BlockState state, float beamStrength) {}
+        public void blockInBeam(World world, BlockPos pos, BlockState state, PartialEffectExecutor executor) {}
     }
 }

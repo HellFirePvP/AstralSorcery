@@ -322,6 +322,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
         this.storedStarlight = MathHelper.clamp(this.storedStarlight + collectable, 0, this.getAltarType().getStarlightCapacity());
         this.tickStarlightCollectionMap.computeIfPresent(category, (cat, remaining) -> Math.max(remaining - collectable, 0));
         this.markForUpdate();
+        this.preventNetworkSync();
     }
 
     public float getRemainingCollectionCapacity(AltarCollectionCategory category) {

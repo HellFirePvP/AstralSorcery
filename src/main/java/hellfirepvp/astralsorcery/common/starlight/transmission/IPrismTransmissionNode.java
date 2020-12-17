@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.starlight.transmission;
 
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.lib.DataAS;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
@@ -52,9 +53,19 @@ public interface IPrismTransmissionNode extends ILocatable {
     //Get this node's additional transmission loss multiplier.
     //Why the transmission is reduced even more is not important here.
     //0 means 100% all starlight is lost here, 1 means nothing is lost.
-    //By default we don't increase additional loss.
-    default public float getAdditionalTransmissionLossMultiplier() {
-        return 1F;
+    //Should add up to 1 when combined with #getTransmissionConsumptionMultiplier
+    //Signifies the amount that is passed on to the next hop
+    default public float getTransmissionThroughputMultiplier() {
+        return 1F - getTransmissionConsumptionMultiplier();
+    }
+
+    //Get this node's additional transmission consumption multiplier.
+    //0 means 100% of all starlight is kept as this node, 1 means everything is passed on.
+    //Should add up to 1 when combined with #getTransmissionThroughputMultiplier
+    //The amount this node keeps is transferred to the network node via #onTransmissionTick
+    //if that chunk is loaded and the #needsTransmissionUpdate returns true
+    default public float getTransmissionConsumptionMultiplier() {
+        return 0F;
     }
 
     //If this returns true, this node will be additionally cached in the transmission chain
@@ -65,7 +76,7 @@ public interface IPrismTransmissionNode extends ILocatable {
     }
 
     //The update method of #needsTransmissionUpdate
-    default public void onTransmissionTick(World world) {}
+    default public void onTransmissionTick(World world, float starlightAmt, IWeakConstellation type) {}
 
     //Fired to notify THIS that the link to "to" is no longer valid
     //The node at "to" should have THIS as a valid source.

@@ -32,6 +32,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL11C;
 
 import java.util.Map;
 import java.util.UUID;
@@ -96,6 +97,11 @@ public class TypeBlockRing extends PatreonEffect {
             if (pl.rotationPitch >= 35F) {
                 alpha *= Math.max(0, (55F - pl.rotationPitch) / 20F);
             }
+
+            if (Minecraft.isFabulousGraphicsEnabled()) {
+                RenderSystem.clear(GL11C.GL_DEPTH_BUFFER_BIT, Minecraft.IS_RUNNING_ON_MAC);
+            }
+
             renderStack.push();
             renderStack.translate(0, -0.5, 0);
             renderStack.scale(0.5F, 0.5F, 0.5F);

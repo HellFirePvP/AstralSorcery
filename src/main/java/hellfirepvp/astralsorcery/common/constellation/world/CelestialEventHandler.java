@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.constellation.world.event.StarFall;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -72,9 +71,8 @@ public class CelestialEventHandler {
     }
 
     void tick(World world) {
-        Random rand = this.ctx.getRandom();
         for (CelestialEvent event : this.events) {
-            event.tick(world, rand, ctx);
+            event.tick(world, this.ctx.getRandom(event.getSeedModifier()), ctx);
         }
     }
 

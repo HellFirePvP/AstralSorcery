@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimplePrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionProvider;
@@ -38,26 +39,28 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
         super(thisPos);
     }
 
-    @Override
-    public boolean needsTransmissionUpdate() {
-        return true;
+    public boolean updateAdditionalLoss(float loss) {
+        boolean didChange = this.additionalLoss != loss;
+        this.additionalLoss = loss;
+        return didChange;
     }
 
     @Override
-    public void onTransmissionTick(World world) {
+    public void onTransmissionTick(World world, float starlightAmt, IWeakConstellation type) {
         TilePrism prism = MiscUtils.getTileAt(world, getLocationPos(), TilePrism.class, false);
         if (prism != null) {
-            prism.transmissionTick();
+            prism.transmissionTick(starlightAmt, type);
         }
     }
 
-    public void updateAdditionalLoss(float loss) {
-        this.additionalLoss = loss;
-    }
-
     @Override
-    public float getAdditionalTransmissionLossMultiplier() {
+    public float getTransmissionConsumptionMultiplier() {
+
         return additionalLoss;
+    }
+    @Override
+    public boolean needsTransmissionUpdate() {
+        return true;
     }
 
     @Override
@@ -69,7 +72,6 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
     public TransmissionProvider getProvider() {
         return new Provider();
     }
-
 
     @Override
     public void readFromNBT(CompoundNBT compound) {

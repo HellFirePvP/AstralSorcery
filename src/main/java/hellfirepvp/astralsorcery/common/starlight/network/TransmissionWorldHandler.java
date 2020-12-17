@@ -82,7 +82,7 @@ public class TransmissionWorldHandler {
             }
 
             TransmissionChain chain = cachedSourceChain.get(source);
-            double starlight = source.produceStarlightTick(world, at);
+            float starlight = source.produceStarlightTick(world, at);
             IWeakConstellation type = source.getStarlightType();
             if (type == null) {
                 continue;
@@ -97,10 +97,12 @@ public class TransmissionWorldHandler {
                 }
             }
 
-            if (starlight > 0.1D) {
-                for (IPrismTransmissionNode node : chain.getTransmissionUpdateList()) {
-                    node.onTransmissionTick(world);
-                }
+            if (starlight > 0.01F) {
+                chain.getTransmissionUpdates().forEach((node, multiplier) -> {
+                    if (multiplier >= 0.01F) {
+                        node.onTransmissionTick(world, starlight * multiplier, type);
+                    }
+                });
             }
 
             for (BlockPos endPointPos : chain.getUncheckedEndpointsBlock()) {

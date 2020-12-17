@@ -14,13 +14,13 @@ import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
+import hellfirepvp.astralsorcery.common.util.PartialEffectExecutor;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 /**
@@ -50,19 +50,23 @@ public class ItemColoredLensGrowth extends ItemColoredLens {
         }
 
         @Override
-        public void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, float beamStrength) {}
+        public void entityInBeam(World world, Vector3 origin, Vector3 target, Entity entity, PartialEffectExecutor executor) {}
 
         @Override
-        public void blockInBeam(World world, BlockPos pos, BlockState state, float beamStrength) {
-            if (world.isRemote() || random.nextFloat() > beamStrength) {
+        public void blockInBeam(World world, BlockPos pos, BlockState state, PartialEffectExecutor executor) {
+            if (world.isRemote()) {
                 return;
             }
             CropHelper.GrowablePlant plant = CropHelper.wrapPlant(world, pos);
-            if (plant != null && random.nextInt(8) == 0) {
-                plant.tryGrow(world, random);
-                PktPlayEffect packet = new PktPlayEffect(PktPlayEffect.Type.CROP_GROWTH)
-                        .addData(buf -> ByteBufUtils.writeVector(buf, new Vector3(pos)));
-                PacketChannel.CHANNEL.sendToAllAround(packet, PacketChannel.pointFromPos(world, pos, 16));
+            if (plant != null) {
+                executor.executeAll(() -> {
+                    if (random.nextInt(18) == 0) {
+                        plant.tryGrow(world, random);
+                        PktPlayEffect packet = new PktPlayEffect(PktPlayEffect.Type.CROP_GROWTH)
+                                .addData(buf -> ByteBufUtils.writeVector(buf, new Vector3(pos)));
+                        PacketChannel.CHANNEL.sendToAllAround(packet, PacketChannel.pointFromPos(world, pos, 16));
+                    }
+                });
             }
         }
     }

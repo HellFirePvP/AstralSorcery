@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.common.block.base.BlockStarlightRecipient;
+import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.sync.server.DataLightBlockEndpoints;
@@ -43,7 +44,7 @@ public class TransmissionChain {
     private final Set<BlockPos> uncheckedEndpointsBlock = new HashSet<>(); //Might be IBlockSLRecipient or just a normal block.
     private final Set<BlockPos> resolvedNormalBlockPositions = new HashSet<>();
     private final Set<ITransmissionReceiver> endpointsNodes = new HashSet<>(); //Safe to assume those are endpoints
-    private final Set<IPrismTransmissionNode> transmissionUpdateList = new HashSet<>();
+    private final Map<IPrismTransmissionNode, Float> transmissionUpdateMap = new HashMap();
 
     private final WorldNetworkHandler handler;
     private final IPrismTransmissionNode sourceNode;
@@ -103,14 +104,17 @@ public class TransmissionChain {
     private void recBuildChain(IPrismTransmissionNode node, float lossMultiplier, LinkedList<BlockPos> prevPath) {
         if (lossMultiplier <= 0.001F) return; //No. we don't transfer a part less than 0.1% of the starlight.
 
-        float lossPerc = CrystalCalculations.getThroughputMultiplier(node.getTransmissionProperties());
-        lossPerc *= node.getAdditionalTransmissionLossMultiplier();
+        CrystalAttributes lensProperties = node.getTransmissionProperties();
+        float lossPerc = lossMultiplier * CrystalCalculations.getThroughputMultiplier(lensProperties);
+        float nextHopLossPerc = lossPerc * node.getTransmissionThroughputMultiplier();
+        float transmissionPerc = lossPerc * node.getTransmissionConsumptionMultiplier() * CrystalCalculations.getThroughputEffectMultiplier(lensProperties);
+
         List<NodeConnection<IPrismTransmissionNode>> next = node.queryNext(handler);
-        float nextLoss = (lossMultiplier * lossPerc) / ((float) next.size());
+        float nextLoss = nextHopLossPerc / ((float) next.size());
         prevPath.push(node.getLocationPos());
 
         if (node.needsTransmissionUpdate()) {
-            transmissionUpdateList.add(node);
+            transmissionUpdateMap.put(node, transmissionPerc);
         }
 
         for (NodeConnection<IPrismTransmissionNode> nextNode : next) {
@@ -162,8 +166,8 @@ public class TransmissionChain {
         if (!foundConnections.contains(newCon)) foundConnections.add(newCon);
     }
 
-    public Set<IPrismTransmissionNode> getTransmissionUpdateList() {
-        return transmissionUpdateList;
+    public Map<IPrismTransmissionNode, Float> getTransmissionUpdates() {
+        return this.transmissionUpdateMap;
     }
 
     public Collection<ChunkPos> getInvolvedChunks() {

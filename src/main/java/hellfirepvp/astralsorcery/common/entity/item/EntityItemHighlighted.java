@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.entity.item;
 
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
+import hellfirepvp.astralsorcery.common.util.reflection.ReflectionHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -36,6 +37,7 @@ public class EntityItemHighlighted extends ItemEntity {
 
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);
+        ReflectionHelper.setSkipItemPhysicsRender(this);
     }
 
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world, double x, double y, double z) {

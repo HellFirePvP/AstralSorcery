@@ -461,10 +461,10 @@ public class ScreenJournalConstellationDetail extends ScreenJournal implements N
         TexturesAS.TEX_GUI_BACKGROUND_CONSTELLATIONS.bindTexture();
         RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
             Matrix4f offset = renderStack.getLast().getMatrix();
-            buf.pos(offset, guiLeft + 15,  guiTop + 240, this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.7F).tex(0, 1).endVertex();
-            buf.pos(offset, guiLeft + 200, guiTop + 240, this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.7F).tex(1, 1).endVertex();
-            buf.pos(offset, guiLeft + 200, guiTop + 10,  this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.7F).tex(1, 0).endVertex();
-            buf.pos(offset, guiLeft + 15,  guiTop + 10,  this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.7F).tex(0, 0).endVertex();
+            buf.pos(offset, guiLeft + 15,  guiTop + 240, this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.5F).tex(0.3F, 0.9F).endVertex();
+            buf.pos(offset, guiLeft + 200, guiTop + 240, this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.5F).tex(0.7F, 0.9F).endVertex();
+            buf.pos(offset, guiLeft + 200, guiTop + 10,  this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.5F).tex(0.7F, 0.1F).endVertex();
+            buf.pos(offset, guiLeft + 15,  guiTop + 10,  this.getGuiZLevel()).color(0.8F, 0.8F, 1F, 0.5F).tex(0.3F, 0.1F).endVertex();
         });
         RenderSystem.disableBlend();
     }

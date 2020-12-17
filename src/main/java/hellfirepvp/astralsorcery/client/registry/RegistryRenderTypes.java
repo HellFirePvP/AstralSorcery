@@ -45,6 +45,7 @@ public class RegistryRenderTypes {
                         .blend(Blending.DEFAULT)
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_GENERIC_PARTICLE_DEPTH = createType("effect_fx_generic_particle_depth", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
@@ -53,6 +54,7 @@ public class RegistryRenderTypes {
                         .disableCull()
                         .disableDepthMask()
                         .disableDepth()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_GENERIC_PARTICLE_ATLAS = createType("effect_fx_generic_particle_atlas", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
@@ -60,6 +62,7 @@ public class RegistryRenderTypes {
                         .blend(Blending.DEFAULT)
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_LIGHTNING = createType("effect_fx_lightning", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
@@ -67,6 +70,7 @@ public class RegistryRenderTypes {
                         .blend(Blending.DEFAULT)
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_LIGHTBEAM = createType("effect_fx_lightbeam", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
@@ -74,6 +78,7 @@ public class RegistryRenderTypes {
                         .blend(Blending.ADDITIVE_ALPHA)
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_CRYSTAL = createType("effect_fx_crystal", POSITION_COLOR_TEX_NORMAL, GL11.GL_TRIANGLES, 32768,
                 RenderStateBuilder.builder()
@@ -82,6 +87,7 @@ public class RegistryRenderTypes {
                         .defaultAlpha()
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_BURST = createType("effect_fx_burst", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
@@ -89,6 +95,7 @@ public class RegistryRenderTypes {
                         .blend(Blending.DEFAULT)
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_DYNAMIC_TEXTURE_SPRITE = createType("effect_fx_dynamic_texture_sprite", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
@@ -97,6 +104,7 @@ public class RegistryRenderTypes {
                         .alpha(0.0001F)
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_TEXTURE_SPRITE = createType("effect_fx_texture_sprite", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
@@ -105,6 +113,7 @@ public class RegistryRenderTypes {
                         .alpha(0.0001F)
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_CUBE_OPAQUE_ATLAS = createType("effect_fx_cube_opaque_atlas", DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP,
                 RenderStateBuilder.builder()
@@ -113,6 +122,7 @@ public class RegistryRenderTypes {
                         .defaultAlpha()
                         .disableCull()
                         .enableLighting()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_BLOCK_TRANSLUCENT = createType("effect_fx_block_translucent", DefaultVertexFormats.BLOCK,
                 RenderStateBuilder.builder()
@@ -120,6 +130,7 @@ public class RegistryRenderTypes {
                         .blend(Blending.ADDITIVEDARK)
                         .defaultAlpha()
                         .disableCull()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_BLOCK_TRANSLUCENT_DEPTH = createType("effect_fx_block_translucent_depth", DefaultVertexFormats.BLOCK,
                 RenderStateBuilder.builder()
@@ -128,6 +139,7 @@ public class RegistryRenderTypes {
                         .defaultAlpha()
                         .disableCull()
                         .disableDepth()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_CUBE_TRANSLUCENT_ATLAS = createType("effect_fx_cube_translucent_atlas", DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP,
                 RenderStateBuilder.builder()
@@ -136,6 +148,7 @@ public class RegistryRenderTypes {
                         .defaultAlpha()
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_CUBE_TRANSLUCENT_ATLAS_DEPTH = createType("effect_fx_cube_translucent_atlas_depth", DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP,
                 RenderStateBuilder.builder()
@@ -144,6 +157,7 @@ public class RegistryRenderTypes {
                         .defaultAlpha()
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .disableDepth()
                         .build());
         EFFECT_FX_CUBE_AREA_OF_EFFECT = createType("effect_fx_cube_area_of_effect", DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP,
@@ -153,12 +167,14 @@ public class RegistryRenderTypes {
                         .defaultAlpha()
                         .disableCull()
                         .disableDepthMask()
+                        .particleShaderTarget()
                         .build());
         EFFECT_FX_COLOR_SPHERE = createType("effect_fx_color_sphere", DefaultVertexFormats.POSITION_COLOR, GL11.GL_TRIANGLES, 32768,
                 RenderStateBuilder.builder()
                         .blend(Blending.DEFAULT)
                         .disableTexture()
                         .alpha(0.00001F)
+                        .particleShaderTarget()
                         .build());
     }
 

@@ -78,6 +78,11 @@ public class SolarEclipse extends CelestialEvent {
         return this.prevEventTick + ((this.eventTick - this.prevEventTick) * pTicks);
     }
 
+    @Override
+    public long getSeedModifier() {
+        return 0x8D8692645A136C53L;
+    }
+
     public int getEventDuration() {
         return GeneralConfig.CONFIG.dayLength.get() / 5;
     }
