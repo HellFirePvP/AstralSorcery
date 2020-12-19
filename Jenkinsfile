@@ -10,20 +10,7 @@ pipeline {
 rm -rf perkMapDraft.pdn README.md AstralSorcery'''
       }
     }
-    stage('Build only') {
-      when {
-        not {
-          branch 'master'
-        }
-      }
-      steps {
-        sh '''./gradlew build'''
-      }
-    }
     stage('Build and Publish') {
-      when{
-        branch 'master'
-      }
       steps {
         sh '''./gradlew build publish'''
       }
@@ -41,9 +28,6 @@ find . ! -name \'*.jar\' -delete'''
       }
     }
     stage('Notify') {
-      when{
-        branch 'master'
-      }
       steps {
         discordSendHellFire link: env.BUILD_URL, result: currentBuild.currentResult, webhookURL: "${WEBHOOKURL}"
       }
