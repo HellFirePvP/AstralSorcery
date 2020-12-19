@@ -70,7 +70,7 @@ public class KeyTreeConnector extends MajorPerk {
             ListNBT listTokens = new ListNBT();
             for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(LogicalSide.SERVER, this)) {
                 if (ResearchManager.forceApplyPerk(player, otherPerk, PlayerPerkAllocation.unlock())) {
-                    ResourceLocation token = AstralSorcery.key("connector-tk-" + otherPerk.getRegistryName().getPath());
+                    ResourceLocation token = AstralSorcery.key("connector_tk_" + otherPerk.getRegistryName().getPath());
                     if (ResearchManager.grantFreePerkPoint(player, token)) {
                         listTokens.add(StringNBT.valueOf(token.toString()));
                     }

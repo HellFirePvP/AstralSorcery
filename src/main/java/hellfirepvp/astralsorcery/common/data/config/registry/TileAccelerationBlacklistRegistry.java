@@ -85,6 +85,8 @@ public class TileAccelerationBlacklistRegistry extends ConfigDataAdapter<TileAcc
                 new TileAccelerationBlacklistEntry(TileObservatory.class.getName()),
                 new TileAccelerationBlacklistEntry(TileRitualLink.class.getName()),
                 new TileAccelerationBlacklistEntry(TileRitualPedestal.class.getName()),
+                new TileAccelerationBlacklistEntry(TileSpectralRelay.class.getName()),
+                new TileAccelerationBlacklistEntry(TileTelescope.class.getName()),
                 new TileAccelerationBlacklistEntry(TileTranslucentBlock.class.getName()),
                 new TileAccelerationBlacklistEntry(TileTreeBeaconComponent.class.getName()),
                 new TileAccelerationBlacklistEntry(TileVanishing.class.getName())

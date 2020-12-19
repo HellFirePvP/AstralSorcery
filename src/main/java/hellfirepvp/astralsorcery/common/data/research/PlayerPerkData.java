@@ -387,7 +387,7 @@ public class PlayerPerkData {
             if (compound.contains("pointTokens")) {
                 ListNBT list = compound.getList("pointTokens", Constants.NBT.TAG_STRING);
                 for (int i = 0; i < list.size(); i++) {
-                    this.freePointTokens.add(AstralSorcery.key(list.getString(i).toLowerCase(Locale.ROOT)));
+                    this.freePointTokens.add(AstralSorcery.key(list.getString(i).toLowerCase(Locale.ROOT).replace("-", "_")));
                 }
             }
         }
