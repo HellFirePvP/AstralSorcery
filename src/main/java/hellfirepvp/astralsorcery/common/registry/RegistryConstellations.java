@@ -403,9 +403,9 @@ public class RegistryConstellations {
         ulteria = new Constellation.Minor("ulteria", CONSTELLATION_ULTERIA, MoonPhase.WANING_1_2, MoonPhase.WANING_3_4, MoonPhase.NEW) {
             @Override
             public void affectConstellationEffect(ConstellationEffectProperties properties) {
-                properties.multiplyEffectAmplifier(2.5F);
-                properties.multiplyPotency(1.5F);
-                properties.multiplySize(3);
+                properties.multiplyEffectAmplifier(2F);
+                properties.multiplyPotency(0.5F);
+                properties.multiplySize(0.5F);
             }
         };
         sl1 = ulteria.addStar(4, 28);

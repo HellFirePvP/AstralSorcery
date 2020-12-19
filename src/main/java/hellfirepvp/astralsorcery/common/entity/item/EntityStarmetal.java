@@ -18,7 +18,9 @@ import hellfirepvp.astralsorcery.common.util.reflection.ReflectionHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -41,6 +43,7 @@ public class EntityStarmetal extends ItemEntity implements InteractableEntity {
     public EntityStarmetal(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);
         ReflectionHelper.setSkipItemPhysicsRender(this);
+        recalculateSize();
     }
 
     public EntityStarmetal(EntityType<? extends ItemEntity> type, World world, double x, double y, double z) {
@@ -105,6 +108,32 @@ public class EntityStarmetal extends ItemEntity implements InteractableEntity {
             this.setItem(thisStack);
         }
         return true;
+    }
+
+    @Override
+    public void tick() {
+        boolean onGround = this.isOnGround();
+        super.tick();
+        if (this.isOnGround() != onGround) {
+            recalculateSize();
+        }
+    }
+
+    @Override
+    public void setOnGround(boolean grounded) {
+        boolean updateSize = isOnGround() != grounded;
+        super.setOnGround(grounded);
+        if (updateSize) {
+            recalculateSize();
+        }
+    }
+
+    @Override
+    public EntitySize getSize(Pose poseIn) {
+        if (!this.isOnGround()) {
+            return EntityType.ITEM.getSize();
+        }
+        return this.getType().getSize();
     }
 
     @Override

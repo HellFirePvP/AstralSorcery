@@ -10,7 +10,9 @@ package hellfirepvp.astralsorcery.common.entity.item;
 
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import hellfirepvp.astralsorcery.common.util.reflection.ReflectionHelper;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
@@ -38,6 +40,7 @@ public class EntityItemHighlighted extends ItemEntity {
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);
         ReflectionHelper.setSkipItemPhysicsRender(this);
+        recalculateSize();
     }
 
     public EntityItemHighlighted(EntityType<? extends ItemEntity> type, World world, double x, double y, double z) {
@@ -78,6 +81,32 @@ public class EntityItemHighlighted extends ItemEntity {
         }
         int colorInt = this.getDataManager().get(DATA_COLOR);
         return new Color(colorInt, false);
+    }
+
+    @Override
+    public void tick() {
+        boolean onGround = this.isOnGround();
+        super.tick();
+        if (this.isOnGround() != onGround) {
+            recalculateSize();
+        }
+    }
+
+    @Override
+    public void setOnGround(boolean grounded) {
+        boolean updateSize = isOnGround() != grounded;
+        super.setOnGround(grounded);
+        if (updateSize) {
+            recalculateSize();
+        }
+    }
+
+    @Override
+    public EntitySize getSize(Pose poseIn) {
+        if (!this.isOnGround()) {
+            return EntityType.ITEM.getSize();
+        }
+        return this.getType().getSize();
     }
 
     @Override
