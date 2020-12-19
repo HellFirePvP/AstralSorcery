@@ -31,6 +31,7 @@ public class RenderingConfig extends ConfigEntry {
     public ForgeConfigSpec.DoubleValue maxEffectRenderDistance;
     public ForgeConfigSpec.EnumValue<ParticleAmount> particleAmount;
     public ForgeConfigSpec.BooleanValue patreonEffects;
+    public ForgeConfigSpec.IntValue minYFosicDisplay;
 
     public ForgeConfigSpec.ConfigValue<List<? extends String>> dimensionsWithSkyRendering;
     public ForgeConfigSpec.ConfigValue<List<? extends String>> dimensionsWithOnlyConstellationRendering;
@@ -45,16 +46,18 @@ public class RenderingConfig extends ConfigEntry {
                 .comment("Defines how close to the position of a particle/floating texture you have to be in order for it to render.")
                 .translation(translationKey("maxEffectRenderDistance"))
                 .defineInRange("maxEffectRenderDistance", 64.0, 1, 512);
-
         particleAmount = cfgBuilder
                 .comment("Sets the amount of particles/effects")
                 .translation(translationKey("particleAmount"))
                 .defineEnum("particleAmount", ParticleAmount.ALL);
-
         patreonEffects = cfgBuilder
                 .comment("Enables/Disables all patreon effects.")
                 .translation(translationKey("patreonEffects"))
                 .define("patreonEffects", true);
+        minYFosicDisplay = cfgBuilder
+                .comment("Defines the minimum y-level the fosic resonator will display the fosic field on.")
+                .translation(translationKey("minYFosicDisplay"))
+                .defineInRange("minYFosicDisplay", 0, 0, 256);
 
         dimensionsWithSkyRendering = cfgBuilder
                 .comment("Whitelist of dimension ID's that will have special astral sorcery sky rendering")

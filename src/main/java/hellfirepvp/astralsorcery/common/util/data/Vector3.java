@@ -86,6 +86,7 @@ public class Vector3 {
         return new Vector3(entity.getPosX(), entity.getPosY(), entity.getPosZ());
     }
 
+    @Deprecated
     public static Vector3 atEntityCenter(Entity entity) {
         return atEntityCorner(entity).addY(entity.getHeight() / 2F);
     }

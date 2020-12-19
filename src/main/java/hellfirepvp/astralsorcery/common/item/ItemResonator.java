@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.client.data.config.entry.RenderingConfig;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
@@ -169,10 +170,12 @@ public class ItemResonator extends Item implements OverrideInteractItem {
             int offsetX = center.getX();
             int offsetZ = center.getZ();
             BlockPos.Mutable mPos = new BlockPos.Mutable();
+            int minY = RenderingConfig.CONFIG.minYFosicDisplay.get();
 
             for (int xx = -48; xx <= 48; xx++) {
                 for (int zz = -48; zz <= 48; zz++) {
                     mPos.setPos(world.getHeight(Heightmap.Type.WORLD_SURFACE, mPos.setPos(offsetX + xx, 0, offsetZ + zz)));
+                    mPos.setY(Math.max(mPos.getY(), minY));
 
                     float perc = SkyCollectionHelper.getSkyNoiseDistributionClient(world.getDimensionKey(), mPos).get();
 

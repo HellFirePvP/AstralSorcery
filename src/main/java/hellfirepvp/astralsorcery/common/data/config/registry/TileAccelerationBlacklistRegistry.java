@@ -15,9 +15,7 @@ import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileSourceBase;
 import hellfirepvp.astralsorcery.common.tile.base.network.TileTransmissionBase;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.PistonTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.*;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -47,6 +45,11 @@ public class TileAccelerationBlacklistRegistry extends ConfigDataAdapter<TileAcc
         if (erroredTiles.contains(tileClass)) {
             return false;
         }
+        for (Class<?> excludedTile : erroredTiles) {
+            if (excludedTile.isAssignableFrom(tileClass)) {
+                return false;
+            }
+        }
 
         for (TileAccelerationBlacklistEntry entry : this.getConfiguredValues()) {
             if (entry.test(tile)) {
@@ -66,6 +69,7 @@ public class TileAccelerationBlacklistRegistry extends ConfigDataAdapter<TileAcc
     public List<TileAccelerationBlacklistEntry> getDefaultValues() {
         return Lists.newArrayList(
                 new TileAccelerationBlacklistEntry(PistonTileEntity.class.getName()),
+                new TileAccelerationBlacklistEntry(LockableLootTileEntity.class.getName()),
 
                 // Accelerating storage system components looks like a bad idea
                 new TileAccelerationBlacklistEntry("appeng"),

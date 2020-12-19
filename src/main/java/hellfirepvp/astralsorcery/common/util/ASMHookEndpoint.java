@@ -23,9 +23,11 @@ import hellfirepvp.astralsorcery.common.event.AttributeEvent;
 import hellfirepvp.astralsorcery.common.event.CooldownSetEvent;
 import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.perk.node.key.KeyEntityReach;
+import hellfirepvp.astralsorcery.common.util.collision.CollisionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -37,6 +39,9 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.play.ServerPlayNetHandler;
 import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.ServerCooldownTracker;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapeSpliterator;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -46,9 +51,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.LogicalSide;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -182,5 +189,16 @@ public class ASMHookEndpoint {
                 GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableDepthTest();
         GlStateManager.enableTexture();
+    }
+
+    public static boolean addCustomCollision(VoxelShapeSpliterator iterator, Consumer<? super VoxelShape> action) {
+        return CollisionHelper.onCollision(iterator, action);
+    }
+
+    public static Vector3d wrapCustomEntityCollision(Vector3d allowedMovement, @Nullable Entity entity) {
+        if (entity == null) {
+            return allowedMovement;
+        }
+        return CollisionHelper.onEntityCollision(allowedMovement, entity);
     }
 }
