@@ -388,7 +388,9 @@ public class PlayerPerkData {
             if (compound.contains("pointTokens")) {
                 ListNBT list = compound.getList("pointTokens", Constants.NBT.TAG_STRING);
                 for (int i = 0; i < list.size(); i++) {
-                    this.freePointTokens.add(AstralSorcery.key(list.getString(i).toLowerCase(Locale.ROOT).replace("-", "_")));
+                    String[] resource = legacySplitKey(list.getString(i).toLowerCase(Locale.ROOT));
+                    resource[1] = resource[1].replace("-", "_").replace(":", "_");
+                    this.freePointTokens.add(AstralSorcery.key(resource[1]));
                 }
             }
         }
@@ -396,6 +398,15 @@ public class PlayerPerkData {
         if (compound.contains("perkExp")) {
             this.perkExp = compound.getDouble("perkExp");
         }
+    }
+
+    private static String[] legacySplitKey(String resource) {
+        String[] keyParts = new String[]{ "minecraft", resource };
+        int i = resource.indexOf(":");
+        if (i >= 0) {
+            keyParts[1] = resource.substring(i + 1);
+        }
+        return keyParts;
     }
 
     public static class AppliedPerk {
