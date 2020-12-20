@@ -251,7 +251,7 @@ public class PlayerPerkData {
         this.freePointTokens.clear();
         this.perkExp = 0;
 
-        //TODO disable eventually
+        //TODO remove with 1.17
         if (isLegacyData(tag)) {
             loadLegacyData(progress, tag);
             return;
@@ -274,8 +274,9 @@ public class PlayerPerkData {
             return;
         }
 
+        //TODO Remove .replace("-", "_") in 1.17
         this.freePointTokens.addAll(NBTHelper.readList(tag, "tokens", Constants.NBT.TAG_STRING,
-                nbt -> new ResourceLocation(nbt.getString())));
+                nbt -> new ResourceLocation(nbt.getString().replace("-", "_"))));
 
         ListNBT list = tag.getList("perks", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.size(); i++) {
