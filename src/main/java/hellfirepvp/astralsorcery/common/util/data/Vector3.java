@@ -83,7 +83,7 @@ public class Vector3 {
     }
 
     public static Vector3 atEntityCorner(Entity entity) {
-        return new Vector3(entity.getPosX(), entity.getPosY(), entity.getPosZ());
+        return new Vector3(entity.getPositionVec());
     }
 
     @Deprecated

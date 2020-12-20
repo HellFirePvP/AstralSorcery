@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.reader.PerkAttributeReader;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
+import hellfirepvp.astralsorcery.common.util.ReadWriteLockable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +27,8 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,12 +37,13 @@ import java.util.*;
  * Created by HellFirePvP
  * Date: 08.08.2019 / 16:56
  */
-public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
+public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> implements ReadWriteLockable {
 
     protected static final Random rand = new Random();
 
     //May be used by subclasses to more efficiently track who's got a perk applied
     private final Map<LogicalSide, Set<UUID>> applicationCache = Maps.newHashMap();
+    private final ReadWriteLock accessLock = new ReentrantReadWriteLock(true);
 
     private final boolean isOnlyMultiplicative;
 
@@ -94,13 +98,16 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
     }
 
     public void onApply(PlayerEntity player, LogicalSide side, ModifierSource source) {
-        Set<UUID> applied = applicationCache.computeIfAbsent(side, s -> new HashSet<>());
-        applied.add(player.getUniqueID());
+        this.write(() -> {
+            applicationCache.computeIfAbsent(side, s -> new HashSet<>()).add(player.getUniqueID());
+        });
     }
 
     public void onRemove(PlayerEntity player, LogicalSide side, boolean removedCompletely, ModifierSource source) {
         if (removedCompletely) {
-            applicationCache.computeIfAbsent(side, s -> new HashSet<>()).remove(player.getUniqueID());
+            this.write(() -> {
+                applicationCache.getOrDefault(side, Collections.emptySet()).remove(player.getUniqueID());
+            });
         }
     }
 
@@ -113,17 +120,24 @@ public class PerkAttributeType extends ForgeRegistryEntry<PerkAttributeType> {
     public void onModeRemove(PlayerEntity player, ModifierType mode, LogicalSide side, boolean removedCompletely) {}
 
     public boolean hasTypeApplied(PlayerEntity player, LogicalSide side) {
-        return applicationCache.computeIfAbsent(side, s -> new HashSet<>()).contains(player.getUniqueID());
+        return this.read(() -> applicationCache.getOrDefault(side, Collections.emptySet()).contains(player.getUniqueID()));
     }
 
     private void clear(LogicalSide side) {
-        this.applicationCache.remove(side);
+        this.write(() -> {
+            this.applicationCache.remove(side);
+        });
     }
 
     public static void clearCache(LogicalSide side) {
         for (PerkAttributeType type : RegistriesAS.REGISTRY_PERK_ATTRIBUTE_TYPES) {
             type.clear(side);
         }
+    }
+
+    @Override
+    public ReadWriteLock getLock() {
+        return this.accessLock;
     }
 
     @Override

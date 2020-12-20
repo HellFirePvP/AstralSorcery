@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
 import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.ReadWriteLockable;
 import hellfirepvp.astralsorcery.common.util.log.LogCategory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.LogicalSide;
@@ -24,10 +24,8 @@ import net.minecraftforge.fml.LogicalSide;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -37,7 +35,7 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 08.08.2019 / 18:20
  */
-public class PerkAttributeMap {
+public class PerkAttributeMap implements ReadWriteLockable {
 
     private final ReadWriteLock accessLock = new ReentrantReadWriteLock(true);
     private final LogicalSide side;
@@ -259,28 +257,8 @@ public class PerkAttributeMap {
         });
     }
 
-    <T> T write(Supplier<T> fn) {
-        return this.lock(this.accessLock::writeLock, fn);
-    }
-
-    void write(Runnable run) {
-        this.lock(this.accessLock::writeLock, MiscUtils.nullSupplier(run));
-    }
-
-    <T> T read(Supplier<T> fn) {
-        return this.lock(this.accessLock::readLock, fn);
-    }
-
-    void read(Runnable run) {
-        this.lock(this.accessLock::readLock, MiscUtils.nullSupplier(run));
-    }
-
-    private <T> T lock(Supplier<Lock> lock, Supplier<T> fn) {
-        lock.get().lock();
-        try {
-            return fn.get();
-        } finally {
-            lock.get().unlock();
-        }
+    @Override
+    public ReadWriteLock getLock() {
+        return this.accessLock;
     }
 }

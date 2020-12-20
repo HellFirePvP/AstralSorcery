@@ -126,7 +126,7 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
                         int times = 4 + rand.nextInt(2);
                         while (times > 0) {
                             ((ITickableTileEntity) tile).tick();
-                            if((System.nanoTime() - startNs) >= 80_000) {
+                            if ((System.nanoTime() - startNs) >= 80_000) {
                                 break;
                             }
                             times--;

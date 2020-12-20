@@ -37,4 +37,8 @@ public interface VFXScaleFunction<T extends EntityVisualFX> {
 
     public float getScale(@Nonnull T fx, float scaleIn, float pTicks);
 
+    default public VFXScaleFunction<T> andThen(VFXScaleFunction<T> multiplied) {
+        VFXScaleFunction<T> existing = this;
+        return (fx, scaleIn, pTicks) -> multiplied.getScale(fx, existing.getScale(fx, scaleIn, pTicks), pTicks);
+    }
 }
