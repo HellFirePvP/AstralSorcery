@@ -39,7 +39,8 @@ public final class AstralLootTableProvider extends LootTableProvider {
         return Lists.newArrayList(
                 Pair.of(BlockLootTableProvider::new, LootParameterSets.BLOCK),
                 Pair.of(EntityLootTableProvider::new, LootParameterSets.ENTITY),
-                Pair.of(ChestLootTableProvider::new, LootParameterSets.CHEST)
+                Pair.of(ChestLootTableProvider::new, LootParameterSets.CHEST),
+                Pair.of(GameplayLootTableProvider::new, LootParameterSets.GIFT)
         );
     }
 

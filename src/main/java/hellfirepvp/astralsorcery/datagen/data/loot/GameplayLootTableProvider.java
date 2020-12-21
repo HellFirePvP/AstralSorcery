@@ -6,28 +6,25 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util.data;
+package hellfirepvp.astralsorcery.datagen.data.loot;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import net.minecraft.data.loot.GiftLootTables;
+import net.minecraft.loot.LootTable;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.function.BiConsumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: SizeLimitMap
+ * Class: GameplayLootTableProvider
  * Created by HellFirePvP
- * Date: 19.12.2020 / 17:20
+ * Date: 20.12.2020 / 21:46
  */
-public class SizeLimitMap<K, V> extends LinkedHashMap<K, V> {
-
-    private final int maxSize;
-
-    public SizeLimitMap(int maxSize) {
-        this.maxSize = maxSize;
-    }
+public class GameplayLootTableProvider extends GiftLootTables {
 
     @Override
-    protected boolean removeEldestEntry(final Map.Entry<K, V> eldest) {
-        return size() > maxSize;
+    public void accept(BiConsumer<ResourceLocation, LootTable.Builder> registrar) {
+
     }
 }

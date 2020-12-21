@@ -44,7 +44,7 @@ public class RenderCollectorCrystal extends CustomTileEntityRenderer<TileCollect
         RenderingDrawUtils.renderLightRayFan(renderStack, renderTypeBuffer, color, seed, 24, 24, 12);
 
         seed ^= 0x54FF129A4B11C382L;
-        if (tile.isEnhanced()) {
+        if (tile.isEnhanced() && tile.getAttunedConstellation() != null) {
             color = tile.getAttunedConstellation().getConstellationColor();
         }
 

@@ -25,6 +25,8 @@ public class LootAS {
 
     public static final ResourceLocation SHRINE_CHEST = AstralSorcery.key("shrine_chest");
 
+    public static final ResourceLocation STARFALL_SHOOTING_STAR_REWARD = AstralSorcery.key("gameplay/starfall/shooting_star");
+
     public static class Functions {
 
         public static LootFunctionType LINEAR_LUCK_BONUS;
