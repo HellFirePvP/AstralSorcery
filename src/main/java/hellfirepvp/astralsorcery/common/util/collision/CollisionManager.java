@@ -9,16 +9,13 @@
 package hellfirepvp.astralsorcery.common.util.collision;
 
 import hellfirepvp.astralsorcery.common.constellation.mantle.effect.MantleEffectAevitas;
-import hellfirepvp.astralsorcery.common.util.data.SizeLimitMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShapeSpliterator;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,8 +28,9 @@ public class CollisionManager {
 
     private static final List<CustomCollisionHandler> customHandlers = new ArrayList<>();
 
-    //This should be implemented properly at some point, instead of... this.
-    private static final LinkedHashMap<VoxelShapeSpliterator, List<AxisAlignedBB>> instanceFlags = new SizeLimitMap<>(20);
+    private static final int maxCacheSize = 20;
+    private static final LinkedList<VoxelShapeSpliterator> accessList = new LinkedList<>();
+    private static final HashMap<VoxelShapeSpliterator, List<AxisAlignedBB>> instanceFlags = new HashMap<>();
 
     public static void init() {
         register(new MantleEffectAevitas.PlayerWalkableAir());
@@ -45,12 +43,19 @@ public class CollisionManager {
     @Nullable
     public static AxisAlignedBB getIteratorBoundingBoxes(VoxelShapeSpliterator iterator, @Nullable Entity entity) {
         if (!instanceFlags.containsKey(iterator)) {
-            instanceFlags.put(iterator, getAdditionalBoundingBoxes(entity));
+            List<AxisAlignedBB> additionalBoundingBoxes = getAdditionalBoundingBoxes(entity);
+            if (additionalBoundingBoxes.isEmpty()) {
+                return null;
+            }
+            removeOldestEntry();
+            instanceFlags.put(iterator, additionalBoundingBoxes);
+            accessList.addFirst(iterator);
         }
         List<AxisAlignedBB> boxes = instanceFlags.get(iterator);
         if (boxes == null || boxes.isEmpty()) {
             return null;
         }
+        markActive(iterator);
         return boxes.remove(0);
     }
 
@@ -61,5 +66,33 @@ public class CollisionManager {
                 .filter(handler -> handler.shouldAddCollisionFor(entity))
                 .forEach(handler -> handler.addCollision(entity, entityBox, additionalCollision));
         return additionalCollision;
+    }
+
+    private static void removeOldestEntry() {
+        if (accessList.size() >= maxCacheSize) {
+            VoxelShapeSpliterator oldest;
+            //Apparently the list can be both >= 20 elements in size AND empty at the same time.
+            try {
+                oldest = accessList.removeLast();
+            } catch (NoSuchElementException exc) {
+                if (accessList.isEmpty()) {
+                    return;
+                }
+                try {
+                    oldest = accessList.get(accessList.size() - 1);
+                } catch (Exception e) {
+                    return;
+                }
+            }
+            if (oldest != null) {
+                instanceFlags.remove(oldest);
+            }
+        }
+    }
+
+    private static void markActive(VoxelShapeSpliterator it) {
+        if (accessList.remove(it)) {
+            accessList.addFirst(it);
+        }
     }
 }
