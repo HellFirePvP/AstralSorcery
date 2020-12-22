@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.event.CooldownSetEvent;
 import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.perk.node.key.KeyEntityReach;
 import hellfirepvp.astralsorcery.common.util.collision.CollisionHelper;
+import hellfirepvp.astralsorcery.common.util.reflection.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -191,8 +192,14 @@ public class ASMHookEndpoint {
         GlStateManager.enableTexture();
     }
 
-    public static boolean addCustomCollision(VoxelShapeSpliterator iterator, Consumer<? super VoxelShape> action) {
-        return CollisionHelper.onCollision(iterator, action);
+    public static boolean addCustomCollision(boolean didCollision, VoxelShapeSpliterator iterator, Consumer<? super VoxelShape> action) {
+        if (!didCollision) {
+            if (CollisionHelper.onCollision(iterator, action)) {
+                return true;
+            }
+            ReflectionHelper.setVoxelShapeIteratorDidCustomCollision(iterator);
+        }
+        return false;
     }
 
     public static Vector3d wrapCustomEntityCollision(Vector3d allowedMovement, @Nullable Entity entity) {

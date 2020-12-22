@@ -17,16 +17,20 @@ function initializeCoreMod() {
                 var LabelNode = Java.type('org.objectweb.asm.tree.LabelNode');
                 var JumpInsnNode = Java.type('org.objectweb.asm.tree.JumpInsnNode');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
+                var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
 
                 var first = method.instructions.getFirst();
                 var firstLabel = findFirstLabel(method);
                 method.instructions.insertBefore(first, new LabelNode());
                 method.instructions.insertBefore(first, new VarInsnNode(Opcodes.ALOAD, 0));
+                method.instructions.insertBefore(first, new FieldInsnNode(Opcodes.GETFIELD,
+                    "net/minecraft/util/math/shapes/VoxelShapeSpliterator", "as_didCustomCollision", "Z"))
+                method.instructions.insertBefore(first, new VarInsnNode(Opcodes.ALOAD, 0));
                 method.instructions.insertBefore(first, new VarInsnNode(Opcodes.ALOAD, 1));
                 method.instructions.insertBefore(first, ASMAPI.buildMethodCall(
                     'hellfirepvp/astralsorcery/common/util/ASMHookEndpoint',
                     'addCustomCollision',
-                    '(Lnet/minecraft/util/math/shapes/VoxelShapeSpliterator;Ljava/util/function/Consumer;)Z',
+                    '(ZLnet/minecraft/util/math/shapes/VoxelShapeSpliterator;Ljava/util/function/Consumer;)Z',
                     ASMAPI.MethodType.STATIC));
                 method.instructions.insertBefore(first, new JumpInsnNode(Opcodes.IFEQ, firstLabel));
                 method.instructions.insertBefore(first, new InsnNode(Opcodes.ICONST_1));

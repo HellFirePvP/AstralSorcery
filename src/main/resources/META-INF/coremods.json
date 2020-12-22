@@ -17,6 +17,7 @@
   "render_particles": "coremods/render_particles.js",
   "add_custom_voxel_collision": "coremods/add_custom_voxel_collision.js",
   "add_custom_entity_collision": "coremods/add_custom_entity_collision.js",
+  "add_custom_collision_flag": "coremods/add_custom_collision_flag.js",
 
   "sun_brightness_server": "coremods/sun_brightness_server.js"
 }
