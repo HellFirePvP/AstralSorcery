@@ -31,13 +31,12 @@ public interface GemSocketItem {
     /**
      * Called when a itemstack is inserted into the given socket perk.
      * Note: This will only occur if {@link #canBeInserted} ended up returning true.
-     * Note: only called on {@link LogicalSide.SERVER}
+     * Note: only called on {@link LogicalSide#SERVER}
      *
      * @param stack
      * @param perk
      * @param player
      * @param progress
-     * @param side
      */
     default <T extends AbstractPerk & GemSocketPerk> void onInsert(ItemStack stack, T perk, PlayerEntity player, PlayerProgress progress) {
         return;
@@ -45,13 +44,12 @@ public interface GemSocketItem {
 
     /**
      * Called when the itemstack is removed from the socket perk.
-     * Note: only called on {@link LogicalSide.SERVER}
+     * Note: only called on {@link LogicalSide#SERVER}
      *
      * @param stack
      * @param perk
      * @param player
      * @param progress
-     * @param side
      */
     default <T extends AbstractPerk & GemSocketPerk> void onExtract(ItemStack stack, T perk, PlayerEntity player, PlayerProgress progress) {
         return;

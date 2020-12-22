@@ -30,7 +30,7 @@ public class CollisionManager {
 
     private static final int maxCacheSize = 20;
     private static final LinkedList<VoxelShapeSpliterator> accessList = new LinkedList<>();
-    private static final HashMap<VoxelShapeSpliterator, List<AxisAlignedBB>> instanceFlags = new HashMap<>();
+    private static final Map<VoxelShapeSpliterator, List<AxisAlignedBB>> instanceFlags = new HashMap<>();
 
     public static void init() {
         register(new MantleEffectAevitas.PlayerWalkableAir());
