@@ -20,7 +20,6 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import static hellfirepvp.astralsorcery.client.lib.RenderTypesAS.*;
@@ -354,15 +353,20 @@ public class RegistryRenderTypes {
     }
 
     private static RenderType createBackgroundType(String name, AbstractRenderableTexture tex) {
-        RenderType ren = createType(name+"_background", DefaultVertexFormats.POSITION_COLOR_TEX,
+        RenderType ren = createType(name + "_background", DefaultVertexFormats.POSITION_COLOR_TEX,
                 RenderStateBuilder.builder()
                         .texture(tex)
                         .blend(Blending.DEFAULT)
                         .disableDepthMask()
                         .build());
         IConstellation cst = ConstellationRegistry.getConstellation(AstralSorcery.key(name));
-        cst.setRenderType(ren);
-        cst.setTexture(tex);
+        if (cst != null) {
+            cst.setRenderType(ren);
+            cst.setTexture(tex);
+        }
+        else {
+            AstralSorcery.log.warn("Could not find constellation with name "+AstralSorcery.key(name));
+        }
         return ren;
     }
 }
