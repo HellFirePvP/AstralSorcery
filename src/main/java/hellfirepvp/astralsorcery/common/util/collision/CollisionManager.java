@@ -59,6 +59,15 @@ public class CollisionManager {
         return boxes.remove(0);
     }
 
+    public static boolean needsCustomCollision(@Nullable Entity entity) {
+        for (CustomCollisionHandler handler : customHandlers) {
+            if (handler.shouldAddCollisionFor(entity)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static List<AxisAlignedBB> getAdditionalBoundingBoxes(@Nullable Entity entity) {
         List<AxisAlignedBB> additionalCollision = new ArrayList<>();
         AxisAlignedBB entityBox = entity != null ? entity.getBoundingBox() : new AxisAlignedBB(BlockPos.ZERO);

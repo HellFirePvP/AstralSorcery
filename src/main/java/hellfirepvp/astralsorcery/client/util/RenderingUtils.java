@@ -254,12 +254,12 @@ public class RenderingUtils {
         }
     }
 
-    public static void renderInWorldText(ITextProperties text, Color color, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
+    public static int renderInWorldText(ITextProperties text, Color color, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
         float scale = (float) Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
-        renderInWorldText(text, color, 0.02F * (Minecraft.getInstance().gameSettings.guiScale / scale), at, renderStack, pTicks, facePlayer);
+        return renderInWorldText(text, color, 0.02F * (Minecraft.getInstance().gameSettings.guiScale / scale), at, renderStack, pTicks, facePlayer);
     }
 
-    public static void renderInWorldText(ITextProperties text, Color color, float scale, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
+    public static int renderInWorldText(ITextProperties text, Color color, float scale, Vector3 at, MatrixStack renderStack, float pTicks, boolean facePlayer) {
         FontRenderer fr = Minecraft.getInstance().fontRenderer;
 
         renderStack.push();
@@ -279,10 +279,11 @@ public class RenderingUtils {
         int length = fr.getStringPropertyWidth(text);
         IRenderTypeBuffer.Impl buffers = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
         IReorderingProcessor processedText = LanguageMap.getInstance().func_241870_a(text);
-        fr.func_238416_a_(processedText, -(length / 2F), 0, color.getRGB(), false, matr, buffers, true, 0, LightmapUtil.getPackedFullbrightCoords());
+        int drawnLength = fr.func_238416_a_(processedText, -(length / 2F), 0, color.getRGB(), false, matr, buffers, true, 0, LightmapUtil.getPackedFullbrightCoords());
         buffers.finish();
 
         renderStack.pop();
+        return drawnLength;
     }
 
     public static void renderItemAsEntity(ItemStack stack, MatrixStack renderStack, IRenderTypeBuffer buffers, double x, double y, double z, int combinedLight, float pTicks, int age) {

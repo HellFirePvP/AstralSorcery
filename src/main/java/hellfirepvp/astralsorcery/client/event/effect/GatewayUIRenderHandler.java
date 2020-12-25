@@ -22,8 +22,6 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
@@ -138,7 +136,6 @@ public class GatewayUIRenderHandler implements ITickHandler {
         Color c = ColorsAS.CONSTELLATION_TYPE_MAJOR;
         float alpha = MathHelper.clamp(1F - ((float) (distance / 2D)), 0F, 1F);
 
-        IRenderTypeBuffer.Impl drawBuffers = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
         node.getAllowedUsers().forEach((index, playerRef) -> {
             BlockPos drawPos = TileCelestialGateway.getAllowedUserOffset(index).add(node.getPos());
             Vector3 at = new Vector3(drawPos)
@@ -146,7 +143,7 @@ public class GatewayUIRenderHandler implements ITickHandler {
                     .subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));
             IConstellation cst = this.getCurrentUI().getGeneratedConstellation(playerRef.getPlayerUUID());
             if (cst != null) {
-                RenderingConstellationUtils.renderConstellationIntoWorldFlat(c, cst, renderStack, drawBuffers, at, 1.2, 1, alpha);
+                RenderingConstellationUtils.renderConstellationIntoWorldFlat(c, cst, renderStack, at, 1.2, 1, alpha);
 
                 UUID targetUUID = playerRef.getPlayerUUID();
                 if ((node.getOwner().getPlayerUUID().equals(currentUUID) || targetUUID.equals(currentUUID)) && drawPos.equals(blockSelected)) {
@@ -155,7 +152,6 @@ public class GatewayUIRenderHandler implements ITickHandler {
                 }
             }
         });
-        drawBuffers.finish();
     }
 
     private void renderGatewayFocusedEntry(MatrixStack renderStack, Vector3 renderOffset, float pTicks) {

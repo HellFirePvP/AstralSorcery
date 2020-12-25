@@ -30,6 +30,9 @@ import java.util.function.Consumer;
 public class CollisionHelper {
 
     public static boolean onCollision(VoxelShapeSpliterator iterator, Consumer<? super VoxelShape> action) {
+        if (!CollisionManager.needsCustomCollision(iterator.entity)) {
+            return false;
+        }
         AxisAlignedBB box = CollisionManager.getIteratorBoundingBoxes(iterator, iterator.entity);
         if (box == null) {
             return false;
@@ -44,6 +47,9 @@ public class CollisionHelper {
     }
 
     public static Vector3d onEntityCollision(Vector3d allowedMovement, Entity entity) {
+        if (!CollisionManager.needsCustomCollision(entity)) {
+            return allowedMovement;
+        }
         List<AxisAlignedBB> additionalBoxes = CollisionManager.getAdditionalBoundingBoxes(entity);
         AxisAlignedBB entityBox = entity.getBoundingBox().grow(1.0E-7D);
         for (AxisAlignedBB box : additionalBoxes) {

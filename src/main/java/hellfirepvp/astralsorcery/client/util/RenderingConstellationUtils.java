@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
@@ -96,6 +97,12 @@ public class RenderingConstellationUtils {
 
     public static void renderConstellationIntoWorldFlat(IConstellation c, MatrixStack renderStack, IRenderTypeBuffer buffer, Vector3 offset, double scale, double line, float brightness) {
         renderConstellationIntoWorldFlat(c.getConstellationColor(), c, renderStack, buffer, offset, scale, line, brightness);
+    }
+
+    public static void renderConstellationIntoWorldFlat(Color color, IConstellation c, MatrixStack renderStack, Vector3 offset, double scale, double line, float brightness) {
+        IRenderTypeBuffer.Impl drawBuffers = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        renderConstellationIntoWorldFlat(color, c, renderStack, drawBuffers, offset, scale, line, brightness);
+        drawBuffers.finish();
     }
 
     public static void renderConstellationIntoWorldFlat(Color color, IConstellation c, MatrixStack renderStack, IRenderTypeBuffer buffer, Vector3 offset, double scale, double line, float brightness) {

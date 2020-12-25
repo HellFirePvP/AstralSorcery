@@ -88,6 +88,29 @@ public class BlockGeometry {
         return out;
     }
 
+    public static List<BlockPos> getHollowDome(double outerRadius, double innerRadius) {
+        List<BlockPos> out = new ArrayList<>();
+        Vector3 vFrom = new Vector3(0.5, 0.5, 0.5);
+        double dstOuter = outerRadius * outerRadius;
+        double dstInner = innerRadius * innerRadius;
+
+        int toX = MathHelper.ceil(outerRadius);
+        int toY = MathHelper.ceil(outerRadius);
+        int toZ = MathHelper.ceil(outerRadius);
+        for (int x = MathHelper.floor(-outerRadius); x <= toX; x++) {
+            for (int z = MathHelper.floor(-outerRadius); z <= toZ; z++) {
+                for (int y = 0; y <= toY; y++) {
+                    Vector3 result = new Vector3(x, y, z).add(0.5, 0.5, 0.5);
+                    double dst = result.distanceSquared(vFrom);
+                    if (dst > dstInner && dst <= dstOuter) {
+                        out.add(result.toBlockPos());
+                    }
+                }
+            }
+        }
+        return out;
+    }
+
     public static List<BlockPos> getVerticalCone(BlockPos offset, int flatRadius) {
         List<BlockPos> out = new ArrayList<>();
 
