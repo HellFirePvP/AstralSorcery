@@ -9,11 +9,15 @@
 package hellfirepvp.astralsorcery.client.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.constellation.ConstellationRenderInfos;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.RenderStateBuilder;
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -33,6 +37,7 @@ public class RegistryRenderTypes {
     public static void init() {
         initEffectTypes();
         initEffects();
+        initConstellationTypes();
         initGuiTypes();
         initTERTypes();
         initModels();
@@ -202,6 +207,25 @@ public class RegistryRenderTypes {
                         .build());
     }
 
+    private static void initConstellationTypes() {
+        CONSTELLATION_DISCIDIA_BACKGROUND   = createConstellationBackgroundType(ConstellationsAS.discidia, TexturesAS.TEX_DISCIDIA_BACKGROUND);
+        CONSTELLATION_ARMARA_BACKGROUND     = createConstellationBackgroundType(ConstellationsAS.armara, TexturesAS.TEX_ARMARA_BACKGROUND);
+        CONSTELLATION_VICIO_BACKGROUND      = createConstellationBackgroundType(ConstellationsAS.vicio, TexturesAS.TEX_VICIO_BACKGROUND);
+        CONSTELLATION_AEVITAS_BACKGROUND    = createConstellationBackgroundType(ConstellationsAS.aevitas, TexturesAS.TEX_AEVITAS_BACKGROUND);
+        CONSTELLATION_EVORSIO_BACKGROUND    = createConstellationBackgroundType(ConstellationsAS.evorsio, TexturesAS.TEX_EVORSIO_BACKGROUND);
+        CONSTELLATION_LUCERNA_BACKGROUND    = createConstellationBackgroundType(ConstellationsAS.lucerna, TexturesAS.TEX_LUCERNA_BACKGROUND);
+        CONSTELLATION_MINERALIS_BACKGROUND  = createConstellationBackgroundType(ConstellationsAS.mineralis, TexturesAS.TEX_MINERALIS_BACKGROUND);
+        CONSTELLATION_HOROLOGIUM_BACKGROUND = createConstellationBackgroundType(ConstellationsAS.horologium, TexturesAS.TEX_HOROLOGIUM_BACKGROUND);
+        CONSTELLATION_OCTANS_BACKGROUND     = createConstellationBackgroundType(ConstellationsAS.octans, TexturesAS.TEX_OCTANS_BACKGROUND);
+        CONSTELLATION_BOOTES_BACKGROUND     = createConstellationBackgroundType(ConstellationsAS.bootes, TexturesAS.TEX_BOOTES_BACKGROUND);
+        CONSTELLATION_FORNAX_BACKGROUND     = createConstellationBackgroundType(ConstellationsAS.fornax, TexturesAS.TEX_FORNAX_BACKGROUND);
+        CONSTELLATION_PELOTRIO_BACKGROUND   = createConstellationBackgroundType(ConstellationsAS.pelotrio, TexturesAS.TEX_PELOTRIO_BACKGROUND);
+        CONSTELLATION_GELU_BACKGROUND       = createConstellationBackgroundType(ConstellationsAS.gelu, TexturesAS.TEX_GELU_BACKGROUND);
+        CONSTELLATION_ULTERIA_BACKGROUND    = createConstellationBackgroundType(ConstellationsAS.ulteria, TexturesAS.TEX_ULTERIA_BACKGROUND);
+        CONSTELLATION_ALCARA_BACKGROUND     = createConstellationBackgroundType(ConstellationsAS.alcara, TexturesAS.TEX_ALCARA_BACKGROUND);
+        CONSTELLATION_VORUX_BACKGROUND      = createConstellationBackgroundType(ConstellationsAS.vorux, TexturesAS.TEX_VORUX_BACKGROUND);
+    }
+
     private static void initGuiTypes() {
         GUI_MISC_INFO_STAR = createType("gui_misc_info_star", DefaultVertexFormats.POSITION_TEX,
                 RenderStateBuilder.builder()
@@ -345,4 +369,15 @@ public class RegistryRenderTypes {
         return RenderType.makeType(AstralSorcery.key(name).toString(), vertexFormat, glDrawMode, bufferSize, usesDelegateDrawing, sortVertices, state);
     }
 
+    private static RenderType createConstellationBackgroundType(IConstellation cst, AbstractRenderableTexture tex) {
+        RenderType rType = createType("constellation_background_" + cst.getSimpleName(), DefaultVertexFormats.POSITION_COLOR_TEX,
+                RenderStateBuilder.builder()
+                        .texture(tex)
+                        .blend(Blending.DEFAULT)
+                        .disableDepthMask()
+                        .build());
+
+        ConstellationRenderInfos.registerBackground(cst, rType, tex);
+        return rType;
+    }
 }

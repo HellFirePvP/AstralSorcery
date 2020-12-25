@@ -149,13 +149,13 @@ public class RegistryConstellations {
 
         // CEP/Cepheus
         armara = new Constellation.Major("armara", CONSTELLATION_ARMARA);
-        sl1 = armara.addStar(5, 5);
+        sl1 = armara.addStar(5, 26);
         sl2 = armara.addStar(7, 16);
-        sl3 = armara.addStar(15, 9);
-        sl4 = armara.addStar(11, 26);
-        sl5 = armara.addStar(16, 27);
-        sl6 = armara.addStar(23, 19);
-        sl7 = armara.addStar(26, 13);
+        sl3 = armara.addStar(15, 22);
+        sl4 = armara.addStar(11, 5);
+        sl5 = armara.addStar(16, 4);
+        sl6 = armara.addStar(21, 11);
+        sl7 = armara.addStar(26, 10);
 
         armara.addConnection(sl1, sl2);
         armara.addConnection(sl2, sl3);

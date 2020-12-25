@@ -100,6 +100,23 @@ public class TexturesAS {
     public static AbstractRenderableTexture TEX_STAR_1;
     public static AbstractRenderableTexture TEX_STAR_2;
 
+    public static AbstractRenderableTexture TEX_DISCIDIA_BACKGROUND;
+    public static AbstractRenderableTexture TEX_ARMARA_BACKGROUND;
+    public static AbstractRenderableTexture TEX_VICIO_BACKGROUND;
+    public static AbstractRenderableTexture TEX_AEVITAS_BACKGROUND;
+    public static AbstractRenderableTexture TEX_EVORSIO_BACKGROUND;
+    public static AbstractRenderableTexture TEX_LUCERNA_BACKGROUND;
+    public static AbstractRenderableTexture TEX_MINERALIS_BACKGROUND;
+    public static AbstractRenderableTexture TEX_HOROLOGIUM_BACKGROUND;
+    public static AbstractRenderableTexture TEX_OCTANS_BACKGROUND;
+    public static AbstractRenderableTexture TEX_BOOTES_BACKGROUND;
+    public static AbstractRenderableTexture TEX_FORNAX_BACKGROUND;
+    public static AbstractRenderableTexture TEX_PELOTRIO_BACKGROUND;
+    public static AbstractRenderableTexture TEX_GELU_BACKGROUND;
+    public static AbstractRenderableTexture TEX_ULTERIA_BACKGROUND;
+    public static AbstractRenderableTexture TEX_ALCARA_BACKGROUND;
+    public static AbstractRenderableTexture TEX_VORUX_BACKGROUND;
+
     public static AbstractRenderableTexture TEX_PARTICLE_SMALL;
     public static AbstractRenderableTexture TEX_PARTICLE_LARGE;
     public static AbstractRenderableTexture TEX_CRYSTAL_EFFECT_1;

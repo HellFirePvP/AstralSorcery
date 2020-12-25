@@ -100,6 +100,23 @@ public class RegistryTextures {
         TEX_STAR_1          = loadTexture(ENVIRONMENT, "star_1");
         TEX_STAR_2          = loadTexture(ENVIRONMENT, "star_2");
 
+        TEX_DISCIDIA_BACKGROUND   = loadTexture(ENVIRONMENT, "background_discidia");
+        TEX_ARMARA_BACKGROUND     = loadTexture(ENVIRONMENT, "background_armara");
+        TEX_VICIO_BACKGROUND      = loadTexture(ENVIRONMENT, "background_vicio");
+        TEX_AEVITAS_BACKGROUND    = loadTexture(ENVIRONMENT, "background_aevitas");
+        TEX_EVORSIO_BACKGROUND    = loadTexture(ENVIRONMENT, "background_evorsio");
+        TEX_LUCERNA_BACKGROUND    = loadTexture(ENVIRONMENT, "background_lucerna");
+        TEX_MINERALIS_BACKGROUND  = loadTexture(ENVIRONMENT, "background_mineralis");
+        TEX_HOROLOGIUM_BACKGROUND = loadTexture(ENVIRONMENT, "background_horologium");
+        TEX_OCTANS_BACKGROUND     = loadTexture(ENVIRONMENT, "background_octans");
+        TEX_BOOTES_BACKGROUND     = loadTexture(ENVIRONMENT, "background_bootes");
+        TEX_FORNAX_BACKGROUND     = loadTexture(ENVIRONMENT, "background_fornax");
+        TEX_PELOTRIO_BACKGROUND   = loadTexture(ENVIRONMENT, "background_pelotrio");
+        TEX_GELU_BACKGROUND       = loadTexture(ENVIRONMENT, "background_gelu");
+        TEX_ULTERIA_BACKGROUND    = loadTexture(ENVIRONMENT, "background_ulteria");
+        TEX_ALCARA_BACKGROUND     = loadTexture(ENVIRONMENT, "background_alcara");
+        TEX_VORUX_BACKGROUND      = loadTexture(ENVIRONMENT, "background_vorux");
+
         TEX_PARTICLE_SMALL          = loadTexture(EFFECT, "particle_small");
         TEX_PARTICLE_LARGE          = loadTexture(EFFECT, "particle_large");
         TEX_CRYSTAL_EFFECT_1        = loadTexture(EFFECT, "crystal_burst_effect_1");
