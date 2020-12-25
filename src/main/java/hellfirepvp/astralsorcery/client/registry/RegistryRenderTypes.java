@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.render.RenderStateBuilder;
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -191,165 +192,22 @@ public class RegistryRenderTypes {
     }
 
     private static void initConstellationTypes() {
-        CONSTELLATION_DISCIDIA_BACKGROUND = createType("discidia_backgrrund", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_DISCIDIA_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        IConstellation cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:discidia"));
-        cst.setRenderType(CONSTELLATION_DISCIDIA_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_DISCIDIA_BACKGROUND);
-
-        CONSTELLATION_ARMARA_BACKGROUND = createType("armara_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_ARMARA_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:armara"));
-        cst.setRenderType(CONSTELLATION_ARMARA_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_ARMARA_BACKGROUND);
-
-        CONSTELLATION_VICIO_BACKGROUND = createType("vicio_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_VICIO_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:vicio"));
-        cst.setRenderType(CONSTELLATION_VICIO_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_VICIO_BACKGROUND);
-
-        CONSTELLATION_AEVITAS_BACKGROUND = createType("aevitas_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_AEVITAS_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:aevitas"));
-        cst.setRenderType(CONSTELLATION_AEVITAS_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_AEVITAS_BACKGROUND);
-
-        CONSTELLATION_EVORSIO_BACKGROUND = createType("evorsio_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_EVORSIO_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:evorsio"));
-        cst.setRenderType(CONSTELLATION_EVORSIO_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_EVORSIO_BACKGROUND);
-
-        CONSTELLATION_LUCERNA_BACKGROUND = createType("lucerna_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_LUCERNA_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:lucerna"));
-        cst.setRenderType(CONSTELLATION_LUCERNA_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_LUCERNA_BACKGROUND);
-
-        CONSTELLATION_MINERALIS_BACKGROUND = createType("mineralis_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_MINERALIS_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:mineralis"));
-        cst.setRenderType(CONSTELLATION_MINERALIS_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_MINERALIS_BACKGROUND);
-
-        CONSTELLATION_HOROLOGIUM_BACKGROUND = createType("horologium_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_HOROLOGIUM_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:horologium"));
-        cst.setRenderType(CONSTELLATION_HOROLOGIUM_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_HOROLOGIUM_BACKGROUND);
-
-        CONSTELLATION_OCTANS_BACKGROUND = createType("octans_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_OCTANS_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:octans"));
-        cst.setRenderType(CONSTELLATION_OCTANS_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_OCTANS_BACKGROUND);
-
-        CONSTELLATION_BOOTES_BACKGROUND = createType("bootes_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_BOOTES_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:bootes"));
-        cst.setRenderType(CONSTELLATION_BOOTES_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_BOOTES_BACKGROUND);
-
-        CONSTELLATION_FORNAX_BACKGROUND = createType("fornax_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_FORNAX_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:fornax"));
-        cst.setRenderType(CONSTELLATION_FORNAX_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_FORNAX_BACKGROUND);
-
-        CONSTELLATION_PELOTRIO_BACKGROUND = createType("pelotrio_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_PELOTRIO_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:pelotrio"));
-        cst.setRenderType(CONSTELLATION_PELOTRIO_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_PELOTRIO_BACKGROUND);
-
-        CONSTELLATION_GELU_BACKGROUND = createType("gelu_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_GELU_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:gelu"));
-        cst.setRenderType(CONSTELLATION_GELU_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_GELU_BACKGROUND);
-
-        CONSTELLATION_ULTERIA_BACKGROUND = createType("ulteria_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_ULTERIA_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:ulteria"));
-        cst.setRenderType(CONSTELLATION_ULTERIA_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_ULTERIA_BACKGROUND);
-
-        CONSTELLATION_ALCARA_BACKGROUND = createType("alcara_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_ALCARA_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:alcara"));
-        cst.setRenderType(CONSTELLATION_ALCARA_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_ALCARA_BACKGROUND);
-
-        CONSTELLATION_VORUX_BACKGROUND = createType("vorux_background", DefaultVertexFormats.POSITION_COLOR_TEX,
-                RenderStateBuilder.builder()
-                        .texture(TexturesAS.TEX_VORUX_BACKGROUND)
-                        .blend(Blending.DEFAULT)
-                        .disableDepthMask()
-                        .build());
-        cst = ConstellationRegistry.getConstellation(new ResourceLocation("astralsorcery:vorux"));
-        cst.setRenderType(CONSTELLATION_VORUX_BACKGROUND);
-        cst.setTexture(TexturesAS.TEX_VORUX_BACKGROUND);
+        CONSTELLATION_DISCIDIA_BACKGROUND = createBackgroundType("discidia", TexturesAS.TEX_DISCIDIA_BACKGROUND);
+        CONSTELLATION_ARMARA_BACKGROUND = createBackgroundType("armara", TexturesAS.TEX_ARMARA_BACKGROUND);
+        CONSTELLATION_VICIO_BACKGROUND = createBackgroundType("vicio", TexturesAS.TEX_VICIO_BACKGROUND);
+        CONSTELLATION_AEVITAS_BACKGROUND = createBackgroundType("aevitas", TexturesAS.TEX_AEVITAS_BACKGROUND);
+        CONSTELLATION_EVORSIO_BACKGROUND = createBackgroundType("evorsio", TexturesAS.TEX_EVORSIO_BACKGROUND);
+        CONSTELLATION_LUCERNA_BACKGROUND = createBackgroundType("lucerna", TexturesAS.TEX_LUCERNA_BACKGROUND);
+        CONSTELLATION_MINERALIS_BACKGROUND = createBackgroundType("mineralis", TexturesAS.TEX_MINERALIS_BACKGROUND);
+        CONSTELLATION_HOROLOGIUM_BACKGROUND = createBackgroundType("horologium", TexturesAS.TEX_HOROLOGIUM_BACKGROUND);
+        CONSTELLATION_OCTANS_BACKGROUND = createBackgroundType("octans", TexturesAS.TEX_OCTANS_BACKGROUND);
+        CONSTELLATION_BOOTES_BACKGROUND = createBackgroundType("bootes", TexturesAS.TEX_BOOTES_BACKGROUND);
+        CONSTELLATION_FORNAX_BACKGROUND = createBackgroundType("fornax", TexturesAS.TEX_FORNAX_BACKGROUND);
+        CONSTELLATION_PELOTRIO_BACKGROUND = createBackgroundType("pelotrio", TexturesAS.TEX_PELOTRIO_BACKGROUND);
+        CONSTELLATION_GELU_BACKGROUND = createBackgroundType("gelu", TexturesAS.TEX_GELU_BACKGROUND);
+        CONSTELLATION_ULTERIA_BACKGROUND = createBackgroundType("ulteria", TexturesAS.TEX_ULTERIA_BACKGROUND);
+        CONSTELLATION_ALCARA_BACKGROUND = createBackgroundType("alcara", TexturesAS.TEX_ALCARA_BACKGROUND);
+        CONSTELLATION_VORUX_BACKGROUND = createBackgroundType("vorux", TexturesAS.TEX_VORUX_BACKGROUND);
     }
 
     private static void initGuiTypes() {
@@ -495,4 +353,16 @@ public class RegistryRenderTypes {
         return RenderType.makeType(AstralSorcery.key(name).toString(), vertexFormat, glDrawMode, bufferSize, usesDelegateDrawing, sortVertices, state);
     }
 
+    private static RenderType createBackgroundType(String name, AbstractRenderableTexture tex) {
+        RenderType ren = createType(name+"_background", DefaultVertexFormats.POSITION_COLOR_TEX,
+                RenderStateBuilder.builder()
+                        .texture(tex)
+                        .blend(Blending.DEFAULT)
+                        .disableDepthMask()
+                        .build());
+        IConstellation cst = ConstellationRegistry.getConstellation(AstralSorcery.key(name));
+        cst.setRenderType(ren);
+        cst.setTexture(tex);
+        return ren;
+    }
 }

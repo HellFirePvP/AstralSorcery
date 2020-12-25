@@ -26,6 +26,8 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
@@ -62,8 +64,10 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
 
     public List<StarConnection> getStarConnections();
 
+    //@OnlyIn(Dist.CLIENT)
     public AbstractRenderableTexture getTexture();
 
+    //@OnlyIn(Dist.CLIENT)
     public RenderType getRenderType();
 
     public String getSimpleName();
@@ -123,8 +127,10 @@ public interface IConstellation extends IForgeRegistryEntry<IConstellation>, Com
 
     public IConstellation addSignatureItem(Ingredient item);
 
+    //@OnlyIn(Dist.CLIENT)
     public IConstellation setTexture(AbstractRenderableTexture tex);
 
+    //@OnlyIn(Dist.CLIENT)
     public IConstellation setRenderType(RenderType type);
 
     public Color getConstellationColor();
