@@ -200,20 +200,16 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
                 continue;
             }
 
-            if (MiscUtils.canPlayerPlaceBlockPos(player, stateToPlace, placePos, Direction.UP)) {
-                if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_PLACEMENT, false) &&
-                        world.setBlockState(placePos, stateToPlace)) {
-                    if (!player.isCreative()) {
-                        ItemUtils.consumeFromPlayerInventory(player, held, extractable, false);
-                    }
-
-                    PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
-                            .addData(buf -> {
-                                ByteBufUtils.writePos(buf, placePos);
-                                ByteBufUtils.writeBlockState(buf, stateToPlace);
-                            });
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 32));
-                }
+            if (MiscUtils.canPlayerPlaceBlockPos(player, stateToPlace, placePos, Direction.UP) &&
+                    (player.isCreative() || ItemUtils.consumeFromPlayerInventory(player, held, extractable, false)) &&
+                    AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_PLACEMENT, false) &&
+                    world.setBlockState(placePos, stateToPlace)) {
+                PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
+                        .addData(buf -> {
+                            ByteBufUtils.writePos(buf, placePos);
+                            ByteBufUtils.writeBlockState(buf, stateToPlace);
+                        });
+                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 32));
             }
         }
         return ActionResult.resultSuccess(held);
