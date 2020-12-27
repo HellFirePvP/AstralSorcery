@@ -211,22 +211,17 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
             }
 
             BlockState prevState = world.getBlockState(placePos);
-            if (((ServerPlayerEntity) player).interactionManager.tryHarvestBlock(placePos)) {
-                if (MiscUtils.canPlayerPlaceBlockPos(player, stateToPlace, placePos, Direction.UP)) {
-                    if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_EXCHANGE, false) &&
-                            world.setBlockState(placePos, stateToPlace)) {
-                        if (!player.isCreative()) {
-                            ItemUtils.consumeFromPlayerInventory(player, stack, extractable, false);
-                        }
-
-                        PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
-                                .addData(buf -> {
-                                    ByteBufUtils.writePos(buf, placePos);
-                                    ByteBufUtils.writeBlockState(buf, prevState);
-                                });
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 32));
-                    }
-                }
+            if ((player.isCreative() || ItemUtils.consumeFromPlayerInventory(player, stack, extractable, false)) &&
+                    AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_EXCHANGE, false) &&
+                    ((ServerPlayerEntity) player).interactionManager.tryHarvestBlock(placePos) &&
+                    MiscUtils.canPlayerPlaceBlockPos(player, stateToPlace, placePos, Direction.UP) &&
+                    world.setBlockState(placePos, stateToPlace)) {
+                PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
+                        .addData(buf -> {
+                            ByteBufUtils.writePos(buf, placePos);
+                            ByteBufUtils.writeBlockState(buf, prevState);
+                        });
+                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 32));
             }
         }
 
