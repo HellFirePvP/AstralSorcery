@@ -149,13 +149,13 @@ public class RegistryConstellations {
 
         // CEP/Cepheus
         armara = new Constellation.Major("armara", CONSTELLATION_ARMARA);
-        sl1 = armara.addStar(5, 26);
-        sl2 = armara.addStar(7, 16);
-        sl3 = armara.addStar(15, 22);
-        sl4 = armara.addStar(11, 5);
-        sl5 = armara.addStar(16, 4);
-        sl6 = armara.addStar(21, 11);
-        sl7 = armara.addStar(26, 10);
+        sl1 = armara.addStar(26, 26);
+        sl2 = armara.addStar(24, 15);
+        sl3 = armara.addStar(16, 22);
+        sl4 = armara.addStar(20, 5);
+        sl5 = armara.addStar(15, 4);
+        sl6 = armara.addStar(8, 12);
+        sl7 = armara.addStar(5, 18);
 
         armara.addConnection(sl1, sl2);
         armara.addConnection(sl2, sl3);
@@ -274,12 +274,12 @@ public class RegistryConstellations {
                 return showsUp ? 1F : 0.25F;
             }
         };
-        sl1 = horologium.addStar(25, 28);
-        sl2 = horologium.addStar(20, 22);
-        sl3 = horologium.addStar(25, 16);
-        sl4 = horologium.addStar(27, 10);
-        sl5 = horologium.addStar(23, 6);
-        sl6 = horologium.addStar(4, 3);
+        sl1 = horologium.addStar(28, 6);
+        sl2 = horologium.addStar(22, 10);
+        sl3 = horologium.addStar(16, 6);
+        sl4 = horologium.addStar(10, 4);
+        sl5 = horologium.addStar(6, 8);
+        sl6 = horologium.addStar(3, 27);
 
         horologium.addConnection(sl1, sl2);
         horologium.addConnection(sl2, sl3);

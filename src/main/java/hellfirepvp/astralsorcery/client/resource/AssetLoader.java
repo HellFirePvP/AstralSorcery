@@ -86,7 +86,8 @@ public class AssetLoader {
         MISC("misc"),
         MODEL("model"),
         EFFECT("effect"),
-        ENVIRONMENT("environment");
+        ENVIRONMENT("environment"),
+        CONSTELLATION("constellation");
 
         private final String location;
 

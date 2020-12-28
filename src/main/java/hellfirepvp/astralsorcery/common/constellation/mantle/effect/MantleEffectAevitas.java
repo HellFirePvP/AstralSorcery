@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
@@ -114,7 +116,10 @@ public class MantleEffectAevitas extends MantleEffect {
 
     public static boolean canSupportEffect(PlayerEntity player) {
         LogicalSide side = player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
-        return AlignmentChargeHandler.INSTANCE.hasCharge(player, side, CONFIG.chargeCostPerTravelTick.get().floatValue());
+        PlayerProgress progress = ResearchHelper.getProgress(player, side);
+        return progress.doPerkAbilities() &&
+                progress.hasConstellationDiscovered(ConstellationsAS.aevitas) &&
+                AlignmentChargeHandler.INSTANCE.hasCharge(player, side, CONFIG.chargeCostPerTravelTick.get().floatValue());
     }
 
     public static boolean isStandingOnAir(Entity entity) {

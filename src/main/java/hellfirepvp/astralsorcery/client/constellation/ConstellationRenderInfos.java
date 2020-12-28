@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class ConstellationRenderInfos {
 
-    private static Map<IConstellation, ConstellationBackgroundInfo> backgroundRenderMap = new HashMap<>();
+    private static final Map<IConstellation, ConstellationBackgroundInfo> backgroundRenderMap = new HashMap<>();
 
     public static void registerBackground(IConstellation cst, RenderType renderType, AbstractRenderableTexture texture) {
         backgroundRenderMap.put(cst, new ConstellationBackgroundInfo(renderType, texture));
@@ -33,6 +33,6 @@ public class ConstellationRenderInfos {
 
     @Nullable
     public static ConstellationBackgroundInfo getBackgroundRenderInfo(IConstellation cst) {
-        return backgroundRenderMap.get(cst);
+        return null;//backgroundRenderMap.get(cst);
     }
 }

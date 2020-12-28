@@ -22,7 +22,8 @@ public class PartialEffectExecutor {
     private static final Random random = new Random();
 
     private final Random rand;
-    private float amount;
+    private final float amount;
+    private float currentAmount;
 
     public PartialEffectExecutor(float amount) {
         this(amount, random);
@@ -31,14 +32,19 @@ public class PartialEffectExecutor {
     public PartialEffectExecutor(float amount, Random rand) {
         this.rand = rand;
         this.amount = amount;
+        this.currentAmount = amount;
     }
 
     public boolean canExecute() {
-        return amount > 1 || rand.nextFloat() < amount;
+        return currentAmount > 1 || rand.nextFloat() < currentAmount;
     }
 
     public void markExecution() {
-        amount -= 1F;
+        currentAmount -= 1F;
+    }
+
+    public void reset() {
+        this.currentAmount = this.amount;
     }
 
     public boolean executeAll(Runnable run) {

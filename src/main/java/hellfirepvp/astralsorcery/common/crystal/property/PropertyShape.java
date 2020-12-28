@@ -30,7 +30,7 @@ public class PropertyShape extends CrystalProperty {
         this.addUsage(ctx -> ctx.uses(USE_TOOL_EFFECTIVENESS));
         this.addModifier(((value, originalValue, propertyLevel, context) -> {
             if (context.uses(USE_TOOL_EFFECTIVENESS)) {
-                return value * (1.0 + (0.1F * Math.min(propertyLevel, 4)));
+                return value * (1.0 + (0.1F * Math.min(propertyLevel, 6)));
             }
             return value;
         }));

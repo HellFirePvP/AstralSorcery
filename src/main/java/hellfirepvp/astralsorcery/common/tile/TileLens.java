@@ -104,10 +104,11 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
             return;
         }
 
-        PartialEffectExecutor exec = new PartialEffectExecutor((1F / ((float) linked.size())) * effectMultiplier, rand);
         Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
 
         for (BlockPos linkedTo : linked) {
+            PartialEffectExecutor exec = new PartialEffectExecutor((1F / ((float) linked.size())) * effectMultiplier, rand);
+
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
             RaytraceAssist rta = new RaytraceAssist(thisVec, to).includeEndPoint();
             if (colorType.getType().doBlockInteraction()) {
@@ -127,6 +128,8 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
                 }
             }
             if (colorType.getType().doEntityInteraction()) {
+                exec.reset();
+
                 rta.setCollectEntities(0.5);
                 rta.isClear(world);
                 List<Entity> found = rta.collectedEntities(world);

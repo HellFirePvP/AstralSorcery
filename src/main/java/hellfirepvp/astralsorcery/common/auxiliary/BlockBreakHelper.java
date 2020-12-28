@@ -117,7 +117,7 @@ public class BlockBreakHelper {
             BlockState nowAt = world.getBlockState(pos);
             if (world instanceof ServerWorld && BlockUtils.matchStateExact(expected, nowAt)) {
                 BlockUtils.breakBlockWithoutPlayer((ServerWorld) world, pos, world.getBlockState(pos), ItemStack.EMPTY,
-                        true, true, true);
+                        true, true);
             }
         }
 

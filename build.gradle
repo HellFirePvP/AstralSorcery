@@ -1,3 +1,5 @@
+import net.minecraftforge.gradle.common.task.SignJar
+
 buildscript {
 
     repositories {
@@ -84,7 +86,8 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'info'
 
-            args '--mod', 'astralsorcery', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'astralsorcery', '--all', '--output', file('src/generated/resources/'), '--validate',
+            '--existing', sourceSets.main.resources.srcDirs[0]
 
             mods {
                 astralsorcery {
@@ -123,30 +126,28 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:1.16.4-35.1.13'
 
-    compileOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.4.4.v72'
-    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.4.4.v72:deobf'
+    compileOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.5.0.v74'
+    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.5.0.v74:deobf'
 
     compileOnly 'top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.0:api'
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.0")
+    runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.0')
 
     compileOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.0.58')
     runtimeOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.0.58')
 
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-48:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-48")
+    compileOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-48:api')
+    runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-48')
     
-    compileOnly fg.deobf("vazkii.botania:Botania:1.16.4-410:api")
-    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.4-410")
+    compileOnly fg.deobf('vazkii.botania:Botania:1.16.4-410:api')
+    runtimeOnly fg.deobf('vazkii.botania:Botania:1.16.4-410')
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-/*
-TODO start signing jars again once that's around again.
 //Sign jar from flatfile if present
-task signMainJarFile(type: SignJar, dependsOn: reobfJar) {
+task signJar(type: SignJar, dependsOn: jar) {
     onlyIf {
         project.hasProperty('keyStore')
     }
@@ -157,11 +158,12 @@ task signMainJarFile(type: SignJar, dependsOn: reobfJar) {
         keyPass = project.keyPass
         inputFile = jar.archivePath
         outputFile = jar.archivePath
+    } else {
+        logger.warn("No key store found, not signing the output jar\n")
     }
 }
 
-build.dependsOn signMainJarFile
-*/
+build.dependsOn signJar
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
@@ -213,6 +215,34 @@ publishing {
     repositories {
         maven {
             url "file://" + System.getenv("LOCAL_MAVEN")
+        }
+    }
+}
+
+// Minimize/optimize all png files, requires optipng on the PATH
+// Credits: ImmersiveEngineering / and from there: BrainStone
+void minimizePNGFile(File file) {
+    long size = file.length()
+    exec {
+        executable "optipng"
+        args "-q", "-o7", "-zm1-9", "-strip", "all", file
+    }
+    long newSize = file.length()
+    if (newSize < size) {
+        System.out.format("Reduced File size of %s from %d bytes to %d bytes (reduced by %.2f%%)\n",
+                file, size, newSize, ((double) (size - newSize)) / ((double) size) * 100.0)
+    } else {
+        System.out.format("File size of %s couldn't be reduced.\n", file)
+    }
+}
+
+task optimizePng {
+    def pngPatterns = ["**/*.png"]
+    doLast {
+        //Ensure the logo is minimized (we add this file to each jar)
+        //Minimize any PNGs in the source sets
+        for (dir in sourceSets.main.resources.srcDirs) {
+            fileTree(dir: dir, includes: pngPatterns).each { minimizePNGFile(it) }
         }
     }
 }

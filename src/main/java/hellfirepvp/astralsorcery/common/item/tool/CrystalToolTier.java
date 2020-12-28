@@ -40,7 +40,7 @@ public class CrystalToolTier implements IItemTier {
 
     @Override
     public float getAttackDamage() {
-        return 2.5F;
+        return 3.5F;
     }
 
     @Override

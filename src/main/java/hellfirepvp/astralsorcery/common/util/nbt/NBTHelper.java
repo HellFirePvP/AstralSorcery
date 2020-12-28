@@ -355,8 +355,6 @@ public class NBTHelper {
 
     public static void removeUUID(CompoundNBT compound, String key) {
         compound.remove(key);
-        // compound.remove(key + "Most");
-        // compound.remove(key + "Least");
     }
 
     public static UUID getUUID(CompoundNBT compoundNBT, String key, UUID _default) {
