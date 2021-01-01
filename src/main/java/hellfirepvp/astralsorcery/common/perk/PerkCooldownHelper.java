@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.perk;
 
+import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.tick.TimeoutListContainer;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.LogicalSide;
 
-import javax.annotation.Nonnull;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
@@ -27,10 +28,10 @@ import java.util.function.Consumer;
  */
 public class PerkCooldownHelper {
 
-    private static final TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> perkCooldowns =
-            new TimeoutListContainer<>(new PerkTimeoutHandler(), TickEvent.Type.SERVER);
-    private static final TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> perkCooldownsClient =
-            new TimeoutListContainer<>(new PerkTimeoutHandler(), TickEvent.Type.CLIENT);
+    private static final TimeoutListContainer<UUID, ResourceLocation> perkCooldowns =
+            new TimeoutListContainer<>(new PerkTimeoutHandler(LogicalSide.SERVER), TickEvent.Type.SERVER);
+    private static final TimeoutListContainer<UUID, ResourceLocation> perkCooldownsClient =
+            new TimeoutListContainer<>(new PerkTimeoutHandler(LogicalSide.CLIENT), TickEvent.Type.CLIENT);
 
     private PerkCooldownHelper() {}
 
@@ -48,14 +49,14 @@ public class PerkCooldownHelper {
     }
 
     public static void removeAllCooldowns(PlayerEntity player, LogicalSide side) {
-        PlayerWrapperContainer ct = new PlayerWrapperContainer(player);
+        UUID playerUUID = player.getUniqueID();
         if (side.isClient()) {
-            if (perkCooldownsClient.hasList(ct)) {
-                perkCooldownsClient.removeList(ct);
+            if (perkCooldownsClient.hasList(playerUUID)) {
+                perkCooldownsClient.removeList(playerUUID);
             }
         } else {
-            if (perkCooldowns.hasList(ct)) {
-                perkCooldowns.removeList(ct);
+            if (perkCooldowns.hasList(playerUUID)) {
+                perkCooldowns.removeList(playerUUID);
             }
         }
     }
@@ -63,7 +64,7 @@ public class PerkCooldownHelper {
     public static void removePerkCooldowns(LogicalSide side, AbstractPerk perk) {
         if (!(perk instanceof CooldownPerk)) return;
 
-        TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> container = side.isClient() ?
+        TimeoutListContainer<UUID, ResourceLocation> container = side.isClient() ?
                 perkCooldownsClient : perkCooldowns;
         container.removeList(key -> key.equals(perk.getRegistryName()));
     }
@@ -71,29 +72,29 @@ public class PerkCooldownHelper {
     public static boolean isCooldownActiveForPlayer(PlayerEntity player, AbstractPerk perk) {
         if (!(perk instanceof CooldownPerk)) return false;
 
-        TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> container = player.getEntityWorld().isRemote ?
+        TimeoutListContainer<UUID, ResourceLocation> container = player.getEntityWorld().isRemote ?
                 perkCooldownsClient : perkCooldowns;
-        PlayerWrapperContainer ct = new PlayerWrapperContainer(player);
-        return container.hasList(ct) &&
-                container.getOrCreateList(ct).contains(perk.getRegistryName());
+        UUID playerUUID = player.getUniqueID();
+        return container.hasList(playerUUID) &&
+                container.getOrCreateList(playerUUID).contains(perk.getRegistryName());
     }
 
     public static void setCooldownActiveForPlayer(PlayerEntity player, AbstractPerk perk, int cooldownTicks) {
         if (!(perk instanceof CooldownPerk)) return;
 
-        TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> container = player.getEntityWorld().isRemote ?
+        TimeoutListContainer<UUID, ResourceLocation> container = player.getEntityWorld().isRemote ?
                 perkCooldownsClient : perkCooldowns;
-        PlayerWrapperContainer ct = new PlayerWrapperContainer(player);
-        container.getOrCreateList(ct).setOrAddTimeout(cooldownTicks, perk.getRegistryName());
+        UUID playerUUID = player.getUniqueID();
+        container.getOrCreateList(playerUUID).setOrAddTimeout(cooldownTicks, perk.getRegistryName());
     }
 
     public static void forceSetCooldownForPlayer(PlayerEntity player, AbstractPerk perk, int cooldownTicks) {
         if (!(perk instanceof CooldownPerk)) return;
 
-        TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> container = player.getEntityWorld().isRemote ?
+        TimeoutListContainer<UUID, ResourceLocation> container = player.getEntityWorld().isRemote ?
                 perkCooldownsClient : perkCooldowns;
-        PlayerWrapperContainer ct = new PlayerWrapperContainer(player);
-        if (!container.getOrCreateList(ct).setTimeout(cooldownTicks, perk.getRegistryName())) {
+        UUID playerUUID = player.getUniqueID();
+        if (!container.getOrCreateList(playerUUID).setTimeout(cooldownTicks, perk.getRegistryName())) {
             setCooldownActiveForPlayer(player, perk, cooldownTicks);
         }
     }
@@ -101,49 +102,33 @@ public class PerkCooldownHelper {
     public static int getActiveCooldownForPlayer(PlayerEntity player, AbstractPerk perk) {
         if (!(perk instanceof CooldownPerk)) return -1;
 
-        TimeoutListContainer<PlayerWrapperContainer, ResourceLocation> container = player.getEntityWorld().isRemote ?
+        TimeoutListContainer<UUID, ResourceLocation> container = player.getEntityWorld().isRemote ?
                 perkCooldownsClient : perkCooldowns;
-        PlayerWrapperContainer ct = new PlayerWrapperContainer(player);
-        if (!container.hasList(ct)) {
+        UUID playerUUID = player.getUniqueID();
+        if (!container.hasList(playerUUID)) {
             return -1;
         }
-        return container.getOrCreateList(ct).getTimeout(perk.getRegistryName());
+        return container.getOrCreateList(playerUUID).getTimeout(perk.getRegistryName());
     }
 
-    public static class PerkTimeoutHandler implements TimeoutListContainer.ContainerTimeoutDelegate<PlayerWrapperContainer, ResourceLocation> {
+    public static class PerkTimeoutHandler implements TimeoutListContainer.ContainerTimeoutDelegate<UUID, ResourceLocation> {
 
-        @Override
-        public void onContainerTimeout(PlayerWrapperContainer plWrapper, ResourceLocation key) {
-            LogicalSide side = plWrapper.player.getEntityWorld().isRemote() ? LogicalSide.CLIENT : LogicalSide.SERVER;
-            PerkTree.PERK_TREE.getPerk(side, key).ifPresent(perk -> {
-                if (perk instanceof CooldownPerk) {
-                    ((CooldownPerk) perk).onCooldownTimeout(plWrapper.player);
-                }
-            });
-        }
-    }
+        private final LogicalSide side;
 
-    public static class PlayerWrapperContainer {
-
-        @Nonnull
-        public final PlayerEntity player;
-
-        public PlayerWrapperContainer(@Nonnull PlayerEntity player) {
-            this.player = player;
+        public PerkTimeoutHandler(LogicalSide side) {
+            this.side = side;
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null) return false;
-            if (!(obj instanceof PlayerWrapperContainer)) return false;
-            return ((PlayerWrapperContainer) obj).player.getUniqueID().equals(player.getUniqueID());
+        public void onContainerTimeout(UUID playerUUID, ResourceLocation key) {
+            PlayerEntity player = EntityUtils.getPlayer(playerUUID, this.side);
+            if (player != null) {
+                PerkTree.PERK_TREE.getPerk(this.side, key).ifPresent(perk -> {
+                    if (perk instanceof CooldownPerk) {
+                        ((CooldownPerk) perk).onCooldownTimeout(player);
+                    }
+                });
+            }
         }
-
-        @Override
-        public int hashCode() {
-            return player.getUniqueID().hashCode();
-        }
-
     }
 }

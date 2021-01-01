@@ -42,7 +42,7 @@ public class ConstellationEffectRegistry {
     }
 
     @Nullable
-    public static ConstellationEffect createInstance(ILocatable origin, IWeakConstellation constellation) {
+    public static ConstellationEffect createInstance(@Nullable ILocatable origin, IWeakConstellation constellation) {
         ConstellationEffectProvider effect = constellation.getConstellationEffect();
         if (effect != null) {
             return effect.createEffect(origin);

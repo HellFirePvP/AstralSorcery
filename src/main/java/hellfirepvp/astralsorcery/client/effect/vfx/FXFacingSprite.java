@@ -33,6 +33,7 @@ import java.awt.*;
 public class FXFacingSprite extends EntityVisualFX implements EntityDynamicFX {
 
     private SpriteSheetResource sprite = null;
+    private float spriteDisplayFactor = 1F;
 
     public FXFacingSprite(Vector3 pos) {
         super(pos);
@@ -43,13 +44,18 @@ public class FXFacingSprite extends EntityVisualFX implements EntityDynamicFX {
         return this;
     }
 
+    public FXFacingSprite setSpriteDisplayFactor(float spriteDisplayFactor) {
+        this.spriteDisplayFactor = spriteDisplayFactor;
+        return this;
+    }
+
     @Override
     public <T extends EntityVisualFX> void render(BatchRenderContext<T> ctx, MatrixStack renderStack, IVertexBuilder vb, float pTicks) {}
 
     @Override
     public <T extends EntityVisualFX & EntityDynamicFX> void renderNow(BatchRenderContext<T> ctx, MatrixStack renderStack, IDrawRenderTypeBuffer drawBuffer, float pTicks) {
         SpriteSheetResource ssr = this.sprite != null ? this.sprite : ctx.getSprite();
-        Tuple<Float, Float> uvOffset = ssr.getUVOffset(this);
+        Tuple<Float, Float> uvOffset = ssr.getUVOffset(this, pTicks, spriteDisplayFactor);
 
         int alpha = this.getAlpha(pTicks);
         Color col = this.getColor(pTicks);

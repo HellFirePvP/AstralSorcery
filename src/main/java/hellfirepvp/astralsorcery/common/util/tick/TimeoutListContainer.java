@@ -128,7 +128,14 @@ public class TimeoutListContainer<K, V> implements ITickHandler {
                 delegate.onContainerTimeout(key, object);
             }
         }
+    }
 
+    public static class ForwardingTimeoutDelegate<K, V extends TimeoutList.TimeoutDelegate<K>> implements ContainerTimeoutDelegate<K, V> {
+
+        @Override
+        public void onContainerTimeout(K key, V timedOut) {
+            timedOut.onTimeout(key);
+        }
     }
 
     public static interface ContainerTimeoutDelegate<K, V> {

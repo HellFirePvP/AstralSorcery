@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
@@ -16,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
@@ -29,7 +31,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -93,6 +94,12 @@ public abstract class ConstellationEffect {
 
     public abstract Config getConfig();
 
+    public abstract PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag();
+
+    protected static PlayerAffectionFlags.AffectionFlag makeAffectionFlag(String constellationName) {
+        return new PlayerAffectionFlags.NoOpAffectionFlag(AstralSorcery.key("constellation_effect_" + constellationName));
+    }
+
     @Nonnull
     public IWeakConstellation getConstellation() {
         return cst;
@@ -129,6 +136,13 @@ public abstract class ConstellationEffect {
                     ByteBufUtils.writeRegistryEntry(buf, cst);
                 });
         PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, at.toBlockPos(), 32));
+    }
+
+    protected void markPlayerAffected(PlayerEntity player) {
+        if (player.getEntityWorld().isRemote()) {
+            return;
+        }
+        PlayerAffectionFlags.markPlayerAffected(player, this.getPlayerAffectionFlag());
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -191,7 +191,7 @@ public class FXLightning extends EntityVisualFX {
                 for (LightningVertex vertex : next) {
                     vertex.calcDepthRec();
                 }
-                this.followingDepth = MiscUtils.getMaxEntry(this.next, (v) -> v.followingDepth).followingDepth + 1;
+                this.followingDepth = MiscUtils.getMaxEntry(this.next, (v) -> v.followingDepth) + 1;
             }
         }
     }

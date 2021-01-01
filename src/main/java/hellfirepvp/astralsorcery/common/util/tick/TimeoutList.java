@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.tick;
 
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraftforge.event.TickEvent;
 
@@ -74,10 +75,7 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
 
     public boolean contains(V value) {
         if (value == null) return false;
-        for (TimeoutEntry<V> entry : tickEntries) {
-            if (entry.value.equals(value)) return true;
-        }
-        return false;
+        return MiscUtils.contains(tickEntries, entry -> entry.value.equals(value));
     }
 
     public boolean remove(V key) {
@@ -178,8 +176,9 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
 
     private static class TimeoutEntry<V> {
 
+        @Nonnull
+        private final V value;
         private int timeout;
-        @Nonnull private V value;
 
         private TimeoutEntry(int timeout, @Nonnull V value) {
             this.timeout = timeout;

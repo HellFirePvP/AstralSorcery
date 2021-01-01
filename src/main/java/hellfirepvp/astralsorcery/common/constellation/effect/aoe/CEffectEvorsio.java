@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.CEffectAbstractList;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ListEntries;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
@@ -54,6 +55,7 @@ import java.util.stream.Collectors;
  */
 public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("evorsio");
     public static EvorsioConfig CONFIG = new EvorsioConfig();
 
     public CEffectEvorsio(@Nonnull ILocatable origin) {
@@ -181,6 +183,11 @@ public class CEffectEvorsio extends CEffectAbstractList<ListEntries.PosEntry> {
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     private static class EvorsioConfig extends Config {

@@ -30,12 +30,18 @@ import java.util.stream.Collectors;
  */
 public class OreItemRarityEntry implements ConfigDataSet {
 
-    private final ITag.INamedTag<Item> itemTag;
+    private final ITag<Item> itemTag;
+    private final ResourceLocation key;
     private final int weight;
 
-    public OreItemRarityEntry(ITag.INamedTag<Item> itemTag, int weight) {
+    public OreItemRarityEntry(ITag<Item> itemTag, ResourceLocation key, int weight) {
         this.itemTag = itemTag;
+        this.key = key;
         this.weight = weight;
+    }
+
+    public OreItemRarityEntry(ITag.INamedTag<Item> itemTag, int weight) {
+        this(itemTag, itemTag.getName(), weight);
     }
 
     public int getWeight() {
@@ -57,7 +63,7 @@ public class OreItemRarityEntry implements ConfigDataSet {
             return null;
         }
         ResourceLocation keyItemTag = new ResourceLocation(split[0]);
-        ITag.INamedTag<Item> itemTag = MiscUtils.iterativeSearch(ItemTags.getAllTags(), namedTag -> namedTag.getName().equals(keyItemTag));
+        ITag<Item> itemTag = ItemTags.getCollection().get(keyItemTag);
         if (itemTag == null) {
             return null;
         }
@@ -68,12 +74,12 @@ public class OreItemRarityEntry implements ConfigDataSet {
         } catch (NumberFormatException exc) {
             return null;
         }
-        return new OreItemRarityEntry(itemTag, weight);
+        return new OreItemRarityEntry(itemTag, keyItemTag, weight);
     }
 
     @Nonnull
     @Override
     public String serialize() {
-        return String.format("%s;%s", itemTag.getName().toString(), weight);
+        return String.format("%s;%s", key.toString(), weight);
     }
 }

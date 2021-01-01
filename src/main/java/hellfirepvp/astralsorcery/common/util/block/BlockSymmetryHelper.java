@@ -8,9 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.util.block;
 
+import hellfirepvp.astralsorcery.common.util.data.BiDiPair;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.IBlockReader;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,32 +28,90 @@ import java.util.List;
  */
 public class BlockSymmetryHelper {
 
-    public SymmetryResult getDotSymmetry(BlockPos center, int radiusLayer) {
+    public SymmetryResult getDotSymmetry(IBlockReader world, BlockPos center, int radiusLayer, boolean allowMirrorSymmetry, Predicate<BlockState> applicableStateFilter) {
         List<BlockPos> layerPositions = BlockGeometry.getHollowSphere(radiusLayer + 1, radiusLayer);
+        SymmetryResult result = new SymmetryResult(layerPositions.size());
+        Set<BlockPos> visitedBlocks = new HashSet<>();
 
-        float degree = 1F;
+        for (BlockPos offset : layerPositions) {
+            BlockPos at = center.add(offset);
+            if (visitedBlocks.contains(at)) {
+                continue;
+            }
+            visitedBlocks.add(at);
 
+            BlockState state = world.getBlockState(at);
+            if (offset.getX() == 0 || offset.getY() == 0 || offset.getZ() == 0) {
+                if (!state.isAir(world, at)) {
+                    result.fillerBlocks.add(at);
+                }
+                continue;
+            }
 
+            if (applicableStateFilter.test(state)) {
+                BlockPos dotSym = center.subtract(offset);
+                BlockState dotState = world.getBlockState(dotSym);
+                if (applicableStateFilter.test(dotState)) {
+                    result.symmetryPairs.add(new BiDiPair<>(at, dotSym));
 
-        return null;
+                    if (!allowMirrorSymmetry) {
+                        checkMirrorSymmetry(world, new Vector3i(-offset.getX(),  offset.getY(),  offset.getZ()), center, applicableStateFilter, result, visitedBlocks);
+                        checkMirrorSymmetry(world, new Vector3i( offset.getX(), -offset.getY(),  offset.getZ()), center, applicableStateFilter, result, visitedBlocks);
+                        checkMirrorSymmetry(world, new Vector3i( offset.getX(),  offset.getY(), -offset.getZ()), center, applicableStateFilter, result, visitedBlocks);
+                    }
+                } else if (!dotState.isAir(world, dotSym)) {
+                    result.fillerBlocks.add(at);
+                    result.fillerBlocks.add(dotSym);
+                }
+
+                visitedBlocks.add(dotSym);
+            } else if (!state.isAir(world, at)) {
+                result.fillerBlocks.add(at);
+            }
+        }
+
+        return result;
+    }
+
+    private static void checkMirrorSymmetry(IBlockReader world, Vector3i offset, BlockPos center, Predicate<BlockState> applicableStateFilter, SymmetryResult result, Set<BlockPos> visitedBlocks) {
+        BlockPos at = center.add(offset);
+        BlockState state = world.getBlockState(at);
+        visitedBlocks.add(at);
+
+        if (!state.isAir(world, at)) {
+            result.fillerBlocks.add(at);
+        }
+
+        BlockPos dotSym = center.subtract(offset);
+        BlockState dotState = world.getBlockState(dotSym);
+        visitedBlocks.add(dotSym);
+
+        if (!dotState.isAir(world, dotSym)) {
+            result.fillerBlocks.add(at);
+        }
     }
 
     public static class SymmetryResult {
 
-        private final float degree;
-        private final float density;
+        private final float totalCount;
+        private float density = 0F;
+        private Set<BiDiPair<BlockPos, BlockPos>> symmetryPairs = new HashSet<>();
+        private Set<BlockPos> fillerBlocks = new HashSet<>();
 
-        public SymmetryResult(float degree, float density) {
-            this.degree = degree;
-            this.density = density;
-        }
-
-        public float getDegree() {
-            return degree;
+        private SymmetryResult(float totalCount) {
+            this.totalCount = totalCount;
         }
 
         public float getDensity() {
             return density;
+        }
+
+        public Set<BiDiPair<BlockPos, BlockPos>> getSymmetryPairs() {
+            return symmetryPairs;
+        }
+
+        public Set<BlockPos> getFillerBlocks() {
+            return fillerBlocks;
         }
     }
 }

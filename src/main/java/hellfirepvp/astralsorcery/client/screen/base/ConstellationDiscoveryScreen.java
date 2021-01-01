@@ -296,8 +296,8 @@ public abstract class ConstellationDiscoveryScreen<D extends ConstellationDiscov
 
             boolean didMatch = true;
             for (StarConnection cstConnection : cst.getStarConnections()) {
-                Rectangle.Float rctFrom = info.frameDrawInformation.get(cstConnection.from);
-                Rectangle.Float rctTo = info.frameDrawInformation.get(cstConnection.to);
+                Rectangle.Float rctFrom = info.frameDrawInformation.get(cstConnection.getLeft());
+                Rectangle.Float rctTo = info.frameDrawInformation.get(cstConnection.getRight());
                 if (rctFrom == null || rctTo == null) {
                     didMatch = false;
                     break;

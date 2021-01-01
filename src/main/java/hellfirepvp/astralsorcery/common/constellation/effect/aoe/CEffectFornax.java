@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.crafting.nojson.WorldFreezingRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.WorldMeltableRegistry;
 import hellfirepvp.astralsorcery.common.crafting.nojson.freezing.WorldFreezingRecipe;
 import hellfirepvp.astralsorcery.common.crafting.nojson.meltable.WorldMeltableRecipe;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
@@ -52,6 +53,7 @@ import java.util.function.Consumer;
  */
 public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("fornax");
     public static FornaxConfig CONFIG = new FornaxConfig();
 
     public CEffectFornax(@Nonnull ILocatable origin) {
@@ -138,6 +140,11 @@ public class CEffectFornax extends CEffectAbstractList<ListEntries.PosEntry> {
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     private static class FornaxConfig extends Config {

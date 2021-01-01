@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.auxiliary;
 
 import hellfirepvp.astralsorcery.common.constellation.effect.base.CEffectAbstractList;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemStack;
@@ -38,6 +39,7 @@ import java.util.function.Function;
 public class CropHelper {
 
     public static final String GROWABLE = "growable";
+    public static final String GROWABLE_CROP = "growable_crop";
     public static final String GROWABLE_REED = "growable_reed";
     public static final String GROWABLE_CACTUS = "growable_cactus";
     public static final String GROWABLE_NETHERWART = "growable_netherwart";
@@ -46,6 +48,7 @@ public class CropHelper {
     public static Map<String, Function<BlockPos, GrowablePlant>> growableFactoryWrapper = new HashMap<String, Function<BlockPos, GrowablePlant>>() {
         {
             put(GROWABLE, GrowableWrapper::new);
+            put(GROWABLE_CROP, GrowableCropWrapper::new);
             put(GROWABLE_REED, GrowableReedWrapper::new);
             put(GROWABLE_CACTUS, GrowableCactusWrapper::new);
             put(GROWABLE_NETHERWART, GrowableNetherwartWrapper::new);
@@ -62,23 +65,26 @@ public class CropHelper {
     public static GrowablePlant wrapPlant(IWorld world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         Block b = state.getBlock();
-        if (state.getBlock() instanceof IGrowable) {
+        if (b instanceof CropsBlock) {
+            return new GrowableCropWrapper(pos);
+        }
+        if (b instanceof IGrowable) {
             if (b instanceof GrassBlock) return null;
             if (b instanceof TallGrassBlock) return null;
             if (b instanceof DoublePlantBlock) return null;
             return new GrowableWrapper(pos);
         }
-        if (state.getBlock() instanceof SugarCaneBlock) {
+        if (b instanceof SugarCaneBlock) {
             if (isReedBase(world, pos)) {
                 return new GrowableReedWrapper(pos);
             }
         }
-        if (state.getBlock() instanceof CactusBlock) {
+        if (b instanceof CactusBlock) {
             if (isCactusBase(world, pos)) {
                 return new GrowableCactusWrapper(pos);
             }
         }
-        if (state.getBlock() instanceof NetherWartBlock) {
+        if (b instanceof NetherWartBlock) {
             return new GrowableNetherwartWrapper(pos);
         }
         return null;
@@ -88,17 +94,20 @@ public class CropHelper {
     public static HarvestablePlant wrapHarvestablePlant(IWorld world, BlockPos pos) {
         GrowablePlant growable = wrapPlant(world, pos);
         if (growable == null) return null; //Every plant has to be growable.
-        BlockState state = world.getBlockState(growable.getPos());
-        if (state.getBlock() instanceof SugarCaneBlock && growable instanceof GrowableReedWrapper) {
+        Block block = world.getBlockState(growable.getPos()).getBlock();
+        if (growable instanceof GrowableCropWrapper) {
+            return (GrowableCropWrapper) growable;
+        }
+        if (block instanceof SugarCaneBlock && growable instanceof GrowableReedWrapper) {
             return (GrowableReedWrapper) growable;
         }
-        if (state.getBlock() instanceof CactusBlock && growable instanceof GrowableCactusWrapper) {
+        if (block instanceof CactusBlock && growable instanceof GrowableCactusWrapper) {
             return (GrowableCactusWrapper) growable;
         }
-        if (state.getBlock() instanceof NetherWartBlock && growable instanceof GrowableNetherwartWrapper) {
+        if (block instanceof NetherWartBlock && growable instanceof GrowableNetherwartWrapper) {
             return (GrowableNetherwartWrapper) growable;
         }
-        if (state.getBlock() instanceof IPlantable) {
+        if (block instanceof IPlantable) {
             return new HarvestableWrapper(pos);
         }
         return null;
@@ -163,7 +172,6 @@ public class CropHelper {
                 BlockState at = world.getBlockState(getPos());
                 if (at.getBlock() instanceof IPlantable) {
                     drops.addAll(BlockUtils.getDrops(world, pos, harvestFortune, rand));
-                    world.removeBlock(pos, false);
                     world.setBlockState(pos, ((IPlantable) at.getBlock()).getPlant(world, pos));
                 }
             }
@@ -242,7 +250,7 @@ public class CropHelper {
         public boolean tryGrow(IWorld world, Random rand) {
             if (rand.nextBoolean()) {
                 BlockState current = world.getBlockState(pos);
-                return world.setBlockState(pos, current.with(NetherWartBlock.AGE, (Math.min(3, current.get(NetherWartBlock.AGE) + 1))), 3);
+                return world.setBlockState(pos, current.with(NetherWartBlock.AGE, (Math.min(3, current.get(NetherWartBlock.AGE) + 1))), Constants.BlockFlags.DEFAULT);
             }
             return false;
         }
@@ -257,7 +265,7 @@ public class CropHelper {
         public NonNullList<ItemStack> harvestDropsAndReplant(ServerWorld world, Random rand, int harvestFortune) {
             NonNullList<ItemStack> stacks = NonNullList.create();
             stacks.addAll(BlockUtils.getDrops(world, pos, harvestFortune, rand));
-            world.setBlockState(pos, Blocks.NETHER_WART.getDefaultState().with(NetherWartBlock.AGE, 1), 3);
+            world.setBlockState(pos, Blocks.NETHER_WART.getDefaultState().with(NetherWartBlock.AGE, 0), Constants.BlockFlags.DEFAULT);
             return stacks;
         }
 
@@ -298,7 +306,8 @@ public class CropHelper {
                 BlockPos bp = pos.up(i);
                 BlockState at = world.getBlockState(bp);
                 if (at.getBlock() instanceof CactusBlock) {
-                    BlockUtils.breakBlockWithoutPlayer(world, bp);
+                    drops.addAll(BlockUtils.getDrops(world, pos, harvestFortune, rand));
+                    world.removeBlock(bp, false);
                 }
             }
             return drops;
@@ -425,6 +434,76 @@ public class CropHelper {
             return pos;
         }
 
+    }
+
+    public static class GrowableCropWrapper implements HarvestablePlant {
+
+        private final BlockPos pos;
+
+        public GrowableCropWrapper(BlockPos pos) {
+            this.pos = pos;
+        }
+
+        @Override
+        public boolean isValid(IWorld world) {
+            return wrapPlant(world, this.pos) instanceof GrowableCropWrapper;
+        }
+
+        @Override
+        public boolean canGrow(IWorld world) {
+            BlockState state = world.getBlockState(this.pos);
+            if (state.getBlock() instanceof CropsBlock) {
+                return ((CropsBlock) state.getBlock()).canGrow(world, pos, state, false);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean tryGrow(IWorld world, Random rand) {
+            BlockState state = world.getBlockState(this.pos);
+            if (state.getBlock() instanceof CropsBlock) {
+                CropsBlock block = (CropsBlock) state.getBlock();
+                if (block.canGrow(world, pos, state, false)) {
+                    int age = state.get(block.getAgeProperty());
+                    int next = Math.min(age + 1, block.getMaxAge());
+                    return world.setBlockState(pos, block.withAge(next), Constants.BlockFlags.DEFAULT);
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean canHarvest(IWorld world) {
+            BlockState state = world.getBlockState(this.pos);
+            if (state.getBlock() instanceof CropsBlock) {
+                return !((CropsBlock) state.getBlock()).canGrow(world, pos, state, false);
+            }
+            return false;
+        }
+
+        @Override
+        public NonNullList<ItemStack> harvestDropsAndReplant(ServerWorld world, Random rand, int harvestFortune) {
+            NonNullList<ItemStack> drops = NonNullList.create();
+            BlockState state = world.getBlockState(this.pos);
+            if (state.getBlock() instanceof CropsBlock) {
+                CropsBlock block = (CropsBlock) state.getBlock();
+
+                drops.addAll(BlockUtils.getDrops(world, pos, harvestFortune, rand));
+                int startingAge = MiscUtils.getMinEntry(block.getAgeProperty().getAllowedValues());
+                world.setBlockState(pos, block.withAge(startingAge));
+            }
+            return drops;
+        }
+
+        @Override
+        public String getIdentifier() {
+            return GROWABLE_CROP;
+        }
+
+        @Override
+        public BlockPos getPos() {
+            return this.pos;
+        }
     }
 
     public static class GrowableWrapper implements GrowablePlant {

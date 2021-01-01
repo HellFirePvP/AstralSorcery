@@ -138,6 +138,7 @@ public class RegistryTextures {
         TEX_HALO_RITUAL             = loadTexture(EFFECT, "halo_ritual");
         TEX_FOUNTAIN_LIQUID         = loadTexture(EFFECT, "fountain_liquid");
         TEX_FOUNTAIN_VORTEX         = loadTexture(EFFECT, "fountain_vortex");
+        TEX_DAZZLING_AURA           = loadTexture(EFFECT, "dazzling_aura");
 
         TEX_LIGHTNING_PART      = loadTexture(EFFECT, "lightning_part");
         TEX_LIGHTBEAM           = loadTexture(EFFECT, "lightbeam");

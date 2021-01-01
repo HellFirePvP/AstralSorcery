@@ -98,7 +98,7 @@ public class RegistryWorldGeneration {
         GEN_AQUAMARINE = registerConfiguredFeature(KEY_AQUAMARINE, GenerationStage.Decoration.UNDERGROUND_ORES, CFG_AQUAMARINE,
                 REPLACE_BLOCK.withConfiguration(new ReplaceBlockConfig(new TagMatchRuleTest(BlockTags.SAND), BlocksAS.AQUAMARINE_SAND_ORE.getDefaultState()))
                         .withPlacement(RIVERBED.configure(NoPlacementConfig.INSTANCE))
-                        .func_242732_c(12)
+                        .func_242732_c(8)
                         .withPlacement(WORLD_FILTER.configure(CFG_AQUAMARINE.worldFilterConfig())));
         GEN_MARBLE = registerConfiguredFeature(KEY_MARBLE, GenerationStage.Decoration.UNDERGROUND_ORES, CFG_MARBLE,
                 Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, BlocksAS.MARBLE_RAW.getDefaultState(), 26))

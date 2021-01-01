@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.CEffectAbstractList;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ListEntries;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
@@ -59,6 +60,7 @@ import java.awt.*;
  */
 public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEntry> {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("octans");
     public static OctansConfig CONFIG = new OctansConfig();
 
     private static boolean corruptedSkipWaterCheck = false;
@@ -217,6 +219,11 @@ public class CEffectOctans extends CEffectAbstractList<ListEntries.CounterMaxEnt
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     private static class OctansConfig extends CountConfig {

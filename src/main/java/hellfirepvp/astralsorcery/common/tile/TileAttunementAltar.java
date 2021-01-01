@@ -503,8 +503,8 @@ public class TileAttunementAltar extends TileEntityTick {
     private Set<Tuple<BlockPos, BlockPos>> getConstellationConnectionPositions(IConstellation cst) {
         Set<Tuple<BlockPos, BlockPos>> offsetPositions = new HashSet<>();
         for (StarConnection conn : cst.getStarConnections()) {
-            StarLocation from = conn.from;
-            StarLocation to = conn.to;
+            StarLocation from = conn.getLeft();
+            StarLocation to = conn.getRight();
             int fX = from.x / 2;
             int fZ = from.y / 2;
             int tX = to.x / 2;

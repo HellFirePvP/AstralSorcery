@@ -12,6 +12,8 @@ import com.google.common.base.Predicate;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,6 +36,8 @@ import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.Event;
@@ -42,10 +46,7 @@ import net.minecraftforge.fml.LogicalSidedProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -60,6 +61,30 @@ import java.util.function.Supplier;
 public class EntityUtils {
 
     private static final Random rand = new Random();
+
+    @Nullable
+    public static PlayerEntity getPlayer(UUID playerUUID, LogicalSide side) {
+        return side.isClient() ? getPlayerClient(playerUUID) : getPlayerServer(playerUUID);
+    }
+
+    @Nullable
+    public static PlayerEntity getPlayerServer(UUID playerUUID) {
+        MinecraftServer server = LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER);
+        if (server == null) {
+            return null;
+        }
+        return server.getPlayerList().getPlayerByUUID(playerUUID);
+    }
+
+    @Nullable
+    @OnlyIn(Dist.CLIENT)
+    public static PlayerEntity getPlayerClient(UUID playerUUID) {
+        ClientWorld clWorld = Minecraft.getInstance().world;
+        if (clWorld == null) {
+            return null;
+        }
+        return clWorld.getPlayerByUuid(playerUUID);
+    }
 
     public static void applyPotionEffectAtHalf(LivingEntity entity, EffectInstance effect) {
         EffectInstance activeEffect = entity.getActivePotionEffect(effect.getPotion());

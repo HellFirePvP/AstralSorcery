@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.base.CEffectAbstrac
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ListEntries;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfiguredBlockStateList;
 import hellfirepvp.astralsorcery.common.data.config.registry.OreBlockRarityRegistry;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
@@ -51,6 +52,7 @@ import java.awt.*;
  */
 public class CEffectMineralis extends CEffectAbstractList<ListEntries.PosEntry> {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("mineralis");
     public static MineralisConfig CONFIG = new MineralisConfig(new BlockStateList().add(Blocks.STONE));
 
     public CEffectMineralis(@Nonnull ILocatable origin) {
@@ -146,6 +148,11 @@ public class CEffectMineralis extends CEffectAbstractList<ListEntries.PosEntry> 
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     private static class MineralisConfig extends CountConfig {

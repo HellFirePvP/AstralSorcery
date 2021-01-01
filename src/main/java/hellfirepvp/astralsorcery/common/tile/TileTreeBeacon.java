@@ -59,7 +59,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -463,11 +462,14 @@ public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon
                 return;
             }
             double rangeSq = Config.CONFIG.range.get() * Config.CONFIG.range.get();
-            Set<BlockPos> watchers = WATCHERS.getOrDefault(world.getDimensionKey(), Collections.emptySet())
+            BlockPos closestBeacon = WATCHERS.getOrDefault(world.getDimensionKey(), Collections.emptySet())
                     .stream()
                     .filter(pos -> pos.distanceSq(treePos) < rangeSq)
-                    .collect(Collectors.toSet());
-            BlockPos closestBeacon = MiscUtils.getMinEntry(watchers, pos -> pos.distanceSq(treePos));
+                    .min(Comparator.comparing(pos -> pos.distanceSq(treePos)))
+                    .orElse(null);
+            if (closestBeacon == null) {
+                return;
+            }
             TileTreeBeacon ttb = MiscUtils.getTileAt(world, closestBeacon, TileTreeBeacon.class, false);
             if (ttb == null) {
                 return;

@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ConstellationEffectEntityCollect;
 import hellfirepvp.astralsorcery.common.data.config.registry.TechnicalEntityRegistry;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
@@ -52,6 +53,7 @@ import java.util.List;
  */
 public class CEffectDiscidia extends ConstellationEffectEntityCollect<LivingEntity> {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("discidia");
     public static DiscidiaConfig CONFIG = new DiscidiaConfig();
 
     public CEffectDiscidia(@Nonnull ILocatable origin) {
@@ -105,6 +107,9 @@ public class CEffectDiscidia extends ConstellationEffectEntityCollect<LivingEnti
                 }
                 DamageUtil.shotgunAttack(entity, e -> DamageUtil.attackEntityFrom(entity, src, damage));
             }
+            if (entity instanceof PlayerEntity) {
+                markPlayerAffected((PlayerEntity) entity);
+            }
 
             didEffect = true;
         }
@@ -115,6 +120,11 @@ public class CEffectDiscidia extends ConstellationEffectEntityCollect<LivingEnti
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     private static class DiscidiaConfig extends Config {

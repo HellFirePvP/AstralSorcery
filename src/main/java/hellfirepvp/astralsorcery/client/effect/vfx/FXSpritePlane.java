@@ -39,6 +39,7 @@ public class FXSpritePlane extends EntityVisualFX implements EntityDynamicFX {
     private Vector3 axis = Vector3.RotAxis.Y_AXIS;
     private int ticksPerFullRot = 100;
     private float fixDegree = 0;
+    private float spriteDisplayFactor = 1F;
 
     private SpriteSheetResource sprite = null;
 
@@ -52,6 +53,11 @@ public class FXSpritePlane extends EntityVisualFX implements EntityDynamicFX {
 
     public FXSpritePlane setSprite(SpriteSheetResource sprite) {
         this.sprite = sprite;
+        return this;
+    }
+
+    public FXSpritePlane setSpriteDisplayFactor(float spriteDisplayFactor) {
+        this.spriteDisplayFactor = spriteDisplayFactor;
         return this;
     }
 
@@ -77,7 +83,7 @@ public class FXSpritePlane extends EntityVisualFX implements EntityDynamicFX {
     @Override
     public <T extends EntityVisualFX & EntityDynamicFX> void renderNow(BatchRenderContext<T> ctx, MatrixStack renderStack, IDrawRenderTypeBuffer drawBuffer, float pTicks) {
         SpriteSheetResource ssr = this.sprite != null ? this.sprite : ctx.getSprite();
-        Tuple<Float, Float> uvOffset = ssr.getUVOffset(this);
+        Tuple<Float, Float> uvOffset = ssr.getUVOffset(this, pTicks, spriteDisplayFactor);
 
         Vector3 vec = this.getRenderPosition(pTicks);
         vec.subtract(RenderingVectorUtils.getStandardTranslationRemovalVector(pTicks));

@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
@@ -43,6 +44,7 @@ import java.util.List;
  */
 public class CEffectVicio extends ConstellationEffect implements ConstellationEffectStatus {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("vicio");
     public static VicioConfig CONFIG = new VicioConfig();
 
     public CEffectVicio(@Nonnull ILocatable origin) {
@@ -97,6 +99,7 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
                             pl.sendPlayerAbilities();
                         }
                     }
+                    markPlayerAffected(pl);
                 }
                 foundPlayer = true;
                 entity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 200, 9));
@@ -113,6 +116,7 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
                         pl.sendPlayerAbilities();
                     }
                 }
+                markPlayerAffected(pl);
             }
         }
         return foundPlayer;
@@ -121,6 +125,11 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     private static class VicioConfig extends Config {

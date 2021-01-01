@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.AnimalHelper;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ConstellationEffectEntityCollect;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.EffectsAS;
@@ -51,6 +52,7 @@ import java.util.List;
  */
 public class CEffectBootes extends ConstellationEffectEntityCollect<LivingEntity> {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("bootes");
     public static BootesConfig CONFIG = new BootesConfig();
 
     public CEffectBootes(@Nonnull ILocatable origin) {
@@ -137,6 +139,11 @@ public class CEffectBootes extends ConstellationEffectEntityCollect<LivingEntity
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     private static class BootesConfig extends Config {

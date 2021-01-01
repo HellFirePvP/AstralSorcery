@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -54,11 +55,13 @@ public abstract class MantleEffect extends ForgeRegistryEntry<MantleEffect> impl
 
     protected static final Random rand = new Random();
 
+    private final PlayerAffectionFlags.AffectionFlag playerAffectionFlag;
     private final IWeakConstellation constellation;
 
     public MantleEffect(IWeakConstellation constellation) {
         this.constellation = constellation;
         this.setRegistryName(this.constellation.getRegistryName());
+        this.playerAffectionFlag = new PlayerAffectionFlags.NoOpAffectionFlag(AstralSorcery.key("mantle_effect_" + constellation.getSimpleName()));
 
         this.attachEventListeners(MinecraftForge.EVENT_BUS);
         this.attachTickHandlers(AstralSorcery.getProxy().getTickManager()::register);
@@ -69,6 +72,10 @@ public abstract class MantleEffect extends ForgeRegistryEntry<MantleEffect> impl
     }
 
     public abstract Config getConfig();
+
+    public final PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return playerAffectionFlag;
+    }
 
     protected void attachEventListeners(IEventBus bus) {}
 
@@ -146,6 +153,7 @@ public abstract class MantleEffect extends ForgeRegistryEntry<MantleEffect> impl
             if (!(pl instanceof ServerPlayerEntity) || MiscUtils.isPlayerFakeMP((ServerPlayerEntity) pl)) {
                 return;
             }
+            PlayerAffectionFlags.markPlayerAffected(pl, this.playerAffectionFlag);
             this.tickServer(pl);
         } else {
             this.tickClient(pl);

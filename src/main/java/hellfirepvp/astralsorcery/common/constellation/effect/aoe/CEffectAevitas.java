@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.CropHelper;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.CEffectAbstractList;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.EffectsAS;
@@ -27,10 +28,14 @@ import hellfirepvp.astralsorcery.common.util.block.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.entity.EntityUtils;
+import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -52,6 +57,7 @@ import java.util.List;
  */
 public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant> {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("aevitas");
     public static AevitasConfig CONFIG = new AevitasConfig();
 
     public CEffectAevitas(@Nonnull ILocatable origin) {
@@ -84,7 +90,12 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
             changed = MiscUtils.executeWithChunk(world, plant.getPos(), changed, (changedFlag) -> {
                 if (properties.isCorrupted()) {
                     if (world instanceof ServerWorld) {
-                        if (BlockUtils.breakBlockWithoutPlayer(((ServerWorld) world), plant.getPos())) {
+                        CropHelper.HarvestablePlant harvestablePlant = CropHelper.wrapHarvestablePlant(world, plant.getPos());
+                        if (harvestablePlant != null) {
+                            NonNullList<ItemStack> drops = harvestablePlant.harvestDropsAndReplant((ServerWorld) world, rand, 1);
+                            drops.forEach(drop -> ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop));
+                            changedFlag = !drops.isEmpty();
+                        } else if (BlockUtils.breakBlockWithoutPlayer(((ServerWorld) world), plant.getPos())) {
                             changedFlag = true;
                         }
                     } else {
@@ -128,6 +139,9 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
                 } else {
                     EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.REGENERATION, 120, amplifier));
                 }
+                if (entity instanceof PlayerEntity) {
+                    markPlayerAffected((PlayerEntity) entity);
+                }
             }
         }
 
@@ -149,6 +163,11 @@ public class CEffectAevitas extends CEffectAbstractList<CropHelper.GrowablePlant
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     @OnlyIn(Dist.CLIENT)

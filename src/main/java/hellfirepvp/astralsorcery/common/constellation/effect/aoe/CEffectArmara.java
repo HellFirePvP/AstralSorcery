@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ConstellationEffectEntityCollect;
 import hellfirepvp.astralsorcery.common.data.config.registry.TechnicalEntityRegistry;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemAttunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
@@ -53,6 +54,7 @@ import java.util.List;
  */
 public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity> {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("armara");
     public static ArmaraConfig CONFIG = new ArmaraConfig();
 
     private int rememberedTimeout = 0;
@@ -162,6 +164,9 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
                         EntityUtils.applyPotionEffectAtHalf(entity, new EffectInstance(Effects.ABSORPTION, 30, potionAmplifier, true, false));
                     }
                 }
+                if (entity instanceof PlayerEntity) {
+                    markPlayerAffected((PlayerEntity) entity);
+                }
             }
         }
 
@@ -171,6 +176,11 @@ public class CEffectArmara extends ConstellationEffectEntityCollect<LivingEntity
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     @Override

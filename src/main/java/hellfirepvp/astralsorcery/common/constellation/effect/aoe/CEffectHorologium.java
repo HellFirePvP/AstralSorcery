@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.effect.base.CEffectAbstractList;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ListEntries;
 import hellfirepvp.astralsorcery.common.data.config.registry.TileAccelerationBlacklistRegistry;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
@@ -49,6 +50,7 @@ import java.awt.*;
  */
 public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry> {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("horologium");
     public static HorologiumConfig CONFIG = new HorologiumConfig();
 
     public CEffectHorologium(@Nonnull ILocatable origin) {
@@ -160,6 +162,11 @@ public class CEffectHorologium extends CEffectAbstractList<ListEntries.PosEntry>
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     private static class HorologiumConfig extends CountConfig {

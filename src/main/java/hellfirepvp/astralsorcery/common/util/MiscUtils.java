@@ -149,26 +149,28 @@ public class MiscUtils {
         return item != null ? item.getValue() : null;
     }
 
-    public static <T, V extends Comparable<V>> T getMaxEntry(Collection<T> elements, Function<T, V> valueFunction) {
-        V max = null;
+    public static <T, V extends Comparable<V>> V getMaxEntry(Collection<T> elements, Function<T, V> valueFunction) {
+        return getMaxEntry(MiscUtils.transformCollection(elements, valueFunction));
+    }
+
+    public static <T extends Comparable<T>> T getMaxEntry(Collection<T> elements) {
         T maxElement = null;
         for (T element : elements) {
-            V val = valueFunction.apply(element);
-            if (max == null || max.compareTo(val) < 0) {
-                max = val;
+            if (maxElement == null || maxElement.compareTo(element) < 0) {
                 maxElement = element;
             }
         }
         return maxElement;
     }
 
-    public static <T, V extends Comparable<V>> T getMinEntry(Collection<T> elements, Function<T, V> valueFunction) {
-        V min = null;
+    public static <T, V extends Comparable<V>> V getMinEntry(Collection<T> elements, Function<T, V> valueFunction) {
+        return getMinEntry(MiscUtils.transformCollection(elements, valueFunction));
+    }
+
+    public static <T extends Comparable<T>> T getMinEntry(Collection<T> elements) {
         T minElement = null;
         for (T element : elements) {
-            V val = valueFunction.apply(element);
-            if (min == null || min.compareTo(val) > 0) {
-                min = val;
+            if (minElement == null || minElement.compareTo(element) > 0) {
                 minElement = element;
             }
         }

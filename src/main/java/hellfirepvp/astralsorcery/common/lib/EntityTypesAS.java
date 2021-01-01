@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.entity.*;
-import hellfirepvp.astralsorcery.common.entity.item.EntityCrystal;
-import hellfirepvp.astralsorcery.common.entity.item.EntityItemExplosionResistant;
-import hellfirepvp.astralsorcery.common.entity.item.EntityItemHighlighted;
-import hellfirepvp.astralsorcery.common.entity.item.EntityStarmetal;
+import hellfirepvp.astralsorcery.common.entity.item.*;
 import hellfirepvp.astralsorcery.common.entity.technical.EntityGrapplingHook;
 import hellfirepvp.astralsorcery.common.entity.technical.EntityObservatoryHelper;
 import net.minecraft.entity.EntityType;
@@ -37,6 +34,7 @@ public class EntityTypesAS {
     public static EntityType<EntityItemHighlighted> ITEM_HIGHLIGHT;
     public static EntityType<EntityItemExplosionResistant> ITEM_EXPLOSION_RESISTANT;
     public static EntityType<EntityCrystal> ITEM_CRYSTAL;
+    public static EntityType<EntityDazzlingGem> ITEM_DAZZLING_GEM;
     public static EntityType<EntityStarmetal> ITEM_STARMETAL_INGOT;
 
     public static EntityType<EntityObservatoryHelper> OBSERVATORY_HELPER;

@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.effect.base.CEffectAbstractList;
 import hellfirepvp.astralsorcery.common.constellation.effect.base.ListEntries;
 import hellfirepvp.astralsorcery.common.data.config.registry.EntityTransmutationRegistry;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.lib.EffectsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
@@ -47,6 +48,7 @@ import java.util.List;
  */
 public class CEffectPelotrio extends CEffectAbstractList<ListEntries.EntitySpawnEntry> {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("pelotrio");
     private static final AxisAlignedBB PROXIMITY_BOX = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 
     public static PelotrioConfig CONFIG = new PelotrioConfig();
@@ -145,6 +147,11 @@ public class CEffectPelotrio extends CEffectAbstractList<ListEntries.EntitySpawn
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     private static class PelotrioConfig extends CountConfig {

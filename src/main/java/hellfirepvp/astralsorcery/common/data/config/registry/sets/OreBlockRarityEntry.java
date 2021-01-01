@@ -30,12 +30,18 @@ import java.util.stream.Collectors;
  */
 public class OreBlockRarityEntry implements ConfigDataSet {
 
-    private final ITag.INamedTag<Block> blockTag;
+    private final ITag<Block> blockTag;
+    private final ResourceLocation key;
     private final int weight;
 
-    public OreBlockRarityEntry(ITag.INamedTag<Block> blockTag, int weight) {
+    public OreBlockRarityEntry(ITag<Block> blockTag, ResourceLocation key, int weight) {
         this.blockTag = blockTag;
+        this.key = key;
         this.weight = weight;
+    }
+
+    public OreBlockRarityEntry(ITag.INamedTag<Block> blockTag, int weight) {
+        this(blockTag, blockTag.getName(), weight);
     }
 
     public int getWeight() {
@@ -57,7 +63,7 @@ public class OreBlockRarityEntry implements ConfigDataSet {
             return null;
         }
         ResourceLocation keyBlockTag = new ResourceLocation(split[0]);
-        ITag.INamedTag<Block> blockTag = MiscUtils.iterativeSearch(BlockTags.getAllTags(), namedTag -> namedTag.getName().equals(keyBlockTag));
+        ITag<Block> blockTag = BlockTags.getCollection().get(keyBlockTag);
         if (blockTag == null) {
             return null;
         }
@@ -68,12 +74,12 @@ public class OreBlockRarityEntry implements ConfigDataSet {
         } catch (NumberFormatException exc) {
             return null;
         }
-        return new OreBlockRarityEntry(blockTag, weight);
+        return new OreBlockRarityEntry(blockTag, keyBlockTag, weight);
     }
 
     @Nonnull
     @Override
     public String serialize() {
-        return String.format("%s;%s", blockTag.getName().toString(), weight);
+        return String.format("%s;%s", key.toString(), weight);
     }
 }

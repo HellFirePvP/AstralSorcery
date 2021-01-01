@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
@@ -43,6 +44,7 @@ import javax.annotation.Nullable;
  */
 public class CEffectLucerna extends ConstellationEffect implements ConstellationEffectStatus {
 
+    public static PlayerAffectionFlags.AffectionFlag FLAG = makeAffectionFlag("lucerna");
     public static LucernaConfig CONFIG = new LucernaConfig();
 
     private int rememberedTimeout = 0;
@@ -91,6 +93,11 @@ public class CEffectLucerna extends ConstellationEffect implements Constellation
     @Override
     public Config getConfig() {
         return CONFIG;
+    }
+
+    @Override
+    public PlayerAffectionFlags.AffectionFlag getPlayerAffectionFlag() {
+        return FLAG;
     }
 
     @Override

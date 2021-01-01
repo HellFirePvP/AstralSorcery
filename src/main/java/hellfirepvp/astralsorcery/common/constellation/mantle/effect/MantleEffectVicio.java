@@ -10,9 +10,11 @@ package hellfirepvp.astralsorcery.common.constellation.mantle.effect;
 
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectVicio;
 import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffect;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
@@ -58,7 +60,9 @@ public class MantleEffectVicio extends MantleEffect {
 
             EventHelperTemporaryFlight.allowFlight(player, 10);
             if (player.abilities.isFlying && !player.isOnGround() && player.ticksExisted % 10 == 0) {
-                AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
+                if (!PlayerAffectionFlags.isPlayerAffected(player, CEffectVicio.FLAG)) {
+                    AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
+                }
             }
         }
     }

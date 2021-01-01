@@ -91,8 +91,9 @@ public class SpriteSheetResource extends AbstractRenderableTexture {
         return new Tuple<>((frame % columns) * uPart, (frame / columns) * vPart);
     }
 
-    public Tuple<Float, Float> getUVOffset(EntityComplexFX fx) {
-        float perc = ((float) fx.getAge()) / ((float) fx.getMaxAge());
+    public Tuple<Float, Float> getUVOffset(EntityComplexFX fx, float pTicks, float spriteDisplayFactor) {
+        float agePart = fx.getAge() * spriteDisplayFactor + pTicks;
+        float perc = agePart / fx.getMaxAge();
         long timer = MathHelper.floor(this.getFrameCount() * perc);
         return getUVOffset(timer);
     }

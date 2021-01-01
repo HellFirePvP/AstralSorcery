@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchIOThread;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletRandomizeHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
+import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.event.handler.*;
 import hellfirepvp.astralsorcery.common.event.helper.*;
 import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
@@ -183,6 +184,7 @@ public class CommonProxy {
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(PerkLevelManager::loadPerkLevels));
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(BlockBreakHelper::clearServerCache));
         this.serverLifecycleListeners.add(ServerLifecycleListener.stop(TileTreeBeacon.TreeWatcher::clearServerCache));
+        this.serverLifecycleListeners.add(ServerLifecycleListener.stop(PlayerAffectionFlags::clearServerCache));
 
         SyncDataHolder.initialize();
 
@@ -247,6 +249,7 @@ public class CommonProxy {
         EventHelperInvulnerability.attachTickListener(registrar);
         EventHelperEntityFreeze.attachTickListener(registrar);
         PerkCooldownHelper.attachTickListeners(registrar);
+        PlayerAffectionFlags.attachTickListeners(registrar);
     }
 
     protected void initializeConfigurations() {
