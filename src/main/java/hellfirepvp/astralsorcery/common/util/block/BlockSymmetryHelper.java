@@ -55,9 +55,9 @@ public class BlockSymmetryHelper {
                     result.symmetryPairs.add(new BiDiPair<>(at, dotSym));
 
                     if (!allowMirrorSymmetry) {
-                        checkMirrorSymmetry(world, new Vector3i(-offset.getX(),  offset.getY(),  offset.getZ()), center, applicableStateFilter, result, visitedBlocks);
-                        checkMirrorSymmetry(world, new Vector3i( offset.getX(), -offset.getY(),  offset.getZ()), center, applicableStateFilter, result, visitedBlocks);
-                        checkMirrorSymmetry(world, new Vector3i( offset.getX(),  offset.getY(), -offset.getZ()), center, applicableStateFilter, result, visitedBlocks);
+                        checkMirrorSymmetry(world, new Vector3i(-offset.getX(),  offset.getY(),  offset.getZ()), center, result, visitedBlocks);
+                        checkMirrorSymmetry(world, new Vector3i( offset.getX(), -offset.getY(),  offset.getZ()), center, result, visitedBlocks);
+                        checkMirrorSymmetry(world, new Vector3i( offset.getX(),  offset.getY(), -offset.getZ()), center, result, visitedBlocks);
                     }
                 } else if (!dotState.isAir(world, dotSym)) {
                     result.fillerBlocks.add(at);
@@ -70,10 +70,11 @@ public class BlockSymmetryHelper {
             }
         }
 
+        result.density = (result.fillerBlocks.size() + result.symmetryPairs.size() * 2F) / ((float) result.totalCount);
         return result;
     }
 
-    private static void checkMirrorSymmetry(IBlockReader world, Vector3i offset, BlockPos center, Predicate<BlockState> applicableStateFilter, SymmetryResult result, Set<BlockPos> visitedBlocks) {
+    private static void checkMirrorSymmetry(IBlockReader world, Vector3i offset, BlockPos center, SymmetryResult result, Set<BlockPos> visitedBlocks) {
         BlockPos at = center.add(offset);
         BlockState state = world.getBlockState(at);
         visitedBlocks.add(at);
@@ -93,12 +94,12 @@ public class BlockSymmetryHelper {
 
     public static class SymmetryResult {
 
-        private final float totalCount;
+        private final int totalCount;
         private float density = 0F;
-        private Set<BiDiPair<BlockPos, BlockPos>> symmetryPairs = new HashSet<>();
-        private Set<BlockPos> fillerBlocks = new HashSet<>();
+        private final Set<BiDiPair<BlockPos, BlockPos>> symmetryPairs = new HashSet<>();
+        private final Set<BlockPos> fillerBlocks = new HashSet<>();
 
-        private SymmetryResult(float totalCount) {
+        private SymmetryResult(int totalCount) {
             this.totalCount = totalCount;
         }
 

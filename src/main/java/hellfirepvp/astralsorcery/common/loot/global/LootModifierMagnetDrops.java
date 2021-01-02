@@ -25,6 +25,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.fml.LogicalSide;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -57,6 +59,22 @@ public class LootModifierMagnetDrops extends LootModifier {
         PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!prog.isValid() || !prog.getPerkData().hasPerkEffect(perk -> perk instanceof KeyMagnetDrops)) {
             return generatedLoot;
+        }
+
+        //Means we're in the 2nd run of loot manipulation, re-run by top.theillusivec4.curios.common.objects.FortuneBonusMultiplier
+        ItemStack tool = context.get(LootParameters.TOOL);
+        if (tool != null && tool.hasTag() && tool.getTag().contains("HasCuriosFortuneBonus")) {
+            return generatedLoot.stream()
+                    .filter(stack -> !stack.isEmpty())
+                    .map(result -> ItemUtils.dropItemToPlayer(player, result))
+                    .filter(stack -> !stack.isEmpty())
+                    .collect(Collectors.toList());
+        }
+        int curiosFortuneBonus = CuriosApi.getCuriosHelper().getCuriosHandler(player)
+                .map(ICuriosItemHandler::getFortuneBonus)
+                .orElse(0);
+        if (curiosFortuneBonus > 0) {
+            return generatedLoot; //Do not modify loot, loot modification gets re-run by curios later
         }
 
         return generatedLoot.stream()
