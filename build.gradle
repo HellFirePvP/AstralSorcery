@@ -124,7 +124,7 @@ repositories {
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.16.4-35.1.13'
+    minecraft 'net.minecraftforge:forge:1.16.4-35.1.28'
 
     compileOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.5.0.v74'
     runtimeOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.5.0.v74:deobf'

@@ -30,14 +30,13 @@ import java.util.*;
  */
 public class IntegrationBotania {
     
-    public static Collection<ItemStack> botaniaFindItemsInPlayerInventory(PlayerEntity player, ItemStack match) {
+    public static Collection<ItemStack> findProvidersProvidingItems(PlayerEntity player, ItemStack match) {
         List<ItemStack> stacksOut = new LinkedList<>();
 
         // Botania can only supply blocks, so let's filter that out first.
         if(!(match.getItem() instanceof BlockItem)) {
             return stacksOut;
         }
-
         Block matchBlock = ((BlockItem) match.getItem()).getBlock();
 
         IItemHandler handler = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(ItemUtils.EMPTY_INVENTORY);
@@ -46,7 +45,7 @@ public class IntegrationBotania {
             Item sItem = s.getItem();
             if (sItem instanceof IBlockProvider) {
                 IBlockProvider provider = (IBlockProvider) sItem;
-                int blockCount = provider.getBlockCount(player, s, s, matchBlock);
+                int blockCount = provider.getBlockCount(player, ItemStack.EMPTY, s, matchBlock);
                 if (blockCount == -1) {
                     // Used by rods to indicate infinite.  That doesn't suit our needs, so let's just report a lot.
                     blockCount = 9001;
@@ -60,7 +59,6 @@ public class IntegrationBotania {
     }
     
     public static boolean consumeFromPlayerInventory(PlayerEntity player, ItemStack requestingItemStack, ItemStack toConsume, boolean simulate) {
-
         // Botania can only supply blocks, so let's filter that out first.
         if (!(toConsume.getItem() instanceof BlockItem)) {
             return false;
@@ -73,17 +71,11 @@ public class IntegrationBotania {
             Item sItem = s.getItem();
             if (sItem instanceof IBlockProvider) {
                 IBlockProvider provider = (IBlockProvider) sItem;
-                int blockCount = provider.getBlockCount(player, s, s, consumeBlock);
+                int blockCount = provider.getBlockCount(player, requestingItemStack, s, consumeBlock);
                 if (blockCount == -1 || blockCount > toConsume.getCount()) {
-                    // -1 is used by rods to indicate infinite.  Not technically true, but until Botania sorts out how to report how many invocations the player's
-                    // mana can handle, we'll have to take it at its word.
-                    // It also doesn't take mana availability into account until actually invoked to fully commit, so best we can do is eat up
-                    // as much as we have, and if it wasn't enough, say sorry and fail the entire operation.
-                    if (!simulate) {
-                        for (int i = 0; i < toConsume.getCount(); i++) {
-                            if (!provider.provideBlock(player, s, s, consumeBlock, true)) {
-                                return false;
-                            }
+                    for (int i = 0; i < toConsume.getCount(); i++) {
+                        if (!provider.provideBlock(player, requestingItemStack, s, consumeBlock, !simulate)) {
+                            return false;
                         }
                     }
                     return true;

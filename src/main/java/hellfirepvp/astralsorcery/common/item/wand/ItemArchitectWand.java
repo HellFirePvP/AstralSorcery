@@ -200,7 +200,9 @@ public class ItemArchitectWand extends Item implements ItemBlockStorage, ItemOve
                 continue;
             }
 
-            if (MiscUtils.canPlayerPlaceBlockPos(player, stateToPlace, placePos, Direction.UP) &&
+            if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_PLACEMENT, true) &&
+                    (player.isCreative() || ItemUtils.consumeFromPlayerInventory(player, held, extractable, true)) &&
+                    MiscUtils.canPlayerPlaceBlockPos(player, stateToPlace, placePos, Direction.UP) &&
                     (player.isCreative() || ItemUtils.consumeFromPlayerInventory(player, held, extractable, false)) &&
                     AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_PLACEMENT, false) &&
                     world.setBlockState(placePos, stateToPlace)) {

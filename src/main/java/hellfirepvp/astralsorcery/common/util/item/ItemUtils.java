@@ -204,7 +204,7 @@ public class ItemUtils {
         Collection<ItemStack> results = findItemsInInventory(handler, match, strict);
 
         if (Mods.BOTANIA.isPresent()) {
-            results.addAll(IntegrationBotania.botaniaFindItemsInPlayerInventory(player, match));
+            results.addAll(IntegrationBotania.findProvidersProvidingItems(player, match));
         }
 
         return results;

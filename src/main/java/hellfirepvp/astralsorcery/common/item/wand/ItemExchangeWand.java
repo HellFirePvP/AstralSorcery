@@ -211,10 +211,11 @@ public class ItemExchangeWand extends Item implements ItemBlockStorage, ItemOver
             }
 
             BlockState prevState = world.getBlockState(placePos);
-            if ((player.isCreative() || ItemUtils.consumeFromPlayerInventory(player, stack, extractable, false)) &&
+            if ((player.isCreative() || ItemUtils.consumeFromPlayerInventory(player, stack, extractable, true)) &&
                     AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, COST_PER_EXCHANGE, false) &&
                     ((ServerPlayerEntity) player).interactionManager.tryHarvestBlock(placePos) &&
                     MiscUtils.canPlayerPlaceBlockPos(player, stateToPlace, placePos, Direction.UP) &&
+                    (player.isCreative() || ItemUtils.consumeFromPlayerInventory(player, stack, extractable, false)) &&
                     world.setBlockState(placePos, stateToPlace)) {
                 PktPlayEffect ev = new PktPlayEffect(PktPlayEffect.Type.BLOCK_EFFECT)
                         .addData(buf -> {
