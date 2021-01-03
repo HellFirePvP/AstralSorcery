@@ -19,6 +19,7 @@ import hellfirepvp.observerlib.api.block.BlockStructureObserver;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathType;
@@ -126,6 +127,17 @@ public class BlockRitualPedestal extends BlockStarlightNetwork implements Custom
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return shape;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.onBlockPlacedBy(world, pos, state, placer, stack);
+        if (placer instanceof PlayerEntity) {
+            TileRitualPedestal pedestal = MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, true);
+            if (pedestal != null) {
+                pedestal.setOwner(placer.getUniqueID());
+            }
+        }
     }
 
     @Override
