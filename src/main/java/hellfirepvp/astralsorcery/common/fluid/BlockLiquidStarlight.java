@@ -69,7 +69,7 @@ public class BlockLiquidStarlight extends FlowingFluidBlock {
         if (entity instanceof LivingEntity) {
             ((LivingEntity) entity).addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 300, 0, true, true));
         } else if (entity instanceof ItemEntity) {
-            LiquidStarlightCraftingRegistry.tryCraft((ItemEntity) entity);
+            LiquidStarlightCraftingRegistry.tryCraft((ItemEntity) entity, pos);
 
             if (!world.isRemote() &&((ItemEntity) entity).getItem().isEmpty()) {
                 entity.remove();

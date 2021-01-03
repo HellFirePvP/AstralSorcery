@@ -45,19 +45,18 @@ public class LiquidStarlightCraftingRegistry extends CustomRecipeRegistry<Liquid
                 .orElse(null);
     }
 
-    public static void tryCraft(ItemEntity itemEntity) {
+    public static void tryCraft(ItemEntity itemEntity, BlockPos at) {
         if (!itemEntity.isAlive()) {
             return;
         }
         World world = itemEntity.getEntityWorld();
-        BlockPos floorAt = itemEntity.getPosition();
 
-        LiquidStarlightRecipe recipe = LiquidStarlightCraftingRegistry.INSTANCE.getRecipeFor(itemEntity, world, floorAt);
+        LiquidStarlightRecipe recipe = LiquidStarlightCraftingRegistry.INSTANCE.getRecipeFor(itemEntity, world, at);
         if (recipe != null) {
             if (!world.isRemote()) {
-                recipe.doServerCraftTick(itemEntity, world, floorAt);
+                recipe.doServerCraftTick(itemEntity, world, at);
             } else {
-                recipe.doClientEffectTick(itemEntity, world, floorAt);
+                recipe.doClientEffectTick(itemEntity, world, at);
             }
         }
     }
