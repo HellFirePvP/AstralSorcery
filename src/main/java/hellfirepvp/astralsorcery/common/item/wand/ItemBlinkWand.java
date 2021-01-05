@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperDamageCancelling;
 import hellfirepvp.astralsorcery.common.item.armor.ItemMantle;
 import hellfirepvp.astralsorcery.common.item.base.AlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
@@ -37,6 +38,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -151,13 +153,17 @@ public class ItemBlinkWand extends Item implements AlignmentChargeConsumer {
                 }
             }
         } else if (mode == BlinkMode.LAUNCH) {
-            float strength = 0.2F + Math.min(1F, Math.min(50, stack.getUseDuration() - timeLeft) / 50F) * 0.8F;
+            float multiplier = 0.8F;
+            if (!entityLiving.isElytraFlying()) {
+                multiplier = 2.4F;
+            }
+            float strength = 0.2F + Math.min(1F, Math.min(50, stack.getUseDuration() - timeLeft) / 50F) * multiplier;
             if (strength > 0.3F) {
-                float chargeCost = COST_PER_DASH * strength;
+                float chargeCost = COST_PER_DASH * 0.8F;
                 if (AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, chargeCost, false)) {
                     Vector3 motion = new Vector3(player.getLook(1F)).normalize().multiply(strength * 3F);
                     if (motion.getY() > 0) {
-                        motion.setY(MathHelper.clamp(motion.getY() + (0.7F * strength), 0.7F * strength, Float.MAX_VALUE));
+                        motion.setY(MathHelper.clamp(motion.getY() + (0.2F * strength), 0.2F * strength, Float.MAX_VALUE));
                     }
 
                     player.setMotion(motion.toVector3d());
@@ -170,6 +176,10 @@ public class ItemBlinkWand extends Item implements AlignmentChargeConsumer {
                     PktShootEntity pkt = new PktShootEntity(player.getEntityId(), motion);
                     pkt.setEffectLength(strength);
                     PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(worldIn, player.getPosition(), 64));
+
+                    if (!player.isElytraFlying()) {
+                        EventHelperDamageCancelling.markInvulnerableToNextDamage(player, DamageSource.FALL);
+                    }
                 }
             }
         }

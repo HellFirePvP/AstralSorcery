@@ -253,7 +253,7 @@ public class TileAttunementAltar extends TileEntityTick {
         if (this.attunementAltarIdleSound == null || ((PositionedLoopSound) this.attunementAltarIdleSound).hasStoppedPlaying()) {
             this.attunementAltarIdleSound = SoundHelper.playSoundLoopFadeInClient(SoundsAS.ATTUNEMENT_ATLAR_IDLE,
                     new Vector3(this).add(0.5, 1, 0.5),
-                    1F,
+                    0.4F,
                     1F,
                     false,
                     (s) -> !this.canPlayConstellationActiveEffects() ||

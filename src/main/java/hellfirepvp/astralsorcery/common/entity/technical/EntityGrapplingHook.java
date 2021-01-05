@@ -15,12 +15,14 @@ import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXFacingParticle;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
+import hellfirepvp.astralsorcery.common.event.helper.EventHelperDamageCancelling;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.EntityTypesAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
@@ -28,6 +30,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -175,7 +178,7 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
                 if (((getPulling() != null && ticksExisted > 60 && dist < 2) || (getPulling() == null && ticksExisted > 15 && dist < 2)) || timeout > 15) {
                     setDespawning();
                 } else {
-                    thrower.fallDistance = -5F;
+                    thrower.fallDistance = -2F;
 
                     double mx = this.getPosX() - thrower.getPosX();
                     double my = this.getPosY() - thrower.getPosY();
@@ -197,6 +200,10 @@ public class EntityGrapplingHook extends ThrowableEntity implements IEntityAddit
                         launchedThrower = true;
                     }
                     thrower.setMotion(motion);
+
+                    if (thrower instanceof PlayerEntity) {
+                        EventHelperDamageCancelling.markInvulnerableToNextDamage((PlayerEntity) thrower, DamageSource.FALL);
+                    }
 
                     int roughDst = (int) (dist / 2.5D);
                     if (roughDst >= this.previousDist) {

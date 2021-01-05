@@ -39,7 +39,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -340,7 +339,7 @@ public class ActivePlayerAttunementRecipe extends AttunementRecipe.Active<Attune
             startedPlayerSound = true;
             SoundHelper.playSoundFadeInClient(SoundsAS.ATTUNEMENT_ATLAR_PLAYER_ATTUNE,
                     new Vector3(altar).add(0.5, 1, 0.5),
-                    1F,
+                    0.7F,
                     1F,
                     false,
                     (s) -> {

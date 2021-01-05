@@ -338,6 +338,7 @@ public class PlayerProgress {
         this.attunedConstellation = message.attunedConstellation;
         this.wasOnceAttuned = message.wasOnceAttuned;
         this.perkData.receive(message);
+        this.usePerkAbilities = message.doPerkAbilities;
     }
 
     protected PlayerProgress copy() {

@@ -139,7 +139,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
 
                 clientCraftSound = SoundHelper.playSoundLoopFadeInClient(sound,
                         new Vector3(this).add(0.5, 0.5, 0.5),
-                        1F,
+                        0.6F,
                         1F,
                         false,
                         (s) -> isRemoved() ||
@@ -152,7 +152,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
             if (activeRecipe.getState() == ActiveSimpleAltarRecipe.CraftingState.WAITING && type.isThisGEThan(AltarType.RADIANCE)) {
 
                 if (clientWaitSound == null || ((PositionedLoopSound) clientWaitSound).hasStoppedPlaying()) {
-                    clientWaitSound = SoundHelper.playSoundLoopFadeInClient(SoundsAS.ALTAR_CRAFT_LOOP_T4_WAITING, new Vector3(this).add(0.5, 0.5, 0.5), 1F, 1F, false,
+                    clientWaitSound = SoundHelper.playSoundLoopFadeInClient(SoundsAS.ALTAR_CRAFT_LOOP_T4_WAITING, new Vector3(this).add(0.5, 0.5, 0.5), 0.7F, 1F, false,
                             (s) -> isRemoved() ||
                                     SoundHelper.getSoundVolume(SoundCategory.BLOCKS) <= 0 ||
                                     this.getActiveRecipe() == null ||
@@ -192,7 +192,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
             }
 
             if (!isChaining) {
-                SoundHelper.playSoundClientWorld(SoundsAS.ALTAR_CRAFT_FINISH, at, 1F, 1F);
+                SoundHelper.playSoundClientWorld(SoundsAS.ALTAR_CRAFT_FINISH, at, 0.6F, 1F);
             }
         }
     }
@@ -262,7 +262,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
         this.activeRecipe = new ActiveSimpleAltarRecipe(recipe, divisor, crafter.getUniqueID());
         markForUpdate();
 
-        SoundHelper.playSoundAround(SoundsAS.ALTAR_CRAFT_START, SoundCategory.BLOCKS, this.world, new Vector3(this).add(0.5, 0.5, 0.5), 1F, 1F);
+        SoundHelper.playSoundAround(SoundsAS.ALTAR_CRAFT_START, SoundCategory.BLOCKS, this.world, new Vector3(this).add(0.5, 0.5, 0.5), 0.6F, 1F);
         return true;
     }
 

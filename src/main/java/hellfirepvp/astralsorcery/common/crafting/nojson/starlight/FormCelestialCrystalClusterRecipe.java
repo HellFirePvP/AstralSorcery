@@ -107,7 +107,7 @@ public class FormCelestialCrystalClusterRecipe extends LiquidStarlightRecipe {
     @OnlyIn(Dist.CLIENT)
     public void doClientEffectTick(ItemEntity trigger, World world, BlockPos at) {
         for (int i = 0; i < 3; i++) {
-            Vector3 pos = Vector3.atEntityCenter(trigger);
+            Vector3 pos = Vector3.atEntityCorner(trigger);
             MiscUtils.applyRandomOffset(pos, rand, 0.15F);
 
             Vector3 motion = Vector3.RotAxis.Y_AXIS.clone();
@@ -123,7 +123,7 @@ public class FormCelestialCrystalClusterRecipe extends LiquidStarlightRecipe {
                     .setMaxAge(30 + rand.nextInt(20));
         }
         for (int i = 0; i < 4; i++) {
-            Vector3 target = Vector3.atEntityCenter(trigger);
+            Vector3 target = Vector3.atEntityCorner(trigger);
             Vector3 pos = target.clone().add(Vector3.random().normalize().multiply(3 + rand.nextFloat()));
 
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)

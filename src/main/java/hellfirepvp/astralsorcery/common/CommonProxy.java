@@ -214,6 +214,7 @@ public class CommonProxy {
         EventHelperSpawnDeny.attachListeners(eventBus);
         EventHelperInvulnerability.attachListeners(eventBus);
         EventHelperEntityFreeze.attachListeners(eventBus);
+        EventHelperDamageCancelling.attachListeners(eventBus);
         PerkAttributeLimiter.attachListeners(eventBus);
 
         eventBus.addListener(RegistryWorldGeneration::loadBiomeFeatures);

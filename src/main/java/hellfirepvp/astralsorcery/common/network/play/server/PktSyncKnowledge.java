@@ -45,6 +45,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
     public IMajorConstellation attunedConstellation = null;
     public boolean wasOnceAttuned = false;
     public int progressTier = 0;
+    public boolean doPerkAbilities = true;
     public PlayerPerkData perkData = null;
 
     public PktSyncKnowledge() {}
@@ -62,6 +63,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
         this.attunedConstellation = progress.getAttunedConstellation();
         this.perkData = progress.getPerkData();
         this.wasOnceAttuned = progress.wasOnceAttuned();
+        this.doPerkAbilities = progress.doPerkAbilities();
     }
 
     @Nonnull
@@ -78,6 +80,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
             ByteBufUtils.writeOptional(buffer, packet.attunedConstellation, ByteBufUtils::writeRegistryEntry);
             buffer.writeBoolean(packet.wasOnceAttuned);
             buffer.writeInt(packet.progressTier);
+            buffer.writeBoolean(packet.doPerkAbilities);
         };
     }
 
@@ -95,6 +98,7 @@ public class PktSyncKnowledge extends ASPacket<PktSyncKnowledge> {
             pkt.attunedConstellation = ByteBufUtils.readOptional(buffer, ByteBufUtils::readRegistryEntry);
             pkt.wasOnceAttuned = buffer.readBoolean();
             pkt.progressTier = buffer.readInt();
+            pkt.doPerkAbilities = buffer.readBoolean();
 
             return pkt;
         };
