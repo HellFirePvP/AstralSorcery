@@ -33,8 +33,12 @@ public class CrystalCalculations {
     private CrystalCalculations() {}
 
     public static double calculate(double value, CrystalAttributes attributes, CalculationContext context) {
-        for (CrystalAttributes.Attribute attribute : attributes.getCrystalAttributes()) {
-            value = attribute.getProperty().modify(value, attribute.getTier(), context);
+        if (attributes != null) {
+            for (CrystalAttributes.Attribute attribute : attributes.getCrystalAttributes()) {
+                if (attribute != null) {
+                    value = attribute.getProperty().modify(value, attribute.getTier(), context);
+                }
+            }
         }
         return value;
     }
