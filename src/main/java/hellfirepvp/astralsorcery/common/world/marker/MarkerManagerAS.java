@@ -80,14 +80,11 @@ public class MarkerManagerAS {
 
     private static void makeChest(IWorld world, BlockPos pos, ResourceLocation tableName, Random rand, MutableBoundingBox box) {
         if (box.isVecInside(pos) && world.getBlockState(pos).getBlock() != Blocks.CHEST) {
-            BlockState chest = Blocks.CHEST.getDefaultState();
-            StructurePiece.correctFacing(world, pos, chest);
+            BlockState chest = StructurePiece.correctFacing(world, pos, Blocks.CHEST.getDefaultState());
 
             world.setBlockState(pos, chest, Constants.BlockFlags.BLOCK_UPDATE);
-            LockableLootTileEntity tile = MiscUtils.getTileAt(world, pos, LockableLootTileEntity.class, true);
-            if (tile != null) {
-                tile.setLootTable(tableName, rand.nextLong());
-            }
+            // Static setLootTable used instead of manual tile fetch -> member setLootTable to provide compatibility with Lootr.
+            LockableLootTileEntity.setLootTable(world, rand, pos, tableName);
         }
     }
 }
