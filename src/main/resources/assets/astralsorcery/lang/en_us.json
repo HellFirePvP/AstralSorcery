@@ -3,6 +3,8 @@
   "itemGroup.astralsorcery.papers": "[AS] Constellation Papers",
   "itemGroup.astralsorcery.crystals": "[AS] Attuned Crystals",
 
+  "gamerule.asIgnoreSkylightCheck": "Ignore Skylight Check (Astral Sorcery)",
+
   "astralsorcery.command.argument.constellation.notfound": "Constellation not found.",
 
   "death.attack.astralsorcery.stellar": "%1$s disintegrated into dust",
