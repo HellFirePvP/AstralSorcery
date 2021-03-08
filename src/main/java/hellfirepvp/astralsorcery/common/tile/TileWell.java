@@ -80,6 +80,7 @@ public class TileWell extends TileReceiverBase<StarlightReceiverWell> {
         this.access.putTank(0, tank, Direction.DOWN);
 
         this.inventory = new TileInventoryFiltered(this, () -> 1, Direction.DOWN);
+        this.inventory.filterMaxStackSize((slot, stack) -> 1);
         this.inventory.canExtract((slot, amount, existing) -> false);
         this.inventory.canInsert((slot, toAdd, existing) -> {
             if (toAdd.isEmpty()) {

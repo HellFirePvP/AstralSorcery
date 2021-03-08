@@ -99,15 +99,16 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                 if (sideBroken.getDirectionVec().getY() != 0 && yy != 0) continue;
                 for (int zz = -size; zz <= size; zz++) {
                     if (sideBroken.getDirectionVec().getZ() != 0 && zz != 0) continue;
+                    if (xx == 0 && yy == 0 && zz == 0) continue;
 
                     BlockPos other = at.add(xx, yy, zz);
                     BlockState otherState = world.getBlockState(other);
                     if (otherState.getBlockHardness(world, other) != -1 &&
                             (player.isCreative() || miningTest.test(world, other, otherState)) &&
-                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
+                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), true)) {
                         BlockState state = world.getBlockState(other);
                         if (!BlockUtils.isFluidBlock(state) && (player.isCreative() || otherState.canHarvestBlock(world, other, player)) && player.interactionManager.tryHarvestBlock(other)) {
-                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
+                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), false);
                         }
                     }
                 }
@@ -123,15 +124,16 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
             if (sideBroken.getDirectionVec().getX() != 0 && xx != 0) continue;
             for (int zz = -size; zz <= size; zz++) {
                 if (sideBroken.getDirectionVec().getZ() != 0 && zz != 0) continue;
+                if (xx == 0 && zz == 0) continue;
 
                 BlockPos other = at.add(xx, 0, zz);
                 BlockState otherState = world.getBlockState(other);
                 if (otherState.getBlockHardness(world, other) != -1 &&
                         (player.isCreative() || miningTest.test(world, other, otherState)) &&
-                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), true)) {
+                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), true)) {
                     BlockState state = world.getBlockState(other);
                     if (!BlockUtils.isFluidBlock(state) && (player.isCreative() || otherState.canHarvestBlock(world, other, player)) && player.interactionManager.tryHarvestBlock(other)) {
-                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
+                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), false);
                     }
                 }
             }
@@ -140,7 +142,7 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
 
     private static class Config extends ConfigEntry {
 
-        private ForgeConfigSpec.IntValue chargeCost;
+        private ForgeConfigSpec.IntValue chargeCostPerBreak;
 
         private Config(String section) {
             super(section);
@@ -148,10 +150,10 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
 
         @Override
         public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
-            chargeCost = cfgBuilder
+            chargeCostPerBreak = cfgBuilder
                     .comment("Defines the amount of starlight charge consumed per additional block break through this attribute.")
-                    .translation(translationKey("chargeCost"))
-                    .defineInRange("chargeCost", 4, 1, 500);
+                    .translation(translationKey("chargeCostPerBreak"))
+                    .defineInRange("chargeCostPerBreak", 2, 1, 500);
         }
     }
 }

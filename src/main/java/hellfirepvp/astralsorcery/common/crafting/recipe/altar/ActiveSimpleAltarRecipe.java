@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.crafting.recipe.altar;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingFocusStack;
 import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
+import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
@@ -21,6 +22,7 @@ import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -30,6 +32,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
@@ -122,16 +128,34 @@ public class ActiveSimpleAltarRecipe {
 
     public void consumeInputs(TileAltar altar) {
         TileInventory inv = altar.getInventory();
+        AltarRecipeGrid grid = this.recipeToCraft.getInputs();
 
         for (int slot = 0; slot < AltarRecipeGrid.MAX_INVENTORY_SIZE; slot++) {
-            ItemUtils.decrementItem(inv, slot, altar::dropItemOnTop);
+            Ingredient input = grid.getIngredient(slot);
+            if (input instanceof FluidIngredient) {
+                ItemStack stack = inv.getStackInSlot(slot);
+                FluidActionResult far = FluidUtil.tryEmptyContainer(stack, EmptyFluidHandler.INSTANCE, FluidAttributes.BUCKET_VOLUME, null, true);
+                if (far.isSuccess()) {
+                    inv.setStackInSlot(slot, far.getResult());
+                }
+            } else {
+                ItemUtils.decrementItem(inv, slot, altar::dropItemOnTop);
+            }
         }
 
         for (CraftingFocusStack input : this.focusStacks) {
             TileSpectralRelay tar = MiscUtils.getTileAt(altar.getWorld(), input.getRealPosition(), TileSpectralRelay.class, true);
             if (tar != null) {
                 TileInventory tarInventory = tar.getInventory();
-                ItemUtils.decrementItem(tarInventory, 0, altar::dropItemOnTop);
+                if (input.getInput() != null && input.getInput().getIngredient() instanceof FluidIngredient) {
+                    ItemStack stack = tarInventory.getStackInSlot(0);
+                    FluidActionResult far = FluidUtil.tryEmptyContainer(stack, EmptyFluidHandler.INSTANCE, FluidAttributes.BUCKET_VOLUME, null, true);
+                    if (far.isSuccess()) {
+                        tarInventory.setStackInSlot(0, far.getResult());
+                    }
+                } else {
+                    ItemUtils.decrementItem(tarInventory, 0, altar::dropItemOnTop);
+                }
             }
         }
     }
@@ -192,6 +216,7 @@ public class ActiveSimpleAltarRecipe {
 
         boolean waitMissingInputs = false;
         for (int i = 0; i < iIngredients.size(); i++) {
+            WrappedIngredient input = iIngredients.get(i);
             int index = i;
 
             int offset = part + (index * cttPart);
@@ -211,7 +236,7 @@ public class ActiveSimpleAltarRecipe {
                         waitMissingInputs = true;
                         continue;
                     }
-                    found = new CraftingFocusStack(index, at);
+                    found = new CraftingFocusStack(index, input, at);
                     this.focusStacks.add(found);
                 }
                 TileSpectralRelay tar = MiscUtils.getTileAt(altar.getWorld(), found.getRealPosition(), TileSpectralRelay.class, true);
@@ -219,7 +244,6 @@ public class ActiveSimpleAltarRecipe {
                     waitMissingInputs = true;
                     continue;
                 }
-                WrappedIngredient input = iIngredients.get(i);
                 if (!input.getIngredient().test(tar.getInventory().getStackInSlot(0))) {
                     waitMissingInputs = true;
                 }

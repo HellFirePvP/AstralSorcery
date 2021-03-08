@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.util.image.ColorThief;
+import hellfirepvp.astralsorcery.client.util.color.ColorThief;
 import hellfirepvp.astralsorcery.common.util.ColorUtils;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.fluid.Fluid;
@@ -38,8 +38,8 @@ import java.util.Optional;
  */
 public class ColorizationHelper {
 
-    private static Map<Item, Optional<Color>> itemColors = new HashMap<>();
-    private static Map<Fluid, Optional<Color>> fluidColors = new HashMap<>();
+    private static final Map<Item, Optional<Color>> itemColors = new HashMap<>();
+    private static final Map<Fluid, Optional<Color>> fluidColors = new HashMap<>();
 
     private ColorizationHelper() {}
 

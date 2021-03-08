@@ -74,7 +74,7 @@ public class RootAevitas extends RootPerk {
         } catch (Exception exc) {
             hardness = 1F;
         }
-        float xp = Math.min(hardness * 6F, 100F);
+        float xp = Math.min(hardness * 4F, 100F);
         xp *= this.getExpMultiplier();
         xp *= this.getDiminishingReturns(player);
         xp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);

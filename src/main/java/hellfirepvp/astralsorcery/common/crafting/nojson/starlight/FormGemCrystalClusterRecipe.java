@@ -81,7 +81,7 @@ public class FormGemCrystalClusterRecipe extends LiquidStarlightRecipe {
     @Override
     public void doServerCraftTick(ItemEntity trigger, World world, BlockPos at) {
         Random r = new Random(MathHelper.getPositionRandom(at));
-        if (getAndIncrementCraftingTick(trigger) > 125 + r.nextInt(40)) {
+        if (getAndIncrementCraftingTick(trigger) > 50 + r.nextInt(20)) {
             if (consumeItemEntityInBlock(world, at, ItemsAS.ILLUMINATION_POWDER) != null &&
                     consumeItemEntityInBlock(world, at, 1, stack -> stack.getItem() instanceof ItemCrystalBase) != null) {
 

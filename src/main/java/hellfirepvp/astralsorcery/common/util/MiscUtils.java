@@ -578,7 +578,7 @@ public class MiscUtils {
             }
         } else if (world instanceof IWorld) {
             AbstractChunkProvider provider = ((IWorld) world).getChunkProvider();
-            if (provider.isChunkLoaded(new ChunkPos(pos))) {
+            if (provider.canTick(pos)) {
                 return run.get();
             }
         } else {

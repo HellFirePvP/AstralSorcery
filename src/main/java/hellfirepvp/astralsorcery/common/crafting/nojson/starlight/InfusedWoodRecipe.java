@@ -71,7 +71,7 @@ public class InfusedWoodRecipe extends LiquidStarlightRecipe {
 
     @Override
     public void doServerCraftTick(ItemEntity trigger, World world, BlockPos at) {
-        if (getAndIncrementCraftingTick(trigger) > 10) {
+        if (getAndIncrementCraftingTick(trigger) > 5) {
             if (consumeItemEntityInBlock(world, at, 1, (ItemStack stack) -> !stack.isEmpty() && stack.getItem().isIn(ItemTags.LOGS)) != null) {
                 ItemUtils.dropItemNaturally(world, trigger.getPosX(), trigger.getPosY(), trigger.getPosZ(), new ItemStack(BlocksAS.INFUSED_WOOD));
             }

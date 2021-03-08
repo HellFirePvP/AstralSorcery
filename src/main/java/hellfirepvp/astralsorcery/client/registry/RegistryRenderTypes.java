@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.registry;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.constellation.ConstellationRenderInfos;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
@@ -16,11 +17,14 @@ import hellfirepvp.astralsorcery.client.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.image.SkyImageGenerator;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
+import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.util.Util;
 import org.lwjgl.opengl.GL11;
 
 import static hellfirepvp.astralsorcery.client.lib.RenderTypesAS.*;
@@ -357,6 +361,17 @@ public class RegistryRenderTypes {
                         .build());
     }
 
+    public static RenderType createDepthProjectionType(int zoom) {
+        return createType("player_starry_sky_layer", DefaultVertexFormats.POSITION_COLOR, GL11.GL_QUADS, 256, false, true,
+                RenderStateBuilder.builder()
+                        .blend(Blending.ADDITIVE)
+                        .texture(AssetLibrary.loadGeneratedResource(AstralSorcery.key("player_starry_sky_layer"), SkyImageGenerator::generateStarBackground, true))
+                        .alpha(0.001F)
+                        .vanillaBuilder()
+                        .texturing(new IdentityProjectionModelTexturingState(zoom))
+                        .build(false));
+    }
+
     private static RenderType createType(String name, VertexFormat vertexFormat, RenderType.State state) {
         return createType(name, vertexFormat, GL11.GL_QUADS, 32768, state);
     }
@@ -379,5 +394,48 @@ public class RegistryRenderTypes {
 
         ConstellationRenderInfos.registerBackground(cst, rType, tex);
         return rType;
+    }
+
+    private static class IdentityProjectionModelTexturingState extends RenderState.TexturingState {
+
+        private final int zoom;
+
+        public IdentityProjectionModelTexturingState(int zoom) {
+            super(AstralSorcery.key("depth_projection_texturing_" + zoom).toString(), () -> {
+                float movementV = ((float) (Util.milliTime() % 200000L) / 200000.0F);
+
+                RenderSystem.matrixMode(GL11.GL_TEXTURE);
+                RenderSystem.pushMatrix();
+                RenderSystem.loadIdentity();
+                RenderSystem.translatef(0.5F, 0.5F, 0.0F);
+                RenderSystem.scalef(0.25F, 0.25F, 1.0F);
+                RenderSystem.translatef(17.0F / zoom, (2.0F + zoom / 1.5F) * movementV, 0.0F);
+                RenderSystem.rotatef(((zoom * zoom) * 4321.0F + zoom * 9.0F) * 2.0F, 0.0F, 0.0F, 1.0F);
+                RenderSystem.scalef(4.5F - zoom / 4.0F, 4.5F - zoom / 4.0F, 1.0F);
+                RenderSystem.mulTextureByProjModelView();
+                RenderSystem.matrixMode(GL11.GL_MODELVIEW);
+                RenderSystem.setupEndPortalTexGen();
+            }, () -> {
+                RenderSystem.matrixMode(GL11.GL_TEXTURE);
+                RenderSystem.popMatrix();
+                RenderSystem.matrixMode(GL11.GL_MODELVIEW);
+                RenderSystem.clearTexGen();
+            });
+            this.zoom = zoom;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            if (!super.equals(o)) return false;
+            IdentityProjectionModelTexturingState that = (IdentityProjectionModelTexturingState) o;
+            return zoom == that.zoom;
+        }
+
+        @Override
+        public int hashCode() {
+            return zoom;
+        }
     }
 }

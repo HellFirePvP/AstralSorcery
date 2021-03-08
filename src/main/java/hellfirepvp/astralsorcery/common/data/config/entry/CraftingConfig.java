@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.data.config.entry;
 
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import hellfirepvp.astralsorcery.common.util.block.BlockStateHelper;
+import net.minecraft.block.BlockState;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
@@ -31,6 +33,8 @@ public class CraftingConfig extends ConfigEntry {
     public ForgeConfigSpec.BooleanValue liquidStarlightInteractionAquamarine;
     public ForgeConfigSpec.BooleanValue liquidStarlightInteractionSand;
     public ForgeConfigSpec.BooleanValue liquidStarlightInteractionIce;
+
+    public ForgeConfigSpec.ConfigValue<String> starmetalRevertState;
 
     private CraftingConfig() {
         super("crafting");
@@ -77,5 +81,14 @@ public class CraftingConfig extends ConfigEntry {
                 .comment("Set this to false to disable the functionality that two crystals can merge and combine stats when thrown into liquid starlight.")
                 .translation(translationKey("liquidStarlightMergeCrystals"))
                 .define("liquidStarlightMergeCrystals", true);
+
+        starmetalRevertState = cfgBuilder
+                .comment("Defines the state the starmetal ore will revert into when used up by a celestial crystal cluster. Obtain a valid state-string via '/astralsorcery serialize look' and look at the block you want to get. (Chat-Message can be copied)")
+                .translation(translationKey("starmetalRevertState"))
+                .define("starmetalRevertState", "minecraft:iron_ore");
+    }
+
+    public BlockState getStarmetalRevertBlockState() {
+        return BlockStateHelper.deserialize(starmetalRevertState.get());
     }
 }

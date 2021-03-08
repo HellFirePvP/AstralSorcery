@@ -34,31 +34,31 @@ public class LightwellRecipeProvider {
                 .setItemInput(ItemsAS.AQUAMARINE)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .color(new Color(0x00A7FF))
-                .productionMultiplier(0.5F)
-                .shatterMultiplier(15F)
+                .productionMultiplier(0.45F)
+                .shatterMultiplier(9F)
                 .build(registrar);
 
         WellRecipeBuilder.builder(AstralSorcery.key("starlight_resonating_gem"))
                 .setItemInput(ItemsAS.RESONATING_GEM)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .color(new Color(0x00A7FF))
-                .productionMultiplier(0.75F)
-                .shatterMultiplier(20F)
+                .productionMultiplier(0.65F)
+                .shatterMultiplier(15F)
                 .build(registrar);
 
         WellRecipeBuilder.builder(AstralSorcery.key("starlight_rock_crystal"))
                 .setItemInput(ItemsAS.ROCK_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .color(ColorsAS.ROCK_CRYSTAL)
-                .productionMultiplier(0.07F)
-                .shatterMultiplier(2F)
+                .productionMultiplier(0.12F)
+                .shatterMultiplier(3.5F)
                 .build(registrar);
 
         WellRecipeBuilder.builder(AstralSorcery.key("starlight_attuned_rock_crystal"))
                 .setItemInput(ItemsAS.ATTUNED_ROCK_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .color(ColorsAS.ROCK_CRYSTAL)
-                .productionMultiplier(0.09F)
+                .productionMultiplier(0.14F)
                 .shatterMultiplier(5F)
                 .build(registrar);
 
@@ -66,7 +66,7 @@ public class LightwellRecipeProvider {
                 .setItemInput(ItemsAS.CELESTIAL_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .color(ColorsAS.CELESTIAL_CRYSTAL)
-                .productionMultiplier(0.1F)
+                .productionMultiplier(0.18F)
                 .shatterMultiplier(4F)
                 .build(registrar);
 
@@ -74,7 +74,7 @@ public class LightwellRecipeProvider {
                 .setItemInput(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL)
                 .setLiquidOutput(FluidsAS.LIQUID_STARLIGHT_SOURCE)
                 .color(ColorsAS.CELESTIAL_CRYSTAL)
-                .productionMultiplier(0.11F)
+                .productionMultiplier(0.2F)
                 .shatterMultiplier(8F)
                 .build(registrar);
 

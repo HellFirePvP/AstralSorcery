@@ -27,13 +27,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * Date: 07.05.2016 / 00:50
  */
 @OnlyIn(Dist.CLIENT)
-public class BindableResource extends AbstractRenderableTexture.Full {
+public class BindableResource extends AbstractRenderableTexture.Full implements ReloadableResource {
 
     private Texture resource = null;
-    private final String path;
+    private String path = null;
 
-    public BindableResource(String path) {
-        super(AstralSorcery.key(path.replaceAll("[^a-zA-Z0-9\\.\\-]", "_")));
+    protected BindableResource(ResourceLocation key) {
+        super(key);
+    }
+
+    BindableResource(String path) {
+        this(AstralSorcery.key(path.replaceAll("[^a-zA-Z0-9\\.\\-]", "_")));
         this.path = path;
         allocateGlId();
     }
@@ -42,33 +46,26 @@ public class BindableResource extends AbstractRenderableTexture.Full {
         return path;
     }
 
-    public boolean isInitialized() {
-        return this.resource != null;
-    }
-
-    public Texture getResource() {
-        return this.resource;
-    }
-
     public SpriteSheetResource asSpriteSheet(int rows, int columns) {
         return new SpriteSheetResource(this, rows, columns);
     }
 
-    void invalidateAndReload() {
+    public void invalidateAndReload() {
         Minecraft.getInstance().getTextureManager().deleteTexture(this.getKey());
         this.resource = null;
     }
 
-    private void allocateGlId() {
-        if (this.resource != null || AssetLibrary.isReloading()) {
-            return;
+    protected Texture allocateGlId() {
+        if (AssetLibrary.isReloading()) {
+            return null;
         }
         TextureManager mgr = Minecraft.getInstance().getTextureManager();
-        this.resource = mgr.getTexture(this.getKey());
-        if (this.resource == null) {
-            mgr.loadTexture(this.getKey(), new SimpleTexture(new ResourceLocation(this.getPath())));
-            this.resource = mgr.getTexture(this.getKey());
+        Texture resource = mgr.getTexture(this.getKey());
+        if (resource != null) {
+            return resource;
         }
+        mgr.loadTexture(this.getKey(), new SimpleTexture(new ResourceLocation(this.getPath())));
+        return mgr.getTexture(this.getKey());
     }
 
     @Override
@@ -77,7 +74,10 @@ public class BindableResource extends AbstractRenderableTexture.Full {
             return; //we do nothing but wait.
         }
         if (this.resource == null) {
-            allocateGlId();
+            this.resource = allocateGlId();
+        }
+        if (this.resource == null) {
+            return;
         }
         RenderSystem.bindTexture(this.resource.getGlTextureId());
     }

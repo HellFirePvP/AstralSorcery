@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.datagen.data.recipes.altar;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.crafting.builder.SimpleAltarRecipeBuilder;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.CrystalIngredient;
@@ -450,6 +451,17 @@ public class DiscoveryAltarRecipeProvider {
                 .build(registrar);
 
         SimpleAltarRecipeBuilder.builder()
+                .createRecipe(AstralSorcery.key("marble_slabs_from_bricks"), AltarType.DISCOVERY)
+                .setStarlightRequirement(0.1F)
+                .multiplyDuration(0.4F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("MMM")
+                        .key('M', BlocksAS.MARBLE_BRICKS)
+                )
+                .addOutput(new ItemStack(BlocksAS.MARBLE_SLAB, 6))
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
                 .createRecipe(BlocksAS.MARBLE_STAIRS, AltarType.DISCOVERY)
                 .setStarlightRequirement(0.1F)
                 .multiplyDuration(0.4F)
@@ -458,6 +470,19 @@ public class DiscoveryAltarRecipeProvider {
                         .patternLine("MM ")
                         .patternLine("MMM")
                         .key('M', BlocksAS.MARBLE_RAW)
+                )
+                .addOutput(new ItemStack(BlocksAS.MARBLE_STAIRS, 8))
+                .build(registrar);
+
+        SimpleAltarRecipeBuilder.builder()
+                .createRecipe(AstralSorcery.key("marble_stairs_from_bricks"), AltarType.DISCOVERY)
+                .setStarlightRequirement(0.1F)
+                .multiplyDuration(0.4F)
+                .setInputs(AltarRecipeGrid.builder()
+                        .patternLine("M  ")
+                        .patternLine("MM ")
+                        .patternLine("MMM")
+                        .key('M', BlocksAS.MARBLE_BRICKS)
                 )
                 .addOutput(new ItemStack(BlocksAS.MARBLE_STAIRS, 8))
                 .build(registrar);

@@ -4,7 +4,7 @@
     "item": "astralsorcery:celestial_crystal"
   },
   "output": "astralsorcery:liquid_starlight",
-  "productionMultiplier": 0.1,
+  "productionMultiplier": 0.18,
   "shatterMultiplier": 4.0,
-  "color": 35071
+  "color": -16742145
 }

@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.event.*;
 import hellfirepvp.astralsorcery.client.event.effect.EffectRenderEventHandler;
 import hellfirepvp.astralsorcery.client.event.effect.LightbeamRenderHelper;
 import hellfirepvp.astralsorcery.client.registry.RegistryKeyBindings;
+import hellfirepvp.astralsorcery.client.render.entity.layer.StarryLayerRenderer;
 import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.resource.AssetPreLoader;
 import hellfirepvp.astralsorcery.client.screen.journal.ScreenJournal;
@@ -42,6 +43,7 @@ import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.IReloadableResourceManager;
@@ -53,6 +55,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.resource.SelectiveReloadStateHandler;
 import net.minecraftforge.resource.VanillaResourceType;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -180,6 +183,12 @@ public class ClientProxy extends CommonProxy {
         RegistryBlockRenderTypes.initBlocks();
         RegistryBlockRenderTypes.initFluids();
         RegistryItems.registerItemProperties();
+
+        Map<String, PlayerRenderer> playerRenderMap = Minecraft.getInstance().getRenderManager().getSkinMap();
+        PlayerRenderer renderer = playerRenderMap.get("slim");
+        renderer.addLayer(new StarryLayerRenderer<>(renderer, true));
+        renderer = playerRenderMap.get("default");
+        renderer.addLayer(new StarryLayerRenderer<>(renderer, false));
     }
 
     private void addTomeBookmarks() {

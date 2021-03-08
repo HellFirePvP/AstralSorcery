@@ -1,6 +1,7 @@
 {
 	"attunement_altar_idle_loop": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.attunement_altar_idle_loop",
 		"sounds": [
 			{
 				"name": "astralsorcery:attunement/altar_idle_loop",
@@ -10,6 +11,7 @@
 	},
 	"attunement_altar_item_finish": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.attunement_altar_item_finish",
 		"sounds": [
 			{
 				"name": "astralsorcery:attunement/altar_item_finish1",
@@ -23,6 +25,7 @@
 	},
 	"attunement_altar_item_loop": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.attunement_altar_item_loop",
 		"sounds": [
 			{
 				"name": "astralsorcery:attunement/altar_item_loop",
@@ -32,6 +35,7 @@
 	},
 	"attunement_altar_item_start": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.attunement_altar_item_start",
 		"sounds": [
 			{
 				"name": "astralsorcery:attunement/altar_item_start1",
@@ -45,6 +49,7 @@
 	},
 	"attunement_altar_player_attune": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.attunement_altar_player_attune",
 		"sounds": [
 			{
 				"name": "astralsorcery:attunement/altar_player_attune",
@@ -54,6 +59,7 @@
 	},
 	"infuser_craft_start": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.infuser_craft_start",
 		"sounds": [
 			{
 				"name": "astralsorcery:infuser/craft_start_1",
@@ -67,6 +73,7 @@
 	},
 	"infuser_craft_loop": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.infuser_craft_loop",
 		"sounds": [
 			{
 				"name": "astralsorcery:infuser/craft_loop_1",
@@ -80,6 +87,7 @@
 	},
 	"infuser_craft_finish": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.infuser_craft_finish",
 		"sounds": [
 			{
 				"name": "astralsorcery:infuser/craft_finish_1",
@@ -93,6 +101,7 @@
 	},
 	"perk_seal": {
 		"category": "player",
+		"subtitle": "astralsorcery.subtitles.perk_seal",
 		"sounds": [
 			{
 				"name": "astralsorcery:perk/perk_seal_1",
@@ -106,6 +115,7 @@
 	},
 	"perk_unseal": {
 		"category": "player",
+		"subtitle": "astralsorcery.subtitles.perk_unseal",
 		"sounds": [
 			{
 				"name": "astralsorcery:perk/perk_unseal_1",
@@ -119,6 +129,7 @@
 	},
 	"perk_unlock": {
 		"category": "player",
+		"subtitle": "astralsorcery.subtitles.perk_unlock",
 		"sounds": [
 			{
 				"name": "astralsorcery:perk/perk_unlock_1",
@@ -132,6 +143,7 @@
 	},
 	"illumination_wand_highlight": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.illumination_wand_highlight",
 		"sounds": [
 			{
 				"name": "astralsorcery:wand/illumination_wand_highlight_1",
@@ -145,6 +157,7 @@
 	},
 	"illumination_wand_unhighlight": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.illumination_wand_unhighlight",
 		"sounds": [
 			{
 				"name": "astralsorcery:wand/illumination_wand_unhighlight_1",
@@ -158,6 +171,7 @@
 	},
 	"illumination_wand_light": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.illumination_wand_light",
 		"sounds": [
 			{
 				"name": "astralsorcery:wand/illumination_wand_light_1",
@@ -171,6 +185,7 @@
 	},
 	"altar_craft_start": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.altar_craft_start",
 		"sounds": [
 			{
 				"name": "astralsorcery:altar/craft_start_1",
@@ -184,6 +199,7 @@
 	},
 	"altar_craft_finish": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.altar_craft_finish",
 		"sounds": [
 			{
 				"name": "astralsorcery:altar/craft_finish_1",
@@ -197,6 +213,7 @@
 	},
 	"altar_craft_loop_t1": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.altar_craft_loop_t1",
 		"sounds": [
 			{
 				"name": "astralsorcery:altar/craft_loop_t1",
@@ -206,6 +223,7 @@
 	},
 	"altar_craft_loop_t2": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.altar_craft_loop_t2",
 		"sounds": [
 			{
 				"name": "astralsorcery:altar/craft_loop_t2",
@@ -215,6 +233,7 @@
 	},
 	"altar_craft_loop_t3": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.altar_craft_loop_t3",
 		"sounds": [
 			{
 				"name": "astralsorcery:altar/craft_loop_t3",
@@ -224,6 +243,7 @@
 	},
 	"altar_craft_loop_t4": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.altar_craft_loop_t4",
 		"sounds": [
 			{
 				"name": "astralsorcery:altar/craft_loop_t4",
@@ -233,6 +253,7 @@
 	},
 	"altar_craft_loop_t4_waiting": {
 		"category": "block",
+		"subtitle": "astralsorcery.subtitles.altar_craft_loop_t4_waiting",
 		"sounds": [
 			{
 				"name": "astralsorcery:altar/craft_loop_t4_waiting",
@@ -251,6 +272,7 @@
     },
     "block_coloredlens_attach": {
         "category": "master",
+		"subtitle": "astralsorcery.subtitles.block_coloredlens_attach",
         "sounds": [
             {
                 "name": "astralsorcery:block_coloredlens_attach",
@@ -269,6 +291,7 @@
 	},
 	"gui_journal_close": {
 	    "category": "master",
+		"subtitle": "astralsorcery.subtitles.gui_journal_close",
 	    "sounds": [
 	        {
 	            "name": "astralsorcery:gui_journal_close",
@@ -278,6 +301,7 @@
 	},
 	"gui_journal_page": {
 	    "category": "master",
+		"subtitle": "astralsorcery.subtitles.gui_journal_page",
 	    "sounds": [
 	        {
 	            "name": "astralsorcery:gui_journal_page_1",

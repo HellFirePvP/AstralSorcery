@@ -9,8 +9,8 @@
 package hellfirepvp.astralsorcery.common.util.item;
 
 import hellfirepvp.astralsorcery.common.base.Mods;
-import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import hellfirepvp.astralsorcery.common.integration.IntegrationBotania;
+import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

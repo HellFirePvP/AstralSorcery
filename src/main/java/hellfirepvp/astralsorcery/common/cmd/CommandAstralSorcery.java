@@ -33,6 +33,7 @@ public class CommandAstralSorcery {
                         .then(CommandMaximizeAll.register())
                         .then(CommandReset.register())
                         .then(CommandProgress.register())
+                        .then(CommandSerialize.register())
         );
 
         dispatcher.register(Commands.literal(AstralSorcery.MODID)

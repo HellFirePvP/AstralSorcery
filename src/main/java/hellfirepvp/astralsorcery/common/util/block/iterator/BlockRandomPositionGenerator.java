@@ -8,11 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.util.block.iterator;
 
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,18 +21,12 @@ import java.util.Random;
  */
 public class BlockRandomPositionGenerator extends BlockPositionGenerator {
 
-    private static final Random rand = new Random();
-
     @Override
-    protected BlockPos genNext(BlockPos offset, double radius) {
-        int iRadius = MathHelper.ceil(radius);
-        if (iRadius <= 0) {
-            return offset;
+    protected BlockPos genNext(Vector3 offset, double radius) {
+        if (radius <= 0) {
+            return offset.toBlockPos();
         }
-        int rX = -iRadius + rand.nextInt(2 * iRadius - 1);
-        int rY = -iRadius + rand.nextInt(2 * iRadius - 1);
-        int rZ = -iRadius + rand.nextInt(2 * iRadius - 1);
-        return offset.add(rX, rY, rZ);
+        return offset.clone().add(Vector3.random().multiply(radius)).toBlockPos();
     }
 
     @Override

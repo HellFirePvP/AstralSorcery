@@ -17,13 +17,13 @@ import hellfirepvp.astralsorcery.common.block.tile.BlockCelestialCrystalCluster;
 import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeTile;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
+import hellfirepvp.astralsorcery.common.data.config.entry.CraftingConfig;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -107,7 +107,7 @@ public class TileCelestialCrystals extends TileEntityTick implements CrystalAttr
             growthChance *= 0.6;
 
             if (rand.nextInt(400) == 0) {
-                getWorld().setBlockState(getPos().down(), Blocks.IRON_ORE.getDefaultState());
+                getWorld().setBlockState(getPos().down(), CraftingConfig.CONFIG.getStarmetalRevertBlockState());
             }
         }
         float distribution = DayTimeHelper.getCurrentDaytimeDistribution(getWorld());

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.event.helper;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 
@@ -29,11 +30,25 @@ public class EventHelperDamageCancelling {
     private EventHelperDamageCancelling() {}
 
     public static void markInvulnerableToNextDamage(PlayerEntity player, DamageSource source) {
+        if (player.getEntityWorld().isRemote()) {
+            return;
+        }
         invulnerableTypes.computeIfAbsent(player.getUniqueID(), uuid -> new HashSet<>()).add(source);
     }
 
     public static void attachListeners(IEventBus bus) {
         bus.addListener(EventHelperDamageCancelling::onLivingDamage);
+        bus.addListener(EventHelperDamageCancelling::onPlayerTick);
+    }
+
+    private static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        PlayerEntity player = event.player;
+        if (event.phase == TickEvent.Phase.END && !player.getEntityWorld().isRemote()) {
+            if (player.isOnGround()) {
+                Set<DamageSource> sources = invulnerableTypes.getOrDefault(event.player.getUniqueID(), Collections.emptySet());
+                sources.remove(DamageSource.FALL);
+            }
+        }
     }
 
     private static void onLivingDamage(LivingHurtEvent event) {

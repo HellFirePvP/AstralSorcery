@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.datagen.data.tags;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.data.BlockTagsProvider;
@@ -18,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import static hellfirepvp.astralsorcery.common.lib.TagsAS.Items.*;
 
@@ -30,8 +32,8 @@ import static hellfirepvp.astralsorcery.common.lib.TagsAS.Items.*;
  */
 public class AstralItemTagsProvider extends ItemTagsProvider {
 
-    public AstralItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagsProvider) {
-        super(dataGenerator, blockTagsProvider);
+    public AstralItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagsProvider, ExistingFileHelper fileHelper) {
+        super(dataGenerator, blockTagsProvider, AstralSorcery.MODID, fileHelper);
     }
 
     @Override

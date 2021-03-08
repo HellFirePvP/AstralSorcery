@@ -29,6 +29,10 @@ public class FluidRarityEntry implements ConfigDataSet {
     private final ResourceLocation fluidName;
     private final int guaranteedAmount, additionalRandomAmount, rarity;
 
+    public FluidRarityEntry(ResourceLocation fluidName, int rarity, int guaranteedAmount) {
+        this(fluidName, rarity, guaranteedAmount, guaranteedAmount / 2);
+    }
+
     public FluidRarityEntry(ResourceLocation fluidName, int rarity, int guaranteedAmount, int additionalRandomAmount) {
         this.fluidName = fluidName;
         this.rarity = rarity;

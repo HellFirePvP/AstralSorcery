@@ -79,7 +79,7 @@ public class KeyGrowables extends KeyPerk implements PlayerTickPerk {
                 }
             } else {
                 BlockState at = w.getBlockState(pos);
-                if (at.getBlock().equals(Blocks.DIRT)) {
+                if (at.getBlock().equals(Blocks.DIRT) && w.isAirBlock(pos.up())) {
                     if (w.setBlockState(pos, Blocks.GRASS_BLOCK.getDefaultState())) {
                         AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
                         pkt = new PktPlayEffect(PktPlayEffect.Type.CROP_GROWTH)

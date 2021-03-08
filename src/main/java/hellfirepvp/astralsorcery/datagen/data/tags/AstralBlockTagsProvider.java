@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.datagen.data.tags;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
@@ -15,6 +16,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.TagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import static hellfirepvp.astralsorcery.common.lib.TagsAS.Blocks.MARBLE;
 import static hellfirepvp.astralsorcery.common.lib.TagsAS.Blocks.ORES;
@@ -28,8 +30,8 @@ import static hellfirepvp.astralsorcery.common.lib.TagsAS.Blocks.ORES;
  */
 public class AstralBlockTagsProvider extends BlockTagsProvider {
 
-    public AstralBlockTagsProvider(DataGenerator generatorIn) {
-        super(generatorIn);
+    public AstralBlockTagsProvider(DataGenerator generatorIn, ExistingFileHelper existingFileHelper) {
+        super(generatorIn, AstralSorcery.MODID, existingFileHelper);
     }
 
     @Override

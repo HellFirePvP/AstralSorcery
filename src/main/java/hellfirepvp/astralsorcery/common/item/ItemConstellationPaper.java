@@ -32,6 +32,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -106,8 +107,7 @@ public class ItemConstellationPaper extends Item implements ItemDynamicColor, Co
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
         EntityItemExplosionResistant res = new EntityItemExplosionResistant(EntityTypesAS.ITEM_EXPLOSION_RESISTANT, world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
-        res.setPickupDelay(20);
-        res.setMotion(location.getMotion());
+        res.read(location.writeWithoutTypeId(new CompoundNBT()));
         if (location instanceof ItemEntity) {
             res.setThrowerId(((ItemEntity) location).getThrowerId());
             res.setOwnerId(((ItemEntity) location).getOwnerId());

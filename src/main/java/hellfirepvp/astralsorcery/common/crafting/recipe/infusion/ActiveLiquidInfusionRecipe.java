@@ -272,7 +272,7 @@ public class ActiveLiquidInfusionRecipe {
         if (infusion.doesConsumeMultipleFluids()) {
             for (BlockPos at : TileInfuser.getLiquidOffsets()) {
                 if (rand.nextFloat() < chance) {
-                    infuser.getWorld().setBlockState(at, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+                    infuser.getWorld().setBlockState(at.add(infuser.getPos()), Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
                 }
             }
         } else {

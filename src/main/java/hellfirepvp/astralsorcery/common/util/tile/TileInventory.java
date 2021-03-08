@@ -22,6 +22,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -38,6 +39,7 @@ public class TileInventory extends ItemStackHandler implements Iterable<ItemStac
     protected final Consumer<Integer> changeListener;
     protected final Supplier<Integer> slotCountProvider;
     protected Set<Direction> applicableSides = new HashSet<>();
+    protected BiFunction<Integer, ItemStack, Integer> stackSizeLimiter;
 
     public TileInventory(@Nonnull TileEntitySynchronized tile,
                          @Nonnull Supplier<Integer> slotCountProvider,
@@ -49,22 +51,29 @@ public class TileInventory extends ItemStackHandler implements Iterable<ItemStac
                          @Nonnull Supplier<Integer> slotCountProvider,
                          @Nullable Consumer<Integer> changeListener,
                          Direction... applicableSides) {
-        this(tile, slotCountProvider, changeListener, Arrays.asList(applicableSides));
+        this(tile, slotCountProvider, changeListener, Arrays.asList(applicableSides), (slot, stack) -> stack.getMaxStackSize());
     }
 
     protected TileInventory(@Nonnull TileEntitySynchronized tile,
                             @Nonnull Supplier<Integer> slotCountProvider,
                             @Nullable Consumer<Integer> changeListener,
-                            @Nonnull Collection<Direction> applicableSides) {
+                            @Nonnull Collection<Direction> applicableSides,
+                            @Nonnull BiFunction<Integer, ItemStack, Integer> stackSizeLimiter) {
         super(slotCountProvider.get());
         this.tile = tile;
         this.changeListener = changeListener;
         this.slotCountProvider = slotCountProvider;
         this.applicableSides.addAll(applicableSides);
+        this.stackSizeLimiter = stackSizeLimiter;
+    }
+
+    public TileInventory filterMaxStackSize(BiFunction<Integer, ItemStack, Integer> stackSizeLimiter) {
+        this.stackSizeLimiter = stackSizeLimiter;
+        return this;
     }
 
     protected TileInventory makeNewInstance() {
-        return new TileInventory(this.tile, this.slotCountProvider, this.changeListener, MiscUtils.copySet(this.applicableSides));
+        return new TileInventory(this.tile, this.slotCountProvider, this.changeListener, MiscUtils.copySet(this.applicableSides), this.stackSizeLimiter);
     }
 
     @Nonnull
@@ -85,6 +94,16 @@ public class TileInventory extends ItemStackHandler implements Iterable<ItemStac
     @Nonnull
     public CompoundNBT serialize() {
         return this.serializeNBT();
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+        int insertable = this.stackSizeLimiter.apply(slot, stack);
+        int leftOver = stack.getCount() - insertable;
+        ItemStack toInsert = ItemUtils.copyStackWithSize(stack, insertable);
+        ItemStack notInserted = super.insertItem(slot, toInsert, simulate);
+        return ItemUtils.copyStackWithSize(toInsert, leftOver + notInserted.getCount());
     }
 
     private boolean hasHandlerForSide(@Nullable Direction facing) {

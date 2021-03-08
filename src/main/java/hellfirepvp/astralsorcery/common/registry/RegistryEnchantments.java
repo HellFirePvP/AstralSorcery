@@ -10,12 +10,10 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentNightVision;
+import hellfirepvp.astralsorcery.common.enchantment.EnchantmentScorchingHeat;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
 
-import static hellfirepvp.astralsorcery.common.lib.EnchantmentsAS.NIGHT_VISION;
-import static hellfirepvp.astralsorcery.common.lib.EnchantmentsAS.SCORCHING_HEAT;
+import static hellfirepvp.astralsorcery.common.lib.EnchantmentsAS.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,7 +32,7 @@ public class RegistryEnchantments {
     public static void init() {
         NIGHT_VISION = register(new EnchantmentNightVision())
                 .setRegistryName(AstralSorcery.key("night_vision"));
-        SCORCHING_HEAT = register(new Enchantment(Enchantment.Rarity.VERY_RARE, EnchantmentType.DIGGER, new EquipmentSlotType[] { EquipmentSlotType.MAINHAND }) {})
+        SCORCHING_HEAT = register(new EnchantmentScorchingHeat())
                 .setRegistryName(AstralSorcery.key("scorching_heat"));
     }
 

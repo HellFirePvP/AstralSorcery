@@ -18,7 +18,7 @@ apply plugin: 'maven-publish'
 
 version = '1.16.4-1.13.10'
 group = 'hellfirepvp.astralsorcery'
-archivesBaseName = 'astralsorcery'
+archivesBaseName = 'astralsorcery-1.16'
 String build_version = ""
 
 // Most likely inside Jenkins. Or homebrew environment.
@@ -86,6 +86,9 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'info'
 
+            // Required for Botania mixins to not crash terribly
+            property 'mixin.env.disableRefMap', 'true'
+
             args '--mod', 'astralsorcery', '--all', '--output', file('src/generated/resources/'), '--validate',
             '--existing', sourceSets.main.resources.srcDirs[0]
 
@@ -124,22 +127,22 @@ repositories {
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.16.4-35.1.28'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.0.45'
 
-    compileOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.5.0.v74'
-    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.5.0.v74:deobf'
+    compileOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.5.1.v75'
+    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.5.1.v75:deobf'
 
-    compileOnly 'top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.0:api'
-    runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.0')
+    compileOnly 'top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0:api'
+    runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0')
 
-    compileOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.0.58')
-    runtimeOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.0.58')
+    compileOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.1.71')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.1.71')
 
-    compileOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-48:api')
-    runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-48')
+    compileOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-50:api')
+    runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-50')
     
-    compileOnly fg.deobf('vazkii.botania:Botania:1.16.4-410:api')
-    runtimeOnly fg.deobf('vazkii.botania:Botania:1.16.4-410')
+    compileOnly fg.deobf('vazkii.botania:Botania:1.16.4-413:api')
+    runtimeOnly fg.deobf('vazkii.botania:Botania:1.16.4-413')
 }
 
 tasks.withType(JavaCompile) {

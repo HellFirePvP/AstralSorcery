@@ -63,13 +63,16 @@ public class LootModifierScorchingHeat extends LootModifier {
                     furnaceResult.ifPresent(result -> {
                         ItemStack tool = context.get(LootParameters.TOOL);
                         if (!tool.isEmpty() && !(result.getItem() instanceof BlockItem)) {
-                            int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
-                            if (fortuneLevel > 0) {
-                                int addedCount = context.getRandom().nextInt(fortuneLevel + 2) - 1;
-                                if (addedCount < 0) {
-                                    addedCount = 0;
+                            int silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool);
+                            if (silkTouch <= 0) {
+                                int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
+                                if (fortuneLevel > 0) {
+                                    int addedCount = context.getRandom().nextInt(fortuneLevel + 2) - 1;
+                                    if (addedCount < 0) {
+                                        addedCount = 0;
+                                    }
+                                    result.setCount(result.getCount() * (addedCount + 1));
                                 }
-                                result.setCount(result.getCount() * (addedCount + 1));
                             }
                         }
                     });

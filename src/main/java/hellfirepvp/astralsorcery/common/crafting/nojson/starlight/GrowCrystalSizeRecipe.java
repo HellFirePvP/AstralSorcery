@@ -81,7 +81,7 @@ public class GrowCrystalSizeRecipe extends LiquidStarlightRecipe {
     @Override
     public void doServerCraftTick(ItemEntity trigger, World world, BlockPos at) {
         Random r = new Random(MathHelper.getPositionRandom(at));
-        if (!world.isRemote() && getAndIncrementCraftingTick(trigger) > 200 + r.nextInt(40)) {
+        if (!world.isRemote() && getAndIncrementCraftingTick(trigger) > 80 + r.nextInt(40)) {
             ItemStack stack = trigger.getItem();
             CrystalAttributes attr = ((ItemCrystalBase) stack.getItem()).getAttributes(stack);
             if (attr != null && world.setBlockState(at, Blocks.AIR.getDefaultState())) {

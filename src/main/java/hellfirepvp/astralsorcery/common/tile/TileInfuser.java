@@ -32,6 +32,7 @@ import hellfirepvp.astralsorcery.common.util.MapStream;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.sound.CategorizedSoundEvent;
 import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.tile.TileInventory;
@@ -41,6 +42,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -59,6 +61,7 @@ import net.minecraftforge.fml.LogicalSide;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -92,6 +95,7 @@ public class TileInfuser extends TileEntityTick implements WandInteractable {
     private TileInventory inventory;
 
     private ActiveLiquidInfusionRecipe activeRecipe = null;
+    private Set<ResourceLocation> knownRecipes = new HashSet<>();
 
     private Object clientCraftSound = null;
 
@@ -220,6 +224,8 @@ public class TileInfuser extends TileEntityTick implements WandInteractable {
         PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(this.getWorld(), this.getPos(), 32));
 
         EntityFlare.spawnAmbientFlare(getWorld(), getPos().add(-3 + rand.nextInt(7), 1 + rand.nextInt(3), -3 + rand.nextInt(7)));
+
+        this.knownRecipes.add(recipeName);
     }
 
     private void abortCrafting() {
@@ -315,6 +321,7 @@ public class TileInfuser extends TileEntityTick implements WandInteractable {
         super.readCustomNBT(compound);
 
         this.inventory = this.inventory.deserialize(compound.getCompound("inventory"));
+        this.knownRecipes = NBTHelper.readSet(compound, "knownRecipes", Constants.NBT.TAG_STRING, nbt -> new ResourceLocation(nbt.toString()));
 
         if (compound.contains("activeRecipe", Constants.NBT.TAG_COMPOUND)) {
             this.activeRecipe = ActiveLiquidInfusionRecipe.deserialize(compound.getCompound("activeRecipe"), this.activeRecipe);
@@ -331,6 +338,7 @@ public class TileInfuser extends TileEntityTick implements WandInteractable {
         super.writeCustomNBT(compound);
 
         compound.put("inventory", this.inventory.serialize());
+        NBTHelper.writeList(compound, "knownRecipes", this.knownRecipes, key -> StringNBT.valueOf(key.toString()));
 
         if (this.activeRecipe != null) {
             compound.put("activeRecipe", this.activeRecipe.serialize());

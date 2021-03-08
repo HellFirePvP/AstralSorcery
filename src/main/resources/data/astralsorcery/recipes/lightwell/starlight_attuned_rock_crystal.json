@@ -4,7 +4,7 @@
     "item": "astralsorcery:attuned_rock_crystal"
   },
   "output": "astralsorcery:liquid_starlight",
-  "productionMultiplier": 0.09,
+  "productionMultiplier": 0.14,
   "shatterMultiplier": 5.0,
-  "color": 14540287
+  "color": -2236929
 }

@@ -107,7 +107,7 @@ public class NBTCopyRecipe extends SimpleAltarRecipe {
         for (ItemStack output : outputs) {
             CompoundNBT tag = output.getOrCreateTag();
             for (CompoundNBT foundTag : foundTags) {
-                NBTHelper.deepMerge(tag, foundTag);
+                NBTHelper.deepMerge(tag, foundTag, true);
             }
         }
         return outputs;

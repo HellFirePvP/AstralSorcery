@@ -16,9 +16,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.*;
 import net.minecraft.state.Property;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -97,12 +95,12 @@ public class NBTHelper {
         base.remove(AstralSorcery.MODID);
     }
 
-    public static void deepMerge(CompoundNBT dst, CompoundNBT src) {
+    public static void deepMerge(CompoundNBT dst, CompoundNBT src, boolean uniqueArrayEntries) {
         for (String s : src.keySet()) {
             INBT nbtElement = src.get(s);
             if (nbtElement.getId() == Constants.NBT.TAG_COMPOUND) {
                 if (dst.contains(s, Constants.NBT.TAG_COMPOUND)) {
-                    deepMerge(dst.getCompound(s), (CompoundNBT) nbtElement);
+                    deepMerge(dst.getCompound(s), (CompoundNBT) nbtElement, uniqueArrayEntries);
                 } else {
                     dst.put(s, nbtElement.copy());
                 }
@@ -114,6 +112,54 @@ public class NBTHelper {
                         deepMergeList(dstList, srcList);
                     } else {
                         dst.put(s, srcList.copy());
+                    }
+                } else {
+                    dst.put(s, nbtElement.copy());
+                }
+            } else if (nbtElement.getId() == Constants.NBT.TAG_INT_ARRAY) {
+                if (dst.contains(s, Constants.NBT.TAG_INT_ARRAY)) {
+                    IntArrayNBT dstArr = (IntArrayNBT) dst.get(s);
+                    IntArrayNBT srcArr = (IntArrayNBT) nbtElement;
+                    if (uniqueArrayEntries) {
+                        for (IntNBT element : srcArr) {
+                            if (!dstArr.contains(element)) {
+                                dstArr.add(element);
+                            }
+                        }
+                    } else {
+                        dstArr.addAll(srcArr);
+                    }
+                } else {
+                    dst.put(s, nbtElement.copy());
+                }
+            } else if (nbtElement.getId() == Constants.NBT.TAG_LONG_ARRAY) {
+                if (dst.contains(s, Constants.NBT.TAG_LONG_ARRAY)) {
+                    LongArrayNBT dstArr = (LongArrayNBT) dst.get(s);
+                    LongArrayNBT srcArr = (LongArrayNBT) nbtElement;
+                    if (uniqueArrayEntries) {
+                        for (LongNBT element : srcArr) {
+                            if (!dstArr.contains(element)) {
+                                dstArr.add(element);
+                            }
+                        }
+                    } else {
+                        dstArr.addAll(srcArr);
+                    }
+                } else {
+                    dst.put(s, nbtElement.copy());
+                }
+            } else if (nbtElement.getId() == Constants.NBT.TAG_BYTE_ARRAY) {
+                if (dst.contains(s, Constants.NBT.TAG_BYTE_ARRAY)) {
+                    ByteArrayNBT dstArr = (ByteArrayNBT) dst.get(s);
+                    ByteArrayNBT srcArr = (ByteArrayNBT) nbtElement;
+                    if (uniqueArrayEntries) {
+                        for (ByteNBT element : srcArr) {
+                            if (!dstArr.contains(element)) {
+                                dstArr.add(element);
+                            }
+                        }
+                    } else {
+                        dstArr.addAll(srcArr);
                     }
                 } else {
                     dst.put(s, nbtElement.copy());
@@ -138,7 +184,7 @@ public class NBTHelper {
                     break;
                 }
             }
-            if (found) {
+            if (!found) {
                 dst.add(toAdd.copy());
             }
         }

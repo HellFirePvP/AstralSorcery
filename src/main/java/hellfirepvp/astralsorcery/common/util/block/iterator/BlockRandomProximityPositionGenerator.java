@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.block.iterator;
 
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -20,9 +21,9 @@ import net.minecraft.util.math.BlockPos;
 public class BlockRandomProximityPositionGenerator extends BlockRandomPositionGenerator {
 
     @Override
-    protected BlockPos genNext(BlockPos offset, double radius) {
+    protected BlockPos genNext(Vector3 offset, double radius) {
         BlockPos next1 = super.genNext(offset, radius);
         BlockPos next2 = super.genNext(offset, radius);
-        return next1.distanceSq(offset) < next2.distanceSq(offset) ? next1 : next2;
+        return offset.distance(next1) < offset.distance(next2) ? next1 : next2;
     }
 }

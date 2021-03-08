@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.datagen.data.recipes.vanilla;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
@@ -51,6 +52,10 @@ public class VanillaTypedRecipeProvider {
                 .build(registrar);
         StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_RAW), BlocksAS.MARBLE_STAIRS)
                 .build(registrar);
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_BRICKS), BlocksAS.MARBLE_SLAB, 2)
+                .build(registrar, AstralSorcery.key("marble_slab_from_bricks"));
+        StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.MARBLE_BRICKS), BlocksAS.MARBLE_STAIRS)
+                .build(registrar, AstralSorcery.key("marble_stairs_from_bricks"));
 
         StoneCuttingRecipeBuilder.stoneCuttingRecipe(Ingredient.fromItems(BlocksAS.BLACK_MARBLE_RAW), BlocksAS.BLACK_MARBLE_ARCH)
                 .build(registrar);
@@ -137,6 +142,11 @@ public class VanillaTypedRecipeProvider {
                 .key('M', BlocksAS.MARBLE_RAW)
                 .subDirectory("marble")
                 .build(registrar);
+        SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.MARBLE_SLAB, 6)
+                .patternLine("MMM")
+                .key('M', BlocksAS.MARBLE_BRICKS)
+                .subDirectory("marble")
+                .build(registrar, AstralSorcery.key("marble_slab_from_bricks"));
         SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.MARBLE_STAIRS, 8)
                 .patternLine("M  ")
                 .patternLine("MM ")
@@ -144,6 +154,13 @@ public class VanillaTypedRecipeProvider {
                 .key('M', BlocksAS.MARBLE_RAW)
                 .subDirectory("marble")
                 .build(registrar);
+        SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.MARBLE_STAIRS, 8)
+                .patternLine("M  ")
+                .patternLine("MM ")
+                .patternLine("MMM")
+                .key('M', BlocksAS.MARBLE_BRICKS)
+                .subDirectory("marble")
+                .build(registrar, AstralSorcery.key("marble_stairs_from_bricks"));
 
         SimpleShapedRecipeBuilder.shapedRecipe(BlocksAS.BLACK_MARBLE_RAW, 8)
                 .patternLine("MMM")

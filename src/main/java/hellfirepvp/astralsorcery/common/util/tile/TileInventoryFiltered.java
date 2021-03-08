@@ -17,6 +17,7 @@ import net.minecraft.util.Direction;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -46,10 +47,11 @@ public class TileInventoryFiltered extends TileInventory {
     }
 
     protected TileInventoryFiltered(@Nonnull TileEntitySynchronized tile,
-                                 @Nonnull Supplier<Integer> slotCountProvider,
-                                 @Nullable Consumer<Integer> changeListener,
-                                 @Nonnull Collection<Direction> applicableSides) {
-        super(tile, slotCountProvider, changeListener, applicableSides);
+                                    @Nonnull Supplier<Integer> slotCountProvider,
+                                    @Nullable Consumer<Integer> changeListener,
+                                    @Nonnull Collection<Direction> applicableSides,
+                                    @Nonnull BiFunction<Integer, ItemStack, Integer> stackSizeLimiter) {
+        super(tile, slotCountProvider, changeListener, applicableSides, stackSizeLimiter);
     }
 
     public TileInventoryFiltered canInsert(InputFilter filter) {
@@ -65,7 +67,7 @@ public class TileInventoryFiltered extends TileInventory {
     @Override
     protected TileInventoryFiltered makeNewInstance() {
         TileInventoryFiltered inv = new TileInventoryFiltered(this.tile, this.slotCountProvider,
-                this.changeListener, MiscUtils.copySet(this.applicableSides));
+                this.changeListener, MiscUtils.copySet(this.applicableSides), this.stackSizeLimiter);
         inv.canInsert(this.inputFilter);
         inv.canExtract(this.extractFilter);
         return inv;

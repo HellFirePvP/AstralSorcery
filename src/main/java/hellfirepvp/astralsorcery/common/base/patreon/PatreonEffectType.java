@@ -30,6 +30,7 @@ public enum PatreonEffectType {
     CELESTIAL_WINGS(new ProviderCelestialWings()),
     STAR_HALO(new ProviderStarHalo()),
     NEBULA_CLOUD(new ProviderNebulaCloud()),
+    STARRY_LAYER(new ProviderStarryPlayerLayer()),
     BLOCK_RING(new ProviderBlockRing());
 
     private final PatreonEffectProvider<?> provider;

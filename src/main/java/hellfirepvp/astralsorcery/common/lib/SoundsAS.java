@@ -23,7 +23,9 @@ public class SoundsAS {
 
     public static CategorizedSoundEvent BLOCK_COLOREDLENS_ATTACH;
 
+    @Deprecated
     public static CategorizedSoundEvent CRAFT_FINISH;
+    @Deprecated
     public static CategorizedSoundEvent CRAFT_ATTUNEMENT;
 
     public static CategorizedSoundEvent ALTAR_CRAFT_START;

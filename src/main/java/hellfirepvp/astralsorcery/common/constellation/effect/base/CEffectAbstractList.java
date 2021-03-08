@@ -162,7 +162,7 @@ public abstract class CEffectAbstractList<T extends CEffectAbstractList.ListEntr
         if (gen != this.positionStrategy) {
             gen.copyFilterFrom(this.positionStrategy);
         }
-        BlockPos at = gen.generateNextPosition(BlockPos.ZERO, prop.getSize());
+        BlockPos at = gen.generateNextPosition(new Vector3(0.5, 0.5, 0.5), prop.getSize());
         BlockPos actual = at.add(pos);
 
         if (this.getCount() >= this.maxAmount) {

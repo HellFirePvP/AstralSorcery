@@ -17,15 +17,21 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,6 +48,7 @@ import java.util.Random;
 public class BlockFlareLight extends Block {
 
     public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
+    private static final VoxelShape SHAPE = VoxelShapes.create(6F / 16F, 3F / 16F, 6F / 16F, 10F / 16F, 7F / 16F, 10F / 16F);
 
     public BlockFlareLight() {
         super(PropertiesMisc.defaultAir()
@@ -81,12 +88,46 @@ public class BlockFlareLight extends Block {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx) {
-        return VoxelShapes.empty();
+    @OnlyIn(Dist.CLIENT)
+    public boolean addDestroyEffects(BlockState state, World world, BlockPos pos, ParticleManager manager) {
+        return true;
     }
 
     @Override
-    public boolean isAir(BlockState state) {
+    @OnlyIn(Dist.CLIENT)
+    public boolean addHitEffects(BlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
+        return true;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public boolean addRunningEffects(BlockState state, World world, BlockPos pos, Entity entity) {
+        return true;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public boolean addLandingEffects(BlockState state1, ServerWorld worldserver, BlockPos pos, BlockState state2, LivingEntity entity, int numberOfParticles) {
+        return true;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx) {
+        return SHAPE;
+    }
+
+    @Override
+    public boolean isAir(BlockState state, IBlockReader world, BlockPos pos) {
+        return false;
+    }
+
+    @Override
+    public boolean canBeReplacedByLogs(BlockState state, IWorldReader world, BlockPos pos) {
+        return true;
+    }
+
+    @Override
+    public boolean canBeReplacedByLeaves(BlockState state, IWorldReader world, BlockPos pos) {
         return true;
     }
 

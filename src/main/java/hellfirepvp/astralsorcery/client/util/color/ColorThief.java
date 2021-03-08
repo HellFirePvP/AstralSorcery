@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.util.image;
+package hellfirepvp.astralsorcery.client.util.color;
 
 /*
  * Java Color Thief

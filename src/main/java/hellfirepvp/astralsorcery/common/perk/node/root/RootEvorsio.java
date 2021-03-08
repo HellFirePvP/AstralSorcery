@@ -81,7 +81,6 @@ public class RootEvorsio extends RootPerk {
             return; //Unbreakable
         }
 
-        gainedExp *= 2.5F;
         gainedExp *= this.getExpMultiplier();
         gainedExp *= this.getDiminishingReturns(player);
         gainedExp *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);

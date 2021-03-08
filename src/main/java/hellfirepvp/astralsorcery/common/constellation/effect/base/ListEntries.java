@@ -88,6 +88,8 @@ public class ListEntries {
 
             Entity e = this.type.create(world);
             if (e != null) {
+                e.addTag(ConstellationEffectRegistry.ENTITY_TAG_LUCERNA_SKIP_ENTITY);
+
                 BlockPos at = getPos();
                 e.setLocationAndAngles(
                         at.getX() + 0.5,
@@ -101,7 +103,6 @@ public class ListEntries {
                         return;
                     }
                 }
-                e.addTag(ConstellationEffectRegistry.ENTITY_TAG_LUCERNA_SKIP_ENTITY);
                 world.addEntity(e);
                 world.playEvent(2004, e.getPosition(), 0);
                 world.playEvent(2004, e.getPosition(), 0);

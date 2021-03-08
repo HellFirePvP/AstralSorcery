@@ -82,7 +82,7 @@ public class MergeCrystalsRecipe extends LiquidStarlightRecipe {
     @Override
     public void doServerCraftTick(ItemEntity trigger, World world, BlockPos at) {
         Random r = new Random(MathHelper.getPositionRandom(at));
-        if (!world.isRemote() && getAndIncrementCraftingTick(trigger) > 100 + r.nextInt(40)) {
+        if (!world.isRemote() && getAndIncrementCraftingTick(trigger) > 40 + r.nextInt(20)) {
             ItemStack crystalFoundOne, crystalFoundTwo;
             if ((crystalFoundOne = consumeItemEntityInBlock(world, at, 1, stack -> stack.getItem() instanceof ItemCrystalBase)) != null &&
                     (crystalFoundTwo = consumeItemEntityInBlock(world, at, 1, stack -> stack.getItem() instanceof ItemCrystalBase)) != null &&

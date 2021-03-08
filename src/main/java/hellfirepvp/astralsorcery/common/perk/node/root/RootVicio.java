@@ -133,7 +133,7 @@ public class RootVicio extends RootPerk implements PlayerTickPerk {
         }
 
         if (added > 0) {
-            added *= 0.05F;
+            added *= 0.02F;
             added *= this.getExpMultiplier();
             added *= this.getDiminishingReturns(player);
             added *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);

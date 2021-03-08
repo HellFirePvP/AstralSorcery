@@ -42,7 +42,7 @@ public class RegistryRecipeTypes {
                 recipe.matches(context.getInfuser(), context.getCrafter(), context.getSide()));
         TYPE_BLOCK_TRANSMUTATION = new ResolvingRecipeType<>("block_transmutation", BlockTransmutation.class, (recipe, context) ->
                 recipe.matches(context.getWorld(), context.getPos(), context.getState(), context.getConstellation()));
-        TYPE_ALTAR = new ResolvingRecipeType<>("simple_altar", SimpleAltarRecipe.class, (recipe, context) ->
+        TYPE_ALTAR = new ResolvingRecipeType<>("altar", SimpleAltarRecipe.class, (recipe, context) ->
                 recipe.matches(context.getSide(), context.getCrafter(), context.getAltar(), context.ignoreStarlightRequirement()));
         TYPE_LIQUID_INTERACTION = new ResolvingRecipeType<>("liquid_interaction", LiquidInteraction.class, (recipe, context) ->
                 recipe.matches(context.getContentTank1(), context.getContentTank2()));

@@ -20,11 +20,11 @@ import hellfirepvp.astralsorcery.common.perk.tick.PlayerTickPerk;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -66,7 +66,7 @@ public class KeyStoneEnrichment extends KeyPerk implements PlayerTickPerk {
                         (rand.nextFloat() * radius * 2) - radius);
                 World world = player.getEntityWorld();
                 BlockPos pos = vec.toBlockPos();
-                if (Tags.Blocks.STONE.contains(world.getBlockState(pos).getBlock())) {
+                if (BlockTags.BASE_STONE_OVERWORLD.contains(world.getBlockState(pos).getBlock())) {
                     Block block = OreBlockRarityRegistry.STONE_ENRICHMENT.getRandomBlock(rand);
                     if (block != null) {
                         if (world.setBlockState(pos, block.getDefaultState(), Constants.BlockFlags.DEFAULT_AND_RERENDER)) {

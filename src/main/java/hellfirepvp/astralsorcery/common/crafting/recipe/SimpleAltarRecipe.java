@@ -61,9 +61,9 @@ public class SimpleAltarRecipe extends CustomMatcherRecipe implements GatedRecip
     private final List<ItemStack> outputs = new LinkedList<>();
     private ResourceLocation customRecipeType = null;
     private IConstellation focusConstellation = null;
-    private List<WrappedIngredient> relayInputs = new LinkedList<>();
+    private final List<WrappedIngredient> relayInputs = new LinkedList<>();
 
-    private Set<AltarRecipeEffect> craftingEffects = new HashSet<>();
+    private final Set<AltarRecipeEffect> craftingEffects = new HashSet<>();
 
     public SimpleAltarRecipe(ResourceLocation recipeId, AltarType altarType) {
         this(recipeId, altarType, altarType.getDefaultAltarCraftingDuration());

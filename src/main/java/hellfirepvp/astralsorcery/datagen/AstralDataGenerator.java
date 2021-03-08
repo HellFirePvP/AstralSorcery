@@ -45,9 +45,9 @@ public class AstralDataGenerator {
 
         if (event.includeServer()) {
             gen.addProvider(new AstralAdvancementProvider(gen));
-            BlockTagsProvider blockTagGen = new AstralBlockTagsProvider(gen);
+            BlockTagsProvider blockTagGen = new AstralBlockTagsProvider(gen, fileHelper);
             gen.addProvider(blockTagGen);
-            gen.addProvider(new AstralItemTagsProvider(gen, blockTagGen));
+            gen.addProvider(new AstralItemTagsProvider(gen, blockTagGen, fileHelper));
             gen.addProvider(new AstralLootTableProvider(gen));
             gen.addProvider(new AstralRecipeProvider(gen));
             gen.addProvider(new AstralPerkTreeProvider(gen));

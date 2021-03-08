@@ -185,7 +185,20 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
                 stack = ItemUtils.changeItem(stack, Items.ENCHANTED_BOOK);
             }
             Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-            enchantments.put(this.enchantment.get(), level);
+            Enchantment newEnch = this.enchantment.get();
+            if (!this.ignoreCompat) {
+                boolean hasIncompat = false;
+                for (Enchantment e : enchantments.keySet()) {
+                    if (e.equals(newEnch) || !e.isCompatibleWith(newEnch)) {
+                        hasIncompat = true;
+                        break;
+                    }
+                }
+                if (hasIncompat) {
+                    return stack;
+                }
+            }
+            enchantments.put(newEnch, level);
             EnchantmentHelper.setEnchantments(enchantments, stack);
             return stack;
         }

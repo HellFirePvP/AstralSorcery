@@ -44,7 +44,9 @@ import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -109,14 +111,17 @@ public class RegistryWorldGeneration {
     }
 
     public static void registerStructureGeneration() {
-        Map<Structure<?>, StructureSeparationSettings> defaultStructureSettings = DimensionSettings.field_242740_q.getStructures().func_236195_a_();
+        List<Map<Structure<?>, StructureSeparationSettings>> structureSettings = new ArrayList<>();
+        structureSettings.add(DimensionSettings.field_242740_q.getStructures().func_236195_a_());
+        WorldGenRegistries.NOISE_SETTINGS.forEach(settings -> structureSettings.add(settings.getStructures().func_236195_a_()));
+
         ImmutableMap.Builder<Structure<?>, StructureSeparationSettings> builder = ImmutableMap.builder();
         builder.putAll(DimensionStructuresSettings.field_236191_b_);
         STRUCTURES.forEach((structureFeature, cfg) -> {
             if (cfg.isEnabled()) {
                 StructureSeparationSettings settings = cfg.createSettings();
                 builder.put(structureFeature.field_236268_b_, settings);
-                defaultStructureSettings.put(structureFeature.field_236268_b_, settings);
+                structureSettings.forEach(noiseStructureSettings -> noiseStructureSettings.put(structureFeature.field_236268_b_, settings));
             }
         });
         DimensionStructuresSettings.field_236191_b_ = builder.build();

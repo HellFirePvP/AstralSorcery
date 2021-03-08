@@ -13,9 +13,11 @@ import hellfirepvp.astralsorcery.common.util.VoxelUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -127,6 +129,13 @@ public class BlockBlackMarblePillar extends BlockBlackMarbleTemplate implements 
     public FluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
+
+    @Nullable
+    @Override
+    public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity) {
+        return PathNodeType.BLOCKED;
+    }
+
 
     public static enum PillarType implements IStringSerializable {
 

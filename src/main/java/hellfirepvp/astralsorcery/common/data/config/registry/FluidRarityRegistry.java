@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.config.registry.sets.FluidRarityEntry;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -36,7 +37,19 @@ public class FluidRarityRegistry extends ConfigDataAdapter<FluidRarityEntry> {
     public List<FluidRarityEntry> getDefaultValues() {
         return Lists.newArrayList(
                 new FluidRarityEntry(Mods.MINECRAFT.key("water"), 14000, Integer.MAX_VALUE, Integer.MAX_VALUE),
-                new FluidRarityEntry(Mods.MINECRAFT.key("lava"), 7500, 4_000_000, 1_000_000)
+                new FluidRarityEntry(Mods.MINECRAFT.key("lava"), 7500, 4_000_000),
+
+                new FluidRarityEntry(key("immersivepetrolium", "oil"), 5000, 2_500_000),
+                new FluidRarityEntry(key("immersivepetroleum", "napalm"), 100, 750_000),
+
+                new FluidRarityEntry(key("industrialforegoing", "essence_fluid"), 300, 500_000),
+                new FluidRarityEntry(key("industrialforegoing", "sewage_fluid"), 250, 10_000_000),
+                new FluidRarityEntry(key("industrialforegoing", "sludge_fluid"), 200, 3_000_000),
+
+                new FluidRarityEntry(key("mekanism", "flowing_heavy_water"), 2500, 10_000_000),
+                new FluidRarityEntry(key("mekanismgenerators", "flowing_fusion_fuel"), 100, 1_000_000),
+
+                new FluidRarityEntry(key("bloodmagic", "life_essence_fluid_flowing"), 250, 5_000_000)
         );
     }
 
@@ -70,5 +83,9 @@ public class FluidRarityRegistry extends ConfigDataAdapter<FluidRarityEntry> {
     @Override
     public Predicate<Object> getValidator() {
         return obj -> obj instanceof String;
+    }
+
+    private static ResourceLocation key(String domain, String path) {
+        return new ResourceLocation(domain, path);
     }
 }

@@ -637,26 +637,26 @@ public class TileRitualPedestal extends TileReceiverBase<StarlightReceiverRitual
 
     static {
         Set<BlockPos> circleOffsets = Sets.newHashSet(
-                new BlockPos(4, 1, 0),
-                new BlockPos(4, 1, 1),
-                new BlockPos(3, 1, 2),
-                new BlockPos(2, 1, 3),
-                new BlockPos(1, 1, 4),
-                new BlockPos(0, 1, 4),
-                new BlockPos(-1, 1, 4),
-                new BlockPos(-2, 1, 3),
-                new BlockPos(-3, 1, 2),
-                new BlockPos(-4, 1, 1),
-                new BlockPos(-4, 1, 0),
-                new BlockPos(-4, 1, -1),
-                new BlockPos(-3, 1, -2),
-                new BlockPos(-2, 1, -3),
-                new BlockPos(-1, 1, -4),
-                new BlockPos(0, 1, -4),
-                new BlockPos(1, 1, -4),
-                new BlockPos(2, 1, -3),
-                new BlockPos(3, 1, -2),
-                new BlockPos(4, 1, -1)
+                new BlockPos(4, 0, 0),
+                new BlockPos(4, 0, 1),
+                new BlockPos(3, 0, 2),
+                new BlockPos(2, 0, 3),
+                new BlockPos(1, 0, 4),
+                new BlockPos(0, 0, 4),
+                new BlockPos(-1, 0, 4),
+                new BlockPos(-2, 0, 3),
+                new BlockPos(-3, 0, 2),
+                new BlockPos(-4, 0, 1),
+                new BlockPos(-4, 0, 0),
+                new BlockPos(-4, 0, -1),
+                new BlockPos(-3, 0, -2),
+                new BlockPos(-2, 0, -3),
+                new BlockPos(-1, 0, -4),
+                new BlockPos(0, 0, -4),
+                new BlockPos(1, 0, -4),
+                new BlockPos(2, 0, -3),
+                new BlockPos(3, 0, -2),
+                new BlockPos(4, 0, -1)
         );
         Set<BlockPos> ritualOffsets = new HashSet<>(circleOffsets);
         circleOffsets.stream().map(pos -> pos.add(0, 1, 0)).forEach(ritualOffsets::add);

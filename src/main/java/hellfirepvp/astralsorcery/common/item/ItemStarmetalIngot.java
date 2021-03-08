@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -42,8 +43,7 @@ public class ItemStarmetalIngot extends Item {
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
         EntityStarmetal res = new EntityStarmetal(EntityTypesAS.ITEM_STARMETAL_INGOT, world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
-        res.setPickupDelay(20);
-        res.setMotion(location.getMotion());
+        res.read(location.writeWithoutTypeId(new CompoundNBT()));
         if (location instanceof ItemEntity) {
             res.setThrowerId(((ItemEntity) location).getThrowerId());
             res.setOwnerId(((ItemEntity) location).getOwnerId());

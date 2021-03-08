@@ -44,6 +44,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -60,10 +61,7 @@ import net.minecraftforge.fml.LogicalSide;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -83,7 +81,9 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
 
     private ActiveSimpleAltarRecipe activeRecipe = null;
     private ItemStack focusItem = ItemStack.EMPTY;
-    private int storedStarlight = 0;
+    private Set<ResourceLocation> knownRecipes = new HashSet<>();
+    private final DeferredStarlightStorage starlightStorage = new DeferredStarlightStorage(2);
+    private int starlightNextTick = 0;
 
     private Object clientCraftSound = null;
     private Object clientWaitSound = null;
@@ -239,6 +239,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
                 });
         PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(this.getWorld(), this.getPos(), 32));
 
+        this.knownRecipes.add(recipeName);
         markForUpdate();
     }
 
@@ -289,13 +290,13 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
 
         WorldContext ctx = SkyHandler.getContext(getWorld());
         if (ctx == null) {
-            if (this.storedStarlight > 0) {
-                this.storedStarlight = 0;
+            if (this.starlightNextTick > 0) {
+                this.starlightNextTick = 0;
                 this.markForUpdate();
             }
             return;
         }
-        this.storedStarlight *= 0.9F;
+        this.starlightNextTick *= 0.9F;
 
         if (this.doesSeeSky()) {
             int altarTier = this.getAltarType().ordinal() + 1;
@@ -315,11 +316,13 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
             fieldAmount *= DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
             this.collectStarlight(fieldAmount * altarTier * 65F, AltarCollectionCategory.FOSIC_FIELD);
         }
+
+        this.starlightStorage.setStoredStarlight(this.starlightNextTick);
     }
 
     public void collectStarlight(float percent, AltarCollectionCategory category) {
         int collectable = MathHelper.floor(Math.min(percent, getRemainingCollectionCapacity(category)));
-        this.storedStarlight = MathHelper.clamp(this.storedStarlight + collectable, 0, this.getAltarType().getStarlightCapacity());
+        this.starlightNextTick = MathHelper.clamp(this.starlightNextTick + collectable, 0, this.getAltarType().getStarlightCapacity());
         this.tickStarlightCollectionMap.computeIfPresent(category, (cat, remaining) -> Math.max(remaining - collectable, 0));
         this.markForUpdate();
         this.preventNetworkSync();
@@ -384,7 +387,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     }
 
     public int getStoredStarlight() {
-        return storedStarlight;
+        return this.starlightStorage.getStoredStarlight();
     }
 
     public float getAmbientStarlightPercent() {
@@ -459,13 +462,27 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
     }
 
     @Override
+    public void readNetNBT(CompoundNBT compound) {
+        super.readNetNBT(compound);
+
+        this.starlightStorage.readNBT(compound);
+    }
+
+    @Override
+    public void writeNetNBT(CompoundNBT compound) {
+        super.writeNetNBT(compound);
+
+        this.starlightStorage.writeNBT(compound);
+    }
+
+    @Override
     public void readCustomNBT(CompoundNBT compound) {
         super.readCustomNBT(compound);
 
         this.altarType = AltarType.values()[compound.getInt("altarType")];
         this.inventory = this.inventory.deserialize(compound.getCompound("inventory"));
         this.focusItem = NBTHelper.getStack(compound, "focusItem");
-        this.storedStarlight = compound.getInt("storedStarlight");
+        this.knownRecipes = NBTHelper.readSet(compound, "knownRecipes", Constants.NBT.TAG_STRING, nbt -> new ResourceLocation(nbt.toString()));
 
         if (compound.contains("activeRecipe", Constants.NBT.TAG_COMPOUND)) {
             this.activeRecipe = ActiveSimpleAltarRecipe.deserialize(compound.getCompound("activeRecipe"), this.activeRecipe);
@@ -481,7 +498,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
         compound.putInt("altarType", this.altarType.ordinal());
         compound.put("inventory", this.inventory.serialize());
         NBTHelper.setStack(compound, "focusItem", this.focusItem);
-        compound.putInt("storedStarlight", this.storedStarlight);
+        NBTHelper.writeList(compound, "knownRecipes", this.knownRecipes, key -> StringNBT.valueOf(key.toString()));
 
         if (this.activeRecipe != null) {
             compound.put("activeRecipe", this.activeRecipe.serialize());
