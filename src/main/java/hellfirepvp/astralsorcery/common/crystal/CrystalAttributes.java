@@ -140,16 +140,18 @@ public final class CrystalAttributes {
         for (Attribute attr : this.getCrystalAttributes()) {
             if (attr.getTier() > 0) {
                 CrystalProperty prop = attr.getProperty();
+                if (!prop.hasUsageFor(ctx) && !ctx.isEmpty()) {
+                    //Don't add a line for it if it's there, but not used in context
+                    continue;
+                }
+
                 if (!prop.canSee(progress) || !attr.isDiscovered()) {
                     missing = true;
                 } else {
                     IFormattableTextComponent enchantmentLevel = new TranslationTextComponent(String.format("enchantment.level.%s", attr.getTier()))
                             .mergeStyle(TextFormatting.GOLD);
                     IFormattableTextComponent propertyName = prop.getName(attr.getTier()).mergeStyle(TextFormatting.GRAY);
-                    if (!prop.hasUsageFor(ctx) && !ctx.isEmpty()) {
-                        //Don't add a line for it if it's there, but not used in context
-                        continue;
-                    }
+
                     tooltip.add(propertyName
                             .append(new StringTextComponent(" "))
                             .append(enchantmentLevel));
