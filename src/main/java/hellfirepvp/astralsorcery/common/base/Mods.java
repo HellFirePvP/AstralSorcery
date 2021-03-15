@@ -34,7 +34,8 @@ public enum Mods {
     DRACONIC_EVOLUTION("draconicevolution"),
     CURIOS("curios"),
     JEI("jei"),
-    BOTANIA("botania");
+    BOTANIA("botania"),
+    CRAFTTWEAKER("crafttweaker");
 
     private final String modid;
     private final boolean loaded;
