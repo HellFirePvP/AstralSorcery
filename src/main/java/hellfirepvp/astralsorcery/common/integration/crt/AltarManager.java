@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2020
+ *
+ * All rights reserved.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.integration.crt;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
@@ -17,6 +25,13 @@ import org.openzen.zencode.java.ZenCodeType;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: AltarManager
+ * Created by Jaredlll08
+ * Date: 03.17.2021 / 15:36
+ */
 @ZenRegister
 @ZenCodeType.Name("mods.astralsorcery.AltarManager")
 public class AltarManager implements IRecipeManager {
@@ -48,7 +63,7 @@ public class AltarManager implements IRecipeManager {
 
         SimpleAltarRecipe recipe = new SimpleAltarRecipe(new ResourceLocation(name), AltarType.valueOf(altarType.toUpperCase()), duration, starlightRequired, builder.build());
         recipe.addOutput(output.getInternal());
-        CraftTweakerAPI.apply(new ActionAddRecipe(this, recipe, ""));
+        CraftTweakerAPI.apply(new ActionAddRecipe(this, recipe));
     }
 
     @ZenCodeType.Method
@@ -61,7 +76,7 @@ public class AltarManager implements IRecipeManager {
             throw new IllegalArgumentException("Astral Sorcery Altar ingredients needs to he a 5x5 array with all values filled.");
         }
         if (ingredients.keySet().stream().anyMatch(s -> s.length() != 1)) {
-            throw new IllegalArgumentException("Cannot have multiple characters has pattern key!");
+            throw new IllegalArgumentException("Cannot have multiple characters as pattern key!");
         }
 
         AltarRecipeGrid.Builder builder = AltarRecipeGrid.builder();
@@ -74,7 +89,7 @@ public class AltarManager implements IRecipeManager {
 
         SimpleAltarRecipe recipe = new SimpleAltarRecipe(new ResourceLocation(name), AltarType.valueOf(altarType.toUpperCase()), duration, starlightRequired, builder.build());
         recipe.addOutput(output.getInternal());
-        CraftTweakerAPI.apply(new ActionAddRecipe(this, recipe, ""));
+        CraftTweakerAPI.apply(new ActionAddRecipe(this, recipe));
     }
 
     @Override
