@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiMapDrawing;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.ClientReplyPacket;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -19,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -59,20 +61,21 @@ public class PktBurnParchment implements IMessage, IMessageHandler<PktBurnParchm
     @Override
     public PktBurnParchment onMessage(PktBurnParchment message, MessageContext ctx) {
         if(ctx.side == Side.SERVER) {
-            World world = DimensionManager.getWorld(message.dimId);
-            if(world != null) {
-                TileMapDrawingTable tmt = MiscUtils.getTileAt(world, message.tablePos, TileMapDrawingTable.class, false);
-                if(tmt != null) {
-                    if(tmt.burnParchment()) {
-                        return new PktBurnParchment(-1, BlockPos.ORIGIN);
+            FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+                World world = DimensionManager.getWorld(message.dimId);
+                if(world != null) {
+                    TileMapDrawingTable tmt = MiscUtils.getTileAt(world, message.tablePos, TileMapDrawingTable.class, false);
+                    if(tmt != null) {
+                        if(tmt.burnParchment()) {
+                            PacketChannel.CHANNEL.sendTo(new PktBurnParchment(-1, BlockPos.ORIGIN), ctx.getServerHandler().player);
+                        }
                     }
                 }
-            }
-            return null;
+            });
         } else {
             closeTable();
-            return null;
         }
+        return null;
     }
 
     @SideOnly(Side.CLIENT)
