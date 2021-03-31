@@ -23,6 +23,12 @@ import net.minecraft.util.math.MathHelper;
 public class ClientCameraUtil {
 
     public static void positionCamera(PlayerEntity renderView, float pTicks, double x, double y, double z, double prevX, double prevY, double prevZ, double yaw, double yawPrev, double pitch, double pitchPrev) {
+        double dYaw = MathHelper.positiveModulo(yaw - yawPrev, 360d);
+        // Use the smaller arc
+        if (dYaw > 180) {
+            dYaw -= 360;
+        }
+        yawPrev = yaw - dYaw;
         float iYaw = MathHelper.lerp(pTicks, (float) yawPrev, (float) yaw);
         float iPitch = MathHelper.lerp(pTicks, (float) pitchPrev, (float) pitch);
 
