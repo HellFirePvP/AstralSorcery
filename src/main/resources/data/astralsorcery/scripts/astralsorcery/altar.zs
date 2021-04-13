@@ -14,8 +14,8 @@
  * You can get them by using `/ct dump astralAltarTypes` in-game as well.
  */
 
-// <recipetype:astralsorcery:altar>.addRecipe(String name, String altarType, IItemStack output, IIngredient[][] ingredients, int duration, int starlightRequired)
-// <recipetype:astralsorcery:altar>.addRecipe(String name, String altarType, IItemStack output, String[] pattern, Map<String, IIngredient> ingredients, int duration, int starlightRequired)
+// <recipetype:astralsorcery:altar>.addRecipe(name as string, altarType as string, output as IItemStack, ingredients as IIngredient[][], duration as int, starlightRequired as int)
+// <recipetype:astralsorcery:altar>.addRecipe(name as string, altarType as string, output as IItemStack, pattern as string[], ingredients as IIngredient[string], duration as int, starlightRequired as int)
 
 val air = <item:minecraft:air>;
 <recipetype:astralsorcery:altar>.addRecipe("altar_test", "RADIANCE", <item:minecraft:dirt>, [
