@@ -144,8 +144,8 @@ dependencies {
     compileOnly fg.deobf('vazkii.botania:Botania:1.16.4-413:api')
     runtimeOnly fg.deobf('vazkii.botania:Botania:1.16.4-413')
     
-    compileOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.0.157')
-    runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.0.157')
+    compileOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.0.294')
+    runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.0.294')
 }
 
 tasks.withType(JavaCompile) {
