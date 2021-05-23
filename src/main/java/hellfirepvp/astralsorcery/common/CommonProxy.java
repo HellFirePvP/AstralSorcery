@@ -36,6 +36,7 @@ import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.event.PlayerAffectionFlags;
 import hellfirepvp.astralsorcery.common.event.handler.*;
 import hellfirepvp.astralsorcery.common.event.helper.*;
+import hellfirepvp.astralsorcery.common.integration.IntegrationCraftTweaker;
 import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
 import hellfirepvp.astralsorcery.common.item.armor.ArmorMaterialImbuedLeather;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -228,6 +229,8 @@ public class CommonProxy {
         TransmissionChunkTracker.INSTANCE.attachListeners(eventBus);
 
         BlockChangeNotifier.addListener(new EventHandlerAutoLink());
+
+        Mods.CRAFTTWEAKER.executeIfPresent(() -> () -> IntegrationCraftTweaker.attachListeners(eventBus));
     }
 
     public void attachTickListeners(Consumer<ITickHandler> registrar) {
