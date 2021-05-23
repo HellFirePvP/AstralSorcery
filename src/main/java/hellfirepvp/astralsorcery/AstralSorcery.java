@@ -41,6 +41,7 @@ public class AstralSorcery {
         instance = this;
         modContainer = ModList.get().getModContainerById(MODID).get();
 
+
         this.proxy = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         this.proxy.initialize();
         this.proxy.attachLifecycle(FMLJavaModLoadingContext.get().getModEventBus());

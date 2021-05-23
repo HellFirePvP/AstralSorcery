@@ -148,7 +148,6 @@ public class PrimerEventHandler {
 
     private void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         RegistryEntities.init();
-        RegistryEntities.initAttributes();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

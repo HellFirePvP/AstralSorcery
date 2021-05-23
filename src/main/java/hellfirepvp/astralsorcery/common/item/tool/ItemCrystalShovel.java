@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
@@ -26,7 +27,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.common.util.Constants;
 
 import java.util.Map;
 
@@ -78,24 +78,42 @@ public class ItemCrystalShovel extends ItemCrystalTierItem implements TypeEnchan
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext ctx) {
-        World world = ctx.getWorld();
-        BlockPos blockpos = ctx.getPos();
-        if (ctx.getFace() != Direction.DOWN && world.getBlockState(blockpos.up()).isAir(world, blockpos.up())) {
-            BlockState blockstate = BLOCK_PAVE_MAP.get(world.getBlockState(blockpos).getBlock());
-            if (blockstate != null) {
-                PlayerEntity playerentity = ctx.getPlayer();
-                world.playSound(playerentity, blockpos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+    public ActionResultType onItemUse(ItemUseContext context) {
+        World world = context.getWorld();
+        BlockPos pos = context.getPos();
+        BlockState state = world.getBlockState(pos);
+        if (context.getFace() == Direction.DOWN) {
+            return ActionResultType.PASS;
+        } else {
+            PlayerEntity playerentity = context.getPlayer();
+            BlockState modifiedState = state.getToolModifiedState(world, pos, playerentity, context.getItem(), ToolType.SHOVEL);
+            BlockState targetState = null;
+            if (modifiedState != null && world.isAirBlock(pos.up())) {
+                world.playSound(playerentity, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                targetState = modifiedState;
+            } else if (state.getBlock() instanceof CampfireBlock && state.get(CampfireBlock.LIT)) {
                 if (!world.isRemote()) {
-                    if (world.setBlockState(blockpos, blockstate, Constants.BlockFlags.DEFAULT_AND_RERENDER) &&
-                            playerentity != null) {
-                        ctx.getItem().damageItem(1, playerentity,
-                                (e) -> e.sendBreakAnimation(ctx.getHand()));
+                    world.playEvent(null, 1009, pos, 0);
+                }
+
+                CampfireBlock.extinguish(world, pos, state);
+                targetState = state.with(CampfireBlock.LIT, false);
+            }
+
+            if (targetState != null) {
+                if (!world.isRemote()) {
+                    world.setBlockState(pos, targetState, 11);
+                    if (playerentity != null) {
+                        context.getItem().damageItem(1, playerentity, (player) -> {
+                            player.sendBreakAnimation(context.getHand());
+                        });
                     }
                 }
-                return ActionResultType.SUCCESS;
+
+                return ActionResultType.func_233537_a_(world.isRemote());
+            } else {
+                return ActionResultType.PASS;
             }
         }
-        return ActionResultType.PASS;
     }
 }

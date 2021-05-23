@@ -28,9 +28,9 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import static hellfirepvp.astralsorcery.common.lib.EntityTypesAS.*;
@@ -135,9 +135,9 @@ public class RegistryEntities {
                         .size(0.1F, 0.1F));
     }
 
-    public static void initAttributes() {
-        GlobalEntityTypeAttributes.put(FLARE, EntityFlare.createAttributes().create());
-        GlobalEntityTypeAttributes.put(SPECTRAL_TOOL, EntitySpectralTool.createAttributes().create());
+    public static void initAttributes(EntityAttributeCreationEvent event) {
+        event.put(FLARE, EntityFlare.createAttributes().create());
+        event.put(SPECTRAL_TOOL, EntitySpectralTool.createAttributes().create());
     }
 
     @OnlyIn(Dist.CLIENT)

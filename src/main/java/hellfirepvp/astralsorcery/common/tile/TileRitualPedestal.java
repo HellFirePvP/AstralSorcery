@@ -10,10 +10,7 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import hellfirepvp.astralsorcery.client.effect.function.RefreshFunction;
-import hellfirepvp.astralsorcery.client.effect.function.VFXAlphaFunction;
-import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
-import hellfirepvp.astralsorcery.client.effect.function.VFXMotionController;
+import hellfirepvp.astralsorcery.client.effect.function.*;
 import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.vfx.FXSpritePlane;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;

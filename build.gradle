@@ -9,14 +9,14 @@ buildscript {
     }
 
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.16.4-1.13.10'
+version = '1.16.5-1.13.10'
 group = 'hellfirepvp.astralsorcery'
 archivesBaseName = 'astralsorcery-1.16'
 String build_version = ""
@@ -27,7 +27,7 @@ if (System.getenv("BUILD_NUMBER") != null) {
     build_version = version + ".v" + System.getenv("BUILD_NUMBER")
 }
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
@@ -127,22 +127,22 @@ repositories {
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.16.5-36.0.45'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.1.23'
 
-    compileOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.5.1.v75'
-    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.16.4-1.5.1.v75:deobf'
+    compileOnly 'hellfirepvp.observerlib:observerlib:1.16.5-1.5.2.v77'
+    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.16.5-1.5.2.v77:deobf'
 
-    compileOnly 'top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0:api'
-    runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0')
+    compileOnly 'top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.1:api'
+    runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.1')
 
-    compileOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.1.71')
-    runtimeOnly fg.deobf('mezz.jei:jei-1.16.4:7.6.1.71')
+    compileOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.0.99')
+    runtimeOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.0.99')
 
-    compileOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-50:api')
-    runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-50')
+    compileOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-51:api')
+    runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-51')
     
-    compileOnly fg.deobf('vazkii.botania:Botania:1.16.4-413:api')
-    runtimeOnly fg.deobf('vazkii.botania:Botania:1.16.4-413')
+    compileOnly fg.deobf('vazkii.botania:Botania:1.16.5-416:api')
+    runtimeOnly fg.deobf('vazkii.botania:Botania:1.16.5-416')
     
     compileOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.0.294')
     runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.0.294')

@@ -197,6 +197,7 @@ public class CommonProxy {
         modEventBus.addListener(this::onEnqueueIMC);
 
         modEventBus.addListener(RegistryRegistries::buildRegistries);
+        modEventBus.addListener(RegistryEntities::initAttributes);
         registryEventHandler.attachEventHandlers(modEventBus);
     }
 
