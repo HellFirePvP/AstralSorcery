@@ -10,8 +10,6 @@ package hellfirepvp.astralsorcery.common.integration;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.impl.commands.CTCommandCollectionEvent;
-import com.blamejared.crafttweaker.impl.commands.script_examples.ExampleCollectionEvent;
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.tile.altar.AltarType;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
@@ -29,15 +27,6 @@ public class IntegrationCraftTweaker {
     
     public static void attachListeners(IEventBus eventBus) {
         eventBus.addListener(IntegrationCraftTweaker::onCommandCollection);
-        eventBus.addListener(IntegrationCraftTweaker::onExampleCollection);
-    }
-    
-    public static void onExampleCollection(ExampleCollectionEvent event) {
-        event.addResource(AstralSorcery.key(AstralSorcery.MODID + "/altar"));
-        event.addResource(AstralSorcery.key(AstralSorcery.MODID + "/block_transmutation"));
-        event.addResource(AstralSorcery.key(AstralSorcery.MODID + "/infusion"));
-        event.addResource(AstralSorcery.key(AstralSorcery.MODID + "/liquid_interaction"));
-        event.addResource(AstralSorcery.key(AstralSorcery.MODID + "/well"));
     }
     
     public static void onCommandCollection(CTCommandCollectionEvent event) {
