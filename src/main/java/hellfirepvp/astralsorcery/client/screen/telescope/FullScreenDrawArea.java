@@ -21,9 +21,7 @@ import java.awt.*;
  */
 public class FullScreenDrawArea extends ConstellationDiscoveryScreen.DrawArea {
 
-    public static final FullScreenDrawArea INSTANCE = new FullScreenDrawArea();
-
-    private FullScreenDrawArea() {
+    public FullScreenDrawArea() {
         super(new Rectangle());
     }
 

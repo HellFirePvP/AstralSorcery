@@ -83,7 +83,7 @@ public class ScreenObservatory extends TileConstellationDiscoveryScreen<TileObse
     @Nonnull
     @Override
     protected List<DrawArea> createDrawAreas() {
-        return Lists.newArrayList(FullScreenDrawArea.INSTANCE);
+        return Lists.newArrayList(new FullScreenDrawArea());
     }
 
     @Override
