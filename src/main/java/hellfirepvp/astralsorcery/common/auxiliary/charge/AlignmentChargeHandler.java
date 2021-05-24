@@ -127,7 +127,7 @@ public class AlignmentChargeHandler implements ITickHandler {
         }
         PlayerProgress progress = ResearchHelper.getProgress(player, side);
 
-        float regenPerTick = max / (10F * 20F);
+        float regenPerTick = max / (6F * 20F);
 
         boolean underground = player.getEntityWorld().getHeight(Heightmap.Type.WORLD_SURFACE, player.getPosition()).getY() > player.getPosition().getY() + 1;
 

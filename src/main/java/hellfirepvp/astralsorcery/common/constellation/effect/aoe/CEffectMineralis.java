@@ -162,7 +162,7 @@ public class CEffectMineralis extends CEffectAbstractList<ListEntries.PosEntry> 
         private ConfiguredBlockStateList replaceableStates;
 
         public MineralisConfig(BlockStateList defaultReplaceableStates) {
-            super("mineralis", 6D, 4D, 1);
+            super("mineralis", 5D, 2D, 1);
             this.defaultReplaceableStates = defaultReplaceableStates;
         }
 

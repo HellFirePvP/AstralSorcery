@@ -107,8 +107,12 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                             (player.isCreative() || miningTest.test(world, other, otherState)) &&
                             AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), true)) {
                         BlockState state = world.getBlockState(other);
-                        if (!BlockUtils.isFluidBlock(state) && (player.isCreative() || otherState.canHarvestBlock(world, other, player)) && player.interactionManager.tryHarvestBlock(other)) {
-                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), false);
+                        if (!BlockUtils.isFluidBlock(state) &&
+                                (player.isCreative() || otherState.canHarvestBlock(world, other, player)) &&
+                                player.interactionManager.tryHarvestBlock(other)) {
+                            if (rand.nextInt(3) == 0) {
+                                AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), false);
+                            }
                         }
                     }
                 }
@@ -132,8 +136,12 @@ public class AttributeTypeMiningSize extends PerkAttributeType {
                         (player.isCreative() || miningTest.test(world, other, otherState)) &&
                         AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), true)) {
                     BlockState state = world.getBlockState(other);
-                    if (!BlockUtils.isFluidBlock(state) && (player.isCreative() || otherState.canHarvestBlock(world, other, player)) && player.interactionManager.tryHarvestBlock(other)) {
-                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), false);
+                    if (!BlockUtils.isFluidBlock(state) &&
+                            (player.isCreative() || otherState.canHarvestBlock(world, other, player)) &&
+                            player.interactionManager.tryHarvestBlock(other)) {
+                        if (rand.nextInt(3) == 0) {
+                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), false);
+                        }
                     }
                 }
             }

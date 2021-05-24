@@ -16,9 +16,13 @@ import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
 import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.crystal.CrystalCalculations;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.TileCollectorCrystal;
+import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.world.SkyCollectionHelper;
 import net.minecraft.nbt.CompoundNBT;
@@ -50,6 +54,8 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
     private boolean doesAutoLink = false;
 
     private double collectionDstMultiplier = 1;
+    private BlockPos closestOtherCollector = null;
+
     private float posDistribution = -1;
     private boolean enhanced = false;
 
@@ -66,6 +72,16 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
 
         if (posDistribution == -1) {
             posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
+        }
+
+        if (closestOtherCollector != null && rand.nextInt(40) == 0) {
+            PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.Type.LIGHTNING)
+                    .addData(buf -> {
+                        ByteBufUtils.writeVector(buf, new Vector3(pos).add(0.5, 0.5, 0.5));
+                        ByteBufUtils.writeVector(buf, new Vector3(closestOtherCollector).add(0.5, 0.5, 0.5));
+                        buf.writeInt(this.constellation.getConstellationColor().darker().getRGB());
+                    });
+            PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 32));
         }
 
         Function<Float, Float> distrFunction = getDistributionFunc();
@@ -107,6 +123,7 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
     @Override
     public void threadedUpdateProximity(BlockPos thisPos, Map<BlockPos, IIndependentStarlightSource> otherSources) {
         double minDstSq = Double.MAX_VALUE;
+        BlockPos closest = null;
         for (BlockPos other : otherSources.keySet()) {
             if (other.equals(thisPos)) {
                 continue;
@@ -114,13 +131,16 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
             double dstSq = thisPos.distanceSq(other);
             if (dstSq < minDstSq) {
                 minDstSq = dstSq;
+                closest = other;
             }
         }
         double dst = Math.sqrt(minDstSq);
         if (dst <= MIN_DST) {
             this.collectionDstMultiplier = dst / MIN_DST;
+            this.closestOtherCollector = closest;
         } else {
             this.collectionDstMultiplier = 1;
+            this.closestOtherCollector = null;
         }
     }
 
@@ -152,6 +172,7 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
         this.doesSeeSky = compound.getBoolean("doesSeeSky");
         this.doesAutoLink = compound.getBoolean("doesAutoLink");
         this.collectionDstMultiplier = compound.getDouble("collectionDstMultiplier");
+        this.closestOtherCollector = NBTHelper.readOptional(compound, "closestOtherCollector", NBTHelper::readBlockPosFromNBT);
         this.enhanced = compound.getBoolean("enhanced");
     }
 
@@ -164,6 +185,7 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
         compound.putBoolean("doesSeeSky", doesSeeSky);
         compound.putBoolean("doesAutoLink", doesAutoLink);
         compound.putDouble("collectionDstMultiplier", collectionDstMultiplier);
+        NBTHelper.writeOptional(compound, "closestOtherCollector", this.closestOtherCollector, (nbt, pos) -> NBTHelper.writeBlockPosToNBT(pos, nbt));
         compound.putBoolean("enhanced", enhanced);
     }
 

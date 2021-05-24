@@ -13,11 +13,11 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceCl
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,6 +27,8 @@ import java.util.Map;
  * Date: 04.08.2016 / 12:34
  */
 public interface IIndependentStarlightSource {
+
+    public static final Random rand = new Random();
 
     //As the purpose of the source, this should produce the starlight - called once every tick
     public float produceStarlightTick(ServerWorld world, BlockPos pos);

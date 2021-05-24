@@ -31,6 +31,8 @@ public class ColorsAS {
     public static final Color EFFECT_BLUE_LIGHT = new Color(0x5D98D8);
     public static final Color EFFECT_BLUE_DARK = new Color(0x005ABE);
 
+    public static final Color EFFECT_PROXIMITY_LIGHTNING = new Color(0xB30404);
+
     public static final Color OVERLAY_CHARGE_MISSING = new Color(0xA20900);
     public static final Color OVERLAY_CHARGE_USAGE   = new Color(0x00B903);
 
