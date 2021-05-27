@@ -32,7 +32,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 18.08.2019 / 10:25
  */
-public class EntityItemHighlighted extends ItemEntity {
+public class EntityItemHighlighted extends EntityCustomItemReplacement {
 
     private static final DataParameter<Integer> DATA_COLOR = EntityDataManager.createKey(EntityItemHighlighted.class, DataSerializers.VARINT);
     private static final int NO_COLOR = 0xFF000000;

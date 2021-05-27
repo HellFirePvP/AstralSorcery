@@ -45,8 +45,7 @@ public class ItemStarmetalIngot extends Item {
         EntityStarmetal res = new EntityStarmetal(EntityTypesAS.ITEM_STARMETAL_INGOT, world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
         res.read(location.writeWithoutTypeId(new CompoundNBT()));
         if (location instanceof ItemEntity) {
-            res.setThrowerId(((ItemEntity) location).getThrowerId());
-            res.setOwnerId(((ItemEntity) location).getOwnerId());
+            res.setReplacedEntity((ItemEntity) location);
         }
         return res;
     }

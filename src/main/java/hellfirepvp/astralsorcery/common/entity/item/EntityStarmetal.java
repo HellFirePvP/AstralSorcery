@@ -38,7 +38,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
  * Created by HellFirePvP
  * Date: 17.05.2020 / 10:08
  */
-public class EntityStarmetal extends ItemEntity implements InteractableEntity {
+public class EntityStarmetal extends EntityCustomItemReplacement implements InteractableEntity {
 
     public EntityStarmetal(EntityType<? extends ItemEntity> type, World world) {
         super(type, world);

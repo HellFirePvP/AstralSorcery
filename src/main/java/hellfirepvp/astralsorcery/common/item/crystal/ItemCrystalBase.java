@@ -94,11 +94,10 @@ public abstract class ItemCrystalBase extends Item implements CrystalAttributeGe
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
         EntityCrystal res = new EntityCrystal(EntityTypesAS.ITEM_CRYSTAL, world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
         res.read(location.writeWithoutTypeId(new CompoundNBT()));
-        if (location instanceof ItemEntity) {
-            res.setThrowerId(((ItemEntity) location).getThrowerId());
-            res.setOwnerId(((ItemEntity) location).getOwnerId());
-        }
         res.applyColor(this.getItemEntityColor(itemstack));
+        if (location instanceof ItemEntity) {
+            res.setReplacedEntity((ItemEntity) location);
+        }
         return res;
     }
 
