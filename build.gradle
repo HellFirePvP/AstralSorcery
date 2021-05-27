@@ -16,7 +16,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.16.5-1.13.10'
+version = '1.16.5-1.13.11'
 group = 'hellfirepvp.astralsorcery'
 archivesBaseName = 'astralsorcery-1.16'
 String build_version = ""
