@@ -46,7 +46,7 @@ public class JEIHandlerSpawnEntity extends JEIInteractionResultHandler {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void drawRecipe(LiquidInteraction recipe, double mouseX, double mouseY) {
+    public void drawRecipe(LiquidInteraction recipe, MatrixStack renderStack, double mouseX, double mouseY) {
         InteractionResult result = recipe.getResult();
         if (!(result instanceof ResultSpawnEntity)) {
             return;
@@ -56,7 +56,7 @@ public class JEIHandlerSpawnEntity extends JEIInteractionResultHandler {
             return;
         }
 
-        MatrixStack renderStack = new MatrixStack();
+        renderStack.push();
         renderStack.translate(55, 35, 500);
         renderStack.scale(15, 15, 15);
         renderStack.rotate(Vector3f.XP.rotationDegrees(180));
@@ -65,5 +65,6 @@ public class JEIHandlerSpawnEntity extends JEIInteractionResultHandler {
         Minecraft.getInstance().getRenderManager()
                 .renderEntityStatic(le, 0, 0, 0, 0, 0, renderStack, buffer, LightmapUtil.getPackedFullbrightCoords());
         buffer.finish();
+        renderStack.pop();
     }
 }

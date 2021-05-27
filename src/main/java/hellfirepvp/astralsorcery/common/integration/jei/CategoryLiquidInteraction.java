@@ -25,7 +25,6 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -82,7 +81,7 @@ public class CategoryLiquidInteraction extends JEICategory<LiquidInteraction> {
         this.icon.draw(renderStack, 93, 36);
 
         JEIInteractionResultRegistry.get(recipe.getResult().getId())
-                .ifPresent(handler -> handler.drawRecipe(recipe, mouseX, mouseY));
+                .ifPresent(handler -> handler.drawRecipe(recipe, renderStack, mouseX, mouseY));
 
         FluidStack testMatch1 = new FluidStack(recipe.getReactant1(), FluidAttributes.BUCKET_VOLUME);
         FluidStack testMatch2 = new FluidStack(recipe.getReactant2(), FluidAttributes.BUCKET_VOLUME);

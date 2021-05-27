@@ -93,7 +93,7 @@ public class BlockStateHelper {
     @Nonnull
     public static <T extends Comparable<T>> BlockState deserialize(@Nonnull String serialized) {
         int propIndex = serialized.indexOf('[');
-        boolean hasProperties = isMissingStateInformation(serialized);
+        boolean hasProperties = !isMissingStateInformation(serialized);
         ResourceLocation key;
         if (hasProperties) {
             key = new ResourceLocation(serialized.substring(0, propIndex).toLowerCase(Locale.ROOT));
