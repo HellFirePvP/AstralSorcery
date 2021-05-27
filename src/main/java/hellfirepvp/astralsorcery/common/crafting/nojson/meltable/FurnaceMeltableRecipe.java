@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.crafting.nojson.meltable;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.RecipeHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,6 +25,6 @@ public class FurnaceMeltableRecipe extends ItemMeltableRecipe {
     public FurnaceMeltableRecipe() {
         super(AstralSorcery.key("all_furnace_meltable"),
                 (world, pos, state) -> RecipeHelper.findSmeltingResult(world, state).isPresent(),
-                (worldPos, state) -> RecipeHelper.findSmeltingResult(worldPos.getWorld(), state).orElse(ItemStack.EMPTY));
+                (worldPos, state) -> RecipeHelper.findSmeltingResult(worldPos.getWorld(), state).map(Tuple::getA).orElse(ItemStack.EMPTY));
     }
 }

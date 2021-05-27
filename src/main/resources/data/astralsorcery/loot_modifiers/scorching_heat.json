@@ -1,5 +1,4 @@
 {
-  "type": "astralsorcery:scorching_heat",
   "conditions": [
     {
       "condition": "minecraft:match_tool",

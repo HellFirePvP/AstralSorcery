@@ -17,10 +17,12 @@ import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -55,7 +57,7 @@ public class RecipeHelper {
     }
 
     @Nonnull
-    public static Optional<ItemStack> findSmeltingResult(World world, BlockState input) {
+    public static Optional<Tuple<ItemStack, Float>> findSmeltingResult(World world, BlockState input) {
         ItemStack stack = ItemUtils.createBlockStack(input);
         if (stack.isEmpty()) {
             return Optional.empty();
@@ -64,7 +66,7 @@ public class RecipeHelper {
     }
 
     @Nonnull
-    public static Optional<ItemStack> findSmeltingResult(World world, ItemStack input) {
+    public static Optional<Tuple<ItemStack, Float>> findSmeltingResult(World world, ItemStack input) {
         RecipeManager mgr = world.getRecipeManager();
         IInventory inv = new Inventory(input);
         Optional<IRecipe<IInventory>> optRecipe = (Optional<IRecipe<IInventory>>) ObjectUtils.firstNonNull(
@@ -72,7 +74,14 @@ public class RecipeHelper {
                 mgr.getRecipe(IRecipeType.CAMPFIRE_COOKING, inv, world),
                 mgr.getRecipe(IRecipeType.SMOKING, inv, world),
                 Optional.empty());
-        return optRecipe.map(recipe -> recipe.getCraftingResult(inv).copy());
+        return optRecipe.map(recipe -> {
+            ItemStack smeltResult = recipe.getCraftingResult(inv).copy();
+            float exp = 0;
+            if (recipe instanceof AbstractCookingRecipe) {
+                exp = ((AbstractCookingRecipe) recipe).getExperience();
+            }
+            return new Tuple<>(smeltResult, exp);
+        });
     }
 
     @Nullable

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.util.loot.LootUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,9 @@ import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.fml.hooks.BasicEventHooks;
@@ -53,30 +57,47 @@ public class LootModifierScorchingHeat extends LootModifier {
         return generatedLoot.stream()
                 .filter(stack -> !stack.isEmpty())
                 .map(stack -> {
-                    Optional<ItemStack> furnaceResult = RecipeHelper.findSmeltingResult(context.getWorld(), stack);
+                    Optional<Tuple<ItemStack, Float>> furnaceResult = RecipeHelper.findSmeltingResult(context.getWorld(), stack);
                     if (context.has(LootParameters.THIS_ENTITY)) {
                         Entity e = context.get(LootParameters.THIS_ENTITY);
                         if (e instanceof PlayerEntity) {
-                            furnaceResult.ifPresent(result -> BasicEventHooks.firePlayerSmeltedEvent((PlayerEntity) e, result));
+                            furnaceResult.ifPresent(result -> BasicEventHooks.firePlayerSmeltedEvent((PlayerEntity) e, result.getA()));
                         }
                     }
                     furnaceResult.ifPresent(result -> {
+                        ItemStack resultStack = result.getA();
+                        float resultExp = result.getB();
+
                         ItemStack tool = context.get(LootParameters.TOOL);
-                        if (!tool.isEmpty() && !(result.getItem() instanceof BlockItem)) {
+                        if (!tool.isEmpty() && !(resultStack.getItem() instanceof BlockItem)) {
                             int silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool);
                             if (silkTouch <= 0) {
+                                int addedCount = 0;
                                 int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
                                 if (fortuneLevel > 0) {
-                                    int addedCount = context.getRandom().nextInt(fortuneLevel + 2) - 1;
-                                    if (addedCount < 0) {
-                                        addedCount = 0;
+                                    addedCount = Math.max(context.getRandom().nextInt(fortuneLevel + 2) - 1, 0);
+                                    resultStack.setCount(resultStack.getCount() * (addedCount + 1));
+                                }
+
+                                resultExp *= (addedCount + 1);
+                                if (resultExp > 0) {
+                                    int iExp = (int) resultExp;
+                                    float partialExp = resultExp - iExp;
+                                    if (partialExp > 0 && partialExp > context.getRandom().nextFloat()) {
+                                        iExp += 1;
                                     }
-                                    result.setCount(result.getCount() * (addedCount + 1));
+                                    if (iExp >= 1) {
+                                        Vector3d blockPos = context.get(LootParameters.field_237457_g_);
+                                        if (blockPos != null) {
+                                            ServerWorld world = context.getWorld();
+                                            world.addEntity(new ExperienceOrbEntity(world, blockPos.getX(), blockPos.getY(), blockPos.getZ(), iExp));
+                                        }
+                                    }
                                 }
                             }
                         }
                     });
-                    return furnaceResult.orElse(stack);
+                    return furnaceResult.map(Tuple::getA).orElse(stack);
                 })
                 .collect(Collectors.toList());
     }

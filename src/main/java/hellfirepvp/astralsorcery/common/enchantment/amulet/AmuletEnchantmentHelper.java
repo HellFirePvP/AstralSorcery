@@ -107,19 +107,19 @@ public class AmuletEnchantmentHelper {
             return null;
         }
 
-        ItemStack cmpThis = anyTool.copy();
-        cmpThis.setDamage(0);
+        int originalDamage = anyTool.getDamage(); //Save the original damage on the tool
 
         //Check if the player actually wears/carries the tool
         boolean foundTool = false;
         for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-            ItemStack stack = player.getItemStackFromSlot(slot).copy();
-            stack.setDamage(0);
-            if (ItemComparator.compare(stack, cmpThis, ItemComparator.Clause.Sets.ITEMSTACK_STRICT)) {
+            ItemStack stack = player.getItemStackFromSlot(slot);
+            anyTool.setDamage(stack.getDamage()); //Make sure the damages are equal before comparing
+            if (ItemComparator.compare(stack, anyTool, ItemComparator.Clause.Sets.ITEMSTACK_STRICT)) {
                 foundTool = true;
                 break;
             }
         }
+        anyTool.setDamage(originalDamage); //Reset original damage on the tool
         if (!foundTool) return null;
 
         return player;

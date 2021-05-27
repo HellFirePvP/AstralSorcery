@@ -30,6 +30,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -83,7 +84,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
             if (entity instanceof ItemEntity) {
                 ItemStack current = ((ItemEntity) entity).getItem();
 
-                ItemStack result = RecipeHelper.findSmeltingResult(entity.getEntityWorld(), current).orElse(ItemStack.EMPTY);
+                ItemStack result = RecipeHelper.findSmeltingResult(entity.getEntityWorld(), current).map(Tuple::getA).orElse(ItemStack.EMPTY);
                 if (result.isEmpty()) {
                     return;
                 }
@@ -126,7 +127,7 @@ public class ItemColoredLensFire extends ItemColoredLens {
             if (blockStack.isEmpty()) {
                 return;
             }
-            ItemStack result = RecipeHelper.findSmeltingResult(world, blockStack).orElse(ItemStack.EMPTY);
+            ItemStack result = RecipeHelper.findSmeltingResult(world, blockStack).map(Tuple::getA).orElse(ItemStack.EMPTY);
             if (result.isEmpty()) {
                 return;
             }
