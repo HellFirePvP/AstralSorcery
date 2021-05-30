@@ -37,6 +37,6 @@ val air = <item:minecraft:air>;
  * Removes the Altar recipe called "astralsorcery:altar/architect_wand". This is the recipe for the Formation Wand.
  */
 
-// <recipetype:astralsorcery:altar>.removeByName(outputState as MCBlockState, @Optional exact as bool)
+// <recipetype:astralsorcery:altar>.removeByName(name as string)
 
 <recipetype:astralsorcery:altar>.removeByName("astralsorcery:altar/architect_wand");
