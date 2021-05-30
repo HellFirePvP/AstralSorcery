@@ -321,7 +321,7 @@ public class TileInfuser extends TileEntityTick implements WandInteractable {
         super.readCustomNBT(compound);
 
         this.inventory = this.inventory.deserialize(compound.getCompound("inventory"));
-        this.knownRecipes = NBTHelper.readSet(compound, "knownRecipes", Constants.NBT.TAG_STRING, nbt -> new ResourceLocation(nbt.toString()));
+        this.knownRecipes = NBTHelper.readSet(compound, "knownRecipes", Constants.NBT.TAG_STRING, nbt -> new ResourceLocation(nbt.getString()));
 
         if (compound.contains("activeRecipe", Constants.NBT.TAG_COMPOUND)) {
             this.activeRecipe = ActiveLiquidInfusionRecipe.deserialize(compound.getCompound("activeRecipe"), this.activeRecipe);
