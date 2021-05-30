@@ -482,7 +482,7 @@ public class TileAltar extends TileReceiverBase<StarlightReceiverAltar> implemen
         this.altarType = AltarType.values()[compound.getInt("altarType")];
         this.inventory = this.inventory.deserialize(compound.getCompound("inventory"));
         this.focusItem = NBTHelper.getStack(compound, "focusItem");
-        this.knownRecipes = NBTHelper.readSet(compound, "knownRecipes", Constants.NBT.TAG_STRING, nbt -> new ResourceLocation(nbt.toString()));
+        this.knownRecipes = NBTHelper.readSet(compound, "knownRecipes", Constants.NBT.TAG_STRING, nbt -> new ResourceLocation(nbt.getString()));
 
         if (compound.contains("activeRecipe", Constants.NBT.TAG_COMPOUND)) {
             this.activeRecipe = ActiveSimpleAltarRecipe.deserialize(compound.getCompound("activeRecipe"), this.activeRecipe);
