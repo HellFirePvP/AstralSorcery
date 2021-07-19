@@ -34,7 +34,12 @@ public class EnchantmentScorchingHeat extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
-        return super.canApplyAtEnchantingTable(stack);
+        return this.type.canEnchantItem(stack.getItem());
+    }
+
+    @Override
+    public int getMaxLevel() {
+        return 1;
     }
 
     @Override
