@@ -29,6 +29,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -73,6 +74,9 @@ public class FormCelestialCrystalClusterRecipe extends LiquidStarlightRecipe {
 
     @Override
     public boolean matches(ItemEntity trigger, World world, BlockPos at) {
+        if (!world.getBlockState(at.down()).isTopSolid(world, at.down(), trigger, Direction.UP)) {
+            return false;
+        }
         List<Entity> otherEntities = getEntitiesInBlock(world, at);
         otherEntities.remove(trigger);
         Optional<Entity> crystalEntity = otherEntities.stream()
