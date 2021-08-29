@@ -33,6 +33,11 @@ public class EnchantmentScorchingHeat extends Enchantment {
     }
 
     @Override
+    public boolean canApply(ItemStack stack) {
+        return stack.canApplyAtEnchantingTable(this);
+    }
+
+    @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
         return false;
     }
