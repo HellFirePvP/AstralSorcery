@@ -31,6 +31,7 @@ public abstract class FluidLiquidStarlight extends ForgeFlowingFluid {
     public static FluidAttributes.Builder addAttributes(FluidAttributes.Builder attributeBuilder) {
         return attributeBuilder
                 .rarity(Rarity.EPIC)
+                .luminosity(15)
                 .density(1001)
                 .viscosity(300)
                 .temperature(40);
