@@ -10,10 +10,7 @@ package hellfirepvp.astralsorcery.common.cmd.sub;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.data.research.*;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ICommandSource;
@@ -66,8 +63,34 @@ public class CommandProgress {
                     .mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
             return 0;
         }
-        if (ResearchManager.grantProgress(target, goal)) {
-            src.sendMessage(new StringTextComponent("Success! ").mergeStyle(TextFormatting.GREEN), Util.DUMMY_UUID);
+        ResearchProgression research = null;
+        switch (goal) {
+            case DISCOVERY:
+                research = ResearchProgression.DISCOVERY;
+                break;
+            case BASIC_CRAFT:
+                research = ResearchProgression.BASIC_CRAFT;
+                break;
+            case ATTUNEMENT:
+                research = ResearchProgression.ATTUNEMENT;
+                break;
+            case CONSTELLATION_CRAFT:
+                research = ResearchProgression.CONSTELLATION;
+                break;
+            case TRAIT_CRAFT:
+                research = ResearchProgression.RADIANCE;
+                break;
+            case BRILLIANCE:
+                research = ResearchProgression.BRILLIANCE;
+                break;
+            default:
+                break;
+        }
+        if (research == null) {
+            src.sendMessage(new StringTextComponent("Invalid progression tier: " + goal.name()).mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
+        }
+        if (ResearchManager.grantProgress(target, goal) && ResearchManager.grantResearch(target, research)) {
+            src.sendMessage(new StringTextComponent("Success!").mergeStyle(TextFormatting.GREEN), Util.DUMMY_UUID);
             return Command.SINGLE_SUCCESS;
         } else {
             src.sendMessage(new StringTextComponent("Failed!").mergeStyle(TextFormatting.RED), Util.DUMMY_UUID);
