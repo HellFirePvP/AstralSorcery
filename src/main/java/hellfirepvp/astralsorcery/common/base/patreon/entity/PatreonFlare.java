@@ -20,7 +20,9 @@ import hellfirepvp.astralsorcery.client.resource.query.SpriteQuery;
 import hellfirepvp.astralsorcery.common.base.patreon.FlareColor;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffect;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.world.IWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,6 +53,7 @@ public class PatreonFlare extends PatreonPartialEntity {
         super.tickClient();
 
         if (this.clientSprite != null) {
+            fadePlayerDistance();
             FXFacingSprite sprite = (FXFacingSprite) clientSprite;
             if (sprite.isRemoved() && RenderingConfig.CONFIG.patreonEffects.get()) {
                 this.clientSprite = null;
@@ -105,6 +108,18 @@ public class PatreonFlare extends PatreonPartialEntity {
                 rand.nextFloat() * 0.08 * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.08 * (rand.nextBoolean() ? 1 : -1));
 
+        if (this.clientSprite instanceof EntityVisualFX) {
+            EntityVisualFX clientSprite = (EntityVisualFX) this.clientSprite;
+            if (this.findOwner(world) != null) {
+                PlayerEntity player = this.findOwner(world);
+                if (player != null) {
+                    if (clientSprite.getAlphaMultiplier() < 0.5F) {
+                        return;
+                    }
+                }
+            }
+        }
+
         EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
                 .spawn(at)
                 .alpha(VFXAlphaFunction.FADE_OUT)
@@ -118,6 +133,29 @@ public class PatreonFlare extends PatreonPartialEntity {
                     .alpha(VFXAlphaFunction.FADE_OUT)
                     .setScaleMultiplier(scale * 0.3F)
                     .setMaxAge(age - 10);
+        }
+    }
+
+    private void fadePlayerDistance() {
+        if (this.clientSprite instanceof EntityVisualFX) {
+            Minecraft mc = Minecraft.getInstance();
+            World world = mc.world;
+            if (world == null) {
+                return;
+            }
+            PlayerEntity player = this.findOwner(world);
+            if (player == null) {
+                return;
+            }
+            double spriteDistance = Math.abs(
+                    (player.getPosX() - pos.getX()) +
+                            (player.getPosYEye() - pos.getY()) +
+                            (player.getPosZ() - pos.getZ())
+            );
+            EntityVisualFX clientSprite = (EntityVisualFX) this.clientSprite;
+            float spriteAlpha = (float) (clientSprite.getAlphaMultiplier() * spriteDistance);
+            spriteAlpha = MathHelper.clamp(spriteAlpha, 0.05F, 1);
+            clientSprite.setAlphaMultiplier(spriteAlpha);
         }
     }
 
