@@ -777,7 +777,7 @@
   "astralsorcery.constellation.horologium.tag": "Time",
   "astralsorcery.constellation.horologium.description": "This constellation shifts in time, only showing during significant astral occurrences. Its light twists time, accelerating things they shine upon.",
   "astralsorcery.constellation.horologium.enchantments": "This constellation saturates potions to grant increased movement Speed, Haste, and greatly increased Luck. Enchanted weapons tend to find much more Loot in slain foes, and tools may bring great Fortune to their user.<NL>Enchanted tools and weapons may find themselves faster to re-use, helmets may improve perk XP gain, and armor may improve the effects of perks.",
-  "astralsorcery.constellation.horologium.ritual": "This ritual accelerates all things mechanical and ticking, with nearby tile entities ticking their own clock at an increased rate. How quickly a clock advances for any block is based on the amount of Starlight channeled into the ritual.",
+  "astralsorcery.constellation.horologium.ritual": "This ritual accelerates all things mechanical and ticking, with nearby tile entities ticking their own clock at an increased rate, though the blocks affected may take some time for the light to find them.",
   "astralsorcery.constellation.horologium.mantle": "Wearers of a mantle attuned to time can freeze all hostiles nearby when attacked for a short period of time. There is a delay before time can be so abruptly disturbed again. Fire does not trigger this mantle effect.",
   "astralsorcery.constellation.horologium.corruption": "Nearby creatures and blocks are held in stasis, as if frozen in time.",
 
@@ -823,7 +823,7 @@
   "astralsorcery.constellation.ulteria.tag": "Tenacity",
   "astralsorcery.constellation.ulteria.description": "The faint light of this constellation endures, even across the vast distances it travels, like an unstoppable, otherworldly juggernaut.",
   "astralsorcery.constellation.ulteria.enchantments": "This constellation saturates potions to grant superior Absorption of damage and Regeneration, at the cost of offensive strength. Enchanted items are resistant to damage through use, and enchanted armor can magically reduce the power of fire, projectiles, and explosions.<NL>Enchanted armor may further reduce elemental damage, melee weapons may reflect damage to attackers, and ranged weapons may improve the ability to dodge blows.",
-  "astralsorcery.constellation.ulteria.trait": "Increased sustainment of the magical energies of the ritual results higher saturation of the area. <NL>Balancing the ritual sees reach increased three-fold, and ritual power more than doubled. Early balancing lenses have a more significant effect.",
+  "astralsorcery.constellation.ulteria.trait": "Increased sustainment of the magical energies of the ritual results higher saturation of the area. <NL>Balancing the ritual sees reach halved, and ritual power doubled. Early balancing lenses have a significantly reduced effect compared to later lenses.",
 
   "astralsorcery.constellation.alcara": "Alcara",
   "astralsorcery.constellation.alcara.tag": "Resonance",
@@ -835,7 +835,7 @@
   "astralsorcery.constellation.vorux.tag": "Ferocity",
   "astralsorcery.constellation.vorux.description": "Light from this constellation invokes rage and aggression in all beings, even from the far depths of the Astral.",
   "astralsorcery.constellation.vorux.enchantments": "This constellation saturates potions to grant increased Strength and Resistance to damage, at the cost of increased muscular fatigue. Enchanted weapons cause more harm to their targets in all ways, and crossbows can Pierce their targets and shields, injuring those behind them.<NL>Enchanted armor may improve the movement speed of the wearer.",
-  "astralsorcery.constellation.vorux.trait": "The brightest shine begets darkness the fastest. <NL>Ritual reach increases by 1/5th, and balancing lenses see power gains more quickly, though at the cost of maximum power.",
+  "astralsorcery.constellation.vorux.trait": "The brightest shine begets darkness the fastest. <NL>Ritual reach increases by 1/5th, and balancing lenses see power gains far more quickly, though at the cost of maximum power.",
 
   "perk.info.astralsorcery.locked": "Locked",
   "perk.info.astralsorcery.available": "Available",
