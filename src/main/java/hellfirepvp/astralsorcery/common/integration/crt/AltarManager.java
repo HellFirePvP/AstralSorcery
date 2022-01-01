@@ -43,11 +43,11 @@ public class AltarManager implements IRecipeManager {
             throw new IllegalArgumentException("Unknown Astral Sorcery Altar Type: " + altarType);
         }
         if (ingredients.length != 5) {
-            throw new IllegalArgumentException("Astral Sorcery Altar ingredients needs to he a 5x5 array with all values filled. Use <item:minecraft:air> to pad it out!");
+            throw new IllegalArgumentException("Astral Sorcery Altar ingredients needs to be a 5x5 array with all values filled. Use <item:minecraft:air> to pad it out!");
         }
         for (IIngredient[] ingredient : ingredients) {
             if (ingredient.length != 5) {
-                throw new IllegalArgumentException("Astral Sorcery Altar ingredients needs to he a 5x5 array with all values filled. Use <item:minecraft:air> to pad it out!");
+                throw new IllegalArgumentException("Astral Sorcery Altar ingredients needs to be a 5x5 array with all values filled. Use <item:minecraft:air> to pad it out!");
             }
         }
 
@@ -73,7 +73,7 @@ public class AltarManager implements IRecipeManager {
             throw new IllegalArgumentException("Unknown Astral Sorcery Altar Type: " + altarType);
         }
         if (pattern.length != 5) {
-            throw new IllegalArgumentException("Astral Sorcery Altar ingredients needs to he a 5x5 array with all values filled.");
+            throw new IllegalArgumentException("Astral Sorcery Altar ingredients needs to be a 5x5 array with all values filled.");
         }
         if (ingredients.keySet().stream().anyMatch(s -> s.length() != 1)) {
             throw new IllegalArgumentException("Cannot have multiple characters as pattern key!");
