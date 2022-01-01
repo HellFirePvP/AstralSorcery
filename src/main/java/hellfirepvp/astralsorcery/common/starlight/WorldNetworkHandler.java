@@ -20,6 +20,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
@@ -76,7 +77,7 @@ public class WorldNetworkHandler {
         for (Tuple<BlockPos, IIndependentStarlightSource> source : getAllSources()) {
             if (!source.getB().providesAutoLink()) continue;
 
-            if (source.getA().distanceSq(at) <= 256) {
+            if (source.getA().distanceSq(Vector3d.copy(at), false) <= 256) {
                 IPrismTransmissionNode node = getTransmissionNode(source.getA());
                 if (node == null) {
                     AstralSorcery.log.warn("Didn't find a TransmissionNode at a position that's supposed to be a source!");
@@ -106,7 +107,7 @@ public class WorldNetworkHandler {
         for (Tuple<BlockPos, IIndependentStarlightSource> source : getAllSources()) {
             if (!source.getB().providesAutoLink()) continue;
 
-            if (source.getA().distanceSq(at) <= 256) {
+            if (source.getA().distanceSq(Vector3d.copy(at), false) <= 256) {
                 IPrismTransmissionNode node = getTransmissionNode(source.getA());
                 if (node == null) {
                     AstralSorcery.log.warn("Didn't find a TransmissionNode at a position that's supposed to be a source!");

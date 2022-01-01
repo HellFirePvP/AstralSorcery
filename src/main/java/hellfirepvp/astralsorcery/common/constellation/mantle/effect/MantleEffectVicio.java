@@ -58,8 +58,8 @@ public class MantleEffectVicio extends MantleEffect {
                 player.sendPlayerAbilities();
             }
 
-            EventHelperTemporaryFlight.allowFlight(player, 10);
-            if (player.abilities.isFlying && !player.isOnGround() && player.ticksExisted % 10 == 0) {
+            EventHelperTemporaryFlight.allowFlight(player, 20);
+            if (player.abilities.isFlying && !player.isOnGround() && player.ticksExisted % 20 == 0) {
                 if (!PlayerAffectionFlags.isPlayerAffected(player, CEffectVicio.FLAG)) {
                     AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCost.get(), false);
                 }
@@ -119,7 +119,7 @@ public class MantleEffectVicio extends MantleEffect {
 
     private static class VicioConfig extends Config {
 
-        private static final int defaultChargeCost = 60;
+        private static final int defaultChargeCost = 100;
 
         private ForgeConfigSpec.IntValue chargeCost;
 

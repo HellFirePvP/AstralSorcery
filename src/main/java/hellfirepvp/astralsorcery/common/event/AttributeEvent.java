@@ -21,7 +21,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,8 +30,6 @@ import java.lang.reflect.Field;
  * Date: 08.08.2019 / 06:57
  */
 public class AttributeEvent {
-
-    private static final Field fAttributeMapEntity;
 
     public static class PostProcessVanilla extends Event {
 
@@ -137,29 +134,24 @@ public class AttributeEvent {
 
     @Nullable
     private static LivingEntity getEntity(AttributeModifierManager map) {
-        if (fAttributeMapEntity != null) {
-            try {
-                return (LivingEntity) fAttributeMapEntity.get(map);
-            } catch (Exception ignored) {}
+        if (map instanceof EntityModifierManager) {
+            return ((EntityModifierManager) map).getLivingEntity();
         }
         return null;
     }
 
     public static void setEntity(AttributeModifierManager map, LivingEntity entity) {
-        try {
-            fAttributeMapEntity.set(map, entity);
-        } catch (Exception ignored) {}
+        if (map instanceof EntityModifierManager) {
+            ((EntityModifierManager) map).setLivingEntity(entity);
+        }
     }
 
-    static {
-        Field f = null;
-        try {
-            //Added via ASM
-            f = AttributeModifierManager.class.getDeclaredField("as_entity");
-        } catch (Exception exc) {
-            f = null;
-        } finally {
-            fAttributeMapEntity = f;
-        }
+    public static interface EntityModifierManager {
+
+        @Nullable
+        LivingEntity getLivingEntity();
+
+        void setLivingEntity(LivingEntity entity);
+
     }
 }

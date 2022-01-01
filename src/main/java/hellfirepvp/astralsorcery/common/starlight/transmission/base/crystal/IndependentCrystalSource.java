@@ -29,6 +29,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -128,7 +129,7 @@ public class IndependentCrystalSource implements IIndependentStarlightSource {
             if (other.equals(thisPos)) {
                 continue;
             }
-            double dstSq = thisPos.distanceSq(other);
+            double dstSq = thisPos.distanceSq(Vector3d.copy(other), false);
             if (dstSq < minDstSq) {
                 minDstSq = dstSq;
                 closest = other;

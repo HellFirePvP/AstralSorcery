@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -95,7 +96,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
         } else {
             this.nextReachable = oldRayState;
         }
-        this.dstToNextSq = pos.distanceSq(thisPos);
+        this.dstToNextSq = pos.distanceSq(Vector3d.copy(thisPos), false);
     }
 
     @Override
@@ -103,8 +104,9 @@ public class SimpleTransmissionNode implements ITransmissionNode {
         if (nextPos == null) {
             return false;
         }
-        double dstStart = thisPos.distanceSq(at);
-        double dstEnd = nextPos.distanceSq(at);
+        Vector3d bPosAt = Vector3d.copy(at);
+        double dstStart = thisPos.distanceSq(bPosAt, false);
+        double dstEnd = nextPos.distanceSq(bPosAt, false);
         if (dstStart > dstToNextSq || dstEnd > dstToNextSq) {
             return false; //out of range
         }

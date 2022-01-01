@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -120,25 +121,40 @@ public class EngravedStarMap {
 
     @Nonnull
     public ItemStack applyEffects(@Nonnull ItemStack stack) {
-        Map<IConstellation, List<EngravingEffect.ApplicableEffect>> effects = new HashMap<>();
-        for (ResourceLocation key : this.getConstellationKeys()) {
-            IConstellation cst = ConstellationRegistry.getConstellation(key);
-            if (cst != null) {
-                EngravingEffect effect = cst.getEngravingEffect();
-                if (effect != null) {
-                    List<EngravingEffect.ApplicableEffect> applicable = effect.getApplicableEffects(stack);
-                    if (!applicable.isEmpty()) {
-                        effects.put(cst, applicable);
+        List<Tuple<EngravingEffect.ApplicableEffect, Float>> engravings = new LinkedList<>();
+        List<IConstellation> constellations = new LinkedList<>();
+        this.getConstellationKeys().stream()
+                .map(ConstellationRegistry::getConstellation)
+                .filter(Objects::nonNull)
+                .forEach(constellations::add);
+
+        for (IConstellation cst : constellations) {
+            EngravingEffect effect = cst.getEngravingEffect();
+            if (effect != null) {
+                List<EngravingEffect.ApplicableEffect> applicable = effect.getApplicableEffects(stack);
+                if (!applicable.isEmpty()) {
+                    float distribution = this.getDistribution(cst);
+                    for (EngravingEffect.ApplicableEffect applicableEffect : applicable) {
+                        engravings.add(new Tuple<>(applicableEffect, distribution));
                     }
                 }
             }
         }
-        for (IConstellation cst : effects.keySet()) {
-            List<EngravingEffect.ApplicableEffect> applicable = effects.get(cst);
-            float distribution = this.getDistribution(cst);
-            for (EngravingEffect.ApplicableEffect effect : applicable) {
-                stack = effect.apply(stack, distribution, rand);
+        engravings.sort(Comparator.comparing(tpl -> {
+            EngravingEffect.ApplicableEffect effect = tpl.getA();
+            if (effect instanceof EngravingEffect.EnchantmentEffect) {
+                if (!((EngravingEffect.EnchantmentEffect) effect).isIgnoreCompatibility()) {
+                    return 0; //Sort incompatible enchantments first since the others won't care.
+                }
+                return 1;
             }
+            return 2;
+        }));
+
+        for (Tuple<EngravingEffect.ApplicableEffect, Float> tpl : engravings) {
+            EngravingEffect.ApplicableEffect effect = tpl.getA();
+            float distribution = tpl.getB();
+            stack = effect.apply(stack, distribution, rand);
         }
         return stack;
     }

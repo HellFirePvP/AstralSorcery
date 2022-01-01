@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.util.reflection;
 
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.util.math.shapes.VoxelShapeSpliterator;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
@@ -30,7 +29,6 @@ import java.util.function.Function;
 public class ReflectionHelper {
 
     private static BiConsumer<ItemEntity, Boolean> itemEntitySkipPhysicRenderer;
-    private static BiConsumer<VoxelShapeSpliterator, Boolean> voxelShapeIteratorDidCustomCollision;
 
     public static void setSkipItemPhysicsRender(ItemEntity entity) {
         if (itemEntitySkipPhysicRenderer == null) {
@@ -38,14 +36,6 @@ public class ReflectionHelper {
         }
 
         itemEntitySkipPhysicRenderer.accept(entity, true);
-    }
-
-    public static void setVoxelShapeIteratorDidCustomCollision(VoxelShapeSpliterator iterator) {
-        if (voxelShapeIteratorDidCustomCollision == null) {
-            voxelShapeIteratorDidCustomCollision = getFieldSetter(VoxelShapeSpliterator.class, "as_didCustomCollision", Field::setBoolean);
-        }
-
-        voxelShapeIteratorDidCustomCollision.accept(iterator, true);
     }
 
     private static <T, V> BiConsumer<T, V> getFieldSetter(Class<T> owningClass, String fieldName, FieldSetter<T, V> fieldSetter) {

@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -184,12 +185,13 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
             } else {
                 this.reachable = oldRayState;
             }
-            this.distanceSq = end.distanceSq(start);
+            this.distanceSq = end.distanceSq(Vector3d.copy(start), false);
         }
 
         private boolean notifyBlockPlace(World world, BlockPos connect, BlockPos at) {
-            double dstStart = connect.distanceSq(at);
-            double dstEnd = pos.distanceSq(at);
+            Vector3d bPosAt = Vector3d.copy(at);
+            double dstStart = connect.distanceSq(bPosAt, false);
+            double dstEnd = pos.distanceSq(bPosAt, false);
             if (dstStart > distanceSq || dstEnd > distanceSq) return false;
             boolean oldState = this.reachable;
             this.reachable = parent.ignoreBlockCollision || rayAssist.isClear(world);

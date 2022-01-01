@@ -34,6 +34,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -121,16 +122,19 @@ public class TileSpectralRelay extends TileEntityTick {
         }
         this.setClosestRelayPos(null);
         BlockPos thisPos = this.getPos();
+        Vector3d thisVPos = Vector3d.copy(thisPos);
         foreachNearbyRelay(this.getWorld(), thisPos, relay -> {
             BlockPos relayPos = relay.getPos();
             if (relayPos.equals(thisPos)) {
                 return;
             }
+            Vector3d relayVPos = Vector3d.copy(relayPos);
+
             BlockPos otherClosestPos = relay.closestRelayPos;
-            if (otherClosestPos == null || thisPos.distanceSq(relayPos) < otherClosestPos.distanceSq(relayPos)) {
+            if (otherClosestPos == null || thisPos.distanceSq(relayVPos, false) < otherClosestPos.distanceSq(relayVPos, false)) {
                 relay.setClosestRelayPos(thisPos);
             }
-            if (this.closestRelayPos == null || relayPos.distanceSq(thisPos) < this.closestRelayPos.distanceSq(thisPos)) {
+            if (this.closestRelayPos == null || relayPos.distanceSq(thisVPos, false) < this.closestRelayPos.distanceSq(thisVPos, false)) {
                 this.setClosestRelayPos(relayPos);
             }
         });
@@ -239,9 +243,10 @@ public class TileSpectralRelay extends TileEntityTick {
     private void updateAltarPos() {
         Set<BlockPos> altarPositions = BlockDiscoverer.searchForTileEntitiesAround(getWorld(), getPos(), 16, tile -> tile instanceof TileAltar);
 
+        Vector3d thisPos = Vector3d.copy(getPos());
         BlockPos closestAltar = null;
         for (BlockPos other : altarPositions) {
-            if (closestAltar == null || other.distanceSq(getPos()) < closestAltar.distanceSq(getPos())) {
+            if (closestAltar == null || other.distanceSq(thisPos, false) < closestAltar.distanceSq(thisPos, false)) {
                 closestAltar = other;
             }
         }

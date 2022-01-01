@@ -151,6 +151,10 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
             return this;
         }
 
+        public boolean isIgnoreCompatibility() {
+            return this.ignoreCompat;
+        }
+
         @Override
         public boolean supports(@Nonnull ItemStack stack) {
             if (stack.isEmpty()) {

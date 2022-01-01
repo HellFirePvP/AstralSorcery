@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.loot.*;
-import hellfirepvp.astralsorcery.common.loot.global.LootModifierMagnetDrops;
 import hellfirepvp.astralsorcery.common.loot.global.LootModifierPerkVoidTrash;
 import hellfirepvp.astralsorcery.common.loot.global.LootModifierScorchingHeat;
 import net.minecraft.loot.LootFunction;
@@ -36,7 +35,6 @@ public class RegistryLoot {
     public static void init() {
         registerGlobalModifier(new LootModifierScorchingHeat.Serializer(), AstralSorcery.key("scorching_heat"));
         registerGlobalModifier(new LootModifierPerkVoidTrash.Serializer(), AstralSorcery.key("perk_void_trash"));
-        registerGlobalModifier(new LootModifierMagnetDrops.Serializer(), AstralSorcery.key("magnet_drops"));
 
         Functions.LINEAR_LUCK_BONUS = registerFunction(new LinearLuckBonus.Serializer(), AstralSorcery.key("linear_luck_bonus"));
         Functions.RANDOM_CRYSTAL_PROPERTIES = registerFunction(new RandomCrystalProperty.Serializer(), AstralSorcery.key("random_crystal_property"));

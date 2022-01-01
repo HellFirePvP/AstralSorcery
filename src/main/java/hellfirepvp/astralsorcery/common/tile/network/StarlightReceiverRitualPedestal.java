@@ -37,6 +37,7 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -277,7 +278,7 @@ public class StarlightReceiverRitualPedestal extends SimpleTransmissionReceiver<
                 if (Math.toDegrees(toDir.angle(newDir)) <= 30) {
                     continue lblWhile;
                 }
-                if (test.distanceSq(p) <= 3) {
+                if (from.distanceSquared(Vector3d.copyCentered(p)) <= 3) {
                     continue lblWhile;
                 }
             }

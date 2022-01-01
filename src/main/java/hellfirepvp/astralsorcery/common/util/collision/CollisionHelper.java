@@ -17,6 +17,7 @@ import net.minecraft.util.math.shapes.VoxelShapeSpliterator;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -46,9 +47,10 @@ public class CollisionHelper {
         return false;
     }
 
+    @Nullable
     public static Vector3d onEntityCollision(Vector3d allowedMovement, Entity entity) {
         if (!CollisionManager.needsCustomCollision(entity)) {
-            return allowedMovement;
+            return null;
         }
         List<AxisAlignedBB> additionalBoxes = CollisionManager.getAdditionalBoundingBoxes(entity);
         AxisAlignedBB entityBox = entity.getBoundingBox().grow(1.0E-7D);

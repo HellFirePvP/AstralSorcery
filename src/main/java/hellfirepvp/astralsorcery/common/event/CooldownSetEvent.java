@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.event;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraftforge.eventbus.api.Event;
 
 /**
@@ -22,23 +21,17 @@ import net.minecraftforge.eventbus.api.Event;
 public class CooldownSetEvent extends Event {
 
     private final PlayerEntity player;
-    private final Item item;
     private final int originalCooldown;
     private int cooldown;
 
-    public CooldownSetEvent(PlayerEntity player, Item item, int originalCooldown) {
+    public CooldownSetEvent(PlayerEntity player, int originalCooldown) {
         this.player = player;
-        this.item = item;
         this.originalCooldown = originalCooldown;
         this.setCooldown(this.getOriginalCooldown());
     }
 
     public PlayerEntity getPlayer() {
         return player;
-    }
-
-    public Item getItem() {
-        return item;
     }
 
     public int getOriginalCooldown() {

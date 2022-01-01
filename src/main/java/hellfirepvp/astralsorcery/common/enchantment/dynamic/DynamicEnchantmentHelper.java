@@ -145,9 +145,10 @@ public class DynamicEnchantmentHelper {
             return enchantmentLevelMap;
         }
 
-        Map<Enchantment, Integer> copyRet = Maps.newLinkedHashMap();
-        for (Map.Entry<Enchantment, Integer> enchant : enchantmentLevelMap.entrySet()) {
-            copyRet.put(enchant.getKey(), getNewEnchantmentLevel(enchant.getValue(), enchant.getKey(), stack, context));
+        Map<Enchantment, Integer> copyRet = Maps.newLinkedHashMap(enchantmentLevelMap);
+        enchantmentLevelMap.clear();
+        for (Map.Entry<Enchantment, Integer> enchant : copyRet.entrySet()) {
+            enchantmentLevelMap.put(enchant.getKey(), getNewEnchantmentLevel(enchant.getValue(), enchant.getKey(), stack, context));
         }
 
         for (DynamicEnchantment mod : context) {
@@ -157,11 +158,11 @@ public class DynamicEnchantmentHelper {
                     continue;
                 }
                 if (!enchantmentLevelMap.containsKey(ench)) { //Means we didn't add the levels on the other iteration
-                    copyRet.put(ench, getNewEnchantmentLevel(0, ench, stack, context));
+                    enchantmentLevelMap.put(ench, getNewEnchantmentLevel(0, ench, stack, context));
                 }
             }
         }
-        return copyRet;
+        return enchantmentLevelMap;
     }
 
     public static boolean canHaveDynamicEnchantment(ItemStack stack) {
