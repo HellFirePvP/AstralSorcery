@@ -12,16 +12,24 @@ import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.annotations.ZenRegister;
 import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.blamejared.crafttweaker.api.managers.IRecipeManager;
-import com.blamejared.crafttweaker.impl.actions.recipes.*;
+import com.blamejared.crafttweaker.impl.actions.recipes.ActionAddRecipe;
+import com.blamejared.crafttweaker.impl.actions.recipes.ActionRemoveRecipe;
+import com.blamejared.crafttweaker.impl.tag.MCTag;
 import com.blamejared.crafttweaker.impl_native.blocks.ExpandBlockState;
-import hellfirepvp.astralsorcery.common.constellation.*;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutation;
-import hellfirepvp.astralsorcery.common.lib.*;
+import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockMatchInformation;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import org.openzen.zencode.java.ZenCodeType;
+
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,9 +41,23 @@ import org.openzen.zencode.java.ZenCodeType;
 @ZenRegister
 @ZenCodeType.Name("mods.astralsorcery.BlockTransmutationManager")
 public class BlockTransmutationManager implements IRecipeManager {
+
+    @ZenCodeType.Method
+    public void addRecipe(String name, BlockState outState, MCTag<Block> input, double starlight, @ZenCodeType.Optional("null") ResourceLocation constellationKey) {
+        addTransmutation(name, outState, starlight, constellationKey, transmutation -> {
+            transmutation.addInputOption(new BlockMatchInformation((ITag<Block>) input.getInternal()));
+        });
+    }
     
     @ZenCodeType.Method
     public void addRecipe(String name, BlockState outState, BlockState input, boolean exact, double starlight, @ZenCodeType.Optional("null") ResourceLocation constellationKey) {
+        addTransmutation(name, outState, starlight, constellationKey, transmutation -> {
+            transmutation.addInputOption(new BlockMatchInformation(input, exact));
+        });
+    }
+
+    private void addTransmutation(String name, BlockState outState, double starlight,
+                                  @ZenCodeType.Optional("null") ResourceLocation constellationKey, Consumer<BlockTransmutation> addInputRequirements) {
         name = fixRecipeName(name);
         IWeakConstellation weakConstellation = null;
         if(constellationKey != null) {
@@ -50,7 +72,6 @@ public class BlockTransmutationManager implements IRecipeManager {
             }
         }
         BlockTransmutation transmutation = new BlockTransmutation(new ResourceLocation(name), outState, starlight, weakConstellation);
-        transmutation.addInputOption(new BlockMatchInformation(input, exact));
         CraftTweakerAPI.apply(new ActionAddRecipe(this, transmutation));
     }
     

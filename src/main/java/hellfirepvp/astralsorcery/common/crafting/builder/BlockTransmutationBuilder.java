@@ -15,11 +15,11 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CustomRecipeSerializer;
 import hellfirepvp.astralsorcery.common.crafting.recipe.BlockTransmutation;
 import hellfirepvp.astralsorcery.common.lib.RecipeSerializersAS;
 import hellfirepvp.astralsorcery.common.util.block.BlockMatchInformation;
-import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -80,6 +80,11 @@ public class BlockTransmutationBuilder extends CustomRecipeBuilder<BlockTransmut
         return this.addInputCheck(matchState, false);
     }
 
+    public BlockTransmutationBuilder addInputCheck(ITag<Block> matchTag, ItemStack display) {
+        this.stateCheck.add(new BlockMatchInformation(matchTag, display));
+        return this;
+    }
+
     public BlockTransmutationBuilder addInputCheck(BlockState matchState, boolean matchExact) {
         return this.addInputCheck(matchState, new ItemStack(matchState.getBlock()), matchExact);
     }
@@ -119,7 +124,7 @@ public class BlockTransmutationBuilder extends CustomRecipeBuilder<BlockTransmut
             throw new IllegalArgumentException("No block input checks!");
         }
         for (BlockMatchInformation inputMatch : this.stateCheck) {
-            if (inputMatch.getMatchState().getBlock() instanceof AirBlock) {
+            if (!inputMatch.isValid()) {
                 throw new IllegalArgumentException("A block transmutation must not convert 'air' into something!");
             }
         }

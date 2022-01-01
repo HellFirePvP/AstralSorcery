@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.common.crafting.builder.BlockTransmutationBuild
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
@@ -28,7 +30,7 @@ public class BlockTransmutationRecipeProvider {
     public static void registerTransmutationRecipes(Consumer<IFinishedRecipe> registrar) {
         BlockTransmutationBuilder.builder(AstralSorcery.key("iron_starmetal"))
                 .multiplyStarlightCost(0.5F)
-                .addInputCheck(Blocks.IRON_ORE)
+                .addInputCheck(Tags.Blocks.ORES_IRON, new ItemStack(Blocks.IRON_ORE))
                 .setOutput(BlocksAS.STARMETAL_ORE)
                 .build(registrar);
         BlockTransmutationBuilder.builder(AstralSorcery.key("craftingtable_altar"))

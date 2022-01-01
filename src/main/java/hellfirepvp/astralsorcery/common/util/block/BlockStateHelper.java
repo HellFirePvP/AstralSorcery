@@ -68,7 +68,12 @@ public class BlockStateHelper {
     @Nonnull
     public static <V extends Comparable<V>> JsonObject serializeObject(BlockState state, boolean serializeProperties) {
         JsonObject object = new JsonObject();
-        object.addProperty("block", state.getBlock().getRegistryName().toString());
+        serializeObject(object, state, serializeProperties);
+        return object;
+    }
+
+    public static <V extends Comparable<V>> void serializeObject(JsonObject out, BlockState state, boolean serializeProperties) {
+        out.addProperty("block", state.getBlock().getRegistryName().toString());
         if (serializeProperties && !state.getProperties().isEmpty()) {
             JsonArray properties = new JsonArray();
             for (Property<?> property : state.getProperties()) {
@@ -79,9 +84,8 @@ public class BlockStateHelper {
                 objProperty.addProperty("value", prop.getName(state.get(prop)));
                 properties.add(objProperty);
             }
-            object.add("properties", properties);
+            out.add("properties", properties);
         }
-        return object;
     }
 
     @Nonnull

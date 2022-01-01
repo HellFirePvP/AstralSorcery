@@ -21,7 +21,6 @@ import hellfirepvp.astralsorcery.common.util.block.BlockMatchInformation;
 import hellfirepvp.astralsorcery.common.util.block.BlockStateHelper;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.data.JsonHelper;
-import net.minecraft.block.AirBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -48,21 +47,13 @@ public class BlockTransmutationSerializer extends CustomRecipeSerializer<BlockTr
     @Override
     public BlockTransmutation read(ResourceLocation recipeId, JsonObject json) {
         List<BlockMatchInformation> matchInformation = new ArrayList<>();
-        JsonHelper.parseMultipleJsonObjects(json, "input", object -> {
-            BlockState state = BlockStateHelper.deserializeObject(object);
-            boolean fullyDefined = !BlockStateHelper.isMissingStateInformation(object);
-            ItemStack display = new ItemStack(state.getBlock());
-            if (object.has("display")) {
-                display = JsonHelper.getItemStack(object, "display");
-            }
-            matchInformation.add(new BlockMatchInformation(state, display, fullyDefined));
-        });
+        JsonHelper.parseMultipleJsonObjects(json, "input", object -> matchInformation.add(BlockMatchInformation.read(object)));
         if (matchInformation.isEmpty()) {
             throw new IllegalArgumentException("A block transmutation has to have at least 1 input!");
         }
         for (BlockMatchInformation info : matchInformation) {
-            if (info.getMatchState().getBlock() instanceof AirBlock) {
-                throw new JsonSyntaxException("A block transmutation must not convert an air-block into something!");
+            if (!info.isValid()) {
+                throw new JsonSyntaxException("Block transmutation must not convert an air-block into something!");
             }
         }
 
@@ -94,8 +85,7 @@ public class BlockTransmutationSerializer extends CustomRecipeSerializer<BlockTr
     @Nullable
     @Override
     public BlockTransmutation read(ResourceLocation recipeId, PacketBuffer buffer) {
-        List<BlockMatchInformation> matchInformation = ByteBufUtils.readList(buffer,
-                buf -> new BlockMatchInformation(ByteBufUtils.readBlockState(buf), ByteBufUtils.readItemStack(buf), buf.readBoolean()));
+        List<BlockMatchInformation> matchInformation = ByteBufUtils.readList(buffer, BlockMatchInformation::read);
         BlockState output = ByteBufUtils.readBlockState(buffer);
         ItemStack display = ByteBufUtils.readItemStack(buffer);
         double starlight = buffer.readDouble();
@@ -110,9 +100,7 @@ public class BlockTransmutationSerializer extends CustomRecipeSerializer<BlockTr
     public void write(JsonObject object, BlockTransmutation recipe) {
         JsonArray inputs = new JsonArray();
         for (BlockMatchInformation info : recipe.getInputOptions()) {
-            JsonObject serializedInfo = BlockStateHelper.serializeObject(info.getMatchState(), info.doesMatchExact());
-            serializedInfo.add("display", JsonHelper.serializeItemStack(info.getDisplayStack()));
-            inputs.add(serializedInfo);
+            inputs.add(info.serializeJson());
         }
         object.add("input", inputs);
 
@@ -127,11 +115,7 @@ public class BlockTransmutationSerializer extends CustomRecipeSerializer<BlockTr
 
     @Override
     public void write(PacketBuffer buffer, BlockTransmutation recipe) {
-        ByteBufUtils.writeCollection(buffer, recipe.getInputOptions(), (buf, match) -> {
-            ByteBufUtils.writeBlockState(buf, match.getMatchState());
-            ByteBufUtils.writeItemStack(buf, match.getDisplayStack());
-            buf.writeBoolean(match.doesMatchExact());
-        });
+        ByteBufUtils.writeCollection(buffer, recipe.getInputOptions(), (buf, match) -> match.serialize(buf));
         ByteBufUtils.writeBlockState(buffer, recipe.getOutput());
         ByteBufUtils.writeItemStack(buffer, recipe.getOutputDisplay());
         buffer.writeDouble(recipe.getStarlightRequired());

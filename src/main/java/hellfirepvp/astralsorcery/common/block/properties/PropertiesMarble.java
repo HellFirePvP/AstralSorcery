@@ -25,7 +25,7 @@ public class PropertiesMarble {
     public static Block.Properties defaultMarble() {
         return Block.Properties.create(MaterialsAS.MARBLE)
                 .hardnessAndResistance(3F, 5F)
-                .harvestLevel(1)
+                .harvestLevel(0)
                 .setRequiresTool()
                 .harvestTool(ToolType.PICKAXE)
                 .sound(SoundType.STONE);
@@ -34,7 +34,7 @@ public class PropertiesMarble {
     public static Block.Properties defaultBlackMarble() {
         return Block.Properties.create(MaterialsAS.MARBLE)
                 .hardnessAndResistance(3F, 5F)
-                .harvestLevel(1)
+                .harvestLevel(0)
                 .setRequiresTool()
                 .harvestTool(ToolType.PICKAXE)
                 .sound(SoundType.STONE);

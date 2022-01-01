@@ -2,11 +2,7 @@
   "type": "astralsorcery:block_transmutation",
   "input": [
     {
-      "block": "minecraft:iron_ore",
-      "display": {
-        "item": "minecraft:iron_ore",
-        "count": 1
-      }
+      "tag": "forge:ores/iron"
     }
   ],
   "output": {
