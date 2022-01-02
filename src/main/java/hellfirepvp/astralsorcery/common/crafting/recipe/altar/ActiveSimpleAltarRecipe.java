@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2021
+ * HellFirePvP / Astral Sorcery 2022
  *
  * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -14,8 +14,8 @@ import hellfirepvp.astralsorcery.common.crafting.helper.WrappedIngredient;
 import hellfirepvp.astralsorcery.common.crafting.helper.ingredient.FluidIngredient;
 import hellfirepvp.astralsorcery.common.crafting.recipe.SimpleAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileSpectralRelay;
+import hellfirepvp.astralsorcery.common.tile.altar.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RecipeHelper;
 import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
@@ -35,7 +35,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
+import net.minecraftforge.fluids.capability.templates.VoidFluidHandler;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 
@@ -134,7 +134,7 @@ public class ActiveSimpleAltarRecipe {
             Ingredient input = grid.getIngredient(slot);
             if (input instanceof FluidIngredient) {
                 ItemStack stack = inv.getStackInSlot(slot);
-                FluidActionResult far = FluidUtil.tryEmptyContainer(stack, EmptyFluidHandler.INSTANCE, FluidAttributes.BUCKET_VOLUME, null, true);
+                FluidActionResult far = FluidUtil.tryEmptyContainer(stack, VoidFluidHandler.INSTANCE, FluidAttributes.BUCKET_VOLUME, null, true);
                 if (far.isSuccess()) {
                     inv.setStackInSlot(slot, far.getResult());
                 }
@@ -149,7 +149,7 @@ public class ActiveSimpleAltarRecipe {
                 TileInventory tarInventory = tar.getInventory();
                 if (input.getInput() != null && input.getInput().getIngredient() instanceof FluidIngredient) {
                     ItemStack stack = tarInventory.getStackInSlot(0);
-                    FluidActionResult far = FluidUtil.tryEmptyContainer(stack, EmptyFluidHandler.INSTANCE, FluidAttributes.BUCKET_VOLUME, null, true);
+                    FluidActionResult far = FluidUtil.tryEmptyContainer(stack, VoidFluidHandler.INSTANCE, FluidAttributes.BUCKET_VOLUME, null, true);
                     if (far.isSuccess()) {
                         tarInventory.setStackInSlot(0, far.getResult());
                     }
