@@ -17,8 +17,12 @@ import hellfirepvp.astralsorcery.common.util.DamageUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.enchantment.SweepingEnchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -60,11 +64,20 @@ public class KeyAreaOfEffect extends KeyAddEnchantment {
             PlayerProgress prog = ResearchHelper.getProgress(player, side);
             if (prog.getPerkData().hasPerkEffect(this)) {
                 LivingEntity attacked = event.getEntityLiving();
-                float sweepPerc = EnchantmentHelper.getSweepingDamageRatio(player);
-                if (sweepPerc > 0) {
-                    sweepPerc = PerkAttributeHelper.getOrCreateMap(player, side)
-                            .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, sweepPerc);
-                    float toApply = event.getAmount() * sweepPerc;
+
+                float sweepingPercentage;
+                Entity indirectSource = source.getImmediateSource();
+                if (indirectSource instanceof TridentEntity) {
+                    ItemStack tridentStack = ((TridentEntity) indirectSource).thrownStack;
+                    int sweepLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.SWEEPING, tridentStack);
+                    sweepingPercentage = sweepLevel > 0 ? SweepingEnchantment.getSweepingDamageRatio(sweepLevel) : 0;
+                } else {
+                    sweepingPercentage = EnchantmentHelper.getSweepingDamageRatio(player);
+                }
+                if (sweepingPercentage > 0) {
+                    sweepingPercentage = PerkAttributeHelper.getOrCreateMap(player, side)
+                            .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT, sweepingPercentage);
+                    float toApply = event.getAmount() * sweepingPercentage;
 
                     float range = 2.5F * PerkAttributeHelper.getOrCreateMap(player, side).getModifier(player, prog, PerkAttributeTypesAS.ATTR_TYPE_INC_PERK_EFFECT);
                     EventFlags.SWEEP_ATTACK.executeWithFlag(() -> {
