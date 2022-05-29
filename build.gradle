@@ -210,6 +210,10 @@ publishing {
     }
 }
 
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+}
+
 // Minimize/optimize all png files, requires optipng on the PATH
 // Credits: ImmersiveEngineering / and from there: BrainStone
 void minimizePNGFile(File file) {
