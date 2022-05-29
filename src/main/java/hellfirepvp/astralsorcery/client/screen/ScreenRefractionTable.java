@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.item.ItemInfusedGlass;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.play.client.PktEngraveGlass;
 import hellfirepvp.astralsorcery.common.tile.TileRefractionTable;
+import hellfirepvp.astralsorcery.common.util.world.WorldSeedCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -244,6 +245,12 @@ public class ScreenRefractionTable extends TileEntityScreen<TileRefractionTable>
                 .stream()
                 .filter(c -> ResearchHelper.getClientProgress().hasConstellationDiscovered(c))
                 .collect(Collectors.toList());
+
+        Random rand = new Random(WorldSeedCache.getSeedIfPresent(world.getDimensionKey()).orElse(0x515F1EB654AB915EL));
+        for (int i = 0; i < ctx.getConstellationHandler().getLastTrackedDay(); i++) {
+            rand.nextLong();
+        }
+        Collections.shuffle(cstList, rand);
 
         for (int i = 0; i < Math.min(cstList.size(), 12); i++) {
             IConstellation cst = cstList.get(i);
