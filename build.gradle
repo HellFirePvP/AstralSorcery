@@ -200,7 +200,6 @@ publishing {
             artifactId project.archivesBaseName
             version build_version
             from components.java
-            artifact srcJar
         }
     }
 
