@@ -10,7 +10,6 @@ buildscript {
             url "https://repo.spongepowered.org/repository/maven-public/"
             content { includeGroup "org.spongepowered" }
         }
-        jcenter()
         mavenCentral()
     }
 
@@ -28,9 +27,9 @@ mixin {
     add sourceSets.main, "astralsorcery.refmap.json"
 }
 
-version = '1.16.5-1.13.12'
+version = '1.14.0'
 group = 'hellfirepvp.astralsorcery'
-archivesBaseName = 'astralsorcery-1.16'
+archivesBaseName = 'astralsorcery-1.16.5'
 String build_version = ""
 
 // Most likely inside Jenkins. Or homebrew environment.
@@ -145,6 +144,9 @@ dependencies {
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
+java {
+    withSourcesJar()
+}
 
 //Sign jar from flatfile if present
 task signJar(type: SignJar, dependsOn: jar) {
@@ -181,35 +183,24 @@ jar {
     }
 }
 
-task deobfJar(type: Jar) {
-    from(sourceSets.main.output)
-    archiveFileName = "${archiveBaseName}-${archiveVersion}-deobf.${archiveExtension}"
-}
-
 task srcJar(type: Jar) {
     from(sourceSets.main.java)
     classifier = 'sources'
-    archiveFileName = "${archiveBaseName}-${archiveVersion}-sources.${archiveExtension}"
 }
 
 artifacts {
-    archives deobfJar, srcJar
+    archives srcJar
 }
 
 publishing {
+    tasks.publish.dependsOn build
     publications {
         mavenJava(MavenPublication) {
             groupId project.group
             artifactId project.archivesBaseName
             version build_version
             from components.java
-
-            artifact deobfJar {
-                classifier 'deobf'
-            }
-            artifact srcJar {
-                classifier 'sources'
-            }
+            artifact srcJar
         }
     }
 
