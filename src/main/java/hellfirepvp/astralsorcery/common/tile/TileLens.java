@@ -106,7 +106,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
         if (accumulatedStarlight <= 0) {
             return;
         }
-        float effectMultiplier = accumulatedStarlight *= 1.4F;
+        float effectMultiplier = accumulatedStarlight * 1.4F;
         accumulatedStarlight = 0;
 
         List<BlockPos> linked = getLinkedPositions();
@@ -247,7 +247,7 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
     @Override
     public void writeNetNBT(CompoundNBT compound) {
         super.writeNetNBT(compound);
-        compound.putFloat("lensEffectTimeout", this.accumulatedStarlight);
+        compound.putFloat("accumulatedStarlight", this.accumulatedStarlight);
     }
 
     @Nonnull
