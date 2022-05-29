@@ -95,6 +95,10 @@ public abstract class TileNetwork<T extends IPrismTransmissionNode> extends Tile
         this.needsNetworkSync = false;
     }
 
+    public boolean needsNetworkSync() {
+        return needsNetworkSync;
+    }
+
     public void onBreak() {
         if (this.getWorld().isRemote()) {
             return;

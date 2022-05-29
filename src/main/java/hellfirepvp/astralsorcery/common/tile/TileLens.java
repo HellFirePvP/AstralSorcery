@@ -79,10 +79,20 @@ public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> imple
         }
     }
 
+    @Override
+    protected void onFirstTick() {
+        super.onFirstTick();
+
+        this.markForUpdate();
+    }
+
     public void transmissionTick(float starlightAmt, IWeakConstellation type) {
         this.accumulatedStarlight += starlightAmt;
-        markForUpdate();
-        preventNetworkSync();
+        boolean networkSync = this.needsNetworkSync();
+        this.markForUpdate();
+        if (!networkSync) {
+            this.preventNetworkSync();
+        }
     }
 
     private void doColorEffects() {
