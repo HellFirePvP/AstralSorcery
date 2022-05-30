@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.util.object.ObjectReference;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.QuickChargeEnchantment;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -176,7 +177,7 @@ public class DynamicEnchantmentHelper {
                 if (i.getRegistryName() == null) {
                     return;
                 }
-                if (!i.isEnchantable(stack) || !stack.isDamageable()) {
+                if (!i.isEnchantable(stack) || i instanceof BookItem) {
                     return;
                 }
                 if (Mods.DRACONIC_EVOLUTION.owns(stack.getItem())) {
