@@ -15,13 +15,12 @@ import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeTile;
 import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
 import hellfirepvp.astralsorcery.common.lib.LootAS;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootFunction;
+import net.minecraft.loot.LootFunctionType;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,9 +46,10 @@ public class CopyCrystalProperties extends LootFunction {
             TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
             if (tile instanceof CrystalAttributeTile && stack.getItem() instanceof CrystalAttributeItem) {
                 CrystalAttributes attr = ((CrystalAttributeTile) tile).getAttributes();
-                if (attr != null) {
-                    ((CrystalAttributeItem) stack.getItem()).setAttributes(stack, attr);
+                if (attr == null) {
+                    attr = ((CrystalAttributeTile) tile).getMissingAttributes();
                 }
+                ((CrystalAttributeItem) stack.getItem()).setAttributes(stack, attr);
             }
         }
         return stack;

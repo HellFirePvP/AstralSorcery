@@ -15,7 +15,9 @@ import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,7 +28,8 @@ import java.util.List;
  */
 public class BaseConfiguration {
 
-    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
+    private static final Map<ModConfig.Type, BaseConfiguration> REGISTERED_CONFIGS = new HashMap<>();
+
     public static final Splitter DOT_SPLITTER = Splitter.on(".");
 
     private final List<ConfigEntry> configEntries = new ArrayList<>();
@@ -53,16 +56,27 @@ public class BaseConfiguration {
             builder.pop(splitPath.size());
         }
 
-        makeAndRegister(this.configType, builder.build(), AstralSorcery.MODID);
+        makeAndRegister(builder.build(), AstralSorcery.MODID);
     }
 
-    static void makeAndRegister(ModConfig.Type type, ForgeConfigSpec spec, String file) {
-        String fileName = type == ModConfig.Type.SERVER ?
+    private void makeAndRegister(ForgeConfigSpec spec, String file) {
+        String fileName = this.configType == ModConfig.Type.SERVER ?
                 String.format("%s.toml", file) :
-                String.format("%s-%s.toml", file, type.extension());
+                String.format("%s-%s.toml", file, this.configType.extension());
         ModContainer ct = AstralSorcery.getModContainer();
-        ModConfig cfg = new ModConfig(type, spec, ct, fileName);
+        ModConfig cfg = new ModConfig(this.configType, spec, ct, fileName);
         ct.addConfig(cfg);
+
+        REGISTERED_CONFIGS.put(this.configType, this);
     }
 
+    public static void refreshConfiguration(ModConfig.Loading cfgLoadEvent) {
+        ModConfig config = cfgLoadEvent.getConfig();
+        if (config.getModId().equals(AstralSorcery.MODID)) {
+            BaseConfiguration cfg = REGISTERED_CONFIGS.get(config.getType());
+            if (cfg != null) {
+                cfg.configEntries.forEach(ConfigEntry::reload);
+            }
+        }
+    }
 }

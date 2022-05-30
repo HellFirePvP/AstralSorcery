@@ -66,6 +66,13 @@ public class ConfigRegistries {
             }
         }
 
+        @Override
+        public void reload() {
+            ConfigRegistries.this.dataRegistries.forEach(registry -> {
+                registry.configuredValues = null;
+            });
+        }
+
         private String registrySubSection(String section) {
             return String.format("%s.%s", section.toLowerCase(Locale.ROOT), section.toLowerCase(Locale.ROOT));
         }

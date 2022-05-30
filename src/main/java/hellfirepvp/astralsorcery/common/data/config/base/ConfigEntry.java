@@ -67,6 +67,8 @@ public abstract class ConfigEntry implements Consumer<ForgeConfigSpec.Builder> {
 
     public abstract void createEntries(ForgeConfigSpec.Builder cfgBuilder);
 
+    public void reload() {}
+
     public String getPath() {
         return this.path;
     }

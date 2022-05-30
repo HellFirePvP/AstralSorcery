@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.constellation.mantle.MantleEffectRegistr
 import hellfirepvp.astralsorcery.common.crafting.recipe.altar.AltarRecipeTypeHandler;
 import hellfirepvp.astralsorcery.common.data.config.CommonConfig;
 import hellfirepvp.astralsorcery.common.data.config.ServerConfig;
+import hellfirepvp.astralsorcery.common.data.config.base.BaseConfiguration;
 import hellfirepvp.astralsorcery.common.data.config.base.ConfigRegistries;
 import hellfirepvp.astralsorcery.common.data.config.entry.*;
 import hellfirepvp.astralsorcery.common.data.config.entry.common.CommonGeneralConfig;
@@ -195,6 +196,7 @@ public class CommonProxy {
     public void attachLifecycle(IEventBus modEventBus) {
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onEnqueueIMC);
+        modEventBus.addListener(BaseConfiguration::refreshConfiguration);
 
         modEventBus.addListener(RegistryRegistries::buildRegistries);
         modEventBus.addListener(RegistryEntities::initAttributes);

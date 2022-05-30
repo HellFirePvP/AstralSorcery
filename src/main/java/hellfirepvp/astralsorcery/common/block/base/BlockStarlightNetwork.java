@@ -31,9 +31,9 @@ public abstract class BlockStarlightNetwork extends BlockInventory {
     @Override
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state != newState) {
-            TileNetwork te = MiscUtils.getTileAt(worldIn, pos, TileNetwork.class, true);
+            TileNetwork<?> te = MiscUtils.getTileAt(worldIn, pos, TileNetwork.class, true);
             if (te != null) {
-                ((TileNetwork<?>) te).onBreak();
+                te.onBreak();
             }
         }
         super.onReplaced(state, worldIn, pos, newState, isMoving);

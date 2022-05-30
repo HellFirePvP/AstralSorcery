@@ -31,7 +31,7 @@ public abstract class ConfigDataAdapter<T extends ConfigDataSet> {
     private ForgeConfigSpec.ConfigValue<List<? extends String>> registryStore = null;
     private final ModConfig.Type registryConfigType;
 
-    private List<T> configuredValues = null;
+    List<T> configuredValues = null;
 
     public ConfigDataAdapter() {
         this(ModConfig.Type.SERVER);
