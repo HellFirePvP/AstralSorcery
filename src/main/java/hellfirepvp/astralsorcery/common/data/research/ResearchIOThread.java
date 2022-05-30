@@ -29,10 +29,12 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 15.01.2019 / 17:42
  */
-public class ResearchIOThread extends TimerTask implements ServerLifecycleListener {
+public class ResearchIOThread implements ServerLifecycleListener {
 
-    private static ResearchIOThread saveTask;
-    private static Timer ioThread;
+    private static final ResearchIOThread instance = new ResearchIOThread();
+
+    private static Timer timer;
+    private static TimerTask saveTask;
 
     private final Map<UUID, PlayerProgress> playerSaveQueue = Maps.newHashMap();
     private final Map<UUID, PlayerProgress> awaitingSaveQueue = Maps.newHashMap();
@@ -40,41 +42,43 @@ public class ResearchIOThread extends TimerTask implements ServerLifecycleListen
 
     private ResearchIOThread() {}
 
-    public static ResearchIOThread startup() {
-        if (saveTask == null) {
-            saveTask = new ResearchIOThread();
-        }
-        return getTask();
-    }
-
-    public static ResearchIOThread getTask() {
-        return saveTask;
+    public static ResearchIOThread getInstance() {
+        return instance;
     }
 
     @Override
     public void onServerStart() {
-        if (ioThread != null) {
-            return;
-        }
-        if (saveTask == null) {
-            saveTask = new ResearchIOThread();
-        }
-        ioThread = new Timer("ResearchIOThread", true);
-        ioThread.scheduleAtFixedRate(saveTask, 30_000, 30_000);
+        reset();
+
+        saveTask = new TimerTask() {
+            @Override
+            public void run() {
+                instance.doSave();
+            }
+        };
+        timer = new Timer("ResearchIOThread", true);
+        timer.scheduleAtFixedRate(saveTask, 30_000, 30_000);
     }
 
     @Override
     public void onServerStop() {
         this.flushAndSaveAll();
 
-        saveTask.cancel();
-        saveTask = null;
-        ioThread.cancel();
-        ioThread = null;
+        reset();
     }
 
-    @Override
-    public void run() {
+    private void reset() {
+        if (saveTask != null) {
+            saveTask.cancel();
+            saveTask = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+    public void doSave() {
         if (skipTick) {
             return;
         }
@@ -116,14 +120,14 @@ public class ResearchIOThread extends TimerTask implements ServerLifecycleListen
     }
 
     public static void saveProgress(UUID playerUUID, PlayerProgress copiedProgress) {
-        if (saveTask != null) {
-            saveTask.scheduleSave(playerUUID, copiedProgress);
+        if (instance != null) {
+            instance.scheduleSave(playerUUID, copiedProgress);
         }
     }
 
     public static void cancelSave(UUID playerUUID) {
-        if (saveTask != null) {
-            saveTask.cancelScheduledSave(playerUUID);
+        if (instance != null) {
+            instance.cancelScheduledSave(playerUUID);
         }
     }
 

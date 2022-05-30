@@ -81,8 +81,12 @@ public interface GemSocketPerk {
         if (!prog.getPerkData().hasPerkEffect(thisPerk)) {
             return false;
         }
-        boolean updateData = dataOvr == null;
-        CompoundNBT data = dataOvr != null ? dataOvr : ((AbstractPerk) this).getPerkData(player, side);
+        //a given data override signifies that that override should be used, but not written.
+        boolean useLiveData = dataOvr == null;
+        CompoundNBT data = dataOvr;
+        if (useLiveData) {
+            data = ((AbstractPerk) this).getPerkData(player, side);
+        }
         if (data == null) {
             return false;
         }
@@ -101,7 +105,7 @@ public interface GemSocketPerk {
             NBTHelper.setStack(data, SOCKET_DATA_KEY, stack);
         }
 
-        if (updateData) {
+        if (useLiveData) {
             ResearchManager.setPerkData(player, thisPerk, prev, data);
         }
         return true;

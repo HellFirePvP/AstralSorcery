@@ -232,12 +232,13 @@ public class EngravingEffect extends ForgeRegistryEntry<EngravingEffect> {
 
         @Override
         public ItemStack apply(@Nonnull ItemStack stack, float percent, Random rand) {
-            int amp = this.min + Math.round(percent * (Math.max(0, this.max - this.min)));
-            int dur = 3 * 60 * 20 + Math.round(rand.nextFloat() * 4 * 60 * 20);
-            EffectInstance effectInstance = new EffectInstance(this.effect.get(), dur, amp, true, false, true);
-
             List<EffectInstance> existing = PotionUtils.getEffectsFromStack(stack);
-            existing.add(effectInstance);
+            if (!MiscUtils.contains(existing, effectInstance -> effectInstance.getPotion().equals(this.effect.get()))) {
+                int amp = this.min + Math.round(percent * (Math.max(0, this.max - this.min)));
+                int dur = 3 * 60 * 20 + Math.round(rand.nextFloat() * 4 * 60 * 20);
+                EffectInstance effectInstance = new EffectInstance(this.effect.get(), dur, amp, true, false, true);
+                existing.add(effectInstance);
+            }
             if (!MiscUtils.contains(existing, effInstance -> effInstance.getPotion().equals(EffectsAS.EFFECT_CHEAT_DEATH)) && rand.nextInt(30) == 0) {
                 existing.add(new EffectInstance(EffectsAS.EFFECT_CHEAT_DEATH, 3 * 60 * 20 + Math.round(rand.nextFloat() * 4 * 60 * 20), 0, true, false, true));
             }

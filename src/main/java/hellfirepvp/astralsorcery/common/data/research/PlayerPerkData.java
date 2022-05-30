@@ -168,6 +168,7 @@ public class PlayerPerkData {
     public CompoundNBT getData(AbstractPerk perk) {
         return this.findAppliedPerk(perk)
                 .map(AppliedPerk::getPerkData)
+                .map(CompoundNBT::copy)
                 .orElse(null);
     }
 

@@ -179,7 +179,7 @@ public class CommonProxy {
         this.tickManager = new TickManager();
         this.attachTickListeners(tickManager::register);
 
-        this.serverLifecycleListeners.add(ResearchIOThread.startup());
+        this.serverLifecycleListeners.add(ResearchIOThread.getInstance());
         this.serverLifecycleListeners.add(ServerLifecycleListener.wrap(EventHandlerCache::onServerStart, EventHandlerCache::onServerStop));
         this.serverLifecycleListeners.add(ServerLifecycleListener.wrap(CelestialGatewayHandler.INSTANCE::onServerStart, CelestialGatewayHandler.INSTANCE::onServerStop));
         this.serverLifecycleListeners.add(ServerLifecycleListener.start(PerkTree.PERK_TREE::setupServerPerkTree));

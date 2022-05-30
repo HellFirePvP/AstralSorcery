@@ -328,6 +328,7 @@ public class ResearchManager {
         return true;
     }
 
+    @Deprecated
     public static boolean removePerk(PlayerEntity player, AbstractPerk perk, PlayerPerkAllocation allocation) {
         PlayerProgress progress = ResearchHelper.getProgress(player, LogicalSide.SERVER);
         if (!progress.isValid()) return false;
