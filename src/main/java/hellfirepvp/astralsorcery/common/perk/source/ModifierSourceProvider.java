@@ -40,6 +40,8 @@ public abstract class ModifierSourceProvider<T extends ModifierSource> {
 
     protected abstract void update(ServerPlayerEntity playerEntity);
 
+    protected abstract void removeModifiers(ServerPlayerEntity playerEntity);
+
     public abstract void serialize(T source, PacketBuffer buf);
 
     public abstract T deserialize(PacketBuffer buf);
@@ -60,19 +62,31 @@ public abstract class ModifierSourceProvider<T extends ModifierSource> {
     }
 
     protected void updateSource(ServerPlayerEntity player, ResourceLocation identifier, @Nullable T source) {
+        boolean needsRemoval = false, needsAddition = false;
+
         T existing = this.getModifier(player, identifier);
         if (existing != null) {
             if (!existing.isEqual(source)) {
-                PerkEffectHelper.modifySource(player, LogicalSide.SERVER, existing, PerkEffectHelper.Action.REMOVE);
-                PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(existing, PerkEffectHelper.Action.REMOVE));
+                needsRemoval = true;
             } else {
                 return; //Nothing to do
             }
         }
-
         if (source != null) {
+            needsAddition = true;
+        }
+
+        if (needsRemoval) {
+            if (needsAddition) {
+                PerkEffectHelper.updateSource(player, LogicalSide.SERVER, existing, source);
+                PacketChannel.CHANNEL.sendToPlayer(player, PktSyncModifierSource.update(existing, source));
+            } else {
+                PerkEffectHelper.modifySource(player, LogicalSide.SERVER, existing, PerkEffectHelper.Action.REMOVE);
+                PacketChannel.CHANNEL.sendToPlayer(player, PktSyncModifierSource.remove(existing));
+            }
+        } else if (needsAddition) {
             PerkEffectHelper.modifySource(player, LogicalSide.SERVER, source, PerkEffectHelper.Action.ADD);
-            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(source, PerkEffectHelper.Action.ADD));
+            PacketChannel.CHANNEL.sendToPlayer(player, PktSyncModifierSource.add(source));
         }
         this.setModifier(player, identifier, source);
     }

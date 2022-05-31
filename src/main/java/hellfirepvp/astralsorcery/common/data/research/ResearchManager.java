@@ -258,7 +258,7 @@ public class ResearchManager {
         }
 
         PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.REMOVE);
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.REMOVE));
+        PacketChannel.CHANNEL.sendToPlayer(player, PktSyncModifierSource.remove(perk));
 
         if (!perkData.sealPerk(perk)) {
             return false;
@@ -284,7 +284,7 @@ public class ResearchManager {
         ResearchSyncHelper.pushProgressToClientUnsafe(progress, player);
         ResearchHelper.savePlayerKnowledge(player);
 
-        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.ADD));
+        PacketChannel.CHANNEL.sendToPlayer(player, PktSyncModifierSource.add(perk));
         return true;
     }
 
@@ -386,7 +386,7 @@ public class ResearchManager {
                 PerkRemovalResult actualResult = perkData.removePerkAllocation(perk, allocation, false);
                 if (actualResult.removesPerk()) {
                     if (sync) {
-                        PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.REMOVE));
+                        PacketChannel.CHANNEL.sendToPlayer(player, PktSyncModifierSource.remove(perk));
                     }
                 }
                 return true;
@@ -412,7 +412,7 @@ public class ResearchManager {
             perkData.updatePerkData(perk, data);
 
             PerkEffectHelper.modifySource(player, LogicalSide.SERVER, perk, PerkEffectHelper.Action.ADD);
-            PacketChannel.CHANNEL.sendToPlayer(player, new PktSyncModifierSource(perk, PerkEffectHelper.Action.ADD));
+            PacketChannel.CHANNEL.sendToPlayer(player, PktSyncModifierSource.add(perk));
             return true;
         }
     }

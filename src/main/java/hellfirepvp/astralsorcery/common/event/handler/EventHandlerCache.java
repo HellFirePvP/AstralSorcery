@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.event.helper.EventHelperSpawnDeny;
 import hellfirepvp.astralsorcery.common.event.helper.EventHelperTemporaryFlight;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.perk.*;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
 import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
@@ -73,6 +74,7 @@ public class EventHandlerCache {
         PerkAttributeHelper.clearClient();
         PerkAttributeType.clearCache(LogicalSide.CLIENT);
         PerkEffectHelper.clientClearAllPerks();
+        ModifierManager.clearClientCache();
         PerkCooldownHelper.clearCache(LogicalSide.CLIENT);
         CelestialGatewayHandler.INSTANCE.updateClientCache(null);
 
@@ -134,6 +136,7 @@ public class EventHandlerCache {
 
         EventHelperTemporaryFlight.onDisconnect(player);
         PerkEffectHelper.onPlayerDisconnectEvent(player);
+        ModifierManager.onDisconnect(player);
     }
 
     @SubscribeEvent

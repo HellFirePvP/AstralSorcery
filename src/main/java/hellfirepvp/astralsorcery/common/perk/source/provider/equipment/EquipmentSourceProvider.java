@@ -70,6 +70,18 @@ public class EquipmentSourceProvider extends ModifierSourceProvider<EquipmentMod
     }
 
     @Override
+    protected void removeModifiers(ServerPlayerEntity playerEntity) {
+        for (EquipmentSlotType slot : EquipmentSlotType.values()) {
+            if (slot == EquipmentSlotType.OFFHAND) {
+                continue;
+            }
+
+            ResourceLocation id = AstralSorcery.key("slot_" + slot.getName());
+            updateSource(playerEntity, id, null);
+        }
+    }
+
+    @Override
     public void serialize(EquipmentModifierSource source, PacketBuffer buf) {
         ByteBufUtils.writeEnumValue(buf, source.slot);
         ByteBufUtils.writeItemStack(buf, source.itemStack);

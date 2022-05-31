@@ -131,6 +131,23 @@ public class PerkEffectHelper {
                 .forEach(perk -> modifySource(player, side, perk, action));
     }
 
+    public static void updateSource(PlayerEntity player, LogicalSide side, ModifierSource oldSource, ModifierSource newSource) {
+        PlayerProgress progress = ResearchHelper.getProgress(player, side);
+        if (!progress.isValid()) {
+            return;
+        }
+
+        PerkAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
+        attributeMap.write(() -> {
+            if (ModifierManager.isModifierApplied(player, side, oldSource)) {
+                removeSource(attributeMap, player, side, oldSource);
+            }
+            if (!ModifierManager.isModifierApplied(player, side, newSource) && newSource.canApplySource(player, side)) {
+                applySource(attributeMap, player, side, newSource);
+            }
+        });
+    }
+
     public static <T extends ModifierSource> void modifySources(PlayerEntity player, LogicalSide side, Collection<T> sources, Action action) {
         PlayerProgress progress = ResearchHelper.getProgress(player, side);
         if (!progress.isValid()) {

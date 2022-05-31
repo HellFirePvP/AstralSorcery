@@ -35,6 +35,9 @@ public class PerkSourceProvider extends ModifierSourceProvider<AbstractPerk> {
     protected void update(ServerPlayerEntity playerEntity) {}
 
     @Override
+    protected void removeModifiers(ServerPlayerEntity playerEntity) {}
+
+    @Override
     public void serialize(AbstractPerk source, PacketBuffer buf) {
         ByteBufUtils.writeResourceLocation(buf, source.getRegistryName());
     }

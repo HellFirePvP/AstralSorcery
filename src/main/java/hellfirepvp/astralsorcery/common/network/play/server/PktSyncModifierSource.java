@@ -10,13 +10,10 @@ package hellfirepvp.astralsorcery.common.network.play.server;
 
 import hellfirepvp.astralsorcery.common.network.base.ASPacket;
 import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
-import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
-import hellfirepvp.astralsorcery.common.perk.source.ModifierSourceProvider;
 import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
@@ -33,28 +30,36 @@ import javax.annotation.Nonnull;
  */
 public class PktSyncModifierSource extends ASPacket<PktSyncModifierSource> {
 
-    private ModifierSource source = null;
-    private PerkEffectHelper.Action action = null;
+    private ModifierSource source, newSource;
+    private ActionType actionType;
 
     public PktSyncModifierSource() {}
 
-    public PktSyncModifierSource(ModifierSource perk, PerkEffectHelper.Action action) {
-        this.source = perk;
-        this.action = action;
+    private PktSyncModifierSource(ModifierSource source, ModifierSource newSource, ActionType actionType) {
+        this.source = source;
+        this.newSource = newSource;
+        this.actionType = actionType;
+    }
+
+    public static PktSyncModifierSource add(ModifierSource source) {
+        return new PktSyncModifierSource(source, null, ActionType.ADD);
+    }
+
+    public static PktSyncModifierSource remove(ModifierSource source) {
+        return new PktSyncModifierSource(source, null, ActionType.REMOVE);
+    }
+
+    public static PktSyncModifierSource update(ModifierSource existing, ModifierSource newSource) {
+        return new PktSyncModifierSource(existing, newSource, ActionType.UPDATE);
     }
 
     @Nonnull
     @Override
     public Encoder<PktSyncModifierSource> encoder() {
         return (packet, buffer) -> {
-            ByteBufUtils.writeOptional(buffer, packet.action, ByteBufUtils::writeEnumValue);
-            ResourceLocation providerName = packet.source.getProviderName();
-            ByteBufUtils.writeResourceLocation(buffer, providerName);
-            ModifierSourceProvider provider = ModifierManager.getProvider(providerName);
-            if (provider == null) {
-                throw new IllegalArgumentException("Unknown provider: " + providerName);
-            }
-            provider.serialize(packet.source, buffer);
+            ByteBufUtils.writeOptional(buffer, packet.source, ByteBufUtils::writeModifierSource);
+            ByteBufUtils.writeOptional(buffer, packet.newSource, ByteBufUtils::writeModifierSource);
+            ByteBufUtils.writeEnumValue(buffer, packet.actionType);
         };
     }
 
@@ -64,13 +69,9 @@ public class PktSyncModifierSource extends ASPacket<PktSyncModifierSource> {
         return buffer -> {
             PktSyncModifierSource pkt = new PktSyncModifierSource();
 
-            pkt.action = ByteBufUtils.readOptional(buffer, (byteBuf) -> ByteBufUtils.readEnumValue(byteBuf, PerkEffectHelper.Action.class));
-            ResourceLocation providerName = ByteBufUtils.readResourceLocation(buffer);
-            ModifierSourceProvider<?> provider = ModifierManager.getProvider(providerName);
-            if (provider == null) {
-                throw new IllegalArgumentException("Unknown provider: " + providerName);
-            }
-            pkt.source = provider.deserialize(buffer);
+            pkt.source = ByteBufUtils.readOptional(buffer, ByteBufUtils::readModifierSource);
+            pkt.newSource = ByteBufUtils.readOptional(buffer, ByteBufUtils::readModifierSource);
+            pkt.actionType = ByteBufUtils.readEnumValue(buffer, PktSyncModifierSource.ActionType.class);
             return pkt;
         };
     }
@@ -87,12 +88,30 @@ public class PktSyncModifierSource extends ASPacket<PktSyncModifierSource> {
                     if (player == null) {
                         return;
                     }
-                    PerkEffectHelper.modifySource(player, LogicalSide.CLIENT, packet.source, packet.action);
+                    switch (packet.actionType) {
+                        case UPDATE:
+                            PerkEffectHelper.updateSource(player, LogicalSide.CLIENT, packet.source, packet.newSource);
+                            break;
+                        case ADD:
+                            PerkEffectHelper.modifySource(player, LogicalSide.CLIENT, packet.source, PerkEffectHelper.Action.ADD);
+                            break;
+                        case REMOVE:
+                            PerkEffectHelper.modifySource(player, LogicalSide.CLIENT, packet.source, PerkEffectHelper.Action.REMOVE);
+                            break;
+                    }
                 });
             }
 
             @Override
             public void handle(PktSyncModifierSource packet, NetworkEvent.Context context, LogicalSide side) {}
         };
+    }
+
+    private static enum ActionType {
+
+        ADD,
+        REMOVE,
+        UPDATE;
+
     }
 }

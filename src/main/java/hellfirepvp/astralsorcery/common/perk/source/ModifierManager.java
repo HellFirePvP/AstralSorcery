@@ -16,6 +16,8 @@ import hellfirepvp.observerlib.common.util.tick.ITickHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -110,6 +112,17 @@ public class ModifierManager implements ITickHandler {
 
     public static boolean isModifierApplied(PlayerEntity player, LogicalSide side, ModifierSource source) {
         return getModifiers(player, side).contains(source);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void clearClientCache() {
+        modifierCacheClient.clear();
+    }
+
+    public static void onDisconnect(ServerPlayerEntity player) {
+        for (ModifierSourceProvider<?> sourceProvider : sourceProviders.values()) {
+            sourceProvider.removeModifiers(player);
+        }
     }
 
     @Override

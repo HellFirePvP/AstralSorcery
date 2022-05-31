@@ -10,6 +10,9 @@ package hellfirepvp.astralsorcery.common.util.data;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSourceProvider;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -188,20 +191,6 @@ public class ByteBufUtils {
         return new ResourceLocation(readString(buf));
     }
 
-    public static void writeNumber(PacketBuffer buf, Number nbr) {
-        long sNumber = nbr.longValue();
-        if (nbr instanceof Float) {
-            sNumber = Float.floatToRawIntBits(nbr.floatValue());
-        } else if (nbr instanceof Double) {
-            sNumber = Double.doubleToRawLongBits(nbr.doubleValue());
-        }
-        buf.writeLong(sNumber);
-    }
-
-    public static long readNumber(PacketBuffer buf) {
-        return buf.readLong();
-    }
-
     public static <T extends Enum<T>> void writeEnumValue(PacketBuffer buf, T value) {
         buf.writeInt(value.ordinal());
     }
@@ -219,6 +208,26 @@ public class ByteBufUtils {
 
     public static JsonObject readJsonObject(PacketBuffer buf) {
         return new JsonParser().parse(readString(buf)).getAsJsonObject();
+    }
+
+    public static void writeModifierSource(PacketBuffer buf, ModifierSource source) {
+        ResourceLocation providerName = source.getProviderName();
+        ByteBufUtils.writeResourceLocation(buf, providerName);
+
+        ModifierSourceProvider provider = ModifierManager.getProvider(providerName);
+        if (provider == null) {
+            throw new IllegalArgumentException("Unknown provider: " + providerName);
+        }
+        provider.serialize(source, buf);
+    }
+
+    public static ModifierSource readModifierSource(PacketBuffer buf) {
+        ResourceLocation providerName = ByteBufUtils.readResourceLocation(buf);
+        ModifierSourceProvider<?> provider = ModifierManager.getProvider(providerName);
+        if (provider == null) {
+            throw new IllegalArgumentException("Unknown provider: " + providerName);
+        }
+        return provider.deserialize(buf);
     }
 
     public static void writePos(PacketBuffer buf, BlockPos pos) {
