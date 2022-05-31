@@ -473,6 +473,14 @@ public class MiscUtils {
         return circleVec.rotate(Math.toRadians(degree), axis.clone()).add(centerOffset);
     }
 
+    public static Vector3 limitVelocityToMinecraftLimit(Vector3 velocity) {
+        double maxDir = Math.max(Math.abs(velocity.getX()), Math.max(Math.abs(velocity.getY()), Math.abs(velocity.getZ())));
+        if (maxDir <= 3.9) { //SEntityVelocityPacket 3.9 * 8000 short value limit
+            return velocity;
+        }
+        return velocity.multiply(3.9 / maxDir);
+    }
+
     @Nullable
     public static BlockRayTraceResult rayTraceLookBlock(PlayerEntity player) {
         return rayTraceLookBlock(player, player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue());

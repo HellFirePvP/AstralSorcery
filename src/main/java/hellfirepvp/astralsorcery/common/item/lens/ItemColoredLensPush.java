@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.entry.GeneralConfig;
 import hellfirepvp.astralsorcery.common.lib.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.PartialEffectExecutor;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockState;
@@ -60,7 +61,7 @@ public class ItemColoredLensPush extends ItemColoredLens {
                     dir.getY() + 0.04F,
                     Math.min(1F, eMotion.z + dir.getZ())
             );
-            entity.setMotion(motion.toVector3d());
+            entity.setMotion(MiscUtils.limitVelocityToMinecraftLimit(motion).toVector3d());
         }
 
         @Override
