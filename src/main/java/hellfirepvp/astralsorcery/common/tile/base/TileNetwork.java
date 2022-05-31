@@ -99,8 +99,13 @@ public abstract class TileNetwork<T extends IPrismTransmissionNode> extends Tile
         return needsNetworkSync;
     }
 
-    public void onBreak() {
-        if (this.getWorld().isRemote()) {
+    public void onBreak() {}
+
+    @Override
+    public void remove() {
+        super.remove();
+
+        if (this.getWorld() == null || this.getWorld().isRemote()) {
             return;
         }
         TransmissionNetworkHelper.informNetworkTileRemoval(this);
