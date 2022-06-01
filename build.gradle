@@ -29,7 +29,7 @@ mixin {
 
 version = '1.16.4-1.14.1'
 group = 'hellfirepvp.astralsorcery'
-archivesBaseName = 'astralsorcery-1.16.5'
+archivesBaseName = 'astralsorcery'
 String build_version = ""
 
 // Most likely inside Jenkins. Or homebrew environment.
