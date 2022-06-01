@@ -28,15 +28,6 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 
-    @ModifyConstant(method = "getMouseOver", constant = @Constant(doubleValue = 6.0, ordinal = 0), require = 1)
-    public double getOverriddenCreativeEntityReach(double defaultExtendedReach) {
-        PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);
-        if (prog.isValid() && prog.getPerkData().hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
-            return Minecraft.getInstance().playerController.getBlockReachDistance();
-        }
-        return defaultExtendedReach;
-    }
-
     @ModifyConstant(method = "getMouseOver", constant = @Constant(intValue = 1, ordinal = 0), require = 1)
     public int adjustDistanceCheck(int flagDoDistanceCheck) {
         PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);

@@ -115,6 +115,11 @@ repositories {
         url "https://maven.blamejared.com"
     }
 
+    maven {
+        name 'CF maven dankstorage'
+        url "https://www.cursemaven.com"
+    }
+
 }
 
 dependencies {
@@ -139,6 +144,9 @@ dependencies {
     
     compileOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.0.294')
     runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.0.294')
+
+    compileOnly fg.deobf("curse.maven:corail-tombstone-243707:3800673")
+    runtimeOnly fg.deobf("curse.maven:corail-tombstone-243707:3800673")
 }
 
 tasks.withType(JavaCompile) {
@@ -175,7 +183,7 @@ jar {
             "Specification-Vendor": "hellfirepvp",
             "Specification-Version": "1",
             "Implementation-Title": project.name,
-            "Implementation-Version": "${archiveVersion}",
+            "Implementation-Version": "${version}",
             "Implementation-Vendor" : "hellfirepvp",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
             "MixinConnector": "hellfirepvp.astralsorcery.MixinConnector"

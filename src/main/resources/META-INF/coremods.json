@@ -1,3 +1,4 @@
 {
-  "reach_set_server_entity_interact": "coremods/reach_set_server_entity_interact.js"
+  "reach_set_server_entity_interact": "coremods/reach_set_server_entity_interact.js",
+  "reach_set_client_renderer": "coremods/reach_set_client_renderer.js"
 }

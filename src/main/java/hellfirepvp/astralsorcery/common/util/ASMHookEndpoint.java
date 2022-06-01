@@ -11,8 +11,11 @@ package hellfirepvp.astralsorcery.common.util;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.perk.node.key.KeyEntityReach;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.play.ServerPlayNetHandler;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 
 /**
@@ -32,5 +35,14 @@ public class ASMHookEndpoint {
             return 999_999_999.0;
         }
         return original;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static double getOverriddenCreativeEntityReach(double defaultExtendedReach) {
+        PlayerProgress prog = ResearchHelper.getProgress(Minecraft.getInstance().player, LogicalSide.CLIENT);
+        if (prog.isValid() && prog.getPerkData().hasPerkEffect(perk -> perk instanceof KeyEntityReach)) {
+            return Math.max(defaultExtendedReach, Minecraft.getInstance().playerController.getBlockReachDistance());
+        }
+        return defaultExtendedReach;
     }
 }
