@@ -177,7 +177,13 @@ public class DynamicEnchantmentHelper {
                 if (i.getRegistryName() == null) {
                     return;
                 }
-                if (!i.isEnchantable(stack) || i instanceof BookItem) {
+                try {
+                    if (!i.isEnchantable(stack) || i instanceof BookItem) {
+                        return;
+                    }
+                } catch (NullPointerException exc) {
+                    //In most cases this is caused due to capabilities being not initialized during search tree indexing
+                    //Silently ignore for now
                     return;
                 }
                 if (Mods.DRACONIC_EVOLUTION.owns(stack.getItem())) {
