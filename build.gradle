@@ -27,7 +27,7 @@ mixin {
     add sourceSets.main, "astralsorcery.refmap.json"
 }
 
-version = '1.14.0'
+version = '1.16.4-1.14.1'
 group = 'hellfirepvp.astralsorcery'
 archivesBaseName = 'astralsorcery-1.16.5'
 String build_version = ""
