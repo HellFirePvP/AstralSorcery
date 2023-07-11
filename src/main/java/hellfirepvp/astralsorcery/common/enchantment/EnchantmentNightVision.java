@@ -15,6 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.fml.LogicalSide;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +34,10 @@ public class EnchantmentNightVision extends EnchantmentPlayerTick {
     @Override
     public void tick(PlayerEntity player, LogicalSide side, int level) {
         if (side.isServer()) {
-            player.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 300, level - 1, true, false));
+            PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
+            if (prog.doPerkAbilities()) {
+                player.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 300, level - 1, true, false));
+            }
         }
     }
 
