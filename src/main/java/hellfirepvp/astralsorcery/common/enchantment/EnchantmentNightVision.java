@@ -11,12 +11,16 @@ package hellfirepvp.astralsorcery.common.enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.fml.LogicalSide;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,9 +40,24 @@ public class EnchantmentNightVision extends EnchantmentPlayerTick {
         if (side.isServer()) {
             PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
             if (prog.doPerkAbilities()) {
-                player.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 300, level - 1, true, false));
+                EffectInstance effect = new EffectInstance(Effects.NIGHT_VISION, 300, level - 1, true, false);
+                effect.addCurativeItem(getCurativeMarkerItem());
+                player.addPotionEffect(effect);
+            } else {
+                player.curePotionEffects(getCurativeMarkerItem());
             }
         }
+    }
+
+    private static ItemStack getCurativeMarkerItem() {
+        ItemStack curativeItem = new ItemStack(Items.AIR, 1);
+
+        CompoundNBT nbtMarker = new CompoundNBT();
+        nbtMarker.putBoolean("astralNightVision", true);
+
+        curativeItem.setTag(nbtMarker);
+
+        return curativeItem;
     }
 
     @Override
