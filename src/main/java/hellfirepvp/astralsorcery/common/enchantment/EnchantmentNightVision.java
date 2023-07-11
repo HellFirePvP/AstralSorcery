@@ -20,8 +20,6 @@ import net.minecraftforge.fml.LogicalSide;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 
-import java.util.List;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -50,7 +48,7 @@ public class EnchantmentNightVision extends EnchantmentPlayerTick {
     }
 
     private static ItemStack getCurativeMarkerItem() {
-        ItemStack curativeItem = new ItemStack(Items.AIR, 1);
+        ItemStack curativeItem = new ItemStack(Items.BARRIER, 1);
 
         CompoundNBT nbtMarker = new CompoundNBT();
         nbtMarker.putBoolean("astralNightVision", true);
