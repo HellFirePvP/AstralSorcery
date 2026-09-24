@@ -1,20 +1,15 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.util.tick;
 
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.observerlib.common.util.tick.ITickHandler;
-import net.minecraftforge.event.TickEvent;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,26 +17,23 @@ import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: TimeoutList
  * Created by HellFirePvP
- * Date: 06.07.2019 / 21:47
+ * Date: 07.09.2026 / 10:00
  */
-public class TimeoutList<V> implements ITickHandler, Iterable<V> {
+public class TimeoutList<V> implements Iterable<V>, TickableListener {
 
     private final TimeoutDelegate<V> delegate;
-    private final EnumSet<TickEvent.Type> tickTypes;
 
     private final List<TimeoutEntry<V>> tickEntries = new LinkedList<>();
 
-    public TimeoutList(@Nullable TimeoutDelegate<V> delegate, TickEvent.Type... types) {
+    public TimeoutList() {
+        this(null);
+    }
+
+    public TimeoutList(@Nullable TimeoutDelegate<V> delegate) {
         this.delegate = delegate;
-        this.tickTypes = EnumSet.noneOf(TickEvent.Type.class);
-        for (TickEvent.Type type : types) {
-            if (type != null) {
-                this.tickTypes.add(type);
-            }
-        }
     }
 
     public void add(V value) {
@@ -75,7 +67,7 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
 
     public boolean contains(V value) {
         if (value == null) return false;
-        return MiscUtils.contains(tickEntries, entry -> entry.value.equals(value));
+        return this.tickEntries.stream().anyMatch(entry -> entry.value.equals(value));
     }
 
     public boolean remove(V key) {
@@ -87,7 +79,7 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
     }
 
     public int getTimeout(V value) {
-        for (TimeoutEntry<V> entry : tickEntries) {
+        for (TimeoutEntry<V> entry : this.tickEntries) {
             if (entry.value.equals(value)) {
                 return entry.timeout;
             }
@@ -104,12 +96,12 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
     }
 
     public boolean isEmpty() {
-        return tickEntries.isEmpty();
+        return this.tickEntries.isEmpty();
     }
 
     @Override
-    public void tick(TickEvent.Type type, Object... context) {
-        Iterator<TimeoutEntry<V>> iterator = tickEntries.iterator();
+    public void tick() {
+        Iterator<TimeoutEntry<V>> iterator = this.tickEntries.iterator();
         while (iterator.hasNext()) {
             TimeoutEntry<V> entry = iterator.next();
             entry.timeout--;
@@ -133,8 +125,8 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
 
     @Override
     public Iterator<V> iterator() {
-        Iterator<TimeoutEntry<V>> entryIterator = tickEntries.iterator();
-        return new Iterator<V>() {
+        Iterator<TimeoutEntry<V>> entryIterator = this.tickEntries.iterator();
+        return new Iterator<>() {
 
             @Override
             public boolean hasNext() {
@@ -153,24 +145,9 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
         };
     }
 
-    @Override
-    public EnumSet<TickEvent.Type> getHandledTypes() {
-        return tickTypes;
-    }
+    public interface TimeoutDelegate<V> {
 
-    @Override
-    public boolean canFire(TickEvent.Phase phase) {
-        return phase == TickEvent.Phase.END;
-    }
-
-    @Override
-    public String getName() {
-        return "TimeoutList";
-    }
-
-    public static interface TimeoutDelegate<V> {
-
-        public void onTimeout(V object);
+        void onTimeout(V object);
 
     }
 
@@ -189,7 +166,7 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            TimeoutEntry that = (TimeoutEntry) o;
+            TimeoutEntry<?> that = (TimeoutEntry<?>) o;
             return value.equals(that.value);
         }
 

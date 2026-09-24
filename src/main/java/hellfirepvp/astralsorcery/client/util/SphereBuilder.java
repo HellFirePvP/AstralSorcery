@@ -1,8 +1,8 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -16,32 +16,32 @@ import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: SphereBuilder
  * Created by HellFirePvP
- * Date: 18.07.2019 / 21:20
+ * Date: 07.09.2026 / 10:00
  */
 public class SphereBuilder {
 
     public static List<TriangleFace> buildFaces(Vector3 axis, int fractionsSplit, int fractionsCircle) {
         List<TriangleFace> sphereFaces = new ArrayList<>();
-        Vector3 centerPerp = axis.clone().perpendicular();
+        Vector3 centerPerp = axis.copy().perpendicular();
         double degSplit =       180D / ((double) fractionsSplit);
         double degCircleSplit = 360D / ((double) fractionsCircle);
         double degCircleOffsetShifted = degCircleSplit / 2D;
         boolean shift = false;
 
         Vector3[] prevArray = new Vector3[fractionsCircle];
-        Vector3 prev = axis.clone();
-        Arrays.fill(prevArray, prev.clone());
+        Vector3 prev = axis.copy();
+        Arrays.fill(prevArray, prev.copy());
         for (int i = 1; i <= fractionsSplit; i++) {
-            Vector3 splitVec = axis.clone().rotate(Math.toRadians(degSplit * i), centerPerp);
+            Vector3 splitVec = axis.copy().rotate(Math.toRadians(degSplit * i), centerPerp);
 
             Vector3[] circlePositions = new Vector3[fractionsCircle];
             for (int j = 0; j < fractionsCircle; j++) {
                 double deg = shift ? degCircleOffsetShifted : 0;
                 deg += degCircleSplit * j;
-                circlePositions[j] = splitVec.clone().rotate(Math.toRadians(deg), axis);
+                circlePositions[j] = splitVec.copy().rotate(Math.toRadians(deg), axis);
             }
 
             for (int k = 0; k < fractionsCircle; k++) {
@@ -69,7 +69,9 @@ public class SphereBuilder {
 
     public static class TriangleFace {
 
-        private Vector3 v1, v2, v3;
+        private final Vector3 v1;
+        private final Vector3 v2;
+        private final Vector3 v3;
 
         private TriangleFace(Vector3 v1, Vector3 v2, Vector3 v3) {
             this.v1 = v1;
@@ -89,5 +91,4 @@ public class SphereBuilder {
             return v3;
         }
     }
-
 }

@@ -1,0 +1,158 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [128, 128],
+	"render_type": "minecraft:cutout",
+	"textures": {
+		"0": "astralsorcery:block/altar/altar_2",
+		"particle": "astralsorcery:block/altar/altar_2"
+	},
+	"elements": [
+		{
+			"from": [0, 10, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 8, 0]},
+			"faces": {
+				"north": {"uv": [2, 4.5, 4, 5.25], "texture": "#0"},
+				"east": {"uv": [0, 4.5, 2, 5.25], "texture": "#0"},
+				"south": {"uv": [6, 4.5, 8, 5.25], "texture": "#0"},
+				"west": {"uv": [4, 4.5, 6, 5.25], "texture": "#0"},
+				"up": {"uv": [4, 4.5, 2, 2.5], "texture": "#0"},
+				"down": {"uv": [6, 2.5, 4, 4.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [-1, 13, -1],
+			"to": [3, 16, 3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 8, 0]},
+			"faces": {
+				"north": {"uv": [3.625, 11.75, 4.125, 12.125], "texture": "#0"},
+				"east": {"uv": [3.125, 11.75, 3.625, 12.125], "texture": "#0"},
+				"south": {"uv": [4.625, 11.75, 5.125, 12.125], "texture": "#0"},
+				"west": {"uv": [4.125, 11.75, 4.625, 12.125], "texture": "#0"},
+				"up": {"uv": [4.125, 11.75, 3.625, 11.25], "texture": "#0"},
+				"down": {"uv": [4.625, 11.25, 4.125, 11.75], "texture": "#0"}
+			}
+		},
+		{
+			"from": [13, 13, -1],
+			"to": [17, 16, 3],
+			"rotation": {"angle": 0, "axis": "y", "origin": [14, 8, 0]},
+			"faces": {
+				"north": {"uv": [0.5, 7.75, 1, 8.125], "texture": "#0"},
+				"east": {"uv": [0, 7.75, 0.5, 8.125], "texture": "#0"},
+				"south": {"uv": [1.5, 7.75, 2, 8.125], "texture": "#0"},
+				"west": {"uv": [1, 7.75, 1.5, 8.125], "texture": "#0"},
+				"up": {"uv": [1, 7.75, 0.5, 7.25], "texture": "#0"},
+				"down": {"uv": [1.5, 7.25, 1, 7.75], "texture": "#0"}
+			}
+		},
+		{
+			"from": [13, 13, 13],
+			"to": [17, 16, 17],
+			"rotation": {"angle": 0, "axis": "y", "origin": [14, 8, 14]},
+			"faces": {
+				"north": {"uv": [0.5, 9.5, 1, 9.875], "texture": "#0"},
+				"east": {"uv": [0, 9.5, 0.5, 9.875], "texture": "#0"},
+				"south": {"uv": [1.5, 9.5, 2, 9.875], "texture": "#0"},
+				"west": {"uv": [1, 9.5, 1.5, 9.875], "texture": "#0"},
+				"up": {"uv": [1, 9.5, 0.5, 9], "texture": "#0"},
+				"down": {"uv": [1.5, 9, 1, 9.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [-1, 13, 13],
+			"to": [3, 16, 17],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 8, 14]},
+			"faces": {
+				"north": {"uv": [0.5, 8.625, 1, 9], "texture": "#0"},
+				"east": {"uv": [0, 8.625, 0.5, 9], "texture": "#0"},
+				"south": {"uv": [1.5, 8.625, 2, 9], "texture": "#0"},
+				"west": {"uv": [1, 8.625, 1.5, 9], "texture": "#0"},
+				"up": {"uv": [1, 8.625, 0.5, 8.125], "texture": "#0"},
+				"down": {"uv": [1.5, 8.125, 1, 8.625], "texture": "#0"}
+			}
+		},
+		{
+			"from": [-1, 0, -1],
+			"to": [17, 2, 17],
+			"faces": {
+				"north": {"uv": [2.25, 2.25, 4.5, 2.5], "texture": "#0"},
+				"east": {"uv": [0, 2.25, 2.25, 2.5], "texture": "#0"},
+				"south": {"uv": [6.75, 2.25, 9, 2.5], "texture": "#0"},
+				"west": {"uv": [4.5, 2.25, 6.75, 2.5], "texture": "#0"},
+				"up": {"uv": [4.5, 2.25, 2.25, 0], "texture": "#0"},
+				"down": {"uv": [6.75, 0, 4.5, 2.25], "texture": "#0"}
+			}
+		},
+		{
+			"from": [4, 2, 4],
+			"to": [12, 10, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 2, 0]},
+			"faces": {
+				"north": {"uv": [1, 6.25, 2, 7.25], "texture": "#0"},
+				"east": {"uv": [0, 6.25, 1, 7.25], "texture": "#0"},
+				"south": {"uv": [3, 6.25, 4, 7.25], "texture": "#0"},
+				"west": {"uv": [2, 6.25, 3, 7.25], "texture": "#0"},
+				"up": {"uv": [2, 6.25, 1, 5.25], "texture": "#0"},
+				"down": {"uv": [3, 5.25, 2, 6.25], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -135, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"fixed": {
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "altar_tier2",
+			"origin": [-16, 0.025, 16],
+			"scope": 0,
+			"color": 0,
+			"children": [
+				0,
+				{
+					"name": "accents",
+					"origin": [0, 8, 0],
+					"scope": 0,
+					"color": 0,
+					"children": [1, 2, 3, 4]
+				},
+				{
+					"name": "pedestal",
+					"origin": [0, 0, 0],
+					"scope": 0,
+					"color": 0,
+					"children": [5, 6]
+				}
+			]
+		}
+	]
+}

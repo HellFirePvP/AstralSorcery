@@ -1,77 +1,84 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.client.model.builtin;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import hellfirepvp.astralsorcery.client.lib.ModelLayersAS;
 import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import hellfirepvp.astralsorcery.client.util.RenderUtil;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.MultiBufferSource;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: ModelLens
- * Created by wiiv
- * Created using Tabula 4.1.1
- * Date: 21.09.2019 / 15:16
+ * Created by HellFirePvP
+ * Date: 07.09.2026 / 10:00
  */
 public class ModelLens extends CustomModel {
 
-    public final ModelRenderer base;
-    public final ModelRenderer frame1;
-    public final ModelRenderer lens;
-    public final ModelRenderer frame2;
+    private final ModelPart base;
+    private final ModelPart frame1;
+    private final ModelPart lens;
+    private final ModelPart frame2;
 
-    public ModelLens() {
-        super((resKey) -> RenderTypesAS.MODEL_LENS_SOLID);
-        this.textureWidth = 64;
-        this.textureHeight = 32;
-        this.base = new ModelRenderer(this, 0, 13);
-        this.base.setRotationPoint(0.0F, 16.0F, 0.0F);
-        this.base.addBox(-6.0F, 4.0F, -6.0F, 12, 2, 12, 0.0F);
-        this.frame1 = new ModelRenderer(this, 0, 13);
-        this.frame1.setRotationPoint(0.0F, 16.0F, 0.0F);
-        this.frame1.addBox(-8.0F, -4.0F, -1.0F, 2, 10, 2, 0.0F);
-        this.frame2 = new ModelRenderer(this, 0, 13);
-        this.frame2.mirror = true;
-        this.frame2.setRotationPoint(0.0F, 16.0F, 0.0F);
-        this.frame2.addBox(6.0F, -4.0F, -1.0F, 2, 10, 2, 0.0F);
-        this.lens = new ModelRenderer(this, 0, 0);
-        this.lens.setRotationPoint(0.0F, 14.0F, 0.0F);
-        this.lens.addBox(-6.0F, -6.0F, -0.5F, 12, 12, 1, 0.0F);
+    private ModelLens(ModelPart root) {
+        this.base = root.getChild("base");
+        this.frame1 = root.getChild("frame1");
+        this.lens = root.getChild("lens");
+        this.frame2 = root.getChild("frame2");
     }
 
-    public void renderFrame(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        IVertexBuilder vb = buffer.getBuffer(RenderTypesAS.MODEL_LENS_SOLID);
-        this.base.render(matrixStackIn, vb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        this.frame1.render(matrixStackIn, vb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        this.frame2.render(matrixStackIn, vb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        RenderingUtils.refreshDrawing(vb, RenderTypesAS.MODEL_LENS_SOLID);
+    public static ModelLens bake(EntityModelSet modelSet) {
+        return new ModelLens(modelSet.bakeLayer(ModelLayersAS.LENS.layerLocation()));
     }
 
-    public void renderGlass(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        IVertexBuilder vb = buffer.getBuffer(RenderTypesAS.MODEL_LENS_GLASS);
-        this.lens.render(matrixStackIn, vb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-
-        this.lens.rotateAngleX = 0;
-        RenderingUtils.refreshDrawing(vb, RenderTypesAS.MODEL_LENS_GLASS);
+    public static LayerDefinition createLayer() {
+        return LayerDefinition.create(ModelLens.createMesh(), 64, 32);
     }
 
-    @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer buffer, int packedLightIn, int packedOverlayIn) {
-        super.render(matrixStackIn, buffer, packedLightIn, packedOverlayIn);
-        this.renderFrame(matrixStackIn, buffer, packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
-        this.renderGlass(matrixStackIn, buffer, packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
+    public static MeshDefinition createMesh() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+
+        root.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 13)
+                .addBox(-6.0F, 4.0F, -6.0F, 12, 2, 12), PartPose.offset(0.0F, 16.0F, 0.0F));
+        root.addOrReplaceChild("frame1", CubeListBuilder.create().texOffs(0, 13)
+                .addBox(-8.0F, -4.0F, -1.0F, 2, 10, 2), PartPose.offset(0.0F, 16.0F, 0.0F));
+        root.addOrReplaceChild("frame2", CubeListBuilder.create().texOffs(0, 13).mirror()
+                .addBox(6.0F, -4.0F, -1.0F, 2, 10, 2), PartPose.offset(0.0F, 16.0F, 0.0F));
+        root.addOrReplaceChild("lens", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(-6.0F, -6.0F, -0.5F, 12, 12, 1), PartPose.offset(0.0F, 14.0F, 0.0F));
+        return mesh;
     }
 
-    @Override
-    public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {}
+    public void rotateLens(float pitchDegrees) {
+        this.lens.xRot = (float) Math.toRadians(pitchDegrees);
+    }
+
+    public void renderModel(PoseStack poseStack, MultiBufferSource src, int packedLight, int packedOverlay) {
+        VertexConsumer buf = src.getBuffer(RenderTypesAS.MODEL_LENS_SOLID);
+        this.base.render(poseStack, buf, packedLight, packedOverlay);
+        this.frame1.render(poseStack, buf, packedLight, packedOverlay);
+        this.frame2.render(poseStack, buf, packedLight, packedOverlay);
+        this.lens.render(poseStack, buf, packedLight, packedOverlay);
+
+        buf = src.getBuffer(RenderTypesAS.MODEL_LENS_GLASS);
+        this.lens.render(poseStack, buf, packedLight, packedOverlay);
+        this.lens.xRot = 0;
+    }
 }

@@ -1,0 +1,40 @@
+{
+	"format_version": "1.9.0",
+	"parent": "block/block",
+	"render_type": "minecraft:solid",
+	"ambientocclusion": false,
+	"textures": {
+		"0": "astralsorcery:block/lumen_crystal",
+		"particle": "astralsorcery:block/lumen_crystal"
+	},
+	"elements": [
+		{
+			"name": "c1",
+			"from": [7, -1, 7],
+			"to": [9, 6, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 7], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [0, 0, 2, 7], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 2, 7], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [0, 0, 2, 7], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "c3",
+			"from": [7.5, -0.5, 10],
+			"to": [8.5, 1.5, 11],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [7, -0.5, 9.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 2], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [0, 0, 1, 2], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 1, 2], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [0, 0, 1, 2], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [4, 0, 5, 1], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [4, 0, 5, 1], "texture": "#0", "tintindex": 0}
+			}
+		}
+	]
+}

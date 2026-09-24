@@ -1,0 +1,22 @@
+{
+    "entries": [
+        {
+            "enum": "net/minecraft/world/item/Rarity",
+            "name": "ASTRALSORCERY_RELIC",
+            "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+            "parameters": {
+                "class": "hellfirepvp/astralsorcery/EnumExtensions",
+                "field": "RARITY_RELIC"
+            }
+        },
+        {
+            "enum": "net/minecraft/world/item/Rarity",
+            "name": "ASTRALSORCERY_ARTIFACT",
+            "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+            "parameters": {
+                "class": "hellfirepvp/astralsorcery/EnumExtensions",
+                "field": "RARITY_ARTIFACT"
+            }
+        }
+    ]
+}

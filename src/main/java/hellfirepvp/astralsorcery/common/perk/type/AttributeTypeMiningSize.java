@@ -1,167 +1,167 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
-import hellfirepvp.astralsorcery.common.auxiliary.charge.AlignmentChargeHandler;
-import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.event.AttributeEvent;
-import hellfirepvp.astralsorcery.common.event.EventFlags;
-import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
-import hellfirepvp.astralsorcery.common.perk.PerkAttributeHelper;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.block.BlockPredicate;
-import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.*;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.LogicalSide;
+import hellfirepvp.astralsorcery.common.lib.PerksAS;
+import hellfirepvp.astralsorcery.common.network.play.PktSyncCustomDestroyProgress;
+import hellfirepvp.astralsorcery.common.perk.PerkManager;
+import hellfirepvp.astralsorcery.common.perk.type.base.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.util.BlockUtil;
+import hellfirepvp.astralsorcery.common.util.MiscUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.GameMasterBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: AttributeTypeMiningSize
  * Created by HellFirePvP
- * Date: 29.03.2020 / 15:50
+ * Date: 07.09.2026 / 10:00
  */
 public class AttributeTypeMiningSize extends PerkAttributeType {
 
-    public static final Config CONFIG = new Config("type." + PerkAttributeTypesAS.KEY_ATTR_TYPE_MINING_SIZE.getPath());
-
     public AttributeTypeMiningSize() {
-        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_MINING_SIZE);
+        super(false);
     }
 
     @Override
     protected void attachListeners(IEventBus eventBus) {
         super.attachListeners(eventBus);
-
-        eventBus.addListener(this::onBreak);
+        eventBus.addListener(this::onBlockBreak);
     }
 
-    private void onBreak(BlockEvent.BreakEvent event) {
-        IWorld world = event.getWorld();
-        PlayerEntity player = event.getPlayer();
+    private void onBlockBreak(BlockEvent.BreakEvent event) {
+        if (!(event.getLevel() instanceof ServerLevel sLevel)) return;
+        if (!(event.getPlayer() instanceof ServerPlayer sPlayer)) return;
 
-        if (!(world instanceof World) || world.isRemote()) {
+        forAllValidBreakablePositions(sLevel, sPlayer, event.getPos(), sPlayer.gameMode::destroyBlock);
+    }
+
+    public static void sendBlockBreakProgressSync(ServerLevel sLevel, ServerPlayer breaker, BlockPos pos, int progressStage) {
+        if (progressStage == -1) {
+            sendToAllNearby(sLevel, pos, PktSyncCustomDestroyProgress.resetProgress(breaker.getId(), pos));
             return;
         }
-        if (player instanceof ServerPlayerEntity) {
-            PlayerProgress prog = ResearchHelper.getProgress(player, LogicalSide.SERVER);
-            if (!prog.doPerkAbilities() || MiscUtils.isPlayerFakeMP((ServerPlayerEntity) player)) {
-                return;
+
+        forAllValidBreakablePositions(sLevel, breaker, pos, offsetPos -> {
+            sendToAllNearby(sLevel, pos, PktSyncCustomDestroyProgress.destroyProgress(breaker.getId(), pos, offsetPos, progressStage));
+        });
+    }
+
+    private static void forAllValidBreakablePositions(ServerLevel sLevel, ServerPlayer sPlayer, BlockPos center, Consumer<BlockPos> posFn) {
+        PlayerProgress progress = ResearchManager.getProgress(sPlayer, LogicalSide.SERVER);
+        if (!progress.isValid() || MiscUtil.isPlayerFake(sPlayer)) return;
+        if (!PerksAS.AttributeTypes.MINING_SIZE.get().hasTypeApplied(sPlayer, LogicalSide.SERVER)) return;
+
+        float size = PerkManager.getOrCreateAttributes(sPlayer)
+                .modifyValue(sPlayer, progress, PerksAS.AttributeTypes.MINING_SIZE, 0);
+        size = AttributeEvent.postProcessModded(sPlayer, PerksAS.AttributeTypes.MINING_SIZE, size);
+        int miningSize = Mth.floor(size);
+        if (miningSize <= 0) return;
+
+        HitResult hitTrace = sPlayer.pick(sPlayer.blockInteractionRange(), 0F, false);
+        if (!(hitTrace instanceof BlockHitResult blockHit)) return;
+        if (!blockHit.getBlockPos().equals(center)) return; //We uh... hit something else? huh. wtf did the client send?
+
+        BlockState hitState = sLevel.getBlockState(blockHit.getBlockPos());
+        Direction hitDirection = blockHit.getDirection();
+        float mainDestroySpeed = hitState.getDestroyProgress(sPlayer, sLevel, blockHit.getBlockPos());
+
+        List<BlockPos> adjacentBreakProgresses = new ArrayList<>();
+        if (hitDirection.getAxis().isVertical()) {
+            adjacentBreakProgresses.addAll(collectPositionsHorizontal(blockHit.getBlockPos(), hitDirection, miningSize));
+        } else {
+            adjacentBreakProgresses.addAll(collectPositionsVertical(blockHit.getBlockPos(), hitDirection, miningSize));
+        }
+
+        WorldBorder worldBorder = sLevel.getWorldBorder();
+        ItemStack heldItem = sPlayer.getMainHandItem();
+        GameType gameMode = sPlayer.gameMode.getGameModeForPlayer();
+        adjacentBreakProgresses.forEach(offsetPos -> {
+            BlockState offsetState = sLevel.getBlockState(offsetPos);
+            if (BlockUtil.isLiquidBlock(offsetState)) return;
+            if (!sLevel.isInWorldBounds(offsetPos) || !worldBorder.isWithinBounds(offsetPos)) return;
+            if (offsetState.getDestroySpeed(sLevel, offsetPos) < 0) return; //unbreakable anyway
+
+            float otherDestroySpeed = offsetState.getDestroyProgress(sPlayer, sLevel, offsetPos);
+            if (otherDestroySpeed * 1.15F < mainDestroySpeed) {
+                return; //If it takes significantly longer to break, it's probably harder. skip
             }
-            EventFlags.MINING_SIZE_BREAK.executeWithFlag(() -> {
-                float size = PerkAttributeHelper.getOrCreateMap(player, LogicalSide.SERVER)
-                        .modifyValue(player, prog, PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, 0);
-                size = AttributeEvent.postProcessModded(player, PerkAttributeTypesAS.ATTR_TYPE_MINING_SIZE, size);
-                if (size >= 1F) {
-                    BlockRayTraceResult brtr = MiscUtils.rayTraceLookBlock(player, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE);
-                    if (brtr != null && brtr.getType() == RayTraceResult.Type.BLOCK) {
-                        int levelBroken = event.getState().getHarvestLevel();
-                        float hardnessBroken = event.getState().getBlockHardness(world, event.getPos());
-                        BlockPredicate miningTest = (worldIn, posIn, stateIn) ->
-                                stateIn.getHarvestLevel() <= levelBroken &&
-                                        stateIn.getBlockHardness(worldIn, posIn) <= hardnessBroken;
-                        Direction dir = brtr.getFace();
-                        if (dir.getAxis() == Direction.Axis.Y) {
-                            this.breakBlocksPlaneHorizontal((ServerPlayerEntity) player, dir, (World) world, event.getPos(), miningTest, MathHelper.floor(size));
-                        } else {
-                            this.breakBlocksPlaneVertical((ServerPlayerEntity) player, dir, (World) world, event.getPos(), miningTest, MathHelper.floor(size));
-                        }
-                    }
-                }
-            });
-        }
+
+            if (!heldItem.isEmpty() && !heldItem.getItem().canAttackBlock(offsetState, sLevel, offsetPos, sPlayer)) return;
+            if (sPlayer.blockActionRestricted(sLevel, offsetPos, gameMode)) return;
+            if (offsetState.getBlock() instanceof GameMasterBlock && !sPlayer.canUseGameMasterBlocks()) return;
+
+            posFn.accept(offsetPos);
+        });
     }
 
-    private void breakBlocksPlaneVertical(ServerPlayerEntity player, Direction sideBroken, World world, BlockPos at, BlockPredicate miningTest, int size) {
-        if (size <= 0) {
-            return;
-        }
+    private static List<BlockPos> collectPositionsVertical(BlockPos center, Direction dir, int size) {
+        if (size <= 0) return Collections.emptyList();
+
+        List<BlockPos> positions = new ArrayList<>();
         for (int xx = -size; xx <= size; xx++) {
-            if (sideBroken.getDirectionVec().getX() != 0 && xx != 0) continue;
+            if (dir.getNormal().getX() != 0 && xx != 0) continue;
             for (int yy = -1; yy <= (size * 2 - 1); yy++) {
-                if (sideBroken.getDirectionVec().getY() != 0 && yy != 0) continue;
+                if (dir.getNormal().getY() != 0 && yy != 0) continue;
                 for (int zz = -size; zz <= size; zz++) {
-                    if (sideBroken.getDirectionVec().getZ() != 0 && zz != 0) continue;
+                    if (dir.getNormal().getZ() != 0 && zz != 0) continue;
                     if (xx == 0 && yy == 0 && zz == 0) continue;
 
-                    BlockPos other = at.add(xx, yy, zz);
-                    BlockState otherState = world.getBlockState(other);
-                    if (otherState.getBlockHardness(world, other) != -1 &&
-                            (player.isCreative() || miningTest.test(world, other, otherState)) &&
-                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), true)) {
-                        BlockState state = world.getBlockState(other);
-                        if (!BlockUtils.isFluidBlock(state) &&
-                                (player.isCreative() || otherState.canHarvestBlock(world, other, player)) &&
-                                player.interactionManager.tryHarvestBlock(other)) {
-                            if (rand.nextInt(3) == 0) {
-                                AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), false);
-                            }
-                        }
-                    }
+                    positions.add(center.offset(xx, yy, zz));
                 }
             }
         }
+        return positions;
     }
 
-    private void breakBlocksPlaneHorizontal(ServerPlayerEntity player, Direction sideBroken, World world, BlockPos at, BlockPredicate miningTest, int size) {
-        if (size <= 0) {
-            return;
-        }
+    private static List<BlockPos> collectPositionsHorizontal(BlockPos center, Direction dir, int size) {
+        if (size <= 0) return Collections.emptyList();
+
+        List<BlockPos> positions = new ArrayList<>();
         for (int xx = -size; xx <= size; xx++) {
-            if (sideBroken.getDirectionVec().getX() != 0 && xx != 0) continue;
+            if (dir.getNormal().getX() != 0 && xx != 0) continue;
             for (int zz = -size; zz <= size; zz++) {
-                if (sideBroken.getDirectionVec().getZ() != 0 && zz != 0) continue;
+                if (dir.getNormal().getZ() != 0 && zz != 0) continue;
                 if (xx == 0 && zz == 0) continue;
 
-                BlockPos other = at.add(xx, 0, zz);
-                BlockState otherState = world.getBlockState(other);
-                if (otherState.getBlockHardness(world, other) != -1 &&
-                        (player.isCreative() || miningTest.test(world, other, otherState)) &&
-                        AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), true)) {
-                    BlockState state = world.getBlockState(other);
-                    if (!BlockUtils.isFluidBlock(state) &&
-                            (player.isCreative() || otherState.canHarvestBlock(world, other, player)) &&
-                            player.interactionManager.tryHarvestBlock(other)) {
-                        if (rand.nextInt(3) == 0) {
-                            AlignmentChargeHandler.INSTANCE.drainCharge(player, LogicalSide.SERVER, CONFIG.chargeCostPerBreak.get(), false);
-                        }
-                    }
-                }
+                positions.add(center.offset(xx, 0, zz));
             }
         }
+        return positions;
     }
 
-    private static class Config extends ConfigEntry {
-
-        private ForgeConfigSpec.IntValue chargeCostPerBreak;
-
-        private Config(String section) {
-            super(section);
-        }
-
-        @Override
-        public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
-            chargeCostPerBreak = cfgBuilder
-                    .comment("Defines the amount of starlight charge consumed per additional block break through this attribute.")
-                    .translation(translationKey("chargeCostPerBreak"))
-                    .defineInRange("chargeCostPerBreak", 2, 1, 500);
-        }
+    private static void sendToAllNearby(ServerLevel sLevel, BlockPos pos, PktSyncCustomDestroyProgress.Request pkt) {
+        PacketDistributor.sendToPlayersNear(sLevel, null, pos.getX(), pos.getY(), pos.getZ(), 32, pkt);
     }
 }

@@ -1,20 +1,18 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk;
 
-import hellfirepvp.astralsorcery.common.data.config.entry.PerkConfig;
-import hellfirepvp.astralsorcery.common.util.SidedReference;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.LogicalSide;
+import hellfirepvp.astralsorcery.common.config.server.PerkConfig;
+import hellfirepvp.astralsorcery.common.util.data.SidedReference;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.fml.LogicalSide;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -22,41 +20,47 @@ import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: PerkLevelManager
  * Created by HellFirePvP
- * Date: 02.06.2019 / 01:59
+ * Date: 07.09.2026 / 10:00
  */
 public class PerkLevelManager {
 
-    private static final SidedReference<LevelData> LEVEL_DATA = new SidedReference<>();
+    private static final PerkLevelManager INSTANCE = new PerkLevelManager();
+
+    private final SidedReference<LevelData> levelData = new SidedReference<>();
 
     private PerkLevelManager() {}
 
-    public static void clearCache(LogicalSide side) {
-        LEVEL_DATA.setData(side, null);
+    public static PerkLevelManager getInstance() {
+        return INSTANCE;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static void receiveLevelCap(int maxLevel) {
-        LEVEL_DATA.setData(LogicalSide.CLIENT, new LevelData(maxLevel));
+    public void clearCache(LogicalSide side) {
+        levelData.setData(side, null);
     }
 
-    public static void loadPerkLevels() {
-        LEVEL_DATA.setData(LogicalSide.SERVER, new LevelData(PerkConfig.CONFIG.perkLevelCap.get()));
+    public void initializeClientLevels(int maxLevel) {
+        this.levelData.setData(LogicalSide.CLIENT, new LevelData(maxLevel));
     }
 
-    public static int getLevel(double totalExp, PlayerEntity player, LogicalSide side) {
-        return getLevel(MathHelper.lfloor(totalExp), player, side);
+    public void initializeServerLevels() {
+        int maxLevel = PerkConfig.CONFIG.perkLevelCap.getAsInt();
+        this.levelData.setData(LogicalSide.SERVER, new LevelData(maxLevel));
     }
 
-    private static int getLevel(long totalExp, PlayerEntity player, LogicalSide side) {
+    public int getLevel(double totalExp, @Nullable Player player, LogicalSide side) {
+        return getLevel(Mth.lfloor(totalExp), player, side);
+    }
+
+    private int getLevel(long totalExp, @Nullable Player player, LogicalSide side) {
         if (totalExp <= 0) {
             return 1;
         }
-        int levelCap = getLevelCap(side, player);
+        int levelCap = getMaxLevel(side, player);
 
-        return LEVEL_DATA.getData(side).map(data -> {
+        return this.levelData.getData(side).map(data -> {
             for (int i = 1; i <= levelCap; i++) {
                 if (totalExp < data.totalExpLevelRequired.getOrDefault(i, Long.MAX_VALUE)) {
                     return i;
@@ -66,13 +70,13 @@ public class PerkLevelManager {
         }).orElse(1);
     }
 
-    public static long getExpForLevel(int targetLevel, PlayerEntity player, LogicalSide side) {
+    public long getExpForLevel(int targetLevel, @Nullable Player player, LogicalSide side) {
         if (targetLevel <= 1) {
             return 0;
         }
-        int levelCap = getLevelCap(side, player);
+        int levelCap = getMaxLevel(side, player);
 
-        return LEVEL_DATA.getData(side).map(data -> {
+        return this.levelData.getData(side).map(data -> {
             int level = targetLevel;
             if (level > levelCap) {
                 level = levelCap;
@@ -81,37 +85,37 @@ public class PerkLevelManager {
         }).orElse(0L);
     }
 
-    public static float getNextLevelPercent(double totalExp, PlayerEntity player, LogicalSide side) {
+    public float getNextLevelPercent(double totalExp, @Nullable Player player, LogicalSide side) {
         int level = getLevel(totalExp, player, side);
-        if (level >= getLevelCap(side, player)) {
+        if (level >= getMaxLevel(side, player)) {
             return 1F; //Done.
         }
-        return LEVEL_DATA.getData(side).map(data -> {
+        return this.levelData.getData(side).map(data -> {
             long nextLevel = data.totalExpLevelRequired.getOrDefault(level, 0L);
             long prevLevel = data.totalExpLevelRequired.getOrDefault(level - 1, 0L);
             return ((float) (totalExp - prevLevel)) / ((float) (nextLevel - prevLevel));
         }).orElse(1F);
     }
 
-    public static int getLevelCap(LogicalSide side, @Nullable PlayerEntity player) {
-        return LEVEL_DATA.getData(side).map(data -> data.levelCap).orElse(1);
+    public int getMaxLevel(LogicalSide side, @Nullable Player player) {
+        return this.levelData.getData(side).map(data -> data.maxLevel).orElse(1);
     }
 
     private static class LevelData {
 
         private final Map<Integer, Long> totalExpLevelRequired = new HashMap<>();
-        private final int levelCap;
+        private final int maxLevel;
 
-        public LevelData(int levelCap) {
-            this.levelCap = levelCap;
+        public LevelData(int maxLevel) {
+            this.maxLevel = maxLevel;
             this.buildLevelRequirements();
         }
 
         private void buildLevelRequirements() {
             if (this.totalExpLevelRequired.isEmpty()) {
-                for (int i = 1; i <= this.levelCap; i++) {
+                for (int i = 1; i <= this.maxLevel; i++) {
                     long prev = this.totalExpLevelRequired.getOrDefault(i - 1, 0L);
-                    this.totalExpLevelRequired.put(i, prev + 150L + 100L * MathHelper.floor(Math.pow(1.2F, i)));
+                    this.totalExpLevelRequired.put(i, prev + 150L + 100L * Mth.floor(Math.pow(1.2F, i)));
                 }
             }
         }

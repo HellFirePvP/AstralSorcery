@@ -1,95 +1,69 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.reader;
 
-import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.event.AttributeEvent;
-import hellfirepvp.astralsorcery.common.perk.PerkAttributeLimiter;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeMap;
-import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
-import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.LogicalSide;
-import org.apache.commons.lang3.tuple.Pair;
+import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.perk.type.base.ModifierType;
+import hellfirepvp.astralsorcery.common.perk.type.base.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.util.MiscUtil;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.fml.LogicalSide;
+
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: ReaderAddedPercentage
  * Created by HellFirePvP
- * Date: 25.08.2019 / 17:31
+ * Date: 07.09.2026 / 10:00
  */
-public class ReaderAddedPercentage extends PerkAttributeReader {
+public class ReaderAddedPercentage extends PerkAttributeTypeReader {
 
-    protected float defaultValue;
+    protected final boolean addPercentageSymbol;
 
-    public ReaderAddedPercentage(PerkAttributeType attribute) {
-        super(attribute);
-        this.defaultValue = attribute.isMultiplicative() ? 1F : 0F;
+    protected ReaderAddedPercentage(Supplier<? extends PerkAttributeType> type, boolean addPercentageSymbol) {
+        super(type);
+        this.addPercentageSymbol = addPercentageSymbol;
     }
 
-    public <T extends ReaderAddedPercentage> T setDefaultValue(float defaultValue) {
-        if (!getType().isMultiplicative()) { //Percentage modifiers with a non-zero base make no sense
-            this.defaultValue = defaultValue;
-        }
-        return (T) this;
+    public static ReaderAddedPercentage withoutPercent(Supplier<? extends PerkAttributeType> type) {
+        return new ReaderAddedPercentage(type, false);
     }
 
-    @Override
-    public double getDefaultValue(PerkAttributeMap statMap, PlayerEntity player, LogicalSide side) {
-        return this.defaultValue;
+    public static ReaderAddedPercentage withPercent(Supplier<? extends PerkAttributeType> type) {
+        return new ReaderAddedPercentage(type, true);
     }
 
     @Override
-    public double getModifierValueForMode(PerkAttributeMap statMap, PlayerEntity player, LogicalSide side, ModifierType mode) {
-        double value = statMap.getModifier(player, ResearchHelper.getProgress(player, side), this.getType(), mode);
-        if (mode == ModifierType.ADDITION) {
-            value /= 100.0;
-            value += 1;
-        }
-        return value;
+    public double getDefaultValue(PerkAttributeMap statMap, Player player, LogicalSide side) {
+        return this.getType().isMultiplicative() ? 1 : 0;
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public PerkStatistic getStatistics(PerkAttributeMap statMap, PlayerEntity player) {
-        String limitStr = "";
-        Double limit = null;
-        if (PerkAttributeLimiter.hasLimit(this.getType())) {
-            Pair<Double, Double> limits = PerkAttributeLimiter.getLimit(this.getType());
-            limit = limits.getRight();
-            limitStr = I18n.format("perk.reader.astralsorcery.limit.percent", MathHelper.floor(limit * 100));
-        }
+    public double getModifierValueForMode(PerkAttributeMap statMap, Player player, LogicalSide side, ModifierType mode) {
+        return statMap.getModifier(player, ResearchManager.getProgress(player, side), this.getType(), mode);
+    }
 
-        double value = statMap.modifyValue(player, ResearchHelper.getProgress(player, LogicalSide.CLIENT),
-                this.getType(), (float) getDefaultValue(statMap, player, LogicalSide.CLIENT));
-
-        if (getType().isMultiplicative()) {
-            value -= 1F;
-        }
-
-        String postProcess = "";
-        double postValue = AttributeEvent.postProcessModded(player, this.getType(), value);
-        if (Math.abs(value - postValue) > 1E-4 &&
-                (limit == null || Math.abs(postValue - limit) > 1E-4)) {
-            if (Math.abs(postValue) >= 1E-4) {
-                postProcess = I18n.format("perk.reader.astralsorcery.postprocess.default",
-                        (postValue >= 0 ? "+" : "") + formatDecimal(postValue) + "%");
+    @Override
+    public String getDisplayValue(PerkAttributeModifier modifier, @Nullable Player player, @Nullable PlayerProgress progress) {
+        if (modifier.getMode() == ModifierType.ADDITION) {
+            String valueStr = modifier.getMode().stringifyValue(this.getRawValue(modifier, player, progress) * 100);
+            if (addPercentageSymbol) {
+                valueStr += "%";
             }
-            value = postValue;
+            return valueStr;
         }
-
-        String strOut = (value >= 0 ? "+" : "") + formatDecimal(value) + "%";
-        return new PerkStatistic(this.getType(), strOut, limitStr, postProcess);
+        return super.getDisplayValue(modifier, player, progress);
     }
 }

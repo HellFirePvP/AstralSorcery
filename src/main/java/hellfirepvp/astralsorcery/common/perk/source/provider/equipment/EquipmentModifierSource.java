@@ -1,88 +1,91 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.source.provider.equipment;
 
+import hellfirepvp.astralsorcery.common.component.IdentifierComponent;
+import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
+import hellfirepvp.astralsorcery.common.lib.PerksAS;
 import hellfirepvp.astralsorcery.common.perk.DynamicModifierHelper;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.perk.source.AttributeModifierProvider;
-import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSource;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraftforge.fml.LogicalSide;
+import hellfirepvp.astralsorcery.common.perk.source.ModifierSourceProvider;
+import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.fml.LogicalSide;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: EquipmentModifierSource
  * Created by HellFirePvP
- * Date: 02.04.2020 / 19:54
+ * Date: 07.09.2026 / 10:00
  */
 public class EquipmentModifierSource implements ModifierSource, AttributeModifierProvider {
 
-    final EquipmentSlotType slot;
+    public static final StreamCodec<RegistryFriendlyByteBuf, EquipmentModifierSource> STREAM_CODEC = StreamCodec.composite(
+            CodecUtil.enumStreamCodec(EquipmentSlot.class),
+            src -> src.slot,
+            ItemStack.STREAM_CODEC,
+            src -> src.itemStack,
+            EquipmentModifierSource::new
+    );
+
+    final EquipmentSlot slot;
     final ItemStack itemStack;
 
-    EquipmentModifierSource(EquipmentSlotType slot, ItemStack itemStack) {
+    EquipmentModifierSource(EquipmentSlot slot, ItemStack itemStack) {
         this.slot = slot;
         this.itemStack = itemStack;
     }
 
     @Override
-    public boolean canApplySource(PlayerEntity player, LogicalSide dist) {
+    public boolean canApplySource(Player player, LogicalSide dist) {
         return true;
     }
 
     @Override
-    public void onRemove(PlayerEntity player, LogicalSide dist) {}
+    public void onRemove(Player player, LogicalSide dist) {
+    }
 
     @Override
-    public void onApply(PlayerEntity player, LogicalSide dist) {}
+    public void onApply(Player player, LogicalSide dist) {
+    }
 
     @Override
-    public Collection<PerkAttributeModifier> getModifiers(PlayerEntity player, LogicalSide side, boolean ignoreRequirements) {
+    public Collection<PerkAttributeModifier> getModifiers(Player player, LogicalSide side, boolean ignoreRequirements) {
         if (this.itemStack.isEmpty()) {
             return Collections.emptyList();
         }
-        return DynamicModifierHelper.getDynamicModifiers(this.itemStack, player, side, ignoreRequirements);
+        return DynamicModifierHelper.getModifiers(this.itemStack, player, side, ignoreRequirements);
     }
 
     @Override
-    public boolean isEqual(ModifierSource other) {
-        return this.equals(other);
-    }
-
-    @Override
-    public ResourceLocation getProviderName() {
-        return ModifierManager.EQUIPMENT_PROVIDER_KEY;
+    public ModifierSourceProvider<?> getSourceProvider() {
+        return PerksAS.Sources.EQUIPMENT.get();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EquipmentModifierSource that = (EquipmentModifierSource) o;
-        return slot == that.slot &&
-                NBTHelper.getUUID(NBTHelper.getPersistentData(itemStack), EquipmentSourceProvider.KEY_MOD_IDENTIFIER, Util.DUMMY_UUID)
-                        .equals(NBTHelper.getUUID(NBTHelper.getPersistentData(that.itemStack), EquipmentSourceProvider.KEY_MOD_IDENTIFIER, Util.DUMMY_UUID));
+        return slot == that.slot && Objects.equals(IdentifierComponent.getIdentifier(this.itemStack), IdentifierComponent.getIdentifier(that.itemStack));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(slot, NBTHelper.getUUID(NBTHelper.getPersistentData(itemStack), EquipmentSourceProvider.KEY_MOD_IDENTIFIER, Util.DUMMY_UUID));
+        return Objects.hash(slot, IdentifierComponent.getIdentifier(this.itemStack));
     }
 }

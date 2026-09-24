@@ -1,84 +1,51 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.event;
 
-import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.eventbus.api.Cancelable;
-import net.minecraftforge.eventbus.api.Event;
-
-import javax.annotation.Nonnull;
-import java.util.LinkedList;
-import java.util.List;
+import hellfirepvp.astralsorcery.common.enchantment.CombinedEnchantmentModifiers;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: DynamicEnchantmentEvent
  * Created by HellFirePvP
- * Date: 11.08.2019 / 20:39
+ * Date: 07.09.2026 / 10:00
  */
 public class DynamicEnchantmentEvent {
 
-    //The event to ADD new dynamic enchantments
-    @Cancelable
-    public static class Add extends Event {
+    public static class Add extends PlayerEvent {
 
-        private final List<DynamicEnchantment> enchantmentsToApply = new LinkedList<>();
-        private final ItemStack itemStack;
-        private final PlayerEntity resolvedPlayer;
+        private final CombinedEnchantmentModifiers.Mutable newDynamicEnchantments;
 
-        public Add(ItemStack itemStack, @Nonnull PlayerEntity player) {
-            this.itemStack = itemStack;
-            this.resolvedPlayer = player;
+        public Add(Player player) {
+            super(player);
+            this.newDynamicEnchantments = CombinedEnchantmentModifiers.of().mutable();
         }
 
-        public ItemStack getEnchantedItemStack() {
-            return itemStack;
-        }
-
-        @Nonnull
-        public PlayerEntity getResolvedPlayer() {
-            return resolvedPlayer;
-        }
-
-        public List<DynamicEnchantment> getEnchantmentsToApply() {
-            return enchantmentsToApply;
+        public CombinedEnchantmentModifiers.Mutable getDynamicEnchantments() {
+            return this.newDynamicEnchantments;
         }
     }
 
-    //The event to MODIFY or REACT to previously defined/added dynamic enchantments + enchantments
-    @Cancelable
-    public static class Modify extends Event {
+    public static class Modify extends PlayerEvent {
 
-        private final List<DynamicEnchantment> enchantmentsToApply;
-        private final ItemStack itemStack;
-        private final PlayerEntity resolvedPlayer;
+        private final CombinedEnchantmentModifiers.Mutable dynamicEnchantments;
 
-        public Modify(ItemStack itemStack, List<DynamicEnchantment> enchantmentsToApply, @Nonnull PlayerEntity resolvedPlayer) {
-            this.itemStack = itemStack;
-            this.enchantmentsToApply = enchantmentsToApply;
-            this.resolvedPlayer = resolvedPlayer;
+        public Modify(Player player, CombinedEnchantmentModifiers dynamicEnchantments) {
+            super(player);
+            this.dynamicEnchantments = dynamicEnchantments.mutable();
         }
 
-        @Nonnull
-        public PlayerEntity getResolvedPlayer() {
-            return resolvedPlayer;
-        }
-
-        public ItemStack getEnchantedItemStack() {
-            return itemStack;
-        }
-
-        public List<DynamicEnchantment> getEnchantmentsToApply() {
-            return enchantmentsToApply;
+        public CombinedEnchantmentModifiers.Mutable getDynamicEnchantments() {
+            return this.dynamicEnchantments;
         }
     }
 }

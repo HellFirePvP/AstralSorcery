@@ -1,108 +1,80 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.tree;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import hellfirepvp.astralsorcery.client.resource.SpriteSheetResource;
-import hellfirepvp.astralsorcery.client.screen.journal.perk.BatchPerkContext;
-import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkRender;
-import hellfirepvp.astralsorcery.client.screen.journal.perk.PerkRenderGroup;
-import hellfirepvp.astralsorcery.client.screen.journal.perk.group.PerkPointRenderGroup;
-import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
-import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.perk.AllocationStatus;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.util.Tuple;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import hellfirepvp.astralsorcery.client.screen.tome.perk.render.PerkRenderType;
+import hellfirepvp.astralsorcery.client.screen.tome.perk.render.PerkRenderer;
+import hellfirepvp.astralsorcery.common.util.MiscUtil;
+import hellfirepvp.astralsorcery.common.util.data.FloatPoint;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: PerkTreePoint
  * Created by HellFirePvP
- * Date: 02.06.2019 / 02:03
+ * Date: 07.09.2026 / 10:00
  */
-public class PerkTreePoint<T extends AbstractPerk> implements PerkRender {
+public class PerkTreePoint<T extends AbstractPerk<?>> {
 
-    private final Point.Float offset;
+    public static final float PERK_RENDER_SIZE = 11F;
+
+    private final FloatPoint offset;
     private final T perk;
-    private int renderSize;
+    private final float renderScale;
 
-    private static final int spriteSize = 11;
+    public PerkTreePoint(FloatPoint offset, T perk) {
+        this(offset, perk, 1F);
+    }
 
-    public PerkTreePoint(T perk, Point.Float offset) {
+    protected PerkTreePoint(FloatPoint offset, T perk, float renderScale) {
         this.offset = offset;
         this.perk = perk;
-        this.renderSize = spriteSize;
+        this.renderScale = renderScale;
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addGroups(Collection<PerkRenderGroup> groups) {
-        groups.add(PerkPointRenderGroup.INSTANCE);
-    }
-
-    public void setRenderSize(int renderSize) {
-        this.renderSize = renderSize;
-    }
-
-    public int getRenderSize() {
-        return renderSize;
+    public FloatPoint getOffset() {
+        return this.offset;
     }
 
     public T getPerk() {
-        return perk;
+        return this.perk;
     }
 
-    public Point.Float getOffset() {
-        return offset;
+    protected float getRenderScale() {
+        return this.renderScale;
     }
 
-    @Nullable
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public Rectangle.Float renderPerkAtBatch(BatchPerkContext drawCtx, MatrixStack renderStack,
-                                             AllocationStatus status, long spriteOffsetTick, float pTicks,
-                                             float x, float y, float zLevel, float scale) {
-        SpriteSheetResource tex = status.getPerkTreeSprite();
-        BatchPerkContext.TextureObjectGroup grp = PerkPointRenderGroup.INSTANCE.getGroup(tex);
-        if (grp == null) {
-            return new Rectangle.Float();
-        }
-        BufferBuilder buf = drawCtx.getContext(grp);
+    public float getRenderSize() {
+        return PERK_RENDER_SIZE * this.getRenderScale();
+    }
 
-        float size = renderSize * scale;
-        Tuple<Float, Float> frameUV = tex.getUVOffset(spriteOffsetTick);
+    public Supplier<List<PerkRenderType>> getFixedRenderTypes() {
+        return PerkRenderType.Types::getDefaultPerkTypes;
+    }
 
-        RenderingGuiUtils.rect(buf, renderStack, x - size, y - size, zLevel, size * 2F, size * 2F)
-                .tex(frameUV.getA(), frameUV.getB(), tex.getULength(), tex.getVLength())
-                .draw();
-        return new Rectangle.Float(-size, -size, size * 2, size * 2);
+    public Supplier<PerkRenderer<?, T>> getRenderer() {
+        return () -> MiscUtil.cast(PerkRenderer.DEFAULT);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PerkTreePoint that = (PerkTreePoint) o;
+        PerkTreePoint<?> that = (PerkTreePoint<?>) o;
         return Objects.equals(offset, that.offset);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(offset);
+        return Objects.hashCode(offset);
     }
-
 }

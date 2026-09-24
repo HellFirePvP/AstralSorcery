@@ -1,0 +1,32 @@
+{
+    "targets": [
+        "transparency",
+        "combined"
+    ],
+    "passes": [
+        {
+            "name": "astralsorcery:transparency_color",
+            "intarget": "minecraft:main",
+            "outtarget": "combined",
+            "auxtargets": [
+                {
+                    "name": "DiffuseDepthSampler",
+                    "id": "minecraft:main:depth"
+                },
+                {
+                    "name": "TransparencySampler",
+                    "id": "transparency"
+                },
+                {
+                    "name": "TransparencyDepthSampler",
+                    "id": "transparency:depth"
+                }
+            ]
+        },
+        {
+            "name": "blit",
+            "intarget": "combined",
+            "outtarget": "minecraft:main"
+        }
+    ]
+}

@@ -1,25 +1,25 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.item.base;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: PerkExperienceRevealer
  * Created by HellFirePvP
- * Date: 03.03.2020 / 20:38
+ * Date: 07.09.2026 / 10:00
  */
 public interface PerkExperienceRevealer {
 
-    default public boolean shouldReveal(ItemStack stack) {
+    default boolean shouldReveal(ItemStack stack) {
         return true;
     }
 }

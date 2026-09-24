@@ -1,0 +1,82 @@
+{
+	"format_version": "1.9.0",
+	"parent": "block/block",
+	"render_type": "minecraft:solid",
+	"ambientocclusion": false,
+	"textures": {
+		"0": "astralsorcery:block/lumen_crystal",
+		"particle": "astralsorcery:block/lumen_crystal"
+	},
+	"elements": [
+		{
+			"name": "c1",
+			"from": [7, -1, 7],
+			"to": [9, 12, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 13], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [0, 0, 2, 13], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 2, 13], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [0, 0, 2, 13], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "c2",
+			"from": [8.5, -1, 7],
+			"to": [10.5, 9, 9],
+			"rotation": {"angle": -22.5, "axis": "z", "origin": [10, -1, 7.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "c3",
+			"from": [7, -0.5, 9],
+			"to": [9, 10.5, 11],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [7.5, -0.5, 9.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 11], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [0, 0, 2, 11], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 2, 11], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [0, 0, 2, 11], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "c4",
+			"from": [7, -1, 5.5],
+			"to": [9, 9, 7.5],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.5, -1, 6]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "c5",
+			"from": [5.5, -1, 7],
+			"to": [7.5, 9, 9],
+			"rotation": {"angle": 22.5, "axis": "z", "origin": [6, -1, 7.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [0, 0, 2, 10], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [4, 0, 6, 2], "texture": "#0", "tintindex": 0}
+			}
+		}
+	]
+}

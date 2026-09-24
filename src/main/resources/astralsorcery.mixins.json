@@ -1,0 +1,36 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "hellfirepvp.astralsorcery.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "mixins": [
+        "MixinAttributeInstance",
+        "MixinInventory",
+        "MixinInventoryChangeTrigger",
+        "MixinItemCooldowns",
+        "MixinItemStack",
+        "MixinLevelChunk",
+        "MixinPlayer",
+        "MixinProjectile",
+        "MixinServerGamePacketListenerImpl",
+        "MixinServerLevel"
+    ],
+    "client": [
+        "client.AccessorGameRenderer",
+        "client.AccessorPostChain",
+        "client.AccessorPostPass",
+        "client.MixinAbstractClientPlayer",
+        "client.MixinGameRenderer",
+        "client.MixinGui",
+        "client.MixinItemRenderer",
+        "client.MixinLevelRenderer",
+        "client.MixinMinecraft",
+        "client.MixinMouseHandler",
+        "client.MixinParticleEngine",
+        "client.MixinPlayerItemInHandLayer"
+    ],
+    "server": [],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

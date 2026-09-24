@@ -1,20 +1,22 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.source;
 
-import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.play.server.PktSyncModifierSource;
-import hellfirepvp.astralsorcery.common.perk.PerkEffectHelper;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
+import hellfirepvp.astralsorcery.common.network.play.PktSyncModifierSource;
+import hellfirepvp.astralsorcery.common.perk.PerkApplicationManager;
+import hellfirepvp.astralsorcery.common.perk.PerkManager;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -23,37 +25,29 @@ import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: ModifierSourceProvider
  * Created by HellFirePvP
- * Date: 01.04.2020 / 18:20
+ * Date: 07.09.2026 / 10:00
  */
 public abstract class ModifierSourceProvider<T extends ModifierSource> {
 
-    private final ResourceLocation key;
-
+    // PlayerId -> { Source-Provider specific ModifierSource Identifier -> ModifierSource }
     private final Map<UUID, Map<ResourceLocation, T>> cachedSources = new HashMap<>();
 
-    protected ModifierSourceProvider(ResourceLocation key) {
-        this.key = key;
-    }
+    protected abstract void update(ServerPlayer playerEntity);
 
-    protected abstract void update(ServerPlayerEntity playerEntity);
+    protected abstract void removeModifiers(ServerPlayer playerEntity);
 
-    protected abstract void removeModifiers(ServerPlayerEntity playerEntity);
-
-    public abstract void serialize(T source, PacketBuffer buf);
-
-    public abstract T deserialize(PacketBuffer buf);
+    public abstract StreamCodec<RegistryFriendlyByteBuf, T> getModifierSourceSyncCodec();
 
     @Nullable
-    private T getModifier(ServerPlayerEntity player, ResourceLocation identifier) {
-        Map<ResourceLocation, T> playerModifiers = cachedSources.computeIfAbsent(player.getUniqueID(), uuid -> new HashMap<>());
-        return playerModifiers.get(identifier);
+    private T getCachedSource(ServerPlayer player, ResourceLocation identifier) {
+        return this.cachedSources.computeIfAbsent(player.getUUID(), uuid -> new HashMap<>()).get(identifier);
     }
 
-    private void setModifier(ServerPlayerEntity player, ResourceLocation identifier, @Nullable T source) {
-        Map<ResourceLocation, T> playerModifiers = cachedSources.computeIfAbsent(player.getUniqueID(), uuid -> new HashMap<>());
+    private void setCachedSource(ServerPlayer player, ResourceLocation identifier, @Nullable T source) {
+        Map<ResourceLocation, T> playerModifiers = this.cachedSources.computeIfAbsent(player.getUUID(), uuid -> new HashMap<>());
         if (source != null) {
             playerModifiers.put(identifier, source);
         } else {
@@ -61,10 +55,14 @@ public abstract class ModifierSourceProvider<T extends ModifierSource> {
         }
     }
 
-    protected void updateSource(ServerPlayerEntity player, ResourceLocation identifier, @Nullable T source) {
+    protected void removeSource(ServerPlayer sPlayer, ResourceLocation sourceIdentifier) {
+        this.updateSource(sPlayer, sourceIdentifier, null);
+    }
+
+    protected void updateSource(ServerPlayer sPlayer, ResourceLocation sourceIdentifier, @Nullable T source) {
         boolean needsRemoval = false, needsAddition = false;
 
-        T existing = this.getModifier(player, identifier);
+        T existing = this.getCachedSource(sPlayer, sourceIdentifier);
         if (existing != null) {
             if (!existing.isEqual(source)) {
                 needsRemoval = true;
@@ -78,20 +76,16 @@ public abstract class ModifierSourceProvider<T extends ModifierSource> {
 
         if (needsRemoval) {
             if (needsAddition) {
-                PerkEffectHelper.updateSource(player, LogicalSide.SERVER, existing, source);
-                PacketChannel.CHANNEL.sendToPlayer(player, PktSyncModifierSource.update(existing, source));
+                PerkApplicationManager.updateSource(sPlayer, LogicalSide.SERVER, existing, source);
+                PacketDistributor.sendToPlayer(sPlayer, PktSyncModifierSource.update(existing, source));
             } else {
-                PerkEffectHelper.modifySource(player, LogicalSide.SERVER, existing, PerkEffectHelper.Action.REMOVE);
-                PacketChannel.CHANNEL.sendToPlayer(player, PktSyncModifierSource.remove(existing));
+                PerkApplicationManager.modifySource(sPlayer, LogicalSide.SERVER, existing, PerkManager.Action.REMOVE);
+                PacketDistributor.sendToPlayer(sPlayer, PktSyncModifierSource.remove(existing));
             }
         } else if (needsAddition) {
-            PerkEffectHelper.modifySource(player, LogicalSide.SERVER, source, PerkEffectHelper.Action.ADD);
-            PacketChannel.CHANNEL.sendToPlayer(player, PktSyncModifierSource.add(source));
+            PerkApplicationManager.modifySource(sPlayer, LogicalSide.SERVER, source, PerkManager.Action.ADD);
+            PacketDistributor.sendToPlayer(sPlayer, PktSyncModifierSource.add(source));
         }
-        this.setModifier(player, identifier, source);
-    }
-
-    public final ResourceLocation getKey() {
-        return key;
+        this.setCachedSource(sPlayer, sourceIdentifier, source);
     }
 }

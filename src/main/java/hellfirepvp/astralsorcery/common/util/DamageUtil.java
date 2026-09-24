@@ -1,46 +1,52 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
+import hellfirepvp.astralsorcery.common.util.data.DamageTypeRegistryObject;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: DamageUtil
  * Created by HellFirePvP
- * Date: 25.08.2019 / 00:47
+ * Date: 07.09.2026 / 10:00
  */
 public class DamageUtil {
 
-    public static boolean attackEntityFrom(@Nonnull Entity attacked, @Nonnull DamageSource type, float amount) {
-        return attacked.attackEntityFrom(type, amount);
+    public static boolean attackEntity(Entity entity, DamageTypeRegistryObject src, float amount) {
+        return attackEntity(entity, src.source(entity.damageSources()), amount);
     }
 
-    public static boolean attackEntityFrom(@Nonnull Entity attacked, @Nonnull DamageSource type, float amount, @Nullable Entity newSource) {
-        DamageSource newType = DamageSourceUtil.withEntityDirect(type, newSource);
-        return attackEntityFrom(attacked, newType != null ? newType : type, amount);
+    public static boolean attackEntity(Entity entity, DamageSource src, float amount) {
+        return entity.hurt(src, amount);
     }
 
-    public static <T extends LivingEntity> void shotgunAttack(T targeted, Consumer<T> fn) {
-        int hurtTime = targeted.hurtResistantTime;
-        targeted.hurtResistantTime = 0;
+    public static boolean attackEntityFrom(Entity entity, DamageTypeRegistryObject src, float amount, Entity newSource) {
+        return attackEntityFrom(entity, src.source(entity.damageSources()), amount, newSource);
+    }
+
+    public static boolean attackEntityFrom(Entity entity, DamageSource src, float amount, Entity newSource) {
+        DamageSource ovr = new DamageSource(src.typeHolder(), newSource, newSource, src.sourcePositionRaw());
+        return attackEntity(entity, ovr, amount);
+    }
+
+    public static <T extends Entity> void shotgunAttack(T targeted, Consumer<T> fn) {
+        int hurtTime = targeted.invulnerableTime;
+        targeted.invulnerableTime = 0;
         try {
             fn.accept(targeted);
         } finally {
-            targeted.hurtResistantTime = hurtTime;
+            targeted.invulnerableTime = hurtTime;
         }
     }
 }

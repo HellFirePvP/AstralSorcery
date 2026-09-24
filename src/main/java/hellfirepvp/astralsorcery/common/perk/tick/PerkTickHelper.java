@@ -1,64 +1,47 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.tick;
 
-import hellfirepvp.astralsorcery.common.data.research.PlayerPerkData;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import hellfirepvp.observerlib.common.util.tick.ITickHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.fml.LogicalSide;
-
-import java.util.EnumSet;
+import hellfirepvp.astralsorcery.common.perk.tree.AbstractPerk;
+import hellfirepvp.astralsorcery.common.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.util.SidedHelper;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: PerkTickHelper
  * Created by HellFirePvP
- * Date: 25.08.2019 / 22:04
+ * Date: 07.09.2026 / 10:00
  */
-public class PerkTickHelper implements ITickHandler {
-
-    public static final PerkTickHelper INSTANCE = new PerkTickHelper();
+public class PerkTickHelper {
 
     private PerkTickHelper() {}
 
-    @Override
-    public void tick(TickEvent.Type type, Object... context) {
-        PlayerEntity ticked = (PlayerEntity) context[0];
-        LogicalSide side = (LogicalSide) context[1];
-        PlayerProgress prog = ResearchHelper.getProgress(ticked, side);
+    public static void attachEventListeners(IEventBus bus) {
+        bus.addListener(PerkTickHelper::onPlayerTick);
+    }
+
+    private static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        LogicalSide side = SidedHelper.getSide(player);
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog.isValid()) {
-            PlayerPerkData perkData = prog.getPerkData();
-            for (AbstractPerk perk : perkData.getEffectGrantingPerks()) {
-                if (perk instanceof PlayerTickPerk) {
-                    ((PlayerTickPerk) perk).onPlayerTick(ticked, side);
+            for (AbstractPerk<?> perk : prog.getPerkData().getEffectGrantingPerks()) {
+                if (perk instanceof TickablePerk tickPerk) {
+                    tickPerk.tick(player, side);
                 }
             }
         }
-    }
-
-    @Override
-    public EnumSet<TickEvent.Type> getHandledTypes() {
-        return EnumSet.of(TickEvent.Type.PLAYER);
-    }
-
-    @Override
-    public boolean canFire(TickEvent.Phase phase) {
-        return phase == TickEvent.Phase.END;
-    }
-
-    @Override
-    public String getName() {
-        return "PlayerPerkHandler";
     }
 }

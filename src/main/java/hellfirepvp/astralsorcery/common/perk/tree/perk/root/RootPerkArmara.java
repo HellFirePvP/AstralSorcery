@@ -1,0 +1,139 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package hellfirepvp.astralsorcery.common.perk.tree.perk.root;
+
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
+import hellfirepvp.astralsorcery.common.event.AttributeEvent;
+import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
+import hellfirepvp.astralsorcery.common.lib.PerksAS;
+import hellfirepvp.astralsorcery.common.lib.types.PerkDataTypesAS;
+import hellfirepvp.astralsorcery.common.perk.PerkAttributeMap;
+import hellfirepvp.astralsorcery.common.perk.PerkManager;
+import hellfirepvp.astralsorcery.common.perk.convert.PerkAttributeConverter;
+import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.perk.tree.AbstractPerk;
+import hellfirepvp.astralsorcery.common.perk.tree.PerkCategory;
+import hellfirepvp.astralsorcery.common.perk.tree.PerkType;
+import hellfirepvp.astralsorcery.common.perk.tree.perk.RootPerk;
+import hellfirepvp.astralsorcery.common.perk.tree.requirement.PerkRequirement;
+import hellfirepvp.astralsorcery.common.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.util.DiminishingMultiplier;
+import hellfirepvp.astralsorcery.common.util.event.SidedEventBus;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.CombatTracker;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+
+import java.util.Collection;
+import java.util.Collections;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on GitHub.
+ * Class: RootPerkArmara
+ * Created by HellFirePvP
+ * Date: 07.09.2026 / 10:00
+ */
+public class RootPerkArmara extends RootPerk<AbstractPerk.Data> {
+
+    public static final MapCodec<RootPerkArmara> CODEC = RecordCodecBuilder.mapCodec(inst -> perkRootFields(inst).apply(inst, RootPerkArmara::new));
+    public static final PerkType<RootPerkArmara> TYPE =
+            PerkType.of(RootPerkArmara.CODEC, PerkDataTypesAS.DEFAULT_DATA, RootPerkArmara::new);
+    public static final Config CONFIG = new Config("root.armara");
+
+    private RootPerkArmara(ResourceLocation key, float x, float y) {
+        this(key, defaultNameKey(key), x, y, PerkCategory.ROOT, Collections.emptySet(), Collections.emptySet(), Collections.emptySet(), ConstellationsAS.ARMARA.get());
+    }
+
+    protected RootPerkArmara(ResourceLocation key, String nameKey, float x, float y, PerkCategory category, Collection<PerkRequirement> requirements, Collection<PerkAttributeConverter> converters, Collection<PerkAttributeModifier> modifiers, BaseConstellation constellation) {
+        super(key, nameKey, x, y, category, requirements, converters, modifiers, constellation);
+    }
+
+    @Override
+    protected Config getConfig() {
+        return CONFIG;
+    }
+
+    @Override
+    protected DiminishingMultiplier createMultiplier() {
+        return DiminishingMultiplier.of()
+                .multiplierReGainTime(40)
+                .multiplierReGainRate(0.3F)
+                .multiplierLossRate(0.2F)
+                .build();
+    }
+
+    @Override
+    protected void attachEventListeners(SidedEventBus sidedEventBus) {
+        super.attachEventListeners(sidedEventBus);
+        sidedEventBus.addListener(LivingIncomingDamageEvent.class, SidedEventBus.entityEvent(), this::onHurt);
+    }
+
+    private void onHurt(LivingIncomingDamageEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer sPlayer)) return;
+
+        LogicalSide side = this.getSide(sPlayer);
+        if (!side.isServer()) return;
+        PlayerProgress progress = ResearchManager.getProgress(sPlayer, side);
+        if (!progress.getPerkData().hasPerkEffect(this)) return;
+        PerkAttributeMap perkMap = PerkManager.getOrCreateAttributes(sPlayer);
+
+        float effectMultiplier = 5F;
+        if (event.getSource().getEntity() == null) {
+            effectMultiplier *= 0.25F;
+        }
+
+        CombatTracker tracker = sPlayer.getCombatTracker();
+        if (tracker.inCombat) {
+            if (tracker.getCombatDuration() > this.getConfig().extendedCombatDuration.getAsInt()) {
+                effectMultiplier *= 0.05F;
+            }
+        }
+
+        float xp = Math.min(event.getAmount(), 8F);
+        xp *= effectMultiplier;
+        xp *= this.getExpMultiplier();
+        xp *= this.getDiminishingMultiplier(sPlayer);
+        xp *= perkMap.getModifier(sPlayer, progress, PerksAS.AttributeTypes.PERK_EFFECT);
+        xp *= perkMap.getModifier(sPlayer, progress, PerksAS.AttributeTypes.PERK_EXPERIENCE);
+
+        xp = AttributeEvent.postProcessModded(sPlayer, PerksAS.AttributeTypes.PERK_EXPERIENCE, xp);
+
+        ResearchHelper.addPerkExp(sPlayer, xp);
+    }
+
+    @Override
+    public PerkType<?> getType() {
+        return TYPE;
+    }
+
+    public static class Config extends RootPerk.Config {
+
+        public ModConfigSpec.IntValue extendedCombatDuration;
+
+        public Config(String section) {
+            super(section);
+        }
+
+        @Override
+        public void createEntries(ModConfigSpec.Builder cfgBuilder) {
+            super.createEntries(cfgBuilder);
+
+            this.extendedCombatDuration = cfgBuilder
+                    .comment("The time in ticks after which the combat duration is considered excessively long and apply a penalty on exp gained. Might want to adjust this higher for very combat focused modpacks.")
+                    .defineInRange("extendedCombatDuration", 2 * 60 * 20, 1, Integer.MAX_VALUE);
+        }
+    }
+}

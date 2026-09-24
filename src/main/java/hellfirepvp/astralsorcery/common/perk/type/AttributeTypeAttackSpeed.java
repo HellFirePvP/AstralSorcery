@@ -1,61 +1,31 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.type;
 
-import hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS;
-import hellfirepvp.astralsorcery.common.perk.type.vanilla.VanillaAttributeType;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.Attributes;
+import hellfirepvp.astralsorcery.common.perk.type.base.VanillaAttributeType;
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import javax.annotation.Nonnull;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: AttributeTypeAttackSpeed
  * Created by HellFirePvP
- * Date: 24.08.2019 / 23:57
+ * Date: 07.09.2026 / 10:00
  */
 public class AttributeTypeAttackSpeed extends VanillaAttributeType {
-
-    private static final UUID ATTACK_SPEED_ADD_ID = UUID.fromString("79D9A08D-3A36-45CA-BAB9-899ADE702530");
-    private static final UUID ATTACK_SPEED_ADD_MULTIPLY_ID = UUID.fromString("79D9AFAA-3A36-45CA-BAB9-899ADE702530");
-    private static final UUID ATTACK_SPEED_STACK_MULTIPLY_ID = UUID.fromString("8ED9ABB5-3A36-45CA-BAB9-899ADE702530");
-
-    public AttributeTypeAttackSpeed() {
-        super(PerkAttributeTypesAS.KEY_ATTR_TYPE_ATTACK_SPEED);
-    }
-
-    @Override
-    public String getDescription() {
-        return "Perk AttackSpeed";
-    }
-
     @Nonnull
     @Override
-    public Attribute getAttribute() {
+    public Holder<Attribute> getAttribute() {
         return Attributes.ATTACK_SPEED;
-    }
-
-    @Override
-    public UUID getID(ModifierType mode) {
-        switch (mode) {
-            case ADDITION:
-                return ATTACK_SPEED_ADD_ID;
-            case ADDED_MULTIPLY:
-                return ATTACK_SPEED_ADD_MULTIPLY_ID;
-            case STACKING_MULTIPLY:
-                return ATTACK_SPEED_STACK_MULTIPLY_ID;
-            default:
-                break;
-        }
-        return null;
     }
 }

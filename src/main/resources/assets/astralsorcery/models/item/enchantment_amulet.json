@@ -1,8 +1,0 @@
-{
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "astralsorcery:item/amulet",
-        "layer1": "astralsorcery:item/amulet_gem",
-        "layer2": "astralsorcery:item/amulet_shine"
-    }
-}

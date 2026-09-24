@@ -4,7 +4,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
@@ -20,9 +19,6 @@ hs_err_pid*
 /nbproject
 
 #gradle stuff
-/gradlew
-/gradlew.bat
-/gradle
 /.gradle
 
 # maven
@@ -43,6 +39,7 @@ hs_err_pid*
 /classes
 /out
 /logs
+/runs
 
 # Mac filesystem dust
 /.DS_Store
@@ -56,7 +53,3 @@ hs_err_pid*
 # For good measure...
 *.jks
 gradle.attributes
-gradle.properties
-
-# Do not commit generated resources
-/src/generated/

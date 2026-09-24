@@ -1,0 +1,88 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - '1.21.1'
+
+#echo "$(${{github.workspace}}/gradlew printVersion -q | awk -F "version:" '{printf $2}')"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1000
+          fetch-tags: true
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build with Gradle
+        env:
+          MVN_URL: ${{ secrets.MVN_URL }}
+          MVN_USER: ${{ secrets.MVN_USER }}
+          MVN_PASS: ${{ secrets.MVN_PASS }}
+        run: ./gradlew build publish
+
+      - name: Get Version
+        run: |
+          echo "VERSION_NAME=$(${{github.workspace}}/gradlew -q printVersion | awk -F "version:" '{printf $2}')" >> $GITHUB_OUTPUT
+        id: version
+      - name: Compile version message
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const gh = ${{ toJSON(github) }};
+
+            core.setOutput('EMBED_TITLE', gh.event.repository.name + " / " + gh.ref_name);
+            core.setOutput('EMBED_AUTHOR_NAME', gh.event.sender.login);
+            core.setOutput('EMBED_AUTHOR_ICON_URL', gh.event.sender.avatar_url);
+
+            const commits = ${{ toJSON(github.event.commits) }};
+            let description = "";
+            description += "**Version:** ${{steps.version.outputs.VERSION_NAME}}\n";
+            description += "**Changes:**";
+            for (const commit of commits) {
+              if (description.length !== 0) {
+                description += "\n";
+              }
+              let message = commit.message;
+              if (message.indexOf("\n\nSigned-off-by:") !== -1) {
+                message = message.substring(0, message.indexOf("\n\nSigned-off-by:"));
+              }
+              if (message.length > 100) {
+                message = message.substring(0, 100) + "...";
+              }
+            
+              description += "- [" + commit.id.slice(0,7) + "](<" + commit.url + ">) *" + message + " - " + commit.author.username + "*";
+            }
+            
+            description += "\n\n";
+            description += "**Build Artifact:**\n";
+            description += "https://maven.hellfiredev.net/hellfirepvp/astralsorcery/AstralSorcery/${{steps.version.outputs.VERSION_NAME}}/AstralSorcery-${{steps.version.outputs.VERSION_NAME}}.jar";
+            description += "\n\n";
+            description += "**Disclaimer:**\n";
+            description += "Builds linked here are **NOT** release-builds! Do **NOT** use them in your packs!\n";
+            description += "Expect bugs, crashes or similar! These builds are meant for **testing**, not **playing**!";
+            core.setOutput('EMBED_DESCRIPTION', description);
+        id: embed
+      - name: Send Discord Notification
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          embeds: ${{steps.embed.outputs.EMBEDS}}
+          content: null
+          embed-title: "${{steps.embed.outputs.EMBED_TITLE}}"
+          embed-url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          embed-description: "${{steps.embed.outputs.EMBED_DESCRIPTION}}"
+          embed-author-name: "${{steps.embed.outputs.EMBED_AUTHOR_NAME}}"
+          embed-author-icon-url: "${{steps.embed.outputs.EMBED_AUTHOR_ICON_URL}}"
+          embed-color: 38153

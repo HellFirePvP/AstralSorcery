@@ -1,8 +1,8 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
@@ -10,88 +10,61 @@ package hellfirepvp.astralsorcery.client.util.camera;
 
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: CameraTransformerPlayerFocus
  * Created by HellFirePvP
- * Date: 02.12.2019 / 20:18
+ * Date: 07.09.2026 / 10:00
  */
-public class CameraTransformerPlayerFocus extends CameraTransformerSettingsCache {
+public class CameraTransformerPlayerFocus extends RevertableCameraTransformer {
 
-    private final EntityCameraRenderView entity;
-    private final ICameraPersistencyFunction func;
+    private final CameraViewEntity cameraEntity;
+    private final CameraPersistencyFunction persistencyFunction;
 
-    private EntityClientReplacement clientEntity;
-
-    public CameraTransformerPlayerFocus(EntityCameraRenderView renderView, ICameraPersistencyFunction func) {
-        this.entity = renderView;
-        this.func = func;
+    public CameraTransformerPlayerFocus(CameraViewEntity cameraEntity, CameraPersistencyFunction persistencyFunction) {
+        this.cameraEntity = cameraEntity;
+        this.persistencyFunction = persistencyFunction;
     }
 
     @Override
-    public void onStartTransforming(float pTicks) {
-        super.onStartTransforming(pTicks);
+    public void startTransforming() {
+        super.startTransforming();
 
-        EntityClientReplacement repl = new EntityClientReplacement();
-        repl.read(Minecraft.getInstance().player.writeWithoutTypeId(new CompoundNBT()));
-        Minecraft.getInstance().world.addPlayer(repl.getEntityId(), repl);
-        this.clientEntity = repl;
-
-        entity.setAsRenderViewEntity();
+        this.cameraEntity.setAsRenderViewEntity();
     }
 
     @Override
-    public void onStopTransforming(float pTicks) {
-        super.onStopTransforming(pTicks);
+    public void stopTransforming() {
+        super.stopTransforming();
 
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.world != null) {
-            mc.world.removeEntityFromWorld(this.clientEntity.getEntityId());
-        }
+        CameraUtil.resetCamera();
 
-        if (mc.player != null) {
-            PlayerEntity player = mc.player;
-            player.setPositionAndRotation(this.clientEntity.getPosX(), this.clientEntity.getPosY(), this.clientEntity.getPosZ(), this.clientEntity.rotationYaw, this.clientEntity.rotationPitch);
-            player.setVelocity(0, 0, 0);
-        }
-
-        ClientCameraUtil.resetCamera();
-
-        if (mc.world != null) {
-            entity.onStopTransforming();
+        if (Minecraft.getInstance().level != null) {
+            this.cameraEntity.onStopTransforming();
         }
     }
 
     @Override
-    public void transformRenderView(float pTicks) {
-        super.transformRenderView(pTicks);
+    public void transformCameraView(float pTicks) {
+        super.transformCameraView(pTicks);
 
-        Vector3 focus = entity.getCameraFocus();
+        Vector3 focus = this.cameraEntity.getCameraFocus();
         if (focus != null) {
-            entity.transformToFocusOnPoint(focus, pTicks, true);
+            this.cameraEntity.transformToFocusOnPoint(focus, pTicks, true);
         }
     }
 
     @Override
-    public ICameraPersistencyFunction getPersistencyFunction() {
-        return func;
+    public void onTick() {
+        this.cameraEntity.tickCount++;
+
+        this.cameraEntity.moveEntityTick(Minecraft.getInstance().player, this.cameraEntity.tickCount);
     }
 
     @Override
-    public int getPriority() {
-        return 0;
-    }
-
-    @Override
-    public void onClientTick() {
-        entity.ticksExisted++;
-
-        if (clientEntity != null) {
-            entity.moveEntityTick(entity, clientEntity, entity.ticksExisted);
-        }
+    public CameraPersistencyFunction getPersistencyFunction() {
+        return this.persistencyFunction;
     }
 }

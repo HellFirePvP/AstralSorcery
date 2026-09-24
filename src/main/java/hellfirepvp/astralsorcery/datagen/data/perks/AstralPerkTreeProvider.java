@@ -1,2953 +1,3058 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.datagen.data.perks;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.enchantment.EnchantmentModifier;
 import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
-import hellfirepvp.astralsorcery.common.lib.PerkConvertersAS;
-import hellfirepvp.astralsorcery.common.lib.PerkCustomModifiersAS;
-import hellfirepvp.astralsorcery.common.perk.data.PerkTypeHandler;
+import hellfirepvp.astralsorcery.common.lib.PerksAS;
+import hellfirepvp.astralsorcery.common.lib.types.PerkTypesAS;
 import hellfirepvp.astralsorcery.common.perk.data.builder.PerkDataBuilder;
 import hellfirepvp.astralsorcery.common.perk.data.builder.PerkDataProvider;
-import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierPerk;
-import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.util.ResourceLocation;
+import hellfirepvp.astralsorcery.common.perk.tree.AttributeModifierPerk;
+import hellfirepvp.astralsorcery.common.perk.tree.requirement.PerkRequirementConstellation;
+import hellfirepvp.astralsorcery.common.perk.tree.requirement.PerkRequirementProgress;
+import hellfirepvp.astralsorcery.common.perk.type.base.ModifierType;
+import hellfirepvp.astralsorcery.common.research.ResearchTier;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import static hellfirepvp.astralsorcery.AstralSorcery.key;
-import static hellfirepvp.astralsorcery.common.lib.PerkAttributeTypesAS.*;
-import static hellfirepvp.astralsorcery.common.lib.PerkNamesAS.*;
-import static hellfirepvp.astralsorcery.common.perk.data.PerkTypeHandler.*;
+import static hellfirepvp.astralsorcery.common.lib.PerksAS.AttributeTypes.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: AstralPerkTreeProvider
  * Created by HellFirePvP
- * Date: 14.08.2020 / 19:13
+ * Date: 07.09.2026 / 10:00
  */
 public class AstralPerkTreeProvider extends PerkDataProvider {
 
-    public AstralPerkTreeProvider(DataGenerator generator) {
-        super(generator);
+    public AstralPerkTreeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries);
     }
+
+    // whenever importing a new data set:
+    // - replace PerkRequirementProgress.of("luminance") with PerkRequirementProgress.of(ResearchTier.LUMINANCE)
+    // - add references to epiphany travel nodes
+    // - add enchantments to dynamic enchantment nodes
 
     @Override
-    public void registerPerks(Consumer<FinishedPerk> registrar) {
-        registerRoots(registrar);
-        registerTravel(registrar);
-        registerInnerRoots(registrar);
-        registerCore(registrar);
-        registerOuterTravel(registrar);
-        registerRootConnectors(registrar);
-        registerMetaPerks(registrar);
-        registerOuterRoots(registrar);
-    }
-
-    private void registerOuterRoots(Consumer<FinishedPerk> registrar) {
-        registerAevitasOuter(registrar);
-        registerVicioOuter(registrar);
-        registerArmaraOuter(registrar);
-        registerDiscidiaOuter(registrar);
-        registerEvorsioOuter(registrar);
-    }
-
-    private void registerEvorsioOuter(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_outer_lowlife_1"), 28, 8)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("travel_53"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_outer_lowlife_2"), 29, 7)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("evorsio_outer_lowlife_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_LOW_LIFE)
-                .create(key("evorsio_outer_lowlife_3"), 30, 8)
-                .setName(name("key.low_life"))
-                .connect(key("evorsio_outer_lowlife_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_outer_size_1"), 17, 9)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_52"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_outer_size_2"), 18, 8)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("evorsio_outer_size_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_outer_size_3"), 17, 7)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("evorsio_outer_size_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("evorsio_outer_size_4"), 16, 8)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_MINING_SIZE)
-                .setName(name("named.geologic_prowess"))
-                .connect(key("evorsio_outer_size_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_outer_luck_1"), 10, 21)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_LUCK)
-                .setName(NAME_ADD_LUCK)
-                .connect(key("travel_50"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_outer_luck_2"), 9, 20)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_LUCK)
-                .setName(NAME_ADD_LUCK)
-                .connect(key("evorsio_outer_luck_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_ADD_ENCHANTMENT)
-                .create(key("evorsio_outer_luck_3"), 10, 19)
-                .modify(perk -> perk.addEnchantment(Enchantments.FORTUNE, 1))
-                .setName(name("key.luck"))
-                .connect(key("evorsio_outer_luck_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_outer_entity_reach_1"), 15, 24)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("travel_50"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_outer_entity_reach_2"), 16, 25)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("evorsio_outer_entity_reach_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_ENTITY_REACH)
-                .create(key("evorsio_outer_entity_reach_3"), 15, 26)
-                .setName(name("key.entity_reach"))
-                .connect(key("evorsio_outer_entity_reach_2"))
-                .build(registrar);
-    }
-
-    private void registerDiscidiaOuter(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_potionhit_1"), 67, 24)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("travel_34"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_potionhit_2"), 66, 25)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("discidia_outer_potionhit_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_potionhit_3"), 65, 24)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("discidia_outer_potionhit_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_ON_HIT_POTIONS)
-                .create(key("discidia_outer_potionhit_4"), 66, 23)
-                .setName(name("key.damage_types"))
-                .connect(key("discidia_outer_potionhit_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_cull_1"), 64, 9)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_INC_CRIT_CHANCE)
-                .connect(key("travel_32"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_cull_2"), 65, 8)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_INC_CRIT_CHANCE)
-                .connect(key("discidia_outer_cull_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_cull_3"), 64, 7)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_INC_CRIT_CHANCE)
-                .connect(key("discidia_outer_cull_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_CULLING)
-                .create(key("discidia_outer_cull_4"), 63, 8)
-                .setName(name("key.cull_attack"))
-                .connect(key("discidia_outer_cull_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(KEY_BLEED)
-                .create(key("discidia_outer_bleed_1"), 56, 8)
-                .setName(name("key.bleed"))
-                .connect(key("travel_31"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_bleed_2"), 58, 7)
-                .addModifier(0.25F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_BLEED_CHANCE)
-                .setName(NAME_INC_BLEED_CHANCE)
-                .connect(key("discidia_outer_bleed_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_bleed_3"), 59, 8)
-                .addModifier(0.25F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_BLEED_DURATION)
-                .setName(NAME_INC_BLEED_DURATION)
-                .connect(key("discidia_outer_bleed_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_bleed_4"), 55, 6)
-                .addModifier(0.25F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_BLEED_CHANCE)
-                .setName(NAME_INC_BLEED_CHANCE)
-                .connect(key("discidia_outer_bleed_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_bleed_5"), 54, 7)
-                .addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_BLEED_STACKS)
-                .setName(NAME_ADD_BLEED_STACKS)
-                .connect(key("discidia_outer_bleed_4"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(KEY_LIGHTNING_ARC)
-                .create(key("discidia_outer_arc_1"), 49, 7)
-                .setName(name("key.arc"))
-                .connect(key("travel_30"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_arc_2"), 50, 5)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARC_CHAINS)
-                .setName(name("special.arc_chain_1"))
-                .connect(key("discidia_outer_arc_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_arc_3"), 51, 6)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARC_CHAINS)
-                .setName(name("special.arc_chain_1"))
-                .connect(key("discidia_outer_arc_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("discidia_outer_arc_4"), 52, 4)
-                .addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_ARC_CHAINS)
-                .setName(name("special.arc_chain_2"))
-                .connect(key("discidia_outer_arc_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_exp_1"), 70, 20)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_SPEED)
-                .setName(NAME_INC_PROJ_SPEED)
-                .connect(key("travel_34"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_exp_2"), 71, 19)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_SPEED)
-                .setName(NAME_INC_PROJ_SPEED)
-                .connect(key("discidia_outer_exp_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("discidia_outer_exp_3"), 70, 18)
-                .addModifier(0.14F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_SPEED)
-                .setName(name("named.finesse"))
-                .connect(key("discidia_outer_exp_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_outer_crit_1"), 46, 11)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER)
-                .setName(NAME_INC_CRIT_MULTIPLIER)
-                .connect(key("travel_30"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("discidia_outer_crit_2"), 47, 12)
-                .addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER)
-                .setName(name("named.lethality"))
-                .connect(key("discidia_outer_crit_1"))
-                .build(registrar);
-    }
-
-    private void registerArmaraOuter(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_reflect_1"), 75, 46)
-                .addModifier(5F, ModifierType.ADDITION, ATTR_TYPE_INC_THORNS)
-                .setName(NAME_INC_THORNS)
-                .connect(key("travel_36"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_reflect_2"), 76, 47)
-                .addModifier(5F, ModifierType.ADDITION, ATTR_TYPE_INC_THORNS)
-                .setName(NAME_INC_THORNS)
-                .connect(key("armara_outer_reflect_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_reflect_3"), 77, 46)
-                .addModifier(5F, ModifierType.ADDITION, ATTR_TYPE_INC_THORNS)
-                .setName(NAME_INC_THORNS)
-                .connect(key("armara_outer_reflect_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("armara_outer_reflect_4"), 76, 45)
-                .addModifier(5F, ModifierType.ADDITION, ATTR_TYPE_INC_THORNS)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_THORNS_RANGED)
-                .setName(name("key.thorns_ranged"))
-                .connect(key("armara_outer_reflect_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_revive_1"), 72, 36)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("travel_35"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_revive_2"), 71, 37)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("armara_outer_revive_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_revive_3"), 70, 36)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("armara_outer_revive_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_CHEATDEATH)
-                .create(key("armara_outer_revive_4"), 69, 37)
-                .setName(name("key.revive"))
-                .connect(key("armara_outer_revive_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_worn_1"), 70, 62)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_ARMOR_TOUGHNESS)
-                .setName(name("hybrid.armor_armor_toughness"))
-                .connect(key("travel_38"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_worn_2"), 71, 63)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_ARMOR_TOUGHNESS)
-                .setName(name("hybrid.armor_armor_toughness"))
-                .connect(key("armara_outer_worn_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_worn_3"), 72, 62)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_ARMOR_TOUGHNESS)
-                .setName(name("hybrid.armor_armor_toughness"))
-                .connect(key("armara_outer_worn_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_NO_ARMOR)
-                .create(key("armara_outer_worn_4"), 71, 61)
-                .setName(name("key.no_armor"))
-                .connect(key("armara_outer_worn_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_exp_1"), 64, 65)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_39"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_exp_2"), 65, 66)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("armara_outer_exp_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("armara_outer_exp_3"), 66, 65)
-                .addModifier(0.12F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("named.clarity"))
-                .connect(key("armara_outer_exp_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_recovery_1"), 62, 60)
-                .addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .setName(name("hybrid.life_recovery_cooldown_reduction"))
-                .connect(key("travel_39"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_recovery_2"), 61, 59)
-                .addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .setName(name("hybrid.life_recovery_cooldown_reduction"))
-                .connect(key("armara_outer_recovery_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("armara_outer_recovery_3"), 60, 60)
-                .addModifier(0.10F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
-                .addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .setName(name("named.osmosis"))
-                .connect(key("armara_outer_recovery_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_proj_1"), 75, 32)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(NAME_INC_PROJ_DAMAGE)
-                .connect(key("travel_35"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_outer_proj_2"), 76, 31)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(NAME_INC_PROJ_DAMAGE)
-                .connect(key("armara_outer_proj_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("armara_outer_proj_3"), 77, 32)
-                .addModifier(0.06F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .setName(name("named.arrow_slits"))
-                .connect(key("armara_outer_proj_2"))
-                .build(registrar);
-    }
-
-    private void registerVicioOuter(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_step_1"), 51, 69)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("travel_40"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_step_2"), 50, 68)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("vicio_outer_step_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_step_3"), 51, 67)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("vicio_outer_step_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_STEP_ASSIST)
-                .create(key("vicio_outer_step_4"), 50, 66)
-                .setName(name("key.step_assist"))
-                .connect(key("vicio_outer_step_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_magnet_1"), 29, 73)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("travel_44"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_magnet_2"), 30, 74)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("vicio_outer_magnet_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_magnet_3"), 29, 75)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("vicio_outer_magnet_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_MAGNET_DROPS)
-                .create(key("vicio_outer_magnet_4"), 28, 74)
-                .setName(name("key.magnet_drops"))
-                .connect(key("vicio_outer_magnet_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_flight_1"), 42, 77)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .setName(NAME_INC_ALL_RES)
-                .connect(key("travel_42"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_flight_2"), 43, 78)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .setName(NAME_INC_ALL_RES)
-                .connect(key("vicio_outer_flight_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_flight_3"), 42, 79)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .setName(NAME_INC_ALL_RES)
-                .connect(key("vicio_outer_flight_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_MANTLE_CREATIVE_FLIGHT)
-                .create(key("vicio_outer_flight_4"), 43, 80)
-                .setName(name("key.mantle_flight"))
-                .connect(key("vicio_outer_flight_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_cdr_1"), 47, 76)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .setName(NAME_INC_COOLDOWN_RECOVERY)
-                .connect(key("travel_41"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_cdr_2"), 46, 77)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .setName(NAME_INC_COOLDOWN_RECOVERY)
-                .connect(key("vicio_outer_cdr_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("vicio_outer_cdr_3"), 45, 76)
-                .addModifier(0.06F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(name("named.fleet_footed"))
-                .connect(key("vicio_outer_cdr_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_charge_resist_1"), 36, 75)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(name("hybrid.charge_all_resist"))
-                .connect(key("travel_43"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_charge_resist_2"), 37, 76)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(name("hybrid.charge_all_resist"))
-                .connect(key("vicio_outer_charge_resist_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("vicio_outer_charge_resist_3"), 36, 77)
-                .addModifier(0.06F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(name("named.dazzling_barrier"))
-                .connect(key("vicio_outer_charge_resist_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_movespeed_1"), 31, 68)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("travel_44"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("vicio_outer_movespeed_2"), 30, 67)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE)
-                .setName(name("named.hushed_steps"))
-                .connect(key("vicio_outer_movespeed_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_meleedmg_1"), 54, 73)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .setName(NAME_INC_MELEE_DAMAGE)
-                .connect(key("travel_40"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_outer_meleedmg_2"), 55, 74)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .setName(NAME_INC_MELEE_DAMAGE)
-                .connect(key("vicio_outer_meleedmg_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("vicio_outer_meleedmg_3"), 54, 75)
-                .addModifier(0.07F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(name("named.dervish"))
-                .connect(key("vicio_outer_meleedmg_2"))
-                .build(registrar);
-    }
-
-    private void registerAevitasOuter(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_ttt_1"), 21, 61)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("travel_45"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_ttt_2"), 22, 60)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("aevitas_outer_ttt_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_ttt_3"), 23, 61)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("aevitas_outer_ttt_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_VOID_TRASH)
-                .create(key("aevitas_outer_ttt_4"), 22, 62)
-                .setName(name("key.void_trash"))
-                .connect(key("aevitas_outer_ttt_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_enrich_1"), 12, 62)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("travel_46"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_enrich_2"), 11, 63)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("aevitas_outer_enrich_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_enrich_3"), 12, 64)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("aevitas_outer_enrich_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_STONE_ENRICHMENT)
-                .create(key("aevitas_outer_enrich_4"), 13, 63)
-                .setName(name("key.stone_enrichment"))
-                .connect(key("aevitas_outer_enrich_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_mending_1"), 9, 33)
-                .addModifier(0.07F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .setName(NAME_INC_ALL_RES)
-                .connect(key("travel_49"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_mending_2"), 10, 32)
-                .addModifier(0.07F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .setName(NAME_ADD_ARMOR)
-                .connect(key("aevitas_outer_mending_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_mending_3"), 11, 33)
-                .addModifier(0.07F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .setName(NAME_ADD_ARMOR)
-                .connect(key("aevitas_outer_mending_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_ARMOR_MENDING)
-                .create(key("aevitas_outer_mending_4"), 10, 34)
-                .setName(name("key.mending"))
-                .connect(key("aevitas_outer_mending_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_vit_1"), 3, 42)
-                .addModifier(0.12F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
-                .setName(NAME_INC_LIFE_RECOVERY)
-                .connect(key("travel_48"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_vit_2"), 2, 41)
-                .addModifier(0.12F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
-                .setName(NAME_INC_LIFE_RECOVERY)
-                .connect(key("aevitas_outer_vit_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("aevitas_outer_vit_3"), 3, 40)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_HEALTH)
-                .setName(name("named.vitality"))
-                .connect(key("aevitas_outer_vit_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_perkexp_1"), 3, 46)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_48"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("aevitas_outer_perkexp_2"), 4, 47)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("named.sage"))
-                .connect(key("aevitas_outer_perkexp_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_cdr_1"), 18, 65)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .setName(NAME_INC_COOLDOWN_RECOVERY)
-                .connect(key("travel_45"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_cdr_2"), 17, 66)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .setName(NAME_INC_COOLDOWN_RECOVERY)
-                .connect(key("aevitas_outer_cdr_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("aevitas_outer_cdr_3"), 16, 65)
-                .addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(name("named.vivid_growth"))
-                .connect(key("aevitas_outer_cdr_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_dodge_1"), 8, 36)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_ADD_DODGE)
-                .connect(key("travel_49"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_outer_dodge_2"), 9, 37)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_ADD_DODGE)
-                .connect(key("aevitas_outer_dodge_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("aevitas_outer_dodge_3"), 8, 38)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE)
-                .addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .setName(name("named.adaptive"))
-                .connect(key("aevitas_outer_dodge_2"))
-                .build(registrar);
-    }
-
-    private void registerMetaPerks(Consumer<FinishedPerk> registrar) {
-        registerFocusPerks(registrar);
-        registerConnectorPerks(registrar);
-    }
-
-    private void registerConnectorPerks(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_connector_1"), 22, 70)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.aevitas"))
-                .connect(key("travel_22"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_connector_2"), 21, 75)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.aevitas"))
-                .connect(key("aevitas_connector_1"))
-                .connect(key("aevitas_connector_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_connector_3"), 17, 71)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.aevitas"))
-                .connect(key("aevitas_connector_1"))
-                .connect(key("aevitas_connector_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(EPIPHANY_PERK)
-                .create(key("aevitas_connector_4"), 20, 72)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .setName(name("special.connector.key.aevitas"))
-                .connect(key("aevitas_connector_1"))
-                .connect(key("aevitas_connector_2"))
-                .connect(key("aevitas_connector_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_connector_1"), 59, 69)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.vicio"))
-                .connect(key("travel_20"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_connector_2"), 64, 70)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.vicio"))
-                .connect(key("vicio_connector_1"))
-                .connect(key("vicio_connector_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_connector_3"), 60, 74)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.vicio"))
-                .connect(key("vicio_connector_1"))
-                .connect(key("vicio_connector_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(EPIPHANY_PERK)
-                .create(key("vicio_connector_4"), 61, 71)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .setName(name("special.connector.key.vicio"))
-                .connect(key("vicio_connector_1"))
-                .connect(key("vicio_connector_2"))
-                .connect(key("vicio_connector_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_connector_1"), 74, 26)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.armara"))
-                .connect(key("travel_18"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_connector_2"), 75, 21)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.armara"))
-                .connect(key("armara_connector_1"))
-                .connect(key("armara_connector_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_connector_3"), 79, 25)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.armara"))
-                .connect(key("armara_connector_1"))
-                .connect(key("armara_connector_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(EPIPHANY_PERK)
-                .create(key("armara_connector_4"), 76, 24)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .setName(name("special.connector.key.armara"))
-                .connect(key("armara_connector_1"))
-                .connect(key("armara_connector_2"))
-                .connect(key("armara_connector_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_connector_1"), 39, 7)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.discidia"))
-                .connect(key("travel_16"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_connector_2"), 36, 2)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.discidia"))
-                .connect(key("discidia_connector_1"))
-                .connect(key("discidia_connector_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_connector_3"), 42, 2)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.discidia"))
-                .connect(key("discidia_connector_1"))
-                .connect(key("discidia_connector_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(EPIPHANY_PERK)
-                .create(key("discidia_connector_4"), 39, 4)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .setName(name("special.connector.key.discidia"))
-                .connect(key("discidia_connector_1"))
-                .connect(key("discidia_connector_2"))
-                .connect(key("discidia_connector_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_connector_1"), 6, 26)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.evorsio"))
-                .connect(key("travel_24"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_connector_2"), 1, 25)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.evorsio"))
-                .connect(key("evorsio_connector_1"))
-                .connect(key("evorsio_connector_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_connector_3"), 5, 21)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("special.connector.evorsio"))
-                .connect(key("evorsio_connector_1"))
-                .connect(key("evorsio_connector_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(EPIPHANY_PERK)
-                .create(key("evorsio_connector_4"), 4, 24)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .setName(name("special.connector.key.evorsio"))
-                .connect(key("evorsio_connector_1"))
-                .connect(key("evorsio_connector_2"))
-                .connect(key("evorsio_connector_3"))
-                .build(registrar);
-    }
-
-    private void registerFocusPerks(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vorux_effect"), 3, 54)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vorux))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_47"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vorux_exp"), 5, 56)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vorux))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_47"))
-                .build(registrar);
-        PerkDataBuilder.ofType(FOCUS_VORUX)
-                .create(key("focus_vorux"), 1, 58)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vorux))
-                .addModifier(PerkCustomModifiersAS.FOCUS_VORUX)
-                .setName(name("special.focus.vorux"))
-                .connect(key("vorux_effect"))
-                .connect(key("vorux_exp"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("alcara_effect"), 75, 56)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.alcara))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_37"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("alcara_exp"), 77, 54)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.alcara))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_37"))
-                .build(registrar);
-        PerkDataBuilder.ofType(FOCUS_ALCARA)
-                .create(key("focus_alcara"), 79, 58)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.alcara))
-                .addConverter(PerkConvertersAS.FOCUS_ALCARA)
-                .setName(name("special.focus.alcara"))
-                .connect(key("alcara_effect"))
-                .connect(key("alcara_exp"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ulteria_effect"), 68, 15)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.ulteria))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_33"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ulteria_exp"), 66, 13)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.ulteria))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_33"))
-                .build(registrar);
-        PerkDataBuilder.ofType(FOCUS_ULTERIA)
-                .create(key("focus_ulteria"), 70, 11)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.ulteria))
-                .addModifier(PerkCustomModifiersAS.FOCUS_ULTERIA)
-                .setName(name("special.focus.ulteria"))
-                .connect(key("ulteria_effect"))
-                .connect(key("ulteria_exp"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("gelu_effect"), 14, 13)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.gelu))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_51"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("gelu_exp"), 12, 15)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.gelu))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_51"))
-                .build(registrar);
-        PerkDataBuilder.ofType(FOCUS_GELU)
-                .create(key("focus_gelu"), 10, 11)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.gelu))
-                .addModifier(PerkCustomModifiersAS.FOCUS_GELU)
-                .addConverter(PerkConvertersAS.FOCUS_GELU)
-                .setName(name("special.focus.gelu"))
-                .connect(key("gelu_effect"))
-                .connect(key("gelu_exp"))
-                .build(registrar);
-    }
-
-    private void registerRootConnectors(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_co_armor_1"), 12, 43)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_ADD_ARMOR)
-                .connect(key("aevitas_m_life_armor"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_co_armor_2"), 9, 45)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_ADD_ARMOR)
-                .connect(key("aevitas_co_armor_1"))
-                .connect(key("travel_48"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_co_ats_1"), 18, 55)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("aevitas_m_life_resist"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_co_ats_2"), 15, 56)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("aevitas_co_ats_1"))
-                .connect(key("travel_46"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_co_ms_1"), 33, 66)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("vicio_m_reach_movespeed"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_co_ms_2"), 34, 70)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("vicio_co_ms_1"))
-                .connect(key("travel_43"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_co_dodge_1"), 47, 66)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_DODGE)
-                .connect(key("vicio_m_dodge_movespeed"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_co_dodge_2"), 45, 69)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_DODGE)
-                .connect(key("vicio_co_dodge_1"))
-                .connect(key("travel_41"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_co_life_1"), 63, 55)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("armara_m_life_armor"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_co_life_2"), 67, 56)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("armara_co_life_1"))
-                .connect(key("travel_38"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_co_mining_1"), 67, 43)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("armara_m_resist_armor"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_co_mining_2"), 70, 45)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("armara_co_mining_1"))
-                .connect(key("travel_36"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_co_projectiles_1"), 59, 21)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_SPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(name("hybrid.proj_dmg_speed"))
-                .connect(key("discidia_m_proj_dmg_speed"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_co_projectiles_2"), 62, 18)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_SPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(name("hybrid.proj_dmg_speed"))
-                .connect(key("discidia_co_projectiles_1"))
-                .connect(key("travel_33"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_co_melee_1"), 49, 15)
-                .addModifier(0.10F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(name("hybrid.melee_crit_chance"))
-                .connect(key("discidia_m_melee_reach"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_co_melee_2"), 51, 12)
-                .addModifier(0.10F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(name("hybrid.melee_crit_chance"))
-                .connect(key("discidia_co_melee_1"))
-                .connect(key("travel_31"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_co_cdr_1"), 31, 15)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(name("hybrid.life_cooldown_reduction"))
-                .connect(key("evorsio_m_dmg_ats"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_co_cdr_2"), 28, 13)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(name("hybrid.life_cooldown_reduction"))
-                .connect(key("evorsio_co_cdr_1"))
-                .connect(key("travel_53"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_co_reach_1"), 21, 22)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(name("hybrid.reach_movespeed"))
-                .connect(key("evorsio_m_mining_reach"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_co_reach_2"), 17, 20)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(name("hybrid.reach_movespeed"))
-                .connect(key("evorsio_co_reach_1"))
-                .connect(key("travel_51"))
-                .build(registrar);
-    }
-
-    private void registerOuterTravel(Consumer<FinishedPerk> registrar) {
-        this.makeTravelNode(47, 9, key("travel_30"))
-                .connect(key("travel_16"))
-                .build(registrar);
-        this.makeTravelNode(54, 10, key("travel_31"))
-                .connect(key("travel_30"))
-                .build(registrar);
-        this.makeTravelNode(62, 11, key("travel_32"))
-                .connect(key("travel_31"))
-                .build(registrar);
-        this.makeTravelNode(65, 16, key("travel_33"))
-                .connect(key("travel_32"))
-                .build(registrar);
-        this.makeTravelNode(69, 22, key("travel_34"))
-                .connect(key("travel_33"))
-                .connect(key("travel_18"))
-                .build(registrar);
-        this.makeTravelNode(73, 35, key("travel_35"))
-                .connect(key("travel_18"))
-                .build(registrar);
-        this.makeTravelNode(73, 44, key("travel_36"))
-                .connect(key("travel_35"))
-                .build(registrar);
-        this.makeTravelNode(74, 53, key("travel_37"))
-                .connect(key("travel_36"))
-                .build(registrar);
-        this.makeTravelNode(69, 59, key("travel_38"))
-                .connect(key("travel_37"))
-                .build(registrar);
-        this.makeTravelNode(61, 63, key("travel_39"))
-                .connect(key("travel_38"))
-                .connect(key("travel_20"))
-                .build(registrar);
-        this.makeTravelNode(52, 71, key("travel_40"))
-                .connect(key("travel_20"))
-                .build(registrar);
-        this.makeTravelNode(46, 73, key("travel_41"))
-                .connect(key("travel_40"))
-                .build(registrar);
-        this.makeTravelNode(41, 74, key("travel_42"))
-                .connect(key("travel_41"))
-                .build(registrar);
-        this.makeTravelNode(35, 73, key("travel_43"))
-                .connect(key("travel_42"))
-                .build(registrar);
-        this.makeTravelNode(30, 71, key("travel_44"))
-                .connect(key("travel_43"))
-                .connect(key("travel_22"))
-                .build(registrar);
-        this.makeTravelNode(20, 64, key("travel_45"))
-                .connect(key("travel_22"))
-                .build(registrar);
-        this.makeTravelNode(13, 59, key("travel_46"))
-                .connect(key("travel_45"))
-                .build(registrar);
-        this.makeTravelNode(6, 53, key("travel_47"))
-                .connect(key("travel_46"))
-                .build(registrar);
-        this.makeTravelNode(5, 44, key("travel_48"))
-                .connect(key("travel_47"))
-                .build(registrar);
-        this.makeTravelNode(6, 34, key("travel_49"))
-                .connect(key("travel_48"))
-                .connect(key("travel_24"))
-                .build(registrar);
-        this.makeTravelNode(12, 23, key("travel_50"))
-                .connect(key("travel_24"))
-                .build(registrar);
-        this.makeTravelNode(15, 16, key("travel_51"))
-                .connect(key("travel_50"))
-                .build(registrar);
-        this.makeTravelNode(19, 11, key("travel_52"))
-                .connect(key("travel_51"))
-                .build(registrar);
-        this.makeTravelNode(26, 10, key("travel_53"))
-                .connect(key("travel_52"))
-                .build(registrar);
-        this.makeTravelNode(33, 11, key("travel_54"))
-                .connect(key("travel_53"))
-                .connect(key("travel_16"))
-                .build(registrar);
-    }
-
-    private void registerCore(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(GEM_SLOT_PERK)
-                .create(key("core_m_gem"), 40, 40)
-                .build(registrar);
-        this.makeTravelNode(41, 34, key("travel_25"))
-                .connect(key("core_m_gem"))
-                .connect(key("travel_0"))
-                .build(registrar);
-        this.makeTravelNode(45, 39, key("travel_26"))
-                .connect(key("core_m_gem"))
-                .connect(key("travel_3"))
-                .build(registrar);
-        this.makeTravelNode(43, 45, key("travel_27"))
-                .connect(key("core_m_gem"))
-                .connect(key("travel_6"))
-                .build(registrar);
-        this.makeTravelNode(37, 46, key("travel_28"))
-                .connect(key("core_m_gem"))
-                .connect(key("travel_9"))
-                .build(registrar);
-        this.makeTravelNode(35, 38, key("travel_29"))
-                .connect(key("core_m_gem"))
-                .connect(key("travel_12"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_charge_cave_1"), 44, 33)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .setName(NAME_INC_CHARGE_REGEN)
-                .connect(key("travel_25"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_charge_cave_2"), 45, 34)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .setName(NAME_INC_CHARGE_REGEN)
-                .connect(key("core_charge_cave_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_CHARGE_BALANCING)
-                .create(key("core_charge_cave_3"), 44, 35)
-                .addModifier(0.75F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .addModifier(1.5F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .setName(name("key.charge_regen"))
-                .connect(key("core_charge_cave_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_aoe_reach_1"), 34, 41)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("travel_29"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_aoe_reach_2"), 33, 42)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("core_aoe_reach_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_AOE)
-                .create(key("core_aoe_reach_3"), 32, 41)
-                .setName(name("key.aoe_effect"))
-                .connect(key("core_aoe_reach_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_potion_dur_1"), 43, 37)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION)
-                .setName(NAME_INC_POTION_DURATION)
-                .connect(key("travel_26"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("core_potion_dur_2"), 42, 38)
-                .addModifier(0.3F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(name("named.alchemists_flasks"))
-                .connect(key("core_potion_dur_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_potion_dur_3"), 39, 45)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION)
-                .setName(NAME_INC_POTION_DURATION)
-                .connect(key("travel_28"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("core_potion_dur_4"), 40, 44)
-                .addModifier(0.4F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_POTION_DURATION)
-                .addModifier(0.85F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_HEALTH)
-                .setName(name("named.profane_chemistry"))
-                .connect(key("core_potion_dur_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_unbreaking_1"), 34, 44)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .setName(NAME_INC_ALL_RES)
-                .connect(key("travel_28"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_unbreaking_2"), 33, 45)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .setName(NAME_INC_ALL_RES)
-                .connect(key("core_unbreaking_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_ADD_ENCHANTMENT)
-                .create(key("core_unbreaking_3"), 34, 46)
-                .modify(perk -> perk.addEnchantment(Enchantments.UNBREAKING, 1))
-                .setName(name("key.enduring"))
-                .connect(key("core_unbreaking_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_ench_effect_1"), 34, 36)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ENCH_EFFECT)
-                .setName(NAME_INC_ENCH_EFFECT)
-                .connect(key("travel_29"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_ench_effect_2"), 33, 35)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ENCH_EFFECT)
-                .setName(NAME_INC_ENCH_EFFECT)
-                .connect(key("core_ench_effect_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("core_ench_effect_3"), 34, 34)
-                .addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ENCH_EFFECT)
-                .setName(name("named.prismatic_shimmer"))
-                .connect(key("core_ench_effect_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_cdr_1"), 42, 47)
-                .addModifier(0.07F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .setName(NAME_INC_COOLDOWN_RECOVERY)
-                .connect(key("travel_27"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_cdr_2"), 41, 48)
-                .addModifier(0.07F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .setName(NAME_INC_COOLDOWN_RECOVERY)
-                .connect(key("core_cdr_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("core_cdr_3"), 40, 47)
-                .addModifier(0.20F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_COOLDOWN_REDUCTION)
-                .setName(name("named.tilted_pendulum"))
-                .connect(key("core_cdr_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_lifeleech_1"), 47, 40)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_ATTACK_LIFE_LEECH)
-                .setName(NAME_ADD_LIFE_LEECH)
-                .connect(key("travel_26"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_lifeleech_2"), 48, 41)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_ATTACK_LIFE_LEECH)
-                .setName(NAME_ADD_LIFE_LEECH)
-                .connect(key("core_lifeleech_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("core_lifeleech_3"), 47, 42)
-                .addModifier(1.5F, ModifierType.ADDITION, ATTR_TYPE_ATTACK_LIFE_LEECH)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(name("named.vampirism"))
-                .connect(key("core_lifeleech_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_perk_exp_1"), 39, 32)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_INC_CRIT_CHANCE)
-                .connect(key("travel_25"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("core_perk_exp_2"), 38, 33)
-                .addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(name("named.precision"))
-                .connect(key("core_perk_exp_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_perk_exp_3"), 45, 44)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_27"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("core_perk_exp_4"), 46, 45)
-                .addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(name("named.focused_mind"))
-                .connect(key("core_perk_exp_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_luck_1"), 38, 36)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_LUCK)
-                .setName(NAME_ADD_LUCK)
-                .connect(key("travel_25"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("core_luck_2"), 39, 37)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_LUCK)
-                .setName(name("named.cunning"))
-                .connect(key("core_luck_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_smite_1"), 36, 42)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .setName(NAME_INC_MELEE_DAMAGE)
-                .connect(key("travel_28"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_ADD_ENCHANTMENT)
-                .create(key("core_smite_2"), 37, 41)
-                .modify(perk -> perk.addEnchantment(Enchantments.SMITE, 1))
-                .setName(name("key.undead_bane"))
-                .connect(key("core_smite_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("core_infinity_1"), 44, 42)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(NAME_INC_PROJ_DAMAGE)
-                .connect(key("travel_26"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_ADD_ENCHANTMENT)
-                .create(key("core_infinity_2"), 43, 41)
-                .modify(perk -> perk.addEnchantment(Enchantments.INFINITY, 1))
-                .setName(name("key.endless_munitions"))
-                .connect(key("core_infinity_1"))
-                .build(registrar);
-    }
-
-    private void registerInnerRoots(Consumer<FinishedPerk> registrar) {
-        registerAevitasInner(registrar);
-        registerVicioInner(registrar);
-        registerArmaraInner(registrar);
-        registerDiscidiaInner(registrar);
-        registerEvorsioInner(registrar);
-    }
-
-    private void registerEvorsioInner(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_inner_1"), 29, 27)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("evorsio_mining_bridge_3"))
-                .connect(key("evorsio_inner_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_inner_2"), 31, 29)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("travel_13"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_inner_3"), 32, 25)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("evorsio_mining_bridge_1"))
-                .connect(key("evorsio_inner_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_inner_4"), 35, 27)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("travel_14"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_inner_crit1"), 30, 31)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_INC_CRIT_CHANCE)
-                .connect(key("evorsio_inner_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_inner_crit2"), 29, 32)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_INC_CRIT_CHANCE)
-                .connect(key("evorsio_inner_crit1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_DISARM)
-                .create(key("evorsio_inner_crit3"), 28, 31)
-                .setName(name("key.disarm"))
-                .connect(key("evorsio_inner_crit2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_digtypes_1"), 34, 23)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("evorsio_inner_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_digtypes_2"), 35, 22)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("evorsio_digtypes_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_DIG_TYPES)
-                .create(key("evorsio_digtypes_3"), 34, 21)
-                .setName(name("key.dig_types"))
-                .connect(key("evorsio_digtypes_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_charge_inner_1"), 37, 26)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(name("hybrid.charge_max_regen"))
-                .connect(key("evorsio_inner_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_charge_inner_2"), 38, 25)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(name("hybrid.charge_max_regen"))
-                .connect(key("evorsio_charge_inner_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("evorsio_charge_inner_3"), 37, 24)
-                .addModifier(0.2F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(name("named.bloom"))
-                .connect(key("evorsio_charge_inner_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_mining_size_1"), 26, 29)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("evorsio_inner_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_mining_size_2"), 25, 28)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("evorsio_mining_size_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("evorsio_mining_size_3"), 26, 27)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_MINING_SIZE)
-                .setName(name("named.illusory_hammer"))
-                .connect(key("evorsio_mining_size_2"))
-                .build(registrar);
-    }
-
-    private void registerDiscidiaInner(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_inner_1"), 47, 24)
-                .addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_INC_CRIT_CHANCE)
-                .connect(key("discidia_crit_bridge_3"))
-                .connect(key("discidia_inner_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_inner_2"), 46, 27)
-                .addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_INC_CRIT_CHANCE)
-                .connect(key("travel_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_inner_3"), 51, 26)
-                .addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_INC_CRIT_CHANCE)
-                .connect(key("discidia_crit_bridge_1"))
-                .connect(key("discidia_inner_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_inner_4"), 49, 29)
-                .addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_INC_CRIT_CHANCE)
-                .connect(key("travel_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_close_range_1"), 45, 21)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(NAME_INC_PROJ_DAMAGE)
-                .connect(key("discidia_inner_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_close_range_2"), 46, 20)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(NAME_INC_PROJ_DAMAGE)
-                .connect(key("discidia_close_range_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_PROJ_PROXIMITY)
-                .create(key("discidia_close_range_3"), 47, 21)
-                .setName(name("key.projectile_close_range"))
-                .connect(key("discidia_close_range_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_distance_1"), 54, 28)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(NAME_INC_PROJ_DAMAGE)
-                .connect(key("discidia_inner_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_distance_2"), 55, 27)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(NAME_INC_PROJ_DAMAGE)
-                .connect(key("discidia_distance_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_RPOJ_DISTANCE)
-                .create(key("discidia_distance_3"), 54, 26)
-                .setName(name("key.projectile_distance"))
-                .connect(key("discidia_distance_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_rampage_1"), 44, 26)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .addModifier(0.2F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_RAMPAGE_DURATION)
-                .setName(name("hybrid.attack_speed_rampage"))
-                .connect(key("discidia_inner_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_rampage_2"), 43, 25)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .addModifier(0.2F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_RAMPAGE_DURATION)
-                .setName(name("hybrid.attack_speed_rampage"))
-                .connect(key("discidia_rampage_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_RAMPAGE)
-                .create(key("discidia_rampage_3"), 44, 24)
-                .setName(name("key.rampage"))
-                .connect(key("discidia_rampage_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_multi_1"), 51, 30)
-                .addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER)
-                .setName(NAME_INC_CRIT_MULTIPLIER)
-                .connect(key("discidia_inner_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_multi_2"), 52, 31)
-                .addModifier(0.08F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER)
-                .setName(NAME_INC_CRIT_MULTIPLIER)
-                .connect(key("discidia_multi_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("discidia_multi_3"), 53, 30)
-                .addModifier(0.16F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER)
-                .addModifier(1.5F, ModifierType.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(name("named.combat_focus"))
-                .connect(key("discidia_multi_2"))
-                .build(registrar);
-    }
-
-    private void registerArmaraInner(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_inner_1"), 57, 44)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_INC_DODGE)
-                .connect(key("armara_dodge_bridge_3"))
-                .connect(key("armara_inner_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_inner_2"), 54, 41)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_INC_DODGE)
-                .connect(key("travel_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_inner_3"), 56, 48)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_INC_DODGE)
-                .connect(key("armara_dodge_bridge_1"))
-                .connect(key("armara_inner_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_inner_4"), 52, 47)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_INC_DODGE)
-                .connect(key("travel_5"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_dmgarmor_1"), 51, 49)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .setName(NAME_INC_ARMOR)
-                .connect(key("armara_inner_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_dmgarmor_2"), 52, 50)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .setName(NAME_INC_ARMOR)
-                .connect(key("armara_dmgarmor_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_DAMAGE_ARMOR)
-                .create(key("armara_dmgarmor_3"), 51, 51)
-                .setName(name("key.damage_armor"))
-                .connect(key("armara_dmgarmor_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_noknockback_1"), 59, 41)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("armara_inner_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_noknockback_2"), 60, 40)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("armara_noknockback_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_NO_KNOCKBACK)
-                .create(key("armara_noknockback_3"), 59, 39)
-                .setName(name("key.no_knockback"))
-                .connect(key("armara_noknockback_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("amara_maxcharge_inner_1"), 53, 38)
-                .addModifier(0.07F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(NAME_INC_CHARGE_MAX)
-                .connect(key("armara_inner_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("amara_maxcharge_inner_2"), 54, 37)
-                .addModifier(0.07F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(NAME_INC_CHARGE_MAX)
-                .connect(key("amara_maxcharge_inner_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("amara_maxcharge_inner_3"), 55, 38)
-                .addModifier(0.2F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(name("named.ample_semblance"))
-                .connect(key("amara_maxcharge_inner_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_armor_inner_1"), 57, 52)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_ARMOR_TOUGHNESS)
-                .setName(name("hybrid.armor_armor_toughness"))
-                .connect(key("armara_inner_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_armor_inner_2"), 56, 53)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_ARMOR_TOUGHNESS)
-                .setName(name("hybrid.armor_armor_toughness"))
-                .connect(key("armara_armor_inner_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("armara_armor_inner_3"), 55, 52)
-                .addModifier(4F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_ARMOR_TOUGHNESS)
-                .setName(name("named.tough"))
-                .connect(key("armara_armor_inner_2"))
-                .build(registrar);
-    }
-
-    private void registerVicioInner(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_inner_1"), 42, 57)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("vicio_ats_bridge_3"))
-                .connect(key("vicio_inner_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_inner_2"), 43, 54)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("travel_7"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_inner_3"), 38, 57)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("vicio_ats_bridge_1"))
-                .connect(key("vicio_inner_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_inner_4"), 39, 53)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("travel_8"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_food_reduction_1"), 45, 58)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("vicio_inner_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_food_reduction_2"), 46, 57)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("vicio_food_reduction_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_REDUCED_FOOD)
-                .create(key("vicio_food_reduction_3"), 45, 56)
-                .setName(name("key.reduced_food"))
-                .connect(key("vicio_food_reduction_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_place_lights_1"), 36, 54)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("vicio_inner_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_place_lights_2"), 35, 53)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("vicio_place_lights_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_SPAWN_LIGHTS)
-                .create(key("vicio_place_lights_3"), 36, 52)
-                .setName(name("key.place_lights"))
-                .connect(key("vicio_place_lights_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_ats_inner_1"), 35, 58)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("vicio_inner_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_ats_inner_2"), 34, 57)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("vicio_ats_inner_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("vicio_ats_inner_3"), 33, 58)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(name("named.zeal"))
-                .connect(key("vicio_ats_inner_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_charge_inner_1"), 45, 53)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(name("hybrid.charge_regen_mining"))
-                .connect(key("vicio_inner_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_charge_inner_2"), 44, 52)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(name("hybrid.charge_regen_mining"))
-                .connect(key("vicio_charge_inner_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("vicio_charge_inner_3"), 45, 51)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(name("named.haste"))
-                .connect(key("vicio_charge_inner_2"))
-                .build(registrar);
-    }
-
-    private void registerAevitasInner(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_inner_1"), 24, 49)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("aevitas_life_bridge_3"))
-                .connect(key("aevitas_inner_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_inner_2"), 28, 47)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("travel_10"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_inner_3"), 23, 43)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("aevitas_life_bridge_1"))
-                .connect(key("aevitas_inner_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_inner_4"), 27, 42)
-                .addModifier(0.5F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("travel_11"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_cleanse_1"), 21, 41)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
-                .setName(NAME_INC_LIFE_RECOVERY)
-                .connect(key("aevitas_inner_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_cleanse_2"), 20, 40)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
-                .setName(NAME_INC_LIFE_RECOVERY)
-                .connect(key("aevitas_cleanse_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_REMOVE_BAD_POTIONS)
-                .create(key("aevitas_cleanse_3"), 21, 39)
-                .setName(name("key.cleansing"))
-                .connect(key("aevitas_cleanse_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_plant_growth_1"), 23, 53)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(name("hybrid.reach_mining"))
-                .connect(key("aevitas_inner_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_plant_growth_2"), 24, 54)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(name("hybrid.reach_mining"))
-                .connect(key("aevitas_plant_growth_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(KEY_GROWABLES)
-                .create(key("aevitas_plant_growth_3"), 25, 53)
-                .setName(name("key.plant_growth"))
-                .connect(key("aevitas_plant_growth_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_inner_charge_1"), 29, 49)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(name("hybrid.charge_max_regen"))
-                .connect(key("aevitas_inner_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_inner_charge_2"), 30, 50)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_MAXIMUM)
-                .setName(name("hybrid.charge_max_regen"))
-                .connect(key("aevitas_inner_charge_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("aevitas_inner_charge_3"), 31, 49)
-                .addModifier(0.15F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ALIGNMENT_CHARGE_REGENERATION)
-                .setName(name("named.stellar_vessel"))
-                .connect(key("aevitas_inner_charge_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_armor_life_1"), 26, 39)
-                .addModifier(-0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_HEALTH)
-                .setName(name("hybrid.life_movespeed"))
-                .connect(key("aevitas_inner_4"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_armor_life_2"), 27, 38)
-                .addModifier(-0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_HEALTH)
-                .setName(name("hybrid.life_movespeed"))
-                .connect(key("aevitas_armor_life_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("aevitas_armor_life_3"), 28, 39)
-                .addModifier(-0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_HEALTH)
-                .addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .setName(name("named.iron_heart"))
-                .connect(key("aevitas_armor_life_2"))
-                .build(registrar);
-    }
-
-    private void registerTravel(Consumer<FinishedPerk> registrar) {
-        this.makeTravelNode(40, 29, key("travel_0"))
-                .connect(key("travel_1"))
-                .connect(key("travel_14"))
-                .connect(key("ev_ds_effect_1"))
-                .connect(key("ev_ds_exp_1"))
-                .build(registrar);
-        this.makeTravelNode(44, 30, key("travel_1"))
-                .connect(key("travel_0"))
-                .connect(key("travel_2"))
-                .build(registrar);
-        this.makeTravelNode(48, 33, key("travel_2"))
-                .connect(key("travel_1"))
-                .connect(key("travel_3"))
-                .build(registrar);
-        this.makeTravelNode(50, 36, key("travel_3"))
-                .connect(key("travel_2"))
-                .connect(key("travel_4"))
-                .connect(key("ar_ds_effect_1"))
-                .connect(key("ar_ds_exp_1"))
-                .build(registrar);
-        this.makeTravelNode(50, 40, key("travel_4"))
-                .connect(key("travel_3"))
-                .connect(key("travel_5"))
-                .build(registrar);
-        this.makeTravelNode(49, 45, key("travel_5"))
-                .connect(key("travel_4"))
-                .connect(key("travel_6"))
-                .build(registrar);
-        this.makeTravelNode(46, 49, key("travel_6"))
-                .connect(key("travel_5"))
-                .connect(key("travel_7"))
-                .connect(key("ar_vi_effect_1"))
-                .connect(key("ar_vi_exp_1"))
-                .build(registrar);
-        this.makeTravelNode(42, 50, key("travel_7"))
-                .connect(key("travel_6"))
-                .connect(key("travel_8"))
-                .build(registrar);
-        this.makeTravelNode(38, 50, key("travel_8"))
-                .connect(key("travel_7"))
-                .connect(key("travel_9"))
-                .build(registrar);
-        this.makeTravelNode(34, 49, key("travel_9"))
-                .connect(key("travel_8"))
-                .connect(key("travel_10"))
-                .connect(key("ae_vi_effect_1"))
-                .connect(key("ae_vi_exp_1"))
-                .build(registrar);
-        this.makeTravelNode(31, 45, key("travel_10"))
-                .connect(key("travel_9"))
-                .connect(key("travel_11"))
-                .build(registrar);
-        this.makeTravelNode(30, 40, key("travel_11"))
-                .connect(key("travel_10"))
-                .connect(key("travel_12"))
-                .build(registrar);
-        this.makeTravelNode(30, 36, key("travel_12"))
-                .connect(key("travel_11"))
-                .connect(key("travel_13"))
-                .connect(key("ae_ev_effect_1"))
-                .connect(key("ae_ev_exp_1"))
-                .build(registrar);
-        this.makeTravelNode(32, 33, key("travel_13"))
-                .connect(key("travel_12"))
-                .connect(key("travel_14"))
-                .build(registrar);
-        this.makeTravelNode(36, 30, key("travel_14"))
-                .connect(key("travel_13"))
-                .connect(key("travel_0"))
-                .build(registrar);
-
-
-        this.makeTravelNode(40, 20, key("travel_15"))
-                .connect(key("ev_ds_effect_1"))
-                .connect(key("ev_ds_exp_1"))
-                .connect(key("ev_ds_effect_2"))
-                .connect(key("ev_ds_exp_2"))
-                .connect(key("discidia_c_ats_bridge_2"))
-                .connect(key("evorsio_c_armor_2"))
-                .build(registrar);
-        this.makeTravelNode(40, 10, key("travel_16"))
-                .connect(key("ev_ds_effect_2"))
-                .connect(key("ev_ds_exp_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ev_ds_effect_1"), 41, 25)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_0"))
-                .connect(key("travel_15"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ev_ds_exp_1"), 39, 23)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_0"))
-                .connect(key("travel_15"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ev_ds_effect_2"), 41, 14)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_15"))
-                .connect(key("travel_16"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ev_ds_exp_2"), 39, 16)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_15"))
-                .connect(key("travel_16"))
-                .build(registrar);
-
-
-        this.makeTravelNode(59, 32, key("travel_17"))
-                .connect(key("ar_ds_effect_1"))
-                .connect(key("ar_ds_exp_1"))
-                .connect(key("ar_ds_effect_2"))
-                .connect(key("ar_ds_exp_2"))
-                .connect(key("discidia_c_damage_2"))
-                .connect(key("armara_c_recovery_2"))
-                .build(registrar);
-        this.makeTravelNode(71, 28, key("travel_18"))
-                .connect(key("ar_ds_effect_2"))
-                .connect(key("ar_ds_exp_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ar_ds_effect_1"), 55, 35)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_3"))
-                .connect(key("travel_17"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ar_ds_exp_1"), 53, 33)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_3"))
-                .connect(key("travel_17"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ar_ds_effect_2"), 66, 31)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_17"))
-                .connect(key("travel_18"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ar_ds_exp_2"), 64, 29)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_17"))
-                .connect(key("travel_18"))
-                .build(registrar);
-
-
-        this.makeTravelNode(50, 58, key("travel_19"))
-                .connect(key("ar_vi_effect_1"))
-                .connect(key("ar_vi_exp_1"))
-                .connect(key("ar_vi_effect_2"))
-                .connect(key("ar_vi_exp_2"))
-                .connect(key("armara_c_movespeed_2"))
-                .connect(key("vicio_c_armor_2"))
-                .build(registrar);
-        this.makeTravelNode(55, 68, key("travel_20"))
-                .connect(key("ar_vi_effect_2"))
-                .connect(key("ar_vi_exp_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ar_vi_effect_1"), 47, 54)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_6"))
-                .connect(key("travel_19"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ar_vi_exp_1"), 49, 52)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_6"))
-                .connect(key("travel_19"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ar_vi_effect_2"), 52, 64)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_19"))
-                .connect(key("travel_20"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ar_vi_exp_2"), 54, 62)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_19"))
-                .connect(key("travel_20"))
-                .build(registrar);
-
-
-        this.makeTravelNode(30, 58, key("travel_21"))
-                .connect(key("ae_vi_effect_1"))
-                .connect(key("ae_vi_exp_1"))
-                .connect(key("ae_vi_effect_2"))
-                .connect(key("ae_vi_exp_2"))
-                .connect(key("vicio_c_mining_2"))
-                .connect(key("aevitas_c_reach_2"))
-                .build(registrar);
-        this.makeTravelNode(25, 68, key("travel_22"))
-                .connect(key("ae_vi_effect_2"))
-                .connect(key("ae_vi_exp_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ae_vi_effect_1"), 31, 52)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_9"))
-                .connect(key("travel_21"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ae_vi_exp_1"), 33, 54)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_9"))
-                .connect(key("travel_21"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ae_vi_effect_2"), 26, 62)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_21"))
-                .connect(key("travel_22"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ae_vi_exp_2"), 28, 64)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_21"))
-                .connect(key("travel_22"))
-                .build(registrar);
-
-        this.makeTravelNode(21, 32, key("travel_23"))
-                .connect(key("ae_ev_effect_1"))
-                .connect(key("ae_ev_exp_1"))
-                .connect(key("ae_ev_effect_2"))
-                .connect(key("ae_ev_exp_2"))
-                .connect(key("aevitas_c_armor_2"))
-                .connect(key("evorsio_c_mining_2"))
-                .build(registrar);
-        this.makeTravelNode(9, 28, key("travel_24"))
-                .connect(key("ae_ev_effect_2"))
-                .connect(key("ae_ev_exp_2"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ae_ev_effect_1"), 27, 33)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .connect(key("travel_12"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ae_ev_exp_1"), 25, 35)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .connect(key("travel_12"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ae_ev_effect_2"), 16, 29)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT)
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("ae_ev_exp_2"), 14, 31)
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP)
-                .setName(NAME_INC_PERK_EXP)
-                .build(registrar);
-    }
-
-    private void registerRoots(Consumer<FinishedPerk> registrar) {
-        registerAevitasRoot(registrar);
-        registerVicioRoot(registrar);
-        registerArmaraRoot(registrar);
-        registerDiscidiaRoot(registrar);
-        registerEvorsioRoot(registrar);
-    }
-
-    private void registerEvorsioRoot(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(ROOT_EVORSIO)
-                .create(key("evorsio"), 21, 14)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_REACH)
-                .connect(key("evorsio_damage_1"))
-                .connect(key("evorsio_mining_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_damage_1"), 25, 16)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .setName(NAME_INC_MELEE_DAMAGE)
-                .connect(key("evorsio_damage_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_damage_2"), 27, 17)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .setName(NAME_INC_MELEE_DAMAGE)
-                .connect(key("evorsio_m_dmg_ats"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_mining_1"), 23, 18)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("evorsio_mining_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_mining_2"), 24, 20)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("evorsio_m_mining_reach"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("evorsio_m_dmg_ats"), 30, 18)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(name("named.expertise"))
-                .connect(key("evorsio_mining_bridge_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("evorsio_m_mining_reach"), 25, 23)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(name("named.tunneling"))
-                .connect(key("evorsio_mining_bridge_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(GEM_SLOT_PERK)
-                .create(key("evorsio_m_gem"), 28, 21)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .connect(key("evorsio_damage_2"))
-                .connect(key("evorsio_mining_2"))
-                .connect(key("evorsio_mining_bridge_1"))
-                .connect(key("evorsio_mining_bridge_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_mining_bridge_1"), 31, 20)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_mining_bridge_2"), 30, 23)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("evorsio_mining_bridge_1"))
-                .connect(key("evorsio_mining_bridge_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_mining_bridge_3"), 27, 24)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_c_armor_1"), 33, 17)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .setName(NAME_INC_ARMOR)
-                .connect(key("evorsio_m_dmg_ats"))
-                .connect(key("evorsio_c_armor_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_c_armor_2"), 37, 18)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .setName(NAME_INC_ARMOR)
-                .connect(key("travel_15"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_c_mining_1"), 23, 26)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("evorsio_m_mining_reach"))
-                .connect(key("evorsio_c_mining_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("evorsio_c_mining_2"), 22, 29)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.evorsio))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("travel_23"))
-                .build(registrar);
-    }
-
-    private void registerDiscidiaRoot(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(ROOT_DISCIDIA)
-                .create(key("discidia"), 59, 14)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(1.1F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .addModifier(1.1F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .connect(key("discidia_proj_1"))
-                .connect(key("discidia_melee_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_proj_1"), 57, 18)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(NAME_INC_PROJ_DAMAGE)
-                .connect(key("discidia_proj_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_proj_2"), 56, 20)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(NAME_INC_PROJ_DAMAGE)
-                .connect(key("discidia_m_proj_dmg_speed"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_melee_1"), 55, 16)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .setName(NAME_INC_MELEE_DAMAGE)
-                .connect(key("discidia_melee_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_melee_2"), 53, 17)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .setName(NAME_INC_MELEE_DAMAGE)
-                .connect(key("discidia_m_melee_reach"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("discidia_m_proj_dmg_speed"), 55, 23)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .addModifier(0.2F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_SPEED)
-                .setName(name("named.deadly_draw"))
-                .connect(key("discidia_crit_bridge_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("discidia_m_melee_reach"), 50, 18)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(name("named.strong_arms"))
-                .connect(key("discidia_crit_bridge_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(GEM_SLOT_PERK)
-                .create(key("discidia_m_gem"), 52, 21)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .connect(key("discidia_proj_2"))
-                .connect(key("discidia_melee_2"))
-                .connect(key("discidia_crit_bridge_1"))
-                .connect(key("discidia_crit_bridge_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_crit_bridge_1"), 53, 24)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_ADD_CRIT_CHANCE)
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_crit_bridge_2"), 50, 23)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_ADD_CRIT_CHANCE)
-                .connect(key("discidia_crit_bridge_1"))
-                .connect(key("discidia_crit_bridge_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_crit_bridge_3"), 49, 20)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE)
-                .setName(NAME_ADD_CRIT_CHANCE)
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_c_damage_1"), 57, 26)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(name("hybrid.melee_proj_dmg"))
-                .connect(key("discidia_m_proj_dmg_speed"))
-                .connect(key("discidia_c_damage_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_c_damage_2"), 58, 29)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE)
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE)
-                .setName(name("hybrid.melee_proj_dmg"))
-                .connect(key("travel_17"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_c_ats_bridge_1"), 47, 17)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("discidia_m_melee_reach"))
-                .connect(key("discidia_c_ats_bridge_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("discidia_c_ats_bridge_2"), 43, 18)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.discidia))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("travel_15"))
-                .build(registrar);
-    }
-
-    private void registerArmaraRoot(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(ROOT_ARMARA)
-                .create(key("armara"), 70, 51)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(1.20F, ModifierType.STACKING_MULTIPLY, ATTR_TYPE_ARMOR)
-                .connect(key("armara_armor_1"))
-                .connect(key("armara_resist_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_armor_1"), 66, 52)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .setName(NAME_ADD_ARMOR)
-                .connect(key("armara_armor_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_armor_2"), 64, 51)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .setName(NAME_ADD_ARMOR)
-                .connect(key("armara_m_life_armor"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_resist_1"), 68, 48)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .setName(NAME_INC_ALL_RES)
-                .connect(key("armara_resist_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_resist_2"), 66, 47)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .setName(NAME_INC_ALL_RES)
-                .connect(key("armara_m_resist_armor"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("armara_m_life_armor"), 61, 52)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_HEALTH)
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .setName(name("named.resilience"))
-                .connect(key("armara_dodge_bridge_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("armara_m_resist_armor"), 64, 44)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_ARMOR)
-                .setName(name("named.bulwark"))
-                .connect(key("armara_dodge_bridge_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(GEM_SLOT_PERK)
-                .create(key("armara_m_gem"), 63, 48)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .connect(key("armara_armor_2"))
-                .connect(key("armara_resist_2"))
-                .connect(key("armara_dodge_bridge_1"))
-                .connect(key("armara_dodge_bridge_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_dodge_bridge_1"), 60, 50)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_ADD_DODGE)
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_dodge_bridge_2"), 59, 47)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_ADD_DODGE)
-                .connect(key("armara_dodge_bridge_1"))
-                .connect(key("armara_dodge_bridge_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_dodge_bridge_3"), 61, 45)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_ADD_DODGE)
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_c_movespeed_1"), 58, 56)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("armara_m_life_armor"))
-                .connect(key("armara_c_movespeed_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_c_movespeed_2"), 54, 57)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .setName(NAME_INC_MOVESPEED)
-                .connect(key("travel_19"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_c_recovery_1"), 63, 40)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
-                .setName(NAME_INC_LIFE_RECOVERY)
-                .connect(key("armara_m_resist_armor"))
-                .connect(key("armara_c_recovery_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("armara_c_recovery_2"), 61, 36)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.armara))
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY)
-                .setName(NAME_INC_LIFE_RECOVERY)
-                .connect(key("travel_17"))
-                .build(registrar);
-    }
-
-    private void registerVicioRoot(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(ROOT_VICIO)
-                .create(key("vicio"), 40, 70)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .connect(key("vicio_reach_1"))
-                .connect(key("vicio_dodge_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_reach_1"), 38, 67)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("vicio"))
-                .connect(key("vicio_reach_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_reach_2"), 37, 65)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("vicio_reach_1"))
-                .connect(key("vicio_m_reach_movespeed"))
-                .connect(key("vicio_m_gem"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_dodge_1"), 42, 67)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_ADD_DODGE)
-                .connect(key("vicio"))
-                .connect(key("vicio_dodge_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_dodge_2"), 43, 65)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(2F, ModifierType.ADDITION, ATTR_TYPE_INC_DODGE)
-                .setName(NAME_ADD_DODGE)
-                .connect(key("vicio_dodge_1"))
-                .connect(key("vicio_m_dodge_movespeed"))
-                .connect(key("vicio_m_gem"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("vicio_m_reach_movespeed"), 35, 63)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(name("named.swiftness"))
-                .connect(key("vicio_reach_2"))
-                .connect(key("vicio_ats_bridge_1"))
-                .connect(key("vicio_c_mining_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("vicio_m_dodge_movespeed"), 45, 63)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED)
-                .addModifier(0.1F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_DODGE)
-                .setName(name("named.agility"))
-                .connect(key("vicio_dodge_2"))
-                .connect(key("vicio_ats_bridge_3"))
-                .connect(key("vicio_c_armor_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(GEM_SLOT_PERK)
-                .create(key("vicio_m_gem"), 40, 64)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .connect(key("vicio_reach_2"))
-                .connect(key("vicio_dodge_2"))
-                .connect(key("vicio_ats_bridge_1"))
-                .connect(key("vicio_ats_bridge_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_ats_bridge_1"), 37, 61)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("vicio_m_reach_movespeed"))
-                .connect(key("vicio_ats_bridge_2"))
-                .connect(key("vicio_m_gem"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_ats_bridge_2"), 40, 59)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("vicio_ats_bridge_1"))
-                .connect(key("vicio_ats_bridge_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_ats_bridge_3"), 43, 61)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ATTACK_SPEED)
-                .setName(NAME_INC_ATTACK_SPEED)
-                .connect(key("vicio_m_dodge_movespeed"))
-                .connect(key("vicio_ats_bridge_2"))
-                .connect(key("vicio_m_gem"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_c_mining_1"), 34, 60)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("vicio_m_reach_movespeed"))
-                .connect(key("vicio_c_mining_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_c_mining_2"), 31, 61)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.04F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED)
-                .setName(NAME_INC_MINING_SPEED)
-                .connect(key("travel_21"))
-                .connect(key("vicio_c_mining_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_c_armor_1"), 46, 60)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .setName(NAME_INC_ARMOR)
-                .connect(key("vicio_m_dodge_movespeed"))
-                .connect(key("vicio_c_armor_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("vicio_c_armor_2"), 49, 61)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.vicio))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .setName(NAME_INC_ARMOR)
-                .connect(key("vicio_c_armor_1"))
-                .connect(key("travel_19"))
-                .build(registrar);
-    }
-
-    private void registerAevitasRoot(Consumer<FinishedPerk> registrar) {
-        PerkDataBuilder.ofType(ROOT_AEVITAS)
-                .create(key("aevitas"), 10, 51)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(2, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .connect(key("aevitas_life_armor_1"))
-                .connect(key("aevitas_life_reach_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_life_armor_1"), 12, 48)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_HEALTH)
-                .setName(name("hybrid.life_armor"))
-                .connect(key("aevitas"))
-                .connect(key("aevitas_life_armor_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_life_armor_2"), 14, 47)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_HEALTH)
-                .setName(name("hybrid.life_armor"))
-                .connect(key("aevitas_life_armor_1"))
-                .connect(key("aevitas_m_life_armor"))
-                .connect(key("aevitas_m_gem"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_life_reach_1"), 14, 52)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_HEALTH)
-                .setName(name("hybrid.life_reach"))
-                .connect(key("aevitas"))
-                .connect(key("aevitas_life_reach_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_life_reach_2"), 16, 51)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.03F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_HEALTH)
-                .setName(name("hybrid.life_reach"))
-                .connect(key("aevitas_life_reach_1"))
-                .connect(key("aevitas_m_life_resist"))
-                .connect(key("aevitas_m_gem"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("aevitas_m_life_armor"), 16, 44)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .addModifier(1, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(name("named.thick_skin"))
-                .connect(key("aevitas_life_armor_2"))
-                .connect(key("aevitas_life_bridge_1"))
-                .connect(key("aevitas_c_armor_1"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MAJOR_PERK)
-                .create(key("aevitas_m_life_resist"), 19, 52)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST)
-                .addModifier(1, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(name("named.melding"))
-                .connect(key("aevitas_life_reach_2"))
-                .connect(key("aevitas_life_bridge_3"))
-                .connect(key("aevitas_c_reach_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(GEM_SLOT_PERK)
-                .create(key("aevitas_m_gem"), 17, 48)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .connect(key("aevitas_life_armor_2"))
-                .connect(key("aevitas_life_reach_2"))
-                .connect(key("aevitas_life_bridge_1"))
-                .connect(key("aevitas_life_bridge_3"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_life_bridge_1"), 19, 45)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("aevitas_m_life_armor"))
-                .connect(key("aevitas_life_bridge_2"))
-                .connect(key("aevitas_m_gem"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_life_bridge_2"), 21, 47)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("aevitas_life_bridge_1"))
-                .connect(key("aevitas_life_bridge_3"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_life_bridge_3"), 20, 50)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(1F, ModifierType.ADDITION, ATTR_TYPE_HEALTH)
-                .setName(NAME_ADD_LIFE)
-                .connect(key("aevitas_m_life_resist"))
-                .connect(key("aevitas_life_bridge_2"))
-                .connect(key("aevitas_m_gem"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_c_armor_1"), 17, 40)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .setName(NAME_INC_ARMOR)
-                .connect(key("aevitas_m_life_armor"))
-                .connect(key("aevitas_c_armor_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_c_armor_2"), 19, 36)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.05F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_ARMOR)
-                .setName(NAME_INC_ARMOR)
-                .connect(key("travel_23"))
-                .connect(key("aevitas_c_armor_1"))
-                .build(registrar);
-
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_c_reach_1"), 22, 56)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("aevitas_m_life_resist"))
-                .connect(key("aevitas_c_reach_2"))
-                .build(registrar);
-        PerkDataBuilder.ofType(MODIFIER_PERK)
-                .create(key("aevitas_c_reach_2"), 26, 57)
-                .modify(perk -> perk.addRequireConstellation(ConstellationsAS.aevitas))
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_REACH)
-                .setName(NAME_INC_REACH)
-                .connect(key("travel_21"))
-                .connect(key("aevitas_c_reach_1"))
-                .build(registrar);
-    }
-
-    private PerkDataBuilder<AttributeModifierPerk> makeTravelNode(float x, float y, ResourceLocation perkKey) {
-        return PerkDataBuilder.ofType(PerkTypeHandler.MODIFIER_PERK)
-                .create(perkKey, x, y)
-                .addModifier(0.02F, ModifierType.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT)
-                .setName(NAME_INC_PERK_EFFECT);
+    public void registerPerks(HolderLookup.Provider registries, Consumer<BuiltPerk> registrar) {
+        var enchLookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> fortune = enchLookup.getOrThrow(Enchantments.FORTUNE);
+        Holder<Enchantment> unbreaking = enchLookup.getOrThrow(Enchantments.UNBREAKING);
+        Holder<Enchantment> infinity = enchLookup.getOrThrow(Enchantments.INFINITY);
+
+// Paste inside AstralPerkTreeProvider.registerPerks(Registrar registrar)
+
+        var rootAevitas = PerkDataBuilder.builder(PerkTypesAS.ROOT_PERK_AEVITAS)
+                .create(AstralSorcery.key("root_aevitas"), -30f, 11f)
+                .setNameKey("perk.astralsorcery.root_perk_aevitas")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1.1f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.MAX_HEALTH)
+                .build(registrar);
+
+        var rootVicio = PerkDataBuilder.builder(PerkTypesAS.ROOT_PERK_VICIO)
+                .create(AstralSorcery.key("root_vicio"), 0f, 30f)
+                .setNameKey("perk.astralsorcery.root_perk_vicio")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(1.1f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .build(registrar);
+
+        var rootArmara = PerkDataBuilder.builder(PerkTypesAS.ROOT_PERK_ARMARA)
+                .create(AstralSorcery.key("root_armara"), 30f, 11f)
+                .setNameKey("perk.astralsorcery.root_perk_armara")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1.15f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.ARMOR)
+                .build(registrar);
+
+        var rootEvorsio = PerkDataBuilder.builder(PerkTypesAS.ROOT_PERK_EVORSIO)
+                .create(AstralSorcery.key("root_evorsio"), -20f, -26f)
+                .setNameKey("perk.astralsorcery.root_perk_evorsio")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.BLOCK_REACH)
+                .build(registrar);
+
+        var rootDiscidia = PerkDataBuilder.builder(PerkTypesAS.ROOT_PERK_DISCIDIA)
+                .create(AstralSorcery.key("root_discidia"), 19f, -26f)
+                .setNameKey("perk.astralsorcery.root_perk_discidia")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.1f, ModifierType.ADDITION, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .build(registrar);
+
+        var travel0 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_0"), 0f, -11f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .build(registrar);
+
+        var travel1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_1"), 4f, -10f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel0)
+                .build(registrar);
+
+        var travel2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_2"), 7f, -8f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel1)
+                .build(registrar);
+
+        var travel3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_3"), 10f, -4f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel2)
+                .build(registrar);
+
+        var travel4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_4"), 10f, 0f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel3)
+                .build(registrar);
+
+        var travel5 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_5"), 9f, 5f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel4)
+                .build(registrar);
+
+        var travel6 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_6"), 6f, 9f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel5)
+                .build(registrar);
+
+        var travel7 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_7"), 3f, 10f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel6)
+                .build(registrar);
+
+        var travel8 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_8"), -2f, 10f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel7)
+                .build(registrar);
+
+        var travel9 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_9"), -6f, 9f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel8)
+                .build(registrar);
+
+        var travel10 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_10"), -9f, 5f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel9)
+                .build(registrar);
+
+        var travel11 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_11"), -10f, 0f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel10)
+                .build(registrar);
+
+        var travel12 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_12"), -10f, -4f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel11)
+                .build(registrar);
+
+        var travel13 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_13"), -8f, -7f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel12)
+                .build(registrar);
+
+        var travel14 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_14"), -4f, -10f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel13)
+                .connect(travel0)
+                .build(registrar);
+
+        var travel15 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_15"), 0f, -30f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .build(registrar);
+
+        var travel16 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_16"), 7f, -31f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel15)
+                .build(registrar);
+
+        var travel17 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_17"), 14f, -30f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel16)
+                .build(registrar);
+
+        var travel18 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_18"), 22f, -29f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel17)
+                .build(registrar);
+
+        var travel19 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_19"), 25f, -24f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel18)
+                .build(registrar);
+
+        var travel20 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_20"), 29f, -18f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel19)
+                .build(registrar);
+
+        var travel21 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_21"), 31f, -12f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel20)
+                .build(registrar);
+
+        var travel22 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_22"), 34f, -5f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel21)
+                .build(registrar);
+
+        var travel23 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_23"), 33f, 4f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel22)
+                .build(registrar);
+
+        var travel24 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_24"), 34f, 13f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel23)
+                .build(registrar);
+
+        var travel25 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_25"), 29f, 19f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel24)
+                .build(registrar);
+
+        var travel26 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_26"), 21f, 23f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel25)
+                .build(registrar);
+
+        var travel27 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_27"), 15f, 28f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel26)
+                .build(registrar);
+
+        var travel28 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_28"), 12f, 31f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel27)
+                .build(registrar);
+
+        var travel29 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_29"), 6f, 33f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel28)
+                .build(registrar);
+
+        var travel30 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_30"), 1f, 34f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel29)
+                .build(registrar);
+
+        var travel31 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_31"), -5f, 33f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel30)
+                .build(registrar);
+
+        var travel32 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_32"), -10f, 31f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel31)
+                .build(registrar);
+
+        var travel33 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_33"), -15f, 28f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel32)
+                .build(registrar);
+
+        var travel34 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_34"), -20f, 24f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel33)
+                .build(registrar);
+
+        var travel35 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_35"), -27f, 19f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel34)
+                .build(registrar);
+
+        var travel36 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_36"), -34f, 13f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel35)
+                .build(registrar);
+
+        var travel37 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_37"), -35f, 4f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel36)
+                .build(registrar);
+
+        var travel38 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_38"), -34f, -6f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel37)
+                .build(registrar);
+
+        var travel39 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_39"), -31f, -12f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel38)
+                .build(registrar);
+
+        var travel40 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_40"), -28f, -17f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel39)
+                .build(registrar);
+
+        var travel41 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_41"), -25f, -24f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel40)
+                .build(registrar);
+
+        var travel42 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_42"), -21f, -29f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel41)
+                .build(registrar);
+
+        var travel43 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_43"), -14f, -30f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel42)
+                .build(registrar);
+
+        var travel44 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_44"), -7f, -29f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel43)
+                .connect(travel15)
+                .build(registrar);
+
+        var travelBranch0 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_0"), -1f, -24f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travel15)
+                .build(registrar);
+
+        var travelBranch3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_3"), -1f, -17f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travel0)
+                .build(registrar);
+
+        var travelBranch1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_1"), 1f, -26f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel15)
+                .build(registrar);
+
+        var travelBranch2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_2"), 0f, -20f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travelBranch0)
+                .connect(travelBranch1)
+                .connect(travelBranch3)
+                .build(registrar);
+
+        var travelBranch4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_4"), 1f, -15f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travelBranch2)
+                .connect(travel0)
+                .build(registrar);
+
+        var travelBranch5 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_5"), 24f, -11f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travel21)
+                .build(registrar);
+
+        var travelBranch6 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_6"), 26f, -9f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel21)
+                .build(registrar);
+
+        var travelBranch8 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_8"), 13f, -7f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travel3)
+                .build(registrar);
+
+        var travelBranch7 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_7"), 19f, -8f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travelBranch5)
+                .connect(travelBranch6)
+                .connect(travelBranch8)
+                .build(registrar);
+
+        var travelBranch9 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_9"), 15f, -5f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel3)
+                .connect(travelBranch7)
+                .build(registrar);
+
+        var travelBranch10 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_10"), 14f, 22f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travel27)
+                .build(registrar);
+
+        var travelBranch11 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_11"), 12f, 24f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel27)
+                .build(registrar);
+
+        var travelBranch12 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_12"), 10f, 18f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travelBranch10)
+                .connect(travelBranch11)
+                .build(registrar);
+
+        var travelBranch13 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_13"), 9f, 12f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travelBranch12)
+                .connect(travel6)
+                .build(registrar);
+
+        var travelBranch14 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_14"), 7f, 14f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travelBranch12)
+                .connect(travel6)
+                .build(registrar);
+
+        var travelBranch15 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_15"), -12f, 24f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travel33)
+                .build(registrar);
+
+        var travelBranch16 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_16"), -14f, 22f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel33)
+                .build(registrar);
+
+        var travelBranch17 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_17"), -10f, 18f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travelBranch16)
+                .connect(travelBranch15)
+                .build(registrar);
+
+        var travelBranch18 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_18"), -7f, 14f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travelBranch17)
+                .connect(travel9)
+                .build(registrar);
+
+        var travelBranch19 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_19"), -9f, 12f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travelBranch17)
+                .connect(travel9)
+                .build(registrar);
+
+        var travelBranch20 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_20"), -26f, -9f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travel39)
+                .build(registrar);
+
+        var travelBranch21 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_21"), -24f, -11f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel39)
+                .build(registrar);
+
+        var travelBranch22 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_22"), -19f, -8f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travelBranch20)
+                .connect(travelBranch21)
+                .build(registrar);
+
+        var travelBranch23 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_23"), -15f, -5f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travel12)
+                .connect(travelBranch22)
+                .build(registrar);
+
+        var travelBranch24 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_branch_24"), -13f, -7f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel12)
+                .connect(travelBranch22)
+                .build(registrar);
+
+        var connectorN0 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_n_0"), -1f, -33f)
+                .setNameKey("perk.name.astralsorcery.named.connector_n.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_n")))
+                .connect(travel15)
+                .build(registrar);
+
+        var connectorN1 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_n_1"), -4f, -38f)
+                .setNameKey("perk.name.astralsorcery.named.connector_n.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_n")))
+                .connect(connectorN0)
+                .build(registrar);
+
+        var connectorN2 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_n_2"), 2f, -38f)
+                .setNameKey("perk.name.astralsorcery.named.connector_n.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_n")))
+                .connect(connectorN1)
+                .connect(connectorN0)
+                .build(registrar);
+
+        var treeConnectorN = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR)
+                .create(AstralSorcery.key("tree_connector_n"), -1f, -36f)
+                .setNameKey("perk.name.astralsorcery.named.connector_n")
+                .connect(connectorN0)
+                .connect(connectorN1)
+                .connect(connectorN2)
+                .build(registrar);
+
+        var connectorNe0 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_ne_0"), 34f, -14f)
+                .setNameKey("perk.name.astralsorcery.named.connector_ne.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_ne")))
+                .connect(travel21)
+                .build(registrar);
+
+        var connectorNe1 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_ne_1"), 35f, -19f)
+                .setNameKey("perk.name.astralsorcery.named.connector_ne.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_ne")))
+                .connect(connectorNe0)
+                .build(registrar);
+
+        var connectorNe2 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_ne_2"), 39f, -15f)
+                .setNameKey("perk.name.astralsorcery.named.connector_ne.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_ne")))
+                .connect(connectorNe1)
+                .connect(connectorNe0)
+                .build(registrar);
+
+        var treeConnectorNe = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR)
+                .create(AstralSorcery.key("tree_connector_ne"), 36f, -16f)
+                .setNameKey("perk.name.astralsorcery.named.connector_ne")
+                .connect(connectorNe0)
+                .connect(connectorNe1)
+                .connect(connectorNe2)
+                .build(registrar);
+
+        var connectorSe0 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_se_0"), 19f, 29f)
+                .setNameKey("perk.name.astralsorcery.named.connector_se.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_se")))
+                .connect(travel27)
+                .build(registrar);
+
+        var connectorSe1 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_se_1"), 24f, 30f)
+                .setNameKey("perk.name.astralsorcery.named.connector_se.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_se")))
+                .connect(connectorSe0)
+                .build(registrar);
+
+        var connectorSe2 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_se_2"), 20f, 34f)
+                .setNameKey("perk.name.astralsorcery.named.connector_se.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_se")))
+                .connect(connectorSe0)
+                .connect(connectorSe1)
+                .build(registrar);
+
+        var treeConnectorSe = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR)
+                .create(AstralSorcery.key("tree_connector_se"), 21f, 31f)
+                .setNameKey("perk.name.astralsorcery.named.connector_se")
+                .connect(connectorSe0)
+                .connect(connectorSe2)
+                .connect(connectorSe1)
+                .build(registrar);
+
+        var connectorSw0 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_sw_0"), -18f, 29f)
+                .setNameKey("perk.name.astralsorcery.named.connector_sw.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_sw")))
+                .connect(travel33)
+                .build(registrar);
+
+        var connectorSw1 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_sw_1"), -23f, 30f)
+                .setNameKey("perk.name.astralsorcery.named.connector_sw.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_sw")))
+                .connect(connectorSw0)
+                .build(registrar);
+
+        var connectorSw2 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_sw_2"), -19f, 34f)
+                .setNameKey("perk.name.astralsorcery.named.connector_sw.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_sw")))
+                .connect(connectorSw1)
+                .connect(connectorSw0)
+                .build(registrar);
+
+        var treeConnectorSw = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR)
+                .create(AstralSorcery.key("tree_connector_sw"), -20f, 31f)
+                .setNameKey("perk.name.astralsorcery.named.connector_sw")
+                .connect(connectorSw0)
+                .connect(connectorSw1)
+                .connect(connectorSw2)
+                .build(registrar);
+
+        var connectorNw0 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_nw_0"), -34f, -14f)
+                .setNameKey("perk.name.astralsorcery.named.connector_nw.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_nw")))
+                .connect(travel39)
+                .build(registrar);
+
+        var connectorNw1 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_nw_1"), -39f, -15f)
+                .setNameKey("perk.name.astralsorcery.named.connector_nw.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_nw")))
+                .connect(connectorNw0)
+                .build(registrar);
+
+        var connectorNw2 = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR_DELEGATE)
+                .create(AstralSorcery.key("connector_nw_2"), -35f, -19f)
+                .setNameKey("perk.name.astralsorcery.named.connector_nw.delegate")
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .modify(perk -> perk.setDelegateKey(AstralSorcery.key("tree_connector_nw")))
+                .connect(connectorNw1)
+                .connect(connectorNw0)
+                .build(registrar);
+
+        var treeConnectorNw = PerkDataBuilder.builder(PerkTypesAS.KEY_TREE_CONNECTOR)
+                .create(AstralSorcery.key("tree_connector_nw"), -36f, -16f)
+                .setNameKey("perk.name.astralsorcery.named.connector_nw")
+                .connect(connectorNw0)
+                .connect(connectorNw1)
+                .connect(connectorNw2)
+                .build(registrar);
+
+        var gemSocketCore = PerkDataBuilder.builder(PerkTypesAS.GEM_SOCKET_PERK)
+                .create(AstralSorcery.key("gem_socket_core"), 0f, 0f)
+                .setNameKey("perk.name.astralsorcery.generic.gem_socket")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .build(registrar);
+
+        var travelCore0 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_core_0"), -5f, 1f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel11)
+                .connect(gemSocketCore)
+                .build(registrar);
+
+        var travelCore2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_core_2"), 4f, -4f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel2)
+                .connect(gemSocketCore)
+                .build(registrar);
+
+        var travelCore3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_core_3"), 4f, 3f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel5)
+                .connect(gemSocketCore)
+                .build(registrar);
+
+        var travelCore4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_core_4"), -1f, 6f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel8)
+                .connect(gemSocketCore)
+                .build(registrar);
+
+        var aevitasInnerArmor2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_inner_armor_2"), -25f, 7f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ARMOR)
+                .build(registrar);
+
+        var aevitasInnerReach1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_inner_reach_1"), -26f, 12f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(rootAevitas)
+                .build(registrar);
+
+        var aevitasInnerReach2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_inner_reach_2"), -23f, 11f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(aevitasInnerReach1)
+                .build(registrar);
+
+        var aevitasGemSocket = PerkDataBuilder.builder(PerkTypesAS.GEM_SOCKET_PERK)
+                .create(AstralSorcery.key("aevitas_gem_socket"), -22f, 8f)
+                .setNameKey("perk.name.astralsorcery.generic.gem_socket")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .connect(aevitasInnerArmor2)
+                .connect(aevitasInnerReach2)
+                .build(registrar);
+
+        var aevitasInnerM1 = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("aevitas_inner_m_1"), -24f, 3f)
+                .setNameKey("perk.name.astralsorcery.named.thick_skin")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ARMOR)
+                .connect(aevitasInnerArmor2)
+                .build(registrar);
+
+        var aevitasBridge1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_bridge_1"), -21f, 5f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(aevitasInnerM1)
+                .connect(aevitasGemSocket)
+                .build(registrar);
+
+        var aevitasBridge4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_bridge_4"), -19f, 9f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(aevitasGemSocket)
+                .build(registrar);
+
+        var aevitasInnerM2 = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("aevitas_inner_m_2"), -19f, 13f)
+                .setNameKey("perk.name.astralsorcery.named.melding")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ELEMENTAL_RESISTANCE)
+                .connect(aevitasInnerReach2)
+                .connect(aevitasBridge4)
+                .build(registrar);
+
+        var aevitasBridge2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_bridge_2"), -18f, 3f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(aevitasBridge1)
+                .build(registrar);
+
+        var aevitasBridge5 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_bridge_5"), -15f, 8f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(aevitasBridge4)
+                .build(registrar);
+
+        var aevitasBridge3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_bridge_3"), -14f, 2f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(aevitasBridge2)
+                .connect(travel11)
+                .build(registrar);
+
+        var aevitasBridge6 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_bridge_6"), -12f, 6f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(travel10)
+                .connect(aevitasBridge5)
+                .build(registrar);
+
+        var aevitasBridgeConnect1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_bridge_connect_1"), -16f, 5f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(aevitasBridge2)
+                .build(registrar);
+
+        var aevitasBridgeConnect2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_bridge_connect_2"), -14f, 4f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(aevitasBridge6)
+                .connect(aevitasBridgeConnect1)
+                .build(registrar);
+
+        var aevitasConnectOut3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_connect_out_3"), -22f, 16f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(aevitasInnerM2)
+                .build(registrar);
+
+        var aevitasConnectOut4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_connect_out_4"), -25f, 15f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel35)
+                .connect(aevitasConnectOut3)
+                .build(registrar);
+
+        var aevitasConnectOut1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_connect_out_1"), -29f, 2f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(aevitasInnerM1)
+                .build(registrar);
+
+        var aevitasConnectOut2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_connect_out_2"), -31f, 5f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel37)
+                .connect(aevitasConnectOut1)
+                .build(registrar);
+
+        var aevitasConnectIn1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_connect_in_1"), -23f, -1f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ARMOR)
+                .connect(aevitasInnerM1)
+                .build(registrar);
+
+        var aevitasConnectIn2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_connect_in_2"), -20f, -4f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ARMOR)
+                .connect(aevitasConnectIn1)
+                .connect(travelBranch22)
+                .build(registrar);
+
+        var aevitasConnectIn3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_connect_in_3"), -16f, 16f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(aevitasInnerM2)
+                .build(registrar);
+
+        var aevitasConnectIn4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_connect_in_4"), -13f, 15f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(aevitasConnectIn3)
+                .connect(travelBranch17)
+                .build(registrar);
+
+        var armaraInnerArmor1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_inner_armor_1"), 26f, 12f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(rootArmara)
+                .build(registrar);
+
+        var armaraInnerArmor2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_inner_armor_2"), 23f, 11f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(armaraInnerArmor1)
+                .build(registrar);
+
+        var armaraInnerResist1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_inner_resist_1"), 28f, 8f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.elemental_resistance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ELEMENTAL_RESISTANCE)
+                .connect(rootArmara)
+                .build(registrar);
+
+        var armaraInnerResist2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_inner_resist_2"), 25f, 7f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.elemental_resistance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ELEMENTAL_RESISTANCE)
+                .connect(armaraInnerResist1)
+                .build(registrar);
+
+        var armaraGemSocket = PerkDataBuilder.builder(PerkTypesAS.GEM_SOCKET_PERK)
+                .create(AstralSorcery.key("armara_gem_socket"), 22f, 8f)
+                .setNameKey("perk.name.astralsorcery.generic.gem_socket")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .connect(armaraInnerArmor2)
+                .connect(armaraInnerResist2)
+                .build(registrar);
+
+        var armaraInnerM2 = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("armara_inner_m_2"), 19f, 13f)
+                .setNameKey("perk.name.astralsorcery.named.tough")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(4f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR_TOUGHNESS)
+                .connect(armaraInnerArmor2)
+                .build(registrar);
+
+        var armaraInnerM1 = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("armara_inner_m_1"), 24f, 3f)
+                .setNameKey("perk.name.astralsorcery.named.bulwark")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ELEMENTAL_RESISTANCE)
+                .connect(armaraInnerResist2)
+                .build(registrar);
+
+        var armaraBridge1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_bridge_1"), 19f, 9f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(armaraGemSocket)
+                .connect(armaraInnerM2)
+                .build(registrar);
+
+        var armaraBridge4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_bridge_4"), 21f, 5f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(armaraInnerM1)
+                .connect(armaraGemSocket)
+                .build(registrar);
+
+        var armaraBridge2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_bridge_2"), 15f, 7f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(armaraBridge1)
+                .build(registrar);
+
+        var armaraBridge3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_bridge_3"), 12f, 6f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(travel5)
+                .connect(armaraBridge2)
+                .build(registrar);
+
+        var armaraBridge5 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_bridge_5"), 18f, 3f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(armaraBridge4)
+                .build(registrar);
+
+        var armaraBridge6 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_bridge_6"), 15f, 1f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(travel4)
+                .connect(armaraBridge5)
+                .build(registrar);
+
+        var armaraBridgeConnect2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_bridge_connect_2"), 14f, 3f)
+                .setNameKey("perk.name.astralsorcery.hybrid.armor_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(armaraBridge6)
+                .build(registrar);
+
+        var armaraBridgeConnect1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_bridge_connect_1"), 16f, 5f)
+                .setNameKey("perk.name.astralsorcery.hybrid.armor_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(armaraBridge2)
+                .connect(armaraBridgeConnect2)
+                .build(registrar);
+
+        var armaraConnectOut1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_connect_out_1"), 22f, 16f)
+                .setNameKey("perk.name.astralsorcery.hybrid.armor_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(armaraInnerM2)
+                .build(registrar);
+
+        var armaraConnectOut2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_connect_out_2"), 26f, 15f)
+                .setNameKey("perk.name.astralsorcery.hybrid.armor_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(armaraConnectOut1)
+                .connect(travel25)
+                .build(registrar);
+
+        var armaraConnectOut3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_connect_out_3"), 28f, 2f)
+                .setNameKey("perk.name.astralsorcery.hybrid.armor_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(armaraInnerM1)
+                .build(registrar);
+
+        var armaraConnectOut4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_connect_out_4"), 29f, 5f)
+                .setNameKey("perk.name.astralsorcery.hybrid.armor_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(armaraConnectOut3)
+                .connect(travel23)
+                .build(registrar);
+
+        var armaraConnectIn1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_connect_in_1"), 16f, 14f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(armaraInnerM2)
+                .build(registrar);
+
+        var armaraConnectIn3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_connect_in_3"), 23f, -1f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.elemental_resistance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ELEMENTAL_RESISTANCE)
+                .connect(armaraInnerM1)
+                .build(registrar);
+
+        var armaraConnectIn4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_connect_in_4"), 20f, -4f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.elemental_resistance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ELEMENTAL_RESISTANCE)
+                .connect(armaraConnectIn3)
+                .connect(travelBranch7)
+                .build(registrar);
+
+        var vicioInnerReach1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_inner_reach_1"), -2f, 27f)
+                .setNameKey("perk.name.astralsorcery.hybrid.movespeed_block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(rootVicio)
+                .build(registrar);
+
+        var vicioInnerReach2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_inner_reach_2"), -4f, 25f)
+                .setNameKey("perk.name.astralsorcery.hybrid.movespeed_block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(vicioInnerReach1)
+                .build(registrar);
+
+        var vicioInnerSwim1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_inner_swim_1"), 2f, 27f)
+                .setNameKey("perk.name.astralsorcery.hybrid.movespeed_swimspeed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.SWIM_SPEED)
+                .connect(rootVicio)
+                .build(registrar);
+
+        var vicioInnerSwim2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_inner_swim_2"), 4f, 25f)
+                .setNameKey("perk.name.astralsorcery.hybrid.movespeed_swimspeed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.SWIM_SPEED)
+                .connect(vicioInnerSwim1)
+                .build(registrar);
+
+        var vicioGemSocket = PerkDataBuilder.builder(PerkTypesAS.GEM_SOCKET_PERK)
+                .create(AstralSorcery.key("vicio_gem_socket"), 0f, 23f)
+                .setNameKey("perk.name.astralsorcery.generic.gem_socket")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .connect(vicioInnerSwim2)
+                .connect(vicioInnerReach2)
+                .build(registrar);
+
+        var vicioConnectIn1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_connect_in_1"), -7f, 19f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .build(registrar);
+
+        var vicioConnectIn2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_connect_in_2"), -9f, 21f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(vicioConnectIn1)
+                .connect(travelBranch17)
+                .build(registrar);
+
+        var vicioConnectOut1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_connect_out_1"), -8f, 25f)
+                .setNameKey("perk.name.astralsorcery.hybrid.movespeed_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .build(registrar);
+
+        var vicioConnectOut2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_connect_out_2"), -6f, 28f)
+                .setNameKey("perk.name.astralsorcery.hybrid.movespeed_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(vicioConnectOut1)
+                .connect(travel31)
+                .build(registrar);
+
+        var vicioConnectIn3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_connect_in_3"), 8f, 21f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.swim_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.SWIM_SPEED)
+                .build(registrar);
+
+        var vicioConnectIn4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_connect_in_4"), 7f, 19f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.swim_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.SWIM_SPEED)
+                .connect(vicioConnectIn3)
+                .connect(travelBranch12)
+                .build(registrar);
+
+        var vicioConnectOut3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_connect_out_3"), 7f, 26f)
+                .setNameKey("perk.name.astralsorcery.hybrid.movespeed_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .build(registrar);
+
+        var vicioConnectOut4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_connect_out_4"), 5f, 30f)
+                .setNameKey("perk.name.astralsorcery.hybrid.movespeed_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(vicioConnectOut3)
+                .connect(travel29)
+                .build(registrar);
+
+        var vicioBridge2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_bridge_2"), -2f, 19f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .build(registrar);
+
+        var vicioBridge3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_bridge_3"), -3f, 14f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(travel8)
+                .connect(vicioBridge2)
+                .build(registrar);
+
+        var vicioBridge4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_bridge_4"), 2f, 22f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(vicioGemSocket)
+                .build(registrar);
+
+        var vicioBridge5 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_bridge_5"), 3f, 18f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(vicioBridge4)
+                .build(registrar);
+
+        var vicioBridge6 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_bridge_6"), 2f, 14f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(travel7)
+                .connect(vicioBridge5)
+                .build(registrar);
+
+        var vicioBridgeConnect1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_bridge_connect_1"), 1f, 17f)
+                .setNameKey("perk.name.astralsorcery.hybrid.movespeed_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(vicioBridge2)
+                .build(registrar);
+
+        var vicioBridgeConnect2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_bridge_connect_2"), -1f, 16f)
+                .setNameKey("perk.name.astralsorcery.hybrid.movespeed_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(vicioBridgeConnect1)
+                .connect(vicioBridge6)
+                .build(registrar);
+
+        var vicioInnerM2 = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("vicio_inner_m_2"), 6f, 23f)
+                .setNameKey("perk.name.astralsorcery.named.nimble")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(6f, ModifierType.ADDITION, PerksAS.AttributeTypes.SAFE_FALL_DISTANCE)
+                .connect(vicioBridge4)
+                .connect(vicioInnerSwim2)
+                .connect(vicioConnectOut3)
+                .connect(vicioConnectIn3)
+                .build(registrar);
+
+        var vicioInnerM1 = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("vicio_inner_m_1"), -6f, 23f)
+                .setNameKey("perk.name.astralsorcery.named.swiftness")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(vicioConnectIn1)
+                .connect(vicioConnectOut1)
+                .connect(vicioInnerReach2)
+                .build(registrar);
+
+        var discidiaInnerMelee1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_inner_melee_1"), 18f, -22f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(rootDiscidia)
+                .build(registrar);
+
+        var discidiaInnerMelee2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_inner_melee_2"), 17f, -20f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(discidiaInnerMelee1)
+                .build(registrar);
+
+        var discidiaInnerProj1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_inner_proj_1"), 13f, -24f)
+                .setNameKey("perk.name.astralsorcery.hybrid.projectile_damage_critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.07f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .build(registrar);
+
+        var discidiaInnerProj2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_inner_proj_2"), 15f, -25f)
+                .setNameKey("perk.name.astralsorcery.hybrid.projectile_damage_critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.07f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(rootDiscidia)
+                .connect(discidiaInnerProj1)
+                .build(registrar);
+
+        var discidiaGemSocket = PerkDataBuilder.builder(PerkTypesAS.GEM_SOCKET_PERK)
+                .create(AstralSorcery.key("discidia_gem_socket"), 14f, -21f)
+                .setNameKey("perk.name.astralsorcery.generic.gem_socket")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .connect(discidiaInnerProj1)
+                .connect(discidiaInnerMelee2)
+                .build(registrar);
+
+        var discidiaBridge1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_bridge_1"), 15f, -18f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(discidiaGemSocket)
+                .build(registrar);
+
+        var discidiaInnerM_ = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("discidia_inner_m_"), 18f, -17f)
+                .setNameKey("perk.name.astralsorcery.named.strong_arms")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_REACH)
+                .connect(discidiaInnerMelee2)
+                .connect(discidiaBridge1)
+                .build(registrar);
+
+        var discidiaInnerM1 = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("discidia_inner_m_1"), 10f, -23f)
+                .setNameKey("perk.name.astralsorcery.named.deadly_draw")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .addModifier(0.15f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_SPEED)
+                .connect(discidiaInnerProj1)
+                .build(registrar);
+
+        var discidiaBridgeConnect1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_bridge_connect_1"), 10f, -16f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .build(registrar);
+
+        var discidiaBridgeConnect2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_bridge_connect_2"), 9f, -14f)
+                .setNameKey("perk.name.astralsorcery.hybrid.projectile_damage_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(discidiaBridgeConnect1)
+                .build(registrar);
+
+        var discidiaConnectIn1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_connect_in_1"), 7f, -21f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(discidiaInnerM1)
+                .build(registrar);
+
+        var discidiaConnectIn2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_connect_in_2"), 4f, -22f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(travelBranch2)
+                .connect(discidiaConnectIn1)
+                .build(registrar);
+
+        var discidiaConnectIn3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_connect_in_3"), 20f, -14f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_REACH)
+                .connect(discidiaInnerM_)
+                .build(registrar);
+
+        var discidiaConnectIn4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_connect_in_4"), 18f, -11f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_REACH)
+                .connect(discidiaConnectIn3)
+                .connect(travelBranch7)
+                .build(registrar);
+
+        var evorsioInnerDamage1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_inner_damage_1"), -16f, -25f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .connect(rootEvorsio)
+                .build(registrar);
+
+        var evorsioInnerMining1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_inner_mining_1"), -19f, -22f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.06f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(rootEvorsio)
+                .build(registrar);
+
+        var evorsioInnerDamage2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_inner_damage_2"), -14f, -24f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .connect(evorsioInnerDamage1)
+                .build(registrar);
+
+        var evorsioInnerMining2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_inner_mining_2"), -18f, -20f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.06f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(evorsioInnerMining1)
+                .build(registrar);
+
+        var evorsioGemSocket = PerkDataBuilder.builder(PerkTypesAS.GEM_SOCKET_PERK)
+                .create(AstralSorcery.key("evorsio_gem_socket"), -15f, -21f)
+                .setNameKey("perk.name.astralsorcery.generic.gem_socket")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .connect(evorsioInnerDamage2)
+                .connect(evorsioInnerMining2)
+                .build(registrar);
+
+        var evorsioInnerM1 = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("evorsio_inner_m_1"), -11f, -23f)
+                .setNameKey("perk.name.astralsorcery.named.finesse")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.06f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(evorsioInnerDamage2)
+                .build(registrar);
+
+        var evorsioInnerM2 = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("evorsio_inner_m_2"), -19f, -17f)
+                .setNameKey("perk.name.astralsorcery.named.tunneling")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(evorsioInnerMining2)
+                .build(registrar);
+
+        var evorsioBridge1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_bridge_1"), -16f, -18f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(evorsioGemSocket)
+                .connect(evorsioInnerM2)
+                .build(registrar);
+
+        var evorsioBridge4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_bridge_4"), -12f, -20f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(evorsioInnerM1)
+                .connect(evorsioGemSocket)
+                .build(registrar);
+
+        var evorsioBridge2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_bridge_2"), -14f, -15f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(evorsioBridge1)
+                .build(registrar);
+
+        var evorsioBridge3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_bridge_3"), -10f, -11f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(evorsioBridge2)
+                .connect(travel13)
+                .build(registrar);
+
+        var evorsioBridge5 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_bridge_5"), -10f, -17f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(evorsioBridge4)
+                .build(registrar);
+
+        var evorsioBridge6 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_bridge_6"), -7f, -14f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(travel14)
+                .connect(evorsioBridge5)
+                .build(registrar);
+
+        var evorsioBridgeConnect1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_bridge_connect_1"), -11f, -15f)
+                .setNameKey("perk.name.astralsorcery.hybrid.block_reach_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.07f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(evorsioBridge5)
+                .build(registrar);
+
+        var evorsioBridgeConnect2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_bridge_connect_2"), -9f, -13f)
+                .setNameKey("perk.name.astralsorcery.hybrid.block_reach_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.07f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(evorsioBridgeConnect1)
+                .connect(evorsioBridge3)
+                .build(registrar);
+
+        var evorsioConnectIn1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_connect_in_1"), -7f, -24f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(evorsioInnerM1)
+                .build(registrar);
+
+        var evorsioConnectIn2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_connect_in_2"), -4f, -21f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(evorsioConnectIn1)
+                .connect(travelBranch2)
+                .build(registrar);
+
+        var evorsioConnectIn3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_connect_in_3"), -20f, -14f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(evorsioInnerM2)
+                .build(registrar);
+
+        var evorsioConnectIn4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_connect_in_4"), -18f, -11f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(evorsioConnectIn3)
+                .connect(travelBranch22)
+                .build(registrar);
+
+        var discidiaConnectOut1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_connect_out_1"), 21f, -19f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(discidiaInnerM_)
+                .build(registrar);
+
+        var discidiaConnectOut2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_connect_out_2"), 22f, -22f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(discidiaConnectOut1)
+                .connect(travel19)
+                .build(registrar);
+
+        var discidiaConnectOut3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_connect_out_3"), 9f, -26f)
+                .setNameKey("perk.name.astralsorcery.hybrid.projectile_damage_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(discidiaInnerM1)
+                .build(registrar);
+
+        var discidiaConnectOut4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_connect_out_4"), 12f, -28f)
+                .setNameKey("perk.name.astralsorcery.hybrid.projectile_damage_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(discidiaConnectOut3)
+                .connect(travel17)
+                .build(registrar);
+
+        var evorsioConnectOut1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_connect_out_1"), -12f, -26f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(evorsioInnerM1)
+                .build(registrar);
+
+        var evorsioConnectOut2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_connect_out_2"), -15f, -28f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(travel43)
+                .connect(evorsioConnectOut1)
+                .build(registrar);
+
+        var evorsioConnectOut3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_connect_out_3"), -22f, -19f)
+                .setNameKey("perk.name.astralsorcery.hybrid.block_break_speed_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(evorsioInnerM2)
+                .build(registrar);
+
+        var evorsioConnectOut4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("evorsio_connect_out_4"), -24f, -21f)
+                .setNameKey("perk.name.astralsorcery.hybrid.block_break_speed_perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel41)
+                .connect(evorsioConnectOut3)
+                .build(registrar);
+
+        var aevitasInnerArmor1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("aevitas_inner_armor_1"), -28f, 8f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ARMOR)
+                .connect(rootAevitas)
+                .connect(aevitasInnerArmor2)
+                .build(registrar);
+
+        var vicioBridge1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vicio_bridge_1"), -3f, 22f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(vicioInnerM1)
+                .connect(vicioBridge2)
+                .connect(vicioGemSocket)
+                .build(registrar);
+
+        var armaraConnectIn2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("armara_connect_in_2"), 14f, 17f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(travelBranch12)
+                .connect(armaraConnectIn1)
+                .build(registrar);
+
+        var discidiaBridge2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_bridge_2"), 13f, -15f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(discidiaBridge1)
+                .connect(discidiaBridgeConnect1)
+                .build(registrar);
+
+        var discidiaBridge3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_bridge_3"), 10f, -12f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(travel2)
+                .connect(discidiaBridge2)
+                .build(registrar);
+
+        var discidiaBridge4 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_bridge_4"), 11f, -20f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(discidiaInnerM1)
+                .connect(discidiaGemSocket)
+                .build(registrar);
+
+        var discidiaBridge5 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_bridge_5"), 8f, -17f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(discidiaBridge4)
+                .build(registrar);
+
+        var discidiaBridge6 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("discidia_bridge_6"), 6f, -13f)
+                .setNameKey("perk.name.astralsorcery.hybrid.attack_damage_projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(travel1)
+                .connect(discidiaBridgeConnect2)
+                .connect(discidiaBridge5)
+                .build(registrar);
+
+        var travelCore1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("travel_core_1"), -1f, -5f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(gemSocketCore)
+                .connect(travel14)
+                .build(registrar);
+
+        var keyLastBreath = PerkDataBuilder.builder(PerkTypesAS.KEY_LAST_BREATH)
+                .create(AstralSorcery.key("key_last_breath"), -8f, -34f)
+                .setNameKey("perk.name.astralsorcery.named.last_breath")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .build(registrar);
+
+        var lastBreath2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("last_breath_2"), -7f, -33f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(keyLastBreath)
+                .build(registrar);
+
+        var geologicProwess1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("geologic_prowess_1"), -24f, -31f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(travel42)
+                .build(registrar);
+
+        var geologicProwess2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("geologic_prowess_2"), -25f, -30f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_effect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(geologicProwess1)
+                .build(registrar);
+
+        var keyGeologicProwess = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_geologic_prowess"), -24f, -29f)
+                .setNameKey("perk.name.astralsorcery.named.geologic_prowess")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MINING_SIZE)
+                .connect(geologicProwess2)
+                .build(registrar);
+
+        var consistentLuck1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("consistent_luck_1"), -26f, -15f)
+                .setNameKey("perk.name.astralsorcery.generic.add.luck")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.LUCK)
+                .connect(travel40)
+                .build(registrar);
+
+        var consistentLuck2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("consistent_luck_2"), -25f, -16f)
+                .setNameKey("perk.name.astralsorcery.generic.add.luck")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.LUCK)
+                .connect(consistentLuck1)
+                .build(registrar);
+
+        var keyConsistentLuck = PerkDataBuilder.builder(PerkTypesAS.KEY_ADD_ENCHANTMENTS)
+                .create(AstralSorcery.key("key_consistent_luck"), -26f, -17f)
+                .setNameKey("perk.name.astralsorcery.named.consistent_luck")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .modify(perk -> perk.addEnchantment(EnchantmentModifier.addLevel(fortune, 1)))
+                .connect(consistentLuck2)
+                .build(registrar);
+
+        var honedInfluence1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("honed_influence_1"), -29f, -20f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(travel40)
+                .build(registrar);
+
+        var honedInfluence2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("honed_influence_2"), -30f, -21f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(honedInfluence1)
+                .build(registrar);
+
+        var keyHonedInfluence = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_honed_influence"), -31f, -20f)
+                .setNameKey("perk.name.astralsorcery.named.honed_influence")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(1.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.ATTACK_REACH)
+                .connect(honedInfluence2)
+                .build(registrar);
+
+        var illusoryHammer1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("illusory_hammer_1"), -11f, -9f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(evorsioBridge3)
+                .build(registrar);
+
+        var illusoryHammer2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("illusory_hammer_2"), -12f, -10f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(illusoryHammer1)
+                .build(registrar);
+
+        var keyIllusoryHammer = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_illusory_hammer"), -13f, -9f)
+                .setNameKey("perk.name.astralsorcery.named.illusory_hammer")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MINING_SIZE)
+                .connect(illusoryHammer2)
+                .build(registrar);
+
+        var breakingAim1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("breaking_aim_1"), -15f, -13f)
+                .setNameKey("perk.name.astralsorcery.generic.add.critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.02f, ModifierType.ADDITION, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(evorsioBridge2)
+                .build(registrar);
+
+        var breakingAim2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("breaking_aim_2"), -16f, -12f)
+                .setNameKey("perk.name.astralsorcery.generic.add.critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.02f, ModifierType.ADDITION, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(breakingAim1)
+                .build(registrar);
+
+        var keyBreakingAim = PerkDataBuilder.builder(PerkTypesAS.KEY_DISARM)
+                .create(AstralSorcery.key("key_breaking_aim"), -15f, -11f)
+                .setNameKey("perk.name.astralsorcery.named.breaking_aim")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .connect(breakingAim2)
+                .build(registrar);
+
+        var differentAngles1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("different_angles_1"), -4f, -15f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(evorsioBridge6)
+                .build(registrar);
+
+        var differentAngles2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("different_angles_2"), -3f, -16f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(differentAngles1)
+                .build(registrar);
+
+        var keyDifferentAngles = PerkDataBuilder.builder(PerkTypesAS.KEY_ALL_TOOL_TYPES)
+                .create(AstralSorcery.key("key_different_angles"), -4f, -17f)
+                .setNameKey("perk.name.astralsorcery.named.different_angles")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .connect(differentAngles2)
+                .build(registrar);
+
+        var bluntForce1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("blunt_force_1"), -8f, -19f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .connect(evorsioBridge5)
+                .build(registrar);
+
+        var bluntForce2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("blunt_force_2"), -7f, -20f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .connect(bluntForce1)
+                .build(registrar);
+
+        var keyBluntForce = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_blunt_force"), -6f, -19f)
+                .setNameKey("perk.name.astralsorcery.named.blunt_force")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .addModifier(0.16f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_DAMAGE)
+                .connect(bluntForce2)
+                .build(registrar);
+
+        var cullingStrike1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("culling_strike_1"), 23f, -32f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(travel18)
+                .build(registrar);
+
+        var cullingStrike2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("culling_strike_2"), 24f, -33f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(cullingStrike1)
+                .build(registrar);
+
+        var cullingStrike3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("culling_strike_3"), 23f, -34f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_chance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(cullingStrike2)
+                .build(registrar);
+
+        var keyCullingStrike = PerkDataBuilder.builder(PerkTypesAS.KEY_CULLING_ATTACK)
+                .create(AstralSorcery.key("key_culling_strike"), 22f, -33f)
+                .setNameKey("perk.name.astralsorcery.named.culling_strike")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .connect(cullingStrike3)
+                .build(registrar);
+
+        var lethality1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("lethality_1"), 8f, -33f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_DAMAGE)
+                .connect(travel16)
+                .build(registrar);
+
+        var lethality2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("lethality_2"), 9f, -34f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_DAMAGE)
+                .connect(lethality1)
+                .build(registrar);
+
+        var keyLethality = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_lethality"), 10f, -33f)
+                .setNameKey("perk.name.astralsorcery.named.lethality")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.2f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_DAMAGE)
+                .connect(lethality2)
+                .build(registrar);
+
+        var cursedTouch1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("cursed_touch_1"), 30f, -21f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(travel20)
+                .build(registrar);
+
+        var cursedTouch2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("cursed_touch_2"), 31f, -22f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(cursedTouch1)
+                .build(registrar);
+
+        var cursedTouch3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("cursed_touch_3"), 30f, -23f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.06f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(cursedTouch2)
+                .build(registrar);
+
+        var keyCursedTouch = PerkDataBuilder.builder(PerkTypesAS.KEY_DAMAGE_EFFECTS)
+                .create(AstralSorcery.key("key_cursed_touch"), 31f, -24f)
+                .setNameKey("perk.name.astralsorcery.named.cursed_touch")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .connect(cursedTouch3)
+                .build(registrar);
+
+        var dextralDraw1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("dextral_draw_1"), 26f, -17f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.projectile_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_SPEED)
+                .connect(travel20)
+                .build(registrar);
+
+        var dextralDraw2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("dextral_draw_2"), 25f, -16f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.projectile_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_SPEED)
+                .connect(dextralDraw1)
+                .build(registrar);
+
+        var keyDextralDraw = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_dextral_draw"), 26f, -15f)
+                .setNameKey("perk.name.astralsorcery.named.dextral_draw")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.06f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_SPEED)
+                .addModifier(0.06f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(dextralDraw2)
+                .build(registrar);
+
+        var longShot1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("long_shot_1"), 15f, -14f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(discidiaBridge2)
+                .build(registrar);
+
+        var longShot2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("long_shot_2"), 16f, -13f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(longShot1)
+                .build(registrar);
+
+        var keyLongShot = PerkDataBuilder.builder(PerkTypesAS.KEY_PROJECTILE_DISTANCE)
+                .create(AstralSorcery.key("key_long_shot"), 15f, -12f)
+                .setNameKey("perk.name.astralsorcery.named.long_shot")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .connect(longShot2)
+                .build(registrar);
+
+        var bluntBolts1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("blunt_bolts_1"), 5f, -18f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(discidiaBridge5)
+                .build(registrar);
+
+        var bluntBolts2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("blunt_bolts_2"), 4f, -19f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(bluntBolts1)
+                .build(registrar);
+
+        var keyBluntBolts = PerkDataBuilder.builder(PerkTypesAS.KEY_PROJECTILE_PROXIMITY)
+                .create(AstralSorcery.key("key_blunt_bolts"), 5f, -20f)
+                .setNameKey("perk.name.astralsorcery.named.blunt_bolts")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .connect(bluntBolts2)
+                .build(registrar);
+
+        var rampage1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("rampage_1"), 4f, -14f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(discidiaBridge6)
+                .build(registrar);
+
+        var rampage2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("rampage_2"), 3f, -15f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(rampage1)
+                .build(registrar);
+
+        var keyRampage = PerkDataBuilder.builder(PerkTypesAS.KEY_RAMPAGE)
+                .create(AstralSorcery.key("key_rampage"), 4f, -16f)
+                .setNameKey("perk.name.astralsorcery.named.rampage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .connect(rampage2)
+                .build(registrar);
+
+        var combatFocus1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("combat_focus_1"), 11f, -10f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.06f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_DAMAGE)
+                .connect(discidiaBridge3)
+                .build(registrar);
+
+        var combatFocus2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("combat_focus_2"), 12f, -9f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.06f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_DAMAGE)
+                .connect(combatFocus1)
+                .build(registrar);
+
+        var keyCombatFocus = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_combat_focus"), 13f, -10f)
+                .setNameKey("perk.name.astralsorcery.named.combat_focus")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.DISCIDIA))
+                .addModifier(0.14f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_DAMAGE)
+                .addModifier(0.04f, ModifierType.ADDITION, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(combatFocus2)
+                .build(registrar);
+
+        var keyUnwavering = PerkDataBuilder.builder(PerkTypesAS.KEY_NO_KNOCKBACK)
+                .create(AstralSorcery.key("key_unwavering"), 15f, 10f)
+                .setNameKey("perk.name.astralsorcery.named.unwavering")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .build(registrar);
+
+        var unwavering1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("unwavering_1"), 14f, 9f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(armaraBridge2)
+                .connect(keyUnwavering)
+                .build(registrar);
+
+        var bodyBlocking1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("body_blocking_1"), 11f, 8f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ARMOR)
+                .connect(armaraBridge3)
+                .build(registrar);
+
+        var bodyBlocking2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("body_blocking_2"), 10f, 9f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ARMOR)
+                .connect(bodyBlocking1)
+                .build(registrar);
+
+        var keyBodyBlocking = PerkDataBuilder.builder(PerkTypesAS.KEY_DAMAGE_ARMOR)
+                .create(AstralSorcery.key("key_body_blocking"), 9f, 8f)
+                .setNameKey("perk.name.astralsorcery.named.body_blocking")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .connect(bodyBlocking2)
+                .build(registrar);
+
+        var firmness1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("firmness_1"), 19f, 1f)
+                .setNameKey("perk.name.astralsorcery.hybrid.armor_armor_toughness")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR_TOUGHNESS)
+                .connect(armaraBridge5)
+                .build(registrar);
+
+        var firmness2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("firmness_2"), 20f, 0f)
+                .setNameKey("perk.name.astralsorcery.hybrid.armor_armor_toughness")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR_TOUGHNESS)
+                .connect(firmness1)
+                .build(registrar);
+
+        var keyFirmness = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_firmness"), 19f, -1f)
+                .setNameKey("perk.name.astralsorcery.named.firmness")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(4f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(1.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR_TOUGHNESS)
+                .connect(firmness2)
+                .build(registrar);
+
+        var tenacity1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("tenacity_1"), 14f, -1f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.life_recovery")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.15f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
+                .connect(armaraBridge6)
+                .build(registrar);
+
+        var tenacity2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("tenacity_2"), 15f, -2f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.life_recovery")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.15f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
+                .connect(tenacity1)
+                .build(registrar);
+
+        var keyTenacity = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_tenacity"), 16f, -1f)
+                .setNameKey("perk.name.astralsorcery.named.tenacity")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
+                .connect(tenacity2)
+                .build(registrar);
+
+        var phoenixBlessing1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("phoenix_blessing_1"), 32f, -4f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(travel22)
+                .build(registrar);
+
+        var phoenixBlessing2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("phoenix_blessing_2"), 31f, -5f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(phoenixBlessing1)
+                .build(registrar);
+
+        var keyPhoenixBlessing = PerkDataBuilder.builder(PerkTypesAS.KEY_CHEAT_DEATH)
+                .create(AstralSorcery.key("key_phoenix_blessing"), 29f, -5f)
+                .setNameKey("perk.name.astralsorcery.named.phoenix_blessing")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .build(registrar);
+
+        var phoenixBlessing3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("phoenix_blessing_3"), 30f, -4f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(keyPhoenixBlessing)
+                .connect(phoenixBlessing2)
+                .build(registrar);
+
+        var dislocatedReflection1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("dislocated_reflection_1"), 36f, 3f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.damage_reflect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.DAMAGE_REFLECT)
+                .connect(travel23)
+                .build(registrar);
+
+        var dislocatedReflection2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("dislocated_reflection_2"), 37f, 4f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.damage_reflect")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.DAMAGE_REFLECT)
+                .connect(dislocatedReflection1)
+                .build(registrar);
+
+        var keydislocatedReflection = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("keydislocated_reflection"), 36f, 5f)
+                .setNameKey("perk.name.astralsorcery.named.dislocated_reflection")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.14f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.DAMAGE_REFLECT)
+                .connect(dislocatedReflection2)
+                .build(registrar);
+
+        var diamondSkin1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("diamond_skin_1"), 36f, 15f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(travel24)
+                .build(registrar);
+
+        var diamondSkin2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("diamond_skin_2"), 37f, 14f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(diamondSkin1)
+                .build(registrar);
+
+        var diamondSkin3 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("diamond_skin_3"), 38f, 15f)
+                .setNameKey("perk.name.astralsorcery.generic.add.armor")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(diamondSkin2)
+                .build(registrar);
+
+        var keyDiamondSkin = PerkDataBuilder.builder(PerkTypesAS.KEY_NO_ARMOR)
+                .create(AstralSorcery.key("key_diamond_skin"), 39f, 14f)
+                .setNameKey("perk.name.astralsorcery.named.diamond_skin")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .connect(diamondSkin3)
+                .build(registrar);
+
+        var clarity1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("clarity_1"), 24f, 24f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travel26)
+                .build(registrar);
+
+        var clarity2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("clarity_2"), 25f, 25f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(clarity1)
+                .build(registrar);
+
+        var keyClarity = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_clarity"), 26f, 24f)
+                .setNameKey("perk.name.astralsorcery.named.clarity")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.14f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(clarity2)
+                .build(registrar);
+
+        var osmosis1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("osmosis_1"), 22f, 20f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_cooldown_reduction")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
+                .connect(travel26)
+                .build(registrar);
+
+        var osmosis2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("osmosis_2"), 21f, 19f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_cooldown_reduction")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
+                .connect(osmosis1)
+                .build(registrar);
+
+        var keyOsmosis = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_osmosis"), 20f, 20f)
+                .setNameKey("perk.name.astralsorcery.named.osmosis")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
+                .connect(osmosis2)
+                .build(registrar);
+
+        var arrowSlits1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("arrow_slits_1"), 36f, -4f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(travel22)
+                .build(registrar);
+
+        var arrowSlits2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("arrow_slits_2"), 37f, -5f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.projectile_damage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(arrowSlits1)
+                .build(registrar);
+
+        var keyArrowSlits = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_arrow_slits"), 36f, -6f)
+                .setNameKey("perk.name.astralsorcery.named.arrow_slits")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(arrowSlits2)
+                .build(registrar);
+
+        var zeal1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("zeal_1"), -4f, 18f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(vicioBridge2)
+                .build(registrar);
+
+        var keyZeal = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_zeal"), -5f, 17f)
+                .setNameKey("perk.name.astralsorcery.named.zeal")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.12f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(zeal1)
+                .build(registrar);
+
+        var biggerStomach1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("bigger_stomach_1"), 5f, 17f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(vicioBridge5)
+                .build(registrar);
+
+        var biggerStomach2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("bigger_stomach_2"), 6f, 16f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(biggerStomach1)
+                .build(registrar);
+
+        var keyBiggerStomach = PerkDataBuilder.builder(PerkTypesAS.KEY_REDUCED_FOOD)
+                .create(AstralSorcery.key("key_bigger_stomach"), 5f, 15f)
+                .setNameKey("perk.name.astralsorcery.named.bigger_stomach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .connect(biggerStomach2)
+                .build(registrar);
+
+        var haste1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("haste_1"), 4f, 12f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(vicioBridge6)
+                .build(registrar);
+
+        var keyHaste = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_haste"), 5f, 13f)
+                .setNameKey("perk.name.astralsorcery.named.haste")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.12f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(haste1)
+                .build(registrar);
+
+        var fins1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("fins_1"), -4f, 12f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.swim_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.SWIM_SPEED)
+                .connect(vicioBridge3)
+                .build(registrar);
+
+        var keyFins = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_fins"), -5f, 13f)
+                .setNameKey("perk.name.astralsorcery.named.fins")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.16f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.SWIM_SPEED)
+                .connect(fins1)
+                .build(registrar);
+
+        var hikingBoots1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("hiking_boots_1"), 10f, 30f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(travel28)
+                .build(registrar);
+
+        var hikingBoots2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("hiking_boots_2"), 11f, 29f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.move_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.02f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(hikingBoots1)
+                .build(registrar);
+
+        var keyHikingBoots = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_hiking_boots"), 10f, 28f)
+                .setNameKey("perk.name.astralsorcery.named.hiking_boots")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.STEP_HEIGHT)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(hikingBoots2)
+                .build(registrar);
+
+        var dervish1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("dervish_1"), 8f, 34f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(travel29)
+                .build(registrar);
+
+        var dervish2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("dervish_2"), 9f, 35f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .connect(dervish1)
+                .build(registrar);
+
+        var keyDervish = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_dervish"), 8f, 36f)
+                .setNameKey("perk.name.astralsorcery.named.dervish")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_SPEED)
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.ATTACK_DAMAGE)
+                .connect(dervish2)
+                .build(registrar);
+
+        var fleetFooted1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("fleet_footed_1"), -4f, 35f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.cooldown_reduction")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .connect(travel31)
+                .build(registrar);
+
+        var fleetFooted2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("fleet_footed_2"), -5f, 36f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.cooldown_reduction")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .connect(fleetFooted1)
+                .build(registrar);
+
+        var keyFleetFooted = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_fleet_footed"), -4f, 37f)
+                .setNameKey("perk.name.astralsorcery.named.fleet_footed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(fleetFooted2)
+                .build(registrar);
+
+        var spatialManipulation1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("spatial_manipulation_1"), -9f, 29f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_REACH)
+                .connect(travel32)
+                .build(registrar);
+
+        var spatialManipulation2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("spatial_manipulation_2"), -10f, 28f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.attack_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ATTACK_REACH)
+                .connect(spatialManipulation1)
+                .build(registrar);
+
+        var keySpatialManipulation = PerkDataBuilder.builder(PerkTypesAS.KEY_TELEPORT_DROPS)
+                .create(AstralSorcery.key("key_spatial_manipulation"), -9f, 27f)
+                .setNameKey("perk.name.astralsorcery.named.spatial_manipulation")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
+                .connect(spatialManipulation2)
+                .build(registrar);
+
+        var keyVividGrowth = PerkDataBuilder.builder(PerkTypesAS.KEY_GROW_PLANTS)
+                .create(AstralSorcery.key("key_vivid_growth"), -14f, 12f)
+                .setNameKey("perk.name.astralsorcery.named.vivid_growth")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .build(registrar);
+
+        var vividGrowth1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vivid_growth_1"), -14f, 10f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(aevitasBridge5)
+                .build(registrar);
+
+        var vividGrowth2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vivid_growth_2"), -15f, 11f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_block_reach")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_REACH)
+                .connect(vividGrowth1)
+                .connect(keyVividGrowth)
+                .build(registrar);
+
+        var cleansing1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("cleansing_1"), -13f, -1f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.life_recovery")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
+                .connect(aevitasBridge3)
+                .build(registrar);
+
+        var keyCleansing = PerkDataBuilder.builder(PerkTypesAS.KEY_CLEANSE_NEGATIVE_EFFECTS)
+                .create(AstralSorcery.key("key_cleansing"), -14f, -2f)
+                .setNameKey("perk.name.astralsorcery.named.cleansing")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .connect(cleansing1)
+                .build(registrar);
+
+        var ironHeart1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("iron_heart_1"), -17f, 1f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_movespeed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.95f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(aevitasBridge2)
+                .build(registrar);
+
+        var ironHeart2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("iron_heart_2"), -18f, 0f)
+                .setNameKey("perk.name.astralsorcery.hybrid.life_movespeed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(2f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.95f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .connect(ironHeart1)
+                .build(registrar);
+
+        var keyIronHeart2 = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_iron_heart_2"), -17f, -1f)
+                .setNameKey("perk.name.astralsorcery.named.iron_heart")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.91f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
+                .addModifier(4f, ModifierType.ADDITION, PerksAS.AttributeTypes.ARMOR)
+                .connect(ironHeart2)
+                .build(registrar);
+
+        var adaptive1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("adaptive_1"), -10f, 7f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.elemental_resistance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ELEMENTAL_RESISTANCE)
+                .connect(aevitasBridge6)
+                .build(registrar);
+
+        var adaptive2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("adaptive_2"), -9f, 8f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.elemental_resistance")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ELEMENTAL_RESISTANCE)
+                .connect(adaptive1)
+                .build(registrar);
+
+        var keyAdaptive = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_adaptive"), -10f, 9f)
+                .setNameKey("perk.name.astralsorcery.named.adaptive")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ELEMENTAL_RESISTANCE)
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.DAMAGE_REDUCTION)
+                .connect(adaptive2)
+                .build(registrar);
+
+        var keyMending = PerkDataBuilder.builder(PerkTypesAS.KEY_MEND_ARMOR)
+                .create(AstralSorcery.key("key_mending"), -24f, 25f)
+                .setNameKey("perk.name.astralsorcery.named.mending")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .build(registrar);
+
+        var mending1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("mending_1"), -22f, 25f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(travel34)
+                .build(registrar);
+
+        var mending2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("mending_2"), -23f, 26f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(keyMending)
+                .connect(mending1)
+                .build(registrar);
+
+        var vitality1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vitality_1"), -32f, -5f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(travel38)
+                .build(registrar);
+
+        var vitality2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vitality_2"), -31f, -6f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(vitality1)
+                .build(registrar);
+
+        var keyVitality = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_vitality"), -30f, -5f)
+                .setNameKey("perk.name.astralsorcery.named.vitality")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(0.12f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
+                .connect(vitality2)
+                .build(registrar);
+
+        var sage1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("sage_1"), -36f, 1f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travel37)
+                .build(registrar);
+
+        var keySage = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_sage"), -37f, 0f)
+                .setNameKey("perk.name.astralsorcery.named.sage")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(sage1)
+                .build(registrar);
+
+        var nourishment1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("nourishment_1"), -30f, 20f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.cooldown_reduction")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .connect(travel35)
+                .build(registrar);
+
+        var nourishment2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("nourishment_2"), -31f, 21f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.cooldown_reduction")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .connect(nourishment1)
+                .build(registrar);
+
+        var leyNourishment = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("ley_nourishment"), -30f, 22f)
+                .setNameKey("perk.name.astralsorcery.named.nourishment")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
+                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(4f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
+                .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.LUCK)
+                .connect(nourishment2)
+                .build(registrar);
+
+        var cunning1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("cunning_1"), 3f, -7f)
+                .setNameKey("perk.name.astralsorcery.generic.add.luck")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.LUCK)
+                .connect(travelCore2)
+                .build(registrar);
+
+        var keyCunning = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_cunning"), 4f, -8f)
+                .setNameKey("perk.name.astralsorcery.named.cunning")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(1.5f, ModifierType.ADDITION, PerksAS.AttributeTypes.LUCK)
+                .connect(cunning1)
+                .build(registrar);
+
+        var focused1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("focused_1"), -4f, -2f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.perk_experience")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(travelCore0)
+                .build(registrar);
+
+        var keyFocused = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_focused"), -5f, -3f)
+                .setNameKey("perk.name.astralsorcery.named.focused")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.12f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EXPERIENCE)
+                .connect(focused1)
+                .build(registrar);
+
+        var alchGenius1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("alch_genius_1"), 1f, 4f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.potion_duration")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.06f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.POTION_DURATION)
+                .connect(travelCore4)
+                .build(registrar);
+
+        var keyAlchGenius = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_alch_genius"), 2f, 5f)
+                .setNameKey("perk.name.astralsorcery.named.alchemists_genius")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.POTION_DURATION)
+                .connect(alchGenius1)
+                .build(registrar);
+
+        var profaneChemistry1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("profane_chemistry_1"), 0f, -8f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.potion_duration")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.POTION_DURATION)
+                .connect(travelCore1)
+                .build(registrar);
+
+        var keyProfaneChemistry = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_profane_chemistry"), -1f, -9f)
+                .setNameKey("perk.name.astralsorcery.named.profane_chemistry")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(1.25f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.POTION_DURATION)
+                .addModifier(0.7f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.MAX_HEALTH)
+                .connect(profaneChemistry1)
+                .build(registrar);
+
+        var tiltedPendulum1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("tilted_pendulum_1"), 7f, 2f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.cooldown_reduction")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .connect(travelCore3)
+                .build(registrar);
+
+        var keyTiltedPendulum = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_tilted_pendulum"), 8f, 1f)
+                .setNameKey("perk.name.astralsorcery.named.tilted_pendulum")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.25f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(0.8f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.ARMOR)
+                .connect(tiltedPendulum1)
+                .build(registrar);
+
+        var enduring1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("enduring_1"), -3f, 2f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.damage_reduction")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.DAMAGE_REDUCTION)
+                .connect(travelCore0)
+                .build(registrar);
+
+        var keyEnduring = PerkDataBuilder.builder(PerkTypesAS.KEY_ADD_ENCHANTMENTS)
+                .create(AstralSorcery.key("key_enduring"), -4f, 3f)
+                .setNameKey("perk.name.astralsorcery.named.enduring")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .modify(perk -> perk.addEnchantment(EnchantmentModifier.addLevel(unbreaking, 1)))
+                .connect(enduring1)
+                .build(registrar);
+
+        var endlessMunitions1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("endless_munitions_1"), 3f, 0f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.projectile_damage")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PROJECTILE_DAMAGE)
+                .connect(travelCore3)
+                .build(registrar);
+
+        var keyEndlessMunitions = PerkDataBuilder.builder(PerkTypesAS.KEY_ADD_ENCHANTMENTS)
+                .create(AstralSorcery.key("key_endless_munitions"), 4f, -1f)
+                .setNameKey("perk.name.astralsorcery.named.endless_munitions")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .modify(perk -> perk.addEnchantment(EnchantmentModifier.addLevel(infinity, 1)))
+                .connect(endlessMunitions1)
+                .build(registrar);
+
+        var precision1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("precision_1"), -3f, -6f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_chance")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(travelCore1)
+                .build(registrar);
+
+        var precision2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("precision_2"), -4f, -5f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.critical_hit_chance")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .connect(precision1)
+                .build(registrar);
+
+        var keyPrecision = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_precision"), -5f, -6f)
+                .setNameKey("perk.name.astralsorcery.named.precision")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.CRITICAL_HIT_CHANCE)
+                .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.PERK_EFFECT)
+                .connect(precision2)
+                .build(registrar);
+
+        var vampirism1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("vampirism_1"), 6f, -3f)
+                .setNameKey("perk.name.astralsorcery.generic.add.life_leech")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.03f, ModifierType.ADDITION, PerksAS.AttributeTypes.LIFE_LEECH)
+                .connect(travelCore2)
+                .build(registrar);
+
+        var keyVampirism = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_vampirism"), 7f, -4f)
+                .setNameKey("perk.name.astralsorcery.named.vampirism")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.07f, ModifierType.ADDITION, PerksAS.AttributeTypes.LIFE_LEECH)
+                .connect(vampirism1)
+                .build(registrar);
+
+        var prismaticShimmer1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("prismatic_shimmer_1"), -7f, 2f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.dynamic_enchantment_effect")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ENCHANTMENT_EFFECT)
+                .connect(travelCore0)
+                .build(registrar);
+
+        var prismaticShimmer2 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("prismatic_shimmer_2"), -8f, 3f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.dynamic_enchantment_effect")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ENCHANTMENT_EFFECT)
+                .connect(prismaticShimmer1)
+                .build(registrar);
+
+        var keyPrismaticShimmer = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_prismatic_shimmer"), -7f, 4f)
+                .setNameKey("perk.name.astralsorcery.named.prismatic_shimmer")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.15f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.ENCHANTMENT_EFFECT)
+                .connect(prismaticShimmer2)
+                .build(registrar);
+
+        var compact1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("compact_1"), -3f, 7f)
+                .setNameKey("perk.name.astralsorcery.generic.less.scale")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.95f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.SCALE)
+                .connect(travelCore4)
+                .build(registrar);
+
+        var keyCompact = PerkDataBuilder.builder(PerkTypesAS.MAJOR_PERK)
+                .create(AstralSorcery.key("key_compact"), -4f, 6f)
+                .setNameKey("perk.name.astralsorcery.named.compact")
+                .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
+                .addModifier(0.85f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.SCALE)
+                .connect(compact1)
+                .build(registrar);
+
+        var lastBreath1 = PerkDataBuilder.builder(PerkTypesAS.MODIFIER_PERK)
+                .create(AstralSorcery.key("last_breath_1"), -8f, -32f)
+                .setNameKey("perk.name.astralsorcery.generic.inc.block_break_speed")
+                .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.EVORSIO))
+                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.BLOCK_BREAK_SPEED)
+                .connect(lastBreath2)
+                .connect(travel44)
+                .build(registrar);
+
     }
 }

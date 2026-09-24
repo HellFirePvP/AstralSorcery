@@ -1,79 +1,87 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.tile;
 
-import hellfirepvp.astralsorcery.common.block.tile.BlockPrism;
-import hellfirepvp.astralsorcery.common.item.lens.LensColorType;
-import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
-import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
-import hellfirepvp.astralsorcery.common.tile.network.StarlightTransmissionPrism;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
+import com.mojang.datafixers.Products;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import hellfirepvp.astralsorcery.common.component.CrystalAttributesComponent;
+import hellfirepvp.astralsorcery.common.lib.StarlightNetworkNodesAS;
+import hellfirepvp.astralsorcery.common.lib.TileEntitiesAS;
+import hellfirepvp.astralsorcery.common.starlight.api.provider.TransmissionNodeProvider;
+import hellfirepvp.astralsorcery.common.tile.base.TileDataCrystalAttributeContainer;
+import hellfirepvp.astralsorcery.common.tile.base.TileEntityNetwork;
+import hellfirepvp.astralsorcery.common.tile.network.SimpleTransmissionNode;
+import hellfirepvp.astralsorcery.common.tile.network.provider.SimpleTransmissionNodeProvider;
+import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
+import hellfirepvp.astralsorcery.common.util.data.TileRegistryObject;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: TilePrism
  * Created by HellFirePvP
- * Date: 24.08.2019 / 23:13
+ * Date: 07.09.2026 / 10:00
  */
-public class TilePrism extends TileLens {
+public class TilePrism extends TileEntityNetwork<SimpleTransmissionNode, TilePrism.Data> {
 
-    public TilePrism() {
-        super(TileEntityTypesAS.PRISM);
+    public TilePrism(BlockPos pos, BlockState blockState) {
+        this(TileEntitiesAS.PRISM, pos, blockState);
+    }
+
+    protected TilePrism(TileRegistryObject<?> type, BlockPos pos, BlockState blockState) {
+        super(type, pos, blockState);
     }
 
     @Override
-    public boolean isSingleLink() {
-        return false;
+    public DeferredHolder<TransmissionNodeProvider<?>, SimpleTransmissionNodeProvider> getNodeProvider() {
+        return StarlightNetworkNodesAS.SIMPLE_NODE;
     }
 
     @Override
-    public LensColorType setColorType(@Nullable LensColorType colorType) {
-        LensColorType returned = super.setColorType(colorType);
-        BlockState thisState = getWorld().getBlockState(getPos());
+    public Codec<Data> dataCodec() {
+        return Data.CODEC;
+    }
 
-        if (thisState.get(BlockPrism.HAS_COLORED_LENS) && colorType == null && returned != null) {
-            getWorld().setBlockState(getPos(), thisState.with(BlockPrism.HAS_COLORED_LENS, false), Constants.BlockFlags.DEFAULT_AND_RERENDER);
-        } else if (!thisState.get(BlockPrism.HAS_COLORED_LENS) && colorType != null && returned == null) {
-            getWorld().setBlockState(getPos(), thisState.with(BlockPrism.HAS_COLORED_LENS, true), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+    public static class Data extends TileEntityNetwork.Data implements TileDataCrystalAttributeContainer {
+
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(inst -> prismFields(inst).apply(inst, Data::new));
+
+        protected static <T extends Data> Products.P5<RecordCodecBuilder.Mu<T>, Long, Boolean, Map<BlockPos, Boolean>, Boolean, CrystalAttributesComponent> prismFields(RecordCodecBuilder.Instance<T> instance) {
+            return netFields(instance).and(
+                    CodecUtil.defaulted(CrystalAttributesComponent.CODEC, "crystalAttributes", CrystalAttributesComponent::defaultEmpty, Data::getCrystalAttributes)
+            );
         }
-        return returned;
-    }
 
-    @Override
-    public Direction getPlacedAgainst() {
-        BlockState state = world.getBlockState(getPos());
-        if (!(state.getBlock() instanceof BlockPrism)) {
-            return Direction.DOWN;
+        protected CrystalAttributesComponent crystalAttributes;
+
+        protected Data(long ticksExisted, boolean hasStructure, Map<BlockPos, Boolean> skyObstructions, boolean needsNetworkSync, CrystalAttributesComponent crystalAttributes) {
+            super(ticksExisted, hasStructure, skyObstructions, needsNetworkSync);
+            this.crystalAttributes = crystalAttributes;
         }
-        return state.get(BlockPrism.PLACED_AGAINST);
-    }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    protected void onDataReceived() {
-        super.onDataReceived();
+        @Nonnull
+        @Override
+        public CrystalAttributesComponent getCrystalAttributes() {
+            return this.crystalAttributes;
+        }
 
-        getWorld().notifyBlockUpdate(getPos(), getBlockState(), getBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
-    }
-
-    @Nonnull
-    @Override
-    public IPrismTransmissionNode provideTransmissionNode(BlockPos at) {
-        return new StarlightTransmissionPrism(at, this.getAttributes());
+        @Override
+        public void setCrystalAttributes(@Nonnull CrystalAttributesComponent attributes) {
+            this.crystalAttributes = attributes;
+            this.setNeedsNetworkSync(true);
+        }
     }
 }

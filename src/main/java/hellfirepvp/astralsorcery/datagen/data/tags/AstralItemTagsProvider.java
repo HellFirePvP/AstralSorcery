@@ -1,72 +1,94 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.datagen.data.tags;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import net.minecraft.data.BlockTagsProvider;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.data.TagsProvider;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
+import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-import static hellfirepvp.astralsorcery.common.lib.TagsAS.Items.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: AstralItemTagsProvider
  * Created by HellFirePvP
- * Date: 06.03.2020 / 21:15
+ * Date: 07.09.2026 / 10:00
  */
 public class AstralItemTagsProvider extends ItemTagsProvider {
 
-    public AstralItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagsProvider, ExistingFileHelper fileHelper) {
-        super(dataGenerator, blockTagsProvider, AstralSorcery.MODID, fileHelper);
+    public AstralItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, ExistingFileHelper existingFileHelper) {
+        super(output, lookupProvider, blockTags, AstralSorcery.MODID, existingFileHelper);
     }
 
     @Override
-    protected void registerTags() {
-        this.tag(ItemTags.LECTERN_BOOKS)
-                .add(ItemsAS.TOME);
+    protected void addTags(HolderLookup.Provider provider) {
+        copy(TagsAS.Blocks.INFUSED_WOOD, TagsAS.Items.INFUSED_WOOD);
+        copy(TagsAS.Blocks.MARBLE, TagsAS.Items.MARBLE);
+        copy(TagsAS.Blocks.SOOTY_MARBLE, TagsAS.Items.SOOTY_MARBLE);
+        tag(TagsAS.Items.GEMS_AQUAMARINE)
+                .add(ItemsAS.AQUAMARINE.asItem());
+        tag(Tags.Items.RAW_MATERIALS)
+                .add(ItemsAS.RAW_STARMETAL.asItem());
 
-        this.tag(CURIOS_NECKLACE)
-                .add(ItemsAS.ENCHANTMENT_AMULET);
+        tag(ItemTags.LECTERN_BOOKS)
+                .add(ItemsAS.TOME.asItem());
 
-        this.tag(FORGE_GEM_AQUAMARINE)
-                .add(ItemsAS.AQUAMARINE);
+        tag(TagsAS.Items.CRYSTAL)
+                .addTag(TagsAS.Items.CELESTIAL_CRYSTAL)
+                .addTag(TagsAS.Items.ATTUNED_CRYSTAL)
+                .add(ItemsAS.ROCK_CRYSTAL.asItem());
+        tag(TagsAS.Items.CELESTIAL_CRYSTAL)
+                .add(ItemsAS.CELESTIAL_CRYSTAL.asItem())
+                .add(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL.asItem());
+        tag(TagsAS.Items.ROCK_CRYSTAL)
+                .add(ItemsAS.ROCK_CRYSTAL.asItem())
+                .add(ItemsAS.ATTUNED_ROCK_CRYSTAL.asItem());
+        tag(TagsAS.Items.ATTUNED_CRYSTAL)
+                .add(ItemsAS.ATTUNED_ROCK_CRYSTAL.asItem())
+                .add(ItemsAS.ATTUNED_CELESTIAL_CRYSTAL.asItem());
 
-        this.tag(COLORED_LENS)
-                .add(ItemsAS.COLORED_LENS_BREAK)
-                .add(ItemsAS.COLORED_LENS_DAMAGE)
-                .add(ItemsAS.COLORED_LENS_FIRE)
-                .add(ItemsAS.COLORED_LENS_GROWTH)
-                .add(ItemsAS.COLORED_LENS_PUSH)
-                .add(ItemsAS.COLORED_LENS_REGENERATION)
-                .add(ItemsAS.COLORED_LENS_SPECTRAL);
-        this.tag(DUSTS_STARDUST)
-                .add(ItemsAS.STARDUST);
-        this.tag(INGOTS_STARMETAL)
-                .add(ItemsAS.STARMETAL_INGOT);
+        tag(TagsAS.Items.FUNCTIONAL_ALTAR_CONSTELLATION_ITEM)
+                .addTag(TagsAS.Items.ATTUNED_CRYSTAL);
+        tag(TagsAS.Items.FUNCTIONAL_ATTUNEABLE_ITEM)
+                .add(ItemsAS.ROCK_CRYSTAL.asItem())
+                .add(ItemsAS.CELESTIAL_CRYSTAL.asItem());
+        tag(TagsAS.Items.FUNCTIONAL_PERKTREE_SOCKETABLE_ITEM)
+                .add(ItemsAS.DYNAMISM_GEM_SKY.asItem())
+                .add(ItemsAS.DYNAMISM_GEM_DAY.asItem())
+                .add(ItemsAS.DYNAMISM_GEM_NIGHT.asItem());
 
-        this.tag(Tags.Items.ORES)
-                .add(BlocksAS.STARMETAL_ORE.asItem())
-                .add(BlocksAS.AQUAMARINE_SAND_ORE.asItem())
-                .add(BlocksAS.ROCK_CRYSTAL_ORE.asItem());
-    }
+        tag(TagsAS.Items.CURIOS_NECKLACE)
+                .add(ItemsAS.ENCHANTMENT_AMULET.asItem());
 
-    private TagsProvider.Builder<Item> tag(ITag.INamedTag<Item> tag) {
-        return this.getOrCreateBuilder(tag);
+        tag(ItemTags.AXES)
+                .add(ItemsAS.CRYSTAL_AXE.asItem())
+                .add(ItemsAS.IRIDESCENT_CRYSTAL_AXE.asItem());
+        tag(ItemTags.PICKAXES)
+                .add(ItemsAS.CRYSTAL_PICKAXE.asItem())
+                .add(ItemsAS.IRIDESCENT_CRYSTAL_PICKAXE.asItem());
+        tag(ItemTags.SHOVELS)
+                .add(ItemsAS.CRYSTAL_SHOVEL.asItem())
+                .add(ItemsAS.IRIDESCENT_CRYSTAL_SHOVEL.asItem());
+        tag(ItemTags.SWORDS)
+                .add(ItemsAS.CRYSTAL_SWORD.asItem())
+                .add(ItemsAS.IRIDESCENT_CRYSTAL_SWORD.asItem());
+
+        tag(Tags.Items.INGOTS)
+                .add(ItemsAS.STARMETAL_INGOT.asItem());
     }
 }

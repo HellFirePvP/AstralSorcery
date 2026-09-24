@@ -1,94 +1,74 @@
-import net.minecraftforge.gradle.common.task.SignJar
-
-buildscript {
-
-    repositories {
-        maven {
-            url = 'https://files.minecraftforge.net/maven'
-        }
-        maven {
-            url "https://repo.spongepowered.org/repository/maven-public/"
-            content { includeGroup "org.spongepowered" }
-        }
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-    }
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
-
-mixin {
-    add sourceSets.main, "astralsorcery.refmap.json"
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.141'
 }
 
-version = '1.16.4-1.14.1'
-group = 'hellfirepvp.astralsorcery'
-archivesBaseName = 'astralsorcery'
-String build_version = ""
+version = mod_version + getGHActionVersionSuffix()
+group = mod_group_id
 
-// Most likely inside Jenkins. Or homebrew environment.
-// I hope you know what you do if it's the latter.
-if (System.getenv("BUILD_NUMBER") != null) {
-    build_version = version + ".v" + System.getenv("BUILD_NUMBER")
+repositories {
+    mavenLocal()
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
-minecraft {
+neoForge {
+    version = project.neo_version
 
-    mappings channel: 'snapshot', version: '20201028-1.16.3'
+    accessTransformers {
+        file('src/main/resources/META-INF/accesstransformer.cfg')
+    }
 
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            workingDirectory project.file('run')
+            client()
+            devLogin = true
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'info'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
 
-            mods {
-                astralsorcery {
-                    source sourceSets.main
-                }
-            }
+        client2 {
+            client()
+
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            programArguments.addAll '--username', 'Dev2'
         }
 
         server {
-            workingDirectory project.file('run')
+            server()
+            //programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'info'
-            mods {
-                astralsorcery {
-                    source sourceSets.main
-                }
-            }
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
         data {
-            workingDirectory project.file('run')
+            data()
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'info'
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
 
-            args '--mod', 'astralsorcery', '--all', '--output', file('src/generated/resources/'), '--validate',
-            '--existing', sourceSets.main.resources.srcDirs[0]
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'mixin.debug.export', 'true'
 
-            mods {
-                astralsorcery {
-                    source sourceSets.main
-                }
-            }
+            logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
         }
     }
 }
@@ -96,138 +76,118 @@ minecraft {
 repositories {
 
     maven {
-        name 'hellfirepvp maven'
+        // ObserverLib
+        name 'HellFirePvP maven'
         url 'https://maven.hellfiredev.net/'
+        content {
+            includeGroup "hellfirepvp.observerlib"
+        }
+    }
+
+    maven {
+        // JEI
+        name 'ModMaven'
+        url 'https://modmaven.dev/'
+        content {
+            includeGroup "mezz.jei"
+        }
     }
 
     maven {
         name 'curios maven'
-        url "https://maven.theillusivec4.top/"
+        url 'https://maven.theillusivec4.top/'
+        content {
+            includeGroup "top.theillusivec4.curios"
+        }
     }
 
     maven {
-        name 'JEI maven'
-        url "https://dvs1.progwml6.com/files/maven"
+        name 'Modrinth Maven - JADE'
+        url "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
     }
-    
-    maven {
-        name 'Botania maven'
-        url "https://maven.blamejared.com"
-    }
-
-    maven {
-        name 'CF maven dankstorage'
-        url "https://www.cursemaven.com"
-    }
-
 }
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.22'
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
-    compileOnly 'hellfirepvp.observerlib:observerlib:1.16.5-1.5.2.v77'
-    runtimeOnly 'hellfirepvp.observerlib:observerlib:1.16.5-1.5.2.v77:deobf'
-
-    compileOnly 'top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.1:api'
-    runtimeOnly fg.deobf('top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.1')
-
-    compileOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.0.99')
-    runtimeOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.0.99')
-
-    compileOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-51:api')
-    runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-51')
-    
-    compileOnly fg.deobf('vazkii.botania:Botania:1.16.5-416:api')
-    runtimeOnly fg.deobf('vazkii.botania:Botania:1.16.5-416')
-    
-    compileOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.0.294')
-    runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.0.294')
-
-    compileOnly fg.deobf("curse.maven:corail-tombstone-243707:3800673")
-    runtimeOnly fg.deobf("curse.maven:corail-tombstone-243707:3800673")
+    implementation "hellfirepvp.observerlib:ObserverLib:${observerlib_version}"
+    implementation "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    implementation "maven.modrinth:jade:${jade_modrinth_version}"
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-}
-java {
-    withSourcesJar()
-}
-
-//Sign jar from flatfile if present
-task signJar(type: SignJar, dependsOn: jar) {
-    onlyIf {
-        project.hasProperty('keyStore')
-    }
-    if (project.hasProperty('keyStore')) {
-        keyStore = project.keyStore
-        alias = project.alias
-        storePass = project.storePass
-        keyPass = project.keyPass
-        inputFile = jar.archivePath
-        outputFile = jar.archivePath
-    } else {
-        logger.warn("No key store found, not signing the output jar\n")
-    }
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [minecraft_version      : minecraft_version,
+                             minecraft_version_range: minecraft_version_range,
+                             neo_version            : neo_version,
+                             neo_version_range      : neo_version_range,
+                             loader_version_range   : loader_version_range,
+                             mod_id                 : mod_id,
+                             mod_name               : mod_name,
+                             mod_license            : mod_license,
+                             mod_version            : mod_version,
+                             mod_authors            : mod_authors,
+                             mod_description        : mod_description]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
 }
 
-build.dependsOn signJar
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
 
-// Example for how to get properties into the manifest for reading by the runtime..
-jar {
-    manifest {
-        attributes([
-            "Specification-Title": "astralsorcery",
-            "Specification-Vendor": "hellfirepvp",
-            "Specification-Version": "1",
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" : "hellfirepvp",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConnector": "hellfirepvp.astralsorcery.MixinConnector"
-        ])
-    }
-}
-
-task srcJar(type: Jar) {
-    from(sourceSets.main.java)
-    classifier = 'sources'
-}
-
-artifacts {
-    archives srcJar
-}
-
+// Example configuration to allow publishing using the maven-publish plugin
 publishing {
-    tasks.publish.dependsOn build
     publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version build_version
+        register('mavenJava', MavenPublication) {
             from components.java
         }
     }
 
     repositories {
         maven {
-            url "file://" + System.getenv("LOCAL_MAVEN")
+            url = System.getenv("MVN_URL")
+            credentials {
+                username = System.getenv("MVN_USER")
+                password = System.getenv("MVN_PASS")
+            }
         }
     }
 }
 
-tasks.withType(GenerateModuleMetadata) {
-    enabled = false
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }
 
-// Minimize/optimize all png files, requires optipng on the PATH
+static def getGHActionVersionSuffix() {
+    if (System.getenv("GITHUB_RUN_NUMBER") != null) {
+        return "." + System.getenv("GITHUB_RUN_NUMBER")
+    }
+    return ".local"
+}
+
+tasks.register('printVersion') {
+    doLast {
+        println("version:" + project.version)
+    }
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
 // Credits: ImmersiveEngineering / and from there: BrainStone
 void minimizePNGFile(File file) {
     long size = file.length()
     exec {
-        executable "optipng"
+        executable "optipng.exe"
         args "-q", "-o7", "-zm1-9", "-strip", "all", file
     }
     long newSize = file.length()
@@ -239,11 +199,9 @@ void minimizePNGFile(File file) {
     }
 }
 
-task optimizePng {
+tasks.register('optimizePng') {
     def pngPatterns = ["**/*.png"]
     doLast {
-        //Ensure the logo is minimized (we add this file to each jar)
-        //Minimize any PNGs in the source sets
         for (dir in sourceSets.main.resources.srcDirs) {
             fileTree(dir: dir, includes: pngPatterns).each { minimizePNGFile(it) }
         }

@@ -1,97 +1,94 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.source.provider.equipment;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
-import hellfirepvp.astralsorcery.common.perk.source.ModifierManager;
+import hellfirepvp.astralsorcery.common.component.IdentifierComponent;
+import hellfirepvp.astralsorcery.common.lib.PerksAS;
 import hellfirepvp.astralsorcery.common.perk.source.ModifierSourceProvider;
-import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
 
-import java.util.Collection;
-import java.util.UUID;
+import java.util.Arrays;
+import java.util.EnumMap;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: EquipmentSourceProvider
  * Created by HellFirePvP
- * Date: 02.04.2020 / 18:56
+ * Date: 07.09.2026 / 10:00
  */
 public class EquipmentSourceProvider extends ModifierSourceProvider<EquipmentModifierSource> {
 
-    static final String KEY_MOD_IDENTIFIER = "modifier_identifier";
+    private static final EnumMap<EquipmentSlot, ResourceLocation> SLOT_IDS = new EnumMap<>(EquipmentSlot.class) {
+        {
+            Arrays.stream(EquipmentSlot.values()).forEach(slot -> this.put(slot, AstralSorcery.key(slot.getName())));
+        }
+    };
 
-    public EquipmentSourceProvider() {
-        super(ModifierManager.EQUIPMENT_PROVIDER_KEY);
+    public static void attachEventListeners(IEventBus bus) {
+        bus.addListener(EquipmentSourceProvider::onEquipmentChange);
+    }
+
+    // update technically also covers this, but this is quicker so it may avoid weird fov jitter
+    private static void onEquipmentChange(LivingEquipmentChangeEvent event) {
+        if (event.getSlot() == EquipmentSlot.OFFHAND) return;
+        if (!(event.getEntity() instanceof ServerPlayer sPlayer)) return;
+        if (event.getEntity().level().isClientSide()) return;
+        EquipmentSourceProvider provider = PerksAS.Sources.EQUIPMENT.get();
+
+        provider.updateSource(sPlayer, event.getSlot(), event.getTo());
     }
 
     @Override
-    protected void update(ServerPlayerEntity playerEntity) {
-        for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-            //Items held in offhand will not provide modifers.
-            if (slot == EquipmentSlotType.OFFHAND) {
-                continue;
-            }
+    protected void update(ServerPlayer playerEntity) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot == EquipmentSlot.OFFHAND) continue;
 
-            ResourceLocation id = AstralSorcery.key("slot_" + slot.getName());
+            this.updateSource(playerEntity, slot, playerEntity.getItemBySlot(slot));
+        }
+    }
 
-            ItemStack stack = playerEntity.getItemStackFromSlot(slot);
-            EquipmentModifierSource slotSource = new EquipmentModifierSource(slot, stack.copy());
-            if (!stack.isEmpty()) {
-                Collection<PerkAttributeModifier> modifiers = slotSource.getModifiers(playerEntity, LogicalSide.SERVER, false);
-                if (!modifiers.isEmpty()) {
-                    CompoundNBT nbt = NBTHelper.getPersistentData(stack);
-                    if (!nbt.hasUniqueId(KEY_MOD_IDENTIFIER)) {
-                        nbt.putUniqueId(KEY_MOD_IDENTIFIER, UUID.randomUUID());
-                    }
-                    updateSource(playerEntity, id, slotSource);
-                } else {
-                    updateSource(playerEntity, id, null);
-                }
+    private void updateSource(ServerPlayer player, EquipmentSlot slot, ItemStack stack) {
+        ItemStack newStack = stack.copy();
+        EquipmentModifierSource slotSource = new EquipmentModifierSource(slot, newStack);
+        if (!newStack.isEmpty()) {
+            if (!slotSource.getModifiers(player, LogicalSide.SERVER, false).isEmpty()) {
+                IdentifierComponent.createIdentifierIfNotExists(stack);
+                this.updateSource(player, SLOT_IDS.get(slot), slotSource);
             } else {
-                updateSource(playerEntity, id, null);
+                this.removeSource(player, SLOT_IDS.get(slot));
             }
+        } else {
+            this.removeSource(player, SLOT_IDS.get(slot));
         }
     }
 
     @Override
-    protected void removeModifiers(ServerPlayerEntity playerEntity) {
-        for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-            if (slot == EquipmentSlotType.OFFHAND) {
-                continue;
-            }
+    protected void removeModifiers(ServerPlayer playerEntity) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot == EquipmentSlot.OFFHAND) continue;
 
-            ResourceLocation id = AstralSorcery.key("slot_" + slot.getName());
-            updateSource(playerEntity, id, null);
+            this.removeSource(playerEntity, SLOT_IDS.get(slot));
         }
     }
 
     @Override
-    public void serialize(EquipmentModifierSource source, PacketBuffer buf) {
-        ByteBufUtils.writeEnumValue(buf, source.slot);
-        ByteBufUtils.writeItemStack(buf, source.itemStack);
+    public StreamCodec<RegistryFriendlyByteBuf, EquipmentModifierSource> getModifierSourceSyncCodec() {
+        return EquipmentModifierSource.STREAM_CODEC;
     }
-
-    @Override
-    public EquipmentModifierSource deserialize(PacketBuffer buf) {
-        EquipmentSlotType type = ByteBufUtils.readEnumValue(buf, EquipmentSlotType.class);
-        ItemStack stack = ByteBufUtils.readItemStack(buf);
-        return new EquipmentModifierSource(type, stack);
-    }
-
 }

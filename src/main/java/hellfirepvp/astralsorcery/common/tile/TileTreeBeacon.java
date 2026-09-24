@@ -1,484 +1,433 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.tile;
 
-import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
-import hellfirepvp.astralsorcery.client.effect.function.VFXMotionController;
-import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
+import com.mojang.datafixers.Products;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.function.FXColorFunction;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
-import hellfirepvp.astralsorcery.common.base.TreeType;
-import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
-import hellfirepvp.astralsorcery.common.base.patreon.types.TypeTreeBeaconColor;
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.constellation.world.DayTimeHelper;
-import hellfirepvp.astralsorcery.common.data.config.base.ConfigEntry;
+import hellfirepvp.astralsorcery.common.config.ConfigEntry;
+import hellfirepvp.astralsorcery.common.visual.type.BlockHarvestDraw;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.ConstellationsAS;
-import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
-import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.play.server.PktPlayEffect;
-import hellfirepvp.astralsorcery.common.tile.base.TileAreaOfInfluence;
-import hellfirepvp.astralsorcery.common.tile.base.network.TileReceiverBase;
-import hellfirepvp.astralsorcery.common.tile.network.StarlightReceiverTreeBeacon;
-import hellfirepvp.astralsorcery.common.util.CalendarUtils;
-import hellfirepvp.astralsorcery.common.util.MapStream;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.block.BlockUtils;
-import hellfirepvp.astralsorcery.common.util.data.ByteBufUtils;
+import hellfirepvp.astralsorcery.common.lib.LumenAS;
+import hellfirepvp.astralsorcery.common.lib.StarlightNetworkNodesAS;
+import hellfirepvp.astralsorcery.common.lib.TileEntitiesAS;
+import hellfirepvp.astralsorcery.common.lib.constants.ColorsAS;
+import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
+import hellfirepvp.astralsorcery.common.lumen.ILumenHandler;
+import hellfirepvp.astralsorcery.common.lumen.Lumen;
+import hellfirepvp.astralsorcery.common.lumen.LumenStack;
+import hellfirepvp.astralsorcery.common.lumen.capability.LumenHandlerView;
+import hellfirepvp.astralsorcery.common.lumen.capability.LumenHandlerViewFactory;
+import hellfirepvp.astralsorcery.common.lumen.capability.LumenStackList;
+import hellfirepvp.astralsorcery.common.lumen.transfer.LumenRequestHelper;
+import hellfirepvp.astralsorcery.common.starlight.api.provider.TransmissionNodeProvider;
+import hellfirepvp.astralsorcery.common.starlight.transmission.StarlightTransmissionPacket;
+import hellfirepvp.astralsorcery.common.tile.base.TileEntityLumenDisplay;
+import hellfirepvp.astralsorcery.common.tile.base.TileEntityNetwork;
+import hellfirepvp.astralsorcery.common.tile.network.ForwardingStarlightReceiverNode;
+import hellfirepvp.astralsorcery.common.tile.network.provider.ForwardingStarlightReceiverNodeProvider;
+import hellfirepvp.astralsorcery.common.util.*;
+import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
+import hellfirepvp.astralsorcery.common.util.data.TileRegistryObject;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.item.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import hellfirepvp.astralsorcery.common.util.level.DayTimeHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.world.SaplingGrowTreeEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.List;
 import java.util.*;
-import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: TileTreeBeacon
  * Created by HellFirePvP
- * Date: 04.09.2020 / 19:57
+ * Date: 07.09.2026 / 10:00
  */
-public class TileTreeBeacon extends TileReceiverBase<StarlightReceiverTreeBeacon> implements TileAreaOfInfluence {
+public class TileTreeBeacon extends TileEntityNetwork<ForwardingStarlightReceiverNode, TileTreeBeacon.Data> implements TileEntityLumenDisplay, ForwardingStarlightReceiverNode.ReceiverTile {
 
-    private final Map<BlockPos, Integer> treeComponents = new HashMap<>();
-    private UUID playerUUID = null;
+    public static final Config CONFIG = new Config();
 
-    private float starlight = 0F;
+    private double registeredGrowHandlerRadius = -1;
 
-    public TileTreeBeacon() {
-        super(TileEntityTypesAS.TREE_BEACON);
+    public TileTreeBeacon(BlockPos pos, BlockState blockState) {
+        this(TileEntitiesAS.TREE_BEACON, pos, blockState);
+    }
+
+    protected TileTreeBeacon(TileRegistryObject<?> type, BlockPos pos, BlockState blockState) {
+        super(type, pos, blockState);
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void serverTick(ServerLevel level) {
+        super.serverTick(level);
 
-        if (this.getWorld().isRemote()) {
-            playEffects();
-        } else {
-            doHarvestCycle();
+        double cfgRange = CONFIG.range.getAsDouble();
+        if (this.registeredGrowHandlerRadius != cfgRange) {
+            this.setupTreeGrowthHandler(level, cfgRange);
+            this.registeredGrowHandlerRadius = cfgRange;
+        }
+
+        this.gatherCycle(level);
+        this.doHavestCycle(level);
+    }
+
+    protected void setupTreeGrowthHandler(ServerLevel level, double radius) {
+        TreeGrowUtil.addHandler(level, this.getBlockPos(), radius, (event, tree) -> {
+            tree.simulateGrowTree(level, event.getRandom()).forEach(snapshot -> {
+                LevelAccessor evLevel = event.getLevel();
+                //Reset blocks we don't capture
+                if (!this.canCaptureBlock(evLevel, snapshot.getPos(), snapshot.getState())) {
+                    evLevel.setBlock(snapshot.getPos(), snapshot.getState(), Block.UPDATE_CLIENTS);
+                    return;
+                }
+                evLevel.setBlock(snapshot.getPos(), BlocksAS.TRANSLUCENT_TREE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+                MiscUtil.getTileAt(evLevel, snapshot.getPos(), TileTranslucentTree.class, true).ifPresent(tile -> {
+                    TileTranslucentTree.Data data = tile.getTileData();
+                    data.setStoredState(snapshot.getState());
+                    data.setTreeBeaconPos(this.getBlockPos());
+                    data.markForUpdate();
+
+                    this.getTileData().addTreeComponent(snapshot.getPos(), this.isLog(snapshot.getState()) ? CONFIG.logWeight.getAsInt() : 1);
+                });
+
+                //Revert if something went wrong
+                if (!MiscUtil.getTileExists(evLevel, snapshot.getPos(), TileTranslucentTree.class, true)) {
+                    evLevel.setBlock(snapshot.getPos(), snapshot.getState(), Block.UPDATE_CLIENTS);
+                }
+            });
+            return true;
+        });
+    }
+
+    private void gatherCycle(ServerLevel level) {
+        if (this.doesSeeSky()) {
+            if (DayTimeHelper.isNight(level)) {
+                float generated = DayTimeHelper.getCurrentDaytimeDistribution(level) * 0.4F;
+                this.getTileData().addStoredStarlight(MiscUtil.roundChanced(generated, rand));
+            }
+        }
+
+        if (this.getTileData().getTicksExisted() % 80 == 0) {
+            Lumen lumen = LumenAS.AEVITAS.get();
+            LumenStack drain = lumen.stack(500);
+            int storedLumen = this.getTileData().getStoredLumen().getLumenStack(lumen).map(LumenStack::getAmount).orElse(0);
+            if (storedLumen <= 500) {
+                LumenRequestHelper.requestRelayed(level, this.getBlockPos(), drain).ifPresent(chain -> {
+                    LumenStack stored = LumenUtil.tryChainTransfer(this.getTileData().getLumenHandler(), level, chain, drain, ILumenHandler.Action.EXECUTE);
+                    if (!stored.isEmpty()) {
+                        chain.playTransferEffect(level, stored.getLumen());
+                    }
+                });
+            }
         }
     }
 
-    private void doHarvestCycle() {
-        boolean changed = this.starlight > 0 || !this.treeComponents.isEmpty();
+    protected void doHavestCycle(ServerLevel level) {
+        int cycles = Math.max(1, MiscUtil.roundChanced(this.getTileData().getStoredStarlight() * 0.75F, rand));
+        this.getTileData().setStoredStarlight(0);
 
-        int cycles = Math.max(1, MathHelper.ceil(this.starlight * 0.8F));
-        this.starlight = 0;
+        float pivotCount = CONFIG.productionPivot.getAsInt();
         for (int i = 0; i < cycles; i++) {
-            float filled = this.treeComponents.size() / Config.CONFIG.maxCount.get().floatValue();
-            if (rand.nextFloat() >= filled * 0.25F) {
-                continue;
-            }
+            int storedCount = this.getTileData().treeComponentWeights.size();
+            float pivotChance = storedCount / pivotCount;
+            if (pivotChance > 1F) pivotChance = 1F / pivotChance;
+            if (rand.nextFloat() >= pivotChance) continue;
 
-            BlockPos pos = MiscUtils.getWeightedRandomEntry(this.treeComponents.keySet(), rand, this.treeComponents::get);
-            if (pos != null) {
-                TileTreeBeaconComponent component = MiscUtils.getTileAt(this.getWorld(), pos, TileTreeBeaconComponent.class, false);
-                if (component != null && harvestTree(component)) {
+            Map<BlockPos, Integer> components = this.getTileData().getTreeComponents();
+            MiscUtil.getWeightedRandomEntry(components.keySet(), rand, components::get).ifPresent(pos -> {
+                MiscUtil.getTileAt(level, pos, TileTranslucentTree.class, false).ifPresent(tile -> {
+                    boolean doEffect = false;
+                    if (rand.nextInt(Math.max(1, CONFIG.harvestChance.getAsInt())) == 0) {
+                        this.doHarvest(level, tile);
+                        doEffect = true;
+                    }
 
-                    int breakChance = Config.CONFIG.breakChance.get();
-                    if (breakChance > 0 && rand.nextInt(breakChance) == 0) {
-                        if (component.removeSelf()) {
-                            this.treeComponents.remove(pos);
+                    if (rand.nextInt(Math.max(1, CONFIG.breakChance.getAsInt())) == 0) {
+                        if (tile.removeBlock(level) && this.getTileData().removeTreeComponent(pos)) {
+                            this.getTileData().markForUpdate();
+                            doEffect = true;
                         }
                     }
 
-                    PktPlayEffect effect = new PktPlayEffect(PktPlayEffect.Type.BLOCK_HARVEST_DRAW)
-                            .addData(buf -> {
-                                ByteBufUtils.writeVector(buf, new Vector3(pos).add(0.5, 0.5, 0.5));
-                                ByteBufUtils.writeVector(buf, new Vector3(this.getPos()).add(0.5, 0.5, 0.5));
-                                buf.writeInt(this.getColor(LogicalSide.SERVER).getRGB());
-                            });
-                    PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(this.getWorld(), this.getPos(), 32));
-                }
-            }
-        }
-
-        if (changed) {
-            this.markForUpdate();
-        }
-    }
-
-    private boolean harvestTree(TileTreeBeaconComponent harvest) {
-        if (rand.nextFloat() > Config.CONFIG.dropChance.get()) {
-            return true;
-        }
-        World world = this.getWorld();
-        if (!(world instanceof ServerWorld)) {
-            return false;
-        }
-        if (!MiscUtils.canEntityTickAt(world, harvest.getPos())) {
-            return false;
-        }
-        List<ItemStack> drops = BlockUtils.getDrops((ServerWorld) world, harvest.getPos(), harvest.getFakedState(), 2, rand, ItemStack.EMPTY);
-        drops.forEach(drop -> {
-            if (drop.isEmpty()) {
-                return;
-            }
-            Vector3 offset = new Vector3(0.5, 0.5, 0.5);
-            MiscUtils.applyRandomOffset(offset, rand, 2F);
-            offset.setY(Math.abs(offset.getY()));
-            Vector3 at = new Vector3(this.getPos()).add(offset);
-            ItemUtils.dropItemNaturally(world, at.getX(), at.getY(), at.getZ(), drop);
-        });
-        return false;
-    }
-
-    public void receiveStarlight(double amount, IWeakConstellation type) {
-        float mul = 1F;
-        if (type.equals(ConstellationsAS.aevitas)) {
-            mul = 1.4F;
-        }
-        this.starlight += Math.sqrt(amount) * mul;
-    }
-
-    private void captureTree(Supplier<List<BlockPos>> treeGenerator) {
-        List<BlockPos> tree = treeGenerator.get();
-        tree.stream()
-                .sorted(Comparator.comparing(pos -> pos.distanceSq(this.getPos())))
-                .filter(pos -> !this.addComponent(pos))
-                .forEach(pos -> {
-                    //Update blocks that didn't get a client notification
-                    world.markAndNotifyBlock(pos, world.getChunkAt(pos), Blocks.AIR.getDefaultState(), world.getBlockState(pos), Constants.BlockFlags.DEFAULT_AND_RERENDER, 512);
+                    if (doEffect) {
+                        BlockHarvestDraw.make(pos, Vector3.atCenter(this.getBlockPos()), ColorsAS.TREE_BEACON_GREEN)
+                                .sendToNearby(level, this.getBlockPos());
+                    }
                 });
+            });
+        }
     }
 
-    private boolean addComponent(BlockPos pos) {
-        if (this.treeComponents.size() >= Config.CONFIG.maxCount.get()) {
-            return false;
-        }
+    protected void doHarvest(ServerLevel level, TileTranslucentTree tile) {
+        BlockState storedState = tile.getTileData().getStoredState();
+        if (storedState.isAir()) return;
 
-        World world = this.getWorld();
-        BlockState state = world.getBlockState(pos);
-        if (!state.isAir(world, pos)) {
-            if (this.getWorld().setBlockState(pos, BlocksAS.TREE_BEACON_COMPONENT.getDefaultState(), Constants.BlockFlags.DEFAULT)) {
-                TileTreeBeaconComponent tfs = MiscUtils.getTileAt(world, pos, TileTreeBeaconComponent.class, true);
-                if (tfs == null) {
-                    this.getWorld().setBlockState(pos, state, Constants.BlockFlags.DEFAULT);
-                    return false;
-                }
+        BlockUtil.getDrops(level, tile.getTileData().getStoredState(), tile.getBlockPos(), 2).forEach(drop -> {
+            BlockPos pos = this.getBlockPos().offset(
+                    Mth.nextInt(rand, -2, 2),
+                    Mth.nextInt(rand, -2, 2) + 2,
+                    Mth.nextInt(rand, -2, 2)
+            );
+            Block.popResource(level, pos, drop);
+        });
+    }
 
-                boolean isLog = state.getBlock().isIn(BlockTags.LOGS);
-                tfs.setFakedState(state);
-                tfs.setTreeBeaconPos(this.getPos());
-                tfs.setOverlayColor(this.getColor(LogicalSide.SERVER));
-                return this.treeComponents.put(pos, isLog ? Config.CONFIG.logWeight.get() : Config.CONFIG.leafWeight.get()) == null;
+    protected boolean canCaptureBlock(LevelAccessor level, BlockPos pos, BlockState state) {
+        if (level.getBlockEntity(pos) != null) return false;
+        return state.is(TagsAS.Blocks.VALID_TREE_BEACON_BLOCK);
+    }
+
+    protected boolean isLog(BlockState state) {
+        return state.is(BlockTags.LOGS);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void clientTick(Level level) {
+        super.clientTick(level);
+
+        boolean hasLumen = this.getTileData().getStoredLumen().getLumenStack(LumenAS.AEVITAS.get()).map(LumenStack::getAmount).orElse(0) > 0;
+        FXColorFunction<?> colorFn = FXColorFunction.constant(ColorsAS.TREE_BEACON_GREEN);
+        float daytimeMultiplier = DayTimeHelper.getCurrentDaytimeDistribution(level);
+        float alpha = 0.1F + (daytimeMultiplier * 0.9F);
+        float markerAlpha = 0.7F + alpha * 0.3F;
+
+        Vector3 thisPos = Vector3.atBottomCenter(this);
+        double radius = CONFIG.range.getAsDouble();
+        int count = MiscUtil.roundChanced(radius * 0.15F, rand);
+        for (int i = 0; i < count; i++) {
+            Vector3 offset = Vector3.random(rand).setY(0).normalize().multiply(radius);
+            Vector3 effectPos = VectorUtil.withRandomOffset(thisPos, rand, 0.3F).add(offset);
+
+
+            float scale = 0.35F + rand.nextFloat() * 0.2F;
+            float gravity = 0.00015F + rand.nextFloat() * 0.0001F;
+            int maxAge = 70 + rand.nextInt(40);
+            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                    .spawn(effectPos)
+                    .setAlpha(markerAlpha)
+                    .color(colorFn)
+                    .setScale(scale)
+                    .setGravity(Vector3.y(gravity))
+                    .setMaxAge(maxAge);
+            if (hasLumen) {
+                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                        .spawn(effectPos)
+                        .setAlpha(alpha)
+                        .color(FXColorFunction.WHITE)
+                        .setScale(scale * 0.4F)
+                        .setGravity(Vector3.y(gravity))
+                        .setMaxAge(maxAge);
             }
         }
-        return false;
-    }
 
-    @OnlyIn(Dist.CLIENT)
-    private void playEffects() {
-        Color color = this.getColor(LogicalSide.CLIENT);
-        VFXColorFunction<?> colorFn = VFXColorFunction.constant(color);
+        int randomCount = MiscUtil.roundChanced(count * 0.4F, rand);
+        for (int i = 0; i < randomCount; i++) {
+            Vector3 offset = Vector3.random(rand).setY(0).normalize().multiply(radius * rand.nextFloat()).add(this.getBlockPos());
 
-        float radius = Config.CONFIG.range.get().floatValue();
-        Vector3 thisPos = new Vector3(this.getPos()).add(0.5, 0.5, 0.5);
-        int amt = MathHelper.floor( radius * Math.PI / 8);
-        for (int i = 0; i < amt; i++) {
-            Vector3 at = MiscUtils.getRandomCirclePosition(thisPos, Vector3.RotAxis.Y_AXIS, radius);
-            MiscUtils.applyRandomOffset(at, rand, 0.35F);
+            float scale = 0.35F + rand.nextFloat() * 0.2F;
+            float gravity = 0.00015F + rand.nextFloat() * 0.0001F;
+            int maxAge = 70 + rand.nextInt(40);
             EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                    .spawn(at)
+                    .spawn(offset)
+                    .setAlpha(alpha)
                     .color(colorFn)
-                    .setGravityStrength(-0.0015F + rand.nextFloat() * -0.001F)
-                    .setScaleMultiplier(0.3F + rand.nextFloat() * 0.1F)
-                    .setMaxAge(30 + rand.nextInt(20));
-        }
-
-        for (int i = 0; i < Math.ceil(amt * 1.5F); i++) {
-            Vector3 offset = new Vector3(0.5, 0.5, 0.5);
-            MiscUtils.applyRandomCircularOffset(offset, rand, radius);
-            offset.setY(offset.getY() * 0.75F);
-            Vector3 at = new Vector3(this.getPos()).add(offset);
-            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                    .spawn(at)
-                    .color(colorFn)
-                    .setGravityStrength(rand.nextBoolean() ? -0.0015F : 0)
-                    .setScaleMultiplier(0.2F + rand.nextFloat() * 0.1F)
-                    .setMaxAge(25 + rand.nextInt(10));
+                    .setScale(scale)
+                    .setGravity(Vector3.y(gravity))
+                    .setMaxAge(maxAge);
+            if (hasLumen) {
+                EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
+                        .spawn(offset)
+                        .setAlpha(alpha)
+                        .color(FXColorFunction.WHITE)
+                        .setScale(scale * 0.4F)
+                        .setGravity(Vector3.y(gravity))
+                        .setMaxAge(maxAge);
+            }
         }
 
         if (rand.nextInt(20) == 0) {
-            float alphaDaytime = DayTimeHelper.getCurrentDaytimeDistribution(getWorld());
-            alphaDaytime *= 0.8F;
-
-            Vector3 at = new Vector3(this).add(0.5, 0.05, 0.5);
-            MiscUtils.applyRandomOffset(at, rand, 0.05F);
-
-            EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
-                    .setOwner(this.playerUUID)
-                    .spawn(at)
-                    .setup(at.clone().addY(7), 1.5F, 1.5F)
-                    .color(colorFn)
-                    .setAlphaMultiplier(0.5F + (0.5F * alphaDaytime))
-                    .setMaxAge(64);
+            Vector3 offset = Vector3.atBottomCenter(this);
+            offset = VectorUtil.withRandomOffset(offset, rand, 0.1F).setY(offset.getY());
+            EffectHelper.of(EffectTemplatesAS.LIGHT_BEAM)
+                    .spawn(offset)
+                    .setup(offset.copy().addY(6 + rand.nextFloat()), 1.2F, 1.2F)
+                    .setAlpha(alpha)
+                    .color(colorFn);
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static void playDrawParticles(PktPlayEffect pkt) {
-        Vector3 from = ByteBufUtils.readVector(pkt.getExtraData());
-        Vector3 to = ByteBufUtils.readVector(pkt.getExtraData());
-        Color c = new Color(pkt.getExtraData().readInt());
+    @Override
+    public void receiveStarlight(ServerLevel sLevel, StarlightTransmissionPacket packet) {
+        int added = MiscUtil.roundChanced(packet.amount(), rand);
+        this.getTileData().addStoredStarlight(added);
+    }
 
-        VFXColorFunction<?> colorFn = VFXColorFunction.constant(c);
-        for (int i = 0; i < 10; i++) {
-            Vector3 at = new Vector3(from.toBlockPos()).add(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
-            EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                    .spawn(at)
-                    .motion(VFXMotionController.target(to::clone, 0.04F + rand.nextFloat() * 0.05F))
-                    .setScaleMultiplier(0.15F + rand.nextFloat() * 0.05F)
-                    .color(rand.nextFloat() > 0.8F ? VFXColorFunction.WHITE : colorFn)
-                    .setMaxAge(30 + rand.nextInt(20));
+    @Override
+    public DeferredHolder<TransmissionNodeProvider<?>, ForwardingStarlightReceiverNodeProvider> getNodeProvider() {
+        return StarlightNetworkNodesAS.FORWARDING_RECEIVER_NODE;
+    }
+
+    @Override
+    public Codec<Data> dataCodec() {
+        return Data.CODEC;
+    }
+
+    @Override
+    public void onTileEntityRemove(Level level, BlockPos pos) {
+        super.onTileEntityRemove(level, pos);
+
+        if (level instanceof ServerLevel sLevel) {
+            TreeGrowUtil.removeHandler(sLevel, pos);
         }
     }
 
-    @Nullable
-    public UUID getPlayerUUID() {
-        return playerUUID;
-    }
+    public static class Data extends TileEntityNetwork.Data {
 
-    public void setPlayerUUID(UUID playerUUID) {
-        this.playerUUID = playerUUID;
-        this.markForUpdate();
-    }
+        public static final int LUMEN_TANK_CAPACITY = 1000;
 
-    public Color getColor(LogicalSide side) {
-        return Optional.ofNullable(this.playerUUID)
-                .flatMap(uuid -> PatreonEffectHelper.getPatreonEffects(side, this.playerUUID).stream()
-                        .filter(effect -> effect instanceof TypeTreeBeaconColor)
-                        .map(effect -> (TypeTreeBeaconColor) effect)
-                        .findFirst())
-                .map(TypeTreeBeaconColor::getTreeBeaconColor)
-                .orElse(CalendarUtils.isAprilFirst() ? Color.getHSBColor(rand.nextFloat(), 1F, 1F) :
-                        ConstellationsAS.aevitas.getConstellationColor());
-    }
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(inst -> treeBeaconFields(inst).apply(inst, Data::new));
 
-    @Nonnull
-    @Override
-    public StarlightReceiverTreeBeacon provideEndpoint(BlockPos at) {
-        return new StarlightReceiverTreeBeacon(at);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Nullable
-    @Override
-    public Color getEffectColor() {
-        return this.getColor(LogicalSide.CLIENT);
-    }
-
-    @Nonnull
-    @Override
-    public Vector3 getEffectPosition() {
-        return new Vector3(this).add(0.5, 0.5, 0.5);
-    }
-
-    @Override
-    public float getRadius() {
-        return Config.CONFIG.range.get().floatValue();
-    }
-
-    @Nonnull
-    @Override
-    public BlockPos getEffectOriginPosition() {
-        return this.getPos();
-    }
-
-    @Nonnull
-    @Override
-    public RegistryKey<World> getDimension() {
-        return this.getWorld().getDimensionKey();
-    }
-
-    @Override
-    public boolean providesEffect() {
-        return !this.isRemoved();
-    }
-
-    @Override
-    public void validate() {
-        super.validate();
-
-        TreeWatcher.WATCHERS.computeIfAbsent(this.getDimension(), type -> new HashSet<>())
-                .add(this.getPos());
-    }
-
-    @Override
-    public void remove() {
-        super.remove();
-
-        TreeWatcher.WATCHERS.computeIfAbsent(this.getDimension(), type -> new HashSet<>())
-                .remove(this.getPos());
-    }
-
-    @Override
-    public void onBreak() {
-        super.onBreak();
-
-        this.treeComponents.keySet().forEach(pos -> {
-            TileTreeBeaconComponent component = MiscUtils.getTileAt(this.getWorld(), pos, TileTreeBeaconComponent.class, true);
-            if (component != null) {
-                component.revert();
-            }
-        });
-        this.treeComponents.clear();
-    }
-
-    @Override
-    public void readCustomNBT(CompoundNBT compound) {
-        super.readCustomNBT(compound);
-
-        this.treeComponents.clear();
-        ListNBT componentList = compound.getList("components", Constants.NBT.TAG_COMPOUND);
-        for (int i = 0; i < componentList.size(); i++) {
-            CompoundNBT tag = componentList.getCompound(i);
-            this.treeComponents.put(NBTHelper.readBlockPosFromNBT(tag), tag.getInt("weight"));
+        protected static <T extends Data> Products.P8<RecordCodecBuilder.Mu<T>, Long, Boolean, Map<BlockPos, Boolean>, Boolean, Map<BlockPos, Integer>, LumenStackList, Integer, Optional<UUID>> treeBeaconFields(RecordCodecBuilder.Instance<T> instance) {
+            return netFields(instance).and(instance.group(
+                    CodecUtil.defaulted(Codec.unboundedMap(CodecUtil.stringBlockPos(), Codec.INT), "treeComponents", HashMap::new, Data::getTreeComponents),
+                    CodecUtil.defaulted(LumenStackList.CODEC, "lumenContents", LumenStackList::create, Data::getStoredLumen),
+                    CodecUtil.defaulted(Codec.INT, "starlightStored", () -> 0, Data::getStoredStarlight),
+                    CodecUtil.optional(CodecUtil.uuidCodec(), "ownerId", Data::getOwnerId)
+            ));
         }
 
-        this.starlight = compound.getFloat("starlight");
+        protected Map<BlockPos, Integer> treeComponentWeights = new HashMap<>();
+        protected LumenStackList storedLumen;
+        protected int storedStarlight;
+        protected UUID ownerId;
 
-        this.playerUUID = NBTHelper.getUUID(compound, "playerUUID", null);
-    }
+        protected Data(long ticksExisted,
+                       boolean hasStructure,
+                       Map<BlockPos, Boolean> skyObstructions,
+                       boolean needsNetworkSync,
+                       Map<BlockPos, Integer> treeComponents,
+                       LumenStackList storedLumen,
+                       int storedStarlight,
+                       Optional<UUID> ownerId) {
+            super(ticksExisted, hasStructure, skyObstructions, needsNetworkSync);
+            this.treeComponentWeights.putAll(treeComponents);
+            this.storedLumen = storedLumen;
+            this.storedStarlight = storedStarlight;
+            this.ownerId = ownerId.orElse(null);
+        }
 
-    @Override
-    public void writeCustomNBT(CompoundNBT compound) {
-        super.writeCustomNBT(compound);
+        public void addTreeComponent(BlockPos pos, int weight) {
+            this.treeComponentWeights.put(pos, weight);
+        }
 
-        ListNBT componentList = new ListNBT();
-        MapStream.forEach(this.treeComponents, (pos, weight) -> {
-            CompoundNBT tag = new CompoundNBT();
-            NBTHelper.writeBlockPosToNBT(pos, tag);
-            tag.putInt("weight", weight);
-            componentList.add(tag);
-        });
-        compound.put("components", componentList);
+        public boolean removeTreeComponent(BlockPos pos) {
+            return this.treeComponentWeights.remove(pos) != null;
+        }
 
-        compound.putFloat("starlight", this.starlight);
+        public Map<BlockPos, Integer> getTreeComponents() {
+            return Collections.unmodifiableMap(this.treeComponentWeights);
+        }
 
-        if (this.playerUUID != null) {
-            compound.putUniqueId("playerUUID", this.playerUUID);
+        protected LumenStackList getStoredLumen() {
+            return this.storedLumen;
+        }
+
+        protected LumenHandlerViewFactory newLumenHandler() {
+            return LumenHandlerViewFactory.builder()
+                    .accessibleSides(Direction.DOWN)
+                    .tankCapacity(lumen -> LUMEN_TANK_CAPACITY)
+                    .extractFilter((toExtract, existing) -> false);
+        }
+
+        public LumenHandlerView getLumenHandler() {
+            return this.newLumenHandler().createTileView(this, this.getStoredLumen());
+        }
+
+        public int getStoredStarlight() {
+            return this.storedStarlight;
+        }
+
+        public void setStoredStarlight(int storedStarlight) {
+            this.storedStarlight = storedStarlight;
+        }
+
+        public void addStoredStarlight(int amount) {
+            int stored = this.getStoredStarlight();
+            this.setStoredStarlight(stored + amount);
+        }
+
+        @Nullable
+        public UUID getOwnerId() {
+            return this.ownerId;
+        }
+
+        public void setOwnerId(UUID ownerId) {
+            this.ownerId = ownerId;
         }
     }
 
     public static class Config extends ConfigEntry {
 
-        public static final Config CONFIG = new Config();
+        private static final double defaultRange           = 12.0;
+        private static final int    defaultProductionPivot = 300;
+        private static final int    defaultHarvestChance   = 15;
+        private static final int    defaultBreakChance     = 800;
+        private static final int    defaultLogWeight       = 2;
 
-        private static final float  defaultRange        = 12;
-        private static final int    defaultMaxCount     = 450;
-        private static final float  defaultDropChance   = 0.15F;
-        private static final int    defaultBreakChance  = 1000;
-        private static final int    defaultLogWeight    = 2;
-        private static final int    defaultLeafWeight   = 1;
-
-        public ForgeConfigSpec.DoubleValue range;
-        public ForgeConfigSpec.IntValue    maxCount;
-        public ForgeConfigSpec.DoubleValue dropChance;
-        public ForgeConfigSpec.IntValue    breakChance;
-        public ForgeConfigSpec.IntValue    logWeight;
-        public ForgeConfigSpec.IntValue    leafWeight;
+        public ModConfigSpec.DoubleValue range;
+        public ModConfigSpec.IntValue    productionPivot;
+        public ModConfigSpec.IntValue    harvestChance;
+        public ModConfigSpec.IntValue    breakChance;
+        public ModConfigSpec.IntValue    logWeight;
 
         private Config() {
             super("tree_beacon");
         }
 
         @Override
-        public void createEntries(ForgeConfigSpec.Builder cfgBuilder) {
+        public void createEntries(ModConfigSpec.Builder cfgBuilder) {
             this.range = cfgBuilder
-                    .comment("Set the radius of the tree beacon.")
+                    .comment("Radius of the tree beacon")
                     .translation(translationKey("range"))
                     .defineInRange("range", defaultRange, 3, 32);
-            this.maxCount = cfgBuilder
-                    .comment("Set the maximum amount of tree-components the tree beacon may allocate.")
-                    .translation(translationKey("maxCount"))
-                    .defineInRange("maxCount", defaultMaxCount, 50, 1500);
-            this.dropChance = cfgBuilder
-                    .comment("Set the chance per harvest-tick for drops to get created.")
-                    .translation(translationKey("dropChance"))
-                    .defineInRange("dropChance", defaultDropChance, 0.001, 1);
+            this.productionPivot = cfgBuilder
+                    .comment("If blocks < pivot, it gets faster the more blocks are stored. If > pivot, it gets slower the more blocks are stored.")
+                    .translation(translationKey("production_pivot"))
+                    .defineInRange("production_pivot", defaultProductionPivot, 100, 2000);
+            this.harvestChance = cfgBuilder
+                    .comment("Chance (1 in x) per tick to harvest/generate drops of one of the block stored")
+                    .translation(translationKey("harvest_chance"))
+                    .defineInRange("harvest_chance", defaultHarvestChance, 2, 500);
             this.breakChance = cfgBuilder
-                    .comment("Set the chance per harvest-tick for the block to get broken (1 in <configured chance>). 0 = blocks never break.")
-                    .translation(translationKey("breakChance"))
-                    .defineInRange("breakChance", defaultBreakChance, 0, Integer.MAX_VALUE);
+                    .comment("Chance (1 in x) per tick to break and remove one of the blocks stored; 0 never breaks blocks.")
+                    .translation(translationKey("break_chance"))
+                    .defineInRange("break_chance", defaultBreakChance, 0, Integer.MAX_VALUE);
             this.logWeight = cfgBuilder
-                    .comment("Set the weight to pick a log-block to harvest instead of a leaf-block, compared to 'leafWeight'.")
-                    .translation(translationKey("logWeight"))
-                    .defineInRange("logWeight", defaultLogWeight, 1, 200);
-            this.leafWeight = cfgBuilder
-                    .comment("Set the weight to pick a leaf-block (strictly speaking, any non-log block) to harvest instead of a log-block, compared to 'logWeight'.")
-                    .translation(translationKey("leafWeight"))
-                    .defineInRange("leafWeight", defaultLeafWeight, 1, 200);
-        }
-    }
-
-    public static class TreeWatcher {
-
-        private static final Map<RegistryKey<World>, Set<BlockPos>> WATCHERS = new HashMap<>();
-
-        public static void clearServerCache() {
-            WATCHERS.clear();
-        }
-
-        public static void onGrow(SaplingGrowTreeEvent event) {
-            if (event.getWorld().isRemote() || !(event.getWorld() instanceof ServerWorld)) {
-                return;
-            }
-
-            ServerWorld world = (ServerWorld) event.getWorld();
-            BlockPos treePos = event.getPos();
-            TreeType type = TreeType.isTree(world, treePos);
-            if (type == null) {
-                return;
-            }
-            double rangeSq = Config.CONFIG.range.get() * Config.CONFIG.range.get();
-            BlockPos closestBeacon = WATCHERS.getOrDefault(world.getDimensionKey(), Collections.emptySet())
-                    .stream()
-                    .filter(pos -> pos.distanceSq(treePos) < rangeSq)
-                    .min(Comparator.comparing(pos -> pos.distanceSq(treePos)))
-                    .orElse(null);
-            if (closestBeacon == null) {
-                return;
-            }
-            TileTreeBeacon ttb = MiscUtils.getTileAt(world, closestBeacon, TileTreeBeacon.class, false);
-            if (ttb == null) {
-                return;
-            }
-
-            event.setResult(Event.Result.DENY);
-
-            Supplier<List<BlockPos>> generator = type.getTreeGenerator(world, treePos, event.getRand());
-            ttb.captureTree(generator);
+                    .comment("Weight multiplier for log blocks when picking a block to harvest. Only applies for newly captured trees after changing this value.")
+                    .translation(translationKey("log_weight"))
+                    .defineInRange("log_weight", defaultLogWeight, 1, 200);
         }
     }
 }

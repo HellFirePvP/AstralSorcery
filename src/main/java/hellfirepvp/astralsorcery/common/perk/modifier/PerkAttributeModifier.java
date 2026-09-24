@@ -1,199 +1,133 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.modifier;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Table;
-import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.perk.PerkConverter;
-import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
-import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.perk.convert.PerkAttributeConverter;
+import hellfirepvp.astralsorcery.common.perk.type.base.ModifierType;
+import hellfirepvp.astralsorcery.common.perk.type.base.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
+import hellfirepvp.astralsorcery.common.util.MutableIdentity;
+import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: PerkAttributeModifier
  * Created by HellFirePvP
- * Date: 08.08.2019 / 17:25
+ * Date: 07.09.2026 / 10:00
  */
-public class PerkAttributeModifier extends ForgeRegistryEntry<PerkAttributeModifier> {
+public class PerkAttributeModifier extends MutableIdentity {
+
+    public static final Codec<PerkAttributeModifier> SERIALIZE_CODEC = RecordCodecBuilder.create(inst -> inst.group(
+            Codec.STRING.fieldOf("identifier").forGetter(PerkAttributeModifier::getIdentifier),
+            PerkAttributeType.CODEC.fieldOf("attribute_type").forGetter(PerkAttributeModifier::getAttributeType),
+            CodecUtil.enumCodec(ModifierType.class).fieldOf("mode").forGetter(PerkAttributeModifier::getMode),
+            Codec.FLOAT.fieldOf("value").forGetter(PerkAttributeModifier::getRawValue)
+    ).apply(inst, PerkAttributeModifier::new));
+    public static final Codec<PerkAttributeModifier> CODEC = CodecUtil.registryOr(RegistriesAS.REGISTRY_PERK_CUSTOM_MODIFIERS, SERIALIZE_CODEC);
 
     private static long counter = 0;
 
-    protected ResourceLocation comparisonKey;
+    protected final Supplier<? extends PerkAttributeType> attributeType;
     protected final ModifierType mode;
-    protected final PerkAttributeType attributeType;
     protected float value;
 
-    //Cannot be converted to anything else.
+    //Can (no longer) be converted via perk converters
     private boolean absolute = false;
 
-    private final Map<PerkConverter, Table<PerkAttributeType, ModifierType, PerkAttributeModifier>> cachedConverters = Maps.newHashMap();
+    public PerkAttributeModifier(PerkAttributeType attributeType, ModifierType mode, float value) {
+        this("perk_modifier_" + counter++, attributeType, mode, value);
+    }
 
-    public PerkAttributeModifier(PerkAttributeType type, ModifierType mode, float value) {
-        Preconditions.checkNotNull(type, "Perk attribute type must not be null!");
-        Preconditions.checkNotNull(mode, "Modifier type must not be null!");
-        this.comparisonKey = AstralSorcery.key("generic_perk_modifier_" + counter++);
-        this.attributeType = type;
+    public PerkAttributeModifier(String identifier, PerkAttributeType attributeType, ModifierType mode, float value) {
+        this(identifier, () -> attributeType, mode, value);
+    }
+
+    protected PerkAttributeModifier(String identifier, Supplier<? extends PerkAttributeType> attributeType, ModifierType mode, float value) {
+        super(identifier);
+        this.attributeType = attributeType;
         this.mode = mode;
         this.value = value;
         this.initModifier();
-    }
-
-    public PerkAttributeModifier(ResourceLocation persistentKey, PerkAttributeType type, ModifierType mode, float value) {
-        this.comparisonKey = persistentKey;
-        this.attributeType = type;
-        this.mode = mode;
-        this.value = value;
-        this.setRegistryName(persistentKey);
-        this.initModifier();
-    }
-
-    public ResourceLocation getComparisonKey() {
-        return comparisonKey;
     }
 
     protected void initModifier() {}
+
+    public final PerkAttributeType getAttributeType() {
+        return this.attributeType.get();
+    }
+
+    public final ModifierType getMode() {
+        return this.mode;
+    }
+
+    /**
+     * Should not be accessed directly unless for internal calculation purposes.
+     * The actual effect of the modifier might depend on the player's AS-data.
+     * See {@link #getValue(Player, PlayerProgress)} for retrieving the actual value
+     */
+    @Deprecated
+    public final float getRawValue() {
+        return this.value;
+    }
+
+    public float getValue(@Nullable Player player, @Nullable PlayerProgress progress) {
+        return this.getRawValue();
+    }
 
     protected void setAbsolute() {
         this.absolute = true;
     }
 
+    public final boolean isAbsolute() {
+        return this.absolute;
+    }
+
     /**
-     * Use this method for PerkConverters returning a new PerkAttributeModifier!
+     * Use this method for PerkConverters returning a new PerkAttributeModifier
+     * Absolute modifiers cannot be converted
      */
     @Nonnull
     public PerkAttributeModifier convertModifier(PerkAttributeType type, ModifierType mode, float value) {
-        if (absolute) {
+        if (this.isAbsolute()) {
             return this;
         }
         PerkAttributeModifier mod = this.createModifier(type, mode, value);
-        mod.comparisonKey = this.comparisonKey;
+        mod.setIdentifier(this.getIdentifier());
         return mod;
     }
 
     /**
-     * Use this method for creating extra Modifiers depending on a given modifier.
+     * Use this method for creating extra Modifiers depending on a given modifier
+     * Caches created modifiers based on converter to avoid creating new unique modifiers
      */
     @Nonnull
-    public PerkAttributeModifier gainAsExtraModifier(PerkConverter converter, PerkAttributeType type, ModifierType mode, float value) {
-        PerkAttributeModifier modifier = getCachedAttributeModifier(converter, type, mode);
+    public PerkAttributeModifier gainAsExtraModifier(PerkAttributeConverter converter, PerkAttributeType type, ModifierType mode, float value) {
+        PerkAttributeModifier modifier = ConvertedModifierCache.getCachedResultModifier(this.getIdentifier(), converter, type, mode);
         if (modifier == null) {
             modifier = this.createModifier(type, mode, value);
             modifier.setAbsolute();
-            addModifierToCache(converter, type, mode, modifier);
+            ConvertedModifierCache.addModifierToCache(this.getIdentifier(), converter, type, mode, modifier);
         }
         return modifier;
-    }
-
-    @Nullable
-    protected PerkAttributeModifier getCachedAttributeModifier(PerkConverter converter, PerkAttributeType type, ModifierType mode) {
-        Table<PerkAttributeType, ModifierType, PerkAttributeModifier> cachedModifiers = cachedConverters.computeIfAbsent(converter, (c) -> HashBasedTable.create());
-        return cachedModifiers.get(type, mode);
-    }
-
-    protected void addModifierToCache(PerkConverter converter, PerkAttributeType type, ModifierType mode, PerkAttributeModifier modifier) {
-        Table<PerkAttributeType, ModifierType, PerkAttributeModifier> cachedModifiers = cachedConverters.computeIfAbsent(converter, (c) -> HashBasedTable.create());
-        cachedModifiers.put(type, mode, modifier);
     }
 
     @Nonnull
     protected PerkAttributeModifier createModifier(PerkAttributeType type, ModifierType mode, float value) {
         return type.createModifier(value, mode);
-    }
-
-    // Should not be accessed directly unless for internal calculation purposes.
-    // The actual effect of the modifier might depend on the player's AS-data.
-    @Deprecated
-    public final float getRawValue() {
-        return value;
-    }
-
-    public float getValue(PlayerEntity player, PlayerProgress progress) {
-        return getRawValue();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public float getValueForDisplay(PlayerEntity player, PlayerProgress progress) {
-        return getValue(player, progress);
-    }
-
-    public ModifierType getMode() {
-        return mode;
-    }
-
-    public PerkAttributeType getAttributeType() {
-        return attributeType;
-    }
-
-    protected String getUnlocalizedAttributeName() {
-        return getAttributeType().getUnlocalizedName();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public boolean hasDisplayString() {
-        return I18n.hasKey(getAttributeType().getUnlocalizedName());
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public String getLocalizedAttributeValue() {
-        return getMode().stringifyValue(getValueForDisplay(Minecraft.getInstance().player, ResearchHelper.getClientProgress()));
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public String getLocalizedModifierName() {
-        return I18n.format(getMode().getUnlocalizedModifierName(getValueForDisplay(Minecraft.getInstance().player, ResearchHelper.getClientProgress())));
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public String getAttributeDisplayFormat() {
-        return I18n.format("perk.modifier.astralsorcery.format");
-    }
-
-    @Nullable
-    @OnlyIn(Dist.CLIENT)
-    public String getLocalizedDisplayString() {
-        if (!hasDisplayString()) {
-            return null;
-        }
-        return String.format(getAttributeDisplayFormat(),
-                getLocalizedAttributeValue(),
-                getLocalizedModifierName(),
-                I18n.format(getUnlocalizedAttributeName()));
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PerkAttributeModifier that = (PerkAttributeModifier) o;
-        return this.comparisonKey.equals(that.comparisonKey);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(this.comparisonKey);
     }
 }

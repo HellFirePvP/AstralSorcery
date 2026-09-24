@@ -1,72 +1,165 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.client.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
-import hellfirepvp.astralsorcery.client.screen.base.WidthHeightScreen;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderingConstellationUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingGuiUtils;
-import hellfirepvp.astralsorcery.common.base.MoonPhase;
-import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.constellation.SkyHandler;
-import hellfirepvp.astralsorcery.common.constellation.world.WorldContext;
-import hellfirepvp.astralsorcery.common.lib.ColorsAS;
+import hellfirepvp.astralsorcery.client.resource.AbstractRenderTexture;
+import hellfirepvp.astralsorcery.client.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.resource.AssetLocation;
+import hellfirepvp.astralsorcery.client.screen.base.FixedSizeScreen;
+import hellfirepvp.astralsorcery.client.sound.PlayableSoundInstance;
+import hellfirepvp.astralsorcery.client.util.*;
+import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
+import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
+import hellfirepvp.astralsorcery.common.constellation.level.LevelSkyHandler;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
-import hellfirepvp.astralsorcery.common.util.sound.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.ColorUtil;
+import hellfirepvp.astralsorcery.common.util.data.ColorWrapper;
+import net.minecraft.client.GameNarrator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextProperties;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import org.apache.commons.lang3.stream.Streams;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: ScreenConstellationPaper
  * Created by HellFirePvP
- * Date: 02.08.2019 / 20:32
+ * Date: 07.09.2026 / 10:00
  */
-public class ScreenConstellationPaper extends WidthHeightScreen {
+public class ScreenConstellationPaper extends FixedSizeScreen {
 
-    private final IConstellation constellation;
-    private List<MoonPhase> phases = null;
+    private final BaseConstellation constellation;
+    private final ColorWrapper color;
+    private List<MoonPhase> activePhases = null;
 
-    public ScreenConstellationPaper(IConstellation cst) {
-        super(cst.getConstellationName(), 344, 275);
-        this.constellation = cst;
-        resolvePhases();
+    public ScreenConstellationPaper(BaseConstellation constellation) {
+        super(GameNarrator.NO_TITLE, 274, 235);
+        this.constellation = constellation;
+        this.color = ColorUtil.blendColors(this.constellation.getConstellationColor(), ColorWrapper.opaque(0x4D4D4D), 0.2F);
+        this.resolvePhases();
     }
 
     private void resolvePhases() {
-        WorldContext ctx = SkyHandler.getContext(Minecraft.getInstance().world, LogicalSide.CLIENT);
-        if (ctx != null) {
-            phases = new ArrayList<>();
-            for (MoonPhase phase : MoonPhase.values()) {
-                if (ctx.getConstellationHandler().isActiveInPhase(this.constellation, phase)) {
-                    phases.add(phase);
-                }
-            }
-        }
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return;
+
+        LevelSkyHandler.getContext(level).ifPresent(ctx -> {
+            this.activePhases = new ArrayList<>();
+            this.activePhases.addAll(ctx.getConstellationHandler().getActiveIndexedPhases(this.constellation));
+
+        });
     }
 
     @Override
-    public void onClose() {
-        super.onClose();
-        SoundHelper.playSoundClient(SoundsAS.GUI_JOURNAL_CLOSE, 1F, 1F);
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {}
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        this.renderTransparentBackground(guiGraphics);
+
+        RenderingDrawUtil.drawTexturedRect(guiGraphics.pose(), TexturesAS.SCREEN_CONSTELLATION_PAPER, this.getScreenRectangle());
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+
+        PoseStack pose = guiGraphics.pose();
+        pose.pushPose();
+        pose.translate(this.getScreenLeft(), this.getScreenTop(), 0);
+
+        this.drawHeadline(guiGraphics);
+        this.drawConstellation(guiGraphics);
+        this.drawPhases(guiGraphics);
+
+        pose.popPose();
+    }
+
+    private void drawHeadline(GuiGraphics graphics) {
+        Component name = this.constellation.getName();
+        float scale = 2F;
+        float length = this.font.width(name) * scale;
+
+        PoseStack pose = graphics.pose();
+        pose.pushPose();
+        pose.translate(this.getScreenWidth() / 2F - length / 2F, 20, 0);
+        pose.scale(scale, scale, 1F);
+        graphics.drawString(this.font, name, 0, 0, this.color.getColor(), false);
+        pose.popPose();
+    }
+
+    private void drawConstellation(GuiGraphics graphics) {
+        RenderSystem.enableBlend();
+        Blending.DEFAULT.apply();
+
+        RenderConstellationUtil.drawConstellationUI(
+                this.color,
+                this.constellation,
+                graphics.pose(),
+                this.getScreenWidth() / 2F - 122 / 2F, 66,
+                122, 122,
+                3F,
+                () -> 0.8F,
+                true,
+                false);
+
+        RenderSystem.disableBlend();
+    }
+
+    private void drawPhases(GuiGraphics graphics) {
+        if (this.activePhases == null) this.resolvePhases();
+        if (this.activePhases == null) return;
+
+        if (this.activePhases.isEmpty()) {
+            PoseStack pose = graphics.pose();
+            pose.pushPose();
+
+            Component cmp = Component.translatable("constellation.astralsorcery.phases.unknown");
+            float scale = 16F / 9F;
+            float length = this.font.width(cmp) * scale;
+            pose.translate(this.getScreenWidth() / 2F - length / 2F, 203, 0);
+            pose.scale(scale, scale, 1F);
+
+            graphics.drawString(this.font, cmp,
+                    0, 0,
+                    0xFF4D4D4D, false);
+
+            pose.popPose();
+        } else {
+            int spriteSize = 16;
+
+            int offsetX = (this.getScreenWidth() / 2) - (this.activePhases.size() * (spriteSize + 2)) / 2;
+            int offsetY = 202;
+
+            RenderSystem.enableBlend();
+            Blending.DEFAULT.apply();
+
+            for (int i = 0; i < this.activePhases.size(); i++) {
+                MoonPhase phase = this.activePhases.get(i);
+                phase.getAssetQuery().resolve().bindTexture();
+
+                int renderOffsetX = offsetX + (i * (spriteSize + 2));
+                RenderUtil.draw(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR, GameRenderer::getPositionTexColorShader, buf -> {
+                    RenderQuadUtil.rect(buf, graphics.pose(), renderOffsetX, offsetY, spriteSize, spriteSize)
+                            .draw();
+                });
+            }
+
+            RenderSystem.disableBlend();
+        }
     }
 
     @Override
@@ -80,63 +173,8 @@ public class ScreenConstellationPaper extends WidthHeightScreen {
     }
 
     @Override
-    public void render(MatrixStack renderStack, int mouseX, int mouseY, float pTicks) {
-        RenderSystem.enableDepthTest();
-        drawWHRect(renderStack, TexturesAS.TEX_GUI_CONSTELLATION_PAPER);
-        drawHeader(renderStack);
-        drawConstellation(renderStack);
-        drawPhaseInformation(renderStack);
-    }
-
-    private void drawHeader(MatrixStack renderStack) {
-        IFormattableTextComponent name = this.constellation.getConstellationName();
-        float length = font.getStringPropertyWidth(name) * 1.8F;
-        double offsetLeft = (width >> 1) - (length / 2);
-        int offsetTop = guiTop + 45;
-
-        renderStack.push();
-        renderStack.translate(offsetLeft + 2, offsetTop, this.getGuiZLevel());
-        renderStack.scale(1.8F, 1.8F, 1F);
-        RenderingDrawUtils.renderStringAt(name, renderStack, font, 0xAA4D4D4D, false);
-        renderStack.pop();
-    }
-
-    private void drawConstellation(MatrixStack renderStack) {
-        RenderSystem.enableBlend();
-        Blending.DEFAULT.apply();
-
-        RenderingConstellationUtils.renderConstellationIntoGUI(ColorsAS.CONSTELLATION_TYPE_BLANK,
-                constellation, renderStack,
-                width / 2F - 145 / 2F, guiTop + 84,
-                this.getGuiZLevel(),
-                145, 145, 2F, () -> 0.5F,
-                true, false);
-
-        RenderSystem.disableBlend();
-    }
-
-    private void drawPhaseInformation(MatrixStack renderStack) {
-        if (this.phases == null) {
-            this.resolvePhases();
-        }
-
-        List<MoonPhase> phases = this.phases == null ? Collections.emptyList() : this.phases;
-        if (phases.isEmpty()) {
-            ITextProperties text = new TranslationTextComponent("astralsorcery.journal.constellation.unknown");
-            RenderingDrawUtils.renderStringCentered(Minecraft.getInstance().fontRenderer, renderStack,
-                    text, guiLeft + guiWidth / 2 + 25, guiTop + 239,
-                    1.8F, 0xAA4D4D4D);
-        } else {
-            int size = 16;
-            int offsetX = (width / 2) - (phases.size() * (size + 2)) / 2;
-            int offsetY = guiTop + 237;
-            for (int i = 0; i < phases.size(); i++) {
-                phases.get(i).getTexture().bindTexture();
-                RenderSystem.enableBlend();
-                Blending.DEFAULT.apply();
-                RenderingGuiUtils.drawRect(renderStack, offsetX + (i * (size + 2)), offsetY, this.getGuiZLevel(), size, size);
-                RenderSystem.disableBlend();
-            }
-        }
+    public void removed() {
+        super.removed();
+        PlayableSoundInstance.of(SoundsAS.SCREEN_TOME_CLOSE).forUI().play();
     }
 }

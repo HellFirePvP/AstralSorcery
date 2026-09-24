@@ -1,54 +1,59 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.client.render.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import hellfirepvp.astralsorcery.client.ClientScheduler;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import hellfirepvp.astralsorcery.client.ClientProxy;
+import hellfirepvp.astralsorcery.client.lib.RenderTypesAS;
 import hellfirepvp.astralsorcery.client.lib.SpritesAS;
-import hellfirepvp.astralsorcery.client.lib.TexturesAS;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderingDrawUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.RenderingVectorUtils;
-import hellfirepvp.astralsorcery.common.entity.technical.EntityGrapplingHook;
+import hellfirepvp.astralsorcery.client.resource.SpriteSheet;
+import hellfirepvp.astralsorcery.client.resource.UVFrame;
+import hellfirepvp.astralsorcery.client.util.RenderUtil;
+import hellfirepvp.astralsorcery.client.util.RenderVectorUtil;
+import hellfirepvp.astralsorcery.client.util.RenderingDrawUtil;
+import hellfirepvp.astralsorcery.common.entity.EntityGrapplingHook;
+import hellfirepvp.astralsorcery.common.lib.constants.ColorsAS;
+import hellfirepvp.astralsorcery.common.util.data.ColorWrapper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import hellfirepvp.observerlib.client.util.LightmapUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.inventory.InventoryMenu;
+import org.joml.Quaternionf;
 
 import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: RenderEntityGrapplingHook
  * Created by HellFirePvP
- * Date: 29.02.2020 / 20:04
+ * Date: 07.09.2026 / 10:00
  */
 public class RenderEntityGrapplingHook extends EntityRenderer<EntityGrapplingHook> {
 
-    protected RenderEntityGrapplingHook(EntityRendererManager renderManager) {
-        super(renderManager);
+    public RenderEntityGrapplingHook(EntityRendererProvider.Context context) {
+        super(context);
     }
 
     @Override
-    public void render(EntityGrapplingHook entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+    public void render(EntityGrapplingHook entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         int alphaMultiplier;
         if (entity.isDespawning()) {
-            alphaMultiplier = MathHelper.clamp(127 - ((int) (entity.despawnPercentage(partialTicks) * 255F)), 0, 255);
+            float alphaPart = 1F - entity.despawnPercentage(partialTick) * 2;
+            alphaMultiplier = Mth.clamp((int) (alphaPart * 255F), 0, 255);
         } else {
             alphaMultiplier = 255;
         }
@@ -56,55 +61,30 @@ public class RenderEntityGrapplingHook extends EntityRenderer<EntityGrapplingHoo
             return;
         }
 
-        Vector3 entityPos = RenderingVectorUtils.interpolatePosition(entity, partialTicks);
-        List<Vector3> line = entity.buildLine(partialTicks);
+        List<Vector3> line = entity.buildLine(partialTick);
+        //List<Vector3> lineStars = entity.buildLine(partialTick, -0.02F);
+        SpriteSheet spr = SpritesAS.SPRITE_GRAPPLING_HOOK;
+        Quaternionf facing = new Quaternionf();
+        facing.set(Minecraft.getInstance().gameRenderer.getMainCamera().rotation());
 
-        RenderSystem.disableAlphaTest();
-        RenderSystem.enableBlend();
-        Blending.DEFAULT.apply();
-        RenderSystem.disableCull();
+        VertexConsumer buf = bufferSource.getBuffer(RenderTypesAS.ENTITY_GRAPPLING_HOOK);
+        RenderingDrawUtil.renderFacingQuadPosed(buf, poseStack, facing, new Vector3(),
+                ColorWrapper.WHITE.copyWithAlpha(alphaMultiplier), 1F, LightmapUtil.getPackedFullbrightCoords(),
+                spr.getUV(ClientProxy.getClientTick() + entity.tickCount));
 
-        //Main grappling hook sprite
-        SpritesAS.SPR_GRAPPLING_HOOK.bindTexture();
-
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            RenderingDrawUtils.renderFacingSpriteVB(buf, matrixStack,
-                    entityPos.getX(), entityPos.getY(), entityPos.getZ(),
-                    1.3F, 0F,
-                    SpritesAS.SPR_GRAPPLING_HOOK, ClientScheduler.getClientTick() + entity.ticksExisted,
-                    255, 255, 255, alphaMultiplier);
+        VertexConsumer lineBuf = bufferSource.getBuffer(RenderTypesAS.ENTITY_GRAPPLING_HOOK_LINE);
+        int lineAlpha = (int) (alphaMultiplier * 0.8F);
+        line.forEach(pos -> {
+            RenderingDrawUtil.renderFacingQuadPosed(lineBuf, poseStack, facing, pos,
+                    ColorsAS.ENTITY_GRAPPLING_HOOK_LINE.copyWithAlpha(lineAlpha), 0.4F, LightmapUtil.getPackedFullbrightCoords(),
+                    UVFrame.FULL);
         });
 
-        //Small line of particles
-        TexturesAS.TEX_PARTICLE_LARGE.bindTexture();
-        Blending.ADDITIVE_ALPHA.apply();
-
-        RenderingUtils.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR_TEX, buf -> {
-            for (Vector3 pos : line) {
-                Vector3 at = pos.multiply(2).add(entityPos);
-                RenderingDrawUtils.renderFacingFullQuadVB(buf, matrixStack,
-                        at.getX(), at.getY(), at.getZ(),
-                        0.3F, 0F,
-                        50, 40, 180, (int) (alphaMultiplier * 0.8F));
-            }
-        });
-
-        RenderSystem.enableCull();
-        Blending.DEFAULT.apply();
-        RenderSystem.disableBlend();
-        RenderSystem.enableAlphaTest();
+        RenderUtil.finishDrawing(bufferSource);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityGrapplingHook entity) {
-        return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
-    }
-
-    public static class Factory implements IRenderFactory<EntityGrapplingHook> {
-
-        @Override
-        public EntityRenderer<? super EntityGrapplingHook> createRenderFor(EntityRendererManager manager) {
-            return new RenderEntityGrapplingHook(manager);
-        }
+    public ResourceLocation getTextureLocation(EntityGrapplingHook entity) {
+        return InventoryMenu.BLOCK_ATLAS;
     }
 }

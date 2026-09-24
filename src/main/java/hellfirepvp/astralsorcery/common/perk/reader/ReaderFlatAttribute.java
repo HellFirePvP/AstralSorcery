@@ -1,84 +1,59 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.reader;
 
-import hellfirepvp.astralsorcery.common.data.research.ResearchHelper;
-import hellfirepvp.astralsorcery.common.event.AttributeEvent;
-import hellfirepvp.astralsorcery.common.perk.PerkAttributeLimiter;
 import hellfirepvp.astralsorcery.common.perk.PerkAttributeMap;
-import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
-import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.LogicalSide;
-import org.apache.commons.lang3.tuple.Pair;
+import hellfirepvp.astralsorcery.common.perk.type.base.ModifierType;
+import hellfirepvp.astralsorcery.common.perk.type.base.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.util.MiscUtil;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.fml.LogicalSide;
+
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: ReaderFlatAttribute
  * Created by HellFirePvP
- * Date: 25.08.2019 / 17:49
+ * Date: 07.09.2026 / 10:00
  */
-public class ReaderFlatAttribute extends PerkAttributeReader {
+public class ReaderFlatAttribute extends PerkAttributeTypeReader {
 
     private final double defaultValue;
     private boolean formatAsDecimal = false;
 
-    public ReaderFlatAttribute(PerkAttributeType type, double defaultValue) {
+    public ReaderFlatAttribute(Supplier<? extends PerkAttributeType> type, double defaultValue) {
         super(type);
         this.defaultValue = defaultValue;
     }
 
+    public static Function<Supplier<? extends PerkAttributeType>, ReaderFlatAttribute> withDefault(double defaultValue) {
+        return type -> new ReaderFlatAttribute(type, defaultValue);
+    }
+
     public <T extends ReaderFlatAttribute> T formatAsDecimal() {
         this.formatAsDecimal = true;
-        return (T) this;
+        return MiscUtil.cast(this);
     }
 
     @Override
-    public double getDefaultValue(PerkAttributeMap statMap, PlayerEntity player, LogicalSide side) {
+    public double getDefaultValue(PerkAttributeMap statMap, Player player, LogicalSide side) {
         return this.defaultValue;
     }
 
     @Override
-    public double getModifierValueForMode(PerkAttributeMap statMap, PlayerEntity player, LogicalSide side, ModifierType mode) {
-        return statMap.getModifier(player, ResearchHelper.getProgress(player, side), this.getType(), mode);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public PerkStatistic getStatistics(PerkAttributeMap statMap, PlayerEntity player) {
-        String limitStr = "";
-        Double limit = null;
-        if (PerkAttributeLimiter.hasLimit(this.getType())) {
-            Pair<Double, Double> limits = PerkAttributeLimiter.getLimit(this.getType());
-            limit = limits.getRight();
-            limitStr = I18n.format("perk.reader.astralsorcery.limit.default", MathHelper.floor(limit));
-        }
-
-        double value = statMap.modifyValue(player, ResearchHelper.getProgress(player, LogicalSide.CLIENT),
-                this.getType(), (float) this.getDefaultValue(statMap, player, LogicalSide.CLIENT));
-
-        String postProcess = "";
-        double post = AttributeEvent.postProcessModded(player, this.getType(), value);
-        if (Math.abs(value - post) > 1E-4 &&
-                (limit == null || Math.abs(post - limit) > 1E-4)) {
-            if (Math.abs(post) >= 1E-4) {
-                postProcess = I18n.format("perk.reader.astralsorcery.postprocess.default", formatForDisplay(post));
-            }
-            value = post;
-        }
-
-        return new PerkStatistic(this.getType(), formatForDisplay(value), limitStr, postProcess);
+    public double getModifierValueForMode(PerkAttributeMap statMap, Player player, LogicalSide side, ModifierType mode) {
+        return statMap.getModifier(player, ResearchManager.getProgress(player, side), this.getType(), mode);
     }
 
     protected String formatForDisplay(double value) {
@@ -86,7 +61,7 @@ public class ReaderFlatAttribute extends PerkAttributeReader {
         if (this.formatAsDecimal) {
             valueStr = formatDecimal(value);
         } else {
-            valueStr = String.valueOf(MathHelper.floor(value));
+            valueStr = String.valueOf(Mth.floor(value));
         }
 
         return (value >= 0 ? "+" : "") + valueStr;

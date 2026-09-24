@@ -1,40 +1,60 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.util.data;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
-import java.util.Random;
 import java.util.function.Consumer;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: Vector3
  * Created by HellFirePvP
- * Date: 17.11.2015 / 18:40
+ * Date: 07.09.2026 / 10:00
  */
 public class Vector3 {
 
-    private static final Random RAND = new Random();
+    public static final MapCodec<Vector3> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            Codec.DOUBLE.fieldOf("x").forGetter(Vector3::getX),
+            Codec.DOUBLE.fieldOf("y").forGetter(Vector3::getY),
+            Codec.DOUBLE.fieldOf("z").forGetter(Vector3::getZ)
+    ).apply(inst, Vector3::new));
+    public static final Codec<Vector3> CODEC = MAP_CODEC.codec();
+    public static final StreamCodec<ByteBuf, Vector3> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.DOUBLE,
+            Vector3::getX,
+            ByteBufCodecs.DOUBLE,
+            Vector3::getY,
+            ByteBufCodecs.DOUBLE,
+            Vector3::getZ,
+            Vector3::new);
 
     protected double x;
     protected double y;
@@ -70,55 +90,97 @@ public class Vector3 {
         this.z = z;
     }
 
-    public Vector3(Vector3i pos) {
+    public Vector3(Vec3i pos) {
         this(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    public Vector3(Vector3d vec) {
+    public Vector3(Vec3 vec) {
         this(vec.x, vec.y, vec.z);
     }
 
-    public Vector3(TileEntity te) {
-        this(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
+    public Vector3(Vector3f vec) {
+        this(vec.x(), vec.y(), vec.z());
     }
 
-    public static Vector3 atEntityCorner(Entity entity) {
-        return new Vector3(entity.getPositionVec());
+    public Vector3(BlockEntity te) {
+        this(te.getBlockPos());
     }
 
-    @Deprecated
-    public static Vector3 atEntityCenter(Entity entity) {
-        return atEntityCorner(entity).addY(entity.getHeight() / 2F);
+    public Vector3(Entity entity) {
+        this(entity.position());
     }
 
-    public static Vector3 getMin(AxisAlignedBB box) {
+    public static Vector3 x(double x) {
+        return new Vector3(x, 0, 0);
+    }
+
+    public static Vector3 y(double y) {
+        return new Vector3(0, y, 0);
+    }
+
+    public static Vector3 z(double z) {
+        return new Vector3(0, 0, z);
+    }
+
+    public static Vector3 getMin(AABB box) {
         return new Vector3(box.minX, box.minY, box.minZ);
     }
 
-    public static Vector3 getMax(AxisAlignedBB box) {
+    public static Vector3 getMax(AABB box) {
         return new Vector3(box.maxX, box.maxY, box.maxZ);
+    }
+
+    public static Vector3 atCenter(Vec3i pos) {
+        return new Vector3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+    }
+
+    public static Vector3 atCenter(BlockEntity entity) {
+        return atCenter(entity.getBlockPos());
+    }
+
+    public static Vector3 atCenter(Entity entity) {
+        return new Vector3(entity).addY(entity.getBbHeight() / 2F);
+    }
+
+    public static Vector3 atEntityEyes(Entity entity) {
+        return new Vector3(entity).addY(entity.getEyeHeight());
+    }
+
+    public static Vector3 atBottomCenter(Vec3i pos) {
+        return new Vector3(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+    }
+
+    public static Vector3 atBottomCenter(BlockEntity entity) {
+        return atBottomCenter(entity.getBlockPos());
+    }
+
+    public static Vector3 randomInAABB(AABB box, RandomSource rand) {
+        return new Vector3(
+                box.minX + (rand.nextDouble() * (box.maxX - box.minX)),
+                box.minY + (rand.nextDouble() * (box.maxY - box.minY)),
+                box.minZ + (rand.nextDouble() * (box.maxZ - box.minZ)));
     }
 
     public static Vector3 directionFromYawPitch(float yaw, float pitch) {
         float radYaw   = yaw   * 0.017453292F;/* / 180F * Math.PI; */
         float radPitch = pitch * 0.017453292F;/* / 180F * Math.PI; */
-        float x = -MathHelper.sin(radYaw) * MathHelper.cos(radPitch);
-        float y = -MathHelper.sin(radPitch);
-        float z = MathHelper.cos(radYaw) * MathHelper.cos(radPitch);
+        float x = -Mth.sin(radYaw) * Mth.cos(radPitch);
+        float y = -Mth.sin(radPitch);
+        float z = Mth.cos(radYaw) * Mth.cos(radPitch);
         return new Vector3(x, y, z);
     }
 
-    public Vector3 add(Vector3i vec) {
+    public Vector3 add(Vec3i vec) {
         this.x += vec.getX();
         this.y += vec.getY();
         this.z += vec.getZ();
         return this;
     }
 
-    public Vector3 add(Vector3d vec) {
-        this.x += vec.getX();
-        this.y += vec.getY();
-        this.z += vec.getZ();
+    public Vector3 add(Vec3 vec) {
+        this.x += vec.x();
+        this.y += vec.y();
+        this.z += vec.z();
         return this;
     }
 
@@ -166,23 +228,23 @@ public class Vector3 {
     }
 
     public Vector3 subtract(Entity e) {
-        this.x -= e.getPosX();
-        this.y -= e.getPosY();
-        this.z -= e.getPosZ();
+        this.x -= e.getX();
+        this.y -= e.getY();
+        this.z -= e.getZ();
         return this;
     }
 
-    public Vector3 subtract(Vector3i vec) {
+    public Vector3 subtract(Vec3i vec) {
         this.x -= vec.getX();
         this.y -= vec.getY();
         this.z -= vec.getZ();
         return this;
     }
 
-    public Vector3 subtract(Vector3d vec) {
-        this.x -= vec.getX();
-        this.y -= vec.getY();
-        this.z -= vec.getZ();
+    public Vector3 subtract(Vec3 vec) {
+        this.x -= vec.x();
+        this.y -= vec.y();
+        this.z -= vec.z();
         return this;
     }
 
@@ -238,7 +300,7 @@ public class Vector3 {
     }
 
     public double distanceSquared(Entity e) {
-        return distanceSquared(Vector3.atEntityCorner(e));
+        return distanceSquared(new Vector3(e));
     }
 
     public double distance(Vector3 o) {
@@ -252,22 +314,22 @@ public class Vector3 {
         return difX * difX + difY * difY + difZ * difZ;
     }
 
-    public double distance(Vector3i o) {
+    public double distance(Vec3i o) {
         return Math.sqrt(distanceSquared(o));
     }
 
-    public double distanceSquared(Vector3i o) {
+    public double distanceSquared(Vec3i o) {
         double difX = x - o.getX();
         double difY = y - o.getY();
         double difZ = z - o.getZ();
         return difX * difX + difY * difY + difZ * difZ;
     }
 
-    public double distance(Vector3d o) {
+    public double distance(Vec3 o) {
         return Math.sqrt(distanceSquared(o));
     }
 
-    public double distanceSquared(Vector3d o) {
+    public double distanceSquared(Vec3 o) {
         double difX = x - o.x;
         double difY = y - o.y;
         double difZ = z - o.z;
@@ -366,8 +428,18 @@ public class Vector3 {
     }
 
     //In rad's
+    public Vector3 rotate(double angle, RotAxis axis) {
+        Quat.buildQuatFrom3DVector(axis.getVector().normalize(), angle).rotateWithMagnitude(this);
+        return this;
+    }
+
     public Vector3 rotate(double angle, Vector3 axis) {
-        Quat.buildQuatFrom3DVector(axis.clone().normalize(), angle).rotateWithMagnitude(this);
+        Quat.buildQuatFrom3DVector(axis.copy().normalize(), angle).rotateWithMagnitude(this);
+        return this;
+    }
+
+    public Vector3 rotate(Quaternionf quat) {
+        Quat.of(quat).rotateWithMagnitude(this);
         return this;
     }
 
@@ -417,28 +489,15 @@ public class Vector3 {
         return new Vector3(buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
-    public static Vector3 random() {
-        return new Vector3(RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1), RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1), RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1));
-    }
-
-    public static Vector3 random(Random rand) {
+    public static Vector3 random(RandomSource rand) {
         return new Vector3(rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), rand.nextDouble() * (rand.nextBoolean() ? 1 : -1));
     }
 
-    public static Vector3 positiveRandom() {
-        return new Vector3(RAND.nextDouble(), RAND.nextDouble(), RAND.nextDouble());
-    }
-
-    public static Vector3 positiveRandom(Random rand) {
+    public static Vector3 positiveRandom(RandomSource rand) {
         return new Vector3(rand.nextDouble(), rand.nextDouble(), rand.nextDouble());
     }
 
-    public static Vector3 positiveYRandom() {
-        Vector3 rand = random();
-        return rand.setY(Math.abs(rand.getY()));
-    }
-
-    public static Vector3 positiveYRandom(Random r) {
+    public static Vector3 positiveYRandom(RandomSource r) {
         Vector3 rand = random(r);
         return rand.setY(Math.abs(rand.getY()));
     }
@@ -454,16 +513,16 @@ public class Vector3 {
         return (difX * difX + difY * difY + difZ * difZ) <= (radius * radius);
     }
 
-    public Vector3d toVector3d() {
-        return new Vector3d(x, y, z);
+    public Vec3 toVector3d() {
+        return new Vec3(x, y, z);
     }
 
     public BlockPos toBlockPos() {
-        return new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
+        return new BlockPos(Mth.floor(x), Mth.floor(y), Mth.floor(z));
     }
 
     public ChunkPos toChunkPos() {
-        return new ChunkPos(MathHelper.floor(x) >> 4, MathHelper.floor(z) >> 4);
+        return new ChunkPos(Mth.floor(x) >> 4, Mth.floor(z) >> 4);
     }
 
     public Vector3 vectorFromHereTo(Vector3 target) {
@@ -476,12 +535,12 @@ public class Vector3 {
 
     public void stepAlongVector(double stepWidth, Consumer<Vector3> consumer) {
         int steps = (int) Math.round(this.length() / stepWidth);
-        Vector3 step = this.clone().divide(steps);
+        Vector3 step = this.copy().divide(steps);
         Vector3 at = new Vector3();
-        consumer.accept(at.clone());
+        consumer.accept(at.copy());
         for (int i = 0; i < steps; i++) {
             at.add(step);
-            consumer.accept(at.clone());
+            consumer.accept(at.copy());
         }
     }
 
@@ -503,16 +562,15 @@ public class Vector3 {
                 (z == next.z ? z : z + ((next.z - z) * partial)));
     }
 
-    @Deprecated
     @OnlyIn(Dist.CLIENT)
-    public IVertexBuilder drawPos(IVertexBuilder buf) {
-        buf.pos((float) this.x, (float) this.y, (float) this.z);
+    public VertexConsumer drawPos(VertexConsumer buf) {
+        buf.addVertex((float) this.x, (float) this.y, (float) this.z);
         return buf;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public IVertexBuilder drawPos(Matrix4f renderMatrix, IVertexBuilder buf) {
-        buf.pos(renderMatrix, (float) this.x, (float) this.y, (float) this.z);
+    public VertexConsumer drawPos(Matrix4f renderMatrix, VertexConsumer buf) {
+        buf.addVertex(renderMatrix, (float) this.x, (float) this.y, (float) this.z);
         return buf;
     }
 
@@ -586,10 +644,9 @@ public class Vector3 {
     }
 
     public boolean equals(Object obj) {
-        if (!(obj instanceof Vector3)) {
+        if (!(obj instanceof Vector3 other)) {
             return false;
         }
-        Vector3 other = (Vector3) obj;
 
         return (Math.abs(this.x - other.x) < 1.0E-004D) && (Math.abs(this.y - other.y) < 1.0E-004D) && (Math.abs(this.z - other.z) < 1.0E-004D) && (getClass().equals(obj.getClass()));
     }
@@ -603,7 +660,7 @@ public class Vector3 {
         return hash;
     }
 
-    public Vector3 clone() {
+    public Vector3 copy() {
         return new Vector3(x, y, z);
     }
 
@@ -712,14 +769,25 @@ public class Vector3 {
             return buildQuatWithAngle(axis.x, axis.y, axis.z, angle);
         }
 
+        public static Quat of(Quaternionf quat) {
+            return new Quat(quat.w(), quat.x(), quat.y(), quat.z());
+        }
     }
 
     public static class RotAxis {
 
-        public static final Vector3 X_AXIS = new Vector3(1, 0, 0);
-        public static final Vector3 Y_AXIS = new Vector3(0, 1, 0);
-        public static final Vector3 Z_AXIS = new Vector3(0, 0, 1);
+        public static final RotAxis X_AXIS = new RotAxis(new Vector3(1, 0, 0));
+        public static final RotAxis Y_AXIS = new RotAxis(new Vector3(0, 1, 0));
+        public static final RotAxis Z_AXIS = new RotAxis(new Vector3(0, 0, 1));
 
+        private final Vector3 vec;
+
+        public RotAxis(Vector3 vec) {
+            this.vec = vec;
+        }
+
+        public Vector3 getVector() {
+            return this.vec.copy();
+        }
     }
-
 }

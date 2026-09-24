@@ -1,82 +1,81 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.event;
 
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
-import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
-import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeTypeHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifierManager;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Event;
+import hellfirepvp.astralsorcery.common.perk.type.base.PerkAttributeType;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.bus.api.Event;
+import net.neoforged.neoforge.common.NeoForge;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: AttributeEvent
  * Created by HellFirePvP
- * Date: 08.08.2019 / 06:57
+ * Date: 07.09.2026 / 10:00
  */
 public class AttributeEvent {
 
     public static class PostProcessVanilla extends Event {
 
-        private final ModifiableAttributeInstance instance;
+        private final AttributeInstance instance;
         private final double originalValue;
         private double value;
 
-        public PostProcessVanilla(ModifiableAttributeInstance instance, double value) {
+        public PostProcessVanilla(AttributeInstance instance, double value) {
             this.instance = instance;
             this.originalValue = value;
             this.value = value;
         }
 
         public double getOriginalValue() {
-            return originalValue;
+            return this.originalValue;
         }
 
         public double getValue() {
-            return value;
+            return this.value;
         }
 
         public void setValue(double value) {
             this.value = value;
         }
 
-        public ModifiableAttributeInstance getInstance() {
-            return instance;
+        public AttributeInstance getInstance() {
+            return this.instance;
         }
 
-        public Attribute getAttribute() {
-            return instance.getAttribute();
+        public Holder<Attribute> getAttribute() {
+            return this.instance.getAttribute();
         }
 
-        @Nullable
-        public PerkAttributeType resolveAttributeType() {
-            return PerkAttributeTypeHelper.findVanillaType(getAttribute());
+        public Optional<PerkAttributeType> resolveAttributeType() {
+            return PerkAttributeType.fromVanillaType(this.getAttribute());
         }
     }
 
     public static class PostProcessModded extends Event {
 
-        private final PlayerEntity player;
+        private final Player player;
         private final PerkAttributeType type;
         private final double originalValue;
         private double value;
 
-        public PostProcessModded(double value, PerkAttributeType type, PlayerEntity player) {
+        public PostProcessModded(double value, PerkAttributeType type, Player player) {
             this.player = player;
             this.type = type;
             this.originalValue = value;
@@ -84,11 +83,11 @@ public class AttributeEvent {
         }
 
         public double getOriginalValue() {
-            return originalValue;
+            return this.originalValue;
         }
 
         public double getValue() {
-            return value;
+            return this.value;
         }
 
         public void setValue(double value) {
@@ -96,62 +95,47 @@ public class AttributeEvent {
         }
 
         public PerkAttributeType getType() {
-            return type;
+            return this.type;
         }
 
-        public PlayerEntity getPlayer() {
-            return player;
+        public Player getPlayer() {
+            return this.player;
         }
     }
 
-    public static double postProcessModded(PlayerEntity player, PerkAttributeType type, double value) {
-        PostProcessModded ev = new PostProcessModded(value, type, player);
-        MinecraftForge.EVENT_BUS.post(ev);
+    public static double postProcessModded(Player player, Supplier<? extends PerkAttributeType> type, double value) {
+        PostProcessModded ev = new PostProcessModded(value, type.get(), player);
+        NeoForge.EVENT_BUS.post(ev);
         return ev.getValue();
     }
 
-    public static float postProcessModded(PlayerEntity player, PerkAttributeType type, float value) {
+    public static float postProcessModded(Player player, Supplier<? extends PerkAttributeType> type, float value) {
         return (float) postProcessModded(player, type, (double) value);
     }
 
-    public static double postProcessModded(PlayerEntity player, ResourceLocation key, double value) {
-        PerkAttributeType pType = RegistriesAS.REGISTRY_PERK_ATTRIBUTE_TYPES.getValue(key);
-        if (pType == null) {
-            return value;
-        }
+    public static double postProcessModded(Player player, PerkAttributeType type, double value) {
+        PostProcessModded ev = new PostProcessModded(value, type, player);
+        NeoForge.EVENT_BUS.post(ev);
+        return ev.getValue();
+    }
+
+    public static float postProcessModded(Player player, PerkAttributeType type, float value) {
+        return (float) postProcessModded(player, type, (double) value);
+    }
+
+    public static double postProcessModded(Player player, ResourceLocation key, double value) {
+        PerkAttributeType pType = RegistriesAS.REGISTRY_PERK_ATTRIBUTE_TYPES.get(key);
+        if (pType == null) return value;
         return postProcessModded(player, pType, value);
     }
 
-    public static float postProcessModded(PlayerEntity player, ResourceLocation key, float value) {
+    public static float postProcessModded(Player player, ResourceLocation key, float value) {
         return (float) postProcessModded(player, key, (double) value);
     }
 
-    public static double postProcessVanilla(double value, ModifiableAttributeInstance attribute) {
+    public static double postProcessVanilla(double value, AttributeInstance attribute) {
         AttributeEvent.PostProcessVanilla event = new AttributeEvent.PostProcessVanilla(attribute, value);
-        MinecraftForge.EVENT_BUS.post(event);
-        return event.getAttribute().clampValue(event.getValue());
-    }
-
-    @Nullable
-    private static LivingEntity getEntity(AttributeModifierManager map) {
-        if (map instanceof EntityModifierManager) {
-            return ((EntityModifierManager) map).getLivingEntity();
-        }
-        return null;
-    }
-
-    public static void setEntity(AttributeModifierManager map, LivingEntity entity) {
-        if (map instanceof EntityModifierManager) {
-            ((EntityModifierManager) map).setLivingEntity(entity);
-        }
-    }
-
-    public static interface EntityModifierManager {
-
-        @Nullable
-        LivingEntity getLivingEntity();
-
-        void setLivingEntity(LivingEntity entity);
-
+        NeoForge.EVENT_BUS.post(event);
+        return attribute.getAttribute().value().sanitizeValue(event.getValue());
     }
 }

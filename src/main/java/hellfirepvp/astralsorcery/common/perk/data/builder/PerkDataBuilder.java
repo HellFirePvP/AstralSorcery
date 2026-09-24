@@ -1,93 +1,115 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.data.builder;
 
-import com.google.common.collect.ImmutableList;
-import hellfirepvp.astralsorcery.common.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.perk.PerkConverter;
-import hellfirepvp.astralsorcery.common.perk.data.PerkTypeHandler;
-import hellfirepvp.astralsorcery.common.perk.modifier.AttributeConverterPerk;
-import hellfirepvp.astralsorcery.common.perk.modifier.AttributeModifierPerk;
+import hellfirepvp.astralsorcery.common.perk.convert.PerkAttributeConverter;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
-import hellfirepvp.astralsorcery.common.perk.type.ModifierType;
-import hellfirepvp.astralsorcery.common.perk.type.PerkAttributeType;
-import net.minecraft.util.ResourceLocation;
+import hellfirepvp.astralsorcery.common.perk.tree.*;
+import hellfirepvp.astralsorcery.common.perk.tree.requirement.PerkRequirement;
+import hellfirepvp.astralsorcery.common.perk.type.base.ModifierType;
+import hellfirepvp.astralsorcery.common.perk.type.base.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.util.MiscUtil;
+import hellfirepvp.astralsorcery.common.util.data.PerkTypeRegistryObject;
+import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: PerkDataBuilder
  * Created by HellFirePvP
- * Date: 14.08.2020 / 18:34
+ * Date: 07.09.2026 / 10:00
  */
-public class PerkDataBuilder<T extends AbstractPerk> {
+public class PerkDataBuilder<T extends AbstractPerk<?>> {
 
-    private final T perk;
-    private final List<ResourceLocation> connections = new ArrayList<>();
+    final T perk;
+    final Set<ResourceLocation> connections = new HashSet<>();
 
-    public PerkDataBuilder(T perk) {
+    private PerkDataBuilder(T perk) {
         this.perk = perk;
     }
 
-    public static PerkBuilder<AbstractPerk> builder() {
-        return new PerkBuilder<>(PerkTypeHandler.DEFAULT);
+    public static <T extends AbstractPerk<?>> PerkBuilder<T> builder(PerkType<T> type) {
+        return builder(() -> type);
     }
 
-    public static <T extends AbstractPerk> PerkBuilder<T> ofType(PerkTypeHandler.Type<T> perkType) {
-        return new PerkBuilder<>(perkType);
+    public static <T extends AbstractPerk<?>> PerkBuilder<T> builder(PerkTypeRegistryObject<T> type) {
+        return builder(() -> type.type().value());
     }
 
-    public PerkDataBuilder<T> setName(String perkDisplayName) {
-        this.perk.setName(perkDisplayName);
+    public static <T extends AbstractPerk<?>> PerkBuilder<T> builder(Supplier<PerkType<T>> type) {
+        return new PerkBuilder<>(type);
+    }
+
+    public PerkDataBuilder<T> setNameKey(String nameKey) {
+        this.perk.setNameKey(nameKey);
+        return this;
+    }
+
+    public PerkDataBuilder<T> setCategory(PerkCategory category) {
+        this.perk.setCategory(category);
+        return this;
+    }
+
+    public PerkDataBuilder<T> addRequirement(PerkRequirement requirement) {
+        ProgressPerk<?> pPerk = this.assertPerkType(ProgressPerk.class);
+        pPerk.addRequirement(requirement);
+        return this;
+    }
+
+    public PerkDataBuilder<T> addConverter(Supplier<PerkAttributeConverter> converter) {
+        AttributeConverterPerk<?> cPerk = this.assertPerkType(AttributeConverterPerk.class);
+        cPerk.addConverter(converter.get());
         return this;
     }
 
     public PerkDataBuilder<T> addModifier(float modifier, ModifierType mode, PerkAttributeType type) {
-        if (!(this.perk instanceof AttributeModifierPerk)) {
-            throw new IllegalArgumentException("Cannot add modifiers to non-modifier perks!");
+        return this.addModifier(modifier, mode, () -> type);
+    }
+
+    public PerkDataBuilder<T> addModifier(float modifier, ModifierType mode, Supplier<? extends PerkAttributeType> type) {
+        AttributeModifierPerk<?> mPerk = this.assertPerkType(AttributeModifierPerk.class);
+        mPerk.addModifier(new PerkAttributeModifier(type.get(), mode, modifier));
+        return this;
+    }
+
+    public PerkDataBuilder<T> addCustomModifier(Supplier<PerkAttributeModifier> modifier) {
+        AttributeModifierPerk<?> mPerk = this.assertPerkType(AttributeModifierPerk.class);
+        mPerk.addModifier(modifier.get());
+        return this;
+    }
+
+    public PerkDataBuilder<T> modify(Consumer<T> perkFn) {
+        perkFn.accept(this.perk);
+        return this;
+    }
+
+    public PerkDataBuilder<T> connect(PerkDataBuilder<?>... others) {
+        for (PerkDataBuilder<?> other : others) {
+            this.connect(other);
         }
-        ((AttributeModifierPerk) this.perk).addModifier(modifier, mode, type);
         return this;
     }
 
-    public PerkDataBuilder<T> addModifier(PerkAttributeModifier modifier) {
-        if (!(this.perk instanceof AttributeModifierPerk)) {
-            throw new IllegalArgumentException("Cannot add modifiers to non-modifier perks!");
+    public PerkDataBuilder<T> connect(ResourceLocation... otherKeys) {
+        for (ResourceLocation other : otherKeys) {
+            this.connect(other);
         }
-        ((AttributeModifierPerk) this.perk).addModifier(modifier);
         return this;
-    }
-
-    public PerkDataBuilder<T> addConverter(PerkConverter converter) {
-        if (!(this.perk instanceof AttributeConverterPerk)) {
-            throw new IllegalArgumentException("Cannot add converter to non-converter perks!");
-        }
-        ((AttributeConverterPerk) this.perk).addConverter(converter);
-        return this;
-    }
-
-    public PerkDataBuilder<T> modify(Consumer<T> recipeFn) {
-        recipeFn.accept(this.perk);
-        return this;
-    }
-
-    public PerkDataBuilder<?> chain(PerkDataBuilder<?> other) {
-        this.connect(other.perk.getRegistryName());
-        return other;
     }
 
     public PerkDataBuilder<T> connect(PerkDataBuilder<?> other) {
-        return this.connect(other.perk.getRegistryName());
+        return this.connect(other.perk.getKey());
     }
 
     public PerkDataBuilder<T> connect(ResourceLocation key) {
@@ -95,25 +117,28 @@ public class PerkDataBuilder<T extends AbstractPerk> {
         return this;
     }
 
-    public PerkDataBuilder<T> build(Consumer<PerkDataProvider.FinishedPerk> consumerIn) {
-        consumerIn.accept(new PerkDataProvider.FinishedPerk(this.perk, ImmutableList.copyOf(this.connections)));
+    public PerkDataBuilder<T> build(Consumer<PerkDataProvider.BuiltPerk> registrar) {
+        registrar.accept(PerkDataProvider.BuiltPerk.of(this));
         return this;
     }
 
-    public static class PerkBuilder<T extends AbstractPerk> {
+    private <P extends AbstractPerk<?>> P assertPerkType(Class<P> perkClass) {
+        if (!perkClass.isInstance(this.perk)) {
+            throw new IllegalArgumentException(String.format("Perk is not of type %s (is %s)", perkClass.getSimpleName(), this.perk.getClass().getSimpleName()));
+        }
+        return MiscUtil.cast(this.perk);
+    }
 
-        private final PerkTypeHandler.Type<T> perkType;
+    public static class PerkBuilder<T extends AbstractPerk<?>> {
 
-        private PerkBuilder(PerkTypeHandler.Type<T> perkType) {
+        private final Supplier<PerkType<T>> perkType;
+
+        private PerkBuilder(Supplier<PerkType<T>> perkType) {
             this.perkType = perkType;
         }
 
         public PerkDataBuilder<T> create(ResourceLocation perkKey, float x, float y) {
-            T perk = this.perkType.convert(perkKey, x, y);
-            if (!perkType.getKey().equals(PerkTypeHandler.DEFAULT.getKey())) {
-                perk.setCustomPerkType(perkType.getKey());
-            }
-            return new PerkDataBuilder<>(perk);
+            return new PerkDataBuilder<>(this.perkType.get().newBlankPerk(perkKey, x, y));
         }
     }
 }

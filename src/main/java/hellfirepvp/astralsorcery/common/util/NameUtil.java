@@ -1,69 +1,57 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.util;
 
-import com.google.common.base.CaseFormat;
-import hellfirepvp.astralsorcery.AstralSorcery;
-import net.minecraft.util.ResourceLocation;
+import hellfirepvp.astralsorcery.common.util.data.CacheSupplier;
+import net.minecraft.Util;
+import net.minecraft.core.Registry;
+import net.minecraft.locale.Language;
+import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: NameUtil
  * Created by HellFirePvP
- * Date: 23.09.2019 / 18:09
+ * Date: 07.09.2026 / 10:00
  */
 public class NameUtil {
 
     public static ResourceLocation prefixPath(ResourceLocation key, String prefix) {
-        return new ResourceLocation(key.getNamespace(), prefix + key.getPath());
+        return ResourceLocation.fromNamespaceAndPath(key.getNamespace(), prefix + key.getPath());
     }
 
     public static ResourceLocation suffixPath(ResourceLocation key, String suffix) {
-        return new ResourceLocation(key.getNamespace(), key.getPath() + suffix);
+        return ResourceLocation.fromNamespaceAndPath(key.getNamespace(), key.getPath() + suffix);
     }
 
-    public static ResourceLocation fromClass(Object object) {
-        return fromClass(object, null);
+    public static <T> Supplier<String> cacheName(String type, Registry<T> registry, T value) {
+        return new CacheSupplier<>(() -> Util.makeDescriptionId(type, registry.getKey(value)));
     }
+    
+    public static List<String> resolveLocalizedLines(String key) {
+        List<String> ids = new ArrayList<>();
+        Language lang = Language.getInstance();
 
-    public static ResourceLocation fromClass(Class<?> clazz) {
-        return fromClass(clazz, null);
-    }
-
-    public static ResourceLocation fromClass(Object object, @Nullable String cutPrefix) {
-        return fromClass(object, cutPrefix, null);
-    }
-
-    public static ResourceLocation fromClass(Class<?> clazz, @Nullable String cutPrefix) {
-        return fromClass(clazz, cutPrefix, null);
-    }
-
-    public static ResourceLocation fromClass(Object object, @Nullable String cutPrefix, @Nullable String cutSuffix) {
-        return fromClass(object.getClass(), cutPrefix, cutSuffix);
-    }
-
-    public static ResourceLocation fromClass(Class<?> clazz, @Nullable String cutPrefix, @Nullable String cutSuffix) {
-        String name = clazz.getSimpleName();
-        if (clazz.getEnclosingClass() != null) {
-            name = clazz.getEnclosingClass().getSimpleName() + name;
+        if (lang.has(String.format("%s.1", key))) {
+            int count = 1;
+            while (lang.has(String.format("%s.%s", key, count))) {
+                ids.add(String.format("%s.%s", key, count));
+                count++;
+            }
+        } else if (lang.has(key)) {
+            ids.add(key);
         }
-        if (cutPrefix != null && name.startsWith(cutPrefix)) {
-            name = name.substring(cutPrefix.length());
-        }
-        if (cutSuffix != null && name.endsWith(cutSuffix)) {
-            name = name.substring(0, name.length() - cutSuffix.length());
-        }
-        name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
-        return AstralSorcery.key(name);
+        return ids;
     }
-
 }

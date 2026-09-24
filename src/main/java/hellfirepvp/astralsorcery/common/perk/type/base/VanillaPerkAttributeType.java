@@ -1,0 +1,33 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package hellfirepvp.astralsorcery.common.perk.type.base;
+
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.fml.LogicalSide;
+
+import javax.annotation.Nonnull;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on GitHub.
+ * Class: VanillaPerkAttributeType
+ * Created by HellFirePvP
+ * Date: 07.09.2026 / 10:00
+ */
+public interface VanillaPerkAttributeType {
+
+    @Nonnull
+    Holder<Attribute> getAttribute();
+
+    void refreshAttribute(Player player, LogicalSide side);
+
+}
+

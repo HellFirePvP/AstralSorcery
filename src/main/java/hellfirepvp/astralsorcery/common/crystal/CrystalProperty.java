@@ -1,119 +1,78 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.crystal;
 
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.util.NameUtil;
+import hellfirepvp.astralsorcery.common.util.data.ColorWrapper;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: CrystalProperty
  * Created by HellFirePvP
- * Date: 29.01.2019 / 21:23
+ * Date: 07.09.2026 / 10:00
  */
-public abstract class CrystalProperty extends ForgeRegistryEntry<CrystalProperty> implements Comparable<CrystalProperty> {
+public class CrystalProperty implements Comparable<CrystalProperty> {
 
     private static int counter = 0;
     private final int sortingId;
 
-    private ResearchProgression requiredResearch = null;
-    private List<CrystalPropertyModifierFunction> modifiers = new ArrayList<>();
-    private Predicate<CalculationContext> usageTests = (ctx) -> false;
+    private final Supplier<String> unlocalizedName;
+    private final ColorWrapper color;
+    private final int maxTier;
 
-    public CrystalProperty(ResourceLocation registryName) {
+    public CrystalProperty(ChatFormatting color, int maxTier) {
+        this(ColorWrapper.opaque(color.getColor()), maxTier);
+    }
+
+    public CrystalProperty(TextColor color, int maxTier) {
+        this(ColorWrapper.opaque(color.getValue()), maxTier);
+    }
+
+    public CrystalProperty(ColorWrapper color, int maxTier) {
         this.sortingId = counter++;
-        this.setRegistryName(registryName);
-    }
-
-    /**
-     * Sets/Overwrites the research the player needs to obtain to see/understand this property.
-     *
-     * @param requiredResearch the research needed to be reached.
-     * @return self
-     */
-    public CrystalProperty setRequiredResearch(ResearchProgression requiredResearch) {
-        this.requiredResearch = requiredResearch;
-        return this;
-    }
-
-    /**
-     * Add a modifier to this property, influencing certain calculations depending on its source or usage-hints.
-     *
-     * @param modifierFunction the new modifier function
-     * @return self
-     */
-    public CrystalProperty addModifier(CrystalPropertyModifierFunction modifierFunction) {
-        this.modifiers.add(modifierFunction);
-        return this;
-    }
-
-    /**
-     * Add a usage hint that 'this property influences calculations matching the passed context'
-     *
-     * @param usage the case to add
-     * @return self
-     */
-    public CrystalProperty addUsage(Predicate<CalculationContext> usage) {
-        this.usageTests = this.usageTests.or(usage);
-        return this;
+        this.unlocalizedName = NameUtil.cacheName("crystal.property", RegistriesAS.REGISTRY_CRYSTAL_PROPERTIES, this);
+        this.color = color;
+        this.maxTier = maxTier;
     }
 
     public int getMaxTier() {
-        return 3;
+        return this.maxTier;
     }
 
-    public boolean canSee(PlayerProgress progress) {
-        return this.requiredResearch == null || progress.hasResearch(this.requiredResearch);
+    public ColorWrapper getColor() {
+        return this.color;
     }
 
-    public boolean hasUsageFor(CalculationContext ctx) {
-        return this.usageTests.test(ctx);
+    public Style getColorStyle() {
+        return Style.EMPTY.withColor(TextColor.fromRgb(this.getColor().getColor()));
     }
 
-    public double modify(double value, int tier, CalculationContext context) {
-        double originalValue = value;
-        for (CrystalPropertyModifierFunction fn : modifiers) {
-            value = fn.modify(value, originalValue, tier, context);
-        }
-        return value;
+    public MutableComponent getName(int currentTier) {
+        return Component.translatable(this.unlocalizedName.get());
     }
 
-    public IFormattableTextComponent getName(int currentTier) {
-        return new TranslationTextComponent(String.format("crystal.property.%s.%s.name", getRegistryName().getNamespace(), getRegistryName().getPath()));
+    public String getNameFormat() {
+        return "crystal.property.format";
     }
 
     @Override
-    public int compareTo(CrystalProperty other) {
-        return this.sortingId - other.sortingId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CrystalProperty that = (CrystalProperty) o;
-        return Objects.equals(this.getRegistryName(), that.getRegistryName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.getRegistryName());
+    public int compareTo(CrystalProperty o) {
+        return this.sortingId - o.sortingId;
     }
 }

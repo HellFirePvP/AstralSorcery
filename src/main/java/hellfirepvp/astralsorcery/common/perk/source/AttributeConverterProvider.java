@@ -1,28 +1,28 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.perk.source;
 
-import hellfirepvp.astralsorcery.common.perk.PerkConverter;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.fml.LogicalSide;
+import hellfirepvp.astralsorcery.common.perk.convert.PerkAttributeConverter;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.fml.LogicalSide;
 
 import java.util.Collection;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: AttributeConverterProvider
  * Created by HellFirePvP
- * Date: 08.08.2019 / 18:06
+ * Date: 07.09.2026 / 10:00
  */
 public interface AttributeConverterProvider {
 
-    Collection<PerkConverter> getConverters(PlayerEntity player, LogicalSide side, boolean ignoreRequirements);
+    Collection<PerkAttributeConverter> getConverters(Player player, LogicalSide side, boolean ignoreRequirements);
 
 }

@@ -2,6 +2,7 @@
   "__comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
   "ambientocclusion": true,
   "parent": "block/block",
+  "render_type": "solid",
   "textures": {
     "particle": "astralsorcery:block/chalice_base",
     "texture": "astralsorcery:block/chalice_base",

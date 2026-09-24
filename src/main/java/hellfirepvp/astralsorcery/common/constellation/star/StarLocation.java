@@ -1,51 +1,39 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.constellation.star;
 
-import java.awt.*;
+import hellfirepvp.astralsorcery.common.util.data.IntPoint;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: StarLocation
  * Created by HellFirePvP
- * Date: 06.02.2016 01:57
+ * Date: 07.09.2026 / 10:00
  */
-public class StarLocation {
-
-    public final int x, y;
-
-    public StarLocation(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+public record StarLocation(int x, int y) {
 
     public int getDistanceToOrigin() {
         return x + y;
     }
 
-    public Point asPoint() {
-        return new Point(x, y);
+    public IntPoint asPoint() {
+        return new IntPoint(x, y);
+    }
+
+    public Vector3 asLevelVector() {
+        return new Vector3(x, 0, y);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StarLocation tuple = (StarLocation) o;
-        return x == tuple.x && y == tuple.y;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = x;
-        result = 31 * result + y;
-        return result;
+    public String toString() {
+        return "StarLocation{" + "x=" + x + ", y=" + y + '}';
     }
 }

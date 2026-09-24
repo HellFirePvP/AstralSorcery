@@ -1,258 +1,110 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.tile;
 
-import hellfirepvp.astralsorcery.client.effect.function.VFXColorFunction;
-import hellfirepvp.astralsorcery.client.effect.handler.EffectHelper;
-import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
-import hellfirepvp.astralsorcery.common.block.tile.BlockLens;
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.crystal.CrystalAttributeTile;
-import hellfirepvp.astralsorcery.common.crystal.CrystalAttributes;
-import hellfirepvp.astralsorcery.common.item.lens.LensColorType;
-import hellfirepvp.astralsorcery.common.lib.TileEntityTypesAS;
-import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
-import hellfirepvp.astralsorcery.common.tile.base.network.TileTransmissionBase;
-import hellfirepvp.astralsorcery.common.tile.network.StarlightTransmissionLens;
-import hellfirepvp.astralsorcery.common.util.PartialEffectExecutor;
-import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
+import com.mojang.datafixers.Products;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import hellfirepvp.astralsorcery.common.block.tile.LensBlock;
+import hellfirepvp.astralsorcery.common.component.CrystalAttributesComponent;
+import hellfirepvp.astralsorcery.common.lib.StarlightNetworkNodesAS;
+import hellfirepvp.astralsorcery.common.lib.TileEntitiesAS;
+import hellfirepvp.astralsorcery.common.starlight.api.provider.TransmissionNodeProvider;
+import hellfirepvp.astralsorcery.common.tile.base.TileDataCrystalAttributeContainer;
+import hellfirepvp.astralsorcery.common.tile.base.TileEntityNetwork;
+import hellfirepvp.astralsorcery.common.tile.network.SimpleSingleTransmissionNode;
+import hellfirepvp.astralsorcery.common.tile.network.provider.SimpleSingleTransmissionNodeProvider;
+import hellfirepvp.astralsorcery.common.util.MiscUtil;
+import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
+import hellfirepvp.astralsorcery.common.util.data.TileRegistryObject;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: TileLens
  * Created by HellFirePvP
- * Date: 24.08.2019 / 21:19
+ * Date: 07.09.2026 / 10:00
  */
-public class TileLens extends TileTransmissionBase<IPrismTransmissionNode> implements CrystalAttributeTile {
+public class TileLens extends TileEntityNetwork<SimpleSingleTransmissionNode, TileLens.Data> {
 
-    private CrystalAttributes attributes = null;
-    private LensColorType colorType = null;
-
-    private float accumulatedStarlight = 0;
-
-    //So we can tell the client to render beams eventhough the actual connection doesn't exist.
-    private List<BlockPos> occupiedConnections = new LinkedList<>();
-
-    protected TileLens(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileLens(BlockPos pos, BlockState blockState) {
+        this(TileEntitiesAS.LENS, pos, blockState);
     }
 
-    public TileLens() {
-        super(TileEntityTypesAS.LENS);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-
-        if (colorType != null) {
-            if (world.isRemote()) {
-                playColorEffects();
-            }
-            doColorEffects();
-        }
-    }
-
-    @Override
-    protected void onFirstTick() {
-        super.onFirstTick();
-
-        this.markForUpdate();
-    }
-
-    public void transmissionTick(float starlightAmt, IWeakConstellation type) {
-        this.accumulatedStarlight += starlightAmt;
-        boolean networkSync = this.needsNetworkSync();
-        this.markForUpdate();
-        if (!networkSync) {
-            this.preventNetworkSync();
-        }
-    }
-
-    private void doColorEffects() {
-        World world = this.getWorld();
-        if (!world.isRemote() && !this.occupiedConnections.isEmpty()) {
-            this.occupiedConnections.clear();
-            markForUpdate();
-            preventNetworkSync();
-        }
-
-        if (accumulatedStarlight <= 0) {
-            return;
-        }
-        float effectMultiplier = accumulatedStarlight * 1.4F;
-        accumulatedStarlight = 0;
-
-        List<BlockPos> linked = getLinkedPositions();
-        if (linked.isEmpty()) {
-            return;
-        }
-
-        Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
-
-        for (BlockPos linkedTo : linked) {
-            PartialEffectExecutor exec = new PartialEffectExecutor((1F / ((float) linked.size())) * effectMultiplier, rand);
-
-            Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
-            RaytraceAssist rta = new RaytraceAssist(thisVec, to).includeEndPoint();
-            if (colorType.getType().doBlockInteraction()) {
-                if (!rta.isClear(world) && rta.positionHit() != null) {
-                    BlockPos posHit = rta.positionHit();
-
-                    BlockState stateHit = world.getBlockState(posHit);
-                    colorType.blockInBeam(world, posHit, stateHit, exec);
-
-                    if (!world.isRemote()) {
-                        this.occupiedConnections.add(posHit);
-                    }
-                } else {
-                    if (!world.isRemote()) {
-                        this.occupiedConnections.add(linkedTo);
-                    }
-                }
-            }
-            if (colorType.getType().doEntityInteraction()) {
-                exec.reset();
-
-                rta.setCollectEntities(0.5);
-                rta.isClear(world);
-                List<Entity> found = rta.collectedEntities(world);
-                found.forEach(e -> colorType.entityInBeam(world, thisVec, to, e, exec));
-            }
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void playColorEffects() {
-        Vector3 at = new Vector3(this).add(0.5, 0.5, 0.5);
-        Color lensColor = this.colorType.getColor();
-
-        EffectHelper.of(EffectTemplatesAS.GENERIC_PARTICLE)
-                .spawn(new Vector3(this)
-                        .add(0.2, 0.2, 0.2)
-                        .add(rand.nextFloat() * 0.6, rand.nextFloat() * 0.6, rand.nextFloat() * 0.6))
-                .color(VFXColorFunction.constant(lensColor))
-                .setScaleMultiplier(0.1F + rand.nextFloat() * 0.15F);
-
-        if (getTicksExisted() % 40 == 0) {
-            for (BlockPos connected : this.occupiedConnections) {
-                Vector3 to = new Vector3(connected).add(0.5, 0.5, 0.5);
-                EffectHelper.of(EffectTemplatesAS.LIGHTBEAM)
-                        .spawn(at)
-                        .setup(to, 0.6, 0.6)
-                        .color(VFXColorFunction.constant(lensColor));
-            }
-        }
-    }
-
-    public LensColorType setColorType(@Nullable LensColorType colorType) {
-        if (this.getColorType() == colorType) {
-            return colorType;
-        }
-        LensColorType prev = this.getColorType();
-        this.colorType = colorType;
-        this.markForUpdate();
-        return prev;
-    }
-
-    @Nullable
-    public LensColorType getColorType() {
-        return colorType;
+    protected TileLens(TileRegistryObject<?> type, BlockPos pos, BlockState blockState) {
+        super(type, pos, blockState);
     }
 
     public Direction getPlacedAgainst() {
-        BlockState state = world.getBlockState(getPos());
-        if (!(state.getBlock() instanceof BlockLens)) {
-            return Direction.DOWN;
+        if (!this.hasLevel()) return Direction.DOWN;
+        BlockState state = this.getLevel().getBlockState(this.getBlockPos());
+        return state.getOptionalValue(LensBlock.PLACED_AGAINST).orElse(Direction.DOWN);
+    }
+
+    @Override
+    public DeferredHolder<TransmissionNodeProvider<?>, SimpleSingleTransmissionNodeProvider> getNodeProvider() {
+        return StarlightNetworkNodesAS.SIMPLE_SINGLE_NODE;
+    }
+
+    @Override
+    public Codec<Data> dataCodec() {
+        return Data.CODEC;
+    }
+
+    public static class Data extends TileEntityNetwork.Data implements TileDataCrystalAttributeContainer {
+
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(inst -> lensFields(inst).apply(inst, Data::new));
+
+        protected static <T extends Data> Products.P6<RecordCodecBuilder.Mu<T>, Long, Boolean, Map<BlockPos, Boolean>, Boolean, CrystalAttributesComponent, Optional<BlockPos>> lensFields(RecordCodecBuilder.Instance<T> instance) {
+            return netFields(instance).and(instance.group(
+                    CodecUtil.defaulted(CrystalAttributesComponent.CODEC, "crystalAttributes", CrystalAttributesComponent::defaultEmpty, Data::getCrystalAttributes),
+                    BlockPos.CODEC.optionalFieldOf("linkedPos").forGetter(Data::getLinkedPos)
+            ));
         }
-        return state.get(BlockLens.PLACED_AGAINST);
-    }
 
-    @Override
-    public boolean isSingleLink() {
-        return true;
-    }
+        protected CrystalAttributesComponent crystalAttributes;
+        protected BlockPos linkedPos;
 
-    @Nullable
-    @Override
-    public CrystalAttributes getAttributes() {
-        return attributes;
-    }
-
-    @Override
-    public void setAttributes(@Nullable CrystalAttributes attributes) {
-        this.attributes = attributes;
-    }
-
-    @Override
-    public void readCustomNBT(CompoundNBT compound) {
-        super.readCustomNBT(compound);
-
-        this.attributes = CrystalAttributes.getCrystalAttributes(compound);
-        if (compound.contains("colorType")) {
-            this.colorType = LensColorType.byName(new ResourceLocation(compound.getString("colorType")));
-        } else {
-            this.colorType = null;
+        protected Data(long ticksExisted, boolean hasStructure, Map<BlockPos, Boolean> skyObstructions, boolean needsNetworkSync, CrystalAttributesComponent crystalAttributes, Optional<BlockPos> linkedPos) {
+            super(ticksExisted, hasStructure, skyObstructions, needsNetworkSync);
+            this.crystalAttributes = crystalAttributes;
+            this.linkedPos = linkedPos.orElse(null);
         }
-        this.occupiedConnections = NBTHelper.readList(compound, "occupiedConnections", Constants.NBT.TAG_COMPOUND,
-                nbt -> NBTHelper.readBlockPosFromNBT((CompoundNBT) nbt));
-    }
 
-    @Override
-    public void readNetNBT(CompoundNBT compound) {
-        super.readNetNBT(compound);
-        this.accumulatedStarlight = compound.getFloat("accumulatedStarlight");
-    }
-
-    @Override
-    public void writeCustomNBT(CompoundNBT compound) {
-        super.writeCustomNBT(compound);
-
-        if (this.attributes != null) {
-            this.attributes.store(compound);
+        public Optional<BlockPos> getLinkedPos() {
+            return Optional.ofNullable(this.linkedPos);
         }
-        if (this.colorType != null) {
-            compound.putString("colorType", this.colorType.getName().toString());
+
+        public void setLinkedPos(@Nullable BlockPos linkedPos) {
+            this.linkedPos = linkedPos;
         }
-        NBTHelper.writeList(compound, "occupiedConnections", this.occupiedConnections,
-                pos -> NBTHelper.writeBlockPosToNBT(pos, new CompoundNBT()));
+
+        @Nonnull
+        @Override
+        public CrystalAttributesComponent getCrystalAttributes() {
+            return this.crystalAttributes;
+        }
+
+        @Override
+        public void setCrystalAttributes(@Nonnull CrystalAttributesComponent attributes) {
+            this.crystalAttributes = attributes;
+            this.setNeedsNetworkSync(true);
+        }
     }
 
-    @Override
-    public void writeNetNBT(CompoundNBT compound) {
-        super.writeNetNBT(compound);
-        compound.putFloat("accumulatedStarlight", this.accumulatedStarlight);
-    }
-
-    @Nonnull
-    @Override
-    public IPrismTransmissionNode provideTransmissionNode(BlockPos at) {
-        return new StarlightTransmissionLens(at, this.attributes);
-    }
 }

@@ -1,60 +1,172 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2022
- *
- * All rights reserved.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * HellFirePvP / Astral Sorcery 2026<p>
+ * <p>
+ * All rights reserved.<p>
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery<p>
  * For further details, see the License file there.
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.tile.base;
 
-import hellfirepvp.astralsorcery.common.structure.types.StructureType;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.log.LogCategory;
+import com.mojang.datafixers.Products;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import hellfirepvp.astralsorcery.common.lumen.transfer.LumenNetworkHelper;
+import hellfirepvp.astralsorcery.common.util.ChunkUtil;
+import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
+import hellfirepvp.astralsorcery.common.util.MiscUtil;
+import hellfirepvp.astralsorcery.common.util.data.ObserverRegistryObject;
+import hellfirepvp.astralsorcery.common.util.data.TileRegistryObject;
 import hellfirepvp.observerlib.api.ChangeSubscriber;
 import hellfirepvp.observerlib.api.ObserverHelper;
-import hellfirepvp.observerlib.common.change.ChangeObserverStructure;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Tuple;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
+ * The complete source code for this mod can be found on GitHub.
  * Class: TileEntityTick
  * Created by HellFirePvP
- * Date: 02.08.2016 / 17:34
+ * Date: 07.09.2026 / 10:00
  */
-public abstract class TileEntityTick extends TileEntitySynchronized implements ITickableTileEntity, TileRequiresMultiblock {
+public abstract class TileEntityTick<T extends TileEntityTick.Data> extends TileEntitySynchronized<T> {
 
-    private boolean doesSeeSky = false;
-    private int lastUpdateTick = -1;
+    protected static final Tuple<BlockPos, BlockPos> SKY_CHECK_AREA =
+            new Tuple<>(new BlockPos(0, 1, 0), new BlockPos(0, 1, 0));
 
-    private ChangeSubscriber<ChangeObserverStructure> structureMatch;
-    private boolean hasMultiblock = false;
+    private ChangeSubscriber<?> structureObserver = null;
+    private long lastSkyUpdateTick = -20;
 
-    protected int ticksExisted = 0;
-
-    protected TileEntityTick(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    protected TileEntityTick(TileRegistryObject<?> type, BlockPos pos, BlockState blockState) {
+        super(type, pos, blockState);
     }
 
-    @Override
-    public void tick() {
-        if (ticksExisted == 0) {
-            onFirstTick();
-        }
+    protected void tick(Level level) {
+        //By itself doesn't trigger a sync/update as server and client should tick the same amount anyway
+        this.getTileData().incrementTicks();
+    }
 
-        ticksExisted++;
+    public void serverTick(ServerLevel level) {
+        this.tick(level);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void clientTick(Level level) {
+        this.tick(level);
+    }
+
+    public boolean removeBlock() {
+        return this.removeBlock(this.getLevel());
+    }
+
+    public boolean removeBlock(Level level) {
+        return level.setBlock(this.getBlockPos(), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
     }
 
     @Nullable
-    @Override
-    public StructureType getRequiredStructureType() {
+    public ObserverRegistryObject getRequiredObserver() {
         return null;
+    }
+
+    public final Optional<ChangeSubscriber<?>> getStructureObserver() {
+        return Optional.ofNullable(this.structureObserver);
+    }
+
+    protected Tuple<BlockPos, BlockPos> getSkyCheckArea() {
+        return SKY_CHECK_AREA;
+    }
+
+    public boolean doesSeeSky() {
+        Level level = this.getLevel();
+        if (level == null) return false;
+
+        if (level.isClientSide()) {
+            return this.getTileData().hasSky();
+        }
+
+        if (this.getTileData().getTicksExisted() - this.lastSkyUpdateTick >= 20) {
+            this.lastSkyUpdateTick = this.getTileData().getTicksExisted();
+            boolean prevSky = this.getTileData().hasSky();
+
+            Tuple<BlockPos, BlockPos> area = this.getSkyCheckArea();
+            BlockPos.betweenClosed(area.getA(), area.getB()).forEach(pos -> {
+                BlockPos actualPos = pos.offset(this.getBlockPos());
+                boolean canSee = MiscUtil.canSeeSky(level, actualPos, false, this.seesSkyInNoSkyWorlds(), false);
+                boolean loaded = ChunkUtil.isChunkLoaded(level, actualPos);
+
+                boolean writeCanSee = loaded ? canSee : this.getTileData().getSkyObstructions().getOrDefault(pos, false);
+                this.getTileData().setSkyObstruction(pos.immutable(), writeCanSee);
+            });
+            this.getTileData().markForUpdate();
+
+            if (prevSky != this.getTileData().hasSky()) {
+                this.onSkyStateChange();
+            }
+        }
+        return this.getTileData().hasSky();
+    }
+
+    public boolean hasStructure() {
+        Level level = this.getLevel();
+        if (level == null) return false;
+
+        if (level.isClientSide()) {
+            return this.getTileData().hasStructure();
+        }
+
+        ObserverRegistryObject structure = this.getRequiredObserver();
+        if (structure == null) {
+            this.updateObserver(level);
+            if (this.getTileData().hasStructure()) {
+                this.getTileData().setHasStructure(false);
+                this.getTileData().markForUpdate();
+                this.onStructureStateChange();
+            }
+            return false;
+        }
+
+        this.updateObserver(level);
+        if (this.structureObserver == null) {
+            this.structureObserver = structure.createSubscriber(level, this.getBlockPos());
+        }
+        boolean matches = this.structureObserver.isValid(level);
+        if (this.getTileData().hasStructure() != matches) {
+            this.getTileData().setHasStructure(matches);
+            this.getTileData().markForUpdate();
+            this.onStructureStateChange();
+        }
+        return this.getTileData().hasStructure();
+    }
+
+    private void updateObserver(Level level) {
+        ObserverRegistryObject observer = this.getRequiredObserver();
+        if (this.structureObserver != null) {
+            if (observer == null || !observer.isProviderFor(this.structureObserver)) {
+                this.removeObserver(level);
+            }
+        }
+
+        if (observer == null && ObserverHelper.getHelper().getSubscriber(level, this.getBlockPos()) != null) {
+            this.removeObserver(level);
+        }
+    }
+
+    public void removeObserver(Level level) {
+        ObserverHelper.getHelper().removeObserver(level, this.getBlockPos());
+        this.structureObserver = null;
     }
 
     //Since no-sky worlds count always as "can't see sky" even if it's exposed to the sky
@@ -63,103 +175,74 @@ public abstract class TileEntityTick extends TileEntitySynchronized implements I
         return false;
     }
 
-    protected void onFirstTick() {}
+    protected void onSkyStateChange() {}
 
-    public int getTicksExisted() {
-        return ticksExisted;
-    }
+    protected void onStructureStateChange() {}
 
-    public boolean doesSeeSky() {
-        if (getWorld().isRemote()) {
-            return this.doesSeeSky;
-        }
-
-        if (lastUpdateTick == -1 || (ticksExisted - lastUpdateTick) >= 20) {
-            lastUpdateTick = ticksExisted;
-
-            boolean prevSky = doesSeeSky;
-            boolean newSky = MiscUtils.canSeeSky(this.getWorld(), this.getPos().up(), true, this.seesSkyInNoSkyWorlds(), this.doesSeeSky);
-            if (prevSky != newSky) {
-                this.notifySkyStateUpdate(prevSky, newSky);
-                this.doesSeeSky = newSky;
-                this.markForUpdate();
-            }
-        }
-        return doesSeeSky;
-    }
-
-    public boolean hasMultiblock() {
-        if (getWorld().isRemote()) {
-            return this.hasMultiblock;
-        }
-
-        if (this.getRequiredStructureType() == null) {
-            refreshMatcher();
-            resetMultiblockState();
-            return false;
-        }
-
-        refreshMatcher();
-        if (this.structureMatch == null) {
-            this.structureMatch = this.getRequiredStructureType().observe(getWorld(), getPos());
-        }
-        boolean prevFound = this.hasMultiblock;
-        boolean found = this.structureMatch.isValid(getWorld());
-        if (prevFound != found) {
-            LogCategory.STRUCTURE_MATCH.info(() ->
-                    "Structure match updated: " + this.getClass().getName() + " at " + this.getPos() +
-                            " (" + this.hasMultiblock + " -> " + found + ")");
-            this.notifyMultiblockStateUpdate(prevFound, found);
-            this.hasMultiblock = found;
-            this.markForUpdate();
-        }
-        return this.hasMultiblock;
-    }
-
-    private void refreshMatcher() {
-        StructureType struct = this.getRequiredStructureType();
-        if (this.structureMatch != null) {
-            //Same registry name as the structure type.
-            ResourceLocation key = this.structureMatch.getObserver().getProviderRegistryName();
-            if (struct == null || !key.equals(struct.getRegistryName())) {
-                ObserverHelper.getHelper().removeObserver(getWorld(), getPos());
-                this.structureMatch = null;
-            }
-        }
-        if (struct == null && ObserverHelper.getHelper().getSubscriber(getWorld(), getPos()) != null) {
-            ObserverHelper.getHelper().removeObserver(getWorld(), getPos());
-        }
-    }
-
-    private void resetMultiblockState() {
-        if (this.hasMultiblock) {
-            this.notifyMultiblockStateUpdate(true, false);
-            this.hasMultiblock = false;
-            this.markForUpdate();
-        }
-    }
-
-
-    protected void notifySkyStateUpdate(boolean doesSeeSkyPrev, boolean doesSeeSkyNow) {}
-
-    protected void notifyMultiblockStateUpdate(boolean hadMultiblockPrev, boolean hasMultiblockNow) {}
-
-    @Override
-    public void readCustomNBT(CompoundNBT compound) {
-        super.readCustomNBT(compound);
-        
-        this.ticksExisted = compound.getInt("ticksExisted");
-        this.doesSeeSky = compound.getBoolean("doesSeeSky");
-        this.hasMultiblock = compound.getBoolean("hasMultiblock");
+    public boolean shouldRemoveStructureObserver(BlockState currentState, BlockState newState) {
+        return currentState != newState;
     }
 
     @Override
-    public void writeCustomNBT(CompoundNBT compound) {
-        super.writeCustomNBT(compound);
+    public void onTileEntityRemove(Level level, BlockPos pos) {
+        super.onTileEntityRemove(level, pos);
 
-        compound.putInt("ticksExisted", this.ticksExisted);
-        compound.putBoolean("doesSeeSky", this.doesSeeSky);
-        compound.putBoolean("hasMultiblock", this.hasMultiblock);
+        if (!level.isClientSide()) {
+            this.removeObserver(level);
+            LumenNetworkHelper.getNode(level, pos).ifPresent(lumenNode -> {
+                LumenNetworkHelper.removeNode(level, lumenNode);
+            });
+        }
     }
 
+    public static class Data extends TileEntitySynchronized.Data {
+
+        public static final Codec<Data> CODEC = RecordCodecBuilder.create(inst -> tickFields(inst).apply(inst, TileEntityTick.Data::new));
+
+        protected static <T extends Data> Products.P3<RecordCodecBuilder.Mu<T>, Long, Boolean, Map<BlockPos, Boolean>> tickFields(RecordCodecBuilder.Instance<T> instance) {
+            return instance.group(
+                    Codec.LONG.optionalFieldOf("ticksExisted", 0L).forGetter(Data::getTicksExisted),
+                    Codec.BOOL.optionalFieldOf("hasStructure", false).forGetter(Data::hasStructure),
+                    CodecUtil.defaulted(Codec.unboundedMap(CodecUtil.stringBlockPos(), Codec.BOOL), "skyObstructions", HashMap::new, Data::getSkyObstructions));
+        }
+
+        private boolean hasStructure;
+        private final Map<BlockPos, Boolean> skyObstructions = new HashMap<>();
+
+        private long ticksExisted;
+
+        protected Data(long ticksExisted, boolean hasStructure, Map<BlockPos, Boolean> skyObstructions) {
+            this.ticksExisted = ticksExisted;
+            this.hasStructure = hasStructure;
+            this.skyObstructions.putAll(skyObstructions);
+        }
+
+        protected void incrementTicks() {
+            this.ticksExisted++;
+        }
+
+        protected void setHasStructure(boolean hasStructure) {
+            this.hasStructure = hasStructure;
+        }
+
+        protected void setSkyObstruction(BlockPos pos, boolean obstructed) {
+            this.skyObstructions.put(pos, obstructed);
+        }
+
+        protected Map<BlockPos, Boolean> getSkyObstructions() {
+            return Collections.unmodifiableMap(this.skyObstructions);
+        }
+
+        public boolean hasStructure() {
+            return this.hasStructure;
+        }
+
+        public boolean hasSky() {
+            return this.getSkyObstructions().values().stream().allMatch(b -> b);
+        }
+
+        public long getTicksExisted() {
+            return this.ticksExisted;
+        }
+    }
 }
