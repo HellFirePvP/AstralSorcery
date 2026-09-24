@@ -1,0 +1,61 @@
+{
+  "positions": {
+    "astralsorcery:aevitas": {
+      "x": 6,
+      "y": -3
+    },
+    "astralsorcery:aion": {
+      "x": -2,
+      "y": -2
+    },
+    "astralsorcery:akasha": {
+      "x": -3,
+      "y": 2
+    },
+    "astralsorcery:armara": {
+      "x": -1,
+      "y": -6
+    },
+    "astralsorcery:caldor": {
+      "x": -5,
+      "y": -1
+    },
+    "astralsorcery:discidia": {
+      "x": -6,
+      "y": -4
+    },
+    "astralsorcery:dynamis": {
+      "x": 1,
+      "y": 3
+    },
+    "astralsorcery:evorsio": {
+      "x": -5,
+      "y": 6
+    },
+    "astralsorcery:hyle": {
+      "x": 3,
+      "y": -1
+    },
+    "astralsorcery:nullae": {
+      "x": -2,
+      "y": 5
+    },
+    "astralsorcery:prismatic": {
+      "x": 0,
+      "y": 0
+    },
+    "astralsorcery:solyn": {
+      "x": 2,
+      "y": -5
+    },
+    "astralsorcery:vicio": {
+      "x": 5,
+      "y": 6
+    },
+    "astralsorcery:virel": {
+      "x": 4,
+      "y": 2
+    }
+  },
+  "replace": false
+}

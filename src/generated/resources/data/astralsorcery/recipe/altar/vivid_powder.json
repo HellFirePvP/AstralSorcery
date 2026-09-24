@@ -1,0 +1,58 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "A": {
+        "type": "item",
+        "ingredient": {
+          "tag": "c:gems/aquamarine"
+        }
+      },
+      "I": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:illumination_powder"
+        }
+      },
+      "S": {
+        "type": "item",
+        "ingredient": {
+          "tag": "c:seeds"
+        }
+      }
+    },
+    "pattern": [
+      " I ",
+      "SAS",
+      "ISI"
+    ],
+    "relayPattern": [
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ]
+  },
+  "mayChain": true,
+  "onlyNight": true,
+  "outputModifiers": [],
+  "outputs": [
+    {
+      "count": 4,
+      "id": "astralsorcery:vivid_powder"
+    }
+  ],
+  "requiredAdditionalInputs": [],
+  "requiredFluid": [],
+  "requiredLumen": [],
+  "requiredStarlight": [],
+  "requiredType": "illumination"
+}

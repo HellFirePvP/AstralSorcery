@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:discidia_inner_melee_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:attack_damage",
+        "identifier": "perk_modifier_205",
+        "mode": 1,
+        "value": 0.05
+      },
+      {
+        "attribute_type": "astralsorcery:critical_hit_chance",
+        "identifier": "perk_modifier_206",
+        "mode": 1,
+        "value": 0.05
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.attack_damage_critical_hit_chance",
+    "registry_name": "astralsorcery:discidia_inner_melee_2",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 17.0,
+    "y": -20.0
+  }
+}

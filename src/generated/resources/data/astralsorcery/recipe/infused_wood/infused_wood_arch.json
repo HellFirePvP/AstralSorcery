@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "W": {
+      "item": "astralsorcery:infused_wood_planks"
+    }
+  },
+  "pattern": [
+    "WW"
+  ],
+  "result": {
+    "count": 2,
+    "id": "astralsorcery:infused_wood_arch"
+  }
+}

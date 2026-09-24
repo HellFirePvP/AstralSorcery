@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:zeal_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:attack_speed",
+        "identifier": "perk_modifier_360",
+        "mode": 1,
+        "value": 0.12
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.zeal",
+    "registry_name": "astralsorcery:key_zeal",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": -5.0,
+    "y": 17.0
+  }
+}

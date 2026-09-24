@@ -1,0 +1,35 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:shifting_star",
+  "lookupIndexItems": [
+    "astralsorcery:shifting_star"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.shifting_star.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/shifting_star",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": 1.0,
+  "posY": 2.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:shifting_star"
+    }
+  ],
+  "tier": "resonance"
+}

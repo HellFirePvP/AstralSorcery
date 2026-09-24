@@ -1,0 +1,40 @@
+{
+  "connections": [
+    "astralsorcery:evorsio_bridge_3",
+    "astralsorcery:evorsio_bridge_connect_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:block_reach",
+        "identifier": "perk_modifier_241",
+        "mode": 1,
+        "value": 0.07
+      },
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_242",
+        "mode": 1,
+        "value": 0.02
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.block_reach_perk_effect",
+    "registry_name": "astralsorcery:evorsio_bridge_connect_2",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -9.0,
+    "y": -13.0
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:vitality_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:life_recovery",
+        "identifier": "perk_modifier_403",
+        "mode": 1,
+        "value": 0.12
+      },
+      {
+        "attribute_type": "astralsorcery:max_health",
+        "identifier": "perk_modifier_402",
+        "mode": 1,
+        "value": 0.03
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.vitality",
+    "registry_name": "astralsorcery:key_vitality",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -30.0,
+    "y": -5.0
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:attuned_shifting_stars",
+  "lookupIndexItems": [
+    "astralsorcery:shifting_star_aevitas",
+    "astralsorcery:shifting_star_armara",
+    "astralsorcery:shifting_star_discidia",
+    "astralsorcery:shifting_star_evorsio",
+    "astralsorcery:shifting_star_vicio"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.attuned_shifting_stars.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/shifting_star_aevitas",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/shifting_star_armara",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/shifting_star_discidia",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/shifting_star_evorsio",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/shifting_star_vicio",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": 2.0,
+  "posY": 2.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:shifting_star_aevitas"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:shifting_star_armara"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:shifting_star_discidia"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:shifting_star_evorsio"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:shifting_star_vicio"
+    }
+  ],
+  "tier": "luminance"
+}

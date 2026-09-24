@@ -1,0 +1,40 @@
+{
+  "connections": [
+    "astralsorcery:travel_31",
+    "astralsorcery:vicio_connect_out_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:movement_speed",
+        "identifier": "perk_modifier_182",
+        "mode": 1,
+        "value": 0.02
+      },
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_183",
+        "mode": 1,
+        "value": 0.02
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.movespeed_perk_effect",
+    "registry_name": "astralsorcery:vicio_connect_out_2",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": -6.0,
+    "y": 28.0
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "connections": [
+    "astralsorcery:discidia_inner_melee_2",
+    "astralsorcery:discidia_bridge_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:attack_reach",
+        "identifier": "perk_modifier_214",
+        "mode": 1,
+        "value": 0.1
+      },
+      {
+        "attribute_type": "astralsorcery:attack_damage",
+        "identifier": "perk_modifier_213",
+        "mode": 1,
+        "value": 0.1
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.strong_arms",
+    "registry_name": "astralsorcery:discidia_inner_m_",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 18.0,
+    "y": -17.0
+  }
+}

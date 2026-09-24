@@ -1,0 +1,88 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:complex_lumen",
+  "lookupIndexItems": [],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.complex_lumen.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.complex_lumen.text.1"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.complex_lumen.text.2"
+    }
+  ],
+  "posX": -2.0,
+  "posY": -5.0,
+  "renderItemStacks": [
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:virel"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:solyn"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:nullae"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:caldor"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:hyle"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:dynamis"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:aion"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:akasha"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    }
+  ],
+  "tier": "luminance"
+}

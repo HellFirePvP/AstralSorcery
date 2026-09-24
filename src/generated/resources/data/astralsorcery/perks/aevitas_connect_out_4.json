@@ -1,0 +1,40 @@
+{
+  "connections": [
+    "astralsorcery:aevitas_connect_out_3",
+    "astralsorcery:travel_35"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:max_health",
+        "identifier": "perk_modifier_131",
+        "mode": 0,
+        "value": 1.0
+      },
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_132",
+        "mode": 1,
+        "value": 0.02
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.life_perk_effect",
+    "registry_name": "astralsorcery:aevitas_connect_out_4",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -25.0,
+    "y": 15.0
+  }
+}

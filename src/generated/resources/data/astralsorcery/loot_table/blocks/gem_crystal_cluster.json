@@ -1,0 +1,71 @@
+{
+  "type": "minecraft:block",
+  "functions": [
+    {
+      "function": "minecraft:explosion_decay"
+    },
+    {
+      "function": "astralsorcery:generate_dynamism_gem_rolls"
+    }
+  ],
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "astralsorcery:gem_crystal_cluster",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "stage_2_day"
+              }
+            }
+          ],
+          "name": "astralsorcery:dynamism_gem_day"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "astralsorcery:gem_crystal_cluster",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "stage_2_night"
+              }
+            }
+          ],
+          "name": "astralsorcery:dynamism_gem_night"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "astralsorcery:gem_crystal_cluster",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "stage_2_sky"
+              }
+            }
+          ],
+          "name": "astralsorcery:dynamism_gem_sky"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "astralsorcery:blocks/gem_crystal_cluster"
+}

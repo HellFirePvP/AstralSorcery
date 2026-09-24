@@ -1,0 +1,21 @@
+{
+  "condition": {
+    "type": "astralsorcery:damage_item",
+    "clearDescription": {
+      "translate": "artifact.astralsorcery.condition.value.damage_item.hit_by_sword.clear"
+    },
+    "hiddenDescription": {
+      "translate": "artifact.astralsorcery.condition.value.damage_item.hit_by_sword.hidden"
+    },
+    "id": "astralsorcery:hit_by_sword",
+    "items": [
+      {
+        "tag": "minecraft:swords"
+      }
+    ]
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

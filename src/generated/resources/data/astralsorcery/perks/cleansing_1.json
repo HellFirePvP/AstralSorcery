@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:aevitas_bridge_3"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:life_recovery",
+        "identifier": "perk_modifier_386",
+        "mode": 1,
+        "value": 0.1
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.life_recovery",
+    "registry_name": "astralsorcery:cleansing_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -13.0,
+    "y": -1.0
+  }
+}

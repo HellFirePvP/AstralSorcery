@@ -1,0 +1,13 @@
+{
+  "values": {
+    "#astralsorcery:infused_woods": {
+      "burn_time": 300
+    },
+    "astralsorcery:infused_wood_slab": {
+      "burn_time": 150
+    },
+    "astralsorcery:infused_wood_stairs": {
+      "burn_time": 300
+    }
+  }
+}

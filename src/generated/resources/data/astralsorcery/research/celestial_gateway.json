@@ -1,0 +1,48 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:celestial_gateway",
+  "lookupIndexItems": [
+    "astralsorcery:celestial_gateway"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.celestial_gateway.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/celestial_gateway",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:structure",
+      "structureIndex": 0,
+      "structureObserver": "astralsorcery:celestial_gateway"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.celestial_gateway.text.1"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.celestial_gateway.text.2"
+    }
+  ],
+  "posX": 4.0,
+  "posY": -2.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:celestial_gateway"
+    }
+  ],
+  "tier": "resonance"
+}

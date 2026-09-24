@@ -1,0 +1,34 @@
+{
+  "connections": [
+    "astralsorcery:travel_8",
+    "astralsorcery:gem_socket_core"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_108",
+        "mode": 1,
+        "value": 0.03
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.perk_effect",
+    "registry_name": "astralsorcery:travel_core_4",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": -1.0,
+    "y": 6.0
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "connections": [
+    "astralsorcery:travel_27"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_61",
+        "mode": 1,
+        "value": 0.03
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.perk_effect",
+    "registry_name": "astralsorcery:travel_branch_11",
+    "requirements": [],
+    "x": 12.0,
+    "y": 24.0
+  }
+}

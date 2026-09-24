@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "astralsorcery:item/stardew_overlay_0",
+      "predicate": {
+        "astralsorcery:filled": 0.0
+      }
+    },
+    {
+      "model": "astralsorcery:item/stardew_overlay_1",
+      "predicate": {
+        "astralsorcery:filled": 0.25
+      }
+    },
+    {
+      "model": "astralsorcery:item/stardew_overlay_2",
+      "predicate": {
+        "astralsorcery:filled": 0.5
+      }
+    },
+    {
+      "model": "astralsorcery:item/stardew_overlay_3",
+      "predicate": {
+        "astralsorcery:filled": 0.75
+      }
+    },
+    {
+      "model": "astralsorcery:item/stardew_overlay_4",
+      "predicate": {
+        "astralsorcery:filled": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "astralsorcery:item/stardew_flask"
+  }
+}

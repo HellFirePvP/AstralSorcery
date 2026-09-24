@@ -1,0 +1,58 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "D": {
+        "type": "item",
+        "ingredient": {
+          "tag": "c:gems/diamond"
+        }
+      },
+      "R": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:marble_runed"
+        }
+      },
+      "S": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:stardust"
+        }
+      }
+    },
+    "pattern": [
+      " SD",
+      "DRS",
+      "R  "
+    ],
+    "relayPattern": [
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ]
+  },
+  "mayChain": false,
+  "onlyNight": true,
+  "outputModifiers": [],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:exchange_wand"
+    }
+  ],
+  "requiredAdditionalInputs": [],
+  "requiredFluid": [],
+  "requiredLumen": [],
+  "requiredStarlight": [],
+  "requiredType": "illumination"
+}

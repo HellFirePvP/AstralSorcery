@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:cunning_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:luck",
+        "identifier": "perk_modifier_413",
+        "mode": 0,
+        "value": 1.5
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.cunning",
+    "registry_name": "astralsorcery:key_cunning",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": 4.0,
+    "y": -8.0
+  }
+}

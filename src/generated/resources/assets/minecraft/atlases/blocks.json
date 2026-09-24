@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "astralsorcery:model/astrolabe_in_hand"
+    }
+  ]
+}

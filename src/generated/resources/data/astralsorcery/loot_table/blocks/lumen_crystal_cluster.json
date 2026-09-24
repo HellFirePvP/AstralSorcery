@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:block",
+  "functions": [
+    {
+      "function": "minecraft:explosion_decay"
+    }
+  ],
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "astralsorcery:copy_lumen"
+            }
+          ],
+          "name": "astralsorcery:lumen_crystal"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "astralsorcery:blocks/lumen_crystal_cluster"
+}

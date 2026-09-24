@@ -1,0 +1,52 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "A": {
+        "type": "item",
+        "ingredient": {
+          "tag": "c:gems/aquamarine"
+        }
+      },
+      "P": {
+        "type": "item",
+        "ingredient": {
+          "item": "minecraft:paper"
+        }
+      }
+    },
+    "pattern": [
+      " A ",
+      " P ",
+      "   "
+    ],
+    "relayPattern": [
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ]
+  },
+  "mayChain": true,
+  "onlyNight": true,
+  "outputModifiers": [],
+  "outputs": [
+    {
+      "count": 2,
+      "id": "astralsorcery:parchment"
+    }
+  ],
+  "requiredAdditionalInputs": [],
+  "requiredFluid": [],
+  "requiredLumen": [],
+  "requiredStarlight": [],
+  "requiredType": "illumination"
+}

@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:vicio_bridge_3"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:swim_speed",
+        "identifier": "perk_modifier_366",
+        "mode": 1,
+        "value": 0.08
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.swim_speed",
+    "registry_name": "astralsorcery:fins_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": -4.0,
+    "y": 12.0
+  }
+}

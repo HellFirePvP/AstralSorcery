@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/infuser/infuser_solid"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/infuser/infuser_translucent"
+      }
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "M": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:marble_raw"
+        }
+      }
+    },
+    "pattern": [
+      " M ",
+      "MMM",
+      " M "
+    ],
+    "relayPattern": [
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ]
+  },
+  "mayChain": true,
+  "onlyNight": true,
+  "outputModifiers": [],
+  "outputs": [
+    {
+      "count": 5,
+      "id": "astralsorcery:marble_engraved"
+    }
+  ],
+  "requiredAdditionalInputs": [],
+  "requiredFluid": [],
+  "requiredLumen": [],
+  "requiredStarlight": [],
+  "requiredType": "illumination"
+}

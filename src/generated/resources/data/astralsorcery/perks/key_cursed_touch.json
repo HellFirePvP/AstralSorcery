@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:cursed_touch_3"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_damage_effects",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.cursed_touch",
+    "registry_name": "astralsorcery:key_cursed_touch",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 31.0,
+    "y": -24.0
+  }
+}

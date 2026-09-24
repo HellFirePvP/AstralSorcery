@@ -1,0 +1,32 @@
+{
+  "connections": [],
+  "perk": {
+    "type": "astralsorcery:root_perk_evorsio",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.root"
+      }
+    },
+    "constellation": "astralsorcery:evorsio",
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:block_reach",
+        "identifier": "perk_modifier_3",
+        "mode": 0,
+        "value": 2.0
+      }
+    ],
+    "name": "perk.astralsorcery.root_perk_evorsio",
+    "registry_name": "astralsorcery:root_evorsio",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -20.0,
+    "y": -26.0
+  }
+}

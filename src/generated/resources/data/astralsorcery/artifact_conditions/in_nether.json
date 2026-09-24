@@ -1,0 +1,20 @@
+{
+  "condition": {
+    "type": "astralsorcery:in_dimension",
+    "clearDescription": {
+      "translate": "artifact.astralsorcery.condition.value.in_dimension.the_nether.clear"
+    },
+    "dimensionType": "minecraft:the_nether",
+    "hiddenDescription": {
+      "translate": "artifact.astralsorcery.condition.value.in_dimension.the_nether.hidden"
+    },
+    "id": "astralsorcery:in_nether"
+  },
+  "selector": {
+    "conflicts": [
+      "astralsorcery:in_stronghold",
+      "astralsorcery:in_mineshaft"
+    ],
+    "weight": 1
+  }
+}

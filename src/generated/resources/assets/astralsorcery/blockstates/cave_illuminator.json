@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/cave_illuminator/cave_illuminator_solid"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/cave_illuminator/cave_illuminator_translucent"
+      }
+    }
+  ]
+}

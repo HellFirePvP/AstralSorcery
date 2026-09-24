@@ -1,0 +1,81 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:iridescent_tools",
+  "lookupIndexItems": [
+    "astralsorcery:iridescent_crystal_sword",
+    "astralsorcery:iridescent_crystal_pickaxe",
+    "astralsorcery:iridescent_crystal_axe",
+    "astralsorcery:iridescent_crystal_shovel"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.iridescent_tools.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/iridescent_crystal_pickaxe",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.iridescent_tools.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/iridescent_crystal_axe",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.iridescent_tools.text.2"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/iridescent_crystal_shovel",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.iridescent_tools.text.3"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/iridescent_crystal_sword",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.iridescent_tools.text.4"
+    }
+  ],
+  "posX": 1.0,
+  "posY": -1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:iridescent_crystal_sword"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:iridescent_crystal_pickaxe"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:iridescent_crystal_axe"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:iridescent_crystal_shovel"
+    }
+  ],
+  "tier": "luminance"
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sooty_marble": {
+      "conditions": {
+        "items": [
+          {
+            "items": "astralsorcery:sooty_marble_raw"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "astralsorcery:sooty_marble/sooty_marble_stairs_from_bricks"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sooty_marble"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "astralsorcery:sooty_marble/sooty_marble_stairs_from_bricks"
+    ]
+  }
+}

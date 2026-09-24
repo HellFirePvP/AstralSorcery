@@ -1,0 +1,4 @@
+// 1.21.1	2026-05-12T13:05:49.4924279	Global Loot Modifiers : astralsorcery
+e481fc46cdd70424b892d94d99fcde4960113166 data/astralsorcery/loot_modifiers/smelt_loot.json
+d803a200edcfbfb64c9f94354373592fa5f5b8d9 data/astralsorcery/loot_modifiers/teleport_drops.json
+6826f74f5a01d5a48e4c3abf387784d3135e4200 data/neoforge/loot_modifiers/global_loot_modifiers.json

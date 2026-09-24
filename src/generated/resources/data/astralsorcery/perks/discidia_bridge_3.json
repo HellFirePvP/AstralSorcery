@@ -1,0 +1,40 @@
+{
+  "connections": [
+    "astralsorcery:discidia_bridge_2",
+    "astralsorcery:travel_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:projectile_damage",
+        "identifier": "perk_modifier_270",
+        "mode": 1,
+        "value": 0.04
+      },
+      {
+        "attribute_type": "astralsorcery:attack_damage",
+        "identifier": "perk_modifier_269",
+        "mode": 1,
+        "value": 0.04
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.attack_damage_projectile_damage",
+    "registry_name": "astralsorcery:discidia_bridge_3",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 10.0,
+    "y": -12.0
+  }
+}

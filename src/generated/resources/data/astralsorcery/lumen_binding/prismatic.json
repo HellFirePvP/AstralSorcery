@@ -1,0 +1,74 @@
+{
+  "slot_bindings": {
+    "boots": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:effectiveness",
+        "effect_multiplier": 0.5
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:none"
+      }
+    },
+    "chestplate": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:effectiveness",
+        "effect_multiplier": 0.5
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:none"
+      }
+    },
+    "helmet": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:effectiveness",
+        "effect_multiplier": 0.5
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:none"
+      }
+    },
+    "leggings": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:effectiveness",
+        "effect_multiplier": 0.5
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:none"
+      }
+    },
+    "melee_weapon": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:effectiveness",
+        "effect_multiplier": 0.5
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:none"
+      }
+    },
+    "ranged_weapon": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:effectiveness",
+        "effect_multiplier": 0.5
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:none"
+      }
+    },
+    "tool": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:effectiveness",
+        "effect_multiplier": 0.5
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:none"
+      }
+    }
+  }
+}

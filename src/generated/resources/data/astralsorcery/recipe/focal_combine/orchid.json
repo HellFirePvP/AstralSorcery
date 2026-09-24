@@ -1,0 +1,17 @@
+{
+  "type": "astralsorcery:focal_combine",
+  "color": -4736072,
+  "duration": 1200,
+  "inputs": [
+    {
+      "tag": "minecraft:small_flowers"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:orchid"
+    }
+  ],
+  "required_constellation": "astralsorcery:armara"
+}

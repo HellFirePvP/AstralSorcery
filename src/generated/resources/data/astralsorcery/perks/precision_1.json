@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:travel_core_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:critical_hit_chance",
+        "identifier": "perk_modifier_426",
+        "mode": 1,
+        "value": 0.05
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.critical_hit_chance",
+    "registry_name": "astralsorcery:precision_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": -3.0,
+    "y": -6.0
+  }
+}

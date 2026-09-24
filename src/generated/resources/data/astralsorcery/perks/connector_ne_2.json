@@ -1,0 +1,36 @@
+{
+  "connections": [
+    "astralsorcery:connector_ne_0",
+    "astralsorcery:connector_ne_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_tree_connector_delegate",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "delegate_key": "astralsorcery:tree_connector_ne",
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:perk_experience",
+        "identifier": "perk_modifier_86",
+        "mode": 1,
+        "value": 0.02
+      },
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_85",
+        "mode": 1,
+        "value": 0.02
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.connector_ne.delegate",
+    "registry_name": "astralsorcery:connector_ne_2",
+    "requirements": [],
+    "x": 39.0,
+    "y": -15.0
+  }
+}

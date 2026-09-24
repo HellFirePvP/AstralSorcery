@@ -1,0 +1,10 @@
+{
+  "type": "astralsorcery:lightwell",
+  "catalyst_color": -11310593,
+  "generated_fluid": "minecraft:water",
+  "input": {
+    "item": "minecraft:blue_ice"
+  },
+  "production_multiplier": 2.5,
+  "shatter_multiplier": 0.1
+}

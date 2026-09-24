@@ -1,0 +1,64 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "G": {
+        "type": "item",
+        "ingredient": {
+          "tag": "c:nuggets/gold"
+        }
+      },
+      "L": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:glass_lens"
+        }
+      },
+      "P": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:infused_wood_planks"
+        }
+      },
+      "R": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:marble_runed"
+        }
+      }
+    },
+    "pattern": [
+      "   ",
+      "GLG",
+      "PRP"
+    ],
+    "relayPattern": [
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ]
+  },
+  "mayChain": true,
+  "onlyNight": true,
+  "outputModifiers": [],
+  "outputs": [
+    {
+      "count": 2,
+      "id": "astralsorcery:focus_relay"
+    }
+  ],
+  "requiredAdditionalInputs": [],
+  "requiredFluid": [],
+  "requiredLumen": [],
+  "requiredStarlight": [],
+  "requiredType": "illumination"
+}

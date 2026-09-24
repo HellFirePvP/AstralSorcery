@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#c:is_snowy",
+  "features": "astralsorcery:placed_glimmer_amaranth_flowers",
+  "step": "vegetal_decoration"
+}

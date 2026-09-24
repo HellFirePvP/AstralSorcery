@@ -1,0 +1,23 @@
+{
+  "condition": {
+    "type": "astralsorcery:near_block",
+    "blockConsumptionChance": 0.0,
+    "blockCountNeeded": {
+      "maxInclusive": 1,
+      "minInclusive": 1
+    },
+    "blockPredicate": {
+      "blocks": [
+        "minecraft:note_block",
+        "minecraft:jukebox",
+        "minecraft:bell"
+      ]
+    },
+    "id": "astralsorcery:sound_block",
+    "range": 4
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

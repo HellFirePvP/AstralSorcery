@@ -1,0 +1,12 @@
+{
+  "type": "astralsorcery:lumen_generation",
+  "attempt_starlight_consumption": 1.0,
+  "catalyst_shatter_multiplier": 1.0,
+  "input": {
+    "item": "astralsorcery:orchid"
+  },
+  "lumen_combination_inputs": {},
+  "produced_lumen": "astralsorcery:armara",
+  "produced_lumen_amount": 4,
+  "production_attempt_multiplier": 4.0
+}

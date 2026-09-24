@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:discidia_bridge_5"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:projectile_damage",
+        "identifier": "perk_modifier_313",
+        "mode": 1,
+        "value": 0.05
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.projectile_damage",
+    "registry_name": "astralsorcery:blunt_bolts_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 5.0,
+    "y": -18.0
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "connections": [
+    "astralsorcery:vicio_bridge_2",
+    "astralsorcery:vicio_gem_socket",
+    "astralsorcery:vicio_inner_m_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:movement_speed",
+        "identifier": "perk_modifier_265",
+        "mode": 1,
+        "value": 0.02
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.move_speed",
+    "registry_name": "astralsorcery:vicio_bridge_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": -3.0,
+    "y": 22.0
+  }
+}

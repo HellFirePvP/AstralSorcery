@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:travel_22"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_335",
+        "mode": 0,
+        "value": 0.5
+      },
+      {
+        "attribute_type": "astralsorcery:max_health",
+        "identifier": "perk_modifier_334",
+        "mode": 0,
+        "value": 1.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.life_armor",
+    "registry_name": "astralsorcery:phoenix_blessing_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 32.0,
+    "y": -4.0
+  }
+}

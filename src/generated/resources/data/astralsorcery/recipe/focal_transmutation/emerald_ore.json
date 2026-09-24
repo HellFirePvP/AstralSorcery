@@ -1,0 +1,23 @@
+{
+  "type": "astralsorcery:focal_transmutation",
+  "color": -7078128,
+  "duration": 800,
+  "input_display_stacks": {
+    "item": "minecraft:diamond_ore"
+  },
+  "input_predicates": [
+    {
+      "type": "minecraft:matching_blocks",
+      "blocks": "minecraft:diamond_ore"
+    }
+  ],
+  "output_states": [
+    {
+      "data": {
+        "Name": "minecraft:emerald_ore"
+      },
+      "weight": 1
+    }
+  ],
+  "requires_focused_starlight": true
+}

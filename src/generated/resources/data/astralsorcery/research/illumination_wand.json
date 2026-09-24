@@ -1,0 +1,39 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:illumination_wand",
+  "lookupIndexItems": [
+    "astralsorcery:illumination_wand"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.illumination_wand.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/illumination_wand",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.illumination_wand.text.1"
+    }
+  ],
+  "posX": 0.0,
+  "posY": -3.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:illumination_wand"
+    }
+  ],
+  "tier": "luminance"
+}

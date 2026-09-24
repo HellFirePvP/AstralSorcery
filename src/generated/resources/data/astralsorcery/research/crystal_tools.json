@@ -1,0 +1,65 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:crystal_tools",
+  "lookupIndexItems": [
+    "astralsorcery:crystal_pickaxe",
+    "astralsorcery:crystal_axe",
+    "astralsorcery:crystal_shovel",
+    "astralsorcery:crystal_sword"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.crystal_tools.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/crystal_pickaxe",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/crystal_axe",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/crystal_shovel",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/crystal_sword",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": -5.0,
+  "posY": 0.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:crystal_pickaxe"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:crystal_axe"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:crystal_shovel"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:crystal_sword"
+    }
+  ],
+  "tier": "illumination"
+}

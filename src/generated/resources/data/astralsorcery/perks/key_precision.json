@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:precision_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_429",
+        "mode": 1,
+        "value": 0.1
+      },
+      {
+        "attribute_type": "astralsorcery:critical_hit_chance",
+        "identifier": "perk_modifier_428",
+        "mode": 1,
+        "value": 0.08
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.precision",
+    "registry_name": "astralsorcery:key_precision",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": -5.0,
+    "y": -6.0
+  }
+}

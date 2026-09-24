@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_infused_wood": {
+      "conditions": {
+        "items": [
+          {
+            "items": "astralsorcery:infused_wood"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "astralsorcery:infused_wood/infused_wood_infused"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_infused_wood"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "astralsorcery:infused_wood/infused_wood_infused"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:aevitas_inner_m_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_137",
+        "mode": 1,
+        "value": 0.03
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.armor",
+    "registry_name": "astralsorcery:aevitas_connect_in_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -23.0,
+    "y": -1.0
+  }
+}

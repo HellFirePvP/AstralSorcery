@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_aquamarine": {
+      "conditions": {
+        "items": [
+          {
+            "items": "astralsorcery:aquamarine"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "astralsorcery:tome"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_aquamarine"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "astralsorcery:tome"
+    ]
+  }
+}

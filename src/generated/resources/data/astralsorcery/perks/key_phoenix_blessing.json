@@ -1,0 +1,24 @@
+{
+  "connections": [],
+  "perk": {
+    "type": "astralsorcery:key_cheat_death",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.phoenix_blessing",
+    "registry_name": "astralsorcery:key_phoenix_blessing",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 29.0,
+    "y": -5.0
+  }
+}

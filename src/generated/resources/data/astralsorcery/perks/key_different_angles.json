@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:different_angles_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_all_tool_types",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.different_angles",
+    "registry_name": "astralsorcery:key_different_angles",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -4.0,
+    "y": -17.0
+  }
+}

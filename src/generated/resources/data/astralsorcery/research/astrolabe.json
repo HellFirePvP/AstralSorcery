@@ -1,0 +1,46 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:wand",
+    "astralsorcery:illumination_altar"
+  ],
+  "key": "astralsorcery:astrolabe",
+  "lookupIndexItems": [
+    "astralsorcery:astrolabe"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.astrolabe.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.astrolabe.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:astrolabe",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.astrolabe.text.2"
+    }
+  ],
+  "posX": 2.0,
+  "posY": 0.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:astrolabe"
+    }
+  ],
+  "tier": "shimmer"
+}

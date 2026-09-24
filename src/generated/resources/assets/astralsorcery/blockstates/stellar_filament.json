@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/stellar_filament/stellar_filament_solid"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/stellar_filament/stellar_filament_translucent"
+      }
+    }
+  ]
+}

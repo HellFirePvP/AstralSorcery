@@ -1,0 +1,173 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 1.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_altar_sparkle",
+    "astralsorcery:default_relay_input"
+  ],
+  "focusConstellation": "astralsorcery:armara",
+  "grid": {
+    "key": {
+      "C": {
+        "type": "item",
+        "ingredient": {
+          "tag": "astralsorcery:celestial_crystal"
+        }
+      },
+      "G": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:resonating_gem"
+        }
+      },
+      "L": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:glass_lens"
+        }
+      },
+      "M": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:starmetal_ingot"
+        }
+      },
+      "P": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:marble_pillar"
+        }
+      },
+      "R": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:marble_runed"
+        }
+      },
+      "S": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:sooty_marble_raw"
+        }
+      }
+    },
+    "pattern": [
+      "MLM",
+      "MCM",
+      "M M"
+    ],
+    "relayPattern": [
+      "G   G",
+      "P   P",
+      "P   P",
+      "PSSSP",
+      "PRRRP"
+    ]
+  },
+  "mayChain": false,
+  "onlyNight": true,
+  "outputModifiers": [
+    {
+      "type": "astralsorcery:set_block",
+      "block_states": [
+        {
+          "data": {
+            "Name": "astralsorcery:altar_radiance"
+          },
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "type": "astralsorcery:update_research_tier",
+      "tier": "radiance"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:altar_radiance"
+    }
+  ],
+  "requiredAdditionalInputs": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:stardust"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:nocturnal_powder"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:illumination_powder"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:stardust"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:nocturnal_powder"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:illumination_powder"
+      }
+    }
+  ],
+  "requiredFluid": [
+    {
+      "amount": 1000,
+      "id": "astralsorcery:liquid_starlight"
+    },
+    {
+      "amount": 1000,
+      "id": "astralsorcery:liquid_starlight"
+    },
+    {
+      "amount": 1000,
+      "id": "astralsorcery:liquid_starlight"
+    }
+  ],
+  "requiredLumen": [
+    {
+      "amount": 200,
+      "lumen": "astralsorcery:aevitas"
+    },
+    {
+      "amount": 200,
+      "lumen": "astralsorcery:armara"
+    },
+    {
+      "amount": 200,
+      "lumen": "astralsorcery:vicio"
+    },
+    {
+      "amount": 200,
+      "lumen": "astralsorcery:discidia"
+    },
+    {
+      "amount": 200,
+      "lumen": "astralsorcery:evorsio"
+    }
+  ],
+  "requiredStarlight": [
+    "astralsorcery:armara"
+  ],
+  "requiredType": "luminance"
+}

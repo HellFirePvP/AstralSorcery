@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_0_combined",
+      "predicate": {
+        "astralsorcery:stage": 0.0
+      }
+    },
+    {
+      "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_1_combined",
+      "predicate": {
+        "astralsorcery:stage": 0.2
+      }
+    },
+    {
+      "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_2_combined",
+      "predicate": {
+        "astralsorcery:stage": 0.4
+      }
+    },
+    {
+      "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_3_combined",
+      "predicate": {
+        "astralsorcery:stage": 0.6
+      }
+    },
+    {
+      "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_4_combined",
+      "predicate": {
+        "astralsorcery:stage": 0.8
+      }
+    }
+  ]
+}

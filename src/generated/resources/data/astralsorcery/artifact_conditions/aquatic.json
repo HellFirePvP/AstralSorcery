@@ -1,0 +1,22 @@
+{
+  "condition": {
+    "type": "astralsorcery:near_entity",
+    "entityConsumptionChance": 0.0,
+    "entityCountNeeded": {
+      "maxInclusive": 2,
+      "minInclusive": 2
+    },
+    "entityPredicate": {
+      "damageTypeTags": [
+        "minecraft:aquatic"
+      ],
+      "damageTypes": []
+    },
+    "id": "astralsorcery:aquatic",
+    "range": 10
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

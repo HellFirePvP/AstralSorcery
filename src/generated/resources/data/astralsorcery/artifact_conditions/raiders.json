@@ -1,0 +1,22 @@
+{
+  "condition": {
+    "type": "astralsorcery:near_entity",
+    "entityConsumptionChance": 0.0,
+    "entityCountNeeded": {
+      "maxInclusive": 2,
+      "minInclusive": 2
+    },
+    "entityPredicate": {
+      "damageTypeTags": [
+        "minecraft:raiders"
+      ],
+      "damageTypes": []
+    },
+    "id": "astralsorcery:raiders",
+    "range": 4
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

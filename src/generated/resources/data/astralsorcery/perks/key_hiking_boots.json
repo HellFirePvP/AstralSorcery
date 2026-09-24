@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:hiking_boots_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:movement_speed",
+        "identifier": "perk_modifier_371",
+        "mode": 1,
+        "value": 0.04
+      },
+      {
+        "attribute_type": "astralsorcery:step_height",
+        "identifier": "perk_modifier_370",
+        "mode": 0,
+        "value": 1.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.hiking_boots",
+    "registry_name": "astralsorcery:key_hiking_boots",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": 10.0,
+    "y": 28.0
+  }
+}

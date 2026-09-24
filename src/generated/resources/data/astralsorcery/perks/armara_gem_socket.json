@@ -1,0 +1,27 @@
+{
+  "connections": [
+    "astralsorcery:armara_inner_armor_2",
+    "astralsorcery:armara_inner_resist_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:gem_socket_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.generic.gem_socket",
+    "registry_name": "astralsorcery:armara_gem_socket",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 22.0,
+    "y": 8.0
+  }
+}

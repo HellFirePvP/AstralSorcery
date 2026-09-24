@@ -1,0 +1,44 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:resplendent_prism",
+  "lookupIndexItems": [
+    "astralsorcery:enchantment_amulet"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.resplendent_prism.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/enchantment_amulet_initial",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.resplendent_prism.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/enchantment_amulet_reroll",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": 3.0,
+  "posY": -2.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:enchantment_amulet"
+    }
+  ],
+  "tier": "luminance"
+}

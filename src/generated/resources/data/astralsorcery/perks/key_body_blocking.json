@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:body_blocking_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_damage_armor",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.body_blocking",
+    "registry_name": "astralsorcery:key_body_blocking",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 9.0,
+    "y": 8.0
+  }
+}

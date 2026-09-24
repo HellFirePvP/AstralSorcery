@@ -1,0 +1,35 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:celestial_crystals",
+  "lookupIndexItems": [
+    "astralsorcery:celestial_crystal",
+    "astralsorcery:celestial_crystal_cluster"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.celestial_crystals.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.celestial_crystals.text.1"
+    }
+  ],
+  "posX": 1.0,
+  "posY": -2.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:celestial_crystal"
+    }
+  ],
+  "tier": "illumination"
+}

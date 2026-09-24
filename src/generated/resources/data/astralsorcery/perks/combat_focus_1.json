@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:discidia_bridge_3"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:critical_hit_damage",
+        "identifier": "perk_modifier_317",
+        "mode": 1,
+        "value": 0.06
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.critical_hit_damage",
+    "registry_name": "astralsorcery:combat_focus_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 11.0,
+    "y": -10.0
+  }
+}

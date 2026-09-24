@@ -1,0 +1,27 @@
+{
+  "type": "astralsorcery:liquid_starlight",
+  "color": -1,
+  "consumesInputs": false,
+  "consumesLiquid": true,
+  "duration": 80,
+  "input": {
+    "count": 1,
+    "ingredient": {
+      "item": "astralsorcery:stardust"
+    }
+  },
+  "otherInputs": [
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "astralsorcery:crystal"
+      }
+    }
+  ],
+  "outputModifiers": [
+    {
+      "type": "astralsorcery:form_crystal_cluster"
+    }
+  ],
+  "randomAdditionalDuration": 40
+}

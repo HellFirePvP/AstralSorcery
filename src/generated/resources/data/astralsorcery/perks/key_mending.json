@@ -1,0 +1,24 @@
+{
+  "connections": [],
+  "perk": {
+    "type": "astralsorcery:key_mend_armor",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.mending",
+    "registry_name": "astralsorcery:key_mending",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -24.0,
+    "y": 25.0
+  }
+}

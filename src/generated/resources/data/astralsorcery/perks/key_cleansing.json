@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:cleansing_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_cleanse_negative_effects",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.cleansing",
+    "registry_name": "astralsorcery:key_cleansing",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -14.0,
+    "y": -2.0
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "effect": {
+    "type": "astralsorcery:effects",
+    "effects": [
+      {
+        "ambient": true,
+        "amplifier": 1,
+        "duration": 1000,
+        "id": "minecraft:regeneration",
+        "neoforge:cures": [
+          "protected_by_totem",
+          "milk"
+        ],
+        "show_icon": false
+      },
+      {
+        "ambient": true,
+        "amplifier": 1,
+        "duration": 1000,
+        "id": "minecraft:saturation",
+        "neoforge:cures": [
+          "protected_by_totem",
+          "milk"
+        ],
+        "show_icon": false
+      }
+    ],
+    "id": "astralsorcery:effect_regeneration",
+    "range": 8
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

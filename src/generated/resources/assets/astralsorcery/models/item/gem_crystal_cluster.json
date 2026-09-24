@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_0_combined",
+      "predicate": {
+        "astralsorcery:stage": 0.0
+      }
+    },
+    {
+      "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_1_combined",
+      "predicate": {
+        "astralsorcery:stage": 0.2
+      }
+    },
+    {
+      "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_2_sky_combined",
+      "predicate": {
+        "astralsorcery:stage": 0.4
+      }
+    },
+    {
+      "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_2_day_combined",
+      "predicate": {
+        "astralsorcery:stage": 0.6
+      }
+    },
+    {
+      "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_2_night_combined",
+      "predicate": {
+        "astralsorcery:stage": 0.8
+      }
+    }
+  ]
+}

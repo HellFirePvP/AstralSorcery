@@ -1,0 +1,61 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "I": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:illumination_powder"
+        }
+      },
+      "L": {
+        "type": "fluid",
+        "ingredient": {
+          "amount": 1000,
+          "ingredient": {
+            "fluid": "astralsorcery:liquid_starlight"
+          }
+        }
+      },
+      "R": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:marble_runed"
+        }
+      }
+    },
+    "pattern": [
+      "RIR",
+      "ILI",
+      "RIR"
+    ],
+    "relayPattern": [
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ]
+  },
+  "mayChain": false,
+  "onlyNight": true,
+  "outputModifiers": [],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:cave_illuminator"
+    }
+  ],
+  "requiredAdditionalInputs": [],
+  "requiredFluid": [],
+  "requiredLumen": [],
+  "requiredStarlight": [],
+  "requiredType": "illumination"
+}

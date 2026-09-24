@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "astralsorcery:item/enchantment_amulet",
+    "layer1": "astralsorcery:item/enchantment_amulet_gem",
+    "layer2": "astralsorcery:item/enchantment_amulet_shine"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "connections": [
+    "astralsorcery:armara_inner_m_1",
+    "astralsorcery:armara_gem_socket"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_150",
+        "mode": 0,
+        "value": 1.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.add.armor",
+    "registry_name": "astralsorcery:armara_bridge_4",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 21.0,
+    "y": 5.0
+  }
+}

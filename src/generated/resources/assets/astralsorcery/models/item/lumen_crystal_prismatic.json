@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "astralsorcery:item/lumen_crystal_prismatic"
+  }
+}

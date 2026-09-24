@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:dislocated_reflection_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:damage_reflect",
+        "identifier": "perk_modifier_342",
+        "mode": 1,
+        "value": 0.14
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.dislocated_reflection",
+    "registry_name": "astralsorcery:keydislocated_reflection",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 36.0,
+    "y": 5.0
+  }
+}

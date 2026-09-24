@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:travel_core_4"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:potion_duration",
+        "identifier": "perk_modifier_416",
+        "mode": 1,
+        "value": 0.06
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.potion_duration",
+    "registry_name": "astralsorcery:alch_genius_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": 1.0,
+    "y": 4.0
+  }
+}

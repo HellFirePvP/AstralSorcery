@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:evorsio_inner_m_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_256",
+        "mode": 1,
+        "value": 0.02
+      },
+      {
+        "attribute_type": "astralsorcery:attack_damage",
+        "identifier": "perk_modifier_255",
+        "mode": 1,
+        "value": 0.03
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.attack_damage_perk_effect",
+    "registry_name": "astralsorcery:evorsio_connect_out_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -12.0,
+    "y": -26.0
+  }
+}

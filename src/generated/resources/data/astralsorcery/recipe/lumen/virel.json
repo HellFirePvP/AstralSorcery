@@ -1,0 +1,15 @@
+{
+  "type": "astralsorcery:lumen_generation",
+  "attempt_starlight_consumption": 1.4,
+  "catalyst_shatter_multiplier": 1.2,
+  "input": {
+    "item": "astralsorcery:vivid_powder"
+  },
+  "lumen_combination_inputs": {
+    "astralsorcery:aevitas": 9,
+    "astralsorcery:vicio": 5
+  },
+  "produced_lumen": "astralsorcery:virel",
+  "produced_lumen_amount": 3,
+  "production_attempt_multiplier": 4.0
+}

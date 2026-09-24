@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:root_vicio"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:movement_speed",
+        "identifier": "perk_modifier_174",
+        "mode": 1,
+        "value": 0.02
+      },
+      {
+        "attribute_type": "astralsorcery:swim_speed",
+        "identifier": "perk_modifier_175",
+        "mode": 1,
+        "value": 0.03
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.movespeed_swimspeed",
+    "registry_name": "astralsorcery:vicio_inner_swim_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": 2.0,
+    "y": 27.0
+  }
+}

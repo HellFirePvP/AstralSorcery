@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:lumen_generation",
+  "attempt_starlight_consumption": 2.0,
+  "catalyst_shatter_multiplier": 1.5,
+  "input": {
+    "tag": "c:gems/amethyst"
+  },
+  "lumen_combination_inputs": {
+    "astralsorcery:solyn": 7,
+    "astralsorcery:vicio": 8,
+    "astralsorcery:virel": 8
+  },
+  "produced_lumen": "astralsorcery:dynamis",
+  "produced_lumen_amount": 2,
+  "production_attempt_multiplier": 3.0
+}

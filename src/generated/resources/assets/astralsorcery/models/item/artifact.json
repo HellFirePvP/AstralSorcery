@@ -1,0 +1,44 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "astralsorcery:item/artifact/sidereal",
+      "predicate": {
+        "astralsorcery:artifact_type": 0.0
+      }
+    },
+    {
+      "model": "astralsorcery:item/artifact/luminous",
+      "predicate": {
+        "astralsorcery:artifact_type": 0.16666667
+      }
+    },
+    {
+      "model": "astralsorcery:item/artifact/chronal",
+      "predicate": {
+        "astralsorcery:artifact_type": 0.33333334
+      }
+    },
+    {
+      "model": "astralsorcery:item/artifact/astriform",
+      "predicate": {
+        "astralsorcery:artifact_type": 0.5
+      }
+    },
+    {
+      "model": "astralsorcery:item/artifact/axiomatic",
+      "predicate": {
+        "astralsorcery:artifact_type": 0.6666667
+      }
+    },
+    {
+      "model": "astralsorcery:item/artifact/spectral",
+      "predicate": {
+        "astralsorcery:artifact_type": 0.8333333
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "astralsorcery:item/artifact"
+  }
+}

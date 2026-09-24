@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_raw_starmetal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "astralsorcery:raw_starmetal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:starmetal_ingot_from_smelting_raw_starmetal"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_raw_starmetal"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:starmetal_ingot_from_smelting_raw_starmetal"
+    ]
+  }
+}

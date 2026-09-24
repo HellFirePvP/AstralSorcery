@@ -1,0 +1,39 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:linking_tool",
+  "lookupIndexItems": [
+    "astralsorcery:linking_tool"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.linking_tool.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/linking_tool",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.linking_tool.text.1"
+    }
+  ],
+  "posX": -2.0,
+  "posY": -1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:linking_tool"
+    }
+  ],
+  "tier": "luminance"
+}

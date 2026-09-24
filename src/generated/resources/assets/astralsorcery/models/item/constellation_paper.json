@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "astralsorcery:item/constellation_paper",
+    "layer1": "astralsorcery:item/constellation_paper_overlay"
+  }
+}

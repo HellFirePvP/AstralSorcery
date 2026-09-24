@@ -1,0 +1,21 @@
+{
+  "anvil_cost": 10,
+  "description": {
+    "translate": "enchantment.astralsorcery.scorching_heat"
+  },
+  "exclusive_set": "minecraft:silk_touch",
+  "max_cost": {
+    "base": 60,
+    "per_level_above_first": 10
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 30,
+    "per_level_above_first": 10
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#minecraft:enchantable/mining_loot",
+  "weight": 1
+}

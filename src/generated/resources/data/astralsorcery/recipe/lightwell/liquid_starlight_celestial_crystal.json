@@ -1,0 +1,10 @@
+{
+  "type": "astralsorcery:lightwell",
+  "catalyst_color": -16764007,
+  "generated_fluid": "astralsorcery:liquid_starlight",
+  "input": {
+    "tag": "astralsorcery:celestial_crystal"
+  },
+  "production_multiplier": 0.22,
+  "shatter_multiplier": 0.15
+}

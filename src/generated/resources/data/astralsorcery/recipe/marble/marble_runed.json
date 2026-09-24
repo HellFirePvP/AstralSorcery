@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "astralsorcery:marble_chiseled"
+    },
+    "M": {
+      "item": "astralsorcery:marble_raw"
+    }
+  },
+  "pattern": [
+    "MCM"
+  ],
+  "result": {
+    "count": 3,
+    "id": "astralsorcery:marble_runed"
+  }
+}

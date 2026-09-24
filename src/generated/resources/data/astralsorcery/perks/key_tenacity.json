@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:tenacity_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:life_recovery",
+        "identifier": "perk_modifier_333",
+        "mode": 1,
+        "value": 0.1
+      },
+      {
+        "attribute_type": "astralsorcery:max_health",
+        "identifier": "perk_modifier_332",
+        "mode": 0,
+        "value": 2.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.tenacity",
+    "registry_name": "astralsorcery:key_tenacity",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 16.0,
+    "y": -1.0
+  }
+}

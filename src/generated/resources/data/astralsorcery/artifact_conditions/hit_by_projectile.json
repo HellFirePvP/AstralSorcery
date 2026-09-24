@@ -1,0 +1,20 @@
+{
+  "condition": {
+    "type": "astralsorcery:damage_type",
+    "clearDescription": {
+      "translate": "artifact.astralsorcery.condition.value.damage_type.hit_by_projectile.clear"
+    },
+    "damageTypeTags": [
+      "minecraft:is_projectile"
+    ],
+    "damageTypes": [],
+    "hiddenDescription": {
+      "translate": "artifact.astralsorcery.condition.value.damage_type.hit_by_projectile.hidden"
+    },
+    "id": "astralsorcery:hit_by_projectile"
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

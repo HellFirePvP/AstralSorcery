@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 717324875,
+    "separation": 4,
+    "spacing": 14
+  },
+  "structures": [
+    {
+      "structure": "astralsorcery:focal_point",
+      "weight": 1
+    }
+  ]
+}

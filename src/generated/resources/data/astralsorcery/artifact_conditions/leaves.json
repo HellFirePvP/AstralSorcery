@@ -1,0 +1,19 @@
+{
+  "condition": {
+    "type": "astralsorcery:near_block",
+    "blockConsumptionChance": 0.4,
+    "blockCountNeeded": {
+      "maxInclusive": 4,
+      "minInclusive": 4
+    },
+    "blockPredicate": {
+      "blocks": "#minecraft:leaves"
+    },
+    "id": "astralsorcery:leaves",
+    "range": 7
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

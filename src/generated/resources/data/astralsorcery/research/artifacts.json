@@ -1,0 +1,165 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [
+    {
+      "type": "astralsorcery:research_flag_set",
+      "flag": "has_obtained_artifact"
+    }
+  ],
+  "connections": [],
+  "key": "astralsorcery:artifacts",
+  "lookupIndexItems": [
+    "astralsorcery:artifact",
+    "astralsorcery:artifact_shard"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.artifacts.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.artifacts.text.1"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.artifacts.text.2"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/akashic_singularity_with_generated_artifact_loot",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": -7.0,
+  "posY": 1.0,
+  "renderItemStacks": [
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:sidereal",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    },
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:luminous",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    },
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:chronal",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    },
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:astriform",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    },
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:axiomatic",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    },
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:spectral",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    }
+  ],
+  "tier": "illumination"
+}

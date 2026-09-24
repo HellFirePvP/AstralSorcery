@@ -1,0 +1,84 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_crystal_cluster/celestial_crystal_cluster_0_solid"
+      },
+      "when": {
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_crystal_cluster/celestial_crystal_cluster_1_solid"
+      },
+      "when": {
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_crystal_cluster/celestial_crystal_cluster_2_solid"
+      },
+      "when": {
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_crystal_cluster/celestial_crystal_cluster_3_solid"
+      },
+      "when": {
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_crystal_cluster/celestial_crystal_cluster_4_solid"
+      },
+      "when": {
+        "stage": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_crystal_cluster/celestial_crystal_cluster_0_translucent"
+      },
+      "when": {
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_crystal_cluster/celestial_crystal_cluster_1_translucent"
+      },
+      "when": {
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_crystal_cluster/celestial_crystal_cluster_2_translucent"
+      },
+      "when": {
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_crystal_cluster/celestial_crystal_cluster_3_translucent"
+      },
+      "when": {
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_crystal_cluster/celestial_crystal_cluster_4_translucent"
+      },
+      "when": {
+        "stage": "4"
+      }
+    }
+  ]
+}

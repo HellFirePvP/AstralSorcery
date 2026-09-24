@@ -1,0 +1,37 @@
+{
+  "connections": [],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:projectile_damage",
+        "identifier": "perk_modifier_207",
+        "mode": 1,
+        "value": 0.07
+      },
+      {
+        "attribute_type": "astralsorcery:critical_hit_chance",
+        "identifier": "perk_modifier_208",
+        "mode": 1,
+        "value": 0.05
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.projectile_damage_critical_hit_chance",
+    "registry_name": "astralsorcery:discidia_inner_proj_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 13.0,
+    "y": -24.0
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "altar_craft_finish": {
+    "sounds": [
+      "astralsorcery:altar/altar_craft_finish_1",
+      "astralsorcery:altar/altar_craft_finish_2"
+    ]
+  },
+  "altar_craft_loop_t1": {
+    "sounds": [
+      "astralsorcery:altar/altar_craft_loop_t1"
+    ]
+  },
+  "altar_craft_loop_t2": {
+    "sounds": [
+      "astralsorcery:altar/altar_craft_loop_t2"
+    ]
+  },
+  "altar_craft_loop_t3": {
+    "sounds": [
+      "astralsorcery:altar/altar_craft_loop_t3"
+    ]
+  },
+  "altar_craft_loop_t4": {
+    "sounds": [
+      "astralsorcery:altar/altar_craft_loop_t4"
+    ]
+  },
+  "altar_craft_loop_waiting": {
+    "sounds": [
+      "astralsorcery:altar/altar_craft_loop_waiting"
+    ]
+  },
+  "altar_craft_start": {
+    "sounds": [
+      "astralsorcery:altar/altar_craft_start_1",
+      "astralsorcery:altar/altar_craft_start_2"
+    ]
+  },
+  "attunement_altar_idle_loop": {
+    "sounds": [
+      "astralsorcery:attunement/attunement_altar_idle_loop"
+    ]
+  },
+  "attunement_altar_item_finish": {
+    "sounds": [
+      "astralsorcery:attunement/attunement_altar_item_finish_1",
+      "astralsorcery:attunement/attunement_altar_item_finish_2"
+    ]
+  },
+  "attunement_altar_item_loop": {
+    "sounds": [
+      "astralsorcery:attunement/attunement_altar_item_loop"
+    ]
+  },
+  "attunement_altar_item_start": {
+    "sounds": [
+      "astralsorcery:attunement/attunement_altar_item_start_1",
+      "astralsorcery:attunement/attunement_altar_item_start_2"
+    ]
+  },
+  "attunement_altar_player_attune": {
+    "sounds": [
+      "astralsorcery:attunement/attunement_altar_player_attune"
+    ]
+  },
+  "chisel_hit": {
+    "sounds": [
+      "astralsorcery:chisel/chisel_hit_1",
+      "astralsorcery:chisel/chisel_hit_2",
+      "astralsorcery:chisel/chisel_hit_3",
+      "astralsorcery:chisel/chisel_hit_4"
+    ]
+  },
+  "crystal_break": {
+    "sounds": [
+      "astralsorcery:crystal/crystal_break_1",
+      "astralsorcery:crystal/crystal_break_2",
+      "astralsorcery:crystal/crystal_break_3",
+      "astralsorcery:crystal/crystal_break_4"
+    ]
+  },
+  "crystal_hit": {
+    "sounds": [
+      "astralsorcery:crystal/crystal_hit_1",
+      "astralsorcery:crystal/crystal_hit_2",
+      "astralsorcery:crystal/crystal_hit_3",
+      "astralsorcery:crystal/crystal_hit_4",
+      "astralsorcery:crystal/crystal_hit_5",
+      "astralsorcery:crystal/crystal_hit_6"
+    ]
+  },
+  "crystal_place": {
+    "sounds": [
+      "astralsorcery:crystal/crystal_place_1",
+      "astralsorcery:crystal/crystal_place_2",
+      "astralsorcery:crystal/crystal_place_3",
+      "astralsorcery:crystal/crystal_place_4"
+    ]
+  },
+  "crystal_step": {
+    "sounds": [
+      "astralsorcery:crystal/crystal_step_1",
+      "astralsorcery:crystal/crystal_step_2",
+      "astralsorcery:crystal/crystal_step_3",
+      "astralsorcery:crystal/crystal_step_4",
+      "astralsorcery:crystal/crystal_step_5",
+      "astralsorcery:crystal/crystal_step_6",
+      "astralsorcery:crystal/crystal_step_7",
+      "astralsorcery:crystal/crystal_step_8"
+    ]
+  },
+  "grappling_wand_attach": {
+    "sounds": [
+      "astralsorcery:grappling_wand/grappling_wand_attach_1",
+      "astralsorcery:grappling_wand/grappling_wand_attach_2",
+      "astralsorcery:grappling_wand/grappling_wand_attach_3",
+      "astralsorcery:grappling_wand/grappling_wand_attach_4"
+    ]
+  },
+  "grappling_wand_cast": {
+    "sounds": [
+      "astralsorcery:grappling_wand/grappling_wand_cast_1",
+      "astralsorcery:grappling_wand/grappling_wand_cast_2",
+      "astralsorcery:grappling_wand/grappling_wand_cast_3",
+      "astralsorcery:grappling_wand/grappling_wand_cast_4"
+    ]
+  },
+  "grappling_wand_fail": {
+    "sounds": [
+      "astralsorcery:grappling_wand/grappling_wand_fail_1",
+      "astralsorcery:grappling_wand/grappling_wand_fail_2",
+      "astralsorcery:grappling_wand/grappling_wand_fail_3",
+      "astralsorcery:grappling_wand/grappling_wand_fail_4"
+    ]
+  },
+  "illumination_wand_highlight": {
+    "sounds": [
+      "astralsorcery:illumination_wand/illumination_wand_highlight_1",
+      "astralsorcery:illumination_wand/illumination_wand_highlight_2"
+    ]
+  },
+  "illumination_wand_light": {
+    "sounds": [
+      "astralsorcery:illumination_wand/illumination_wand_light_1",
+      "astralsorcery:illumination_wand/illumination_wand_light_2"
+    ]
+  },
+  "illumination_wand_unhighlight": {
+    "sounds": [
+      "astralsorcery:illumination_wand/illumination_wand_unhighlight_1",
+      "astralsorcery:illumination_wand/illumination_wand_unhighlight_2"
+    ]
+  },
+  "infuser_craft_finish": {
+    "sounds": [
+      "astralsorcery:infuser/infuser_craft_finish_1",
+      "astralsorcery:infuser/infuser_craft_finish_2"
+    ]
+  },
+  "infuser_craft_loop": {
+    "sounds": [
+      "astralsorcery:infuser/infuser_craft_loop_1",
+      "astralsorcery:infuser/infuser_craft_loop_2"
+    ]
+  },
+  "infuser_craft_start": {
+    "sounds": [
+      "astralsorcery:infuser/infuser_craft_start_1",
+      "astralsorcery:infuser/infuser_craft_start_2"
+    ]
+  },
+  "lumen_transfer": {
+    "sounds": [
+      "astralsorcery:lumen/lumen_transfer_1",
+      "astralsorcery:lumen/lumen_transfer_2",
+      "astralsorcery:lumen/lumen_transfer_3",
+      "astralsorcery:lumen/lumen_transfer_4",
+      "astralsorcery:lumen/lumen_transfer_5",
+      "astralsorcery:lumen/lumen_transfer_6"
+    ]
+  },
+  "screen_perk_seal": {
+    "sounds": [
+      "astralsorcery:screen_perk_seal_1",
+      "astralsorcery:screen_perk_seal_2"
+    ]
+  },
+  "screen_perk_unlock": {
+    "sounds": [
+      "astralsorcery:screen_perk_unlock_1",
+      "astralsorcery:screen_perk_unlock_2"
+    ]
+  },
+  "screen_perk_unseal": {
+    "sounds": [
+      "astralsorcery:screen_perk_unseal_1",
+      "astralsorcery:screen_perk_unseal_2"
+    ]
+  },
+  "screen_tome_close": {
+    "sounds": [
+      "astralsorcery:screen_tome_close"
+    ]
+  },
+  "screen_tome_page": {
+    "sounds": [
+      "astralsorcery:screen_tome_page_1",
+      "astralsorcery:screen_tome_page_2"
+    ]
+  }
+}

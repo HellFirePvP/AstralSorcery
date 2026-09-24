@@ -1,0 +1,57 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:enhanced_resonance_structure"
+  ],
+  "key": "astralsorcery:starlight_infuser",
+  "lookupIndexItems": [
+    "astralsorcery:infuser",
+    "astralsorcery:resonating_gem"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.starlight_infuser.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/infuser",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:structure",
+      "structureIndex": 0,
+      "structureObserver": "astralsorcery:infuser"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.starlight_infuser.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:infusion/glass_lens",
+      "recipe_type": "astralsorcery:infusion"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:infusion/infused_wood_infused",
+      "recipe_type": "astralsorcery:infusion"
+    }
+  ],
+  "posX": -3.0,
+  "posY": 0.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:infuser"
+    }
+  ],
+  "tier": "resonance"
+}

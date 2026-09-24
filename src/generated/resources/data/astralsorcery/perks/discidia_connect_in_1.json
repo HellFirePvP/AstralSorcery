@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:discidia_inner_m_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:critical_hit_chance",
+        "identifier": "perk_modifier_221",
+        "mode": 1,
+        "value": 0.04
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.critical_hit_chance",
+    "registry_name": "astralsorcery:discidia_connect_in_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 7.0,
+    "y": -21.0
+  }
+}

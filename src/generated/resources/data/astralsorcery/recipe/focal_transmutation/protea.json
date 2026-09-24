@@ -1,0 +1,24 @@
+{
+  "type": "astralsorcery:focal_transmutation",
+  "color": -6291200,
+  "duration": 600,
+  "input_display_stacks": {
+    "tag": "minecraft:small_flowers"
+  },
+  "input_predicates": [
+    {
+      "type": "minecraft:matching_block_tag",
+      "tag": "minecraft:small_flowers"
+    }
+  ],
+  "output_states": [
+    {
+      "data": {
+        "Name": "astralsorcery:protea"
+      },
+      "weight": 1
+    }
+  ],
+  "required_constellation": "astralsorcery:evorsio",
+  "requires_focused_starlight": false
+}

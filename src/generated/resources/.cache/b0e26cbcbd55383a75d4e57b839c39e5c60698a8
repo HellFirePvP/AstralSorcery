@@ -1,0 +1,20 @@
+// 1.21.1	2026-05-25T21:43:48.4337883	Tags for minecraft:item mod id astralsorcery
+7577afd65e39ff7dc39ff28db4edd10714b84211 data/astralsorcery/tags/item/attuned_crystal.json
+c07603bc7646de81794b69d576315fec8238dc4d data/astralsorcery/tags/item/celestial_crystal.json
+e3b7eb74d63134c6d252953b8e08902fdfe08dcc data/astralsorcery/tags/item/crystal.json
+9d7336584f3c789cf6958689793e5cfb21e31b88 data/astralsorcery/tags/item/functional_altar_constellation_item.json
+186c7d29e3b7d85adff3addfcb3d8a3596bbaee4 data/astralsorcery/tags/item/functional_attuneable_item.json
+82f9b84f161db46f5f12b5c38ddc0f299e50132d data/astralsorcery/tags/item/functional_perktree_socketable_item.json
+8fd7b9d1bbf86bfb965f1c8ef756cad27882dc9a data/astralsorcery/tags/item/infused_woods.json
+de1f79ec1660ee535312f24b53ea054bdff3045a data/astralsorcery/tags/item/rock_crystal.json
+3f481948a8e493ab3dcdb0956447c051790fdf03 data/astralsorcery/tags/item/sooty_marbles.json
+e01849e22238dc1e2c711109cc92ef670479395c data/curios/tags/item/necklace.json
+b91f4cb02a488eca3b505d4ba7406ce6a684b383 data/c/tags/item/gems/aquamarine.json
+72eb2a844f48bdaa98b1ad8dd2af793a251d78ac data/c/tags/item/ingots.json
+88ee3c01e70bb231880606d40185b36df9be2622 data/c/tags/item/marbles.json
+e1bec60c876239ef8ed1c3966e3b247eae012a43 data/c/tags/item/raw_materials.json
+e31e09aeb54624454a34b51807cb93e6d96cfd32 data/minecraft/tags/item/axes.json
+3936bd497b7905411b61819a81d13eb754f693c7 data/minecraft/tags/item/lectern_books.json
+f9430e4dad7ce600d556d599d0f60065ae06c091 data/minecraft/tags/item/pickaxes.json
+f2b19b10617652942f4efaf6e0d2fffcb52e61a6 data/minecraft/tags/item/shovels.json
+ea3c4bb0e45f6933ff5d1de8e372e43a233d9939 data/minecraft/tags/item/swords.json

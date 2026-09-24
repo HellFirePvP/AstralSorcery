@@ -1,0 +1,44 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:luminous_altar",
+  "lookupIndexItems": [
+    "astralsorcery:altar_luminance"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.luminous_altar.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/altar_luminance",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:structure",
+      "structureIndex": 0,
+      "structureObserver": "astralsorcery:altar_t3"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.luminous_altar.text.1"
+    }
+  ],
+  "posX": 4.0,
+  "posY": 1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:altar_luminance"
+    }
+  ],
+  "tier": "resonance"
+}

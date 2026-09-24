@@ -1,0 +1,95 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:sooty_marble",
+  "lookupIndexItems": [
+    "astralsorcery:sooty_marble_raw",
+    "astralsorcery:sooty_marble_bricks",
+    "astralsorcery:sooty_marble_arch",
+    "astralsorcery:sooty_marble_pillar",
+    "astralsorcery:sooty_marble_chiseled",
+    "astralsorcery:sooty_marble_engraved",
+    "astralsorcery:sooty_marble_runed"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.sooty_marble.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:sooty_marble_raw",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:sooty_marble/sooty_marble_bricks",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:sooty_marble/sooty_marble_arch",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:sooty_marble/sooty_marble_pillar",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:sooty_marble/sooty_marble_chiseled",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:sooty_marble/sooty_marble_engraved",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:sooty_marble/sooty_marble_runed",
+      "recipe_type": "minecraft:crafting"
+    }
+  ],
+  "posX": -1.0,
+  "posY": -4.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:sooty_marble_arch"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:sooty_marble_bricks"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:sooty_marble_chiseled"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:sooty_marble_engraved"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:sooty_marble_pillar"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:sooty_marble_raw"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:sooty_marble_runed"
+    }
+  ],
+  "tier": "shimmer"
+}

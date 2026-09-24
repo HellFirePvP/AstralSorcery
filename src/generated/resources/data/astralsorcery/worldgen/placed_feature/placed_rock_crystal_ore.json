@@ -1,0 +1,21 @@
+{
+  "feature": "astralsorcery:rock_crystal_ore",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 24
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "max_inclusive": {
+          "above_bottom": 7
+        },
+        "min_inclusive": {
+          "above_bottom": 4
+        }
+      }
+    }
+  ]
+}

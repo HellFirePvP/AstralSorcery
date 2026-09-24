@@ -1,0 +1,48 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:perk_gems",
+  "lookupIndexItems": [
+    "astralsorcery:dynamism_gem_day",
+    "astralsorcery:dynamism_gem_sky",
+    "astralsorcery:dynamism_gem_night"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.perk_gems.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.perk_gems.text.1"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.perk_gems.text.2"
+    }
+  ],
+  "posX": -2.0,
+  "posY": 3.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:dynamism_gem_day"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:dynamism_gem_sky"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:dynamism_gem_night"
+    }
+  ],
+  "tier": "resonance"
+}

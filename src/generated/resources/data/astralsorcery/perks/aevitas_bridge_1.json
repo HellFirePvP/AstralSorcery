@@ -1,0 +1,34 @@
+{
+  "connections": [
+    "astralsorcery:aevitas_gem_socket",
+    "astralsorcery:aevitas_inner_m_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:max_health",
+        "identifier": "perk_modifier_117",
+        "mode": 0,
+        "value": 1.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.add.life",
+    "registry_name": "astralsorcery:aevitas_bridge_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -21.0,
+    "y": 5.0
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "connections": [
+    "astralsorcery:travel_23",
+    "astralsorcery:armara_connect_out_3"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_166",
+        "mode": 1,
+        "value": 0.02
+      },
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_165",
+        "mode": 0,
+        "value": 1.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.armor_perk_effect",
+    "registry_name": "astralsorcery:armara_connect_out_4",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 29.0,
+    "y": 5.0
+  }
+}

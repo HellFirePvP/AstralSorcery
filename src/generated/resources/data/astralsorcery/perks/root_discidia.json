@@ -1,0 +1,32 @@
+{
+  "connections": [],
+  "perk": {
+    "type": "astralsorcery:root_perk_discidia",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.root"
+      }
+    },
+    "constellation": "astralsorcery:discidia",
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:critical_hit_chance",
+        "identifier": "perk_modifier_4",
+        "mode": 0,
+        "value": 0.1
+      }
+    ],
+    "name": "perk.astralsorcery.root_perk_discidia",
+    "registry_name": "astralsorcery:root_discidia",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 19.0,
+    "y": -26.0
+  }
+}

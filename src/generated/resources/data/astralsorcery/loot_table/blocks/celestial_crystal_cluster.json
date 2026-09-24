@@ -1,0 +1,117 @@
+{
+  "type": "minecraft:block",
+  "functions": [
+    {
+      "function": "minecraft:explosion_decay"
+    },
+    {
+      "function": "astralsorcery:copy_crystal_properties"
+    }
+  ],
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "astralsorcery:celestial_crystal_cluster",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "4"
+              }
+            }
+          ],
+          "name": "astralsorcery:celestial_crystal"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "astralsorcery:celestial_crystal_cluster",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "1"
+              }
+            }
+          ],
+          "name": "astralsorcery:stardust"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "astralsorcery:celestial_crystal_cluster",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "2"
+              }
+            }
+          ],
+          "name": "astralsorcery:stardust"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 1.0
+      }
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "astralsorcery:celestial_crystal_cluster",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "3"
+              }
+            }
+          ],
+          "name": "astralsorcery:stardust"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 1.0
+      }
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "astralsorcery:celestial_crystal_cluster",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "stage": "4"
+              }
+            }
+          ],
+          "name": "astralsorcery:stardust"
+        }
+      ],
+      "rolls": 2.0
+    }
+  ],
+  "random_sequence": "astralsorcery:blocks/celestial_crystal_cluster"
+}

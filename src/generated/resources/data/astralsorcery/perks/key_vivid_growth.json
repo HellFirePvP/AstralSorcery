@@ -1,0 +1,24 @@
+{
+  "connections": [],
+  "perk": {
+    "type": "astralsorcery:key_grow_plants",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.vivid_growth",
+    "registry_name": "astralsorcery:key_vivid_growth",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -14.0,
+    "y": 12.0
+  }
+}

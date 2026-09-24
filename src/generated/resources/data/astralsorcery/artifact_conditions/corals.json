@@ -1,0 +1,19 @@
+{
+  "condition": {
+    "type": "astralsorcery:near_block",
+    "blockConsumptionChance": 0.0,
+    "blockCountNeeded": {
+      "maxInclusive": 2,
+      "minInclusive": 2
+    },
+    "blockPredicate": {
+      "blocks": "#minecraft:coral_blocks"
+    },
+    "id": "astralsorcery:corals",
+    "range": 7
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

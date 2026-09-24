@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:firmness_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_326",
+        "mode": 0,
+        "value": 1.0
+      },
+      {
+        "attribute_type": "astralsorcery:armor_toughness",
+        "identifier": "perk_modifier_327",
+        "mode": 0,
+        "value": 0.5
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.armor_armor_toughness",
+    "registry_name": "astralsorcery:firmness_2",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 20.0,
+    "y": 0.0
+  }
+}

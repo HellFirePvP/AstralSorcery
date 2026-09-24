@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:endless_munitions_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_add_enchantments",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "enchantments": [
+      {
+        "type": 0,
+        "enchantment": "minecraft:infinity",
+        "modifier": 1
+      }
+    ],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.endless_munitions",
+    "registry_name": "astralsorcery:key_endless_munitions",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": 4.0,
+    "y": -1.0
+  }
+}

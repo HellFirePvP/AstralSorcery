@@ -1,0 +1,41 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:liquid_starlight"
+  ],
+  "key": "astralsorcery:lightwell",
+  "lookupIndexItems": [
+    "astralsorcery:lightwell"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.lightwell.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.lightwell.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/lightwell",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": -6.0,
+  "posY": -3.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:lightwell"
+    }
+  ],
+  "tier": "illumination"
+}

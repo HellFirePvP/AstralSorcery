@@ -1,0 +1,185 @@
+{
+  "potion_effect": {
+    "amplifier_range": {
+      "maxInclusive": 1,
+      "minInclusive": 0
+    },
+    "duration_range": {
+      "maxInclusive": 7200,
+      "minInclusive": 3600
+    },
+    "effect": "minecraft:speed"
+  },
+  "slot_bindings": {
+    "boots": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:movement_speed",
+            "identifier": "e97a8161-ed51-4537-bd27-9dab6ebd9381",
+            "mode": 2,
+            "value": 1.1
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:movement",
+        "consumption_chance": 0.3,
+        "lumen_cost": 1,
+        "stat_id": [
+          "minecraft:walk_one_cm",
+          "minecraft:sprint_one_cm",
+          "minecraft:walk_on_water_one_cm"
+        ],
+        "stat_multiplier": 0.03
+      }
+    },
+    "chestplate": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:movement_speed",
+            "identifier": "a240d704-6469-4093-9a52-2c52d941db5b",
+            "mode": 1,
+            "value": 0.06
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:movement",
+        "consumption_chance": 0.4,
+        "lumen_cost": 1,
+        "stat_id": [
+          "minecraft:walk_one_cm",
+          "minecraft:sprint_one_cm",
+          "minecraft:walk_on_water_one_cm"
+        ],
+        "stat_multiplier": 0.02
+      }
+    },
+    "helmet": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:movement_speed",
+            "identifier": "ff9abf7d-d67c-4841-9d6d-4160e2968041",
+            "mode": 1,
+            "value": 0.04
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:movement",
+        "consumption_chance": 0.3,
+        "lumen_cost": 1,
+        "stat_id": [
+          "minecraft:walk_one_cm",
+          "minecraft:sprint_one_cm",
+          "minecraft:walk_on_water_one_cm"
+        ],
+        "stat_multiplier": 0.02
+      }
+    },
+    "leggings": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:movement_speed",
+            "identifier": "ce60b3a5-59f9-4c3b-b79e-56292f172a1b",
+            "mode": 1,
+            "value": 0.04
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:movement",
+        "consumption_chance": 0.3,
+        "lumen_cost": 1,
+        "stat_id": [
+          "minecraft:walk_one_cm",
+          "minecraft:sprint_one_cm",
+          "minecraft:walk_on_water_one_cm"
+        ],
+        "stat_multiplier": 0.02
+      }
+    },
+    "melee_weapon": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:movement_speed",
+            "identifier": "c1aadf6a-3f38-484a-ba8b-b21048ac8b91",
+            "mode": 1,
+            "value": 0.08
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:movement",
+        "consumption_chance": 0.3,
+        "lumen_cost": 1,
+        "stat_id": [
+          "minecraft:walk_one_cm",
+          "minecraft:sprint_one_cm",
+          "minecraft:walk_on_water_one_cm"
+        ],
+        "stat_multiplier": 0.02
+      }
+    },
+    "ranged_weapon": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:projectile_speed",
+            "identifier": "aaef4e83-7014-49fc-b6ff-b16a33252c4b",
+            "mode": 1,
+            "value": 0.1
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:damage_dealt",
+        "consumption_chance": 0.4,
+        "direct": false,
+        "lumen_cost": 1
+      }
+    },
+    "tool": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:movement_speed",
+            "identifier": "b81afa71-971c-4b08-92fd-457a2a1d27e3",
+            "mode": 1,
+            "value": 0.1
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:movement",
+        "consumption_chance": 0.3,
+        "lumen_cost": 1,
+        "stat_id": [
+          "minecraft:walk_one_cm",
+          "minecraft:sprint_one_cm",
+          "minecraft:walk_on_water_one_cm"
+        ],
+        "stat_multiplier": 0.04
+      }
+    }
+  }
+}

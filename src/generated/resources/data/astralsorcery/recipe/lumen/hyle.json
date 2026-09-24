@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:lumen_generation",
+  "attempt_starlight_consumption": 2.0,
+  "catalyst_shatter_multiplier": 1.5,
+  "input": {
+    "item": "minecraft:echo_shard"
+  },
+  "lumen_combination_inputs": {
+    "astralsorcery:armara": 8,
+    "astralsorcery:solyn": 5,
+    "astralsorcery:virel": 4
+  },
+  "produced_lumen": "astralsorcery:hyle",
+  "produced_lumen_amount": 2,
+  "production_attempt_multiplier": 3.0
+}

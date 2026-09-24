@@ -1,0 +1,10 @@
+{
+  "type": "astralsorcery:lightwell",
+  "catalyst_color": -16734209,
+  "generated_fluid": "astralsorcery:liquid_starlight",
+  "input": {
+    "item": "astralsorcery:aquamarine"
+  },
+  "production_multiplier": 0.35,
+  "shatter_multiplier": 0.15
+}

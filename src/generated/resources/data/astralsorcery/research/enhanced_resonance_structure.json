@@ -1,0 +1,37 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:containment_chalice",
+    "astralsorcery:constellation_flowers",
+    "astralsorcery:attunement_altar"
+  ],
+  "key": "astralsorcery:enhanced_resonance_structure",
+  "lookupIndexItems": [],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.enhanced_resonance_structure.text.0"
+    },
+    {
+      "type": "astralsorcery:structure",
+      "structureIndex": 1,
+      "structureObserver": "astralsorcery:altar_t2"
+    }
+  ],
+  "posX": 0.0,
+  "posY": -2.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:altar_resonance"
+    }
+  ],
+  "tier": "resonance"
+}

@@ -1,0 +1,25 @@
+{
+  "type": "astralsorcery:liquid_interaction",
+  "chanceConsumeA": 0.5,
+  "chanceConsumeB": 0.5,
+  "reactantA": {
+    "amount": 6,
+    "ingredient": {
+      "fluid": "astralsorcery:liquid_starlight"
+    }
+  },
+  "reactantB": {
+    "amount": 6,
+    "ingredient": {
+      "fluid": "minecraft:lava"
+    }
+  },
+  "result": {
+    "type": "astralsorcery:drop_item",
+    "output": {
+      "count": 1,
+      "id": "astralsorcery:aquamarine_shale"
+    }
+  },
+  "weight": 1
+}

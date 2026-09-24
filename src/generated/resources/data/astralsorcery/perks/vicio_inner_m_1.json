@@ -1,0 +1,41 @@
+{
+  "connections": [
+    "astralsorcery:vicio_connect_in_1",
+    "astralsorcery:vicio_inner_reach_2",
+    "astralsorcery:vicio_connect_out_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:movement_speed",
+        "identifier": "perk_modifier_201",
+        "mode": 1,
+        "value": 0.04
+      },
+      {
+        "attribute_type": "astralsorcery:block_reach",
+        "identifier": "perk_modifier_202",
+        "mode": 1,
+        "value": 0.1
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.swiftness",
+    "registry_name": "astralsorcery:vicio_inner_m_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": -6.0,
+    "y": 23.0
+  }
+}

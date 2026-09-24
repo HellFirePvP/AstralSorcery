@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:blunt_bolts_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_projectile_proximity",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.blunt_bolts",
+    "registry_name": "astralsorcery:key_blunt_bolts",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 5.0,
+    "y": -20.0
+  }
+}

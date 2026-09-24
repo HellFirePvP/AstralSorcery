@@ -1,0 +1,35 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:cave_illuminator",
+  "lookupIndexItems": [
+    "astralsorcery:cave_illuminator"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.cave_illuminator.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/cave_illuminator",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": -2.0,
+  "posY": 3.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:cave_illuminator"
+    }
+  ],
+  "tier": "illumination"
+}

@@ -1,0 +1,23 @@
+{
+  "condition": {
+    "type": "astralsorcery:in_structure",
+    "clearDescription": {
+      "translate": "artifact.astralsorcery.condition.value.in_structure.fortress.clear"
+    },
+    "hiddenDescription": {
+      "translate": "artifact.astralsorcery.condition.value.in_structure.fortress.hidden"
+    },
+    "id": "astralsorcery:in_fortress",
+    "validStructures": [
+      "minecraft:fortress"
+    ]
+  },
+  "selector": {
+    "conflicts": [
+      "astralsorcery:in_end",
+      "astralsorcery:in_stronghold",
+      "astralsorcery:in_mineshaft"
+    ],
+    "weight": 1
+  }
+}

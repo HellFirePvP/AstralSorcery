@@ -1,0 +1,6 @@
+// 1.21.1	2026-05-12T13:05:49.4840834	Tags for minecraft:damage_type mod id astralsorcery
+e81b8ee4d64bcc190b2172c2bf89b441051c6cec data/astralsorcery/tags/damage_type/is_elemental.json
+e6b16059eb6e3cdf9063db2b3011978793c90b69 data/minecraft/tags/damage_type/bypasses_armor.json
+e6b16059eb6e3cdf9063db2b3011978793c90b69 data/minecraft/tags/damage_type/bypasses_resistance.json
+e6b16059eb6e3cdf9063db2b3011978793c90b69 data/minecraft/tags/damage_type/witch_resistant_to.json
+e6b16059eb6e3cdf9063db2b3011978793c90b69 data/neoforge/tags/damage_type/is_magic.json

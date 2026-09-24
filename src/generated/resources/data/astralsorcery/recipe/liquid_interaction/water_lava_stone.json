@@ -1,0 +1,25 @@
+{
+  "type": "astralsorcery:liquid_interaction",
+  "chanceConsumeA": 0.1,
+  "chanceConsumeB": 0.1,
+  "reactantA": {
+    "amount": 6,
+    "ingredient": {
+      "fluid": "minecraft:water"
+    }
+  },
+  "reactantB": {
+    "amount": 6,
+    "ingredient": {
+      "fluid": "minecraft:lava"
+    }
+  },
+  "result": {
+    "type": "astralsorcery:drop_item",
+    "output": {
+      "count": 1,
+      "id": "minecraft:stone"
+    }
+  },
+  "weight": 3
+}

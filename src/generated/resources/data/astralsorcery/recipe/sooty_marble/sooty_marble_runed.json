@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "astralsorcery:sooty_marble_chiseled"
+    },
+    "M": {
+      "item": "astralsorcery:sooty_marble_raw"
+    }
+  },
+  "pattern": [
+    "MCM"
+  ],
+  "result": {
+    "count": 3,
+    "id": "astralsorcery:sooty_marble_runed"
+  }
+}

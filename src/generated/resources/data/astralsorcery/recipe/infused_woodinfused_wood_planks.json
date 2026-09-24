@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "astralsorcery:infused_wood"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "astralsorcery:infused_wood_planks"
+  }
+}

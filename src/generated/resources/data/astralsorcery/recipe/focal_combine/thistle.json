@@ -1,0 +1,17 @@
+{
+  "type": "astralsorcery:focal_combine",
+  "color": -2090749,
+  "duration": 1200,
+  "inputs": [
+    {
+      "tag": "minecraft:small_flowers"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:thistle"
+    }
+  ],
+  "required_constellation": "astralsorcery:discidia"
+}

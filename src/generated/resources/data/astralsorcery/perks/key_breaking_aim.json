@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:breaking_aim_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_disarm",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.breaking_aim",
+    "registry_name": "astralsorcery:key_breaking_aim",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -15.0,
+    "y": -11.0
+  }
+}

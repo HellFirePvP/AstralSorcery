@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "astralsorcery:marble_raw"
+  },
+  "result": {
+    "count": 2,
+    "id": "astralsorcery:marble_slab"
+  }
+}

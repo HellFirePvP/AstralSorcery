@@ -1,0 +1,168 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [
+    {
+      "type": "astralsorcery:research_flag_set",
+      "flag": "has_obtained_artifact"
+    }
+  ],
+  "connections": [],
+  "key": "astralsorcery:artifact_enhancements",
+  "lookupIndexItems": [],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.artifact_enhancements.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.artifact_enhancements.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/enchantment_amulet_artifact_enhance",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/enchanted_item_artifact_enhance",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/dynamism_gem_artifact_enhance",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": 1.0,
+  "posY": 1.0,
+  "renderItemStacks": [
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:sidereal",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    },
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:luminous",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    },
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:chronal",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    },
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:astriform",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    },
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:axiomatic",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    },
+    {
+      "components": {
+        "astralsorcery:artifact": {
+          "type": "astralsorcery:spectral",
+          "conditionCount": -1,
+          "conditions": [],
+          "failureEffects": [],
+          "lastPulseGameTick": -1,
+          "seed": -1,
+          "stability": 0,
+          "stats": {
+            "emptyTriggers": 0,
+            "partialTriggers": 0,
+            "pulses": 0
+          }
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:artifact"
+    }
+  ],
+  "tier": "radiance"
+}

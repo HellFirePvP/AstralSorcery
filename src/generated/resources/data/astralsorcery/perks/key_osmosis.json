@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:osmosis_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:cooldown_reduction",
+        "identifier": "perk_modifier_353",
+        "mode": 1,
+        "value": 0.08
+      },
+      {
+        "attribute_type": "astralsorcery:life_recovery",
+        "identifier": "perk_modifier_354",
+        "mode": 1,
+        "value": 0.1
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.osmosis",
+    "registry_name": "astralsorcery:key_osmosis",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 20.0,
+    "y": 20.0
+  }
+}

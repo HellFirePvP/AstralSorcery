@@ -1,0 +1,25 @@
+{
+  "condition": {
+    "type": "astralsorcery:in_structure",
+    "clearDescription": {
+      "translate": "artifact.astralsorcery.condition.value.in_structure.mineshaft.clear"
+    },
+    "hiddenDescription": {
+      "translate": "artifact.astralsorcery.condition.value.in_structure.mineshaft.hidden"
+    },
+    "id": "astralsorcery:in_mineshaft",
+    "validStructures": [
+      "minecraft:mineshaft",
+      "minecraft:mineshaft_mesa"
+    ]
+  },
+  "selector": {
+    "conflicts": [
+      "astralsorcery:in_end",
+      "astralsorcery:in_nether",
+      "astralsorcery:in_fortress",
+      "astralsorcery:in_stronghold"
+    ],
+    "weight": 1
+  }
+}

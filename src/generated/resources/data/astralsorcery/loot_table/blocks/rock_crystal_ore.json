@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "astralsorcery:player_nearby",
+          "distance": 10.0,
+          "failIfNoPlayer": true
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "astralsorcery:generate_crystal_properties"
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "astralsorcery:rock_crystal"
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 3.0,
+        "min": 1.0
+      }
+    }
+  ],
+  "random_sequence": "astralsorcery:blocks/rock_crystal_ore"
+}

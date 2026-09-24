@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:block",
+  "functions": [
+    {
+      "function": "astralsorcery:copy_crystal_properties"
+    },
+    {
+      "function": "astralsorcery:copy_constellation"
+    }
+  ],
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "astralsorcery:starlight_focus_celestial_crystal"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "astralsorcery:blocks/starlight_focus_celestial_crystal"
+}

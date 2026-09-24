@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:discidia_inner_m_"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:attack_reach",
+        "identifier": "perk_modifier_223",
+        "mode": 1,
+        "value": 0.05
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.attack_reach",
+    "registry_name": "astralsorcery:discidia_connect_in_3",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 20.0,
+    "y": -14.0
+  }
+}

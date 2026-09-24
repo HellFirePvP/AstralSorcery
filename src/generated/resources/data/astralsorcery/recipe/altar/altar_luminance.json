@@ -1,0 +1,113 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_altar_sparkle",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "A": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:resonating_gem"
+        }
+      },
+      "G": {
+        "type": "item",
+        "ingredient": {
+          "tag": "c:ingots/gold"
+        }
+      },
+      "P": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:marble_pillar"
+        }
+      },
+      "R": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:marble_runed"
+        }
+      }
+    },
+    "pattern": [
+      "   ",
+      "GAG",
+      "RRR"
+    ],
+    "relayPattern": [
+      "G   G",
+      "G   G",
+      "P   P",
+      "P   P",
+      "RRRRR"
+    ]
+  },
+  "mayChain": false,
+  "onlyNight": true,
+  "outputModifiers": [
+    {
+      "type": "astralsorcery:set_block",
+      "block_states": [
+        {
+          "data": {
+            "Name": "astralsorcery:altar_luminance"
+          },
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "type": "astralsorcery:update_research_tier",
+      "tier": "luminance"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:altar_luminance"
+    }
+  ],
+  "requiredAdditionalInputs": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:stardust"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:stardust"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:stardust"
+      }
+    }
+  ],
+  "requiredFluid": [
+    {
+      "amount": 1000,
+      "id": "astralsorcery:liquid_starlight"
+    },
+    {
+      "amount": 1000,
+      "id": "astralsorcery:liquid_starlight"
+    },
+    {
+      "amount": 1000,
+      "id": "astralsorcery:liquid_starlight"
+    }
+  ],
+  "requiredLumen": [],
+  "requiredStarlight": [],
+  "requiredType": "resonance"
+}

@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:tilted_pendulum_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_423",
+        "mode": 2,
+        "value": 0.8
+      },
+      {
+        "attribute_type": "astralsorcery:cooldown_reduction",
+        "identifier": "perk_modifier_422",
+        "mode": 1,
+        "value": 0.25
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.tilted_pendulum",
+    "registry_name": "astralsorcery:key_tilted_pendulum",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": 8.0,
+    "y": 1.0
+  }
+}

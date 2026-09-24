@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:prismatic_shimmer_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:dynamic_enchantment_effect",
+        "identifier": "perk_modifier_434",
+        "mode": 1,
+        "value": 0.15
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.prismatic_shimmer",
+    "registry_name": "astralsorcery:key_prismatic_shimmer",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": -7.0,
+    "y": 4.0
+  }
+}

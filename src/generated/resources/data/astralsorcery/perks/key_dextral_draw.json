@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:dextral_draw_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:projectile_speed",
+        "identifier": "perk_modifier_309",
+        "mode": 1,
+        "value": 0.06
+      },
+      {
+        "attribute_type": "astralsorcery:projectile_damage",
+        "identifier": "perk_modifier_310",
+        "mode": 1,
+        "value": 0.06
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.dextral_draw",
+    "registry_name": "astralsorcery:key_dextral_draw",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 26.0,
+    "y": -15.0
+  }
+}

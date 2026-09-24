@@ -1,0 +1,15 @@
+{
+  "effect": {
+    "type": "astralsorcery:random_move",
+    "distance": {
+      "maxInclusive": 10.0,
+      "minInclusive": 5.0
+    },
+    "id": "astralsorcery:random_move",
+    "move_speed": 0.1
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

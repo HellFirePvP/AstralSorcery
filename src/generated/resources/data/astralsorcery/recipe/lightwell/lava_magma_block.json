@@ -1,0 +1,10 @@
+{
+  "type": "astralsorcery:lightwell",
+  "catalyst_color": -51956,
+  "generated_fluid": "minecraft:lava",
+  "input": {
+    "item": "minecraft:magma_block"
+  },
+  "production_multiplier": 0.8,
+  "shatter_multiplier": 0.05
+}

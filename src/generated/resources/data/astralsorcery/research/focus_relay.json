@@ -1,0 +1,47 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:resonance_altar"
+  ],
+  "key": "astralsorcery:focus_relay",
+  "lookupIndexItems": [
+    "astralsorcery:focus_relay",
+    "astralsorcery:glass_lens"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.focus_relay.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/focus_relay",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.focus_relay.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/glass_lens",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": 2.0,
+  "posY": -4.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:focus_relay"
+    }
+  ],
+  "tier": "illumination"
+}

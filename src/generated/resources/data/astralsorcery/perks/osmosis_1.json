@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:travel_26"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:life_recovery",
+        "identifier": "perk_modifier_350",
+        "mode": 1,
+        "value": 0.05
+      },
+      {
+        "attribute_type": "astralsorcery:cooldown_reduction",
+        "identifier": "perk_modifier_349",
+        "mode": 1,
+        "value": 0.05
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.life_cooldown_reduction",
+    "registry_name": "astralsorcery:osmosis_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 22.0,
+    "y": 20.0
+  }
+}

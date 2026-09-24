@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:spatial_manipulation_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_teleport_drops",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.spatial_manipulation",
+    "registry_name": "astralsorcery:key_spatial_manipulation",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": -9.0,
+    "y": 27.0
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:consistent_luck_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_add_enchantments",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "enchantments": [
+      {
+        "type": 0,
+        "enchantment": "minecraft:fortune",
+        "modifier": 1
+      }
+    ],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.consistent_luck",
+    "registry_name": "astralsorcery:key_consistent_luck",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -26.0,
+    "y": -17.0
+  }
+}

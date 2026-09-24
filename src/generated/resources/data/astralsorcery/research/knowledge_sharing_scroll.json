@@ -1,0 +1,44 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:knowledge_sharing_scroll",
+  "lookupIndexItems": [
+    "astralsorcery:knowledge_share"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.knowledge_sharing_scroll.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.knowledge_sharing_scroll.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/knowledge_share",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": 0.0,
+  "posY": -5.0,
+  "renderItemStacks": [
+    {
+      "components": {
+        "astralsorcery:stored_player_progress": {
+          "creative": true
+        }
+      },
+      "count": 1,
+      "id": "astralsorcery:knowledge_share"
+    }
+  ],
+  "tier": "illumination"
+}

@@ -1,0 +1,39 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:impulsion_wand",
+  "lookupIndexItems": [
+    "astralsorcery:grappling_wand"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.impulsion_wand.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/grappling_wand",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.impulsion_wand.text.1"
+    }
+  ],
+  "posX": 3.0,
+  "posY": -5.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:grappling_wand"
+    }
+  ],
+  "tier": "resonance"
+}

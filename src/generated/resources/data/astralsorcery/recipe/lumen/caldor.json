@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:lumen_generation",
+  "attempt_starlight_consumption": 1.4,
+  "catalyst_shatter_multiplier": 1.2,
+  "input": {
+    "tag": "c:gems/quartz"
+  },
+  "lumen_combination_inputs": {
+    "astralsorcery:armara": 4,
+    "astralsorcery:discidia": 10,
+    "astralsorcery:evorsio": 6
+  },
+  "produced_lumen": "astralsorcery:caldor",
+  "produced_lumen_amount": 3,
+  "production_attempt_multiplier": 4.0
+}

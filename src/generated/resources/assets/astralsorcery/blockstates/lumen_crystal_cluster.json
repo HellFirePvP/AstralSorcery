@@ -1,0 +1,394 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_0_solid",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_0_solid"
+      },
+      "when": {
+        "facing": "south",
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_0_solid",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_0_solid",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_1_solid",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_1_solid"
+      },
+      "when": {
+        "facing": "south",
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_1_solid",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_1_solid",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_2_solid",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_2_solid"
+      },
+      "when": {
+        "facing": "south",
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_2_solid",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_2_solid",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_3_solid",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_3_solid"
+      },
+      "when": {
+        "facing": "south",
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_3_solid",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_3_solid",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_4_solid",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "stage": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_4_solid"
+      },
+      "when": {
+        "facing": "south",
+        "stage": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_4_solid",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "stage": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_4_solid",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "stage": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_0_translucent",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_0_translucent"
+      },
+      "when": {
+        "facing": "south",
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_0_translucent",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_0_translucent",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "stage": "0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_1_translucent",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_1_translucent"
+      },
+      "when": {
+        "facing": "south",
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_1_translucent",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_1_translucent",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "stage": "1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_2_translucent",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_2_translucent"
+      },
+      "when": {
+        "facing": "south",
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_2_translucent",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_2_translucent",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "stage": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_3_translucent",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_3_translucent"
+      },
+      "when": {
+        "facing": "south",
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_3_translucent",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_3_translucent",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "stage": "3"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_4_translucent",
+        "y": 180
+      },
+      "when": {
+        "facing": "north",
+        "stage": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_4_translucent"
+      },
+      "when": {
+        "facing": "south",
+        "stage": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_4_translucent",
+        "y": 90
+      },
+      "when": {
+        "facing": "west",
+        "stage": "4"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_crystal_cluster/lumen_crystal_cluster_4_translucent",
+        "y": 270
+      },
+      "when": {
+        "facing": "east",
+        "stage": "4"
+      }
+    }
+  ]
+}

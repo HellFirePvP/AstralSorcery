@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "astralsorcery:placed_aquamarine_shale_ore",
+  "step": "underground_ores"
+}

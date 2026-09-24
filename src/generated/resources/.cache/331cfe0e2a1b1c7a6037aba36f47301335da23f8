@@ -1,0 +1,15 @@
+// 1.21.1	2026-09-11T12:48:49.823739	Tags for minecraft:block mod id astralsorcery
+8fd7b9d1bbf86bfb965f1c8ef756cad27882dc9a data/astralsorcery/tags/block/infused_woods.json
+3f481948a8e493ab3dcdb0956447c051790fdf03 data/astralsorcery/tags/block/sooty_marbles.json
+7a389d853d029cf1ec83fd3075317fb7a38f4b4f data/astralsorcery/tags/block/valid_tree_beacon_block.json
+88ee3c01e70bb231880606d40185b36df9be2622 data/c/tags/block/marbles.json
+4d869b24eb88166182a3f8ddf04c27fe4d0996b3 data/c/tags/block/ores.json
+a1afdf60ff9e2e88280d32753679b3e74fe18e67 data/c/tags/block/relocation_not_supported.json
+4f7d3cebe7350f677fa2ad403d534cc6ce680a07 data/minecraft/tags/block/flower_pots.json
+44b50195ce10af772f3f58e7f43b824fd3538ab4 data/minecraft/tags/block/mineable/axe.json
+c338250ad906f47120938fc64206c7584ad723c8 data/minecraft/tags/block/mineable/pickaxe.json
+03e00b94ad8147714c7afb4d028c5b91fd88b133 data/minecraft/tags/block/mineable/shovel.json
+3080a57d3334db1ce2303c00495ba855c50610ce data/minecraft/tags/block/needs_iron_tool.json
+3325d2d1febe873d0c5b39a9457c003f1315d2dd data/minecraft/tags/block/needs_stone_tool.json
+c1f5677953ab335e19550438057f686e66b06853 data/minecraft/tags/block/small_flowers.json
+a1afdf60ff9e2e88280d32753679b3e74fe18e67 data/simulated/tags/block/non_movable.json

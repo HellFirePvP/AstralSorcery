@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:bigger_stomach_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_reduced_food",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.bigger_stomach",
+    "registry_name": "astralsorcery:key_bigger_stomach",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": 5.0,
+    "y": 15.0
+  }
+}

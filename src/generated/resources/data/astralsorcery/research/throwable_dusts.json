@@ -1,0 +1,65 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:cave_illuminator"
+  ],
+  "key": "astralsorcery:throwable_dusts",
+  "lookupIndexItems": [
+    "astralsorcery:illumination_powder",
+    "astralsorcery:nocturnal_powder",
+    "astralsorcery:vivid_powder"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.throwable_dusts.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/illumination_powder",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.throwable_dusts.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/nocturnal_powder",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.throwable_dusts.text.2"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/vivid_powder",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": -1.0,
+  "posY": 1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:illumination_powder"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:nocturnal_powder"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:vivid_powder"
+    }
+  ],
+  "tier": "illumination"
+}

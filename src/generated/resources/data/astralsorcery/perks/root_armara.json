@@ -1,0 +1,32 @@
+{
+  "connections": [],
+  "perk": {
+    "type": "astralsorcery:root_perk_armara",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.root"
+      }
+    },
+    "constellation": "astralsorcery:armara",
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_2",
+        "mode": 2,
+        "value": 1.15
+      }
+    ],
+    "name": "perk.astralsorcery.root_perk_armara",
+    "registry_name": "astralsorcery:root_armara",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 30.0,
+    "y": 11.0
+  }
+}

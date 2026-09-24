@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:armara_inner_resist_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:elemental_resistance",
+        "identifier": "perk_modifier_148",
+        "mode": 1,
+        "value": 0.1
+      },
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_147",
+        "mode": 0,
+        "value": 2.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.bulwark",
+    "registry_name": "astralsorcery:armara_inner_m_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 24.0,
+    "y": 3.0
+  }
+}

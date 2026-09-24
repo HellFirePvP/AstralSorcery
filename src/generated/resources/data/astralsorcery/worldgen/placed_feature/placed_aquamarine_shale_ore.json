@@ -1,0 +1,23 @@
+{
+  "feature": "astralsorcery:aquamarine_shale_ore",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": {
+        "type": "minecraft:biased_to_bottom",
+        "max_inclusive": 8,
+        "min_inclusive": 3
+      }
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    {
+      "type": "astralsorcery:riverbed_placement"
+    }
+  ]
+}

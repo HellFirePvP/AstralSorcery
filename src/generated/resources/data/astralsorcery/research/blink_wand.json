@@ -1,0 +1,39 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:blink_wand",
+  "lookupIndexItems": [
+    "astralsorcery:blink_wand"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.blink_wand.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/blink_wand",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.blink_wand.text.1"
+    }
+  ],
+  "posX": 2.0,
+  "posY": -3.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:blink_wand"
+    }
+  ],
+  "tier": "resonance"
+}

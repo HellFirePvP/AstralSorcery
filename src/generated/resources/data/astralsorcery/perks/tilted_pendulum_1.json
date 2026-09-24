@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:travel_core_3"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:cooldown_reduction",
+        "identifier": "perk_modifier_421",
+        "mode": 1,
+        "value": 0.08
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.cooldown_reduction",
+    "registry_name": "astralsorcery:tilted_pendulum_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": 7.0,
+    "y": 2.0
+  }
+}

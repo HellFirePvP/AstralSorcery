@@ -1,0 +1,17 @@
+{
+  "type": "astralsorcery:focal_combine",
+  "color": -6291200,
+  "duration": 1200,
+  "inputs": [
+    {
+      "tag": "minecraft:small_flowers"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:protea"
+    }
+  ],
+  "required_constellation": "astralsorcery:evorsio"
+}

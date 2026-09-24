@@ -1,0 +1,10 @@
+{
+  "type": "astralsorcery:lightwell",
+  "catalyst_color": -51956,
+  "generated_fluid": "minecraft:lava",
+  "input": {
+    "item": "minecraft:netherrack"
+  },
+  "production_multiplier": 0.4,
+  "shatter_multiplier": 0.04
+}

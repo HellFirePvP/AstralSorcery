@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:blunt_force_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:attack_damage",
+        "identifier": "perk_modifier_296",
+        "mode": 1,
+        "value": 0.08
+      },
+      {
+        "attribute_type": "astralsorcery:critical_hit_damage",
+        "identifier": "perk_modifier_297",
+        "mode": 1,
+        "value": 0.16
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.blunt_force",
+    "registry_name": "astralsorcery:key_blunt_force",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -6.0,
+    "y": -19.0
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "astralsorcery:block/sooty_marble_slab"
+    },
+    "type=double": {
+      "model": "astralsorcery:block/sooty_marble_bricks"
+    },
+    "type=top": {
+      "model": "astralsorcery:block/sooty_marble_slab_top"
+    }
+  }
+}

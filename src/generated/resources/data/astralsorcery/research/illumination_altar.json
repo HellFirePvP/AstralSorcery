@@ -1,0 +1,39 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:illumination_altar",
+  "lookupIndexItems": [
+    "astralsorcery:altar_illumination"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.illumination_altar.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:focal_combine/altar_illumination",
+      "recipe_type": "astralsorcery:focal_combine"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.illumination_altar.text.1"
+    }
+  ],
+  "posX": 4.0,
+  "posY": -2.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:altar_illumination"
+    }
+  ],
+  "tier": "shimmer"
+}

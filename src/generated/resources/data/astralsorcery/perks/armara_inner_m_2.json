@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:armara_inner_armor_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:armor_toughness",
+        "identifier": "perk_modifier_146",
+        "mode": 0,
+        "value": 4.0
+      },
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_145",
+        "mode": 0,
+        "value": 2.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.tough",
+    "registry_name": "astralsorcery:armara_inner_m_2",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 19.0,
+    "y": 13.0
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:perk_tools",
+  "lookupIndexItems": [
+    "astralsorcery:perk_seal",
+    "astralsorcery:perk_nullifier"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.perk_tools.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/perk_seal",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.perk_tools.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/perk_nullifier",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": 0.0,
+  "posY": 4.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:perk_seal"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:perk_nullifier"
+    }
+  ],
+  "tier": "resonance"
+}

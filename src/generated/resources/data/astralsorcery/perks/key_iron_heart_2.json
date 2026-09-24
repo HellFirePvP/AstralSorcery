@@ -1,0 +1,45 @@
+{
+  "connections": [
+    "astralsorcery:iron_heart_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_393",
+        "mode": 0,
+        "value": 4.0
+      },
+      {
+        "attribute_type": "astralsorcery:max_health",
+        "identifier": "perk_modifier_391",
+        "mode": 1,
+        "value": 0.1
+      },
+      {
+        "attribute_type": "astralsorcery:movement_speed",
+        "identifier": "perk_modifier_392",
+        "mode": 2,
+        "value": 0.91
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.iron_heart",
+    "registry_name": "astralsorcery:key_iron_heart_2",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -17.0,
+    "y": -1.0
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_array/lumen_array_solid"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/lumen_array/lumen_array_translucent"
+      }
+    }
+  ]
+}

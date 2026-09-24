@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:spatial_manipulation_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:attack_reach",
+        "identifier": "perk_modifier_381",
+        "mode": 1,
+        "value": 0.04
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.attack_reach",
+    "registry_name": "astralsorcery:spatial_manipulation_2",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": -10.0,
+    "y": 28.0
+  }
+}

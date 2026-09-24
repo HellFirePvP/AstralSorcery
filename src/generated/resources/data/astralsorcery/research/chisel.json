@@ -1,0 +1,43 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:focus_relay",
+    "astralsorcery:celestial_crystals"
+  ],
+  "key": "astralsorcery:chisel",
+  "lookupIndexItems": [
+    "astralsorcery:chisel",
+    "astralsorcery:stardust"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.chisel.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/chisel",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.chisel.text.1"
+    }
+  ],
+  "posX": -1.0,
+  "posY": -3.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:chisel"
+    }
+  ],
+  "tier": "illumination"
+}

@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:discidia_inner_m_"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:attack_damage",
+        "identifier": "perk_modifier_247",
+        "mode": 1,
+        "value": 0.04
+      },
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_248",
+        "mode": 1,
+        "value": 0.02
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.attack_damage_perk_effect",
+    "registry_name": "astralsorcery:discidia_connect_out_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 21.0,
+    "y": -19.0
+  }
+}

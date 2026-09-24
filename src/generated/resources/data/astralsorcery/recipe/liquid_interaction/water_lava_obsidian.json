@@ -1,0 +1,25 @@
+{
+  "type": "astralsorcery:liquid_interaction",
+  "chanceConsumeA": 0.5,
+  "chanceConsumeB": 0.5,
+  "reactantA": {
+    "amount": 100,
+    "ingredient": {
+      "fluid": "minecraft:water"
+    }
+  },
+  "reactantB": {
+    "amount": 100,
+    "ingredient": {
+      "fluid": "minecraft:lava"
+    }
+  },
+  "result": {
+    "type": "astralsorcery:drop_item",
+    "output": {
+      "count": 1,
+      "id": "minecraft:obsidian"
+    }
+  },
+  "weight": 1
+}

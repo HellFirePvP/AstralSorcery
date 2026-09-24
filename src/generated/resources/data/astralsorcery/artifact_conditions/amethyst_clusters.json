@@ -1,0 +1,24 @@
+{
+  "condition": {
+    "type": "astralsorcery:near_block",
+    "blockConsumptionChance": 0.0,
+    "blockCountNeeded": {
+      "maxInclusive": 2,
+      "minInclusive": 2
+    },
+    "blockPredicate": {
+      "blocks": [
+        "minecraft:small_amethyst_bud",
+        "minecraft:medium_amethyst_bud",
+        "minecraft:large_amethyst_bud",
+        "minecraft:amethyst_cluster"
+      ]
+    },
+    "id": "astralsorcery:amethyst_clusters",
+    "range": 6
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "astralsorcery:infusion",
+  "accept_chalice_input": true,
+  "consume_multiple_fluids": false,
+  "duration": 200,
+  "fluid_consumption_chance": 0.01,
+  "fluid_input": "astralsorcery:liquid_starlight",
+  "item_input": {
+    "tag": "c:glass_panes"
+  },
+  "output": {
+    "count": 1,
+    "id": "astralsorcery:glass_lens"
+  }
+}

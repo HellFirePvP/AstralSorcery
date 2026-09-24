@@ -1,0 +1,20 @@
+{
+  "condition": {
+    "type": "astralsorcery:damage_type",
+    "clearDescription": {
+      "translate": "artifact.astralsorcery.condition.value.damage_type.hit_by_fire.clear"
+    },
+    "damageTypeTags": [
+      "minecraft:is_fire"
+    ],
+    "damageTypes": [],
+    "hiddenDescription": {
+      "translate": "artifact.astralsorcery.condition.value.damage_type.hit_by_fire.hidden"
+    },
+    "id": "astralsorcery:hit_by_fire"
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:astrolabe"
+  ],
+  "key": "astralsorcery:ores",
+  "lookupIndexItems": [
+    "astralsorcery:aquamarine",
+    "astralsorcery:rock_crystal"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.ores.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.ores.text.1"
+    }
+  ],
+  "posX": -1.0,
+  "posY": 1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:aquamarine_shale"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:rock_crystal_ore"
+    }
+  ],
+  "tier": "shimmer"
+}

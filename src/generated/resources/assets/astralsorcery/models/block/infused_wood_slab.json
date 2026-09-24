@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "astralsorcery:block/infused_wood_planks",
+    "side": "astralsorcery:block/infused_wood_planks",
+    "top": "astralsorcery:block/infused_wood_planks"
+  }
+}

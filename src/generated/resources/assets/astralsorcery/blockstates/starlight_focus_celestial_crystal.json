@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/starlight_focus_celestial_crystal/starlight_focus_celestial_crystal_solid"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/starlight_focus_celestial_crystal/starlight_focus_celestial_crystal_translucent"
+      }
+    }
+  ]
+}

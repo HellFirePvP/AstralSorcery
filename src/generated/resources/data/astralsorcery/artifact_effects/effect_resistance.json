@@ -1,0 +1,33 @@
+{
+  "effect": {
+    "type": "astralsorcery:effects",
+    "effects": [
+      {
+        "ambient": true,
+        "duration": 1000,
+        "id": "minecraft:resistance",
+        "neoforge:cures": [
+          "protected_by_totem",
+          "milk"
+        ],
+        "show_icon": false
+      },
+      {
+        "ambient": true,
+        "duration": 1000,
+        "id": "minecraft:fire_resistance",
+        "neoforge:cures": [
+          "protected_by_totem",
+          "milk"
+        ],
+        "show_icon": false
+      }
+    ],
+    "id": "astralsorcery:effect_resistance",
+    "range": 8
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

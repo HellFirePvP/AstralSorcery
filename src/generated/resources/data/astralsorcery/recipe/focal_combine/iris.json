@@ -1,0 +1,17 @@
+{
+  "type": "astralsorcery:focal_combine",
+  "color": -16728659,
+  "duration": 1200,
+  "inputs": [
+    {
+      "tag": "minecraft:small_flowers"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:iris"
+    }
+  ],
+  "required_constellation": "astralsorcery:vicio"
+}

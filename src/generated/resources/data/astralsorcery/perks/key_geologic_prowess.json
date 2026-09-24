@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:geologic_prowess_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:mining_size",
+        "identifier": "perk_modifier_281",
+        "mode": 0,
+        "value": 1.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.geologic_prowess",
+    "registry_name": "astralsorcery:key_geologic_prowess",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -24.0,
+    "y": -29.0
+  }
+}

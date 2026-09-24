@@ -1,0 +1,17 @@
+{
+  "type": "astralsorcery:focal_combine",
+  "color": -13704192,
+  "duration": 1200,
+  "inputs": [
+    {
+      "tag": "minecraft:small_flowers"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:hyacinth"
+    }
+  ],
+  "required_constellation": "astralsorcery:aevitas"
+}

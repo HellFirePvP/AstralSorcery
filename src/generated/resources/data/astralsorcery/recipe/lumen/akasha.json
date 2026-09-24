@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:lumen_generation",
+  "attempt_starlight_consumption": 2.0,
+  "catalyst_shatter_multiplier": 1.5,
+  "input": {
+    "item": "astralsorcery:stardust"
+  },
+  "lumen_combination_inputs": {
+    "astralsorcery:caldor": 7,
+    "astralsorcery:evorsio": 12,
+    "astralsorcery:nullae": 4
+  },
+  "produced_lumen": "astralsorcery:akasha",
+  "produced_lumen_amount": 2,
+  "production_attempt_multiplier": 3.0
+}

@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:clarity_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:perk_experience",
+        "identifier": "perk_modifier_348",
+        "mode": 1,
+        "value": 0.14
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.clarity",
+    "registry_name": "astralsorcery:key_clarity",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 26.0,
+    "y": 24.0
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "against=down": {
+      "model": "astralsorcery:block/lens"
+    },
+    "against=east": {
+      "model": "astralsorcery:block/lens",
+      "x": 90,
+      "y": 270
+    },
+    "against=north": {
+      "model": "astralsorcery:block/lens",
+      "x": 90,
+      "y": 180
+    },
+    "against=south": {
+      "model": "astralsorcery:block/lens",
+      "x": 90
+    },
+    "against=up": {
+      "model": "astralsorcery:block/lens",
+      "x": 180
+    },
+    "against=west": {
+      "model": "astralsorcery:block/lens",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

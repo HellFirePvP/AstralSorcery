@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_gateway/celestial_gateway_solid"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/celestial_gateway/celestial_gateway_translucent"
+      }
+    }
+  ]
+}

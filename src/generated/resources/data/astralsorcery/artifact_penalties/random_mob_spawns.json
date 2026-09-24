@@ -1,0 +1,16 @@
+{
+  "effect": {
+    "type": "astralsorcery:spawn_natural_mobs",
+    "category": "monster",
+    "id": "astralsorcery:random_mob_spawns",
+    "range": 7,
+    "spawn_count": {
+      "maxInclusive": 13,
+      "minInclusive": 8
+    }
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

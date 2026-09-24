@@ -1,0 +1,42 @@
+{
+  "connections": [
+    "astralsorcery:vicio_bridge_4",
+    "astralsorcery:vicio_connect_in_3",
+    "astralsorcery:vicio_connect_out_3",
+    "astralsorcery:vicio_inner_swim_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:movement_speed",
+        "identifier": "perk_modifier_199",
+        "mode": 1,
+        "value": 0.04
+      },
+      {
+        "attribute_type": "astralsorcery:safe_fall_distance",
+        "identifier": "perk_modifier_200",
+        "mode": 0,
+        "value": 6.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.nimble",
+    "registry_name": "astralsorcery:vicio_inner_m_2",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": 6.0,
+    "y": 23.0
+  }
+}

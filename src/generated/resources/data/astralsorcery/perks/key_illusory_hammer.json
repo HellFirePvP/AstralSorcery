@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:illusory_hammer_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:mining_size",
+        "identifier": "perk_modifier_289",
+        "mode": 0,
+        "value": 1.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.illusory_hammer",
+    "registry_name": "astralsorcery:key_illusory_hammer",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -13.0,
+    "y": -9.0
+  }
+}

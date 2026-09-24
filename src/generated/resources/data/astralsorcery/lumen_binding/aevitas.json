@@ -1,0 +1,148 @@
+{
+  "potion_effect": {
+    "amplifier_range": {
+      "maxInclusive": 0,
+      "minInclusive": 0
+    },
+    "duration_range": {
+      "maxInclusive": 9600,
+      "minInclusive": 4800
+    },
+    "effect": "minecraft:regeneration"
+  },
+  "slot_bindings": {
+    "boots": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:max_health",
+            "identifier": "4f788125-4d82-48f6-b5a8-e154338bb4e1",
+            "mode": 1,
+            "value": 0.05
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:damage_taken",
+        "consumption_chance": 0.1,
+        "lumen_cost": 1
+      }
+    },
+    "chestplate": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:max_health",
+            "identifier": "821f9e5b-043b-4f8a-af89-7d8cf8acf38f",
+            "mode": 1,
+            "value": 0.08
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:damage_taken",
+        "consumption_chance": 0.15,
+        "lumen_cost": 1
+      }
+    },
+    "helmet": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:max_health",
+            "identifier": "99704796-f121-4a61-bd39-edd1c2151b9e",
+            "mode": 1,
+            "value": 0.05
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:damage_taken",
+        "consumption_chance": 0.1,
+        "lumen_cost": 1
+      }
+    },
+    "leggings": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:max_health",
+            "identifier": "625dd332-3ffe-4c36-90ca-c590705da16f",
+            "mode": 1,
+            "value": 0.05
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:damage_taken",
+        "consumption_chance": 0.1,
+        "lumen_cost": 1
+      }
+    },
+    "melee_weapon": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:max_health",
+            "identifier": "b5f0be0d-d9a8-4c28-a67f-069d582e0c77",
+            "mode": 1,
+            "value": 0.02
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:damage_taken",
+        "consumption_chance": 0.3,
+        "lumen_cost": 1
+      }
+    },
+    "ranged_weapon": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:max_health",
+            "identifier": "b9b298f4-6943-4061-bb7c-3fdf740b7354",
+            "mode": 1,
+            "value": 0.02
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:damage_taken",
+        "consumption_chance": 0.3,
+        "lumen_cost": 1
+      }
+    },
+    "tool": {
+      "display_text": [],
+      "effect": {
+        "type": "astralsorcery:dynamic_modifier",
+        "modifiers": [
+          {
+            "attribute_type": "astralsorcery:max_health",
+            "identifier": "219e339c-d6c8-46c6-881c-119484fa222c",
+            "mode": 1,
+            "value": 0.02
+          }
+        ]
+      },
+      "lumen_usage": {
+        "type": "astralsorcery:damage_taken",
+        "consumption_chance": 0.3,
+        "lumen_cost": 1
+      }
+    }
+  }
+}

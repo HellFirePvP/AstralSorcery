@@ -1,0 +1,116 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_solid",
+        "x": 180
+      },
+      "when": {
+        "against": "up"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_translucent",
+        "x": 180
+      },
+      "when": {
+        "against": "up"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_solid"
+      },
+      "when": {
+        "against": "down"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_translucent"
+      },
+      "when": {
+        "against": "down"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_solid",
+        "x": 90,
+        "y": 180
+      },
+      "when": {
+        "against": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_translucent",
+        "x": 90,
+        "y": 180
+      },
+      "when": {
+        "against": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_solid",
+        "x": 90
+      },
+      "when": {
+        "against": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_translucent",
+        "x": 90
+      },
+      "when": {
+        "against": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_solid",
+        "x": 90,
+        "y": 270
+      },
+      "when": {
+        "against": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_translucent",
+        "x": 90,
+        "y": 270
+      },
+      "when": {
+        "against": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_solid",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "against": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/prism/prism_translucent",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "against": "west"
+      }
+    }
+  ]
+}

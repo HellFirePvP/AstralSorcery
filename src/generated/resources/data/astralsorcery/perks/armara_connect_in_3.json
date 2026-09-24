@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:armara_inner_m_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:elemental_resistance",
+        "identifier": "perk_modifier_168",
+        "mode": 1,
+        "value": 0.03
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.elemental_resistance",
+    "registry_name": "astralsorcery:armara_connect_in_3",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 23.0,
+    "y": -1.0
+  }
+}

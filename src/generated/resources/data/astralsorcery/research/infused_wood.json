@@ -1,0 +1,80 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:infused_wood",
+  "lookupIndexItems": [
+    "astralsorcery:infused_wood",
+    "astralsorcery:infused_wood_arch",
+    "astralsorcery:infused_wood_column",
+    "astralsorcery:infused_wood_engraved",
+    "astralsorcery:infused_wood_enriched",
+    "astralsorcery:infused_wood_planks"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.infused_wood.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/infused_wood_planks",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/infused_wood_arch",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/infused_wood_column",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/infused_wood_engraved",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/infused_wood_enriched",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": -4.0,
+  "posY": 2.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:infused_wood"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:infused_wood_arch"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:infused_wood_column"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:infused_wood_engraved"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:infused_wood_enriched"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:infused_wood_planks"
+    }
+  ],
+  "tier": "illumination"
+}

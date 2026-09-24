@@ -1,0 +1,41 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:complex_lumen"
+  ],
+  "key": "astralsorcery:lumen_alchemy_array",
+  "lookupIndexItems": [
+    "astralsorcery:lumen_alchemy_array"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.lumen_alchemy_array.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/lumen_alchemy_array",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.lumen_alchemy_array.text.1"
+    }
+  ],
+  "posX": -3.0,
+  "posY": -3.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:lumen_alchemy_array"
+    }
+  ],
+  "tier": "luminance"
+}

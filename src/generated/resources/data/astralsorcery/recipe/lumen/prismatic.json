@@ -1,0 +1,58 @@
+{
+  "type": "astralsorcery:lumen_generation",
+  "attempt_starlight_consumption": 3.0,
+  "catalyst_shatter_multiplier": 2.0,
+  "input": [
+    {
+      "type": "neoforge:components",
+      "components": {
+        "astralsorcery:artifact_type": "astralsorcery:sidereal"
+      },
+      "items": "astralsorcery:artifact_shard"
+    },
+    {
+      "type": "neoforge:components",
+      "components": {
+        "astralsorcery:artifact_type": "astralsorcery:luminous"
+      },
+      "items": "astralsorcery:artifact_shard"
+    },
+    {
+      "type": "neoforge:components",
+      "components": {
+        "astralsorcery:artifact_type": "astralsorcery:chronal"
+      },
+      "items": "astralsorcery:artifact_shard"
+    },
+    {
+      "type": "neoforge:components",
+      "components": {
+        "astralsorcery:artifact_type": "astralsorcery:astriform"
+      },
+      "items": "astralsorcery:artifact_shard"
+    },
+    {
+      "type": "neoforge:components",
+      "components": {
+        "astralsorcery:artifact_type": "astralsorcery:axiomatic"
+      },
+      "items": "astralsorcery:artifact_shard"
+    },
+    {
+      "type": "neoforge:components",
+      "components": {
+        "astralsorcery:artifact_type": "astralsorcery:spectral"
+      },
+      "items": "astralsorcery:artifact_shard"
+    }
+  ],
+  "lumen_combination_inputs": {
+    "astralsorcery:aion": 3,
+    "astralsorcery:akasha": 3,
+    "astralsorcery:dynamis": 3,
+    "astralsorcery:hyle": 3
+  },
+  "produced_lumen": "astralsorcery:prismatic",
+  "produced_lumen_amount": 2,
+  "production_attempt_multiplier": 2.5
+}

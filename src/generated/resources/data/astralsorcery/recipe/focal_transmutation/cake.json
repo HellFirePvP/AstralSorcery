@@ -1,0 +1,26 @@
+{
+  "type": "astralsorcery:focal_transmutation",
+  "color": -1,
+  "duration": 2400,
+  "input_display_stacks": {
+    "item": "minecraft:pumpkin"
+  },
+  "input_predicates": [
+    {
+      "type": "minecraft:matching_blocks",
+      "blocks": "minecraft:pumpkin"
+    }
+  ],
+  "output_states": [
+    {
+      "data": {
+        "Name": "minecraft:cake",
+        "Properties": {
+          "bites": "0"
+        }
+      },
+      "weight": 1
+    }
+  ],
+  "requires_focused_starlight": true
+}

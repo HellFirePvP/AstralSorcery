@@ -1,0 +1,23 @@
+{
+  "type": "astralsorcery:focal_transmutation",
+  "color": -5376,
+  "duration": 400,
+  "input_display_stacks": {
+    "item": "minecraft:sandstone"
+  },
+  "input_predicates": [
+    {
+      "type": "minecraft:matching_blocks",
+      "blocks": "minecraft:sandstone"
+    }
+  ],
+  "output_states": [
+    {
+      "data": {
+        "Name": "minecraft:end_stone"
+      },
+      "weight": 1
+    }
+  ],
+  "requires_focused_starlight": true
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "astralsorcery:block/pillar",
+  "textures": {
+    "end": "astralsorcery:block/sooty_marble_pillar_inner",
+    "side": "astralsorcery:block/sooty_marble_pillar"
+  }
+}

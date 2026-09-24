@@ -1,0 +1,32 @@
+{
+  "connections": [],
+  "perk": {
+    "type": "astralsorcery:root_perk_aevitas",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.root"
+      }
+    },
+    "constellation": "astralsorcery:aevitas",
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:max_health",
+        "identifier": "perk_modifier_0",
+        "mode": 2,
+        "value": 1.1
+      }
+    ],
+    "name": "perk.astralsorcery.root_perk_aevitas",
+    "registry_name": "astralsorcery:root_aevitas",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -30.0,
+    "y": 11.0
+  }
+}

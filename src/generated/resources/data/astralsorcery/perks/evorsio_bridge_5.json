@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:evorsio_bridge_4"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:block_break_speed",
+        "identifier": "perk_modifier_237",
+        "mode": 1,
+        "value": 0.03
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.block_break_speed",
+    "registry_name": "astralsorcery:evorsio_bridge_5",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -10.0,
+    "y": -17.0
+  }
+}

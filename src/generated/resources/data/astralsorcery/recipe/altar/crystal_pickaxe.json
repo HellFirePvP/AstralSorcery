@@ -1,0 +1,56 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "C": {
+        "type": "item",
+        "ingredient": {
+          "tag": "astralsorcery:crystal"
+        }
+      },
+      "S": {
+        "type": "item",
+        "ingredient": {
+          "tag": "c:rods/wooden"
+        }
+      }
+    },
+    "pattern": [
+      "CCC",
+      " S ",
+      " S "
+    ],
+    "relayPattern": [
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ]
+  },
+  "mayChain": false,
+  "onlyNight": true,
+  "outputModifiers": [
+    {
+      "type": "astralsorcery:merge_crystal_properties"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:crystal_pickaxe"
+    }
+  ],
+  "requiredAdditionalInputs": [],
+  "requiredFluid": [],
+  "requiredLumen": [],
+  "requiredStarlight": [],
+  "requiredType": "illumination"
+}

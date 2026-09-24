@@ -1,0 +1,39 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:wand",
+  "lookupIndexItems": [
+    "astralsorcery:wand"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.wand.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:focal_combine/wand",
+      "recipe_type": "astralsorcery:focal_combine"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.wand.text.1"
+    }
+  ],
+  "posX": 5.0,
+  "posY": 1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:wand"
+    }
+  ],
+  "tier": "shimmer"
+}

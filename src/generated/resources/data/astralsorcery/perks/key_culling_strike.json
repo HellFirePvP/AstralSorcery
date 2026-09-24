@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:culling_strike_3"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_culling_attack",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.culling_strike",
+    "registry_name": "astralsorcery:key_culling_strike",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 22.0,
+    "y": -33.0
+  }
+}

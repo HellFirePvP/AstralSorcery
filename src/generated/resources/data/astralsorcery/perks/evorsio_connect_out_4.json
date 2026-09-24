@@ -1,0 +1,40 @@
+{
+  "connections": [
+    "astralsorcery:evorsio_connect_out_3",
+    "astralsorcery:travel_41"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:block_break_speed",
+        "identifier": "perk_modifier_261",
+        "mode": 1,
+        "value": 0.05
+      },
+      {
+        "attribute_type": "astralsorcery:perk_effect",
+        "identifier": "perk_modifier_262",
+        "mode": 1,
+        "value": 0.02
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.block_break_speed_perk_effect",
+    "registry_name": "astralsorcery:evorsio_connect_out_4",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -24.0,
+    "y": -21.0
+  }
+}

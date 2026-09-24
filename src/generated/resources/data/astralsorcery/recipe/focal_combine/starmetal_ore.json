@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:focal_combine",
+  "color": -15269633,
+  "duration": 500,
+  "inputs": [
+    {
+      "tag": "minecraft:iron_ores"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:starmetal_ore"
+    }
+  ]
+}

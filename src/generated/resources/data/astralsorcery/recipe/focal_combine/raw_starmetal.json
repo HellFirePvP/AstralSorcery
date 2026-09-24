@@ -1,0 +1,16 @@
+{
+  "type": "astralsorcery:focal_combine",
+  "color": -15269633,
+  "duration": 2000,
+  "inputs": [
+    {
+      "item": "minecraft:raw_iron"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:raw_starmetal"
+    }
+  ]
+}

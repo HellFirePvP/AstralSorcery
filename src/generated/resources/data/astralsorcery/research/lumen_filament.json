@@ -1,0 +1,35 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:lumen_filament",
+  "lookupIndexItems": [
+    "astralsorcery:lumen_filament"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.lumen_filament.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/lumen_filament",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": 2.0,
+  "posY": -7.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:lumen_filament"
+    }
+  ],
+  "tier": "resonance"
+}

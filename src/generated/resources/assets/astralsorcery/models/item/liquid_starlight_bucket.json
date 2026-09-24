@@ -1,0 +1,5 @@
+{
+  "parent": "neoforge:item/bucket",
+  "fluid": "astralsorcery:liquid_starlight",
+  "loader": "neoforge:fluid_container"
+}

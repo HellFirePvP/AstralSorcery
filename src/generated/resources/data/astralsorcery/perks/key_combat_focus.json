@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:combat_focus_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:critical_hit_damage",
+        "identifier": "perk_modifier_319",
+        "mode": 1,
+        "value": 0.14
+      },
+      {
+        "attribute_type": "astralsorcery:critical_hit_chance",
+        "identifier": "perk_modifier_320",
+        "mode": 0,
+        "value": 0.04
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.combat_focus",
+    "registry_name": "astralsorcery:key_combat_focus",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 13.0,
+    "y": -10.0
+  }
+}

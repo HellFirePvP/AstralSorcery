@@ -1,0 +1,14 @@
+{
+  "effect": {
+    "type": "astralsorcery:random_teleport",
+    "distance": {
+      "maxInclusive": 10.0,
+      "minInclusive": 5.0
+    },
+    "id": "astralsorcery:random_teleport"
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

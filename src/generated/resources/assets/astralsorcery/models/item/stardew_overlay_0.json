@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "astralsorcery:item/stardew_overlay_0",
+    "layer1": "astralsorcery:item/stardew_flask"
+  }
+}

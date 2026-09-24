@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:long_shot_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_projectile_distance",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.long_shot",
+    "registry_name": "astralsorcery:key_long_shot",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 15.0,
+    "y": -12.0
+  }
+}

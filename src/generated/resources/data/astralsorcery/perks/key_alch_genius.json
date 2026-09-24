@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:alch_genius_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:potion_duration",
+        "identifier": "perk_modifier_417",
+        "mode": 1,
+        "value": 0.1
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.alchemists_genius",
+    "registry_name": "astralsorcery:key_alch_genius",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": 2.0,
+    "y": 5.0
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:marble",
+    "astralsorcery:constellation_paper",
+    "astralsorcery:ores"
+  ],
+  "key": "astralsorcery:welcome",
+  "lookupIndexItems": [
+    "astralsorcery:tome"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.welcome.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.welcome.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:tome",
+      "recipe_type": "minecraft:crafting"
+    }
+  ],
+  "posX": -5.0,
+  "posY": 0.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:tome"
+    }
+  ],
+  "tier": "shimmer"
+}

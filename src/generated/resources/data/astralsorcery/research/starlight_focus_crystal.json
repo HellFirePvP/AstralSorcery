@@ -1,0 +1,52 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:lens_prism",
+    "astralsorcery:linking_tool",
+    "astralsorcery:radiance_altar"
+  ],
+  "key": "astralsorcery:starlight_focus_crystal",
+  "lookupIndexItems": [
+    "astralsorcery:starlight_focus_rock_crystal",
+    "astralsorcery:starlight_focus_celestial_crystal"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.starlight_focus_crystal.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/starlight_focus_rock_crystal",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.starlight_focus_crystal.text.1"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.starlight_focus_crystal.text.2"
+    }
+  ],
+  "posX": -3.0,
+  "posY": 1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:starlight_focus_rock_crystal"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:starlight_focus_celestial_crystal"
+    }
+  ],
+  "tier": "luminance"
+}

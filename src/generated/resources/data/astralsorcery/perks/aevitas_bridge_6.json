@@ -1,0 +1,34 @@
+{
+  "connections": [
+    "astralsorcery:travel_10",
+    "astralsorcery:aevitas_bridge_5"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:max_health",
+        "identifier": "perk_modifier_124",
+        "mode": 0,
+        "value": 1.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.add.life",
+    "registry_name": "astralsorcery:aevitas_bridge_6",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -12.0,
+    "y": 6.0
+  }
+}

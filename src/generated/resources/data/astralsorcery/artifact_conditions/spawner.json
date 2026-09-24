@@ -1,0 +1,22 @@
+{
+  "condition": {
+    "type": "astralsorcery:near_block",
+    "blockConsumptionChance": 0.0,
+    "blockCountNeeded": {
+      "maxInclusive": 1,
+      "minInclusive": 1
+    },
+    "blockPredicate": {
+      "blocks": [
+        "minecraft:spawner",
+        "minecraft:trial_spawner"
+      ]
+    },
+    "id": "astralsorcery:spawner",
+    "range": 4
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

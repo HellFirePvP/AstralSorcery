@@ -1,0 +1,67 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:lumen_binding",
+  "lookupIndexItems": [],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.lumen_binding.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.lumen_binding.text.1"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.lumen_binding.text.2"
+    }
+  ],
+  "posX": 1.0,
+  "posY": -9.0,
+  "renderItemStacks": [
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:aevitas"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:armara"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:discidia"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:evorsio"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:vicio"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    }
+  ],
+  "tier": "resonance"
+}

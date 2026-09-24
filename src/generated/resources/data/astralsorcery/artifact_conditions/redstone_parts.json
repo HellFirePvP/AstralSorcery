@@ -1,0 +1,26 @@
+{
+  "condition": {
+    "type": "astralsorcery:near_block",
+    "blockConsumptionChance": 0.0,
+    "blockCountNeeded": {
+      "maxInclusive": 2,
+      "minInclusive": 2
+    },
+    "blockPredicate": {
+      "blocks": [
+        "minecraft:redstone_wire",
+        "minecraft:redstone_torch",
+        "minecraft:redstone_wall_torch",
+        "minecraft:repeater",
+        "minecraft:comparator",
+        "minecraft:daylight_detector"
+      ]
+    },
+    "id": "astralsorcery:redstone_parts",
+    "range": 6
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "effect": {
+    "type": "astralsorcery:spawn_natural_mobs",
+    "category": "creature",
+    "id": "astralsorcery:random_animals",
+    "range": 6,
+    "spawn_count": {
+      "maxInclusive": 10,
+      "minInclusive": 5
+    }
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

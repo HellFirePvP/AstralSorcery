@@ -1,0 +1,7 @@
+{
+  "parent": "astralsorcery:block/column",
+  "textures": {
+    "end": "astralsorcery:block/infused_wood_column_inner",
+    "side": "astralsorcery:block/infused_wood_column"
+  }
+}

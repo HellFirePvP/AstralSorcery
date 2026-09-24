@@ -1,0 +1,22 @@
+{
+  "condition": {
+    "type": "astralsorcery:near_block",
+    "blockConsumptionChance": 0.0,
+    "blockCountNeeded": {
+      "maxInclusive": 2,
+      "minInclusive": 2
+    },
+    "blockPredicate": {
+      "blocks": [
+        "minecraft:diamond_block",
+        "minecraft:emerald_block"
+      ]
+    },
+    "id": "astralsorcery:gem_blocks",
+    "range": 6
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

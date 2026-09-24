@@ -1,0 +1,52 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:perk_gems",
+    "astralsorcery:perk_tools",
+    "astralsorcery:shifting_star"
+  ],
+  "key": "astralsorcery:attunement_altar",
+  "lookupIndexItems": [
+    "astralsorcery:attunement_altar"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.attunement_altar.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/attunement_altar",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:structure",
+      "structureIndex": 0,
+      "structureObserver": "astralsorcery:attunement_altar"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.attunement_altar.text.1"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.attunement_altar.text.2"
+    }
+  ],
+  "posX": -1.0,
+  "posY": 1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:attunement_altar"
+    }
+  ],
+  "tier": "resonance"
+}

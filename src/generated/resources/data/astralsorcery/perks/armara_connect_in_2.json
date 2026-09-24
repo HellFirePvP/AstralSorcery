@@ -1,0 +1,34 @@
+{
+  "connections": [
+    "astralsorcery:armara_connect_in_1",
+    "astralsorcery:travel_branch_12"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_266",
+        "mode": 0,
+        "value": 1.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.add.armor",
+    "registry_name": "astralsorcery:armara_connect_in_2",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 14.0,
+    "y": 17.0
+  }
+}

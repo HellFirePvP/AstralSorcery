@@ -1,0 +1,42 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:chisel",
+    "astralsorcery:infused_wood",
+    "astralsorcery:throwable_dusts"
+  ],
+  "key": "astralsorcery:liquid_starlight",
+  "lookupIndexItems": [
+    "astralsorcery:liquid_starlight_bucket"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.liquid_starlight.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.liquid_starlight.text.1"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.liquid_starlight.text.2"
+    }
+  ],
+  "posX": -3.0,
+  "posY": -1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:liquid_starlight_bucket"
+    }
+  ],
+  "tier": "illumination"
+}

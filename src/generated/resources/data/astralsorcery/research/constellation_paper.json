@@ -1,0 +1,32 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:constellation_paper",
+  "lookupIndexItems": [],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.constellation_paper.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.constellation_paper.text.1"
+    }
+  ],
+  "posX": -3.0,
+  "posY": 4.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:constellation_paper"
+    }
+  ],
+  "tier": "shimmer"
+}

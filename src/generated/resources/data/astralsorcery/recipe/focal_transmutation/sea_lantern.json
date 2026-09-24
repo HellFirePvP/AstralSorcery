@@ -1,0 +1,23 @@
+{
+  "type": "astralsorcery:focal_transmutation",
+  "color": -16325121,
+  "duration": 800,
+  "input_display_stacks": {
+    "item": "minecraft:glowstone"
+  },
+  "input_predicates": [
+    {
+      "type": "minecraft:matching_blocks",
+      "blocks": "minecraft:glowstone"
+    }
+  ],
+  "output_states": [
+    {
+      "data": {
+        "Name": "minecraft:sea_lantern"
+      },
+      "weight": 1
+    }
+  ],
+  "requires_focused_starlight": false
+}

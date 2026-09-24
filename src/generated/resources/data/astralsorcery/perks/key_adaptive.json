@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:adaptive_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:damage_reduction",
+        "identifier": "perk_modifier_397",
+        "mode": 1,
+        "value": 0.05
+      },
+      {
+        "attribute_type": "astralsorcery:elemental_resistance",
+        "identifier": "perk_modifier_396",
+        "mode": 1,
+        "value": 0.08
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.adaptive",
+    "registry_name": "astralsorcery:key_adaptive",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -10.0,
+    "y": 9.0
+  }
+}

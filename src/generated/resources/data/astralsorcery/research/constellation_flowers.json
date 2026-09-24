@@ -1,0 +1,56 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:lumen_array"
+  ],
+  "key": "astralsorcery:constellation_flowers",
+  "lookupIndexItems": [
+    "astralsorcery:hyacinth",
+    "astralsorcery:iris",
+    "astralsorcery:orchid",
+    "astralsorcery:protea",
+    "astralsorcery:thistle"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.constellation_flowers.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.constellation_flowers.text.1"
+    }
+  ],
+  "posX": -1.0,
+  "posY": -4.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:hyacinth"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:iris"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:orchid"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:protea"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:thistle"
+    }
+  ],
+  "tier": "resonance"
+}

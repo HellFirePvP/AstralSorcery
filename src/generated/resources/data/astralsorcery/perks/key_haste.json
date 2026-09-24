@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:haste_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:block_break_speed",
+        "identifier": "perk_modifier_364",
+        "mode": 1,
+        "value": 0.12
+      },
+      {
+        "attribute_type": "astralsorcery:movement_speed",
+        "identifier": "perk_modifier_365",
+        "mode": 1,
+        "value": 0.03
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.haste",
+    "registry_name": "astralsorcery:key_haste",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": 5.0,
+    "y": 13.0
+  }
+}

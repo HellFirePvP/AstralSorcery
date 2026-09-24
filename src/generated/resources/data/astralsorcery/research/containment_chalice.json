@@ -1,0 +1,41 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:luminous_altar"
+  ],
+  "key": "astralsorcery:containment_chalice",
+  "lookupIndexItems": [
+    "astralsorcery:chalice"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.containment_chalice.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/chalice",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.containment_chalice.text.1"
+    }
+  ],
+  "posX": 2.0,
+  "posY": -1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:chalice"
+    }
+  ],
+  "tier": "resonance"
+}

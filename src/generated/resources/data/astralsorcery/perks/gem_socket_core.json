@@ -1,0 +1,24 @@
+{
+  "connections": [],
+  "perk": {
+    "type": "astralsorcery:gem_socket_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.generic.gem_socket",
+    "registry_name": "astralsorcery:gem_socket_core",
+    "requirements": [
+      {
+        "type": "astralsorcery:progress",
+        "needed_tier": "luminance"
+      }
+    ],
+    "x": 0.0,
+    "y": 0.0
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:evorsio_inner_damage_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:attack_damage",
+        "identifier": "perk_modifier_229",
+        "mode": 1,
+        "value": 0.1
+      },
+      {
+        "attribute_type": "astralsorcery:attack_speed",
+        "identifier": "perk_modifier_230",
+        "mode": 1,
+        "value": 0.06
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.finesse",
+    "registry_name": "astralsorcery:evorsio_inner_m_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -11.0,
+    "y": -23.0
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:lethality_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:critical_hit_damage",
+        "identifier": "perk_modifier_303",
+        "mode": 1,
+        "value": 0.2
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.lethality",
+    "registry_name": "astralsorcery:key_lethality",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 10.0,
+    "y": -33.0
+  }
+}

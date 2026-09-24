@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:fins_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:swim_speed",
+        "identifier": "perk_modifier_367",
+        "mode": 1,
+        "value": 0.16
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.fins",
+    "registry_name": "astralsorcery:key_fins",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": -5.0,
+    "y": 13.0
+  }
+}

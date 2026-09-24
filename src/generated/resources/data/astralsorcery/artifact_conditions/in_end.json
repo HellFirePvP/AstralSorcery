@@ -1,0 +1,21 @@
+{
+  "condition": {
+    "type": "astralsorcery:in_dimension",
+    "clearDescription": {
+      "translate": "artifact.astralsorcery.condition.value.in_dimension.the_end.clear"
+    },
+    "dimensionType": "minecraft:the_end",
+    "hiddenDescription": {
+      "translate": "artifact.astralsorcery.condition.value.in_dimension.the_end.hidden"
+    },
+    "id": "astralsorcery:in_end"
+  },
+  "selector": {
+    "conflicts": [
+      "astralsorcery:in_fortress",
+      "astralsorcery:in_stronghold",
+      "astralsorcery:in_mineshaft"
+    ],
+    "weight": 1
+  }
+}

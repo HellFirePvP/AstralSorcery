@@ -1,0 +1,48 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:chisel"
+  ],
+  "key": "astralsorcery:starmetal",
+  "lookupIndexItems": [
+    "astralsorcery:starmetal_ingot",
+    "astralsorcery:raw_starmetal",
+    "astralsorcery:starmetal_ore"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.starmetal.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:focal_transmutation/starmetal_ore",
+      "recipe_type": "astralsorcery:focal_transmutation"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:focal_combine/raw_starmetal",
+      "recipe_type": "astralsorcery:focal_combine"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.starmetal.text.1"
+    }
+  ],
+  "posX": -4.0,
+  "posY": -5.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:starmetal_ingot"
+    }
+  ],
+  "tier": "illumination"
+}

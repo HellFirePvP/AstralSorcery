@@ -1,0 +1,28 @@
+{
+  "type": "astralsorcery:focal_combine",
+  "color": -2236929,
+  "duration": 400,
+  "inputs": [
+    {
+      "item": "astralsorcery:marble_raw"
+    },
+    {
+      "item": "astralsorcery:marble_raw"
+    },
+    {
+      "item": "astralsorcery:marble_raw"
+    },
+    {
+      "item": "astralsorcery:marble_raw"
+    },
+    {
+      "item": "minecraft:crafting_table"
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:altar_illumination"
+    }
+  ]
+}

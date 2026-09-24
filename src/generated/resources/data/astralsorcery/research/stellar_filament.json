@@ -1,0 +1,43 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:stellar_filament",
+  "lookupIndexItems": [
+    "astralsorcery:stellar_filament"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.stellar_filament.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/stellar_filament",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.stellar_filament.text.1"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.stellar_filament.text.2"
+    }
+  ],
+  "posX": -1.0,
+  "posY": 0.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:stellar_filament"
+    }
+  ],
+  "tier": "radiance"
+}

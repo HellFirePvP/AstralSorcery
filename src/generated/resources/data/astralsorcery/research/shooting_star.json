@@ -1,0 +1,34 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:artifacts"
+  ],
+  "key": "astralsorcery:shooting_star",
+  "lookupIndexItems": [],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.shooting_star.text.0"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.shooting_star.text.1"
+    }
+  ],
+  "posX": -8.0,
+  "posY": -1.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "minecraft:spyglass"
+    }
+  ],
+  "tier": "illumination"
+}

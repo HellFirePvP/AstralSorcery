@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:travel_40"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:luck",
+        "identifier": "perk_modifier_282",
+        "mode": 0,
+        "value": 0.5
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.add.luck",
+    "registry_name": "astralsorcery:consistent_luck_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -26.0,
+    "y": -15.0
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "connections": [
+    "astralsorcery:nourishment_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:cooldown_reduction",
+        "identifier": "perk_modifier_409",
+        "mode": 1,
+        "value": 0.04
+      },
+      {
+        "attribute_type": "astralsorcery:max_health",
+        "identifier": "perk_modifier_410",
+        "mode": 0,
+        "value": 4.0
+      },
+      {
+        "attribute_type": "astralsorcery:luck",
+        "identifier": "perk_modifier_411",
+        "mode": 0,
+        "value": 1.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.nourishment",
+    "registry_name": "astralsorcery:ley_nourishment",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:aevitas"
+      }
+    ],
+    "x": -30.0,
+    "y": 22.0
+  }
+}

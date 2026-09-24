@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:vicio_inner_swim_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:swim_speed",
+        "identifier": "perk_modifier_177",
+        "mode": 1,
+        "value": 0.03
+      },
+      {
+        "attribute_type": "astralsorcery:movement_speed",
+        "identifier": "perk_modifier_176",
+        "mode": 1,
+        "value": 0.02
+      }
+    ],
+    "name": "perk.name.astralsorcery.hybrid.movespeed_swimspeed",
+    "registry_name": "astralsorcery:vicio_inner_swim_2",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": 4.0,
+    "y": 25.0
+  }
+}

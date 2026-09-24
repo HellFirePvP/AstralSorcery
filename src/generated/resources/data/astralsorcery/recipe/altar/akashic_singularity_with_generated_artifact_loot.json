@@ -1,0 +1,107 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "A": {
+        "type": "item",
+        "ingredient": {
+          "tag": "c:gems/aquamarine"
+        }
+      },
+      "D": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:stardust"
+        }
+      },
+      "S": {
+        "type": "item",
+        "ingredient": [
+          {
+            "type": "neoforge:components",
+            "components": {
+              "astralsorcery:artifact_type": "astralsorcery:sidereal"
+            },
+            "items": "astralsorcery:artifact_shard"
+          },
+          {
+            "type": "neoforge:components",
+            "components": {
+              "astralsorcery:artifact_type": "astralsorcery:luminous"
+            },
+            "items": "astralsorcery:artifact_shard"
+          },
+          {
+            "type": "neoforge:components",
+            "components": {
+              "astralsorcery:artifact_type": "astralsorcery:chronal"
+            },
+            "items": "astralsorcery:artifact_shard"
+          },
+          {
+            "type": "neoforge:components",
+            "components": {
+              "astralsorcery:artifact_type": "astralsorcery:astriform"
+            },
+            "items": "astralsorcery:artifact_shard"
+          },
+          {
+            "type": "neoforge:components",
+            "components": {
+              "astralsorcery:artifact_type": "astralsorcery:axiomatic"
+            },
+            "items": "astralsorcery:artifact_shard"
+          },
+          {
+            "type": "neoforge:components",
+            "components": {
+              "astralsorcery:artifact_type": "astralsorcery:spectral"
+            },
+            "items": "astralsorcery:artifact_shard"
+          }
+        ]
+      }
+    },
+    "pattern": [
+      "S S",
+      " D ",
+      "SAS"
+    ],
+    "relayPattern": [
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ]
+  },
+  "mayChain": true,
+  "onlyNight": true,
+  "outputModifiers": [
+    {
+      "type": "astralsorcery:generate_artifact_shard_loot",
+      "count_range": {
+        "maxInclusive": 12,
+        "minInclusive": 4
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:akashic_singularity"
+    }
+  ],
+  "requiredAdditionalInputs": [],
+  "requiredFluid": [],
+  "requiredLumen": [],
+  "requiredStarlight": [],
+  "requiredType": "illumination"
+}

@@ -1,0 +1,32 @@
+{
+  "connections": [],
+  "perk": {
+    "type": "astralsorcery:root_perk_vicio",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.root"
+      }
+    },
+    "constellation": "astralsorcery:vicio",
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:movement_speed",
+        "identifier": "perk_modifier_1",
+        "mode": 2,
+        "value": 1.1
+      }
+    ],
+    "name": "perk.astralsorcery.root_perk_vicio",
+    "registry_name": "astralsorcery:root_vicio",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": 0.0,
+    "y": 30.0
+  }
+}

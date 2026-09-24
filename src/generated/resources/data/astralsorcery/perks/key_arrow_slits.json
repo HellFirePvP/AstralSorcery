@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:arrow_slits_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:armor",
+        "identifier": "perk_modifier_357",
+        "mode": 0,
+        "value": 2.0
+      },
+      {
+        "attribute_type": "astralsorcery:projectile_damage",
+        "identifier": "perk_modifier_358",
+        "mode": 0,
+        "value": 2.0
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.arrow_slits",
+    "registry_name": "astralsorcery:key_arrow_slits",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:armara"
+      }
+    ],
+    "x": 36.0,
+    "y": -6.0
+  }
+}

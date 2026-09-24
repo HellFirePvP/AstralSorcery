@@ -1,0 +1,22 @@
+{
+  "values": [
+    "astralsorcery:rock_crystal_ore",
+    "astralsorcery:starmetal_ore",
+    "astralsorcery:raw_starmetal_block",
+    "astralsorcery:celestial_crystal_cluster",
+    "astralsorcery:gem_crystal_cluster",
+    "astralsorcery:lumen_crystal_cluster",
+    "astralsorcery:altar_illumination",
+    "astralsorcery:altar_resonance",
+    "astralsorcery:altar_luminance",
+    "astralsorcery:altar_radiance",
+    "astralsorcery:lumen_array",
+    "astralsorcery:lumen_alchemy_array",
+    "astralsorcery:lumen_crystallizer",
+    "astralsorcery:lightwell",
+    "astralsorcery:infuser",
+    "astralsorcery:attunement_altar",
+    "astralsorcery:tree_beacon",
+    "astralsorcery:celestial_gateway"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "connections": [
+    "astralsorcery:travel_40"
+  ],
+  "perk": {
+    "type": "astralsorcery:modifier_perk",
+    "category": {
+      "color": -1,
+      "name": {
+        "translate": "perk.category.astralsorcery.default"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:block_reach",
+        "identifier": "perk_modifier_284",
+        "mode": 1,
+        "value": 0.04
+      }
+    ],
+    "name": "perk.name.astralsorcery.generic.inc.block_reach",
+    "registry_name": "astralsorcery:honed_influence_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:evorsio"
+      }
+    ],
+    "x": -29.0,
+    "y": -20.0
+  }
+}

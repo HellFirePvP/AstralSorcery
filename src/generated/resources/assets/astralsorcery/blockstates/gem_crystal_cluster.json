@@ -1,0 +1,84 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_0_solid"
+      },
+      "when": {
+        "stage": "stage_0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_1_solid"
+      },
+      "when": {
+        "stage": "stage_1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_2_sky_solid"
+      },
+      "when": {
+        "stage": "stage_2_sky"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_2_day_solid"
+      },
+      "when": {
+        "stage": "stage_2_day"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_2_night_solid"
+      },
+      "when": {
+        "stage": "stage_2_night"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_0_translucent"
+      },
+      "when": {
+        "stage": "stage_0"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_1_translucent"
+      },
+      "when": {
+        "stage": "stage_1"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_2_sky_translucent"
+      },
+      "when": {
+        "stage": "stage_2_sky"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_2_day_translucent"
+      },
+      "when": {
+        "stage": "stage_2_day"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/gem_crystal_cluster/gem_crystal_cluster_stage_2_night_translucent"
+      },
+      "when": {
+        "stage": "stage_2_night"
+      }
+    }
+  ]
+}

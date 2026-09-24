@@ -1,0 +1,14 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "astralsorcery:block/focus_relay/focus_relay_solid"
+      }
+    },
+    {
+      "apply": {
+        "model": "astralsorcery:block/focus_relay/focus_relay_translucent"
+      }
+    }
+  ]
+}

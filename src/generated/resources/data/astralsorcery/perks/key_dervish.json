@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:dervish_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:attack_damage",
+        "identifier": "perk_modifier_375",
+        "mode": 0,
+        "value": 1.0
+      },
+      {
+        "attribute_type": "astralsorcery:attack_speed",
+        "identifier": "perk_modifier_374",
+        "mode": 1,
+        "value": 0.08
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.dervish",
+    "registry_name": "astralsorcery:key_dervish",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:vicio"
+      }
+    ],
+    "x": 8.0,
+    "y": 36.0
+  }
+}

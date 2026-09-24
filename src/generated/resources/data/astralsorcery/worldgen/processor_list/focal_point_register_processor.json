@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "available_constellations": "#astralsorcery:may_be_focal_point",
+      "processor_type": "astralsorcery:focal_point_register_processor"
+    }
+  ]
+}

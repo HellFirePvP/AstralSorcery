@@ -1,0 +1,26 @@
+{
+  "connections": [
+    "astralsorcery:rampage_2"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_rampage",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.rampage",
+    "registry_name": "astralsorcery:key_rampage",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 4.0,
+    "y": -16.0
+  }
+}

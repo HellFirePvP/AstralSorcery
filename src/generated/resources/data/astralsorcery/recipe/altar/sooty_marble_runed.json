@@ -1,0 +1,52 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "baseFocusShatterChance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "C": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:sooty_marble_chiseled"
+        }
+      },
+      "M": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:sooty_marble_raw"
+        }
+      }
+    },
+    "pattern": [
+      "MCM",
+      "   ",
+      "   "
+    ],
+    "relayPattern": [
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ]
+  },
+  "mayChain": true,
+  "onlyNight": true,
+  "outputModifiers": [],
+  "outputs": [
+    {
+      "count": 3,
+      "id": "astralsorcery:sooty_marble_runed"
+    }
+  ],
+  "requiredAdditionalInputs": [],
+  "requiredFluid": [],
+  "requiredLumen": [],
+  "requiredStarlight": [],
+  "requiredType": "illumination"
+}

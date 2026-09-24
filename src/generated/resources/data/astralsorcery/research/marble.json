@@ -1,0 +1,92 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [
+    "astralsorcery:sooty_marble"
+  ],
+  "key": "astralsorcery:marble",
+  "lookupIndexItems": [
+    "astralsorcery:marble_raw",
+    "astralsorcery:marble_bricks",
+    "astralsorcery:marble_arch",
+    "astralsorcery:marble_pillar",
+    "astralsorcery:marble_chiseled",
+    "astralsorcery:marble_engraved",
+    "astralsorcery:marble_runed"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.marble.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:marble/marble_bricks",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:marble/marble_arch",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:marble/marble_pillar",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:marble/marble_chiseled",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:marble/marble_engraved",
+      "recipe_type": "minecraft:crafting"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:marble/marble_runed",
+      "recipe_type": "minecraft:crafting"
+    }
+  ],
+  "posX": -3.0,
+  "posY": -3.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:marble_arch"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:marble_bricks"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:marble_chiseled"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:marble_engraved"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:marble_pillar"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:marble_raw"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:marble_runed"
+    }
+  ],
+  "tier": "shimmer"
+}

@@ -1,0 +1,23 @@
+{
+  "connections": [
+    "astralsorcery:connector_n_1",
+    "astralsorcery:connector_n_2",
+    "astralsorcery:connector_n_0"
+  ],
+  "perk": {
+    "type": "astralsorcery:key_tree_connector",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.epiphany"
+      }
+    },
+    "converters": [],
+    "modifiers": [],
+    "name": "perk.name.astralsorcery.named.connector_n",
+    "registry_name": "astralsorcery:tree_connector_n",
+    "requirements": [],
+    "x": -1.0,
+    "y": -36.0
+  }
+}

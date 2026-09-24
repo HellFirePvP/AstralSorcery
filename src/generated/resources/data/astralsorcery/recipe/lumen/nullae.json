@@ -1,0 +1,15 @@
+{
+  "type": "astralsorcery:lumen_generation",
+  "attempt_starlight_consumption": 1.4,
+  "catalyst_shatter_multiplier": 1.2,
+  "input": {
+    "item": "astralsorcery:nocturnal_powder"
+  },
+  "lumen_combination_inputs": {
+    "astralsorcery:evorsio": 5,
+    "astralsorcery:vicio": 7
+  },
+  "produced_lumen": "astralsorcery:nullae",
+  "produced_lumen_amount": 3,
+  "production_attempt_multiplier": 4.0
+}

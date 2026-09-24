@@ -1,0 +1,49 @@
+{
+  "backgroundTexture": {
+    "location": "screen",
+    "path": [
+      "tome",
+      "research_frame_wood"
+    ]
+  },
+  "conditions": [],
+  "connections": [],
+  "key": "astralsorcery:lens_prism",
+  "lookupIndexItems": [
+    "astralsorcery:lens",
+    "astralsorcery:prism"
+  ],
+  "pages": [
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.lens_prism.text.0"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/lens",
+      "recipe_type": "astralsorcery:altar_crafting"
+    },
+    {
+      "type": "astralsorcery:text",
+      "textKey": "tome.research.node.astralsorcery.lens_prism.text.1"
+    },
+    {
+      "type": "astralsorcery:recipe",
+      "recipeId": "astralsorcery:altar/prism",
+      "recipe_type": "astralsorcery:altar_crafting"
+    }
+  ],
+  "posX": -5.0,
+  "posY": 0.0,
+  "renderItemStacks": [
+    {
+      "count": 1,
+      "id": "astralsorcery:lens"
+    },
+    {
+      "count": 1,
+      "id": "astralsorcery:prism"
+    }
+  ],
+  "tier": "luminance"
+}

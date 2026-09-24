@@ -1,0 +1,24 @@
+{
+  "type": "astralsorcery:focal_transmutation",
+  "color": -2090749,
+  "duration": 600,
+  "input_display_stacks": {
+    "tag": "minecraft:small_flowers"
+  },
+  "input_predicates": [
+    {
+      "type": "minecraft:matching_block_tag",
+      "tag": "minecraft:small_flowers"
+    }
+  ],
+  "output_states": [
+    {
+      "data": {
+        "Name": "astralsorcery:thistle"
+      },
+      "weight": 1
+    }
+  ],
+  "required_constellation": "astralsorcery:discidia",
+  "requires_focused_starlight": false
+}

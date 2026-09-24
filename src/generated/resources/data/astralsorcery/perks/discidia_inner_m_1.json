@@ -1,0 +1,39 @@
+{
+  "connections": [
+    "astralsorcery:discidia_inner_proj_1"
+  ],
+  "perk": {
+    "type": "astralsorcery:major_perk",
+    "category": {
+      "color": -22016,
+      "name": {
+        "translate": "perk.category.astralsorcery.major"
+      }
+    },
+    "converters": [],
+    "modifiers": [
+      {
+        "attribute_type": "astralsorcery:projectile_speed",
+        "identifier": "perk_modifier_216",
+        "mode": 1,
+        "value": 0.15
+      },
+      {
+        "attribute_type": "astralsorcery:projectile_damage",
+        "identifier": "perk_modifier_215",
+        "mode": 1,
+        "value": 0.1
+      }
+    ],
+    "name": "perk.name.astralsorcery.named.deadly_draw",
+    "registry_name": "astralsorcery:discidia_inner_m_1",
+    "requirements": [
+      {
+        "type": "astralsorcery:constellation",
+        "constellation": "astralsorcery:discidia"
+      }
+    ],
+    "x": 10.0,
+    "y": -23.0
+  }
+}
