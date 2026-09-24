@@ -103,7 +103,7 @@ public class PlayerEventHandler {
 
         if (GeneralConfig.CONFIG.giveTomeOnJoin.get()) {
             PlayerProgress progress = ResearchManager.getProgress(sPlayer, LogicalSide.SERVER);
-            if (progress.hasReceivedTome()) {
+            if (!progress.hasReceivedTome()) {
                 if (sPlayer.getInventory().add(ItemsAS.TOME.toStack())) {
                     ResearchHelper.setTomeReceived(sPlayer);
                 }
