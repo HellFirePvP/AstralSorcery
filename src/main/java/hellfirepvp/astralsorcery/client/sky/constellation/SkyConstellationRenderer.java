@@ -254,6 +254,7 @@ public class SkyConstellationRenderer {
             this.renderedStars.put(star, renderedPos);
 
             float playerYaw = 90 - renderedPos.x();
+            if (playerYaw < 0) playerYaw += 360;
             this.playerViewRenderedStars.put(star, new FloatPoint(playerYaw, -90 + renderedPos.y()));
         }
 

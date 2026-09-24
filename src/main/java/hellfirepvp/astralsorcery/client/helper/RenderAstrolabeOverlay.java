@@ -376,6 +376,9 @@ public class RenderAstrolabeOverlay {
 
         List<DrawnConstellationLine> projectedLines = drawnLines.stream()
                 .map(DrawnConstellationLine::project)
+                .map(line -> new DrawnConstellationLine(
+                        new FloatPoint((line.getLeft().x() + 360F) % 360F, line.getLeft().y()),
+                        new FloatPoint((line.getRight().x() + 360F) % 360F, line.getRight().y())))
                 .toList();
 
         for (SkyConstellationRenderer.ConstellationMapping drawnMapping : SkyConstellationRenderer.getConstellationMappings()) {
