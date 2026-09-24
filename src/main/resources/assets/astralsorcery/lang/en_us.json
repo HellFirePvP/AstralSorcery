@@ -128,12 +128,12 @@
     "artifact.astralsorcery.condition.value.in_dimension.the_end.hidden": "Seeks the void of an abyssal place",
     "artifact.astralsorcery.condition.value.in_dimension.the_end.clear": "Needs to be in the end",
 
-    "artifact.astralsorcery.condition.value.in_structure.in_fortress.hidden": "Wants to reside in a terrible fortress",
-    "artifact.astralsorcery.condition.value.in_structure.in_fortress.clear": "Needs to be in a nether fortress",
-    "artifact.astralsorcery.condition.value.in_structure.in_stronghold.hidden": "Wants to hide in an underground fortress",
-    "artifact.astralsorcery.condition.value.in_structure.in_stronghold.clear": "Needs to be in a stronghold",
-    "artifact.astralsorcery.condition.value.in_structure.in_mineshaft.hidden": "Wants to explore an abandoned mining area",
-    "artifact.astralsorcery.condition.value.in_structure.in_mineshaft.clear": "Needs to be in a mineshaft",
+    "artifact.astralsorcery.condition.value.in_structure.fortress.hidden": "Wants to reside in a terrible fortress",
+    "artifact.astralsorcery.condition.value.in_structure.fortress.clear": "Needs to be in a nether fortress",
+    "artifact.astralsorcery.condition.value.in_structure.stronghold.hidden": "Wants to hide in an underground fortress",
+    "artifact.astralsorcery.condition.value.in_structure.stronghold.clear": "Needs to be in a stronghold",
+    "artifact.astralsorcery.condition.value.in_structure.mineshaft.hidden": "Wants to explore an abandoned mining area",
+    "artifact.astralsorcery.condition.value.in_structure.mineshaft.clear": "Needs to be in a mineshaft",
     "artifact.astralsorcery.condition.value.in_structure..hidden": "",
     "artifact.astralsorcery.condition.value.in_structure..clear": "",
 
