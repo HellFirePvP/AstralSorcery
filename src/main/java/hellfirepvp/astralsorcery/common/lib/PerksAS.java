@@ -177,7 +177,7 @@ public class PerksAS {
         public static final DeferredHolder<PerkAttributeTypeReader.Type, PerkAttributeTypeReader.Type> DAMAGE_REDUCTION =
                 type("damage_reduction", AttributeTypes.DAMAGE_REDUCTION, type -> new ReaderPercentageAttribute(type).negate());
         public static final DeferredHolder<PerkAttributeTypeReader.Type, PerkAttributeTypeReader.Type> DAMAGE_REFLECT =
-                type("damage_reflect", AttributeTypes.DAMAGE_REFLECT, ReaderAddedPercentage::withoutPercent);
+                type("damage_reflect", AttributeTypes.DAMAGE_REFLECT, ReaderAddedPercentage::withPercent);
         public static final DeferredHolder<PerkAttributeTypeReader.Type, PerkAttributeTypeReader.Type> ENCHANTMENT_EFFECT =
                 type("dynamic_enchantment_effect", AttributeTypes.ENCHANTMENT_EFFECT, ReaderPercentageAttribute::new);
         public static final DeferredHolder<PerkAttributeTypeReader.Type, PerkAttributeTypeReader.Type> ELEMENTAL_RESISTANCE =

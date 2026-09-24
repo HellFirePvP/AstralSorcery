@@ -1,4 +1,4 @@
-// 1.21.1	2026-09-24T21:20:05.4993292	Perks
+// 1.21.1	2026-09-24T21:39:32.1262196	Perks
 a368ae44e07da8e93966721b5b0ca3dfd503d4f9 data/astralsorcery/perks/adaptive_1.json
 cbd68e9b4d2dab8b66743907bcf537a8b9f13773 data/astralsorcery/perks/adaptive_2.json
 0204b1b0b19dc5503f9d3728b3f004b84bdba982 data/astralsorcery/perks/aevitas_bridge_1.json
@@ -122,8 +122,8 @@ d7dd9b348395cdb3c2b8e670362e95fe50b76c17 data/astralsorcery/perks/discidia_inner
 2da4b1d5e7906952a9940af2192714a7cf485e9d data/astralsorcery/perks/discidia_inner_m_1.json
 93be1841e016976648fe3ec24afac0ca055422d2 data/astralsorcery/perks/discidia_inner_proj_1.json
 8baf86ff9935d301f8c8add5a5b46d8fe1a51538 data/astralsorcery/perks/discidia_inner_proj_2.json
-61bac80a7402d41a6a97d19806d953dbc6815b82 data/astralsorcery/perks/dislocated_reflection_1.json
-1b654bf005785190371e8d9e078492417c7d6a57 data/astralsorcery/perks/dislocated_reflection_2.json
+cfe7015bb3d1e06bcd2a3c1f5f04a1cc8385c5f1 data/astralsorcery/perks/dislocated_reflection_1.json
+99229b215cae7a0a187a143fe737d97f8f0bf6d8 data/astralsorcery/perks/dislocated_reflection_2.json
 43354cbcb91f0942f3319038ebab79e8d5727ef0 data/astralsorcery/perks/endless_munitions_1.json
 51b0eaf98f2d4325479c632f9e1913480e9bce50 data/astralsorcery/perks/enduring_1.json
 92259033b872eaf27222c3fb65123be334c5a929 data/astralsorcery/perks/evorsio_bridge_1.json
@@ -167,7 +167,7 @@ a8828fdde8cdc839de2971417449a06cf7ea13bd data/astralsorcery/perks/honed_influenc
 2144b9a8c5165d35b436af816fb0178ecd70c485 data/astralsorcery/perks/illusory_hammer_2.json
 9834da5d2d1c870b71d2fea4b793d97753b9d9d0 data/astralsorcery/perks/iron_heart_1.json
 fdc3ad9bba809febc04af5a83317bc3f5e877610 data/astralsorcery/perks/iron_heart_2.json
-61b645339a7f6dee23b48d88f27b2bdcf3567fd1 data/astralsorcery/perks/keydislocated_reflection.json
+07184311a3b492d2e414615bd26e19fd83404ee6 data/astralsorcery/perks/keydislocated_reflection.json
 e2fd31876ef8967b6d188fce979442857dd3e5c1 data/astralsorcery/perks/key_adaptive.json
 7f3b5c270976ee7b544c32def05de8842e4f7b40 data/astralsorcery/perks/key_alch_genius.json
 de21e3e141250b523bb60c28b4276c5218b4728c data/astralsorcery/perks/key_arrow_slits.json

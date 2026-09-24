@@ -99,7 +99,7 @@ public abstract class ScreenContainerAltar<T extends ContainerAltar> extends Scr
         AltarCraftingInput input = this.getMenu().getTile().createInput(level, null);
         this.getMenu().getTile().findMatchingRecipe(level)
                 .map(RecipeHolder::value)
-                .map(recipe -> recipe.getOutputs(input, level.registryAccess()))
+                .map(recipe -> recipe.getOutputsForDisplay(input, level.registryAccess()))
                 .filter(outputs -> !outputs.isEmpty())
                 .map(outputs -> outputs.get((int) ((tick / 40) % outputs.size())))
                 .ifPresent(output -> {

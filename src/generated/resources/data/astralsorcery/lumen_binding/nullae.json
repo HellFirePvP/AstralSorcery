@@ -29,13 +29,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "c1cd1e0a-2b7c-401a-b1f3-7daf0887c01b",
+            "identifier": "c7a2ff54-1387-4458-ace4-ca79599438fc",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "4a6c5aca-c77f-4b13-ab16-ddc7aa94307d",
+            "identifier": "c34517d8-dabd-482a-ab75-612becf933d2",
             "mode": 1,
             "value": 0.04
           }
@@ -70,13 +70,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "c9226aa3-6b18-4ffd-95ee-451701388743",
+            "identifier": "7adfcf76-f7ca-4124-9f24-1b341499766b",
             "mode": 1,
             "value": 0.08
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "ac4ed0e9-72d4-4d86-baa7-5fda3ab86023",
+            "identifier": "e408bbb4-538d-4b5c-b541-3317d8235d90",
             "mode": 1,
             "value": 0.08
           }
@@ -111,13 +111,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "72266354-560f-4aa0-97af-ef5619e7aea5",
+            "identifier": "57653b91-3826-41c8-be83-ff8581ea938c",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "d338b419-91aa-4675-b85d-ba2185a40742",
+            "identifier": "0a375213-8c4d-4b6c-9b4c-a3e1e564a981",
             "mode": 1,
             "value": 0.04
           }
@@ -152,13 +152,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "d971fa07-dada-4870-b6eb-54655d589d01",
+            "identifier": "a61c0817-9e9b-44f0-8da9-d39efec8ff72",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "c4c4f13b-da14-4e2d-9e61-65d11982bd9c",
+            "identifier": "97c2f099-8eb0-4f5b-92e6-45cc5da0a41a",
             "mode": 1,
             "value": 0.04
           }
@@ -193,19 +193,19 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_reach",
-            "identifier": "1afaa61e-21e8-438f-9abd-df16e5a1dcb6",
+            "identifier": "45c93e7c-b851-417d-862b-ba5dadd12bad",
             "mode": 1,
             "value": 0.1
           },
           {
             "attribute_type": "astralsorcery:pierce_armor",
-            "identifier": "17a92c55-b0fd-4d4a-bd87-a6cea11821c6",
+            "identifier": "89aa2e50-8a12-47ba-a1d0-b9a11e6979af",
             "mode": 1,
             "value": 0.06
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "6c2d583b-79b8-4543-a5cc-a6f9ee5e535e",
+            "identifier": "08a1026d-b959-4bf2-a858-32159c0895df",
             "mode": 1,
             "value": 0.04
           }
@@ -241,13 +241,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:projectile_speed",
-            "identifier": "fd78bb0b-7e53-4d2d-b8ec-0d93a80e6899",
+            "identifier": "ff6d162f-9082-4c73-924d-af4a85aaca95",
             "mode": 1,
             "value": 0.12
           },
           {
             "attribute_type": "astralsorcery:pierce_armor",
-            "identifier": "bc9cbac5-2053-4782-b4e9-7ef911fd3713",
+            "identifier": "059d4a96-59f8-41ff-a61f-71ed82f54979",
             "mode": 1,
             "value": 0.08
           }
@@ -283,13 +283,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "404e2133-c1f8-4d46-b3d2-894ab1f8735a",
+            "identifier": "2483c2df-6a12-4fb9-831a-916f2c9f0ed9",
             "mode": 1,
             "value": 0.1
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "c40373fa-eff3-4550-a2d5-73c2c66f7fc2",
+            "identifier": "8db9ea2c-8c91-4a91-91d5-6a59440456c0",
             "mode": 1,
             "value": 0.1
           }

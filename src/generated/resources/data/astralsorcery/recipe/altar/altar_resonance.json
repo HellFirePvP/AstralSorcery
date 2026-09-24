@@ -54,6 +54,10 @@
   "onlyNight": true,
   "outputModifiers": [
     {
+      "type": "astralsorcery:update_research_tier",
+      "tier": "resonance"
+    },
+    {
       "type": "astralsorcery:set_block",
       "block_states": [
         {
@@ -63,10 +67,6 @@
           "weight": 1
         }
       ]
-    },
-    {
-      "type": "astralsorcery:update_research_tier",
-      "tier": "resonance"
     }
   ],
   "outputs": [

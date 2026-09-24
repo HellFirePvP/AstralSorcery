@@ -15,7 +15,7 @@
       {
         "attribute_type": "astralsorcery:damage_reflect",
         "identifier": "perk_modifier_342",
-        "mode": 1,
+        "mode": 0,
         "value": 0.14
       }
     ],

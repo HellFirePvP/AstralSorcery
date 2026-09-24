@@ -2369,7 +2369,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("dislocated_reflection_1"), 36f, 3f)
                 .setNameKey("perk.name.astralsorcery.generic.inc.damage_reflect")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
-                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.DAMAGE_REFLECT)
+                .addModifier(0.03f, ModifierType.ADDITION, PerksAS.AttributeTypes.DAMAGE_REFLECT)
                 .connect(travel23)
                 .build(registrar);
 
@@ -2377,7 +2377,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("dislocated_reflection_2"), 37f, 4f)
                 .setNameKey("perk.name.astralsorcery.generic.inc.damage_reflect")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
-                .addModifier(0.03f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.DAMAGE_REFLECT)
+                .addModifier(0.03f, ModifierType.ADDITION, PerksAS.AttributeTypes.DAMAGE_REFLECT)
                 .connect(dislocatedReflection1)
                 .build(registrar);
 
@@ -2385,7 +2385,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("keydislocated_reflection"), 36f, 5f)
                 .setNameKey("perk.name.astralsorcery.named.dislocated_reflection")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
-                .addModifier(0.14f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.DAMAGE_REFLECT)
+                .addModifier(0.14f, ModifierType.ADDITION, PerksAS.AttributeTypes.DAMAGE_REFLECT)
                 .connect(dislocatedReflection2)
                 .build(registrar);
 

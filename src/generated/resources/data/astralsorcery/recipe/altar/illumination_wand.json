@@ -5,8 +5,8 @@
   "effects": [
     "astralsorcery:default_central_beam",
     "astralsorcery:default_lumen_input",
-    "astralsorcery:default_relay_input",
-    "astralsorcery:default_altar_sparkle"
+    "astralsorcery:default_altar_sparkle",
+    "astralsorcery:default_relay_input"
   ],
   "focusConstellation": "astralsorcery:lucerna",
   "grid": {

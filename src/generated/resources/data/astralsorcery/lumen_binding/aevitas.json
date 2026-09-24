@@ -18,7 +18,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "4f6aee80-998a-4770-b904-be150bcf1972",
+            "identifier": "279fdbe9-2ba2-4e24-8953-05ba11774b6e",
             "mode": 1,
             "value": 0.05
           }
@@ -37,7 +37,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "91c38e0a-91c8-4fda-8dee-6eaf03c64dc9",
+            "identifier": "d9eccfbc-6893-4303-9a73-21af795035c1",
             "mode": 1,
             "value": 0.08
           }
@@ -56,7 +56,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "7ec3aef2-9953-4717-8891-f5377d513b1f",
+            "identifier": "12dbb042-d47a-4a3f-87b7-07f2c4da4ebc",
             "mode": 1,
             "value": 0.05
           }
@@ -75,7 +75,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "a6f30525-0c2c-4a10-af52-8c66c233c3c3",
+            "identifier": "e8e91cd8-24c5-454c-b40a-66b13eacb785",
             "mode": 1,
             "value": 0.05
           }
@@ -94,7 +94,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "cf2c5d19-78d3-49b2-b2c8-863a20c871c2",
+            "identifier": "4a1a7534-75c7-4e7f-b511-5550d9fe7751",
             "mode": 1,
             "value": 0.02
           }
@@ -113,7 +113,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "0ef16b3b-8edd-4b46-b07f-ddba611d6031",
+            "identifier": "67799e0c-6833-493e-a3fc-af9ef1985e6a",
             "mode": 1,
             "value": 0.02
           }
@@ -132,7 +132,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "47c2cf75-9d3c-422f-aa77-2f63ee02dcc4",
+            "identifier": "42da527b-c0f9-4989-a361-aced080ca071",
             "mode": 1,
             "value": 0.02
           }

@@ -32,7 +32,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 public class AttributeTypeDamageReflect extends PerkAttributeType {
 
     public AttributeTypeDamageReflect() {
-        super(true);
+        super(false);
     }
 
     @Override
@@ -51,8 +51,7 @@ public class AttributeTypeDamageReflect extends PerkAttributeType {
         if (!progress.isValid()) return;
 
         float reflectPercent = PerkManager.getOrCreateAttributes(player)
-                .modifyValue(player, progress, this, 1F);
-        reflectPercent -= 1;
+                .modifyValue(player, progress, this, 0F);
         reflectPercent = AttributeEvent.postProcessModded(player, this, reflectPercent);
 
         float damageToReflect = event.getNewDamage() * reflectPercent;

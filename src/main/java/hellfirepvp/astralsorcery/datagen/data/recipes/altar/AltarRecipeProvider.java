@@ -164,8 +164,8 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('L', FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addInput('P', ItemsAS.BLOCK_MARBLE_PILLAR)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
-                .addOutputModifier(AltarOutputSetBlock.builder().add(BlocksAS.ALTAR_RESONANCE).build())
                 .addOutputModifier(AltarOutputUpdateResearchTier.create(ResearchTier.RESONANCE))
+                .addOutputModifier(AltarOutputSetBlock.builder().add(BlocksAS.ALTAR_RESONANCE).build())
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.ILLUMINATION)
                 .setRecipeId(ItemsAS.ILLUMINATION_POWDER)
@@ -344,8 +344,8 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
-                .addOutputModifier(AltarOutputSetBlock.builder().add(BlocksAS.ALTAR_LUMINANCE).build())
                 .addOutputModifier(AltarOutputUpdateResearchTier.create(ResearchTier.LUMINANCE))
+                .addOutputModifier(AltarOutputSetBlock.builder().add(BlocksAS.ALTAR_LUMINANCE).build())
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.RESONANCE)
                 .setRecipeId(ItemsAS.BLOCK_TREE_BEACON)
@@ -827,8 +827,8 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .setBaseFocusShatterChance(1F)
                 .addFocusConstellation(ConstellationsAS.ARMARA.get())
                 .addRequiredStarlight(ConstellationsAS.ARMARA.get())
-                .addOutputModifier(AltarOutputSetBlock.builder().add(BlocksAS.ALTAR_RADIANCE).build())
                 .addOutputModifier(AltarOutputUpdateResearchTier.create(ResearchTier.RADIANCE))
+                .addOutputModifier(AltarOutputSetBlock.builder().add(BlocksAS.ALTAR_RADIANCE).build())
                 .save(recipeOutput);
 
         AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
