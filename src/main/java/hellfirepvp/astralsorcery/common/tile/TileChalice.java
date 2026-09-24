@@ -37,10 +37,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -146,7 +148,7 @@ public class TileChalice extends TileEntityTick<TileChalice.Data> {
         Vec3 chaliceCenter = TileChalice.getChaliceCenter(this.worldPosition);
         List<BlockPos> lightwells = BlockFinder.findNearbyBlocks(level, this.worldPosition, CHALICE_SEARCH_RANGE,
                 (lvl, pos, state) -> state.is(BlocksAS.LIGHTWELL.get()));
-        lightwells.removeIf(pos -> RayTraceUtil.clip(level, chaliceCenter, Vec3.atCenterOf(pos)).getType() == HitResult.Type.BLOCK);
+        lightwells.removeIf(pos -> RayTraceUtil.clip(level, chaliceCenter, Vec3.atCenterOf(pos), Set.of(this.worldPosition, pos)).getType() == HitResult.Type.BLOCK);
         MiscUtil.shuffle(lightwells, this.rand);
 
         for (BlockPos wellPos : lightwells) {

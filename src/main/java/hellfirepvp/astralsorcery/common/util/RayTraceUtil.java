@@ -62,6 +62,12 @@ public class RayTraceUtil {
         return clip(level, ct, Collections.emptySet());
     }
 
+    public static BlockHitResult clip(BlockGetter level, Vec3 from, Vec3 to, Set<BlockPos> excluded) {
+        ClipContext ctx = new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.empty());
+        if (excluded.isEmpty()) return level.clip(ctx);
+        return new LevelClipHelper(level, excluded).clip(ctx);
+    }
+
     public static BlockHitResult clip(BlockGetter level, ClipContext ctx, Set<BlockPos> excluded) {
         if (excluded.isEmpty()) return level.clip(ctx);
         return new LevelClipHelper(level, excluded).clip(ctx);
