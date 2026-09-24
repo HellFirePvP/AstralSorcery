@@ -7933,7 +7933,7 @@
             "id": "mod_mted6vjq_9d",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.05
+            "value": -0.05
           },
           {
             "id": "mod_mted732w_9e",
@@ -7967,7 +7967,7 @@
             "id": "mod_mted79n5_9h",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.05
+            "value": -0.05
           },
           {
             "id": "mod_mted79n5_9i",
@@ -8001,7 +8001,7 @@
             "id": "mod_mted87ib_9m",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.08
+            "value": -0.08
           },
           {
             "id": "mod_mted87ib_9n",
@@ -8556,7 +8556,7 @@
             "id": "mod_mtedw3df_by",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.04
+            "value": -0.04
           }
         ],
         "requirements": [
@@ -8584,7 +8584,7 @@
             "id": "mod_mtedwccn_c1",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.04
+            "value": -0.04
           }
         ],
         "requirements": [
@@ -8612,7 +8612,7 @@
             "id": "mod_mtedwfls_c5",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.08
+            "value": -0.08
           },
           {
             "id": "mod_mtedx1d7_c7",
@@ -9288,7 +9288,7 @@
             "id": "mod_mteeyur7_fh",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.04
+            "value": -0.04
           }
         ],
         "requirements": [
@@ -9316,7 +9316,7 @@
             "id": "mod_mteeyzvt_fk",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.04
+            "value": -0.04
           }
         ],
         "requirements": [
@@ -9344,7 +9344,7 @@
             "id": "mod_mteez43s_fo",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.04
+            "value": -0.04
           },
           {
             "id": "mod_mteezczl_fq",
@@ -9614,7 +9614,7 @@
             "id": "mod_mtefb009_h3",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.08
+            "value": -0.08
           }
         ],
         "requirements": [
@@ -9642,7 +9642,7 @@
             "id": "mod_mtefb6eu_h6",
             "attribute_type": "astralsorcery:cooldown_reduction",
             "mode": 1,
-            "value": 0.25
+            "value": -0.25
           },
           {
             "id": "mod_mtefbsl1_h8",

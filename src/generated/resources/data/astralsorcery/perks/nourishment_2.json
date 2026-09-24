@@ -16,7 +16,7 @@
         "attribute_type": "astralsorcery:cooldown_reduction",
         "identifier": "perk_modifier_408",
         "mode": 1,
-        "value": 0.04
+        "value": -0.04
       }
     ],
     "name": "perk.name.astralsorcery.generic.inc.cooldown_reduction",

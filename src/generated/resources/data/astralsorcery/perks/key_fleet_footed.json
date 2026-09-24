@@ -22,7 +22,7 @@
         "attribute_type": "astralsorcery:cooldown_reduction",
         "identifier": "perk_modifier_378",
         "mode": 1,
-        "value": 0.08
+        "value": -0.08
       }
     ],
     "name": "perk.name.astralsorcery.named.fleet_footed",

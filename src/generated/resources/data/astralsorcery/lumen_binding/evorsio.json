@@ -18,7 +18,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "02b268bb-59dd-4452-a009-eb1ad51693f8",
+            "identifier": "d86e9465-c335-40c7-a5e4-c99f7464693b",
             "mode": 1,
             "value": 0.06
           }
@@ -37,7 +37,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "4f668abd-02ff-4b79-95c8-0395d8c76d56",
+            "identifier": "94788871-eb59-4b16-9ce7-f09030132f4a",
             "mode": 1,
             "value": 0.08
           }
@@ -56,7 +56,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "f35acbe3-340b-4b01-99cc-29170e3ce0bc",
+            "identifier": "f3df1be7-c6ef-494d-9caf-fc6fddd85116",
             "mode": 1,
             "value": 0.06
           }
@@ -75,7 +75,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "47a77b3b-defe-4bc5-b632-1417eff0da7d",
+            "identifier": "48af1107-75e5-48dd-9f4a-008d6aacc4e5",
             "mode": 1,
             "value": 0.06
           }
@@ -94,7 +94,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:pierce_armor",
-            "identifier": "40a296fd-68e4-448b-a0f8-932a93191ee4",
+            "identifier": "90ae9979-f99d-4a4c-bd6e-4776e58e9f7a",
             "mode": 1,
             "value": 0.15
           }
@@ -114,7 +114,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:pierce_armor",
-            "identifier": "8591c731-2c0a-465d-8c6b-a96e9027753f",
+            "identifier": "a6e663f9-5f4e-4479-a980-063f6ba2e169",
             "mode": 1,
             "value": 0.2
           }
@@ -134,7 +134,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "284e134a-255e-4416-9781-ef650e5f44ca",
+            "identifier": "4e18c400-f221-4523-9cba-2f7a567990d5",
             "mode": 1,
             "value": 0.1
           }

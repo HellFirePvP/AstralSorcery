@@ -22,7 +22,7 @@
         "attribute_type": "astralsorcery:cooldown_reduction",
         "identifier": "perk_modifier_422",
         "mode": 1,
-        "value": 0.25
+        "value": -0.25
       }
     ],
     "name": "perk.name.astralsorcery.named.tilted_pendulum",

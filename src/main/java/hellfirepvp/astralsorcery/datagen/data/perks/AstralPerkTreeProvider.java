@@ -2448,7 +2448,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("osmosis_1"), 22f, 20f)
                 .setNameKey("perk.name.astralsorcery.hybrid.life_cooldown_reduction")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
-                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
                 .connect(travel26)
                 .build(registrar);
@@ -2457,7 +2457,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("osmosis_2"), 21f, 19f)
                 .setNameKey("perk.name.astralsorcery.hybrid.life_cooldown_reduction")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
-                .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .addModifier(0.05f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
                 .connect(osmosis1)
                 .build(registrar);
@@ -2466,7 +2466,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("key_osmosis"), 20f, 20f)
                 .setNameKey("perk.name.astralsorcery.named.osmosis")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.ARMARA))
-                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .addModifier(0.1f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.LIFE_RECOVERY)
                 .connect(osmosis2)
                 .build(registrar);
@@ -2622,7 +2622,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("fleet_footed_1"), -4f, 35f)
                 .setNameKey("perk.name.astralsorcery.generic.inc.cooldown_reduction")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
-                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .connect(travel31)
                 .build(registrar);
 
@@ -2630,7 +2630,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("fleet_footed_2"), -5f, 36f)
                 .setNameKey("perk.name.astralsorcery.generic.inc.cooldown_reduction")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
-                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .connect(fleetFooted1)
                 .build(registrar);
 
@@ -2638,7 +2638,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("key_fleet_footed"), -4f, 37f)
                 .setNameKey("perk.name.astralsorcery.named.fleet_footed")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.VICIO))
-                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.MOVEMENT_SPEED)
                 .connect(fleetFooted2)
                 .build(registrar);
@@ -2828,7 +2828,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("nourishment_1"), -30f, 20f)
                 .setNameKey("perk.name.astralsorcery.generic.inc.cooldown_reduction")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
-                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .connect(travel35)
                 .build(registrar);
 
@@ -2836,7 +2836,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("nourishment_2"), -31f, 21f)
                 .setNameKey("perk.name.astralsorcery.generic.inc.cooldown_reduction")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
-                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .connect(nourishment1)
                 .build(registrar);
 
@@ -2844,7 +2844,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("ley_nourishment"), -30f, 22f)
                 .setNameKey("perk.name.astralsorcery.named.nourishment")
                 .addRequirement(PerkRequirementConstellation.of(ConstellationsAS.AEVITAS))
-                .addModifier(0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.04f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .addModifier(4f, ModifierType.ADDITION, PerksAS.AttributeTypes.MAX_HEALTH)
                 .addModifier(1f, ModifierType.ADDITION, PerksAS.AttributeTypes.LUCK)
                 .connect(nourishment2)
@@ -2919,7 +2919,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("tilted_pendulum_1"), 7f, 2f)
                 .setNameKey("perk.name.astralsorcery.generic.inc.cooldown_reduction")
                 .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
-                .addModifier(0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.08f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .connect(travelCore3)
                 .build(registrar);
 
@@ -2927,7 +2927,7 @@ public class AstralPerkTreeProvider extends PerkDataProvider {
                 .create(AstralSorcery.key("key_tilted_pendulum"), 8f, 1f)
                 .setNameKey("perk.name.astralsorcery.named.tilted_pendulum")
                 .addRequirement(PerkRequirementProgress.of(ResearchTier.LUMINANCE))
-                .addModifier(0.25f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
+                .addModifier(-0.25f, ModifierType.ADDED_MULTIPLY, PerksAS.AttributeTypes.COOLDOWN_REDUCTION)
                 .addModifier(0.8f, ModifierType.STACKING_MULTIPLY, PerksAS.AttributeTypes.ARMOR)
                 .connect(tiltedPendulum1)
                 .build(registrar);

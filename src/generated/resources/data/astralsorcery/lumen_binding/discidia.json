@@ -18,7 +18,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "70ce5d20-6b78-41bb-ba75-a91a7298ba6f",
+            "identifier": "dc222cba-c4b2-4c59-96a7-59e6977f6ea2",
             "mode": 1,
             "value": 0.06
           }
@@ -38,7 +38,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "590ceb8a-17ba-4642-9ffa-2a71fba38522",
+            "identifier": "0e38fa11-9e48-4ad6-bff5-a8180a2c64b6",
             "mode": 1,
             "value": 0.1
           }
@@ -58,7 +58,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "22db354d-0f5c-401a-94e7-9445737793b2",
+            "identifier": "74e657dc-b6a6-4248-b7e3-460a6a5dc356",
             "mode": 1,
             "value": 0.06
           }
@@ -78,7 +78,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "a1ca7fe2-1e13-41c7-b694-425252d0d3e4",
+            "identifier": "49a096e6-3180-40e6-9679-73847347d6bb",
             "mode": 1,
             "value": 0.06
           }
@@ -98,7 +98,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "fc49606c-50c9-42bf-a6c9-245b290d2fa1",
+            "identifier": "34728f81-ad70-401a-a64a-e76c37ef889f",
             "mode": 0,
             "value": 3.0
           }
@@ -118,7 +118,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:projectile_damage",
-            "identifier": "3c07bc25-4144-4d2c-81a0-a2fcd4dba837",
+            "identifier": "03b78e28-3808-450f-89d6-55eb953b935b",
             "mode": 0,
             "value": 2.0
           }
@@ -138,7 +138,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "b358782b-67e2-46c1-9e51-3da75c2ee8b9",
+            "identifier": "b3cc0ad4-9f37-471a-89cc-1a9859c79792",
             "mode": 0,
             "value": 4.0
           }

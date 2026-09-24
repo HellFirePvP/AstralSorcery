@@ -226,7 +226,7 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, 0.06F)
+                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
                                         //.addModifier(POTION_DURATION, ADDED_MULTIPLY, 0.1F)
                                         .build(),
                                 LumenBindingExtendMobEffectsEffect.of(40)
@@ -240,7 +240,7 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, 0.1F)
+                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.1F)
                                         //.addModifier(POTION_DURATION, ADDED_MULTIPLY, 0.14F)
                                         .build(),
                                 LumenBindingExtendMobEffectsEffect.of(60)
@@ -254,7 +254,7 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, 0.08F)
+                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.08F)
                                         //.addModifier(POTION_DURATION, ADDED_MULTIPLY, 0.1F)
                                         .build(),
                                 LumenBindingExtendMobEffectsEffect.of(40)
@@ -265,7 +265,7 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
                                 .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.04F)
                                 .build()))
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.30F, true),
@@ -273,7 +273,7 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
                                         .addModifier(ATTACK_SPEED, ADDED_MULTIPLY, 0.1F)
-                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, 0.06F)
+                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
                                         .build(),
                                 LumenBindingHitAddEffectEffect.of(MobEffects.MOVEMENT_SLOWDOWN,
                                         IntRange.of(seconds(8), seconds(15)), IntRange.of(0, 1), 1F)
@@ -283,7 +283,7 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
                                 .addModifier(PROJECTILE_SPEED, ADDED_MULTIPLY, 0.06F)
-                                .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, 0.06F)
+                                .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
                                 .build()))
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
                         CombinedLumenBindingUsage.of(
@@ -295,7 +295,7 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
                                         .addModifier(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.1F)
-                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, 0.06F)
+                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
                                         .build(),
                                 LumenBindingAoeCropGrowthEffect.INSTANCE
                         )))

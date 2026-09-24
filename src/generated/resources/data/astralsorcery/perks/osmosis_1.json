@@ -22,7 +22,7 @@
         "attribute_type": "astralsorcery:cooldown_reduction",
         "identifier": "perk_modifier_349",
         "mode": 1,
-        "value": 0.05
+        "value": -0.05
       }
     ],
     "name": "perk.name.astralsorcery.hybrid.life_cooldown_reduction",

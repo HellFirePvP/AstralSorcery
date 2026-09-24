@@ -16,7 +16,7 @@
         "attribute_type": "astralsorcery:cooldown_reduction",
         "identifier": "perk_modifier_351",
         "mode": 1,
-        "value": 0.05
+        "value": -0.05
       },
       {
         "attribute_type": "astralsorcery:life_recovery",
