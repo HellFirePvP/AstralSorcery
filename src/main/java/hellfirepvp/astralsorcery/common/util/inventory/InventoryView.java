@@ -80,11 +80,15 @@ public class InventoryView implements IItemHandlerModifiable, Iterable<ItemStack
 
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        int insertable = this.stackSizeLimiter.apply(slot, stack);
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+
+        int insertable = Math.min(stack.getCount(), this.stackSizeLimiter.apply(slot, stack));
+        if (insertable <= 0) return stack;
+
         int leftOver = stack.getCount() - insertable;
-        ItemStack toInsert = stack.copyWithCount(insertable);
-        ItemStack notInserted = this.internalInsertItem(slot, toInsert, simulate);
-        return stack.copyWithCount(leftOver + notInserted.getCount());
+        ItemStack notInserted = this.internalInsertItem(slot, stack.copyWithCount(insertable), simulate);
+        int remaining = leftOver + notInserted.getCount();
+        return remaining <= 0 ? ItemStack.EMPTY : stack.copyWithCount(remaining);
     }
 
     protected ItemStack internalInsertItem(int slot, ItemStack stack, boolean simulate) {
