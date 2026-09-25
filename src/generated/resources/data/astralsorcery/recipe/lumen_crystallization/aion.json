@@ -1,0 +1,9 @@
+{
+  "type": "astralsorcery:lumen_crystallization",
+  "catalyst_shatter_multiplier": 3.0,
+  "input": {
+    "item": "astralsorcery:resonating_gem"
+  },
+  "lumen_consumed_per_operation": 1600,
+  "lumen_to_crystallize": "astralsorcery:aion"
+}

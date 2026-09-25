@@ -3,9 +3,9 @@
   "baseFocusShatterChance": 0.0,
   "duration": 100,
   "effects": [
-    "astralsorcery:default_central_beam",
+    "astralsorcery:default_relay_input",
     "astralsorcery:default_lumen_input",
-    "astralsorcery:default_relay_input"
+    "astralsorcery:default_central_beam"
   ],
   "grid": {
     "key": {

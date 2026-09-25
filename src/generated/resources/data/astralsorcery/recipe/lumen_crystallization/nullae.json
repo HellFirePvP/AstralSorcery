@@ -1,0 +1,9 @@
+{
+  "type": "astralsorcery:lumen_crystallization",
+  "catalyst_shatter_multiplier": 2.0,
+  "input": {
+    "item": "astralsorcery:nocturnal_powder"
+  },
+  "lumen_consumed_per_operation": 1600,
+  "lumen_to_crystallize": "astralsorcery:nullae"
+}

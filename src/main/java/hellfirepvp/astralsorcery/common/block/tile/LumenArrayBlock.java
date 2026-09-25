@@ -72,7 +72,7 @@ public class LumenArrayBlock extends BaseTickTileBlock<TileLumenArray> {
             ItemStack held = player.getItemInHand(hand);
 
             return MiscUtil.firstNonNull(
-                    () -> InteractUtil.tryTransferFluidIntoBlock(held, player, level, pos, newStack -> player.setItemInHand(hand, newStack)),
+                    () -> InteractUtil.tryTransferFluidIntoBlock(held, player, level, pos, newStack -> InteractUtil.handleContainerReplacement(player, newStack, hand)),
                     () -> InteractUtil.tryPlaceItemIntoBlock(held, player, level, pos)
             ).orElse(ItemInteractionResult.SUCCESS);
         }).orElse(ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);

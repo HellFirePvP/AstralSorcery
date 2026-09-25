@@ -3,10 +3,10 @@
   "baseFocusShatterChance": 1.0,
   "duration": 100,
   "effects": [
-    "astralsorcery:default_central_beam",
+    "astralsorcery:default_relay_input",
     "astralsorcery:default_lumen_input",
     "astralsorcery:default_altar_sparkle",
-    "astralsorcery:default_relay_input"
+    "astralsorcery:default_central_beam"
   ],
   "focusConstellation": "astralsorcery:vicio",
   "grid": {

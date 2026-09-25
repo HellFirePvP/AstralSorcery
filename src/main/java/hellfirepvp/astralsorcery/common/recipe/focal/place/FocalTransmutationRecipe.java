@@ -141,6 +141,14 @@ public class FocalTransmutationRecipe extends CustomRecipe<FocalTransmutationRec
         return IngredientUtil.getRandomDisplayStack(applicable, tick);
     }
 
+    public List<ItemStack> getOutputForDisplay() {
+        return this.outputStates.stream()
+                .map(WeightedEntry.Wrapper::data)
+                .map(ItemUtil::createBlockStack)
+                .filter(stack -> !stack.isEmpty())
+                .toList();
+    }
+
     public boolean requiresFocusedStarlight() {
         return this.requiresFocusedStarlight;
     }
