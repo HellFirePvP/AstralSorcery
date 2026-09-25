@@ -669,10 +669,10 @@
 
   "perk.modifier_type.addition.astralsorcery.positive": "",
   "perk.modifier_type.addition.astralsorcery.negative": "",
-  "perk.modifier_type.added_multiply.astralsorcery.positive": "%% 增长",
-  "perk.modifier_type.added_multiply.astralsorcery.negative": "%% 减少",
-  "perk.modifier_type.stacking_multiply.astralsorcery.positive": "%% 叠增",
-  "perk.modifier_type.stacking_multiply.astralsorcery.negative": "%% 叠减",
+  "perk.modifier_type.added_multiply.astralsorcery.positive": "%% 增长的",
+  "perk.modifier_type.added_multiply.astralsorcery.negative": "%% 减少的",
+  "perk.modifier_type.stacking_multiply.astralsorcery.positive": "%% 叠增的",
+  "perk.modifier_type.stacking_multiply.astralsorcery.negative": "%% 叠减的",
 
   "perk.attribute.astralsorcery.perk_effect": "星能力效能",
   "perk.attribute.astralsorcery.perk_experience": "星能力经验获取",
