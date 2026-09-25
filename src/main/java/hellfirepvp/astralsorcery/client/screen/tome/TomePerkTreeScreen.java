@@ -202,7 +202,7 @@ public class TomePerkTreeScreen extends TomeScreen {
         this.searchMatches.clear();
 
         String searchText = this.searchInput.getText().toLowerCase(Locale.ROOT);
-        if (searchText.length() < 3) return;
+        if (searchText.length() < SearchInputElement.getMinSearchLength()) return;
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
         PlayerProgress progress = ResearchManager.getClientProgress();

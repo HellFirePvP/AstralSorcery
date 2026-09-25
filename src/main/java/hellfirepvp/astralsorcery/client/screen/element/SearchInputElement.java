@@ -26,6 +26,7 @@ import org.lwjgl.glfw.GLFW;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,6 +36,8 @@ import java.util.Locale;
  * Date: 07.09.2026 / 10:00
  */
 public class SearchInputElement extends AbstractWidget {
+
+    private static final Set<String> LOGOGRAPHIC_LANGUAGES = Set.of("zh", "lzh", "yue", "ja", "ko");
 
     private String text = "";
     private final Runnable changeCallback;
@@ -52,11 +55,10 @@ public class SearchInputElement extends AbstractWidget {
     }
 
     public static int getMinSearchLength() {
-        int minLength = 3;
-        if (!Minecraft.getInstance().getLanguageManager().getSelected().toLowerCase(Locale.ROOT).startsWith("en")) {
-            minLength = 1; //Idk. some languages may need less characters to searh meaningfully
-        }
-        return minLength;
+        String selected = Minecraft.getInstance().getLanguageManager().getSelected().toLowerCase(Locale.ROOT);
+        int regionSplit = selected.indexOf('_');
+        String language = regionSplit == -1 ? selected : selected.substring(0, regionSplit);
+        return LOGOGRAPHIC_LANGUAGES.contains(language) ? 1 : 3;
     }
 
     public void setText(@Nullable String newText) {
