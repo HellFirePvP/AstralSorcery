@@ -25,6 +25,7 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Locale;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,6 +49,14 @@ public class SearchInputElement extends AbstractWidget {
                 TextFieldHelper.createClipboardGetter(Minecraft.getInstance()),
                 TextFieldHelper.createClipboardSetter(Minecraft.getInstance()),
                 (text) -> text.length() < 256);
+    }
+
+    public static int getMinSearchLength() {
+        int minLength = 3;
+        if (!Minecraft.getInstance().getLanguageManager().getSelected().toLowerCase(Locale.ROOT).startsWith("en")) {
+            minLength = 1; //Idk. some languages may need less characters to searh meaningfully
+        }
+        return minLength;
     }
 
     public void setText(@Nullable String newText) {
