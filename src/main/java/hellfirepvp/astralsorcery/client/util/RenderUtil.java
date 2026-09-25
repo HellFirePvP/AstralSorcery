@@ -32,6 +32,15 @@ import java.util.function.Supplier;
  */
 public class RenderUtil {
 
+    private static MultiBufferSource.BufferSource effectBufferSource = null;
+
+    public static MultiBufferSource.BufferSource effectBufferSource() {
+        if (effectBufferSource == null) {
+            effectBufferSource = MultiBufferSource.immediate(new ByteBufferBuilder(0xC_0000));
+        }
+        return effectBufferSource;
+    }
+
     public static void draw(VertexFormat.Mode drawMode, VertexFormat format, Supplier<ShaderInstance> shader, Consumer<BufferBuilder> fn) {
         draw(drawMode, format, shader, bufferBuilder -> {
             fn.accept(bufferBuilder);

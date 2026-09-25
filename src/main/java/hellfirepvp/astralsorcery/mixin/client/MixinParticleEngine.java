@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.helper.GatewayInterfaceRenderHelper;
 import hellfirepvp.astralsorcery.client.helper.TranslucentBlockRenderHelper;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.RenderUtil;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleEngine;
@@ -50,7 +51,7 @@ public abstract class MixinParticleEngine {
 
             if (Minecraft.getInstance().level != null) {
                 PoseStack identity = new PoseStack();
-                MultiBufferSource.BufferSource buffers = Minecraft.getInstance().renderBuffers().bufferSource();
+                MultiBufferSource.BufferSource buffers = RenderUtil.effectBufferSource();
                 GatewayInterfaceRenderHelper.getInstance().renderCurrentUI(Minecraft.getInstance().level, identity, camera, buffers, partialTick);
             }
         }
