@@ -128,12 +128,12 @@
   "artifact.astralsorcery.condition.value.in_dimension.the_end.hidden": "寻求深渊之地的虚空",
   "artifact.astralsorcery.condition.value.in_dimension.the_end.clear": "需要位于末地",
 
-  "artifact.astralsorcery.condition.value.in_structure.in_fortress.hidden": "想居住在可怕的要塞中",
-  "artifact.astralsorcery.condition.value.in_structure.in_fortress.clear": "需要位于下界要塞",
-  "artifact.astralsorcery.condition.value.in_structure.in_stronghold.hidden": "想躲藏在地下的要塞中",
-  "artifact.astralsorcery.condition.value.in_structure.in_stronghold.clear": "需要位于要塞",
-  "artifact.astralsorcery.condition.value.in_structure.in_mineshaft.hidden": "想探索废弃的矿区",
-  "artifact.astralsorcery.condition.value.in_structure.in_mineshaft.clear": "需要位于废弃矿井",
+  "artifact.astralsorcery.condition.value.in_structure.fortress.hidden": "想居住在可怕的要塞中",
+  "artifact.astralsorcery.condition.value.in_structure.fortress.clear": "需要位于下界要塞",
+  "artifact.astralsorcery.condition.value.in_structure.stronghold.hidden": "想躲藏在地下的要塞中",
+  "artifact.astralsorcery.condition.value.in_structure.stronghold.clear": "需要位于要塞",
+  "artifact.astralsorcery.condition.value.in_structure.mineshaft.hidden": "想探索废弃的矿区",
+  "artifact.astralsorcery.condition.value.in_structure.mineshaft.clear": "需要位于废弃矿井",
   "artifact.astralsorcery.condition.value.in_structure..hidden": "",
   "artifact.astralsorcery.condition.value.in_structure..clear": "",
 
