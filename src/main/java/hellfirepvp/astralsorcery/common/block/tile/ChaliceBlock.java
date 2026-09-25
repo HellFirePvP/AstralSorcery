@@ -77,8 +77,8 @@ public class ChaliceBlock extends BaseTickTileBlock<TileChalice> {
         return MiscUtil.getTileAt(level, pos, TileChalice.class, true).map(chalice -> {
             ItemStack held = player.getItemInHand(hand);
             return MiscUtil.firstNonNull(
-                    () -> InteractUtil.tryTransferFluidFromBlock(held, player, level, pos, newStack -> player.setItemInHand(hand, newStack)),
-                    () -> InteractUtil.tryTransferFluidIntoBlock(held, player, level, pos, newStack -> player.setItemInHand(hand, newStack))
+                    () -> InteractUtil.tryTransferFluidFromBlock(held, player, level, pos, newStack -> InteractUtil.handleContainerReplacement(player, newStack, hand)),
+                    () -> InteractUtil.tryTransferFluidIntoBlock(held, player, level, pos, newStack -> InteractUtil.handleContainerReplacement(player, newStack, hand))
             ).orElse(ItemInteractionResult.SUCCESS);
         }).orElse(ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
     }
