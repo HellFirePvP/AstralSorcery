@@ -396,7 +396,7 @@
   "lumen.astralsorcery.akasha": "空界",
   "lumen.astralsorcery.prismatic": "棱彩",
 
-  "lumen.binding.astralsorcery.increased_effect": "其他流明绑定效果+%s%%",
+  "lumen.binding.astralsorcery.increased_effect": "+%s%% 其他流明绑定效果",
   "lumen.binding.astralsorcery.on_hit_effect": "击中时施加%s",
   "lumen.binding.astralsorcery.on_hit_effect.chance": "击中时概率施加%s",
   "lumen.binding.astralsorcery.place_light": "在黑暗区域破坏方块时放置耀光光源",
