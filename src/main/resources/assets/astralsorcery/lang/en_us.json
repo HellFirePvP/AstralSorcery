@@ -881,6 +881,8 @@
     "astralsorcery.enchantment_modifier.add_to_existing_specific.name": "+%1$s %2$s to existing %3$s",
     "astralsorcery.enchantment_modifier.add_to_existing_all.name": "+%1$s %2$s to all existing enchantments",
 
+    "enchantment.astralsorcery.scorching_heat": "Scorching Heat",
+
     "enchantment.level.11": "XI",
     "enchantment.level.12": "XII",
     "enchantment.level.13": "XIII",
