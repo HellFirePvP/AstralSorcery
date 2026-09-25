@@ -877,9 +877,9 @@
 
   "astralsorcery.enchantment_modifier.level.one": "等级",
   "astralsorcery.enchantment_modifier.level.more": "等级",
-  "astralsorcery.enchantment_modifier.add_to_specific.name": "+%1$s%3$s%2$s",
-  "astralsorcery.enchantment_modifier.add_to_existing_specific.name": "+%1$s现有%3$s%2$s",
-  "astralsorcery.enchantment_modifier.add_to_existing_all.name": "+%1$s所有现有魔咒%2$s",
+  "astralsorcery.enchantment_modifier.add_to_specific.name": "+%1$s %3$s%2$s",
+  "astralsorcery.enchantment_modifier.add_to_existing_specific.name": "+%1$s 现有%3$s%2$s",
+  "astralsorcery.enchantment_modifier.add_to_existing_all.name": "+%1$s 所有现有魔咒%2$s",
 
   "enchantment.level.11": "XI",
   "enchantment.level.12": "XII",
