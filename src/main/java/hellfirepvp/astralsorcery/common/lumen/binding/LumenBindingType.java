@@ -26,6 +26,8 @@ import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.fml.common.asm.enumextension.ExtensionInfo;
+import net.neoforged.fml.common.asm.enumextension.IExtensibleEnum;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -92,7 +94,7 @@ public class LumenBindingType {
         IdentifierComponent.createOrOverwriteIdentifier(stack);
     }
 
-    public enum SlotType implements StringRepresentable {
+    public enum SlotType implements StringRepresentable, IExtensibleEnum {
 
         HELMET(armorEquipment(EquipmentSlot.HEAD), wearing(EquipmentSlot.HEAD), Items.IRON_HELMET),
         CHESTPLATE(armorEquipment(EquipmentSlot.CHEST), wearing(EquipmentSlot.CHEST), Items.IRON_CHESTPLATE),
@@ -147,6 +149,9 @@ public class LumenBindingType {
         public String getSerializedName() {
             return this.name().toLowerCase(Locale.ROOT);
         }
-    }
 
+        public static ExtensionInfo getExtensionInfo() {
+            return ExtensionInfo.nonExtended(SlotType.class);
+        }
+    }
 }
