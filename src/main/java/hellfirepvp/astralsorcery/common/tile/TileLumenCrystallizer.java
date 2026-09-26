@@ -73,7 +73,7 @@ import java.util.Optional;
  */
 public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.Data> implements TileEntityLumenDisplay {
 
-    private static final int PASSIVE_LUMEN_DRAIN = 3, PASSIVE_LIQUID_STARLIGHT_DRAIN = 2;
+    private static final int PASSIVE_LUMEN_DRAIN = 2, PASSIVE_LIQUID_STARLIGHT_DRAIN = 2;
     private LumenCrystallizationRecipe activeRecipe = null;
 
     public TileLumenCrystallizer(BlockPos pos, BlockState blockState) {
@@ -102,7 +102,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
             this.activeRecipe = null;
             return;
         }
-        if (!catalyst.isEmpty() && level.isEmptyBlock(this.getBlockPos().above())) {
+        if (!catalyst.isEmpty() && !level.isEmptyBlock(this.getBlockPos().above())) {
             this.breakCatalyst();
             return;
         }
@@ -144,12 +144,13 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
         }
         if (!canCraft) return;
 
+        int lumenToProvide = this.activeRecipe.getLumenConsumedPerOperation() + 100;
+        int storedLumen = this.getTileData().getLumenContents()
+                .getLumenStack(this.activeRecipe.getLumenToCrystallize())
+                .map(LumenStack::getAmount)
+                .orElse(0);
+
         if (this.getTileData().getTicksExisted() % 80 == 0) {
-            int lumenToProvide = this.activeRecipe.getLumenConsumedPerOperation() + 100;
-            int storedLumen = this.getTileData().getLumenContents()
-                    .getLumenStack(this.activeRecipe.getLumenToCrystallize())
-                    .map(LumenStack::getAmount)
-                    .orElse(0);
             if (storedLumen <= lumenToProvide) {
                 int maxCapacity = this.getTileData().getLumenHandler().getCapacity(this.activeRecipe.getLumenToCrystallize());
                 LumenStack drainStack = this.activeRecipe.getLumenToCrystallize().stack(Math.min(200, maxCapacity - storedLumen));
@@ -169,7 +170,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
         if (drained.getAmount() < drainAmt) return;
 
         int liquidAmt = PASSIVE_LIQUID_STARLIGHT_DRAIN;
-        if (byCatalyst) liquidAmt = Math.round(liquidAmt * 1.5F);
+        if (byCatalyst) liquidAmt *= 2;
         FluidStack requested = FluidsAS.LIQUID_STARLIGHT.stack(liquidAmt);
         FluidStack drainedFluid = this.getTileData().getFluidTank().getWithoutFilters(tank -> tank.drain(requested, IFluidHandler.FluidAction.SIMULATE));
         if (drainedFluid.getAmount() < liquidAmt) return;
@@ -181,27 +182,34 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
 
         if (!catalyst.isEmpty() && this.activeRecipe.getCatalystShatterMultiplier() > 0) {
             int chance = Mth.ceil(20 * 60 * (1F / this.activeRecipe.getCatalystShatterMultiplier()));
-            if (byCatalyst) chance /= 2;
             if (this.rand.nextInt(Math.max(chance, 1)) == 0) {
                 this.breakCatalyst();
                 return;
             }
         }
 
-        if (above.isAir()) {
-            if (this.rand.nextInt(20 * 60) == 0) {
-                level.setBlock(this.getBlockPos().above(), BlocksAS.LUMEN_CRYSTAL_CLUSTER.get().defaultBlockState(), Block.UPDATE_ALL);
-                MiscUtil.getTileAt(level, this.getBlockPos().above(), TileLumenCrystalCluster.class, true).ifPresent(newCluster -> {
-                    newCluster.getTileData().setLumen(this.activeRecipe.getLumenToCrystallize());
-                    newCluster.getTileData().markForUpdate();
-                });
-                this.getTileData().getInventory().clearInventory();
-                this.getTileData().markForUpdate();
-            }
-        } else {
-            if (this.rand.nextInt(20 * 60 * 5) == 0) {
-                int stage = above.getValue(LumenCrystalClusterBlock.STAGE);
-                level.setBlock(this.getBlockPos().above(), above.setValue(LumenCrystalClusterBlock.STAGE, Math.min(4, stage + 1)), Block.UPDATE_ALL);
+        if (storedLumen >= lumenToProvide) {
+            if (above.isAir()) {
+                if (this.rand.nextInt(20 * 60) == 0) {
+                    level.setBlock(this.getBlockPos().above(), BlocksAS.LUMEN_CRYSTAL_CLUSTER.get().defaultBlockState(), Block.UPDATE_ALL);
+                    MiscUtil.getTileAt(level, this.getBlockPos().above(), TileLumenCrystalCluster.class, true).ifPresent(newCluster -> {
+                        newCluster.getTileData().setLumen(this.activeRecipe.getLumenToCrystallize());
+                        newCluster.getTileData().markForUpdate();
+                    });
+                    this.getTileData().getInventory().clearInventory();
+                    this.getTileData().markForUpdate();
+                    LumenUtil.drain(this.getTileData().getLumenHandler(),
+                            this.activeRecipe.getLumenToCrystallize().stack(this.activeRecipe.getLumenConsumedPerOperation()),
+                            ILumenHandler.Action.EXECUTE);
+                }
+            } else {
+                if (this.rand.nextInt(20 * 60 * 5) == 0) {
+                    int stage = above.getValue(LumenCrystalClusterBlock.STAGE);
+                    level.setBlock(this.getBlockPos().above(), above.setValue(LumenCrystalClusterBlock.STAGE, Math.min(4, stage + 1)), Block.UPDATE_ALL);
+                    LumenUtil.drain(this.getTileData().getLumenHandler(),
+                            this.activeRecipe.getLumenToCrystallize().stack(this.activeRecipe.getLumenConsumedPerOperation()),
+                            ILumenHandler.Action.EXECUTE);
+                }
             }
         }
     }

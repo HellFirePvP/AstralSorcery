@@ -50,7 +50,7 @@ public abstract class ArtifactEffectProvider implements DataProvider {
 
     protected ArtifactEffectProvider(String modId, boolean positive, PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         this.modId = modId;
-        this.name = "ArtifactEffects([)" + (positive ? "positive" : "negative") + ")";
+        this.name = "ArtifactEffects(" + (positive ? "positive" : "negative") + ")";
         String path = positive ? "artifact_effects" : "artifact_penalties";
         this.pathProvider = output.createPathProvider(PackOutput.Target.DATA_PACK, path);
         this.registries = registries;

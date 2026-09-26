@@ -45,7 +45,7 @@ public class LumenCrystallizationRecipeBuilder implements RecipeBuilder {
     private float catalystShatterMultiplier = 1F;
     private final String recipeIdSuffix;
 
-    private int lumenConsumedPerOperation = 1600;
+    private int lumenConsumedPerOperation = 1400;
 
     private LumenCrystallizationRecipeBuilder(Ingredient input, Lumen lumen, String recipeIdSuffix) {
         this.input = input;

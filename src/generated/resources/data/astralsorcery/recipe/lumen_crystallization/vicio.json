@@ -4,6 +4,6 @@
   "input": {
     "tag": "c:feathers"
   },
-  "lumen_consumed_per_operation": 1600,
+  "lumen_consumed_per_operation": 1400,
   "lumen_to_crystallize": "astralsorcery:vicio"
 }
