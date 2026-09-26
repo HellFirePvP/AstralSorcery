@@ -105,7 +105,6 @@ public class GatewayInterfaceRenderHelper {
 
         this.renderInterfaceStars(poseStack, camera, buffers, alpha, pTicks);
         this.renderFocusedEntryDetails(poseStack, camera, buffers, alpha, pTicks);
-        buffers.endBatch();
     }
 
     private void renderInterfaceStars(PoseStack stack, Camera camera, MultiBufferSource.BufferSource buffers, float distanceAlpha, float pTicks) {

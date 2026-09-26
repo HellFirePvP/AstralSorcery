@@ -87,7 +87,7 @@ public final class EffectHandler {
             return;
         }
 
-        MultiBufferSource.BufferSource drawBuffer = RenderUtil.effectBufferSource();
+        MultiBufferSource.BufferSource drawBuffer = Minecraft.getInstance().renderBuffers().bufferSource();
         for (EffectTemplate template : EffectTemplatesAS.ALL_EFFECT_TEMPLATES) {
             if (!renderTypePredicate.test(template)) continue;
 

@@ -44,7 +44,7 @@ public class TranslucentBlockRenderHelper {
     private static final Map<DyeColor, List<BlockRenderable>> colorFrameRenderables = new HashMap<>();
 
     public static void renderFrame(float pTicks) {
-        MultiBufferSource.BufferSource drawBuffer = RenderUtil.effectBufferSource();
+        MultiBufferSource.BufferSource drawBuffer = Minecraft.getInstance().renderBuffers().bufferSource();
         BlockRenderDispatcher brd = Minecraft.getInstance().getBlockRenderer();
 
         RenderTarget transparencyTarget = ShaderProgramsAS.TRANSPARENCY_COLOR.getTransparencyTarget().orElseThrow();
