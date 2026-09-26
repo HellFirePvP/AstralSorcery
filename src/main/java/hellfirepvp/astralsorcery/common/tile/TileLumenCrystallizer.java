@@ -345,9 +345,9 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
                     .extractFilter((slot, amount, existing) -> false)
                     .inputFilter((slot, toAdd, existing) -> {
                         if (!existing.isEmpty()) return false;
-                        var match = this.findMatchingRecipe(toAdd);
-                        return match.isPresent() &&
-                                (this.getContainedLumen().isEmpty() || match.get().value().getLumenToCrystallize().equals(this.getContainedLumen().getLumen()));
+                        return this.findMatchingRecipe(toAdd).isPresent() &&
+                                (this.getContainedLumen().isEmpty() ||
+                                        this.findMatchingRecipe(this.getContainedLumen().getLumen()).equals(this.findMatchingRecipe(toAdd)));
                     })
                     .accessibleSides(Direction.DOWN);
         }
