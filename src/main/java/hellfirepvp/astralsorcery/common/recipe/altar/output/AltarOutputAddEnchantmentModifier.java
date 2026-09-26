@@ -47,7 +47,7 @@ public class AltarOutputAddEnchantmentModifier extends AltarRecipeOutputModifier
         EnchantmentModifierComponent comp = output.get(DataComponentsAS.ENCHANTMENT_MODIFIERS);
         if (comp != null) {
             List<EnchantmentModifier> modifiers = new ArrayList<>(comp.modifiers());
-            EnchantmentModifier newMod = EnchantmentAmuletGenerator.generateAnyModifier();
+            EnchantmentModifier newMod = EnchantmentAmuletGenerator.generateAnyModifier(registries);
             if (newMod != null) {
                 modifiers.add(newMod);
                 output.set(DataComponentsAS.ENCHANTMENT_MODIFIERS, new EnchantmentModifierComponent(modifiers));

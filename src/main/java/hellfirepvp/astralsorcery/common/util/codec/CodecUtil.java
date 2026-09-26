@@ -20,9 +20,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.common.util.MiscUtil;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.UUIDUtil;
+import net.minecraft.core.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
@@ -184,9 +182,7 @@ public class CodecUtil {
                       });
     }
 
-    public
-
-    static <B, C, T1, T2, T3, T4, T5, T6, T7> StreamCodec<B, C> streamComposite(
+    public static <B, C, T1, T2, T3, T4, T5, T6, T7> StreamCodec<B, C> streamComposite(
             final StreamCodec<? super B, T1> codec1,
             final Function<C, T1> getter1,
             final StreamCodec<? super B, T2> codec2,

@@ -27,7 +27,7 @@ import java.util.function.Function;
  */
 public abstract class JsonDataRegistry<T> {
 
-    protected static final RandomSource rand = RandomSource.create();
+    protected final RandomSource rand = RandomSource.create();
     private final List<T> loadedValues = new ArrayList<>();
 
     void setLoadedValues(List<T> values) {

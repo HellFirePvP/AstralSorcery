@@ -185,6 +185,7 @@ public class AstralBlockTagsProvider extends BlockTagsProvider {
                         BlocksAS.LUMEN_CRYSTALLIZER.get(),
                         BlocksAS.LIGHTWELL.get(),
                         BlocksAS.INFUSER.get(),
+                        BlocksAS.CHALICE.get(),
                         BlocksAS.ATTUNEMENT_ALTAR.get(),
                         BlocksAS.STELLAR_FILAMENT.get(),
                         BlocksAS.CELESTIAL_GATEWAY.get(),
@@ -253,6 +254,7 @@ public class AstralBlockTagsProvider extends BlockTagsProvider {
                         BlocksAS.LUMEN_CRYSTALLIZER.get(),
                         BlocksAS.LIGHTWELL.get(),
                         BlocksAS.INFUSER.get(),
+                        BlocksAS.CHALICE.get(),
                         BlocksAS.ATTUNEMENT_ALTAR.get(),
                         BlocksAS.TREE_BEACON.get(),
                         BlocksAS.CELESTIAL_GATEWAY.get()

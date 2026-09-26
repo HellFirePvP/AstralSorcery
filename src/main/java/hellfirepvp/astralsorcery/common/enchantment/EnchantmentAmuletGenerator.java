@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.component.EnchantmentModifierComponent;
 import hellfirepvp.astralsorcery.common.config.ConfigEntry;
 import hellfirepvp.astralsorcery.common.config.json.data.AmuletEnchantmentDataRegistry;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -38,7 +39,7 @@ public class EnchantmentAmuletGenerator {
     private static ModConfigSpec.DoubleValue chanceToAll;
     private static ModConfigSpec.DoubleValue chanceToNonExisting;
 
-    public static EnchantmentModifierComponent generateModifiers() {
+    public static EnchantmentModifierComponent generateModifiers(HolderLookup.Provider registries) {
         List<EnchantmentModifier> modifiers = new ArrayList<>();
 
         while (mayGetAdditionalRoll(modifiers)) {
@@ -46,7 +47,7 @@ public class EnchantmentAmuletGenerator {
             if (newType == null) break;
             int lvl = getRollLevel();
             if (newType.hasEnchantment()) {
-                AmuletEnchantmentDataRegistry.getInstance().getRandomEnchantment().ifPresent(ench -> {
+                AmuletEnchantmentDataRegistry.getInstance().getRandomEnchantment(registries).ifPresent(ench -> {
                     modifiers.add(EnchantmentModifier.addEnchantmentLevel(newType, ench, lvl));
                 });
             } else {
@@ -58,10 +59,10 @@ public class EnchantmentAmuletGenerator {
     }
 
     @Nullable
-    public static EnchantmentModifier generateAnyModifier() {
+    public static EnchantmentModifier generateAnyModifier(HolderLookup.Provider registries) {
         EnchantmentModifier.Type newType = getAnyRollType();
         if (newType.hasEnchantment()) {
-            return AmuletEnchantmentDataRegistry.getInstance().getRandomEnchantment().map(ench -> {
+            return AmuletEnchantmentDataRegistry.getInstance().getRandomEnchantment(registries).map(ench -> {
                 return EnchantmentModifier.addEnchantmentLevel(newType, ench, getRollLevel());
             }).orElse(null);
         } else {
