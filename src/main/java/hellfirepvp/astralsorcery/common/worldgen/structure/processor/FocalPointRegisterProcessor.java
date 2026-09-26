@@ -19,7 +19,6 @@ import hellfirepvp.astralsorcery.common.util.data.ColumnPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
-import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
@@ -64,10 +63,7 @@ public class FocalPointRegisterProcessor extends StructureProcessor {
                 this.getAvailableConstellations().getRandomElement(settings.getRandom(offset)).ifPresent(cstHolder -> {
                     // Only load then node if it's a server world, i.e. not during chunk generation
                     // The node will get loaded when the chunk is loaded, this processor runs pre-chunk loading
-                    levelGen.getLevel().getServer().tell(new TickTask(0, () -> {
-                        //delay and resync to main thread
-                        FocalPointManager.getInstance().addNewNode(actualLevel, new BasicFocalPointNode(ColumnPos.of(offset), cstHolder.value()), levelGen instanceof ServerLevel);
-                    }));
+                    FocalPointManager.getInstance().addNewNode(actualLevel, new BasicFocalPointNode(ColumnPos.of(offset), cstHolder.value()), levelGen instanceof ServerLevel);
                 });
             }
         }
