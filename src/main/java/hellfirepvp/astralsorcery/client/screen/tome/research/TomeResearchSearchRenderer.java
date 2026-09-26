@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.client.screen.tome.research;
 
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
-import hellfirepvp.astralsorcery.client.screen.element.SearchInputElement;
 import hellfirepvp.astralsorcery.client.screen.element.TomeNavArrowElement;
 import hellfirepvp.astralsorcery.client.screen.element.TomeSearchEntryElement;
 import hellfirepvp.astralsorcery.client.screen.tome.TomeResearchScreen;
@@ -66,7 +65,7 @@ public class TomeResearchSearchRenderer extends TomeResearchPartRenderer {
         List<ResearchNode> allNodes = ResearchNodeLoader.getInstance().getNodes();
         String matchText = newText.toLowerCase(Locale.ROOT);
 
-        if (newText.length() >= SearchInputElement.getMinSearchLength()) {
+        if (newText.length() >= 3) {
             for (ResearchNode node : allNodes) {
                 if (!this.matchingNodes.contains(node) && node.getName().getString().toLowerCase(Locale.ROOT).contains(matchText)) {
                     this.matchingNodes.add(node);

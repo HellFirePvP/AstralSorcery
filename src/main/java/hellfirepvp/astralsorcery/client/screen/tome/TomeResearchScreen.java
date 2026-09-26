@@ -96,7 +96,7 @@ public class TomeResearchScreen extends TomeScreen {
     }
 
     public ViewType getViewType() {
-        if (this.getSearchInput().map(SearchInputElement::getText).map(String::length).orElse(0) >= SearchInputElement.getMinSearchLength()) {
+        if (this.getSearchInput().map(SearchInputElement::getText).map(String::length).orElse(0) >= 3) {
             return ViewType.SEARCH;
         }
         return ViewType.RESEARCH;
