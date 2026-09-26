@@ -409,15 +409,8 @@ public class RenderPageAltar extends RenderPageRecipe<AltarRecipe> {
         return switch (recipe.getRequiredType()) {
             case ILLUMINATION -> TexturesAS.SCREEN_TOME_PAGE_GRID_ALTAR_T1;
             case RESONANCE -> {
-                int[] outerGridIndices = new int[] {
-                        0,  1,  2,  3,  4,
-                        5,              9,
-                        10,             14,
-                        15,             19,
-                        20, 21, 22, 23, 24
-                };
                 List<IngredientBridge> relayInputs = recipe.getGrid().getRelayInputs();
-                for (int slot : outerGridIndices) {
+                for (int slot : TileAltar.getOuterRelaySlots()) {
                     if (!relayInputs.get(slot).isEmpty()) {
                         yield TexturesAS.SCREEN_TOME_PAGE_GRID_ALTAR_T2_EXPANDED;
                     }

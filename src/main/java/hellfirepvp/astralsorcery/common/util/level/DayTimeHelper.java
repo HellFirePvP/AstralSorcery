@@ -32,7 +32,7 @@ public class DayTimeHelper {
     }
 
     public static boolean isNight(Level level) {
-        return getCurrentDaytimeDistribution(level) >= 0.55;
+        return getCurrentDaytimeDistribution(level) >= 0.45;
     }
 
     public static boolean isDay(Level level) {

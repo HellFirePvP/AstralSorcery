@@ -14,7 +14,11 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,6 +52,12 @@ public record CountIngredient(Ingredient ingredient, int count) {
             ByteBufCodecs.INT,
             CountIngredient::count,
             CountIngredient::new);
+
+    public List<ItemStack> getItems() {
+        return Arrays.stream(this.ingredient.getItems())
+                .map(stack -> stack.copyWithCount(this.count()))
+                .toList();
+    }
 
     public boolean isEmpty() {
         return this.ingredient.isEmpty() || this.count <= 0;

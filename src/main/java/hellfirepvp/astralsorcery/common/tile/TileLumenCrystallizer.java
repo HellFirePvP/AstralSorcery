@@ -102,6 +102,11 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
             this.activeRecipe = null;
             return;
         }
+        if (!catalyst.isEmpty() && level.isEmptyBlock(this.getBlockPos().above())) {
+            this.breakCatalyst();
+            return;
+        }
+
         TileLumenCrystalCluster cluster = MiscUtil.getTileAt(level, this.getBlockPos().above(), TileLumenCrystalCluster.class, false).orElse(null);
 
         if (this.activeRecipe == null) {
@@ -119,6 +124,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
         if (this.activeRecipe == null) {
             return;
         }
+        boolean byCatalyst = cluster == null;
 
         LumenStack containedLumen = this.getTileData().getContainedLumen();
         if (!containedLumen.isEmpty() && !containedLumen.is(this.activeRecipe.getLumenToCrystallize())) {
@@ -163,6 +169,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
         if (drained.getAmount() < drainAmt) return;
 
         int liquidAmt = PASSIVE_LIQUID_STARLIGHT_DRAIN;
+        if (byCatalyst) liquidAmt = Math.round(liquidAmt * 1.5F);
         FluidStack requested = FluidsAS.LIQUID_STARLIGHT.stack(liquidAmt);
         FluidStack drainedFluid = this.getTileData().getFluidTank().getWithoutFilters(tank -> tank.drain(requested, IFluidHandler.FluidAction.SIMULATE));
         if (drainedFluid.getAmount() < liquidAmt) return;
@@ -174,6 +181,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
 
         if (!catalyst.isEmpty() && this.activeRecipe.getCatalystShatterMultiplier() > 0) {
             int chance = Mth.ceil(20 * 60 * (1F / this.activeRecipe.getCatalystShatterMultiplier()));
+            if (byCatalyst) chance /= 2;
             if (this.rand.nextInt(Math.max(chance, 1)) == 0) {
                 this.breakCatalyst();
                 return;

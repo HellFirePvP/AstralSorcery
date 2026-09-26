@@ -79,7 +79,7 @@ public class LumenIngredientRenderer implements IIngredientRenderer<LumenStack> 
             this.renderIcon(guiGraphics, ingredient, posX, posY, 8, 8);
 
             int barWidth = this.display.getWidth() - 8 - 2;
-            this.renderBar(guiGraphics, this.display.getBarTexture(), ingredient, posX + 8 + 2, posY + 3, barWidth);
+            this.renderBar(guiGraphics, this.display.getBarTexture(), ingredient, posX + 8 + 2, posY + 2, barWidth);
         }
 
         RenderSystem.disableBlend();

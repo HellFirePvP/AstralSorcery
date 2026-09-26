@@ -23,6 +23,13 @@
   "jei.astralsorcery.info.infusion.consumption_chance.all.multiples": "消耗所有流体",
   "jei.astralsorcery.info.infusion.no_chalice": "不会从附近的圣杯中抽取流体",
   "jei.astralsorcery.info.infusion.consume_multiples": "可能会消耗多格流体",
+  "jei.astralsorcery.info.altar.recipe_night": "仅可在夜间合成",
+  "jei.astralsorcery.info.altar.recipe_constellation": "需要%s定焦物",
+  "jei.astralsorcery.info.altar.recipe_constellation.unknown": "需要一个未知星座的定焦物。",
+  "jei.astralsorcery.info.altar.focused_starlight": "需要来自以下来源的聚焦星能：",
+  "jei.astralsorcery.info.altar.focus_shatter": "有%s%%概率使定焦物碎裂。",
+  "jei.astralsorcery.info.altar.focus_shatter.small": "有<1%概率使定焦物碎裂。",
+  "jei.astralsorcery.info.altar.focus_shatter.guaranteed": "会使定焦物碎裂。",
 
   "ingredient.astralsorcery.tooltip.error": "获取此物品提示信息时出错。",
   "ingredient.astralsorcery.stable_artifact.description": "任意稳定遗物",

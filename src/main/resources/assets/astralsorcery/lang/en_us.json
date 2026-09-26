@@ -5,6 +5,7 @@
     "itemGroup.astralsorcery.attuned_crystals": "Astral Sorcery - Attuned Crystals",
     "itemGroup.astralsorcery.artifacts": "Astral Sorcery - Artifacts",
 
+    "jei.astralsorcery.category.altar_crafting": "Altar Crafting",
     "jei.astralsorcery.category.lightwell": "Lightwell",
     "jei.astralsorcery.category.liquid_interaction": "Chalice Liquid Interaction",
     "jei.astralsorcery.category.focal_transmutation": "Starlight Block Transmutation",
@@ -23,6 +24,13 @@
     "jei.astralsorcery.info.infusion.consumption_chance.all.multiples": "Consumes all blocks of fluid",
     "jei.astralsorcery.info.infusion.no_chalice": "Does not pull liquid from nearby chalices",
     "jei.astralsorcery.info.infusion.consume_multiples": "May use up multiple blocks of fluid",
+    "jei.astralsorcery.info.altar.recipe_night": "Only craftable during the night",
+    "jei.astralsorcery.info.altar.recipe_constellation": "Needs a focus for constellation %s",
+    "jei.astralsorcery.info.altar.recipe_constellation.unknown": "Needs a focus for an unknown constellation.",
+    "jei.astralsorcery.info.altar.focused_starlight": "Needs focused starlight from:",
+    "jei.astralsorcery.info.altar.focus_shatter": "Has a %s%% chance to shatter the focus.",
+    "jei.astralsorcery.info.altar.focus_shatter.small": "Has a <1% chance to shatter the focus.",
+    "jei.astralsorcery.info.altar.focus_shatter.guaranteed": "Will shatter the focus.",
 
     "ingredient.astralsorcery.tooltip.error": "Error upon trying to get this item's tooltip.",
     "ingredient.astralsorcery.stable_artifact.description": "Any stable artifact",

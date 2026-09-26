@@ -63,13 +63,14 @@ public class ASJeiPlugin implements IModPlugin {
         IJeiHelpers jeiHelpers = reg.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
-        this.registerCategory(reg, new LiquidInteractionRecipeCategory(guiHelper));
-        this.registerCategory(reg, new LightwellRecipeCategory(guiHelper));
+        this.registerCategory(reg, new AltarRecipeCategory(guiHelper));
         this.registerCategory(reg, new FocalTransmutationRecipeCategory(guiHelper));
         this.registerCategory(reg, new FocalCombinationRecipeCategory(guiHelper));
+        this.registerCategory(reg, new LightwellRecipeCategory(guiHelper));
         this.registerCategory(reg, new InfusionRecipeCategory(guiHelper));
         this.registerCategory(reg, new LumenGenerationRecipeCategory(guiHelper));
         this.registerCategory(reg, new LumenCrystallizationRecipeCategory(guiHelper));
+        this.registerCategory(reg, new LiquidInteractionRecipeCategory(guiHelper));
     }
 
     private void registerCategory(IRecipeCategoryRegistration register, ASRecipeCategory<?> category) {
