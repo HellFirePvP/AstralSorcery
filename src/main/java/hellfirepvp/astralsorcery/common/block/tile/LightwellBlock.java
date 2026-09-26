@@ -32,7 +32,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -75,7 +74,7 @@ public class LightwellBlock extends BaseTickTileBlock<TileLightwell> {
             ItemStack held = player.getItemInHand(hand);
 
             return MiscUtil.firstNonNull(
-                    () -> InteractUtil.tryTransferFluidFromBlock(held, player, level, pos, newStack -> InteractUtil.handleContainerReplacement(player, newStack, hand)),
+                    () -> InteractUtil.tryTransferFluidFromBlock(held, player, level, pos, newStack -> player.setItemInHand(hand, newStack)),
                     () -> InteractUtil.tryPlaceItemIntoBlock(held, player, level, pos)
             ).orElse(ItemInteractionResult.SUCCESS);
         }).orElse(ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);

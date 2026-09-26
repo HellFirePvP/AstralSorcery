@@ -12,9 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -27,7 +25,6 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -116,26 +113,5 @@ public class InteractUtil {
                     0.2F, ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
         }
         return result;
-    }
-
-    public static void handleContainerReplacement(Player player, ItemStack newStack, InteractionHand hand) {
-        if (!player.isCreative()) {
-            ItemStack contained = player.getItemInHand(hand);
-            contained.shrink(1);
-            giveItemToPlayer(player, newStack, hand);
-        }
-    }
-
-    public static void giveItemToPlayer(Player player, ItemStack stack) {
-        giveItemToPlayer(player, stack, -1);
-    }
-
-    public static void giveItemToPlayer(Player player, ItemStack stack, InteractionHand hand) {
-        int slot = hand == InteractionHand.MAIN_HAND ? player.getInventory().selected : Inventory.SLOT_OFFHAND;
-        giveItemToPlayer(player, stack, slot);
-    }
-
-    public static void giveItemToPlayer(Player player, ItemStack stack, int slot) {
-        ItemHandlerHelper.giveItemToPlayer(player, stack, slot);
     }
 }
