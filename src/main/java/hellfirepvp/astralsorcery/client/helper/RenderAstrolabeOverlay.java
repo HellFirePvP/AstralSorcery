@@ -60,6 +60,7 @@ import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
@@ -186,13 +187,29 @@ public class RenderAstrolabeOverlay {
                     color = ColorUtil.blendColors(color, ColorWrapper.WHITE, ratio * 0.5F);
                 }
 
+                float scale = 1F;
                 float hintWidth = font.width(hint);
-                float hintXOffset = indicatorXOffset - rulePxRatio * (5F + 2F) - hintWidth;
+                float rightXOffset = indicatorXOffset - rulePxRatio * (5F + 2F);
+                List<FormattedCharSequence> text;
+                if (rightXOffset - hintWidth < 0) {
+                    text = font.split(hint, Math.max(Mth.floor(rightXOffset), 10));
+                    scale = 1F / text.size();
+                } else {
+                    text = List.of(hint.getVisualOrderText());
+                }
+
                 float hintYOffset = ruleYOffset + rulePxRatio + Math.round(angle * indicatorRatio) * rulePxRatio - font.lineHeight / 2F;
                 float txtAlpha = alpha * (0.3F + Math.min(1F, (Math.abs(hintYOffset - indicatorYOffset) - 8F) / 16F) * 0.7F);
+                int colorInt = color.copyWithAlpha(Math.max(5, Math.round(txtAlpha * 220))).getColor();
 
-                guiGraphics.drawString(font, hint.getVisualOrderText(),
-                        hintXOffset, hintYOffset, color.copyWithAlpha(Math.max(5, Math.round(txtAlpha * 220))).getColor(), true);
+                guiGraphics.pose().pushPose();
+                guiGraphics.pose().translate(rightXOffset, hintYOffset, 0);
+                guiGraphics.pose().scale(scale, scale, 1F);
+                for (FormattedCharSequence line : text) {
+                    guiGraphics.drawString(font, line, -font.width(line), 0, colorInt, true);
+                    guiGraphics.pose().translate(0, 10, 0);
+                }
+                guiGraphics.pose().popPose();
             });
 
             if (ct.canAddEffects()) {
