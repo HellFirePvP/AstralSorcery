@@ -144,8 +144,6 @@ public abstract class RenderPageRecipe<T extends Recipe<?>> extends RenderPage {
     }
 
     public void renderHoverTooltips(GuiGraphics graphics, float mouseX, float mouseY) {
-        graphics.pose().pushPose();
-        graphics.pose().translate(0, 0, 400);
         this.thisFrameHovers.reversed().entrySet().stream()
                 .filter(entry -> entry.getKey().contains(mouseX, mouseY))
                 .findFirst()
@@ -165,7 +163,6 @@ public abstract class RenderPageRecipe<T extends Recipe<?>> extends RenderPage {
                             }
                             graphics.renderComponentTooltip(Minecraft.getInstance().font, components, Mth.floor(mouseX), Mth.floor(mouseY), firstStack);
                 }));
-        graphics.pose().popPose();
     }
 
     @Override

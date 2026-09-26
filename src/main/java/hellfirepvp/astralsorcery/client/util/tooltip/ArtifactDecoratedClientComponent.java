@@ -84,7 +84,6 @@ public class ArtifactDecoratedClientComponent implements ClientTooltipComponent 
             this.createParticles(container);
         }
         container.renderAll(guiGraphics, Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false));
-        RenderSystem.enableDepthTest();
 
         this.text.renderText(font, x, y, guiGraphics.pose().last().pose(), guiGraphics.bufferSource());
         this.text.renderImage(font, x, y, guiGraphics);

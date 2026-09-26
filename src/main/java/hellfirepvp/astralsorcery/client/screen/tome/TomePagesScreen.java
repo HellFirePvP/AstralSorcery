@@ -270,8 +270,6 @@ public class TomePagesScreen extends TomeScreen {
             offsetY += 28;
         }
 
-        RenderSystem.enableDepthTest();
-
         pageIndex = this.currentDoublePageOffset * 2;
         if (this.renderPages.size() > pageIndex) {
             RenderPage left = this.renderPages.get(pageIndex);
