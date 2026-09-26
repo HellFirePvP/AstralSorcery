@@ -92,8 +92,7 @@ public class AstralBlockLootTableProvider extends BlockLootSubProvider {
                     LootItem.lootTableItem(ItemsAS.AQUAMARINE)
                             .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3)))
                             .apply(LinearLuckFunction.luckAndEnchantments(List.of(
-                                    enchantments.getOrThrow(Enchantments.FORTUNE),
-                                    enchantments.getOrThrow(Enchantments.LOOTING)
+                                    enchantments.getOrThrow(Enchantments.FORTUNE)
                             )))
                             .apply(ApplyExplosionDecay.explosionDecay())
             );

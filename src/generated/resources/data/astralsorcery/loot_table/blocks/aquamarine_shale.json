@@ -42,8 +42,7 @@
                 },
                 {
                   "enchantments": [
-                    "minecraft:fortune",
-                    "minecraft:looting"
+                    "minecraft:fortune"
                   ],
                   "function": "astralsorcery:linear_luck"
                 },

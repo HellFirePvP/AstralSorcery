@@ -1,9 +1,9 @@
-// 1.21.1	2026-09-11T12:48:49.8192311	Loot Tables
+// 1.21.1	2026-09-26T16:41:49.8443324	Loot Tables
 9246b1a4dab15dd5039fb01fc5b60d56719c49d5 data/astralsorcery/loot_table/blocks/altar_illumination.json
 f67ee04b1d12e2221d31dfda20a4dcae02708e73 data/astralsorcery/loot_table/blocks/altar_luminance.json
 939ab3d792ec892deac28722d4d1f6cee19937df data/astralsorcery/loot_table/blocks/altar_radiance.json
 66835491b7f38f8ced096e15d709c254a2b77e75 data/astralsorcery/loot_table/blocks/altar_resonance.json
-946713c9f5b1e29442269880aa97d507f88d21b3 data/astralsorcery/loot_table/blocks/aquamarine_shale.json
+2f481d85dcd48d5a531d67e68af180792f64f5b1 data/astralsorcery/loot_table/blocks/aquamarine_shale.json
 1660cb057c8bb719d2d1f75d9833ce7c90195118 data/astralsorcery/loot_table/blocks/attunement_altar.json
 e51a451365e44fedf4adc4826767f7c0baa3015d data/astralsorcery/loot_table/blocks/cave_illuminator.json
 e8cd0403f066079d0f8e282c302f9df5e254f061 data/astralsorcery/loot_table/blocks/celestial_crystal_cluster.json
