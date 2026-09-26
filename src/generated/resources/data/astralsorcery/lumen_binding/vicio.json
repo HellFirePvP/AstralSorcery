@@ -18,7 +18,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "c34df2af-c343-40d8-9a0c-e86e5b6f09c5",
+            "identifier": "46adcee5-70e5-454a-9565-b48ab13c234f",
             "mode": 2,
             "value": 1.1
           }
@@ -43,7 +43,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "6e6e714a-e0f9-418b-9ed7-84d17987965e",
+            "identifier": "8298e396-9057-4bf3-92f5-d73c8068e69b",
             "mode": 1,
             "value": 0.06
           }
@@ -68,7 +68,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "38e4fa8e-5d1b-4481-adc8-370539d39b07",
+            "identifier": "1c627812-dc57-4b2f-887a-df3246c49a43",
             "mode": 1,
             "value": 0.04
           }
@@ -93,7 +93,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "6f124501-602d-4786-bbd8-58f2c34f62af",
+            "identifier": "96ad7cbe-d0a6-44d9-8cb2-1f9307aab9a9",
             "mode": 1,
             "value": 0.04
           }
@@ -118,7 +118,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "fdacf77d-5127-4de8-a7b1-1205ccf61697",
+            "identifier": "19203173-0de6-4618-b767-29c29d74276a",
             "mode": 1,
             "value": 0.08
           }
@@ -143,7 +143,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:projectile_speed",
-            "identifier": "6b7849ad-f7d4-41d9-a9e0-08a93aa017e0",
+            "identifier": "279b85c1-fff0-486b-8847-15cc1efb49f3",
             "mode": 1,
             "value": 0.1
           }
@@ -163,7 +163,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "61da3e17-89d9-49b2-9793-94586dd63672",
+            "identifier": "800de490-84d8-4f67-a73c-20a72f8ce74c",
             "mode": 1,
             "value": 0.1
           }

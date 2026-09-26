@@ -6,17 +6,15 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.integration.jei.category;
+package hellfirepvp.astralsorcery.common.integration.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.integration.jei.base.ASRecipeCategory;
-import hellfirepvp.astralsorcery.common.integration.jei.base.StatefulCategory;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.recipe.liquid.interaction.LiquidInteractionRecipe;
+import hellfirepvp.astralsorcery.common.recipe.liquid.interaction.result.LiquidInteractionResult;
 import hellfirepvp.astralsorcery.common.recipe.liquid.interaction.result.LiquidInteractionResultDropItem;
 import hellfirepvp.astralsorcery.common.recipe.liquid.interaction.result.LiquidInteractionResultSpawnEntity;
 import hellfirepvp.observerlib.client.util.LightmapUtil;
@@ -29,24 +27,21 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
-import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -62,26 +57,30 @@ import java.util.Set;
  * Created by HellFirePvP
  * Date: 11.04.2026
  */
-public class LiquidInteractionRecipeCategory extends ASRecipeCategory<LiquidInteractionRecipe> implements StatefulCategory {
+public class LiquidInteractionRecipeCategory implements IRecipeCategory<LiquidInteractionRecipe> {
 
-    public static final RecipeType<LiquidInteractionRecipe> RECIPE_TYPE = makeType("liquid_interaction", LiquidInteractionRecipe.class);
-    private static final ResourceLocation BACKGROUND = AstralSorcery.key("textures/screen/jei/liquid_interaction.png");
+    public static final ResourceLocation UID = AstralSorcery.key("liquid_interaction");
+    public static final RecipeType<LiquidInteractionRecipe> RECIPE_TYPE = new RecipeType<>(UID, LiquidInteractionRecipe.class);
 
     private static final DecimalFormat FORMAT_CHANCE = new DecimalFormat("0.00");
 
-    private final Map<EntityType<?>, Entity> entityPreviewCache = new IdentityHashMap<>();
-    private final IDrawable background;
+    private static final int WIDTH = 112;
+    private static final int HEIGHT = 54;
+    private static final int SLOT_A_X = 3;
+    private static final int SLOT_B_X = 93;
+    private static final int SLOT_Y = 19;
+    private static final int OUTPUT_X = 47;
+    private static final int OUTPUT_Y = 18;
 
-    public LiquidInteractionRecipeCategory(IGuiHelper helper) {
-        super(112, 54, helper, ItemsAS.BLOCK_CHALICE);
-        this.background = createBackground(helper, BACKGROUND, this.getWidth(), this.getHeight());
+    private final IDrawable icon;
+    private final Map<EntityType<?>, Entity> entityPreviewCache = new IdentityHashMap<>();
+
+    public void clearEntityCache() {
+        this.entityPreviewCache.clear();
     }
 
-    @SuppressWarnings("removal")
-    @Nullable
-    @Override
-    public IDrawable getBackground() {
-        return this.background;
+    public LiquidInteractionRecipeCategory(IGuiHelper guiHelper) {
+        this.icon = guiHelper.createDrawableItemStack(new ItemStack(BlocksAS.CHALICE.get()));
     }
 
     @Override
@@ -90,12 +89,32 @@ public class LiquidInteractionRecipeCategory extends ASRecipeCategory<LiquidInte
     }
 
     @Override
+    public Component getTitle() {
+        return Component.translatable("jei.astralsorcery.category.liquid_interaction");
+    }
+
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
+    }
+
+    @Override
+    public IDrawable getIcon() {
+        return this.icon;
+    }
+
+    @Override
     public void setRecipe(IRecipeLayoutBuilder builder, LiquidInteractionRecipe recipe, IFocusGroup focuses) {
-        addReactantSlot(builder, recipe.getReactantA(), 3, this.getHeight() / 2 - 8);
-        addReactantSlot(builder, recipe.getReactantB(), this.getWidth() - 16 - 3, this.getHeight() / 2 - 8);
+        addReactantSlot(builder, recipe.getReactantA(), SLOT_A_X, SLOT_Y);
+        addReactantSlot(builder, recipe.getReactantB(), SLOT_B_X, SLOT_Y);
 
         if (recipe.getResult() instanceof LiquidInteractionResultDropItem dropItem) {
-            builder.addSlot(RecipeIngredientRole.OUTPUT, this.getWidth() / 2 - 9, this.getHeight() / 2 - 9)
+            builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X, OUTPUT_Y)
                     .addItemStack(dropItem.getOutput());
         }
     }
@@ -121,12 +140,12 @@ public class LiquidInteractionRecipeCategory extends ASRecipeCategory<LiquidInte
     }
 
     @Override
-    public void draw(LiquidInteractionRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        this.categoryIcon.draw(guiGraphics, 3, 36);
-        this.categoryIcon.draw(guiGraphics, 93, 36);
+    public void draw(LiquidInteractionRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+        this.icon.draw(graphics, 3, 36);
+        this.icon.draw(graphics, 93, 36);
 
         if (recipe.getResult() instanceof LiquidInteractionResultSpawnEntity spawnEntity) {
-            this.drawEntityPreview(guiGraphics, spawnEntity);
+            this.drawEntityPreview(graphics, spawnEntity);
         }
 
         Minecraft mc = Minecraft.getInstance();
@@ -144,9 +163,9 @@ public class LiquidInteractionRecipeCategory extends ASRecipeCategory<LiquidInte
         }
         if (totalWeight > 0) {
             float perc = ((float) recipe.getWeight() / totalWeight) * 100F;
-            Component label = Component.translatable("jei.astralsorcery.info.chance", FORMAT_CHANCE.format(perc)).withStyle(ChatFormatting.DARK_GRAY);
+            Component label = Component.translatable("jei.astralsorcery.tip.chance", FORMAT_CHANCE.format(perc)).withStyle(ChatFormatting.DARK_GRAY);
             int width = mc.font.width(label);
-            guiGraphics.drawString(mc.font, label, 74 - width, 44, 0x333333, false);
+            graphics.drawString(mc.font, label, 74 - width, 44, 0x333333, false);
         }
     }
 
@@ -162,7 +181,7 @@ public class LiquidInteractionRecipeCategory extends ASRecipeCategory<LiquidInte
 
         PoseStack pose = graphics.pose();
         pose.pushPose();
-        pose.translate(this.getWidth() / 2F, this.getHeight() / 2F + 9, 50);
+        pose.translate(OUTPUT_X + 8, OUTPUT_Y + 16, 50);
         pose.scale(15F, 15F, 15F);
         pose.mulPose(Axis.XP.rotationDegrees(180F));
         pose.mulPose(Axis.YP.rotationDegrees(145F));
@@ -185,20 +204,5 @@ public class LiquidInteractionRecipeCategory extends ASRecipeCategory<LiquidInte
             return false;
         }
         return b.matches(sampleA1[0], sampleA2[0]);
-    }
-
-    @Override
-    public void clear() {
-        this.entityPreviewCache.clear();
-    }
-
-    @Override
-    public List<ItemStack> provideCatalyst() {
-        return List.of(ItemsAS.BLOCK_CHALICE.toStack());
-    }
-
-    @Override
-    public List<LiquidInteractionRecipe> provideRecipes(RecipeManager recipeManager, IRecipeRegistration register) {
-        return provideRawRecipes(recipeManager, RecipeTypesAS.LIQUID_INTERACTION_TYPE);
     }
 }

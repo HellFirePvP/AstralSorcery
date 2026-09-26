@@ -1,9 +1,0 @@
-{
-  "type": "astralsorcery:lumen_crystallization",
-  "catalyst_shatter_multiplier": 3.5,
-  "input": {
-    "item": "minecraft:echo_shard"
-  },
-  "lumen_consumed_per_operation": 1600,
-  "lumen_to_crystallize": "astralsorcery:hyle"
-}
