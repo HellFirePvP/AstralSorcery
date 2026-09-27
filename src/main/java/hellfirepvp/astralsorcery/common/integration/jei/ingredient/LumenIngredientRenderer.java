@@ -23,7 +23,6 @@ import hellfirepvp.astralsorcery.common.lumen.LumenStack;
 import hellfirepvp.astralsorcery.common.util.data.ColorWrapper;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
-import mezz.jei.common.gui.JeiTooltip;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -36,6 +35,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.TooltipFlag;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -120,15 +120,18 @@ public class LumenIngredientRenderer implements IIngredientRenderer<LumenStack> 
     @SuppressWarnings("removal")
     @Override
     public List<Component> getTooltip(LumenStack ingredient, TooltipFlag tooltipFlag) {
-        JeiTooltip jeiTooltip = new JeiTooltip();
-        getTooltip(jeiTooltip, ingredient, tooltipFlag);
-        return jeiTooltip.toLegacyToComponents();
+        return this.createTooltip(ingredient);
     }
 
     @Override
     public void getTooltip(ITooltipBuilder tooltip, LumenStack ingredient, TooltipFlag tooltipFlag) {
-        if (ingredient.isEmpty()) return;
+        tooltip.addAll(this.createTooltip(ingredient));
+    }
 
+    private List<Component> createTooltip(LumenStack ingredient) {
+        if (ingredient.isEmpty()) return List.of();
+
+        List<Component> tooltip = new ArrayList<>();
         tooltip.add(ingredient.getLumen().getHoverName());
 
         int amt = ingredient.getAmount();
@@ -140,6 +143,7 @@ public class LumenIngredientRenderer implements IIngredientRenderer<LumenStack> 
             MutableComponent amountStr = Component.translatable("jei.astralsorcery.info.lumen.amount", nf.format(amt));
             tooltip.add(amountStr.withStyle(ChatFormatting.GRAY));
         }
+        return tooltip;
     }
 
     @Override
