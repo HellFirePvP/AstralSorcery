@@ -86,10 +86,11 @@ repositories {
 
     maven {
         // JEI
-        name 'ModMaven'
-        url 'https://modmaven.dev/'
+        name 'Jared maven'
+        url 'https://maven.blamejared.com/'
         content {
             includeGroup "mezz.jei"
+            includeGroup "net.mezzdev.config"
         }
     }
 
@@ -114,7 +115,9 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     implementation "hellfirepvp.observerlib:ObserverLib:${observerlib_version}"
-    implementation "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
     implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     implementation "maven.modrinth:jade:${jade_modrinth_version}"
 }

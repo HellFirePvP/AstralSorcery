@@ -21,7 +21,6 @@ import hellfirepvp.astralsorcery.common.integration.jei.ingredient.LumenIngredie
 import hellfirepvp.astralsorcery.common.integration.jei.ingredient.LumenIngredientType;
 import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.lumen.LumenStack;
-import hellfirepvp.astralsorcery.common.recipe.liquid.interaction.LiquidInteractionRecipe;
 import hellfirepvp.astralsorcery.common.util.MiscUtil;
 import hellfirepvp.astralsorcery.common.util.RecipeUtil;
 import mezz.jei.api.IModPlugin;
@@ -31,14 +30,13 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -62,8 +60,10 @@ public class ASJeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration reg) {
         IJeiHelpers jeiHelpers = reg.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
+        HolderLookup.Provider registries = Objects.requireNonNull(Minecraft.getInstance().getConnection(),
+                "JEI category registration requires a client connection for registry access").registryAccess();
 
-        this.registerCategory(reg, new AltarRecipeCategory(guiHelper));
+        this.registerCategory(reg, new AltarRecipeCategory(guiHelper, registries));
         this.registerCategory(reg, new FocalTransmutationRecipeCategory(guiHelper));
         this.registerCategory(reg, new FocalCombinationRecipeCategory(guiHelper));
         this.registerCategory(reg, new LightwellRecipeCategory(guiHelper));
@@ -128,5 +128,6 @@ public class ASJeiPlugin implements IModPlugin {
                 stateful.clear();
             }
         });
+        this.categories.clear();
     }
 }

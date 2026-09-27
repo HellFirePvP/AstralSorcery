@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.integration.jei.category;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientProxy;
-import hellfirepvp.astralsorcery.client.config.RenderingConfig;
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.ingredient.IngredientBridge;
 import hellfirepvp.astralsorcery.common.integration.jei.base.ASRecipeCategory;
@@ -26,7 +25,6 @@ import hellfirepvp.astralsorcery.common.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.IngredientUtil;
-import hellfirepvp.astralsorcery.common.util.MiscUtil;
 import hellfirepvp.astralsorcery.common.util.data.CountIngredient;
 import hellfirepvp.astralsorcery.common.util.data.IntRectangle;
 import mezz.jei.api.constants.VanillaTypes;
@@ -40,20 +38,15 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.common.util.RegistryUtil;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -74,12 +67,16 @@ public class AltarRecipeCategory extends ASRecipeCategory<AltarRecipe> {
     private static final ResourceLocation ALTAR_ADDITIONAL = AstralSorcery.key("textures/screen/jei/altar_grid_additional.png");
     private static final IntRectangle INFO_ICON = new IntRectangle(86, 3, 12, 12);
 
-    private final IGuiHelper helper;
+    private final IDrawable backgroundT1, backgroundT2, backgroundT3;
     private final IDrawable infoIcon, additionalBox;
+    private final HolderLookup.Provider registries;
 
-    public AltarRecipeCategory(IGuiHelper helper) {
+    public AltarRecipeCategory(IGuiHelper helper, HolderLookup.Provider registries) {
         super(148, 220, helper, ItemsAS.BLOCK_ALTAR_ILLUMINATION);
-        this.helper = helper;
+        this.registries = registries;
+        this.backgroundT1 = createBackground(helper, ALTAR_T1, this.getWidth(), this.getHeight());
+        this.backgroundT2 = createBackground(helper, ALTAR_T2, this.getWidth(), this.getHeight());
+        this.backgroundT3 = createBackground(helper, ALTAR_T3, this.getWidth(), this.getHeight());
         this.infoIcon = createInfoIcon(helper);
         this.additionalBox = helper.drawableBuilder(ALTAR_ADDITIONAL, 0, 0, 130, 34)
                 .setTextureSize(130, 34)
@@ -201,7 +198,7 @@ public class AltarRecipeCategory extends ASRecipeCategory<AltarRecipe> {
 
     private void setOutputs(IRecipeLayoutBuilder builder, AltarRecipe recipe) {
         AltarCraftingInput displayInput = recipe.createInputForDisplay(ClientProxy.getClientTick());
-        List<ItemStack> outputs = recipe.getOutputsForDisplay(displayInput, RegistryUtil.getRegistryAccess());
+        List<ItemStack> outputs = recipe.getOutputsForDisplay(displayInput, this.registries);
         if (outputs.isEmpty()) return;
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 65, 18)
@@ -209,8 +206,8 @@ public class AltarRecipeCategory extends ASRecipeCategory<AltarRecipe> {
 
         outputs = outputs.subList(1, outputs.size());
         for (int i = 0; i < outputs.size(); i++) {
-            int offsetX = 103;
-            int offsetY = 3 + (i / 3) * 18;
+            int offsetX = 103 + (i % 2) * 18;
+            int offsetY = 3 + (i / 2) * 18;
             builder.addSlot(RecipeIngredientRole.OUTPUT, offsetX, offsetY)
                     .setStandardSlotBackground()
                     .addItemStack(outputs.get(i));
@@ -244,22 +241,19 @@ public class AltarRecipeCategory extends ASRecipeCategory<AltarRecipe> {
     }
 
     private IDrawable getBackground(AltarRecipe recipe) {
-        ResourceLocation texture = switch (recipe.getRequiredType()) {
-            case ILLUMINATION -> ALTAR_T1;
+        return switch (recipe.getRequiredType()) {
+            case ILLUMINATION -> this.backgroundT1;
             case RESONANCE -> {
                 List<IngredientBridge> relayInputs = recipe.getGrid().getRelayInputs();
                 for (int slot : TileAltar.getOuterRelaySlots()) {
                     if (!relayInputs.get(slot).isEmpty()) {
-                        yield ALTAR_T3;
+                        yield this.backgroundT3;
                     }
                 }
-                yield ALTAR_T2;
+                yield this.backgroundT2;
             }
-            case LUMINANCE, RADIANCE -> ALTAR_T3;
+            case LUMINANCE, RADIANCE -> this.backgroundT3;
         };
-        return this.helper.drawableBuilder(texture, 0, 0, this.getWidth(), this.getHeight())
-                .setTextureSize(this.getWidth(), this.getHeight())
-                .build();
     }
 
     @Override
