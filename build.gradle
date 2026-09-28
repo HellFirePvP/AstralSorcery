@@ -111,7 +111,10 @@ repositories {
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    exclude '**/.cache/**'
+}
 
 dependencies {
     implementation "hellfirepvp.observerlib:ObserverLib:${observerlib_version}"
