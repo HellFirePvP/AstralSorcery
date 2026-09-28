@@ -43,7 +43,7 @@ import java.util.Objects;
  * The complete source code for this mod can be found on GitHub.
  * Class: ASJeiPlugin
  * Created by HellFirePvP
- * Date: 11.04.2026
+ * Date: 11.04.2026 / 10:00
  */
 @JeiPlugin
 public class ASJeiPlugin implements IModPlugin {

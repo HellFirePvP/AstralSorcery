@@ -29,6 +29,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
@@ -75,13 +76,13 @@ public class LumenBindingDynamicModifierEffect extends LumenBindingEffect implem
         return new LumenBindingDynamicModifierEffect(List.of(modifiers));
     }
 
-    public static LumenBindingDynamicModifierEffect of(PerkAttributeType attributeType, ModifierType mode, float value) {
-        return of(() -> attributeType, mode, value);
+    public static LumenBindingDynamicModifierEffect of(long seed, PerkAttributeType attributeType, ModifierType mode, float value) {
+        return of(seed, () -> attributeType, mode, value);
     }
 
-    public static LumenBindingDynamicModifierEffect of(Supplier<? extends PerkAttributeType> attributeType, ModifierType mode, float value) {
+    public static LumenBindingDynamicModifierEffect of(long seed, Supplier<? extends PerkAttributeType> attributeType, ModifierType mode, float value) {
         return new Builder()
-                .addModifier(attributeType, mode, value)
+                .addModifier(seed, attributeType, mode, value)
                 .build();
     }
 
@@ -128,12 +129,13 @@ public class LumenBindingDynamicModifierEffect extends LumenBindingEffect implem
             return this;
         }
 
-        public Builder addModifier(PerkAttributeType attributeType, ModifierType mode, float value) {
-            return this.addModifier(() -> attributeType, mode, value);
+        public Builder addModifier(long seed, PerkAttributeType attributeType, ModifierType mode, float value) {
+            return this.addModifier(seed, () -> attributeType, mode, value);
         }
 
-        public Builder addModifier(Supplier<? extends PerkAttributeType> attributeType, ModifierType mode, float value) {
-            this.addModifier(new DynamicAttributeModifier(UUID.randomUUID().toString(), attributeType, mode, value));
+        public Builder addModifier(long seed, Supplier<? extends PerkAttributeType> attributeType, ModifierType mode, float value) {
+            RandomSource idSeed = RandomSource.create(seed);
+            this.addModifier(new DynamicAttributeModifier(new UUID(idSeed.nextLong(), idSeed.nextLong()).toString(), attributeType, mode, value));
             return this;
         }
 

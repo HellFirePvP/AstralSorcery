@@ -18,13 +18,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "a87758dd-2bf7-4e45-a291-339628112c26",
+            "identifier": "e28debb4-2090-6d78-dce8-22f309dd5d3b",
             "mode": 0,
             "value": 1.0
           },
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "bf14b8ef-d939-4a7a-9392-db164090bb1b",
+            "identifier": "ec75a878-0e59-a9a4-4c7d-8caa7514b9db",
             "mode": 0,
             "value": 2.0
           }
@@ -43,13 +43,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "dc7b1348-d768-4a55-9039-8fb540def3e2",
+            "identifier": "33cd8582-c685-a600-2141-05239332072f",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "6ecbe5fc-1a38-4534-9085-b288dd8473af",
+            "identifier": "e85bdf2e-1874-56ec-dd77-b702ac5d7c11",
             "mode": 0,
             "value": 2.0
           }
@@ -68,13 +68,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "20790f21-019c-4bf9-8e20-66e808384839",
+            "identifier": "21a2ff24-1613-6376-a3b6-6c683a348645",
             "mode": 0,
             "value": 1.0
           },
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "bf985c65-b1e7-44fd-9230-83c2e4fd09f2",
+            "identifier": "eb4cfc5f-c496-cde4-cce2-26caa8f98e15",
             "mode": 0,
             "value": 2.0
           }
@@ -93,13 +93,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "23b773bd-1e05-4fa1-90b7-b07d3edf6fc7",
+            "identifier": "ae7fe2b5-44c7-25d9-57e1-9d3d74e7c6b8",
             "mode": 0,
             "value": 1.0
           },
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "6bd798e1-a5d8-4222-8abc-23a21dde028e",
+            "identifier": "3ad8814b-5c31-4457-97b9-ec0aa2aad9e6",
             "mode": 0,
             "value": 2.0
           }
@@ -121,13 +121,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:block_chance",
-                "identifier": "b15c5cea-9a6d-4dc2-9887-0ff088b58fbc",
+                "identifier": "6206122b-1786-7bef-44fe-847039a2d447",
                 "mode": 1,
                 "value": 0.15
               },
               {
                 "attribute_type": "astralsorcery:max_health",
-                "identifier": "b5b4842d-0ef1-400d-94f5-f6bda738a28c",
+                "identifier": "ba2d8800-fc78-3c4f-72d7-81a1f026c036",
                 "mode": 0,
                 "value": 1.0
               }
@@ -166,13 +166,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:block_chance",
-                "identifier": "b108148d-bf63-43a4-bd96-5e416b8ea3ed",
+                "identifier": "abe51bbf-def8-e369-9412-1f580b24827b",
                 "mode": 1,
                 "value": 0.1
               },
               {
                 "attribute_type": "astralsorcery:max_health",
-                "identifier": "12b19699-38bf-4816-bc19-0c63d070440f",
+                "identifier": "d552da35-7b5f-0d8d-f6e8-3532f6fa95f5",
                 "mode": 0,
                 "value": 1.0
               }
@@ -211,13 +211,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:block_chance",
-                "identifier": "0bee1bbb-1104-4682-9457-a5b895efd072",
+                "identifier": "c09339da-9a34-31f4-3eb8-570d300e446a",
                 "mode": 1,
                 "value": 0.1
               },
               {
                 "attribute_type": "astralsorcery:max_health",
-                "identifier": "ebf34a46-3200-4078-8032-b78d31b33271",
+                "identifier": "4e525a27-7bce-da38-cf18-b0d4a845d5c8",
                 "mode": 0,
                 "value": 2.0
               }

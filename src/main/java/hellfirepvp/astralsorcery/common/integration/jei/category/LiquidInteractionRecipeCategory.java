@@ -60,7 +60,7 @@ import java.util.Set;
  * The complete source code for this mod can be found on GitHub.
  * Class: LiquidInteractionRecipeCategory
  * Created by HellFirePvP
- * Date: 11.04.2026
+ * Date: 11.04.2026 / 10:00
  */
 public class LiquidInteractionRecipeCategory extends ASRecipeCategory<LiquidInteractionRecipe> implements StatefulCategory {
 

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.recipe.builder;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.ingredient.IngredientBridge;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lib.types.AltarEffectsAS;
 import hellfirepvp.astralsorcery.common.lumen.LumenStack;
 import hellfirepvp.astralsorcery.common.recipe.altar.AltarRecipe;
@@ -67,12 +68,12 @@ public class AltarRecipeBuilder implements RecipeBuilder {
     private int duration = 100;
     private boolean isOnlyNight = true;
     private boolean mayChain = false;
-    private final Set<BaseConstellation> requiredStarlight = new LinkedHashSet<>();
+    private final Set<BaseConstellation> requiredStarlight = new TreeSet<>();
     private final List<LumenStack> requiredLumen = new ArrayList<>();
     private final List<FluidStack> requiredFluids = new ArrayList<>();
     private final List<CountIngredient> requiredAdditionalInputs = new ArrayList<>();
 
-    private final Set<AltarEffect> effects = new LinkedHashSet<>();
+    private final Set<AltarEffect> effects = new TreeSet<>();
     private final List<AltarRecipeOutputModifier> outputModifiers = new ArrayList<>();
 
     private AltarRecipeBuilder(TileAltar.AltarType requiredType) {

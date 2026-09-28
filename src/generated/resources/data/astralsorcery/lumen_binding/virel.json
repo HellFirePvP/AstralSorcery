@@ -18,13 +18,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "2d77a3cf-cecf-4a43-b39c-f92692a0c4b3",
+            "identifier": "b819569e-dae8-3455-de07-ad7375e01157",
             "mode": 1,
             "value": 0.04
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "69cf581c-d419-44ef-afe2-28c71901d528",
+            "identifier": "beb92eeb-fbf5-9f15-197c-1df02c0e1569",
             "mode": 1,
             "value": 0.02
           }
@@ -59,13 +59,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "cd1f2e24-abcf-4c3a-8061-0b8e37e80475",
+            "identifier": "75df742f-3116-6df3-94ef-37ec95a10102",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "1578750a-e936-4cff-9ad3-db23550a9b85",
+            "identifier": "de9d1b22-8e57-f39d-1e4c-9f52fde53b2a",
             "mode": 1,
             "value": 0.04
           }
@@ -100,13 +100,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "27d603e3-cddf-43ba-a0b9-3629ca2a5583",
+            "identifier": "5f67a957-0322-e5b2-0ceb-89c0df43eae8",
             "mode": 1,
             "value": 0.04
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "c471f3f8-cd9f-40a1-aedd-b558d8ab68fc",
+            "identifier": "136ff0c8-063c-e056-96d1-c66fe43a96a2",
             "mode": 1,
             "value": 0.02
           }
@@ -141,13 +141,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "38a1b9ad-ae27-4516-bfac-a3c9f12f7513",
+            "identifier": "d2627068-0cde-d011-f2b2-dc45603633d8",
             "mode": 1,
             "value": 0.04
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "4bf895ad-0d8e-44ae-ae8a-89c57a6365bc",
+            "identifier": "5328f60d-e608-63d8-4506-639d5b444921",
             "mode": 1,
             "value": 0.02
           }
@@ -182,13 +182,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "aef5c5a7-c07d-438f-ae2b-680f650723f7",
+            "identifier": "999e6354-7b47-589c-3b87-10e34c01058e",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "eb0fb1b9-a107-4285-80e8-59a6d9bf5b33",
+            "identifier": "3ec5ec1c-ec65-8dd3-f0fe-8147f39a9cd3",
             "mode": 1,
             "value": 0.02
           }
@@ -223,13 +223,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "adae82a3-cbdd-417e-a257-74d746b818bc",
+            "identifier": "f9a755d3-9549-d9df-b792-ad951bed6fe7",
             "mode": 1,
             "value": 0.08
           },
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "47deb585-ab36-4be3-8aed-af303b191f0d",
+            "identifier": "45e6fe17-4a54-b36e-e9f1-8b8a10eb61f7",
             "mode": 1,
             "value": 0.02
           }
@@ -264,13 +264,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "a54f49a7-1e34-44fb-81b3-1933693c708e",
+            "identifier": "18cdc6de-14be-0308-2a66-e2dc8e4b8a55",
             "mode": 1,
             "value": 0.08
           },
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "61746fae-16bf-4074-b80f-f946fffb7c8c",
+            "identifier": "e726c8e4-3040-48a4-5833-fb40d5f3ec6a",
             "mode": 1,
             "value": 0.02
           }

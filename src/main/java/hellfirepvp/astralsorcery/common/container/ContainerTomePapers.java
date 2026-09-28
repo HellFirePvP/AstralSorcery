@@ -15,10 +15,8 @@ import hellfirepvp.astralsorcery.common.container.slot.ConstellationPaperSlot;
 import hellfirepvp.astralsorcery.common.container.slot.ReadOnlySlot;
 import hellfirepvp.astralsorcery.common.container.transfer.DefaultQuickMoveTransfer;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.lib.MenuTypesAS;
 import hellfirepvp.astralsorcery.common.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.SidedHelper;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,8 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
 
 import javax.annotation.Nullable;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -52,7 +49,8 @@ public class ContainerTomePapers extends ContainerItemInSlot implements DefaultQ
 
     protected void addTomeSlots(Inventory inv) {
         LogicalSide side = SidedHelper.getSide(inv.player);
-        Deque<BaseConstellation> seenConstellations = new LinkedList<>(ResearchManager.getProgress(inv.player, side).getSeenConstellations());
+        List<BaseConstellation> seenConstellations = new ArrayList<>(ResearchManager.getProgress(inv.player, side).getSeenConstellations());
+        Collections.sort(seenConstellations);
 
         int offsetX = 8;
         int offsetY = 13;
@@ -60,7 +58,7 @@ public class ContainerTomePapers extends ContainerItemInSlot implements DefaultQ
             for (int column = 0; column < 9; column++) {
                 if (seenConstellations.isEmpty()) return;
 
-                BaseConstellation cst = seenConstellations.pop();
+                BaseConstellation cst = seenConstellations.removeFirst();
                 this.addSlot(new ConstellationPaperSlot(() -> cst, offsetX + column * 18, offsetY + (row * 18)));
             }
         }

@@ -80,12 +80,12 @@ public class AltarRecipe extends CustomRecipe<AltarRecipe, AltarCraftingInput> {
     private final int duration;
     private final boolean onlyNight;
     private final boolean mayChain;
-    private final Set<BaseConstellation> requiredStarlight = new LinkedHashSet<>();
+    private final Set<BaseConstellation> requiredStarlight = new TreeSet<>();
     private final List<LumenStack> requiredLumen = new ArrayList<>();
     private final List<FluidStack> requiredFluid = new ArrayList<>();
     private final List<CountIngredient> requiredAdditionalInputs = new ArrayList<>();
 
-    private final Set<AltarEffect> effects = new HashSet<>();
+    private final Set<AltarEffect> effects = new TreeSet<>();
     private final List<AltarRecipeOutputModifier> outputModifiers = new ArrayList<>();
 
     public AltarRecipe(

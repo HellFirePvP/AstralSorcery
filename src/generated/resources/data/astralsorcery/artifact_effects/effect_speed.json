@@ -8,8 +8,8 @@
         "duration": 1000,
         "id": "minecraft:haste",
         "neoforge:cures": [
-          "protected_by_totem",
-          "milk"
+          "milk",
+          "protected_by_totem"
         ],
         "show_icon": false
       },
@@ -18,8 +18,8 @@
         "duration": 1000,
         "id": "minecraft:speed",
         "neoforge:cures": [
-          "protected_by_totem",
-          "milk"
+          "milk",
+          "protected_by_totem"
         ],
         "show_icon": false
       }

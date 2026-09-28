@@ -88,15 +88,15 @@ public class BlocksAS {
     public static final DeferredBlock<FlowerBlock> GLIMMER_AMARANTH = register("glimmer_amaranth", () ->
             new FlowerBlock(MobEffects.LUCK, 20, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY).lightLevel(state -> 6)));
     public static final DeferredBlock<FlowerBlock> HYACINTH = register("hyacinth", () ->
-            new FlowerBlock(SuspiciousStewEffects.EMPTY, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)));
+            new FlowerBlock(MobEffects.HEAL, 1, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)));
     public static final DeferredBlock<FlowerBlock> IRIS = register("iris", () ->
-            new FlowerBlock(SuspiciousStewEffects.EMPTY, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)));
+            new FlowerBlock(MobEffects.LEVITATION, 14, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)));
     public static final DeferredBlock<FlowerBlock> ORCHID = register("orchid", () ->
-            new FlowerBlock(SuspiciousStewEffects.EMPTY, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)));
+            new FlowerBlock(MobEffects.DAMAGE_RESISTANCE, 2, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)));
     public static final DeferredBlock<FlowerBlock> PROTEA = register("protea", () ->
-            new FlowerBlock(SuspiciousStewEffects.EMPTY, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)));
+            new FlowerBlock(MobEffects.DIG_SPEED, 5, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)));
     public static final DeferredBlock<FlowerBlock> THISTLE = register("thistle", () ->
-            new FlowerBlock(SuspiciousStewEffects.EMPTY, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)));
+            new FlowerBlock(MobEffects.DAMAGE_BOOST, 12, BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY)));
 
     public static final DeferredBlock<FlowerPotBlock> POTTED_GLIMMER_AMARANTH = register("potted_glimmer_amaranth", () ->
             new PlantableFlowerPotBlock(GLIMMER_AMARANTH, BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY).lightLevel(state -> 6)));

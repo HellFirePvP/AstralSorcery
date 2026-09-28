@@ -18,13 +18,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "95d3ea46-6ebd-4776-95ac-475d91528570",
+            "identifier": "ba695bf0-eb9c-ca40-5c5e-ec23e33bcf80",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:cooldown_reduction",
-            "identifier": "ffc18a52-c73b-4272-88b9-9b6bfc722fa5",
+            "identifier": "d5193a07-c9d9-f02f-73de-3a7f56ddd0db",
             "mode": 1,
             "value": -0.04
           }
@@ -52,7 +52,7 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:cooldown_reduction",
-                "identifier": "26d89953-cc82-44a4-bc37-8548ce7f16fa",
+                "identifier": "37777b67-4b49-1d62-7842-136e94ccf374",
                 "mode": 1,
                 "value": -0.1
               }
@@ -97,7 +97,7 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:cooldown_reduction",
-                "identifier": "98021997-29a4-4592-926a-3fe7bb4f18d0",
+                "identifier": "132cca9b-fb9d-bd5c-9c04-446569b5b6db",
                 "mode": 1,
                 "value": -0.06
               }
@@ -142,7 +142,7 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:cooldown_reduction",
-                "identifier": "b466c4c1-2eb2-4e6f-8d8d-a6086e700b13",
+                "identifier": "a1d4df39-6863-dcdb-3770-fe7fdd7aae50",
                 "mode": 1,
                 "value": -0.08
               }
@@ -187,13 +187,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:attack_speed",
-                "identifier": "2e3e97bc-a931-4bc3-8b26-33be5b0c42fc",
+                "identifier": "deddc67b-8e98-4daf-565a-b88a5e1f3737",
                 "mode": 1,
                 "value": 0.1
               },
               {
                 "attribute_type": "astralsorcery:cooldown_reduction",
-                "identifier": "ea34ab94-f3a6-4af6-a677-f2288ec52a15",
+                "identifier": "1e07e098-4890-e60c-b6f9-fe7b516a1de0",
                 "mode": 1,
                 "value": -0.06
               }
@@ -230,13 +230,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:projectile_speed",
-            "identifier": "b989547b-030a-465f-9b8d-bd78448c7669",
+            "identifier": "61102ff7-8acb-8578-6ab0-ab0d40e2f7d1",
             "mode": 1,
             "value": 0.06
           },
           {
             "attribute_type": "astralsorcery:cooldown_reduction",
-            "identifier": "5e791422-d7ef-41fe-bd2e-2e1822895932",
+            "identifier": "412a750d-1484-5d36-4ffc-e5ec36b22743",
             "mode": 1,
             "value": -0.06
           }
@@ -259,13 +259,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:block_break_speed",
-                "identifier": "90d9a98c-7386-49dd-ac1a-afdb3db04077",
+                "identifier": "62f36bc7-ddf7-1905-2242-0c7f4848f49d",
                 "mode": 1,
                 "value": 0.1
               },
               {
                 "attribute_type": "astralsorcery:cooldown_reduction",
-                "identifier": "7d3aeca1-8d87-4c82-ad97-49c9de88d952",
+                "identifier": "8658cc30-27a2-a5c0-e504-0aab0a499337",
                 "mode": 1,
                 "value": -0.06
               }

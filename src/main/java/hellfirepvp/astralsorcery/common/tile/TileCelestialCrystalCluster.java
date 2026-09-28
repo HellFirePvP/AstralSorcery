@@ -62,7 +62,7 @@ public class TileCelestialCrystalCluster extends TileEntityNetwork<ForwardingSta
     @Override
     public void serverTick(ServerLevel level) {
         super.serverTick(level);
-        if (this.getGrowth(level) < 4 && this.doesSeeSky()) {
+        if (this.getGrowth() < 4 && this.doesSeeSky()) {
             this.tryGrow(level, 1F);
         }
     }
@@ -96,7 +96,7 @@ public class TileCelestialCrystalCluster extends TileEntityNetwork<ForwardingSta
     }
 
     public void grow(Level level, int chance) {
-        int stage = this.getGrowth(level);
+        int stage = this.getGrowth();
         if (stage < 4) {
             if (rand.nextInt(Math.max(chance, 1)) == 0) {
                 this.setGrowth(level, stage + 1);
@@ -120,7 +120,7 @@ public class TileCelestialCrystalCluster extends TileEntityNetwork<ForwardingSta
                         .setGravity(Vector3.y(0.0002F));
             }
         }
-        if (this.getGrowth(level) == 4) {
+        if (this.getGrowth() == 4) {
             if (rand.nextInt(3) == 0) {
                 AABB bounds = this.getBlockState().getShape(level, this.getBlockPos()).bounds();
 
@@ -134,8 +134,8 @@ public class TileCelestialCrystalCluster extends TileEntityNetwork<ForwardingSta
         }
     }
 
-    public int getGrowth(Level level) {
-        BlockState current = level.getBlockState(getBlockPos());
+    public int getGrowth() {
+        BlockState current = this.getBlockState();
         return current.getValue(CelestialCrystalClusterBlock.STAGE);
     }
 

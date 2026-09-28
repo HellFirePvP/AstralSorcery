@@ -90,5 +90,13 @@ public class AstralItemTagsProvider extends ItemTagsProvider {
 
         tag(Tags.Items.INGOTS)
                 .add(ItemsAS.STARMETAL_INGOT.asItem());
+
+        tag(ItemTags.SMALL_FLOWERS)
+                .add(ItemsAS.BLOCK_GLIMMER_AMARANTH.get())
+                .add(ItemsAS.BLOCK_HYACINTH.get())
+                .add(ItemsAS.BLOCK_IRIS.get())
+                .add(ItemsAS.BLOCK_ORCHID.get())
+                .add(ItemsAS.BLOCK_PROTEA.get())
+                .add(ItemsAS.BLOCK_THISTLE.get());
     }
 }
