@@ -73,6 +73,17 @@ neoForge {
     }
 }
 
+project.configurations {
+    "localRuntime" { Configuration c ->
+        canBeResolved = true
+        canBeConsumed = false
+        named(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME) {
+            extendsFrom c
+        }
+    }
+}
+project.java { withSourcesJar() }
+
 repositories {
 
     maven {
@@ -114,16 +125,6 @@ repositories {
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
     exclude '**/.cache/**'
-}
-
-project.configurations {
-    "localRuntime" { Configuration c ->
-        canBeResolved = true
-        canBeConsumed = false
-        named(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME) {
-            extendsFrom c
-        }
-    }
 }
 
 dependencies {
