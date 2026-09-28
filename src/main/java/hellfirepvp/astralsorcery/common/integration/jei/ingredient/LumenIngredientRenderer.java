@@ -123,6 +123,7 @@ public class LumenIngredientRenderer implements IIngredientRenderer<LumenStack> 
         return this.createTooltip(ingredient);
     }
 
+    @SuppressWarnings("removal")
     @Override
     public void getTooltip(ITooltipBuilder tooltip, LumenStack ingredient, TooltipFlag tooltipFlag) {
         tooltip.addAll(this.createTooltip(ingredient));

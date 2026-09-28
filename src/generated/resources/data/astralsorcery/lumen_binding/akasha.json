@@ -1,22 +1,22 @@
 {
   "potion_effect": {
     "amplifier_range": {
-      "maxInclusive": 0,
-      "minInclusive": 0
+      "max_inclusive": 0,
+      "min_inclusive": 0
     },
     "duration_range": {
-      "maxInclusive": 1200,
-      "minInclusive": 600
+      "max_inclusive": 1200,
+      "min_inclusive": 600
     },
     "effect": "minecraft:night_vision",
     "hidden_effect": {
       "amplifier_range": {
-        "maxInclusive": 0,
-        "minInclusive": 0
+        "max_inclusive": 0,
+        "min_inclusive": 0
       },
       "duration_range": {
-        "maxInclusive": 12000,
-        "minInclusive": 6000
+        "max_inclusive": 12000,
+        "min_inclusive": 6000
       },
       "effect": "minecraft:luck"
     }
@@ -29,13 +29,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:step_height",
-            "identifier": "b70e8e02-c598-4008-a03a-f28242c108d4",
+            "identifier": "ce5040d2-87bb-08e8-5fe4-a32aeb8cc6d8",
             "mode": 0,
             "value": 1.0
           },
           {
             "attribute_type": "astralsorcery:safe_fall_distance",
-            "identifier": "456fab42-1810-4396-a4bd-fdbef5079cda",
+            "identifier": "9134fb44-3122-103e-d095-abff80be1568",
             "mode": 0,
             "value": 2.5
           }
@@ -60,13 +60,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_reach",
-            "identifier": "311b4d1b-e3bd-4ffc-b024-5ac858227277",
+            "identifier": "b7937af3-b46c-37f5-95ab-eed39220a1a7",
             "mode": 1,
             "value": 0.08
           },
           {
             "attribute_type": "astralsorcery:block_reach",
-            "identifier": "63cd4129-0df6-4b25-a440-ab87e38d0d85",
+            "identifier": "e6e487e1-7de8-3c70-6a8a-af36f105e8bf",
             "mode": 1,
             "value": 0.08
           }
@@ -91,13 +91,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_reach",
-            "identifier": "f9e7de3e-1704-4c61-827d-ac5b64b0ff29",
+            "identifier": "79290a6b-826d-743d-6511-32e9cb6f2285",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:step_height",
-            "identifier": "02537673-e149-457c-9076-0b84604f1803",
+            "identifier": "fa428cb6-8940-d41d-4007-407918b95c4c",
             "mode": 0,
             "value": 0.5
           }
@@ -122,13 +122,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:step_height",
-            "identifier": "31d72607-3751-4605-8f5b-f8cebf3b48cb",
+            "identifier": "0708362e-58bb-2ae8-6853-73a7588a3b1d",
             "mode": 0,
             "value": 0.5
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "abded105-97e6-4835-8490-6e7fe89f576f",
+            "identifier": "ba75661d-b36c-f390-c427-c59038e08fbd",
             "mode": 1,
             "value": 0.03
           }
@@ -153,13 +153,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_reach",
-            "identifier": "013e6e11-1e8b-4ea9-ac93-bfae5daaa554",
+            "identifier": "ea9d2c1c-41dc-d147-5348-9a9a3b4a8ceb",
             "mode": 1,
             "value": 0.08
           },
           {
             "attribute_type": "astralsorcery:pierce_armor",
-            "identifier": "e358fb55-d00b-4446-96db-e831251d3203",
+            "identifier": "012914b9-2fb4-0416-7d97-f15e0c5a7064",
             "mode": 1,
             "value": 0.1
           }
@@ -182,7 +182,7 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:projectile_speed",
-                "identifier": "ba6a61c7-1f49-462c-8a04-a909f20ca7bf",
+                "identifier": "92b53f88-ccb4-4ec7-cdd6-e64bb74d44b9",
                 "mode": 1,
                 "value": 0.08
               }
@@ -210,7 +210,7 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:mining_size",
-                "identifier": "ad099854-a395-4c93-8d46-065fa4fc60b3",
+                "identifier": "04eb0630-abdb-83a7-0069-155d2d9a4749",
                 "mode": 0,
                 "value": 1.0
               }

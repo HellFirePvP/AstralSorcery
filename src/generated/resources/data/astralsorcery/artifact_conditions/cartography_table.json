@@ -3,8 +3,8 @@
     "type": "astralsorcery:near_block",
     "blockConsumptionChance": 0.0,
     "blockCountNeeded": {
-      "maxInclusive": 1,
-      "minInclusive": 1
+      "max_inclusive": 1,
+      "min_inclusive": 1
     },
     "blockPredicate": {
       "blocks": "minecraft:cartography_table"

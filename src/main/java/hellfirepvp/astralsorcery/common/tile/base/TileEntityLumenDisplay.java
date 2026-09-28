@@ -45,7 +45,7 @@ public interface TileEntityLumenDisplay {
         BlockEntity be = this.self();
         Level level = be.getLevel();
         if (level == null) return Optional.empty();
-        BlockState state = level.getBlockState(be.getBlockPos());
+        BlockState state = be.getBlockState();
         ILumenHandler handler = level.getCapability(ILumenHandler.BLOCK, be.getBlockPos(), state, be, null);
         if (handler == null) return Optional.empty();
 

@@ -3,8 +3,8 @@
     "type": "astralsorcery:near_block",
     "blockConsumptionChance": 0.0,
     "blockCountNeeded": {
-      "maxInclusive": 3,
-      "minInclusive": 3
+      "max_inclusive": 3,
+      "min_inclusive": 3
     },
     "blockPredicate": {
       "blocks": "minecraft:cobweb"

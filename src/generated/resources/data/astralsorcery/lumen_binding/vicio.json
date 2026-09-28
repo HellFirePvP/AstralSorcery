@@ -1,12 +1,12 @@
 {
   "potion_effect": {
     "amplifier_range": {
-      "maxInclusive": 1,
-      "minInclusive": 0
+      "max_inclusive": 1,
+      "min_inclusive": 0
     },
     "duration_range": {
-      "maxInclusive": 7200,
-      "minInclusive": 3600
+      "max_inclusive": 7200,
+      "min_inclusive": 3600
     },
     "effect": "minecraft:speed"
   },
@@ -18,7 +18,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "d604ca11-db1b-4848-9516-0fee6a5e7184",
+            "identifier": "1cb98121-c7a9-98a9-a90a-3ccd2645aff7",
             "mode": 2,
             "value": 1.1
           }
@@ -43,7 +43,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "86f95425-482b-48f7-869e-faaa70c93821",
+            "identifier": "5a2c138d-ed1c-315d-df93-658d706d3488",
             "mode": 1,
             "value": 0.06
           }
@@ -68,7 +68,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "5dd48b7e-aa40-4425-a31d-95258d73b859",
+            "identifier": "d3e41d9b-72a8-fae2-7571-4c10babf61bb",
             "mode": 1,
             "value": 0.04
           }
@@ -93,7 +93,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "f328b9b2-8f2b-4071-9b74-6b5b37eb7d3d",
+            "identifier": "bcfd15a5-9590-5570-b196-6e263b1b0a6a",
             "mode": 1,
             "value": 0.04
           }
@@ -118,7 +118,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "c4231cfa-6240-4ee3-8808-62d478be04c9",
+            "identifier": "ca6af696-fa7c-de6d-5837-3801a1218a16",
             "mode": 1,
             "value": 0.08
           }
@@ -143,7 +143,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:projectile_speed",
-            "identifier": "91d35958-722f-47f8-b530-81c199705203",
+            "identifier": "2311bd84-8616-f106-7bc3-a3641c204d43",
             "mode": 1,
             "value": 0.1
           }
@@ -163,7 +163,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "d7d074a5-9e89-4ee5-984c-1571064fa1ec",
+            "identifier": "dfc64b44-7630-a374-9e1d-ffdabfc1c9f2",
             "mode": 1,
             "value": 0.1
           }

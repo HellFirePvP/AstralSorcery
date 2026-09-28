@@ -1,14 +1,14 @@
 {
   "type": "astralsorcery:altar_crafting",
-  "baseFocusShatterChance": 0.0,
+  "base_focus_shatter_chance": 0.0,
   "duration": 100,
   "effects": [
-    "astralsorcery:default_central_beam",
     "astralsorcery:default_altar_sparkle",
+    "astralsorcery:default_central_beam",
     "astralsorcery:default_lumen_input",
     "astralsorcery:default_relay_input"
   ],
-  "focusConstellation": "astralsorcery:lucerna",
+  "focus_constellation": "astralsorcery:lucerna",
   "grid": {
     "key": {
       "A": {
@@ -41,7 +41,7 @@
       "IR ",
       "R  "
     ],
-    "relayPattern": [
+    "relay_pattern": [
       " I I ",
       "I   I",
       "A   A",
@@ -49,16 +49,16 @@
       " I I "
     ]
   },
-  "mayChain": false,
-  "onlyNight": true,
-  "outputModifiers": [],
+  "may_chain": false,
+  "only_night": true,
+  "output_modifiers": [],
   "outputs": [
     {
       "count": 1,
       "id": "astralsorcery:illumination_wand"
     }
   ],
-  "requiredAdditionalInputs": [
+  "required_additional_inputs": [
     {
       "count": 1,
       "ingredient": {
@@ -96,7 +96,7 @@
       }
     }
   ],
-  "requiredFluid": [
+  "required_fluid": [
     {
       "amount": 1000,
       "id": "astralsorcery:liquid_starlight"
@@ -106,7 +106,7 @@
       "id": "astralsorcery:liquid_starlight"
     }
   ],
-  "requiredLumen": [],
-  "requiredStarlight": [],
-  "requiredType": "luminance"
+  "required_lumen": [],
+  "required_starlight": [],
+  "required_type": "luminance"
 }

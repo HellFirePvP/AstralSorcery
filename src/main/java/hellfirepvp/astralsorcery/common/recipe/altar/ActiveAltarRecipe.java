@@ -70,14 +70,14 @@ public class ActiveAltarRecipe extends ActiveRecipe<AltarRecipe> {
 
     public static final Codec<ActiveAltarRecipe> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             LazyRecipeHolder.typedCodec(RecipeTypesAS.ALTAR_CRAFTING_TYPE).fieldOf("recipe").forGetter(ActiveAltarRecipe::getRecipeReference),
-            CodecUtil.uuidCodec().fieldOf("playerUUID").forGetter(ActiveAltarRecipe::getPlayerUUID),
-            Direction.CODEC.fieldOf("recipeDirection").forGetter(ActiveAltarRecipe::getRecipeDirection),
-            State.CODEC.fieldOf("craftingState").forGetter(ActiveAltarRecipe::getCraftingState),
+            CodecUtil.uuidCodec().fieldOf("player_uuid").forGetter(ActiveAltarRecipe::getPlayerUUID),
+            Direction.CODEC.fieldOf("recipe_direction").forGetter(ActiveAltarRecipe::getRecipeDirection),
+            State.CODEC.fieldOf("crafting_state").forGetter(ActiveAltarRecipe::getCraftingState),
             Codec.INT.fieldOf("tick").forGetter(recipe -> recipe.tick),
-            Codec.INT.fieldOf("progressTick").forGetter(ActiveAltarRecipe::getProgressTick),
-            Codec.list(LumenStack.CODEC).fieldOf("drawnLumen").forGetter(recipe -> recipe.drawnLumen),
-            Codec.unboundedMap(CodecUtil.stringInteger(), FluidStack.CODEC).fieldOf("drawnFluid").forGetter(recipe -> recipe.drawnFluid),
-            AdditionalInput.CODEC.listOf().fieldOf("capturedEntityUUIDs").forGetter(ActiveAltarRecipe::getAdditionalInputs)
+            Codec.INT.fieldOf("progress_tick").forGetter(ActiveAltarRecipe::getProgressTick),
+            Codec.list(LumenStack.CODEC).fieldOf("drawn_lumen").forGetter(recipe -> recipe.drawnLumen),
+            Codec.unboundedMap(CodecUtil.stringInteger(), FluidStack.CODEC).fieldOf("drawn_fluid").forGetter(recipe -> recipe.drawnFluid),
+            AdditionalInput.CODEC.listOf().fieldOf("captured_entity_uuids").forGetter(ActiveAltarRecipe::getAdditionalInputs)
     ).apply(inst, ActiveAltarRecipe::new));
 
     private final AABB CAPTURE_AREA = new AABB(-3, 0, -3, 4, 2, 4);
@@ -687,10 +687,10 @@ public class ActiveAltarRecipe extends ActiveRecipe<AltarRecipe> {
     public static class AdditionalInput implements Comparable<AdditionalInput> {
 
         public static final Codec<AdditionalInput> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-                Vector3.CODEC.fieldOf("targetPosition").forGetter(input -> input.targetPosition),
-                Codec.BOOL.fieldOf("isItem").forGetter(input -> input.isItem),
-                Codec.INT.fieldOf("inputIndex").forGetter(input -> input.inputIndex),
-                CodecUtil.uuidCodec().optionalFieldOf("capturedEntityUUID").forGetter(AdditionalInput::getCapturedEntityUUID)
+                Vector3.CODEC.fieldOf("target_position").forGetter(input -> input.targetPosition),
+                Codec.BOOL.fieldOf("is_item").forGetter(input -> input.isItem),
+                Codec.INT.fieldOf("input_index").forGetter(input -> input.inputIndex),
+                CodecUtil.uuidCodec().optionalFieldOf("captured_entity_uuid").forGetter(AdditionalInput::getCapturedEntityUUID)
         ).apply(inst, AdditionalInput::new));
         public static final StreamCodec<? super RegistryFriendlyByteBuf, AdditionalInput> STREAM_CODEC = StreamCodec.composite(
                 Vector3.STREAM_CODEC,

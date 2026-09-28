@@ -1,12 +1,12 @@
 {
   "potion_effect": {
     "amplifier_range": {
-      "maxInclusive": 2,
-      "minInclusive": 0
+      "max_inclusive": 2,
+      "min_inclusive": 0
     },
     "duration_range": {
-      "maxInclusive": 8400,
-      "minInclusive": 3600
+      "max_inclusive": 8400,
+      "min_inclusive": 3600
     },
     "effect": "minecraft:strength"
   },
@@ -18,7 +18,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "c05cbefe-68cb-4778-8843-a6aa605d928d",
+            "identifier": "4c0d5e00-f2cc-6248-01d5-9f04522f6a30",
             "mode": 1,
             "value": 0.06
           }
@@ -38,7 +38,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "5b5d1acb-f17f-4adb-ab40-32c7f39d03e7",
+            "identifier": "aed2fcbf-4149-6c3a-de92-d29214f8cd0e",
             "mode": 1,
             "value": 0.1
           }
@@ -58,7 +58,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "9aa80834-ca39-4a53-9f11-fe44d1cd19d8",
+            "identifier": "3b3192d3-b1a8-02aa-8c01-f8d406f4b489",
             "mode": 1,
             "value": 0.06
           }
@@ -78,7 +78,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "1785d3fd-c2eb-4f2d-895c-ded4f192c580",
+            "identifier": "456d6e91-4716-c793-921b-b2090d1aa121",
             "mode": 1,
             "value": 0.06
           }
@@ -98,7 +98,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "ff068e80-8825-4c32-819b-1be21f756e15",
+            "identifier": "1d61faf6-ccf2-d1b0-d3de-46f4f114fa47",
             "mode": 0,
             "value": 3.0
           }
@@ -118,7 +118,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:projectile_damage",
-            "identifier": "b61bc08c-fb31-4bf9-9074-d44b904472fa",
+            "identifier": "417bae42-c809-939e-4df3-ab228c059090",
             "mode": 0,
             "value": 2.0
           }
@@ -138,7 +138,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_damage",
-            "identifier": "be1d74f1-3b05-4363-bac8-cc67d8dc1538",
+            "identifier": "797b7d98-9337-a7fe-b704-91c648338524",
             "mode": 0,
             "value": 4.0
           }

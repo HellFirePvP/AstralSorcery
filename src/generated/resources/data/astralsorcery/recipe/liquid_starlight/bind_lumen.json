@@ -1,8 +1,8 @@
 {
   "type": "astralsorcery:liquid_starlight",
   "color": -1,
-  "consumesInputs": false,
-  "consumesLiquid": true,
+  "consumes_inputs": false,
+  "consumes_liquid": true,
   "duration": 80,
   "input": {
     "count": 1,
@@ -10,7 +10,7 @@
       "item": "astralsorcery:lumen_crystal"
     }
   },
-  "otherInputs": [
+  "other_inputs": [
     {
       "count": 1,
       "ingredient": {
@@ -24,10 +24,10 @@
       }
     }
   ],
-  "outputModifiers": [
+  "output_modifiers": [
     {
       "type": "astralsorcery:bind_lumen"
     }
   ],
-  "randomAdditionalDuration": 40
+  "random_additional_duration": 40
 }

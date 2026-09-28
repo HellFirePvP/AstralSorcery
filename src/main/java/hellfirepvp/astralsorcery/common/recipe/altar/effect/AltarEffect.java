@@ -8,13 +8,18 @@
 
 package hellfirepvp.astralsorcery.common.recipe.altar.effect;
 
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.recipe.altar.ActiveAltarRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,11 +28,21 @@ import net.neoforged.api.distmarker.OnlyIn;
  * Created by HellFirePvP
  * Date: 07.09.2026 / 10:00
  */
-public abstract class AltarEffect {
+public abstract class AltarEffect implements Comparable<AltarEffect> {
 
     @OnlyIn(Dist.CLIENT)
     public abstract void tick(Level level, TileAltar altar, RandomSource rand, ActiveAltarRecipe recipe, int progressTick, int tick, ActiveAltarRecipe.State state, CompoundTag effectData);
 
     public void copyEffectData(CompoundTag from, CompoundTag to) {}
 
+    public final ResourceLocation getKey() {
+        return RegistriesAS.REGISTRY_ALTAR_EFFECTS.getResourceKey(this)
+                .map(ResourceKey::location)
+                .orElse(ResourceLocation.withDefaultNamespace("unregistered_sadface"));
+    }
+
+    @Override
+    public int compareTo(@Nonnull AltarEffect o) {
+        return this.getKey().compareTo(o.getKey());
+    }
 }

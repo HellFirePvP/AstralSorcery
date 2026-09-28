@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.util.data.IntRange;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 
 import java.util.List;
@@ -45,9 +46,11 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
 
     @Override
     public void registerBindingTypes() {
-        this.registerPrimitiveTypeBindings();
-        this.registerCombinedTypeBindings();
-        this.registerComplexTypeBindings();
+        RandomSource idRandom = RandomSource.create(0xAA68907893BADCC6L);
+
+        this.registerPrimitiveTypeBindings(idRandom);
+        this.registerCombinedTypeBindings(idRandom);
+        this.registerComplexTypeBindings(idRandom);
 
         this.newBindingType(LumenAS.PRISMATIC)
                 .put(LumenBindingType.SlotType.HELMET, LumenBinding.of(
@@ -89,15 +92,15 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                 .registerBinding(LumenAS.PRISMATIC);
     }
 
-    private void registerComplexTypeBindings() {
+    private void registerComplexTypeBindings(RandomSource rand) {
         this.newBindingType(LumenAS.HYLE)
                 .put(LumenBindingType.SlotType.HELMET, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.10F),
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(DAMAGE_REDUCTION, ADDED_MULTIPLY, 0.05F)
-                                        .addModifier(ARMOR_TOUGHNESS, ADDITION, 2F)
+                                        .addModifier(rand.nextLong(), DAMAGE_REDUCTION, ADDED_MULTIPLY, 0.05F)
+                                        .addModifier(rand.nextLong(), ARMOR_TOUGHNESS, ADDITION, 2F)
                                         .build(),
                                 LumenBindingAbsorbDamageEffect.of(10F, 80, 1, 100)
                         )))
@@ -106,8 +109,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(DAMAGE_REDUCTION, ADDED_MULTIPLY, 0.08F)
-                                        .addModifier(ARMOR_TOUGHNESS, ADDITION, 4F)
+                                        .addModifier(rand.nextLong(), DAMAGE_REDUCTION, ADDED_MULTIPLY, 0.08F)
+                                        .addModifier(rand.nextLong(), ARMOR_TOUGHNESS, ADDITION, 4F)
                                         .build(),
                                 LumenBindingAbsorbDamageEffect.of(10F, 100, 2, 100)
                         )))
@@ -116,8 +119,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(DAMAGE_REDUCTION, ADDED_MULTIPLY, 0.05F)
-                                        .addModifier(ARMOR_TOUGHNESS, ADDITION, 3F)
+                                        .addModifier(rand.nextLong(), DAMAGE_REDUCTION, ADDED_MULTIPLY, 0.05F)
+                                        .addModifier(rand.nextLong(), ARMOR_TOUGHNESS, ADDITION, 3F)
                                         .build(),
                                 LumenBindingAbsorbDamageEffect.of(10F, 80, 1, 100)
                         )))
@@ -126,8 +129,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(SAFE_FALL_DISTANCE, ADDITION, 10F)
-                                        .addModifier(DAMAGE_REDUCTION, ADDED_MULTIPLY, 0.04F)
+                                        .addModifier(rand.nextLong(), SAFE_FALL_DISTANCE, ADDITION, 10F)
+                                        .addModifier(rand.nextLong(), DAMAGE_REDUCTION, ADDED_MULTIPLY, 0.04F)
                                         .build(),
                                 LumenBindingAbsorbDamageEffect.of(10F, 80, 1, 100)
                         )))
@@ -135,22 +138,22 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         LumenBindingUsageDamageDealt.of(1, 0.30F, true),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_DAMAGE, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(LIFE_LEECH, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(rand.nextLong(), ATTACK_DAMAGE, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), LIFE_LEECH, ADDED_MULTIPLY, 0.04F)
                                 .build()))
                 .put(LumenBindingType.SlotType.RANGED_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.30F, false),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(LIFE_LEECH, ADDED_MULTIPLY, 0.03F)
+                                .addModifier(rand.nextLong(), PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), LIFE_LEECH, ADDED_MULTIPLY, 0.03F)
                                 .build()))
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
                         LumenBindingUsageBlockBreak.of(1, 0.20F),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MINING_SIZE, ADDITION, 1F)
-                                .addModifier(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.10F)
+                                .addModifier(rand.nextLong(), MINING_SIZE, ADDITION, 1F)
+                                .addModifier(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.10F)
                                 .build()))
                 .potionEffect(MobEffects.DAMAGE_RESISTANCE, IntRange.of(seconds(15), seconds(30)), IntRange.of(2, 3))
                 .build()
@@ -161,22 +164,22 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         LumenBindingUsageDamageDealt.of(1, 0.25F, true),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_SPEED, ADDED_MULTIPLY, 0.07F)
-                                .addModifier(CRITICAL_HIT_CHANCE, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), ATTACK_SPEED, ADDED_MULTIPLY, 0.07F)
+                                .addModifier(rand.nextLong(), CRITICAL_HIT_CHANCE, ADDED_MULTIPLY, 0.05F)
                                 .build()))
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.30F, true),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_SPEED, ADDED_MULTIPLY, 0.07F)
-                                .addModifier(CRITICAL_HIT_DAMAGE, ADDED_MULTIPLY, 0.1F)
+                                .addModifier(rand.nextLong(), ATTACK_SPEED, ADDED_MULTIPLY, 0.07F)
+                                .addModifier(rand.nextLong(), CRITICAL_HIT_DAMAGE, ADDED_MULTIPLY, 0.1F)
                                 .build()))
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.25F, true),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_SPEED, ADDED_MULTIPLY, 0.07F)
-                                .addModifier(CRITICAL_HIT_CHANCE, ADDED_MULTIPLY, 0.07F)
+                                .addModifier(rand.nextLong(), ATTACK_SPEED, ADDED_MULTIPLY, 0.07F)
+                                .addModifier(rand.nextLong(), CRITICAL_HIT_CHANCE, ADDED_MULTIPLY, 0.07F)
                                 .build()))
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
                         CombinedLumenBindingUsage.of(
@@ -186,16 +189,16 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_SPEED, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(rand.nextLong(), ATTACK_SPEED, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
                                 .build()))
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.35F, true),
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(CRITICAL_HIT_CHANCE, ADDED_MULTIPLY, 0.08F)
-                                        .addModifier(CRITICAL_HIT_DAMAGE, ADDED_MULTIPLY, 0.10F)
+                                        .addModifier(rand.nextLong(), CRITICAL_HIT_CHANCE, ADDED_MULTIPLY, 0.08F)
+                                        .addModifier(rand.nextLong(), CRITICAL_HIT_DAMAGE, ADDED_MULTIPLY, 0.10F)
                                         .build(),
                                 LumenBindingDamageBurstEffect.of(4F, 1.5F)
                         )))
@@ -203,14 +206,14 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         LumenBindingUsageDamageDealt.of(1, 0.35F, false),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(PROJECTILE_SPEED, ADDED_MULTIPLY, 0.10F)
-                                .addModifier(CRITICAL_HIT_CHANCE, ADDED_MULTIPLY, 0.06F)
+                                .addModifier(rand.nextLong(), PROJECTILE_SPEED, ADDED_MULTIPLY, 0.10F)
+                                .addModifier(rand.nextLong(), CRITICAL_HIT_CHANCE, ADDED_MULTIPLY, 0.06F)
                                 .build()))
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
                         LumenBindingUsageBlockBreak.of(1, 0.20F),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.15F)
+                                .addModifier(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.15F)
                                 .build()))
                 .potionEffect(MobEffectsAS.RAMPAGE, IntRange.of(minutes(1), minutes(3)), IntRange.of(2, 3))
                 .build()
@@ -226,8 +229,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
-                                        //.addModifier(POTION_DURATION, ADDED_MULTIPLY, 0.1F)
+                                        .addModifier(rand.nextLong(), COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
+                                        //.addModifier(rand.nextLong(), POTION_DURATION, ADDED_MULTIPLY, 0.1F)
                                         .build(),
                                 LumenBindingExtendMobEffectsEffect.of(40)
                         )))
@@ -240,8 +243,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.1F)
-                                        //.addModifier(POTION_DURATION, ADDED_MULTIPLY, 0.14F)
+                                        .addModifier(rand.nextLong(), COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.1F)
+                                        //.addModifier(rand.nextLong(), POTION_DURATION, ADDED_MULTIPLY, 0.14F)
                                         .build(),
                                 LumenBindingExtendMobEffectsEffect.of(60)
                         )))
@@ -254,8 +257,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.08F)
-                                        //.addModifier(POTION_DURATION, ADDED_MULTIPLY, 0.1F)
+                                        .addModifier(rand.nextLong(), COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.08F)
+                                        //.addModifier(rand.nextLong(), POTION_DURATION, ADDED_MULTIPLY, 0.1F)
                                         .build(),
                                 LumenBindingExtendMobEffectsEffect.of(40)
                         )))
@@ -264,16 +267,16 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.04F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.04F)
                                 .build()))
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.30F, true),
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(ATTACK_SPEED, ADDED_MULTIPLY, 0.1F)
-                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
+                                        .addModifier(rand.nextLong(), ATTACK_SPEED, ADDED_MULTIPLY, 0.1F)
+                                        .addModifier(rand.nextLong(), COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
                                         .build(),
                                 LumenBindingHitAddEffectEffect.of(MobEffects.MOVEMENT_SLOWDOWN,
                                         IntRange.of(seconds(8), seconds(15)), IntRange.of(0, 1), 1F)
@@ -282,8 +285,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         LumenBindingUsageDamageDealt.of(1, 0.30F, false),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(PROJECTILE_SPEED, ADDED_MULTIPLY, 0.06F)
-                                .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
+                                .addModifier(rand.nextLong(), PROJECTILE_SPEED, ADDED_MULTIPLY, 0.06F)
+                                .addModifier(rand.nextLong(), COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
                                 .build()))
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
                         CombinedLumenBindingUsage.of(
@@ -294,8 +297,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.1F)
-                                        .addModifier(COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
+                                        .addModifier(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.1F)
+                                        .addModifier(rand.nextLong(), COOLDOWN_REDUCTION, ADDED_MULTIPLY, -0.06F)
                                         .build(),
                                 LumenBindingAoeCropGrowthEffect.INSTANCE
                         )))
@@ -309,46 +312,46 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(BLOCK_REACH, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(STEP_HEIGHT, ADDITION, 0.5F)
+                                .addModifier(rand.nextLong(), BLOCK_REACH, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), STEP_HEIGHT, ADDITION, 0.5F)
                                 .build()))
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
                         LumenBindingUsageMovement.of(1, 0.4F, 0.02F,
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_REACH, ADDED_MULTIPLY, 0.08F)
-                                .addModifier(BLOCK_REACH, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), ATTACK_REACH, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), BLOCK_REACH, ADDED_MULTIPLY, 0.08F)
                                 .build()))
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
                         LumenBindingUsageMovement.of(1, 0.3F, 0.02F,
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(STEP_HEIGHT, ADDITION, 0.5F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.03F)
+                                .addModifier(rand.nextLong(), STEP_HEIGHT, ADDITION, 0.5F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.03F)
                                 .build()))
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
                         LumenBindingUsageMovement.of(1, 0.3F, 0.03F,
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(STEP_HEIGHT, ADDITION, 1F)
-                                .addModifier(SAFE_FALL_DISTANCE, ADDITION, 2.5F)
+                                .addModifier(rand.nextLong(), STEP_HEIGHT, ADDITION, 1F)
+                                .addModifier(rand.nextLong(), SAFE_FALL_DISTANCE, ADDITION, 2.5F)
                                 .build()))
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.30F, true),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_REACH, ADDED_MULTIPLY, 0.08F)
-                                .addModifier(PIERCE_ARMOR, ADDED_MULTIPLY, 0.1F)
+                                .addModifier(rand.nextLong(), ATTACK_REACH, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), PIERCE_ARMOR, ADDED_MULTIPLY, 0.1F)
                                 .build()))
                 .put(LumenBindingType.SlotType.RANGED_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.30F, false),
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(PROJECTILE_SPEED, ADDED_MULTIPLY, 0.08F)
+                                        .addModifier(rand.nextLong(), PROJECTILE_SPEED, ADDED_MULTIPLY, 0.08F)
                                         .build(),
                                 LumenBindingProjectileAccuracyEffect.INSTANCE
                         )))
@@ -357,7 +360,7 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(MINING_SIZE, ADDITION, 1F)
+                                        .addModifier(rand.nextLong(), MINING_SIZE, ADDITION, 1F)
                                         .build(),
                                 LumenBindingCollectDropsEffect.INSTANCE
                         )))
@@ -367,7 +370,7 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                 .registerBinding(LumenAS.AKASHA);
     }
 
-    private void registerCombinedTypeBindings() {
+    private void registerCombinedTypeBindings(RandomSource rand) {
         this.newBindingType(LumenAS.VIREL)
                 .put(LumenBindingType.SlotType.HELMET, LumenBinding.of(
                         CombinedLumenBindingUsage.of(
@@ -377,8 +380,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MAX_HEALTH, ADDED_MULTIPLY, 0.04F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.02F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.02F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
@@ -389,8 +392,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MAX_HEALTH, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
@@ -401,8 +404,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MAX_HEALTH, ADDED_MULTIPLY, 0.04F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.02F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.02F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
@@ -413,8 +416,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MAX_HEALTH, ADDED_MULTIPLY, 0.04F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.02F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.02F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
@@ -425,8 +428,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(MAX_HEALTH, ADDED_MULTIPLY, 0.02F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.02F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.RANGED_WEAPON, LumenBinding.of(
@@ -437,8 +440,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.08F)
-                                .addModifier(MAX_HEALTH, ADDED_MULTIPLY, 0.02F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.02F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
@@ -449,8 +452,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.08F)
-                                .addModifier(MAX_HEALTH, ADDED_MULTIPLY, 0.02F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.02F)
                                 .build())
                 )
                 .potionEffect(MobEffects.REGENERATION, IntRange.of(minutes(1), minutes(2)), IntRange.of(1, 2))
@@ -462,32 +465,32 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         LumenBindingUsageDamageTaken.of(1, 0.1F),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MAX_HEALTH, ADDITION, 1F)
-                                .addModifier(ARMOR, ADDITION, 2F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDITION, 1F)
+                                .addModifier(rand.nextLong(), ARMOR, ADDITION, 2F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.13F),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MAX_HEALTH, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(ARMOR, ADDITION, 2F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), ARMOR, ADDITION, 2F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.1F),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MAX_HEALTH, ADDITION, 1F)
-                                .addModifier(ARMOR, ADDITION, 2F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDITION, 1F)
+                                .addModifier(rand.nextLong(), ARMOR, ADDITION, 2F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.1F),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(MAX_HEALTH, ADDITION, 1F)
-                                .addModifier(ARMOR, ADDITION, 2F)
+                                .addModifier(rand.nextLong(), MAX_HEALTH, ADDITION, 1F)
+                                .addModifier(rand.nextLong(), ARMOR, ADDITION, 2F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
@@ -495,8 +498,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(BLOCK_CHANCE, ADDED_MULTIPLY, 0.15F)
-                                        .addModifier(MAX_HEALTH, ADDITION, 1F)
+                                        .addModifier(rand.nextLong(), BLOCK_CHANCE, ADDED_MULTIPLY, 0.15F)
+                                        .addModifier(rand.nextLong(), MAX_HEALTH, ADDITION, 1F)
                                         .build(),
                                 LumenBindingHitAddEffectEffect.of(MobEffects.GLOWING, IntRange.of(seconds(45)), IntRange.of(0), 1F)
                         ))
@@ -506,8 +509,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(BLOCK_CHANCE, ADDED_MULTIPLY, 0.1F)
-                                        .addModifier(MAX_HEALTH, ADDITION, 1F)
+                                        .addModifier(rand.nextLong(), BLOCK_CHANCE, ADDED_MULTIPLY, 0.1F)
+                                        .addModifier(rand.nextLong(), MAX_HEALTH, ADDITION, 1F)
                                         .build(),
                                 LumenBindingHitAddEffectEffect.of(MobEffects.GLOWING, IntRange.of(seconds(45)), IntRange.of(0), 1F)
                         ))
@@ -517,8 +520,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(BLOCK_CHANCE, ADDED_MULTIPLY, 0.1F)
-                                        .addModifier(MAX_HEALTH, ADDITION, 2F)
+                                        .addModifier(rand.nextLong(), BLOCK_CHANCE, ADDED_MULTIPLY, 0.1F)
+                                        .addModifier(rand.nextLong(), MAX_HEALTH, ADDITION, 2F)
                                         .build(),
                                 LumenBindingPlaceLightEffect.INSTANCE
                         ))
@@ -535,8 +538,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_DAMAGE, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.06F)
+                                .addModifier(rand.nextLong(), ATTACK_DAMAGE, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.06F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
@@ -546,8 +549,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_DAMAGE, ADDED_MULTIPLY, 0.08F)
-                                .addModifier(PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), ATTACK_DAMAGE, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.08F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
@@ -557,8 +560,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_DAMAGE, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.06F)
+                                .addModifier(rand.nextLong(), ATTACK_DAMAGE, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.06F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
@@ -568,17 +571,17 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_DAMAGE, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.06F)
+                                .addModifier(rand.nextLong(), ATTACK_DAMAGE, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.06F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.4F, true),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_DAMAGE, ADDED_MULTIPLY, 0.08F)
-                                .addModifier(ATTACK_REACH, ADDED_MULTIPLY, 0.08F)
-                                .addModifier(PIERCE_ARMOR, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), ATTACK_DAMAGE, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), ATTACK_REACH, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), PIERCE_ARMOR, ADDED_MULTIPLY, 0.05F)
                                 .build())
                 )
                 .put(LumenBindingType.SlotType.RANGED_WEAPON, LumenBinding.of(
@@ -586,8 +589,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         List.of(),
                         CombinedLumenBindingEffect.of(
                                 LumenBindingDynamicModifierEffect.builder()
-                                        .addModifier(PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.15F)
-                                        .addModifier(PROJECTILE_SPEED, ADDED_MULTIPLY, 0.05F)
+                                        .addModifier(rand.nextLong(), PROJECTILE_DAMAGE, ADDED_MULTIPLY, 0.15F)
+                                        .addModifier(rand.nextLong(), PROJECTILE_SPEED, ADDED_MULTIPLY, 0.05F)
                                         .build(),
                                 LumenBindingProjectileAccuracyEffect.INSTANCE
                         ))
@@ -596,8 +599,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         LumenBindingUsageBlockBreak.of(1, 0.25F),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.15F)
-                                .addModifier(BLOCK_REACH, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.15F)
+                                .addModifier(rand.nextLong(), BLOCK_REACH, ADDED_MULTIPLY, 0.08F)
                                 .build())
                 )
                 .potionEffect(MobEffects.INVISIBILITY, IntRange.of(minutes(3), minutes(5)), IntRange.of(0))
@@ -613,8 +616,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
                                 .build()
                 ))
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
@@ -625,8 +628,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.08F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.08F)
                                 .build()
                 ))
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
@@ -637,8 +640,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
                                 .build()
                 ))
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
@@ -649,8 +652,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.05F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.05F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
                                 .build()
                 ))
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
@@ -661,9 +664,9 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(ATTACK_REACH, ADDED_MULTIPLY, 0.1F)
-                                .addModifier(PIERCE_ARMOR, ADDED_MULTIPLY, 0.06F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
+                                .addModifier(rand.nextLong(), ATTACK_REACH, ADDED_MULTIPLY, 0.1F)
+                                .addModifier(rand.nextLong(), PIERCE_ARMOR, ADDED_MULTIPLY, 0.06F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F)
                                 .build()
                 ))
                 .put(LumenBindingType.SlotType.RANGED_WEAPON, LumenBinding.of(
@@ -674,8 +677,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(PROJECTILE_SPEED, ADDED_MULTIPLY, 0.12F)
-                                .addModifier(PIERCE_ARMOR, ADDED_MULTIPLY, 0.08F)
+                                .addModifier(rand.nextLong(), PROJECTILE_SPEED, ADDED_MULTIPLY, 0.12F)
+                                .addModifier(rand.nextLong(), PIERCE_ARMOR, ADDED_MULTIPLY, 0.08F)
                                 .build()
                 ))
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
@@ -686,8 +689,8 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         ),
                         List.of(),
                         LumenBindingDynamicModifierEffect.builder()
-                                .addModifier(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.1F)
-                                .addModifier(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.1F)
+                                .addModifier(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.1F)
+                                .addModifier(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.1F)
                                 .build()
                 ))
                 .potionEffect(MobEffects.BLINDNESS, IntRange.of(seconds(20), seconds(35)), IntRange.of(0),
@@ -696,42 +699,42 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                 .registerBinding(LumenAS.NULLAE);
     }
 
-    private void registerPrimitiveTypeBindings() {
+    private void registerPrimitiveTypeBindings(RandomSource rand) {
         this.newBindingType(LumenAS.AEVITAS)
                 .put(LumenBindingType.SlotType.HELMET, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.1F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MAX_HEALTH, ADDED_MULTIPLY, 0.05F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.05F))
                 )
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.15F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MAX_HEALTH, ADDED_MULTIPLY, 0.08F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.08F))
                 )
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.1F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MAX_HEALTH, ADDED_MULTIPLY, 0.05F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.05F))
                 )
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.1F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MAX_HEALTH, ADDED_MULTIPLY, 0.05F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.05F))
                 )
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.3F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MAX_HEALTH, ADDED_MULTIPLY, 0.02F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.02F))
                 )
                 .put(LumenBindingType.SlotType.RANGED_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.3F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MAX_HEALTH, ADDED_MULTIPLY, 0.02F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.02F))
                 )
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.3F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MAX_HEALTH, ADDED_MULTIPLY, 0.02F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MAX_HEALTH, ADDED_MULTIPLY, 0.02F))
                 )
                 .potionEffect(MobEffects.REGENERATION, IntRange.of(minutes(4), minutes(8)), IntRange.of(0, 0))
                 .build()
@@ -741,37 +744,37 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                 .put(LumenBindingType.SlotType.HELMET, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.1F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(ARMOR, ADDITION, 3F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), ARMOR, ADDITION, 3F))
                 )
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.15F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(DAMAGE_REDUCTION, ADDED_MULTIPLY, 0.1F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), DAMAGE_REDUCTION, ADDED_MULTIPLY, 0.1F))
                 )
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.1F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(ARMOR, ADDITION, 3F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), ARMOR, ADDITION, 3F))
                 )
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.1F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(ARMOR, ADDITION, 3F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), ARMOR, ADDITION, 3F))
                 )
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.3F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(BLOCK_CHANCE, ADDED_MULTIPLY, 0.1F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), BLOCK_CHANCE, ADDED_MULTIPLY, 0.1F))
                 )
                 .put(LumenBindingType.SlotType.RANGED_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.3F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(BLOCK_CHANCE, ADDED_MULTIPLY, 0.1F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), BLOCK_CHANCE, ADDED_MULTIPLY, 0.1F))
                 )
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
                         LumenBindingUsageDamageTaken.of(1, 0.3F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(BLOCK_CHANCE, ADDED_MULTIPLY, 0.1F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), BLOCK_CHANCE, ADDED_MULTIPLY, 0.1F))
                 )
                 .potionEffect(MobEffects.DAMAGE_RESISTANCE, IntRange.of(minutes(2), minutes(3)), IntRange.of(0))
                 .build()
@@ -781,37 +784,37 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                 .put(LumenBindingType.SlotType.HELMET, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.3F, true),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(ATTACK_DAMAGE, ADDED_MULTIPLY, 0.06F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), ATTACK_DAMAGE, ADDED_MULTIPLY, 0.06F))
                 )
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.4F, true),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(ATTACK_DAMAGE, ADDED_MULTIPLY, 0.1F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), ATTACK_DAMAGE, ADDED_MULTIPLY, 0.1F))
                 )
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.3F, true),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(ATTACK_DAMAGE, ADDED_MULTIPLY, 0.06F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), ATTACK_DAMAGE, ADDED_MULTIPLY, 0.06F))
                 )
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.3F, true),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(ATTACK_DAMAGE, ADDED_MULTIPLY, 0.06F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), ATTACK_DAMAGE, ADDED_MULTIPLY, 0.06F))
                 )
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.3F, true),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(ATTACK_DAMAGE, ADDITION, 3F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), ATTACK_DAMAGE, ADDITION, 3F))
                 )
                 .put(LumenBindingType.SlotType.RANGED_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.3F, false),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(PROJECTILE_DAMAGE, ADDITION, 2F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), PROJECTILE_DAMAGE, ADDITION, 2F))
                 )
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.3F, true),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(ATTACK_DAMAGE, ADDITION, 4F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), ATTACK_DAMAGE, ADDITION, 4F))
                 )
                 .potionEffect(MobEffects.DAMAGE_BOOST, IntRange.of(minutes(3), minutes(7)), IntRange.of(0, 2))
                 .build()
@@ -821,37 +824,37 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                 .put(LumenBindingType.SlotType.HELMET, LumenBinding.of(
                         LumenBindingUsageBlockBreak.of(1, 0.1F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.06F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.06F))
                 )
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
                         LumenBindingUsageBlockBreak.of(1, 0.15F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.08F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.08F))
                 )
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
                         LumenBindingUsageBlockBreak.of(1, 0.1F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.06F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.06F))
                 )
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
                         LumenBindingUsageBlockBreak.of(1, 0.1F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.06F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.06F))
                 )
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.2F, true),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(PIERCE_ARMOR, ADDED_MULTIPLY, 0.15F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), PIERCE_ARMOR, ADDED_MULTIPLY, 0.15F))
                 )
                 .put(LumenBindingType.SlotType.RANGED_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.2F, false),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(PIERCE_ARMOR, ADDED_MULTIPLY, 0.2F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), PIERCE_ARMOR, ADDED_MULTIPLY, 0.2F))
                 )
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
                         LumenBindingUsageBlockBreak.of(1, 0.15F),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.1F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), BLOCK_BREAK_SPEED, ADDED_MULTIPLY, 0.1F))
                 )
                 .potionEffect(MobEffects.DIG_SPEED, IntRange.of(minutes(4), minutes(6)), IntRange.of(0, 1))
                 .build()
@@ -862,42 +865,42 @@ public class AstralLumenBindingDataProvider extends LumenBindingDataProvider {
                         LumenBindingUsageMovement.of(1, 0.3F, 0.02F,
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F))
                 )
                 .put(LumenBindingType.SlotType.CHESTPLATE, LumenBinding.of(
                         LumenBindingUsageMovement.of(1, 0.4F, 0.02F,
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.06F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.06F))
                 )
                 .put(LumenBindingType.SlotType.LEGGINGS, LumenBinding.of(
                         LumenBindingUsageMovement.of(1, 0.3F, 0.02F,
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.04F))
                 )
                 .put(LumenBindingType.SlotType.BOOTS, LumenBinding.of(
                         LumenBindingUsageMovement.of(1, 0.3F, 0.03F,
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MOVEMENT_SPEED, STACKING_MULTIPLY, 1.1F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MOVEMENT_SPEED, STACKING_MULTIPLY, 1.1F))
                 )
                 .put(LumenBindingType.SlotType.MELEE_WEAPON, LumenBinding.of(
                         LumenBindingUsageMovement.of(1, 0.3F, 0.02F,
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.08F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.08F))
                 )
                 .put(LumenBindingType.SlotType.RANGED_WEAPON, LumenBinding.of(
                         LumenBindingUsageDamageDealt.of(1, 0.4F, false),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(PROJECTILE_SPEED, ADDED_MULTIPLY, 0.1F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), PROJECTILE_SPEED, ADDED_MULTIPLY, 0.1F))
                 )
                 .put(LumenBindingType.SlotType.TOOL, LumenBinding.of(
                         LumenBindingUsageMovement.of(1, 0.3F, 0.04F,
                                 Stats.WALK_ONE_CM, Stats.SPRINT_ONE_CM, Stats.WALK_ON_WATER_ONE_CM),
                         List.of(),
-                        LumenBindingDynamicModifierEffect.of(MOVEMENT_SPEED, ADDED_MULTIPLY, 0.1F))
+                        LumenBindingDynamicModifierEffect.of(rand.nextLong(), MOVEMENT_SPEED, ADDED_MULTIPLY, 0.1F))
                 )
                 .potionEffect(MobEffects.MOVEMENT_SPEED, IntRange.of(minutes(3), minutes(6)), IntRange.of(0, 1))
                 .build()

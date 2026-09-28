@@ -1,8 +1,8 @@
 {
   "type": "astralsorcery:liquid_starlight",
   "color": -1,
-  "consumesInputs": false,
-  "consumesLiquid": true,
+  "consumes_inputs": false,
+  "consumes_liquid": true,
   "duration": 60,
   "input": {
     "count": 1,
@@ -10,7 +10,7 @@
       "tag": "astralsorcery:crystal"
     }
   },
-  "otherInputs": [
+  "other_inputs": [
     {
       "count": 1,
       "ingredient": {
@@ -18,10 +18,10 @@
       }
     }
   ],
-  "outputModifiers": [
+  "output_modifiers": [
     {
       "type": "astralsorcery:merge_crystal"
     }
   ],
-  "randomAdditionalDuration": 20
+  "random_additional_duration": 20
 }

@@ -1,12 +1,12 @@
 {
   "potion_effect": {
     "amplifier_range": {
-      "maxInclusive": 1,
-      "minInclusive": 1
+      "max_inclusive": 1,
+      "min_inclusive": 1
     },
     "duration_range": {
-      "maxInclusive": 2400,
-      "minInclusive": 1200
+      "max_inclusive": 2400,
+      "min_inclusive": 1200
     },
     "effect": "minecraft:resistance"
   },
@@ -18,13 +18,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "2da49804-e026-44be-b53b-fd9c7c537f07",
+            "identifier": "e28debb4-2090-6d78-dce8-22f309dd5d3b",
             "mode": 0,
             "value": 1.0
           },
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "8f7f959a-40eb-4310-95f9-f49736783bbe",
+            "identifier": "ec75a878-0e59-a9a4-4c7d-8caa7514b9db",
             "mode": 0,
             "value": 2.0
           }
@@ -43,13 +43,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "ee316921-cffe-4d52-bb93-5a466cd5d7d2",
+            "identifier": "33cd8582-c685-a600-2141-05239332072f",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "b778ab1d-31fe-40e5-8c93-e372626833d0",
+            "identifier": "e85bdf2e-1874-56ec-dd77-b702ac5d7c11",
             "mode": 0,
             "value": 2.0
           }
@@ -68,13 +68,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "7bbb10c9-7f0c-4fa2-9d2f-82e0594ac177",
+            "identifier": "21a2ff24-1613-6376-a3b6-6c683a348645",
             "mode": 0,
             "value": 1.0
           },
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "8e068a34-c195-476e-922c-5b3ce0543374",
+            "identifier": "eb4cfc5f-c496-cde4-cce2-26caa8f98e15",
             "mode": 0,
             "value": 2.0
           }
@@ -93,13 +93,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "9860d17f-d2d9-4c63-88cc-91156330ffb3",
+            "identifier": "ae7fe2b5-44c7-25d9-57e1-9d3d74e7c6b8",
             "mode": 0,
             "value": 1.0
           },
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "2ef26e26-cc7b-49cf-ba18-721a229c42f2",
+            "identifier": "3ad8814b-5c31-4457-97b9-ec0aa2aad9e6",
             "mode": 0,
             "value": 2.0
           }
@@ -121,13 +121,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:block_chance",
-                "identifier": "130d4776-7fcd-48b7-bb3b-a0fa4548f2df",
+                "identifier": "6206122b-1786-7bef-44fe-847039a2d447",
                 "mode": 1,
                 "value": 0.15
               },
               {
                 "attribute_type": "astralsorcery:max_health",
-                "identifier": "65fbafd1-8487-4b09-b519-082f30ff3fad",
+                "identifier": "ba2d8800-fc78-3c4f-72d7-81a1f026c036",
                 "mode": 0,
                 "value": 1.0
               }
@@ -138,12 +138,12 @@
             "chance": 1.0,
             "effect": {
               "amplifier_range": {
-                "maxInclusive": 0,
-                "minInclusive": 0
+                "max_inclusive": 0,
+                "min_inclusive": 0
               },
               "duration_range": {
-                "maxInclusive": 900,
-                "minInclusive": 900
+                "max_inclusive": 900,
+                "min_inclusive": 900
               },
               "effect": "minecraft:glowing"
             }
@@ -166,13 +166,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:block_chance",
-                "identifier": "9a3ce805-4ad2-451a-8bbf-a1110a2583b9",
+                "identifier": "abe51bbf-def8-e369-9412-1f580b24827b",
                 "mode": 1,
                 "value": 0.1
               },
               {
                 "attribute_type": "astralsorcery:max_health",
-                "identifier": "5f170520-487f-4628-a905-78ab66e35da4",
+                "identifier": "d552da35-7b5f-0d8d-f6e8-3532f6fa95f5",
                 "mode": 0,
                 "value": 1.0
               }
@@ -183,12 +183,12 @@
             "chance": 1.0,
             "effect": {
               "amplifier_range": {
-                "maxInclusive": 0,
-                "minInclusive": 0
+                "max_inclusive": 0,
+                "min_inclusive": 0
               },
               "duration_range": {
-                "maxInclusive": 900,
-                "minInclusive": 900
+                "max_inclusive": 900,
+                "min_inclusive": 900
               },
               "effect": "minecraft:glowing"
             }
@@ -211,13 +211,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:block_chance",
-                "identifier": "f9543651-e1f7-4708-b39e-50a26ccb7d22",
+                "identifier": "c09339da-9a34-31f4-3eb8-570d300e446a",
                 "mode": 1,
                 "value": 0.1
               },
               {
                 "attribute_type": "astralsorcery:max_health",
-                "identifier": "c8d096f2-906c-4a43-9dcb-dd7eb024bb5f",
+                "identifier": "4e525a27-7bce-da38-cf18-b0d4a845d5c8",
                 "mode": 0,
                 "value": 2.0
               }

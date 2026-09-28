@@ -1,14 +1,14 @@
 {
   "type": "astralsorcery:altar_crafting",
-  "baseFocusShatterChance": 1.0,
+  "base_focus_shatter_chance": 1.0,
   "duration": 100,
   "effects": [
-    "astralsorcery:default_central_beam",
     "astralsorcery:default_altar_sparkle",
+    "astralsorcery:default_central_beam",
     "astralsorcery:default_lumen_input",
     "astralsorcery:default_relay_input"
   ],
-  "focusConstellation": "astralsorcery:vicio",
+  "focus_constellation": "astralsorcery:vicio",
   "grid": {
     "key": {
       "G": {
@@ -35,7 +35,7 @@
       " T ",
       "   "
     ],
-    "relayPattern": [
+    "relay_pattern": [
       "G   G",
       "I   I",
       "     ",
@@ -43,9 +43,9 @@
       "G   G"
     ]
   },
-  "mayChain": false,
-  "onlyNight": true,
-  "outputModifiers": [
+  "may_chain": false,
+  "only_night": true,
+  "output_modifiers": [
     {
       "type": "astralsorcery:copy_data_components",
       "components_to_copy": [],
@@ -60,8 +60,8 @@
       "id": "astralsorcery:iridescent_crystal_shovel"
     }
   ],
-  "requiredAdditionalInputs": [],
-  "requiredFluid": [
+  "required_additional_inputs": [],
+  "required_fluid": [
     {
       "amount": 1000,
       "id": "astralsorcery:liquid_starlight"
@@ -83,7 +83,7 @@
       "id": "astralsorcery:liquid_starlight"
     }
   ],
-  "requiredLumen": [],
-  "requiredStarlight": [],
-  "requiredType": "luminance"
+  "required_lumen": [],
+  "required_starlight": [],
+  "required_type": "luminance"
 }

@@ -1,10 +1,10 @@
 {
   "type": "astralsorcery:altar_crafting",
-  "baseFocusShatterChance": 0.0,
+  "base_focus_shatter_chance": 0.0,
   "duration": 100,
   "effects": [
-    "astralsorcery:default_central_beam",
     "astralsorcery:default_altar_sparkle",
+    "astralsorcery:default_central_beam",
     "astralsorcery:default_lumen_input",
     "astralsorcery:default_relay_input"
   ],
@@ -40,7 +40,7 @@
       "GAG",
       "RRR"
     ],
-    "relayPattern": [
+    "relay_pattern": [
       "G   G",
       "G   G",
       "P   P",
@@ -48,9 +48,9 @@
       "RRRRR"
     ]
   },
-  "mayChain": false,
-  "onlyNight": true,
-  "outputModifiers": [
+  "may_chain": false,
+  "only_night": true,
+  "output_modifiers": [
     {
       "type": "astralsorcery:update_research_tier",
       "tier": "luminance"
@@ -73,7 +73,7 @@
       "id": "astralsorcery:altar_luminance"
     }
   ],
-  "requiredAdditionalInputs": [
+  "required_additional_inputs": [
     {
       "count": 1,
       "ingredient": {
@@ -93,7 +93,7 @@
       }
     }
   ],
-  "requiredFluid": [
+  "required_fluid": [
     {
       "amount": 1000,
       "id": "astralsorcery:liquid_starlight"
@@ -107,7 +107,7 @@
       "id": "astralsorcery:liquid_starlight"
     }
   ],
-  "requiredLumen": [],
-  "requiredStarlight": [],
-  "requiredType": "resonance"
+  "required_lumen": [],
+  "required_starlight": [],
+  "required_type": "resonance"
 }

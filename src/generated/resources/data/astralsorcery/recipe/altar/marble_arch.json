@@ -1,6 +1,6 @@
 {
   "type": "astralsorcery:altar_crafting",
-  "baseFocusShatterChance": 0.0,
+  "base_focus_shatter_chance": 0.0,
   "duration": 100,
   "effects": [
     "astralsorcery:default_central_beam",
@@ -21,7 +21,7 @@
       "   ",
       "   "
     ],
-    "relayPattern": [
+    "relay_pattern": [
       "     ",
       "     ",
       "     ",
@@ -29,18 +29,18 @@
       "     "
     ]
   },
-  "mayChain": true,
-  "onlyNight": true,
-  "outputModifiers": [],
+  "may_chain": true,
+  "only_night": true,
+  "output_modifiers": [],
   "outputs": [
     {
       "count": 2,
       "id": "astralsorcery:marble_arch"
     }
   ],
-  "requiredAdditionalInputs": [],
-  "requiredFluid": [],
-  "requiredLumen": [],
-  "requiredStarlight": [],
-  "requiredType": "illumination"
+  "required_additional_inputs": [],
+  "required_fluid": [],
+  "required_lumen": [],
+  "required_starlight": [],
+  "required_type": "illumination"
 }

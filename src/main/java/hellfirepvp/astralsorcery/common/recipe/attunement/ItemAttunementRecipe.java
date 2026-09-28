@@ -122,7 +122,7 @@ public class ItemAttunementRecipe extends AttunementRecipe<ItemAttunementRecipe.
         public static final MapCodec<Active> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Codec.INT.fieldOf("tick").forGetter(Active::getTick),
                 RegistriesAS.REGISTRY_CONSTELLATIONS.byNameCodec().fieldOf("constellation").forGetter(Active::getConstellation),
-                Codec.INT.fieldOf("itemId").forGetter(Active::getItemId)
+                Codec.INT.fieldOf("item_id").forGetter(Active::getItemId)
         ).apply(inst, Active::new));
 
         private final int itemId;
