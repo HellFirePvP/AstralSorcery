@@ -16,7 +16,6 @@ import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.recipe.CustomRecipe;
 import hellfirepvp.astralsorcery.common.recipe.liquid.output.LiquidStarlightRecipeOutputModifier;
 import hellfirepvp.astralsorcery.common.util.data.ColorWrapper;
-import hellfirepvp.astralsorcery.common.util.data.CountIngredient;
 import hellfirepvp.astralsorcery.common.util.data.ResolvingRecipeTypeRegistryObject;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -31,6 +30,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -45,8 +45,8 @@ import java.util.function.Supplier;
 public class LiquidStarlightRecipe extends CustomRecipe<LiquidStarlightRecipe, LiquidStarlightRecipeInput> {
 
     public static final MapCodec<LiquidStarlightRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            CountIngredient.CODEC.fieldOf("input").forGetter(LiquidStarlightRecipe::getInput),
-            CountIngredient.CODEC.listOf().fieldOf("other_inputs").forGetter(LiquidStarlightRecipe::getOtherInputs),
+            SizedIngredient.NESTED_CODEC.fieldOf("input").forGetter(LiquidStarlightRecipe::getInput),
+            SizedIngredient.NESTED_CODEC.listOf().fieldOf("otherInputs").forGetter(LiquidStarlightRecipe::getOtherInputs),
             Codec.INT.fieldOf("duration").forGetter(LiquidStarlightRecipe::getDuration),
             Codec.INT.fieldOf("random_additional_duration").forGetter(LiquidStarlightRecipe::getRandomAdditionalDuration),
             ColorWrapper.CODEC.fieldOf("color").forGetter(LiquidStarlightRecipe::getColor),
@@ -57,8 +57,8 @@ public class LiquidStarlightRecipe extends CustomRecipe<LiquidStarlightRecipe, L
 
     public static final StreamCodec<RegistryFriendlyByteBuf, LiquidStarlightRecipe> STREAM_CODEC = StreamCodec.of(LiquidStarlightRecipe::write, LiquidStarlightRecipe::read);
 
-    private final CountIngredient input;
-    private final List<CountIngredient> otherInputs;
+    private final SizedIngredient input;
+    private final List<SizedIngredient> otherInputs;
     private final int duration;
     private final int randomAdditionalDuration;
     private final ColorWrapper color;
@@ -66,7 +66,7 @@ public class LiquidStarlightRecipe extends CustomRecipe<LiquidStarlightRecipe, L
     private final boolean consumesLiquid;
     private final boolean consumesInputs;
 
-    public LiquidStarlightRecipe(CountIngredient input, List<CountIngredient> otherInputs, int duration, int randomAdditionalDuration, ColorWrapper color, List<LiquidStarlightRecipeOutputModifier> outputModifiers, boolean consumesLiquid, boolean consumesInputs) {
+    public LiquidStarlightRecipe(SizedIngredient input, List<SizedIngredient> otherInputs, int duration, int randomAdditionalDuration, ColorWrapper color, List<LiquidStarlightRecipeOutputModifier> outputModifiers, boolean consumesLiquid, boolean consumesInputs) {
         this.input = input;
         this.otherInputs = otherInputs;
         this.duration = duration;
@@ -83,7 +83,7 @@ public class LiquidStarlightRecipe extends CustomRecipe<LiquidStarlightRecipe, L
         if (this.getOtherInputs().isEmpty() && !filteredOtherEntities.isEmpty()) {
             return false;
         }
-        Map<CountIngredient, List<ItemEntity>> splitInputs = this.splitOtherInputs(filteredOtherEntities);
+        Map<SizedIngredient, List<ItemEntity>> splitInputs = this.splitOtherInputs(filteredOtherEntities);
         if (splitInputs.isEmpty() && !this.getOtherInputs().isEmpty()) return false;
 
         ItemStack inputStack = input.getTriggerEntity().getItem();
@@ -152,10 +152,10 @@ public class LiquidStarlightRecipe extends CustomRecipe<LiquidStarlightRecipe, L
         });
     }
 
-    private Map<CountIngredient, List<ItemEntity>> splitOtherInputs(List<ItemEntity> otherInputs) {
+    private Map<SizedIngredient, List<ItemEntity>> splitOtherInputs(List<ItemEntity> otherInputs) {
         List<ItemEntity> modifiableInputs = new ArrayList<>(otherInputs);
-        Map<CountIngredient, List<ItemEntity>> foundInputs = new HashMap<>();
-        for (CountIngredient requiredInput : this.getOtherInputs()) {
+        Map<SizedIngredient, List<ItemEntity>> foundInputs = new HashMap<>();
+        for (SizedIngredient requiredInput : this.getOtherInputs()) {
             Ingredient ingredient = requiredInput.ingredient();
             int requiredCount = requiredInput.count();
             if (requiredCount <= 0) {
@@ -187,11 +187,11 @@ public class LiquidStarlightRecipe extends CustomRecipe<LiquidStarlightRecipe, L
         return modifiableInputs.isEmpty() ? foundInputs : Collections.emptyMap();
     }
 
-    public CountIngredient getInput() {
+    public SizedIngredient getInput() {
         return this.input;
     }
 
-    public List<CountIngredient> getOtherInputs() {
+    public List<SizedIngredient> getOtherInputs() {
         return Collections.unmodifiableList(this.otherInputs);
     }
 
@@ -230,8 +230,8 @@ public class LiquidStarlightRecipe extends CustomRecipe<LiquidStarlightRecipe, L
     }
 
     private static void write(RegistryFriendlyByteBuf buf, LiquidStarlightRecipe recipe) {
-        CountIngredient.STREAM_CODEC.encode(buf, recipe.getInput());
-        CountIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, recipe.getOtherInputs());
+        SizedIngredient.STREAM_CODEC.encode(buf, recipe.getInput());
+        SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, recipe.getOtherInputs());
         buf.writeInt(recipe.getDuration());
         buf.writeInt(recipe.getRandomAdditionalDuration());
         ColorWrapper.STREAM_CODEC.encode(buf, recipe.getColor());
@@ -241,8 +241,8 @@ public class LiquidStarlightRecipe extends CustomRecipe<LiquidStarlightRecipe, L
     }
 
     private static LiquidStarlightRecipe read(RegistryFriendlyByteBuf buf) {
-        CountIngredient input = CountIngredient.STREAM_CODEC.decode(buf);
-        List<CountIngredient> otherInputs = CountIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf);
+        SizedIngredient input = SizedIngredient.STREAM_CODEC.decode(buf);
+        List<SizedIngredient> otherInputs = SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf);
         int duration = buf.readInt();
         int randomAdditionalDuration = buf.readInt();
         ColorWrapper color = ColorWrapper.STREAM_CODEC.decode(buf);

@@ -25,7 +25,6 @@ import hellfirepvp.astralsorcery.common.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.IngredientUtil;
-import hellfirepvp.astralsorcery.common.util.data.CountIngredient;
 import hellfirepvp.astralsorcery.common.util.data.IntRectangle;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -44,6 +43,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -151,8 +151,8 @@ public class AltarRecipeCategory extends ASRecipeCategory<AltarRecipe> {
     }
 
     private void setAdditionalInputs(IRecipeLayoutBuilder builder, AltarRecipe recipe) {
-        List<CountIngredient> otherIngredients = recipe.getRequiredAdditionalInputs().stream()
-                .filter(ingredient -> !ingredient.isEmpty())
+        List<SizedIngredient> otherIngredients = recipe.getRequiredAdditionalInputs().stream()
+                .filter(ingredient -> !ingredient.ingredient().isEmpty())
                 .toList();
         List<FluidStack> otherFluidIngredients = recipe.getRequiredFluid().stream()
                 .filter(ingredient -> !ingredient.isEmpty())
@@ -168,9 +168,9 @@ public class AltarRecipeCategory extends ASRecipeCategory<AltarRecipe> {
             int offsetX = 10 + (i % 8) * 16;
             int offsetY = 188 + (i / 8) * 16;
 
-            if (ingredient instanceof CountIngredient countIngredient) {
+            if (ingredient instanceof SizedIngredient sizedIngredient) {
                 builder.addSlot(RecipeIngredientRole.INPUT, offsetX, offsetY)
-                        .addIngredients(VanillaTypes.ITEM_STACK, countIngredient.getItems());
+                        .addIngredients(VanillaTypes.ITEM_STACK, List.of(sizedIngredient.getItems()));
             } else if (ingredient instanceof FluidStack fluidStack) {
                 builder.addSlot(RecipeIngredientRole.INPUT, offsetX, offsetY)
                         .setFluidRenderer(1000, false, 16, 16)

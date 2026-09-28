@@ -24,7 +24,6 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.IngredientUtil;
 import hellfirepvp.astralsorcery.common.util.ItemUtil;
 import hellfirepvp.astralsorcery.common.util.codec.SetCodec;
-import hellfirepvp.astralsorcery.common.util.data.CountIngredient;
 import hellfirepvp.astralsorcery.common.util.data.ResolvingRecipeTypeRegistryObject;
 import hellfirepvp.astralsorcery.common.util.level.DayTimeHelper;
 import net.minecraft.core.BlockPos;
@@ -37,6 +36,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -59,12 +59,12 @@ public class AltarRecipe extends CustomRecipe<AltarRecipe, AltarCraftingInput> {
             RegistriesAS.REGISTRY_CONSTELLATIONS.byNameCodec().optionalFieldOf("focus_constellation").forGetter(AltarRecipe::getFocusConstellation),
             Codec.FLOAT.fieldOf("base_focus_shatter_chance").forGetter(AltarRecipe::getBaseFocusShatterChance),
             Codec.INT.fieldOf("duration").forGetter(AltarRecipe::getDuration),
-            Codec.BOOL.fieldOf("only_night").forGetter(AltarRecipe::isOnlyNight),
-            Codec.BOOL.fieldOf("may_chain").forGetter(AltarRecipe::mayChain),
-            SetCodec.of(RegistriesAS.REGISTRY_CONSTELLATIONS.byNameCodec()).fieldOf("required_starlight").forGetter(AltarRecipe::getRequiredStarlight),
-            Codec.list(LumenStack.CODEC).fieldOf("required_lumen").forGetter(AltarRecipe::getRequiredLumen),
-            Codec.list(FluidStack.CODEC).fieldOf("required_fluid").forGetter(AltarRecipe::getRequiredFluid),
-            Codec.list(CountIngredient.CODEC_NONEMPTY).fieldOf("required_additional_inputs").forGetter(AltarRecipe::getRequiredAdditionalInputs),
+            Codec.BOOL.fieldOf("onlyNight").forGetter(AltarRecipe::isOnlyNight),
+            Codec.BOOL.fieldOf("mayChain").forGetter(AltarRecipe::mayChain),
+            SetCodec.of(RegistriesAS.REGISTRY_CONSTELLATIONS.byNameCodec()).fieldOf("requiredStarlight").forGetter(AltarRecipe::getRequiredStarlight),
+            Codec.list(LumenStack.CODEC).fieldOf("requiredLumen").forGetter(AltarRecipe::getRequiredLumen),
+            Codec.list(FluidStack.CODEC).fieldOf("requiredFluid").forGetter(AltarRecipe::getRequiredFluid),
+            Codec.list(SizedIngredient.NESTED_CODEC).fieldOf("requiredAdditionalInputs").forGetter(AltarRecipe::getRequiredAdditionalInputs),
             SetCodec.of(RegistriesAS.REGISTRY_ALTAR_EFFECTS.byNameCodec()).fieldOf("effects").forGetter(AltarRecipe::getEffects),
             Codec.list(AltarRecipeOutputModifier.CODEC).fieldOf("output_modifiers").forGetter(AltarRecipe::getOutputModifiers)
     ).apply(inst, AltarRecipe::new));
@@ -83,7 +83,7 @@ public class AltarRecipe extends CustomRecipe<AltarRecipe, AltarCraftingInput> {
     private final Set<BaseConstellation> requiredStarlight = new TreeSet<>();
     private final List<LumenStack> requiredLumen = new ArrayList<>();
     private final List<FluidStack> requiredFluid = new ArrayList<>();
-    private final List<CountIngredient> requiredAdditionalInputs = new ArrayList<>();
+    private final List<SizedIngredient> requiredAdditionalInputs = new ArrayList<>();
 
     private final Set<AltarEffect> effects = new TreeSet<>();
     private final List<AltarRecipeOutputModifier> outputModifiers = new ArrayList<>();
@@ -100,7 +100,7 @@ public class AltarRecipe extends CustomRecipe<AltarRecipe, AltarCraftingInput> {
             Set<BaseConstellation> requiredStarlight,
             List<LumenStack> requiredLumen,
             List<FluidStack> requiredFluid,
-            List<CountIngredient> requiredAdditionalInputs,
+            List<SizedIngredient> requiredAdditionalInputs,
             Set<AltarEffect> effects,
             List<AltarRecipeOutputModifier> outputModifiers) {
         this.requiredType = requiredType;
@@ -230,7 +230,7 @@ public class AltarRecipe extends CustomRecipe<AltarRecipe, AltarCraftingInput> {
         return Collections.unmodifiableList(this.requiredFluid);
     }
 
-    public List<CountIngredient> getRequiredAdditionalInputs() {
+    public List<SizedIngredient> getRequiredAdditionalInputs() {
         return Collections.unmodifiableList(this.requiredAdditionalInputs);
     }
 
@@ -264,7 +264,7 @@ public class AltarRecipe extends CustomRecipe<AltarRecipe, AltarCraftingInput> {
         ByteBufCodecs.registry(RegistriesAS.KEY_CONSTELLATIONS).apply(SetCodec.streamOp()).encode(buf, recipe.getRequiredStarlight());
         LumenStack.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, recipe.getRequiredLumen());
         FluidStack.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, recipe.getRequiredFluid());
-        CountIngredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, recipe.getRequiredAdditionalInputs());
+        SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, recipe.getRequiredAdditionalInputs());
         ByteBufCodecs.registry(RegistriesAS.KEY_ALTAR_EFFECTS).apply(SetCodec.streamOp()).encode(buf, recipe.getEffects());
         AltarRecipeOutputModifier.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, recipe.getOutputModifiers());
     }
@@ -281,7 +281,7 @@ public class AltarRecipe extends CustomRecipe<AltarRecipe, AltarCraftingInput> {
         Set<BaseConstellation> requiredStarlightLevels = ByteBufCodecs.registry(RegistriesAS.KEY_CONSTELLATIONS).apply(SetCodec.streamOp()).decode(buf);
         List<LumenStack> requiredLumen = LumenStack.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf);
         List<FluidStack> requiredFluid = FluidStack.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf);
-        List<CountIngredient> requiredAdditionalInputs = CountIngredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf);
+        List<SizedIngredient> requiredAdditionalInputs = SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf);
         Set<AltarEffect> effects = ByteBufCodecs.registry(RegistriesAS.KEY_ALTAR_EFFECTS).apply(SetCodec.streamOp()).decode(buf);
         List<AltarRecipeOutputModifier> outputModifiers = AltarRecipeOutputModifier.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf);
         return new AltarRecipe(requiredType, grid, outputs, focusConstellation, baseFocusShatterChance, duration, onlyNight, mayChain, requiredStarlightLevels, requiredLumen, requiredFluid, requiredAdditionalInputs, effects, outputModifiers);

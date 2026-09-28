@@ -28,7 +28,6 @@ import hellfirepvp.astralsorcery.common.tile.TileFocusRelay;
 import hellfirepvp.astralsorcery.common.util.ItemUtil;
 import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtil;
-import hellfirepvp.astralsorcery.common.util.data.CountIngredient;
 import hellfirepvp.astralsorcery.common.util.data.LazyRecipeHolder;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.inventory.InventoryView;
@@ -53,6 +52,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -197,10 +197,10 @@ public class ActiveAltarRecipe extends ActiveRecipe<AltarRecipe> {
         if (recipe == null) return;
 
         AABB captureBox = this.CAPTURE_AREA.move(altarPos);
-        List<CountIngredient> additionalInputs = recipe.getRequiredAdditionalInputs();
+        List<SizedIngredient> additionalInputs = recipe.getRequiredAdditionalInputs();
         for (int itemIndex = 0; itemIndex < additionalInputs.size(); itemIndex++) {
-            CountIngredient ingredient = additionalInputs.get(itemIndex);
-            if (ingredient.isEmpty()) continue;
+            SizedIngredient ingredient = additionalInputs.get(itemIndex);
+            if (ingredient.ingredient().isEmpty()) continue;
 
             //create
             AdditionalInput input = this.getAdditionalInput(true, itemIndex);
@@ -369,9 +369,9 @@ public class ActiveAltarRecipe extends ActiveRecipe<AltarRecipe> {
         }
 
         boolean valid = true;
-        List<CountIngredient> requiredAdditionalInputs = recipe.getRequiredAdditionalInputs();
+        List<SizedIngredient> requiredAdditionalInputs = recipe.getRequiredAdditionalInputs();
         for (int itemIndex = 0; itemIndex < requiredAdditionalInputs.size(); itemIndex++) {
-            CountIngredient ingredient = requiredAdditionalInputs.get(itemIndex);
+            SizedIngredient ingredient = requiredAdditionalInputs.get(itemIndex);
 
             AdditionalInput input = this.getAdditionalInput(true, itemIndex);
             if (input == null || input.capturedEntityUUID == null) {
@@ -536,10 +536,10 @@ public class ActiveAltarRecipe extends ActiveRecipe<AltarRecipe> {
             }
         }
 
-        List<CountIngredient> additionalInputs = recipe.getRequiredAdditionalInputs();
+        List<SizedIngredient> additionalInputs = recipe.getRequiredAdditionalInputs();
         for (int itemIndex = 0; itemIndex < additionalInputs.size(); itemIndex++) {
-            CountIngredient ingredient = additionalInputs.get(itemIndex);
-            if (ingredient.isEmpty()) continue;
+            SizedIngredient ingredient = additionalInputs.get(itemIndex);
+            if (ingredient.ingredient().isEmpty()) continue;
 
             AdditionalInput input = this.getAdditionalInput(true, itemIndex);
             if (input == null || input.capturedEntityUUID == null) {
@@ -762,7 +762,7 @@ public class ActiveAltarRecipe extends ActiveRecipe<AltarRecipe> {
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .map(recipe -> recipe.getRequiredAdditionalInputs().get(this.getInputIndex()))
-                        .map(CountIngredient::ingredient)
+                        .map(SizedIngredient::ingredient)
                         .orElse(null);
                 if (ingredient == null) return false;
                 return ingredient.test(itemEntity.getItem());
