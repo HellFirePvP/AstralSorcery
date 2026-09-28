@@ -36,8 +36,8 @@ public class ActiveInfusionRecipe extends ActiveRecipe<InfusionRecipe> {
 
     public static final Codec<ActiveInfusionRecipe> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             LazyRecipeHolder.typedCodec(RecipeTypesAS.INFUSION_TYPE).fieldOf("recipe").forGetter(ActiveInfusionRecipe::getRecipeReference),
-            Codec.INT.fieldOf("progressTick").forGetter(ActiveInfusionRecipe::getProgressTick),
-            TileChalice.LiquidDrawInstance.CODEC.fieldOf("chaliceInput").forGetter(ActiveInfusionRecipe::getDrawInstance)
+            Codec.INT.fieldOf("progress_tick").forGetter(ActiveInfusionRecipe::getProgressTick),
+            TileChalice.LiquidDrawInstance.CODEC.fieldOf("chalice_input").forGetter(ActiveInfusionRecipe::getDrawInstance)
     ).apply(inst, ActiveInfusionRecipe::new));
 
     private int progressTick;

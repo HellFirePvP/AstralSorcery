@@ -151,7 +151,7 @@ public class AltarRecipeGrid {
         public static final MapCodec<GridData> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Codec.unboundedMap(CharacterCodec.CODEC_NON_BLANK, IngredientBridge.CODEC.codec()).fieldOf("key").forGetter(GridData::ingredientKeys),
                 CodecUtil.stringSized(3, 3).listOf(3, 3).fieldOf("pattern").forGetter(GridData::pattern),
-                CodecUtil.stringSized(5, 5).listOf(5, 5).fieldOf("relayPattern").forGetter(GridData::relayPattern)
+                CodecUtil.stringSized(5, 5).listOf(5, 5).fieldOf("relay_pattern").forGetter(GridData::relayPattern)
         ).apply(inst, GridData::new));
     }
 }

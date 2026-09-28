@@ -44,10 +44,10 @@ import java.util.function.Supplier;
 public class LiquidInteractionRecipe extends CustomRecipe<LiquidInteractionRecipe, LiquidInteractionInput> {
 
     public static final MapCodec<LiquidInteractionRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            SizedFluidIngredient.NESTED_CODEC.fieldOf("reactantA").forGetter(LiquidInteractionRecipe::getReactantA),
-            SizedFluidIngredient.NESTED_CODEC.fieldOf("reactantB").forGetter(LiquidInteractionRecipe::getReactantB),
-            Codec.FLOAT.fieldOf("chanceConsumeA").forGetter(LiquidInteractionRecipe::getChanceConsumeA),
-            Codec.FLOAT.fieldOf("chanceConsumeB").forGetter(LiquidInteractionRecipe::getChanceConsumeB),
+            SizedFluidIngredient.NESTED_CODEC.fieldOf("reactant_a").forGetter(LiquidInteractionRecipe::getReactantA),
+            SizedFluidIngredient.NESTED_CODEC.fieldOf("reactant_b").forGetter(LiquidInteractionRecipe::getReactantB),
+            Codec.FLOAT.fieldOf("chance_consume_a").forGetter(LiquidInteractionRecipe::getChanceConsumeA),
+            Codec.FLOAT.fieldOf("chance_consume_b").forGetter(LiquidInteractionRecipe::getChanceConsumeB),
             Codec.INT.fieldOf("weight").forGetter(LiquidInteractionRecipe::getWeight),
             LiquidInteractionResult.CODEC.fieldOf("result").forGetter(LiquidInteractionRecipe::getResult)
     ).apply(inst, LiquidInteractionRecipe::new));

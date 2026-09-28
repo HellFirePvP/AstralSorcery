@@ -34,7 +34,7 @@ import net.minecraft.world.phys.Vec3;
 public class LiquidInteractionResultSpawnEntity extends LiquidInteractionResult {
 
     public static final MapCodec<LiquidInteractionResultSpawnEntity> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entityType").forGetter(LiquidInteractionResultSpawnEntity::getEntityType)
+            BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(LiquidInteractionResultSpawnEntity::getEntityType)
     ).apply(inst, LiquidInteractionResultSpawnEntity::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, LiquidInteractionResultSpawnEntity> STREAM_CODEC = StreamCodec.composite(
