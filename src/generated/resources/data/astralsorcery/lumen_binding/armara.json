@@ -1,12 +1,12 @@
 {
   "potion_effect": {
     "amplifier_range": {
-      "maxInclusive": 0,
-      "minInclusive": 0
+      "max_inclusive": 0,
+      "min_inclusive": 0
     },
     "duration_range": {
-      "maxInclusive": 3600,
-      "minInclusive": 2400
+      "max_inclusive": 3600,
+      "min_inclusive": 2400
     },
     "effect": "minecraft:resistance"
   },
@@ -18,7 +18,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "3130f96c-af9b-4bb1-b8cf-8eecb9563bd2",
+            "identifier": "e723a949-f2e3-44c2-a491-f98a2d1675a0",
             "mode": 0,
             "value": 3.0
           }
@@ -37,7 +37,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:damage_reduction",
-            "identifier": "40498905-1813-4732-aa2c-cbc13c87954c",
+            "identifier": "165f0282-61e8-44cf-bd27-62c4154b808a",
             "mode": 1,
             "value": 0.1
           }
@@ -56,7 +56,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "f9fc21aa-b6cd-4d21-8f76-1e09052f0b5e",
+            "identifier": "099c0438-c700-499a-8195-cb710119d46f",
             "mode": 0,
             "value": 3.0
           }
@@ -75,7 +75,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:armor",
-            "identifier": "04a42721-60a8-4e4c-99e0-e8d6949f462f",
+            "identifier": "b7cdbb56-cf0d-47aa-bc77-84e6fc2ec1a5",
             "mode": 0,
             "value": 3.0
           }
@@ -94,7 +94,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_chance",
-            "identifier": "1f6fab89-f550-41fa-a2cc-fbdb6517e73f",
+            "identifier": "bff4ed16-5c53-4e9b-a207-e89816366151",
             "mode": 1,
             "value": 0.1
           }
@@ -113,7 +113,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_chance",
-            "identifier": "656c6ba3-bc87-4585-bb0a-dda3e5314815",
+            "identifier": "a70af138-4782-4ded-98b6-43d2bbb9b453",
             "mode": 1,
             "value": 0.1
           }
@@ -132,7 +132,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_chance",
-            "identifier": "90e4b7ec-a3ed-4027-ac93-247542a71de0",
+            "identifier": "ed0105b7-9f16-400b-9c7f-25a0d914417f",
             "mode": 1,
             "value": 0.1
           }

@@ -1,8 +1,8 @@
 {
   "type": "astralsorcery:liquid_starlight",
   "color": -1,
-  "consumesInputs": true,
-  "consumesLiquid": false,
+  "consumes_inputs": true,
+  "consumes_liquid": false,
   "duration": 30,
   "input": {
     "count": 1,
@@ -10,8 +10,8 @@
       "tag": "minecraft:logs"
     }
   },
-  "otherInputs": [],
-  "outputModifiers": [
+  "other_inputs": [],
+  "output_modifiers": [
     {
       "type": "astralsorcery:drop_item",
       "result": {
@@ -20,5 +20,5 @@
       }
     }
   ],
-  "randomAdditionalDuration": 0
+  "random_additional_duration": 0
 }

@@ -3,8 +3,8 @@
     "type": "astralsorcery:near_block",
     "blockConsumptionChance": 0.4,
     "blockCountNeeded": {
-      "maxInclusive": 4,
-      "minInclusive": 4
+      "max_inclusive": 4,
+      "min_inclusive": 4
     },
     "blockPredicate": {
       "blocks": "#minecraft:flowers"

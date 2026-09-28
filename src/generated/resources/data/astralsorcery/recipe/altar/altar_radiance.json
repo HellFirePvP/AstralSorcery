@@ -1,14 +1,14 @@
 {
   "type": "astralsorcery:altar_crafting",
-  "baseFocusShatterChance": 1.0,
+  "base_focus_shatter_chance": 1.0,
   "duration": 100,
   "effects": [
-    "astralsorcery:default_central_beam",
     "astralsorcery:default_altar_sparkle",
     "astralsorcery:default_lumen_input",
-    "astralsorcery:default_relay_input"
+    "astralsorcery:default_relay_input",
+    "astralsorcery:default_central_beam"
   ],
-  "focusConstellation": "astralsorcery:armara",
+  "focus_constellation": "astralsorcery:armara",
   "grid": {
     "key": {
       "C": {
@@ -59,7 +59,7 @@
       "MCM",
       "M M"
     ],
-    "relayPattern": [
+    "relay_pattern": [
       "G   G",
       "P   P",
       "P   P",
@@ -67,9 +67,9 @@
       "PRRRP"
     ]
   },
-  "mayChain": false,
-  "onlyNight": true,
-  "outputModifiers": [
+  "may_chain": false,
+  "only_night": true,
+  "output_modifiers": [
     {
       "type": "astralsorcery:update_research_tier",
       "tier": "radiance"
@@ -92,7 +92,7 @@
       "id": "astralsorcery:altar_radiance"
     }
   ],
-  "requiredAdditionalInputs": [
+  "required_additional_inputs": [
     {
       "count": 1,
       "ingredient": {
@@ -130,7 +130,7 @@
       }
     }
   ],
-  "requiredFluid": [
+  "required_fluid": [
     {
       "amount": 1000,
       "id": "astralsorcery:liquid_starlight"
@@ -144,7 +144,7 @@
       "id": "astralsorcery:liquid_starlight"
     }
   ],
-  "requiredLumen": [
+  "required_lumen": [
     {
       "amount": 200,
       "lumen": "astralsorcery:aevitas"
@@ -166,8 +166,8 @@
       "lumen": "astralsorcery:evorsio"
     }
   ],
-  "requiredStarlight": [
+  "required_starlight": [
     "astralsorcery:armara"
   ],
-  "requiredType": "luminance"
+  "required_type": "luminance"
 }

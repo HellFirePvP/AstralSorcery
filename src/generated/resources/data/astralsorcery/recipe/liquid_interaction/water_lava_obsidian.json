@@ -1,14 +1,14 @@
 {
   "type": "astralsorcery:liquid_interaction",
-  "chanceConsumeA": 0.5,
-  "chanceConsumeB": 0.5,
-  "reactantA": {
+  "chance_consume_a": 0.5,
+  "chance_consume_b": 0.5,
+  "reactant_a": {
     "amount": 100,
     "ingredient": {
       "fluid": "minecraft:water"
     }
   },
-  "reactantB": {
+  "reactant_b": {
     "amount": 100,
     "ingredient": {
       "fluid": "minecraft:lava"

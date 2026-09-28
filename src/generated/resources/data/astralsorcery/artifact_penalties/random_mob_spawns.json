@@ -5,8 +5,8 @@
     "id": "astralsorcery:random_mob_spawns",
     "range": 7,
     "spawn_count": {
-      "maxInclusive": 13,
-      "minInclusive": 8
+      "max_inclusive": 13,
+      "min_inclusive": 8
     }
   },
   "selector": {
