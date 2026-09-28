@@ -1,22 +1,22 @@
 {
   "potion_effect": {
     "amplifier_range": {
-      "maxInclusive": 0,
-      "minInclusive": 0
+      "max_inclusive": 0,
+      "min_inclusive": 0
     },
     "duration_range": {
-      "maxInclusive": 700,
-      "minInclusive": 400
+      "max_inclusive": 700,
+      "min_inclusive": 400
     },
     "effect": "minecraft:blindness",
     "hidden_effect": {
       "amplifier_range": {
-        "maxInclusive": 2,
-        "minInclusive": 1
+        "max_inclusive": 2,
+        "min_inclusive": 1
       },
       "duration_range": {
-        "maxInclusive": 3600,
-        "minInclusive": 1800
+        "max_inclusive": 3600,
+        "min_inclusive": 1800
       },
       "effect": "minecraft:haste"
     }
@@ -29,13 +29,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "346f31b1-32e3-4bac-a331-2144005f2101",
+            "identifier": "d7008698-c7c2-47e6-b01d-1cc64056b0ef",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "d51ab0d9-d6fd-4c0c-bb8b-d4948d30d7b8",
+            "identifier": "08f6321c-5525-44ee-86d9-d51e12bc04fe",
             "mode": 1,
             "value": 0.04
           }
@@ -70,13 +70,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "04e22116-5253-4fd9-85c5-1de197f35b40",
+            "identifier": "eb6d3ca4-edda-4b22-8e49-d0ff4edcdd16",
             "mode": 1,
             "value": 0.08
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "2f9ed51d-faf5-4fa8-955a-2da631b33ddd",
+            "identifier": "12da4076-1160-44fa-b3a0-cb11b1897061",
             "mode": 1,
             "value": 0.08
           }
@@ -111,13 +111,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "c42ede65-5b1b-4c06-9c86-90ecac0092ae",
+            "identifier": "0819b044-2313-4f46-8872-08016495c48d",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "a3b7be49-0ab8-4618-8364-1cc2fc2fa00e",
+            "identifier": "59964f5c-c18d-4063-9911-d6afdddd7a0f",
             "mode": 1,
             "value": 0.04
           }
@@ -152,13 +152,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "628f4640-f64e-4f15-9230-1c00c82cddee",
+            "identifier": "53678ed2-9b0d-4197-89aa-bfb1384ff7b6",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "8a65da6d-5a2f-4325-8102-c92afb519b57",
+            "identifier": "1a87af71-0229-4926-96db-09e1a76ec85b",
             "mode": 1,
             "value": 0.04
           }
@@ -193,19 +193,19 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_reach",
-            "identifier": "1199102f-5e8f-4496-b691-d362a2a9d799",
+            "identifier": "27f01c8a-47e2-41bb-9719-40c3d5722bac",
             "mode": 1,
             "value": 0.1
           },
           {
             "attribute_type": "astralsorcery:pierce_armor",
-            "identifier": "320c20d2-de36-4bc3-a4a8-718d5d2b5d11",
+            "identifier": "c90a0e26-83b8-4d59-ac81-824d653fb59c",
             "mode": 1,
             "value": 0.06
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "a8a1b412-cdab-4fb3-8fb9-7746328c473b",
+            "identifier": "c4f36b08-d152-4810-be7d-3afdb6ee2216",
             "mode": 1,
             "value": 0.04
           }
@@ -241,13 +241,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:projectile_speed",
-            "identifier": "fa666c6a-4bdb-4c0c-a188-43e87fe5f550",
+            "identifier": "7d51e73d-37b3-40ec-b06a-8bbe7ff02853",
             "mode": 1,
             "value": 0.12
           },
           {
             "attribute_type": "astralsorcery:pierce_armor",
-            "identifier": "e8249a53-4ad3-497b-a0c9-f40467a91dce",
+            "identifier": "59228b3d-3fb2-419c-8273-c2863d51ddbe",
             "mode": 1,
             "value": 0.08
           }
@@ -283,13 +283,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "df0f39bd-1f8a-40fe-985d-6a5125afc8fb",
+            "identifier": "6f126396-ef92-40bf-b91b-a1c34d7447b3",
             "mode": 1,
             "value": 0.1
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "befe9fbe-e756-4105-b33f-f5b7a82d1f3c",
+            "identifier": "a4c62926-ec86-4dbd-b4b6-4a1d30ea3e7c",
             "mode": 1,
             "value": 0.1
           }

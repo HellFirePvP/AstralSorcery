@@ -25,8 +25,8 @@ import net.minecraft.util.RandomSource;
 public class FloatRange {
 
     public static final Codec<FloatRange> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            Codec.FLOAT.fieldOf("minInclusive").forGetter(r -> r.minInclusive),
-            Codec.FLOAT.fieldOf("maxInclusive").forGetter(r -> r.maxInclusive)
+            Codec.FLOAT.fieldOf("min_inclusive").forGetter(r -> r.minInclusive),
+            Codec.FLOAT.fieldOf("max_inclusive").forGetter(r -> r.maxInclusive)
     ).apply(inst, FloatRange::new));
     public static final StreamCodec<ByteBuf, FloatRange> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.FLOAT,

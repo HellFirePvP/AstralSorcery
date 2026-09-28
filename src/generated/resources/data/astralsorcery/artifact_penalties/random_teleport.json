@@ -2,8 +2,8 @@
   "effect": {
     "type": "astralsorcery:random_teleport",
     "distance": {
-      "maxInclusive": 10.0,
-      "minInclusive": 5.0
+      "max_inclusive": 10.0,
+      "min_inclusive": 5.0
     },
     "id": "astralsorcery:random_teleport"
   },

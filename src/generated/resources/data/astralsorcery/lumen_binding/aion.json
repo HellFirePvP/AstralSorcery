@@ -1,12 +1,12 @@
 {
   "potion_effect": {
     "amplifier_range": {
-      "maxInclusive": 0,
-      "minInclusive": 0
+      "max_inclusive": 0,
+      "min_inclusive": 0
     },
     "duration_range": {
-      "maxInclusive": 12000,
-      "minInclusive": 6000
+      "max_inclusive": 12000,
+      "min_inclusive": 6000
     },
     "effect": "astralsorcery:phoenix_blessing"
   },
@@ -18,13 +18,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "022cb7d5-45e3-4587-ab0f-10da1dfd84b1",
+            "identifier": "95d3ea46-6ebd-4776-95ac-475d91528570",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:cooldown_reduction",
-            "identifier": "8fe3f81b-b4e2-4c43-8daf-a9ac0e74c9d0",
+            "identifier": "ffc18a52-c73b-4272-88b9-9b6bfc722fa5",
             "mode": 1,
             "value": -0.04
           }
@@ -52,7 +52,7 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:cooldown_reduction",
-                "identifier": "609149de-61c8-40cf-a9a4-0c27a796ca1a",
+                "identifier": "26d89953-cc82-44a4-bc37-8548ce7f16fa",
                 "mode": 1,
                 "value": -0.1
               }
@@ -97,7 +97,7 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:cooldown_reduction",
-                "identifier": "556bb49d-02e6-4dd8-a28a-d3f2f26791b2",
+                "identifier": "98021997-29a4-4592-926a-3fe7bb4f18d0",
                 "mode": 1,
                 "value": -0.06
               }
@@ -142,7 +142,7 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:cooldown_reduction",
-                "identifier": "d63f38c0-72ae-47ec-9e6e-1750ee1ce700",
+                "identifier": "b466c4c1-2eb2-4e6f-8d8d-a6086e700b13",
                 "mode": 1,
                 "value": -0.08
               }
@@ -187,13 +187,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:attack_speed",
-                "identifier": "49d2a481-0828-474d-b2ad-8db108143fb8",
+                "identifier": "2e3e97bc-a931-4bc3-8b26-33be5b0c42fc",
                 "mode": 1,
                 "value": 0.1
               },
               {
                 "attribute_type": "astralsorcery:cooldown_reduction",
-                "identifier": "9eae2749-dd3c-4996-8c1b-0bf6a9181ac7",
+                "identifier": "ea34ab94-f3a6-4af6-a677-f2288ec52a15",
                 "mode": 1,
                 "value": -0.06
               }
@@ -204,12 +204,12 @@
             "chance": 1.0,
             "effect": {
               "amplifier_range": {
-                "maxInclusive": 1,
-                "minInclusive": 0
+                "max_inclusive": 1,
+                "min_inclusive": 0
               },
               "duration_range": {
-                "maxInclusive": 300,
-                "minInclusive": 160
+                "max_inclusive": 300,
+                "min_inclusive": 160
               },
               "effect": "minecraft:slowness"
             }
@@ -230,13 +230,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:projectile_speed",
-            "identifier": "fe5cff4a-bcad-441d-b8f1-19027f269d9e",
+            "identifier": "b989547b-030a-465f-9b8d-bd78448c7669",
             "mode": 1,
             "value": 0.06
           },
           {
             "attribute_type": "astralsorcery:cooldown_reduction",
-            "identifier": "57af4d6a-879a-4d8d-a4bb-af73d521a660",
+            "identifier": "5e791422-d7ef-41fe-bd2e-2e1822895932",
             "mode": 1,
             "value": -0.06
           }
@@ -259,13 +259,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:block_break_speed",
-                "identifier": "644a0925-04ab-4854-818b-e25c2ba09732",
+                "identifier": "90d9a98c-7386-49dd-ac1a-afdb3db04077",
                 "mode": 1,
                 "value": 0.1
               },
               {
                 "attribute_type": "astralsorcery:cooldown_reduction",
-                "identifier": "e046bf1c-71e4-4bf5-8f5c-2d6b81b0e6b5",
+                "identifier": "7d3aeca1-8d87-4c82-ad97-49c9de88d952",
                 "mode": 1,
                 "value": -0.06
               }

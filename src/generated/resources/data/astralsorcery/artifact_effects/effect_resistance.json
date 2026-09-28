@@ -7,8 +7,8 @@
         "duration": 1000,
         "id": "minecraft:resistance",
         "neoforge:cures": [
-          "milk",
-          "protected_by_totem"
+          "protected_by_totem",
+          "milk"
         ],
         "show_icon": false
       },
@@ -17,8 +17,8 @@
         "duration": 1000,
         "id": "minecraft:fire_resistance",
         "neoforge:cures": [
-          "milk",
-          "protected_by_totem"
+          "protected_by_totem",
+          "milk"
         ],
         "show_icon": false
       }

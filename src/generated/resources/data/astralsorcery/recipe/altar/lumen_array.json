@@ -1,12 +1,12 @@
 {
   "type": "astralsorcery:altar_crafting",
-  "baseFocusShatterChance": 0.0,
+  "base_focus_shatter_chance": 0.0,
   "duration": 100,
   "effects": [
-    "astralsorcery:default_central_beam",
     "astralsorcery:default_altar_sparkle",
     "astralsorcery:default_lumen_input",
-    "astralsorcery:default_relay_input"
+    "astralsorcery:default_relay_input",
+    "astralsorcery:default_central_beam"
   ],
   "grid": {
     "key": {
@@ -52,7 +52,7 @@
       "L L",
       "GGG"
     ],
-    "relayPattern": [
+    "relay_pattern": [
       "A   A",
       "P   P",
       "P   P",
@@ -60,16 +60,16 @@
       "CSSSC"
     ]
   },
-  "mayChain": false,
-  "onlyNight": true,
-  "outputModifiers": [],
+  "may_chain": false,
+  "only_night": true,
+  "output_modifiers": [],
   "outputs": [
     {
       "count": 1,
       "id": "astralsorcery:lumen_array"
     }
   ],
-  "requiredAdditionalInputs": [
+  "required_additional_inputs": [
     {
       "count": 1,
       "ingredient": {
@@ -83,8 +83,8 @@
       }
     }
   ],
-  "requiredFluid": [],
-  "requiredLumen": [],
-  "requiredStarlight": [],
-  "requiredType": "resonance"
+  "required_fluid": [],
+  "required_lumen": [],
+  "required_starlight": [],
+  "required_type": "resonance"
 }

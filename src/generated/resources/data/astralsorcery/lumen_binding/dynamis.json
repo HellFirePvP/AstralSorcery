@@ -1,12 +1,12 @@
 {
   "potion_effect": {
     "amplifier_range": {
-      "maxInclusive": 3,
-      "minInclusive": 2
+      "max_inclusive": 3,
+      "min_inclusive": 2
     },
     "duration_range": {
-      "maxInclusive": 3600,
-      "minInclusive": 1200
+      "max_inclusive": 3600,
+      "min_inclusive": 1200
     },
     "effect": "astralsorcery:rampage"
   },
@@ -18,13 +18,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_speed",
-            "identifier": "89b9e1bf-b104-4737-b6df-50a740046f09",
+            "identifier": "a4df6ba3-7524-4e42-ba5d-f7d5431f4047",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "dc08de77-ae1f-4d10-a9b6-aada1642a4c2",
+            "identifier": "9bb3121e-6132-49ba-848d-081404cdfd0e",
             "mode": 1,
             "value": 0.04
           }
@@ -60,13 +60,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_speed",
-            "identifier": "a8c6fa50-8540-4d36-9a74-4eae58bfdbb5",
+            "identifier": "bc0bc9c8-e106-4338-ae41-dfe75802a824",
             "mode": 1,
             "value": 0.07
           },
           {
             "attribute_type": "astralsorcery:critical_hit_damage",
-            "identifier": "da818058-fc0c-43be-8b2f-4c6f2bb66ad5",
+            "identifier": "1af6aebc-c111-4649-a57c-0b2626da045f",
             "mode": 1,
             "value": 0.1
           }
@@ -86,13 +86,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_speed",
-            "identifier": "2a16c221-b560-43fd-bf4d-3f2bd5d17a59",
+            "identifier": "6a239446-9922-449d-9681-8edbf98b07cc",
             "mode": 1,
             "value": 0.07
           },
           {
             "attribute_type": "astralsorcery:critical_hit_chance",
-            "identifier": "5ee9583a-a1cf-4cfe-a598-68fc28bc63bd",
+            "identifier": "8d23a3bd-e6a8-46d8-895c-0d30803931ae",
             "mode": 1,
             "value": 0.05
           }
@@ -112,13 +112,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:attack_speed",
-            "identifier": "0ab2b4bc-365d-4550-a173-c4aa46439116",
+            "identifier": "d1663140-93b5-42fa-8fb1-d686def31a02",
             "mode": 1,
             "value": 0.07
           },
           {
             "attribute_type": "astralsorcery:critical_hit_chance",
-            "identifier": "9cb6b19a-37ec-4708-be1a-3d265da4d3ec",
+            "identifier": "e1030caa-539b-4abe-890c-05372f43fca7",
             "mode": 1,
             "value": 0.07
           }
@@ -141,13 +141,13 @@
             "modifiers": [
               {
                 "attribute_type": "astralsorcery:critical_hit_chance",
-                "identifier": "82c662b4-75ea-4e42-b560-29326ae58b30",
+                "identifier": "eca2ca1f-a1d8-409c-b625-49c5f666ec7f",
                 "mode": 1,
                 "value": 0.08
               },
               {
                 "attribute_type": "astralsorcery:critical_hit_damage",
-                "identifier": "201f3357-73b9-4a2d-9417-185c3ab8f5ff",
+                "identifier": "0e07fd1f-1fdf-4a96-82d4-90050a8f857e",
                 "mode": 1,
                 "value": 0.1
               }
@@ -174,13 +174,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:projectile_speed",
-            "identifier": "0c778ceb-329a-46e3-8c6e-b053509154dd",
+            "identifier": "9f487308-baf4-472e-aee7-a5db4e660325",
             "mode": 1,
             "value": 0.1
           },
           {
             "attribute_type": "astralsorcery:critical_hit_chance",
-            "identifier": "4762d9dd-3c91-4298-b0c7-50fb3c8e9c03",
+            "identifier": "1eea3cda-919e-44ad-8786-2e8c53946357",
             "mode": 1,
             "value": 0.06
           }
@@ -200,7 +200,7 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:block_break_speed",
-            "identifier": "241e07be-ef76-4749-af64-e6e61982fd59",
+            "identifier": "268312dc-0c87-46c5-9984-5644c11628b8",
             "mode": 1,
             "value": 0.15
           }

@@ -29,7 +29,7 @@ import net.minecraft.world.item.ItemStack;
 public class AltarOutputSetDataComponent<T> extends AltarRecipeOutputModifier {
 
     public static final MapCodec<AltarOutputSetDataComponent<?>> CODEC =
-            DataComponentType.CODEC.dispatchMap("componentType", AltarOutputSetDataComponent::getComponentType, AltarOutputSetDataComponent::makeCodec);
+            DataComponentType.CODEC.dispatchMap("component_type", AltarOutputSetDataComponent::getComponentType, AltarOutputSetDataComponent::makeCodec);
     public static final StreamCodec<RegistryFriendlyByteBuf, AltarOutputSetDataComponent<?>> STREAM_CODEC =
             DataComponentType.STREAM_CODEC.dispatch(AltarOutputSetDataComponent::getComponentType, AltarOutputSetDataComponent::makeStreamCodec);
     public static final Type<AltarOutputSetDataComponent<?>> TYPE = new Type<>(CODEC, STREAM_CODEC);

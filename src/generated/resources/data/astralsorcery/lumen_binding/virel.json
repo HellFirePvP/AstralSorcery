@@ -1,12 +1,12 @@
 {
   "potion_effect": {
     "amplifier_range": {
-      "maxInclusive": 2,
-      "minInclusive": 1
+      "max_inclusive": 2,
+      "min_inclusive": 1
     },
     "duration_range": {
-      "maxInclusive": 2400,
-      "minInclusive": 1200
+      "max_inclusive": 2400,
+      "min_inclusive": 1200
     },
     "effect": "minecraft:regeneration"
   },
@@ -18,13 +18,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "0aac94e0-615f-41fa-b6e5-73fb6f15ba3a",
+            "identifier": "2d77a3cf-cecf-4a43-b39c-f92692a0c4b3",
             "mode": 1,
             "value": 0.04
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "7ad93e48-3d69-4d84-8151-120f658a77f2",
+            "identifier": "69cf581c-d419-44ef-afe2-28c71901d528",
             "mode": 1,
             "value": 0.02
           }
@@ -59,13 +59,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "856a9cd8-615a-43cc-91ac-37ec9515b757",
+            "identifier": "cd1f2e24-abcf-4c3a-8061-0b8e37e80475",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "0c3e47d5-7a4f-4382-85f2-0c9448575330",
+            "identifier": "1578750a-e936-4cff-9ad3-db23550a9b85",
             "mode": 1,
             "value": 0.04
           }
@@ -100,13 +100,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "32552d20-d2da-4c26-8ca6-147147e4f082",
+            "identifier": "27d603e3-cddf-43ba-a0b9-3629ca2a5583",
             "mode": 1,
             "value": 0.04
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "2c2b634f-f585-497f-b99a-602e6938fa64",
+            "identifier": "c471f3f8-cd9f-40a1-aedd-b558d8ab68fc",
             "mode": 1,
             "value": 0.02
           }
@@ -141,13 +141,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "edfcfe45-f63e-4f72-a9a0-d9e5b7bd7b2b",
+            "identifier": "38a1b9ad-ae27-4516-bfac-a3c9f12f7513",
             "mode": 1,
             "value": 0.04
           },
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "84647719-f3ce-4117-a65c-a71fb33b0144",
+            "identifier": "4bf895ad-0d8e-44ae-ae8a-89c57a6365bc",
             "mode": 1,
             "value": 0.02
           }
@@ -182,13 +182,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "5e4b616c-cd29-4b1f-b070-851bbdb8cf6c",
+            "identifier": "aef5c5a7-c07d-438f-ae2b-680f650723f7",
             "mode": 1,
             "value": 0.05
           },
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "05a360f6-3866-4755-989a-83bca9d9cfdf",
+            "identifier": "eb0fb1b9-a107-4285-80e8-59a6d9bf5b33",
             "mode": 1,
             "value": 0.02
           }
@@ -223,13 +223,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "3d21adb5-e4a6-4ced-a71d-50c782042257",
+            "identifier": "adae82a3-cbdd-417e-a257-74d746b818bc",
             "mode": 1,
             "value": 0.08
           },
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "3c65f454-a1c4-48e3-8f1f-e0b6ade96049",
+            "identifier": "47deb585-ab36-4be3-8aed-af303b191f0d",
             "mode": 1,
             "value": 0.02
           }
@@ -264,13 +264,13 @@
         "modifiers": [
           {
             "attribute_type": "astralsorcery:movement_speed",
-            "identifier": "a9cfe96e-c4ed-44bc-9a5c-c75d7d088427",
+            "identifier": "a54f49a7-1e34-44fb-81b3-1933693c708e",
             "mode": 1,
             "value": 0.08
           },
           {
             "attribute_type": "astralsorcery:max_health",
-            "identifier": "9d69bc5d-c4d7-4240-b8ac-297c391f41c0",
+            "identifier": "61746fae-16bf-4074-b80f-f946fffb7c8c",
             "mode": 1,
             "value": 0.02
           }

@@ -46,13 +46,13 @@ public class LiquidStarlightRecipe extends CustomRecipe<LiquidStarlightRecipe, L
 
     public static final MapCodec<LiquidStarlightRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             CountIngredient.CODEC.fieldOf("input").forGetter(LiquidStarlightRecipe::getInput),
-            CountIngredient.CODEC.listOf().fieldOf("otherInputs").forGetter(LiquidStarlightRecipe::getOtherInputs),
+            CountIngredient.CODEC.listOf().fieldOf("other_inputs").forGetter(LiquidStarlightRecipe::getOtherInputs),
             Codec.INT.fieldOf("duration").forGetter(LiquidStarlightRecipe::getDuration),
-            Codec.INT.fieldOf("randomAdditionalDuration").forGetter(LiquidStarlightRecipe::getRandomAdditionalDuration),
+            Codec.INT.fieldOf("random_additional_duration").forGetter(LiquidStarlightRecipe::getRandomAdditionalDuration),
             ColorWrapper.CODEC.fieldOf("color").forGetter(LiquidStarlightRecipe::getColor),
-            LiquidStarlightRecipeOutputModifier.CODEC.listOf().fieldOf("outputModifiers").forGetter(LiquidStarlightRecipe::getOutputModifiers),
-            Codec.BOOL.fieldOf("consumesLiquid").orElse(false).forGetter(LiquidStarlightRecipe::consumesLiquid),
-            Codec.BOOL.fieldOf("consumesInputs").orElse(true).forGetter(LiquidStarlightRecipe::consumesInputs)
+            LiquidStarlightRecipeOutputModifier.CODEC.listOf().fieldOf("output_modifiers").forGetter(LiquidStarlightRecipe::getOutputModifiers),
+            Codec.BOOL.fieldOf("consumes_liquid").orElse(false).forGetter(LiquidStarlightRecipe::consumesLiquid),
+            Codec.BOOL.fieldOf("consumes_inputs").orElse(true).forGetter(LiquidStarlightRecipe::consumesInputs)
     ).apply(inst, LiquidStarlightRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, LiquidStarlightRecipe> STREAM_CODEC = StreamCodec.of(LiquidStarlightRecipe::write, LiquidStarlightRecipe::read);

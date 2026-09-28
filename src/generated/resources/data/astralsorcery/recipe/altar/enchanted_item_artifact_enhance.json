@@ -1,12 +1,12 @@
 {
   "type": "astralsorcery:altar_crafting",
-  "baseFocusShatterChance": 0.0,
+  "base_focus_shatter_chance": 0.0,
   "duration": 100,
   "effects": [
-    "astralsorcery:default_central_beam",
     "astralsorcery:default_altar_sparkle",
     "astralsorcery:default_lumen_input",
-    "astralsorcery:default_relay_input"
+    "astralsorcery:default_relay_input",
+    "astralsorcery:default_central_beam"
   ],
   "grid": {
     "key": {
@@ -44,7 +44,7 @@
       " E ",
       "   "
     ],
-    "relayPattern": [
+    "relay_pattern": [
       "  S  ",
       "R   R",
       "S   S",
@@ -52,9 +52,9 @@
       "  S  "
     ]
   },
-  "mayChain": false,
-  "onlyNight": true,
-  "outputModifiers": [
+  "may_chain": false,
+  "only_night": true,
+  "output_modifiers": [
     {
       "type": "astralsorcery:replace_with_input",
       "input_slot": 4,
@@ -69,7 +69,7 @@
     },
     {
       "type": "astralsorcery:set_data_component",
-      "componentType": "minecraft:rarity",
+      "component_type": "minecraft:rarity",
       "value": "astralsorcery:artifact"
     },
     {
@@ -83,7 +83,7 @@
       "id": "minecraft:iron_pickaxe"
     }
   ],
-  "requiredAdditionalInputs": [
+  "required_additional_inputs": [
     {
       "count": 1,
       "ingredient": {
@@ -91,7 +91,7 @@
       }
     }
   ],
-  "requiredFluid": [
+  "required_fluid": [
     {
       "amount": 1000,
       "id": "astralsorcery:liquid_starlight"
@@ -101,12 +101,12 @@
       "id": "astralsorcery:liquid_starlight"
     }
   ],
-  "requiredLumen": [
+  "required_lumen": [
     {
       "amount": 600,
       "lumen": "astralsorcery:prismatic"
     }
   ],
-  "requiredStarlight": [],
-  "requiredType": "radiance"
+  "required_starlight": [],
+  "required_type": "radiance"
 }
