@@ -23,7 +23,7 @@ neoForge {
     version = project.neo_version
 
     accessTransformers {
-        file('src/main/resources/META-INF/accesstransformer.cfg')
+        publish file('src/main/resources/META-INF/accesstransformer.cfg')
     }
 
     runs {
