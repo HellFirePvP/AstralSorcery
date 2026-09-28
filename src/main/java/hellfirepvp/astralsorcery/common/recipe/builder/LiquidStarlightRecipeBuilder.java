@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.recipe.liquid.LiquidStarlightRecipe;
 import hellfirepvp.astralsorcery.common.recipe.liquid.output.LiquidStarlightRecipeOutputModifier;
 import hellfirepvp.astralsorcery.common.util.data.ColorWrapper;
-import hellfirepvp.astralsorcery.common.util.data.CountIngredient;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
@@ -23,6 +22,7 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -43,8 +43,8 @@ public class LiquidStarlightRecipeBuilder implements RecipeBuilder {
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
     private final String recipeName;
-    private final CountIngredient input;
-    private final List<CountIngredient> otherInputs;
+    private final SizedIngredient input;
+    private final List<SizedIngredient> otherInputs;
 
     private int duration = 60;
     private int randomAdditionalDuration = 20;
@@ -53,17 +53,17 @@ public class LiquidStarlightRecipeBuilder implements RecipeBuilder {
     private boolean consumesLiquid = false;
     private boolean consumesInputs = true;
 
-    private LiquidStarlightRecipeBuilder(String recipeName, CountIngredient input, List<CountIngredient> otherInputs) {
+    private LiquidStarlightRecipeBuilder(String recipeName, SizedIngredient input, List<SizedIngredient> otherInputs) {
         this.recipeName = recipeName;
         this.input = input;
         this.otherInputs = otherInputs;
     }
 
-    public static LiquidStarlightRecipeBuilder builder(String recipeName, CountIngredient input) {
+    public static LiquidStarlightRecipeBuilder builder(String recipeName, SizedIngredient input) {
         return builder(recipeName, input, List.of());
     }
 
-    public static LiquidStarlightRecipeBuilder builder(String recipeName, CountIngredient input, List<CountIngredient> otherInputs) {
+    public static LiquidStarlightRecipeBuilder builder(String recipeName, SizedIngredient input, List<SizedIngredient> otherInputs) {
         return new LiquidStarlightRecipeBuilder(recipeName, input, otherInputs);
     }
 

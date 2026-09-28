@@ -14,13 +14,13 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.recipe.builder.LiquidStarlightRecipeBuilder;
 import hellfirepvp.astralsorcery.common.recipe.liquid.output.*;
-import hellfirepvp.astralsorcery.common.util.data.CountIngredient;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -39,14 +39,14 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
     }
 
     public static void registerRecipes(RecipeOutput recipeOutput) {
-        LiquidStarlightRecipeBuilder.builder("infused_wood", new CountIngredient(Ingredient.of(ItemTags.LOGS), 1))
+        LiquidStarlightRecipeBuilder.builder("infused_wood", new SizedIngredient(Ingredient.of(ItemTags.LOGS), 1))
                 .addOutputModifier(LiquidStarlightOutputDropItem.create(ItemsAS.BLOCK_INFUSED_WOOD_RAW.toStack()))
                 .duration(30)
                 .randomAdditionalDuration(0)
                 .save(recipeOutput);
         LiquidStarlightRecipeBuilder.builder("merge_crystals",
-                        new CountIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
-                        List.of(new CountIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1)))
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
+                        List.of(new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1)))
                 .addOutputModifier(LiquidStarlightOutputMergeCrystal.getInstance())
                 .duration(60)
                 .randomAdditionalDuration(20)
@@ -54,8 +54,8 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
                 .doesntConsumeInputs()
                 .save(recipeOutput);
         LiquidStarlightRecipeBuilder.builder("form_crystal_cluster",
-                        new CountIngredient(Ingredient.of(ItemsAS.STARDUST), 1),
-                        List.of(new CountIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1)))
+                        new SizedIngredient(Ingredient.of(ItemsAS.STARDUST), 1),
+                        List.of(new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1)))
                 .addOutputModifier(LiquidStarlightOutputFormCrystalCluster.getInstance())
                 .duration(80)
                 .randomAdditionalDuration(40)
@@ -63,8 +63,8 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
                 .doesntConsumeInputs()
                 .save(recipeOutput);
         LiquidStarlightRecipeBuilder.builder("form_gem_crystal_cluster",
-                        new CountIngredient(Ingredient.of(ItemsAS.ILLUMINATION_POWDER), 1),
-                        List.of(new CountIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1)))
+                        new SizedIngredient(Ingredient.of(ItemsAS.ILLUMINATION_POWDER), 1),
+                        List.of(new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1)))
                 .addOutputModifier(LiquidStarlightOutputFormGemCrystalCluster.getInstance())
                 .duration(80)
                 .randomAdditionalDuration(40)
@@ -72,7 +72,7 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
                 .doesntConsumeInputs()
                 .save(recipeOutput);
         LiquidStarlightRecipeBuilder.builder("grow_crystal_size",
-                        new CountIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1))
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1))
                 .addOutputModifier(LiquidStarlightOutputGrowSize.getInstance())
                 .duration(80)
                 .randomAdditionalDuration(40)
@@ -81,10 +81,10 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
                 .save(recipeOutput);
 
         LiquidStarlightRecipeBuilder.builder("bind_lumen",
-                        new CountIngredient(Ingredient.of(ItemsAS.LUMEN_CRYSTAL), 1),
+                        new SizedIngredient(Ingredient.of(ItemsAS.LUMEN_CRYSTAL), 1),
                         List.of(
-                                new CountIngredient(Ingredient.of(ItemsAS.STARDUST), 1),
-                                new CountIngredient(IsLumenBindableIngredient.INSTANCE.toVanilla(), 1)
+                                new SizedIngredient(Ingredient.of(ItemsAS.STARDUST), 1),
+                                new SizedIngredient(IsLumenBindableIngredient.INSTANCE.toVanilla(), 1)
                         ))
                 .addOutputModifier(LiquidStarlightOutputBindLumen.getInstance())
                 .duration(80)
@@ -93,8 +93,8 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
                 .doesntConsumeInputs()
                 .save(recipeOutput);
         LiquidStarlightRecipeBuilder.builder("fill_lumen",
-                        new CountIngredient(Ingredient.of(ItemsAS.LUMEN_CRYSTAL), 1),
-                        List.of(new CountIngredient(HasStoredLumenIngredient.INSTANCE.toVanilla(), 1)))
+                        new SizedIngredient(Ingredient.of(ItemsAS.LUMEN_CRYSTAL), 1),
+                        List.of(new SizedIngredient(HasStoredLumenIngredient.INSTANCE.toVanilla(), 1)))
                 .addOutputModifier(LiquidStarlightOutputFillLumen.getInstance())
                 .duration(80)
                 .randomAdditionalDuration(40)

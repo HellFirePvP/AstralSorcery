@@ -19,7 +19,6 @@ import hellfirepvp.astralsorcery.common.recipe.altar.effect.AltarEffect;
 import hellfirepvp.astralsorcery.common.recipe.altar.output.AltarRecipeOutputModifier;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.NameUtil;
-import hellfirepvp.astralsorcery.common.util.data.CountIngredient;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
@@ -36,6 +35,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -70,7 +70,7 @@ public class AltarRecipeBuilder implements RecipeBuilder {
     private final Set<BaseConstellation> requiredStarlight = new LinkedHashSet<>();
     private final List<LumenStack> requiredLumen = new ArrayList<>();
     private final List<FluidStack> requiredFluids = new ArrayList<>();
-    private final List<CountIngredient> requiredAdditionalInputs = new ArrayList<>();
+    private final List<SizedIngredient> requiredAdditionalInputs = new ArrayList<>();
 
     private final Set<AltarEffect> effects = new LinkedHashSet<>();
     private final List<AltarRecipeOutputModifier> outputModifiers = new ArrayList<>();
@@ -225,17 +225,17 @@ public class AltarRecipeBuilder implements RecipeBuilder {
     }
 
     public AltarRecipeBuilder addRequiredAdditionalInput(int count, ItemStack... stacks) {
-        this.requiredAdditionalInputs.add(new CountIngredient(Ingredient.of(stacks), count));
+        this.requiredAdditionalInputs.add(new SizedIngredient(Ingredient.of(stacks), count));
         return this;
     }
 
     public AltarRecipeBuilder addRequiredAdditionalInput(int count, TagKey<Item> itemTag) {
-        this.requiredAdditionalInputs.add(new CountIngredient(Ingredient.of(itemTag), count));
+        this.requiredAdditionalInputs.add(new SizedIngredient(Ingredient.of(itemTag), count));
         return this;
     }
 
     public AltarRecipeBuilder addRequiredAdditionalInput(int count, Ingredient ingredient) {
-        this.requiredAdditionalInputs.add(new CountIngredient(ingredient, count));
+        this.requiredAdditionalInputs.add(new SizedIngredient(ingredient, count));
         return this;
     }
 

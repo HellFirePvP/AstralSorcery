@@ -42,7 +42,6 @@ import hellfirepvp.astralsorcery.common.util.ColorUtil;
 import hellfirepvp.astralsorcery.common.util.IngredientUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtil;
 import hellfirepvp.astralsorcery.common.util.data.ColorWrapper;
-import hellfirepvp.astralsorcery.common.util.data.CountIngredient;
 import hellfirepvp.astralsorcery.common.util.data.IntRectangle;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.ChatFormatting;
@@ -65,6 +64,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.joml.Vector2f;
 
@@ -245,8 +245,8 @@ public class RenderPageAltar extends RenderPageRecipe<AltarRecipe> {
         int time = 2800;
         float effectPart = (ClientProxy.getClientTick() % time) / (float) time;
 
-        List<CountIngredient> otherIngredients = recipe.getRequiredAdditionalInputs().stream()
-                .filter(ingredient -> !ingredient.isEmpty())
+        List<SizedIngredient> otherIngredients = recipe.getRequiredAdditionalInputs().stream()
+                .filter(ingredient -> !ingredient.ingredient().isEmpty())
                 .toList();
         List<FluidStack> otherFluidIngredients = recipe.getRequiredFluid().stream()
                 .filter(ingredient -> !ingredient.isEmpty())
@@ -259,7 +259,7 @@ public class RenderPageAltar extends RenderPageRecipe<AltarRecipe> {
         }
 
         for (int i = 0; i < otherIngredients.size(); i++) {
-            CountIngredient input = otherIngredients.get(i);
+            SizedIngredient input = otherIngredients.get(i);
 
             float rotRad = (i / count) * Mth.TWO_PI;
             rotRad += Mth.PI;
