@@ -116,13 +116,23 @@ sourceSets.main.resources {
     exclude '**/.cache/**'
 }
 
+project.configurations {
+    "localRuntime" { Configuration c ->
+        canBeResolved = true
+        canBeConsumed = false
+        named(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME) {
+            extendsFrom c
+        }
+    }
+}
+
 dependencies {
-    implementation "hellfirepvp.observerlib:ObserverLib:${observerlib_version}"
+    api "hellfirepvp.observerlib:ObserverLib:${observerlib_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-    implementation "maven.modrinth:jade:${jade_modrinth_version}"
+    localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    api "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    compileOnly(localRuntime "maven.modrinth:jade:${jade_modrinth_version}")
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
