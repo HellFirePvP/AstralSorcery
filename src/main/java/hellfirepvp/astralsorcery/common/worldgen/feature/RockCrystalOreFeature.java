@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.DataAS;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
+import net.minecraft.server.TickTask;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.chunk.BulkSectionAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -47,7 +48,9 @@ public class RockCrystalOreFeature extends Feature<RockCrystalOreFeatureConfigur
                     int relativeZ = SectionPos.sectionRelative(blockpos.getZ());
                     if (cfg.getReplaceCondition().test(worldgenlevel, blockpos) && !isAdjacentToAir(access::getBlockState, blockpos)) {
                         section.setBlockState(relativeX, relativeY, relativeZ, BlocksAS.ROCK_CRYSTAL_ORE.get().defaultBlockState(), false);
-                        DataAS.DOMAIN_AS.getData(worldgenlevel.getLevel(), DataAS.KEY_ROCK_CRYSTAL_DATA).addOre(blockpos);
+                        context.level().getLevel().getServer().tell(new TickTask(0, () -> {
+                            DataAS.DOMAIN_AS.getData(worldgenlevel.getLevel(), DataAS.KEY_ROCK_CRYSTAL_DATA).addOre(blockpos);
+                        }));
                         return true;
                     }
                 }

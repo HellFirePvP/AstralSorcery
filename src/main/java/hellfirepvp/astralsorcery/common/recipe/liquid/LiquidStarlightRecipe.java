@@ -46,7 +46,7 @@ public class LiquidStarlightRecipe extends CustomRecipe<LiquidStarlightRecipe, L
 
     public static final MapCodec<LiquidStarlightRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             SizedIngredient.NESTED_CODEC.fieldOf("input").forGetter(LiquidStarlightRecipe::getInput),
-            SizedIngredient.NESTED_CODEC.listOf().fieldOf("otherInputs").forGetter(LiquidStarlightRecipe::getOtherInputs),
+            SizedIngredient.NESTED_CODEC.listOf().fieldOf("other_inputs").forGetter(LiquidStarlightRecipe::getOtherInputs),
             Codec.INT.fieldOf("duration").forGetter(LiquidStarlightRecipe::getDuration),
             Codec.INT.fieldOf("random_additional_duration").forGetter(LiquidStarlightRecipe::getRandomAdditionalDuration),
             ColorWrapper.CODEC.fieldOf("color").forGetter(LiquidStarlightRecipe::getColor),
