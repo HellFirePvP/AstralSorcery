@@ -23,7 +23,7 @@ neoForge {
     version = project.neo_version
 
     accessTransformers {
-        file('src/main/resources/META-INF/accesstransformer.cfg')
+        publish file('src/main/resources/META-INF/accesstransformer.cfg')
     }
 
     runs {
@@ -73,6 +73,17 @@ neoForge {
     }
 }
 
+project.configurations {
+    "localRuntime" { Configuration c ->
+        canBeResolved = true
+        canBeConsumed = false
+        named(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME) {
+            extendsFrom c
+        }
+    }
+}
+project.java { withSourcesJar() }
+
 repositories {
 
     maven {
@@ -111,29 +122,34 @@ repositories {
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    exclude '**/.cache/**'
+}
 
 dependencies {
-    implementation "hellfirepvp.observerlib:ObserverLib:${observerlib_version}"
+    api "hellfirepvp.observerlib:ObserverLib:${observerlib_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-    implementation "maven.modrinth:jade:${jade_modrinth_version}"
+    localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    api "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    compileOnly(localRuntime "maven.modrinth:jade:${jade_modrinth_version}")
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
-    var replaceProperties = [minecraft_version      : minecraft_version,
-                             minecraft_version_range: minecraft_version_range,
-                             neo_version            : neo_version,
-                             neo_version_range      : neo_version_range,
-                             loader_version_range   : loader_version_range,
-                             mod_id                 : mod_id,
-                             mod_name               : mod_name,
-                             mod_license            : mod_license,
-                             mod_version            : mod_version,
-                             mod_authors            : mod_authors,
-                             mod_description        : mod_description]
+    var replaceProperties = [minecraft_version        : minecraft_version,
+                             minecraft_version_range  : minecraft_version_range,
+                             neo_version              : neo_version,
+                             neo_version_range        : neo_version_range,
+                             loader_version_range     : loader_version_range,
+                             mod_id                   : mod_id,
+                             mod_name                 : mod_name,
+                             mod_license              : mod_license,
+                             mod_version              : mod_version,
+                             mod_authors              : mod_authors,
+                             mod_description          : mod_description,
+                             observerlib_version_range: observerlib_version_range,
+                             curios_version_range     : curios_version_range]
     inputs.properties replaceProperties
     expand replaceProperties
     from "src/main/templates"
