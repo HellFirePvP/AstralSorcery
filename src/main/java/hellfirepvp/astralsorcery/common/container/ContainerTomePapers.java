@@ -8,12 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.container;
 
+import hellfirepvp.astralsorcery.common.component.ConstellationPaperComponent;
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.container.base.ContainerItemInSlot;
 import hellfirepvp.astralsorcery.common.container.base.PlayerInventorySlots;
 import hellfirepvp.astralsorcery.common.container.slot.ConstellationPaperSlot;
 import hellfirepvp.astralsorcery.common.container.slot.ReadOnlySlot;
 import hellfirepvp.astralsorcery.common.container.transfer.DefaultQuickMoveTransfer;
+import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.SidedHelper;
@@ -72,7 +74,10 @@ public class ContainerTomePapers extends ContainerItemInSlot implements DefaultQ
 
     @Override
     public boolean canQuickTransferItemToSlot(ItemStack stack, Slot targetSlot, boolean onlyTransferToFilledSlots) {
-        if (targetSlot instanceof ConstellationPaperSlot && stack.is(ItemsAS.CONSTELLATION_PAPER)) {
+        if (targetSlot instanceof ConstellationPaperSlot &&
+                stack.is(ItemsAS.CONSTELLATION_PAPER) &&
+                stack.getOrDefault(DataComponentsAS.CONSTELLATION_PAPER, ConstellationPaperComponent.EMPTY).getConstellation().isPresent()
+        ) {
             return true;
         }
         return DefaultQuickMoveTransfer.super.canQuickTransferItemToSlot(stack, targetSlot, onlyTransferToFilledSlots);

@@ -34,7 +34,6 @@ public interface CreativeTabItem extends ItemLike {
         return tab == getCreativeTab();
     }
 
-    @OnlyIn(Dist.CLIENT)
     default void fillCreativeTab(Consumer<ItemStack> tabItems) {
         tabItems.accept(new ItemStack(this));
     }

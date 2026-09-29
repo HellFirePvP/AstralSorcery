@@ -81,8 +81,10 @@ public class ResearchManager {
     @OnlyIn(Dist.CLIENT)
     public static void setClientProgress(@Nonnull PlayerProgress progress, @Nullable Player player) {
         int prevClientLevel = ResearchManager.getClientProgress().getPerkData().getPerkLevel(player, LogicalSide.CLIENT);
+        if (progress.hasResearchRelevantChanges(clientProgress)) {
+            TomeResearchScreen.resetOpenTome();
+        }
         clientProgress = progress;
-        TomeResearchScreen.resetOpenTome();
         int newLevel = progress.getPerkData().getPerkLevel(player, LogicalSide.CLIENT);
         if (newLevel > prevClientLevel) {
             RenderPerkExperienceOverlay.RENDERER.revealExperienceBar(160);
@@ -95,6 +97,12 @@ public class ResearchManager {
 
     public static void clearServerCache() {
         serverProgress.clear();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void clearClientCache() {
+        clientProgress = PlayerProgressTestAccess.get();
+        TomeResearchScreen.resetOpenTome();
     }
 
     public static void scheduleSave(Player player, boolean force) {

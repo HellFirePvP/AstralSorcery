@@ -255,4 +255,26 @@ public class PlayerProgress {
     protected boolean setKnownFlag(ResearchFlag flag) {
         return this.knownFlags.add(flag);
     }
+
+    public boolean hasResearchRelevantChanges(PlayerProgress other) {
+        if (!this.getSeenConstellations().equals(other.getSeenConstellations())) {
+            return true;
+        }
+        if (!this.getKnownConstellations().equals(other.getKnownConstellations())) {
+            return true;
+        }
+        if (!this.getSeenFocalPoints().equals(other.getSeenFocalPoints())) {
+            return true;
+        }
+        if (!this.getDiscoveredLumen().equals(other.getDiscoveredLumen())) {
+            return true;
+        }
+        if (!this.getKnownFlags().equals(other.getKnownFlags())) {
+            return true;
+        }
+        if (this.getTierReached() != other.getTierReached()) {
+            return true;
+        }
+        return !Objects.equals(this.getAttunedConstellation(), other.getAttunedConstellation());
+    }
 }

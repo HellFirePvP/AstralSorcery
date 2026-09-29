@@ -51,6 +51,7 @@ import hellfirepvp.astralsorcery.common.perk.tick.PerkCooldownHelper;
 import hellfirepvp.astralsorcery.common.perk.tree.AbstractPerk;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.perk.type.base.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.tick.TimeoutList;
 import hellfirepvp.astralsorcery.common.util.tooltip.ArtifactDecoratedTooltip;
 import hellfirepvp.astralsorcery.common.util.tooltip.ItemStackTooltip;
@@ -108,6 +109,7 @@ public class ClientProxy extends CommonProxy {
         this.clientLifecycleListeners.add(ClientLifecycleListener.disconnect(IsLumenBindableIngredient::clearDisplayCache));
         this.clientLifecycleListeners.add(ClientLifecycleListener.disconnect(IsEnchantedIngredient::clearDisplayCache));
         this.clientLifecycleListeners.add(ClientLifecycleListener.disconnect(HasStoredLumenIngredient::clearDisplayCache));
+        this.clientLifecycleListeners.add(ClientLifecycleListener.disconnect(ResearchManager::clearClientCache));
 
         super.init();
 
