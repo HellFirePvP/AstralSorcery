@@ -93,19 +93,20 @@ public class FocalTransmutationRecipeProvider extends RecipeProvider {
 
         FocalTransmutationRecipeBuilder.builder()
                 .duration(seconds(40))
-                .color(ColorsAS.DYE_LIGHT_GRAY)
-                .outputs(Blocks.CLAY, 1)
-                .inputDisplay(Items.SAND)
-                .input(BlockPredicate.matchesTag(BlockTags.SAND))
-                .save(recipeOutput);
-        FocalTransmutationRecipeBuilder.builder()
-                .duration(seconds(40))
                 .color(ColorsAS.DYE_LIGHT_BLUE)
                 .outputs(Blocks.SEA_LANTERN, 1)
                 .inputDisplay(Items.GLOWSTONE)
                 .input(BlockPredicate.matchesBlocks(Blocks.GLOWSTONE))
                 .save(recipeOutput);
 
+        FocalTransmutationRecipeBuilder.builder()
+                .duration(seconds(40))
+                .color(ColorsAS.DYE_LIGHT_GRAY)
+                .outputs(Blocks.CLAY, 1)
+                .inputDisplay(Items.SAND)
+                .input(BlockPredicate.matchesTag(BlockTags.SAND))
+                .requiresFocusedStarlight()
+                .save(recipeOutput);
         FocalTransmutationRecipeBuilder.builder()
                 .duration(seconds(20))
                 .color(ColorsAS.DYE_YELLOW)

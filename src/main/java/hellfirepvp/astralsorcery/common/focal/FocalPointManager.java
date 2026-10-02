@@ -85,9 +85,7 @@ public class FocalPointManager {
 
     private void onLevelTick(LevelTickEvent.Post event) {
         if (event.getLevel() instanceof ServerLevel sLevel) {
-            this.getData().getNodes(sLevel.dimension()).forEach(node -> {
-                node.tick(sLevel);
-            });
+            List.copyOf(this.getData().getNodes(sLevel.dimension())).forEach(node -> node.tick(sLevel));
         }
     }
 
