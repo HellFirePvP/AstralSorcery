@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.function.FXColorFunction;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.component.CrystalAttributesComponent;
 import hellfirepvp.astralsorcery.common.crystal.CrystalPropertyGenerator;
+import hellfirepvp.astralsorcery.common.event.CrystalPropertyEvent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -34,6 +35,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -75,9 +77,16 @@ public class LiquidStarlightOutputFormCrystalCluster extends LiquidStarlightReci
                 CrystalAttributesComponent defaultCelestialComponent = ItemsAS.CELESTIAL_CRYSTAL.get().components()
                         .getOrDefault(DataComponentsAS.CRYSTAL_ATTRIBUTES.get(), CrystalAttributesComponent.defaultEmpty());
                 CrystalAttributesComponent cmp = input.getTriggerEntity().getItem().getOrDefault(DataComponentsAS.CRYSTAL_ATTRIBUTES, CrystalAttributesComponent.defaultEmpty());
+                CrystalAttributesComponent prev = cmp;
+
                 cmp = cmp.setProperties(defaultCelestialComponent.getProperties());
                 cmp = CrystalPropertyGenerator.generateRandomProperties(cmp);
-                tile.getTileData().setCrystalAttributes(cmp);
+
+                CrystalPropertyEvent.Change formCluster = new CrystalPropertyEvent.Change(input.getTriggerEntity().getItem(),
+                        CrystalPropertyEvent.Change.Type.FORM_CRYSTAL_CLUSTER, prev, cmp);
+                NeoForge.EVENT_BUS.post(formCluster);
+
+                tile.getTileData().setCrystalAttributes(formCluster.getResultComponent());
                 tile.markForUpdate();
 
                 recipe.consumeItemInputs(input);

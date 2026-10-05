@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.component.AstrolabeAngleComponent;
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.constellation.level.LevelSkyContext;
 import hellfirepvp.astralsorcery.common.constellation.level.LevelSkyHandler;
+import hellfirepvp.astralsorcery.common.event.RecipeEvent;
 import hellfirepvp.astralsorcery.common.visual.type.FocalPointCombineSparkle;
 import hellfirepvp.astralsorcery.common.item.AstrolabeItem;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
@@ -62,6 +63,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.TriState;
 
 import java.util.*;
@@ -264,6 +266,10 @@ public class BasicFocalPointNode extends FocalPointNode {
         if (this.activeCombineRecipe == null && sLevel.getGameTime() % 100 == 0) {
             int range = BiasedSuppliers.getLowest(2, () -> rand.nextInt(3) + 1).get();
             ActiveFocalCombineRecipe.tryFindAtOpenSky(sLevel, this.getConstellation(), this.getPos(), range).ifPresent(recipe -> {
+                RecipeEvent.FocalCombine.Start start = new RecipeEvent.FocalCombine.Start(recipe);
+                NeoForge.EVENT_BUS.post(start);
+                if (start.isCanceled()) return;
+
                 this.activeCombineRecipe = recipe;
             });
         }
@@ -278,6 +284,7 @@ public class BasicFocalPointNode extends FocalPointNode {
                 FocalPointCombineSparkle.at(new Vector3(usedInput.getCenter()), this.activeCombineRecipe.getRecipe().getColor()).sendToNearby(sLevel);
                 if (this.activeCombineRecipe.isFinished()) {
                     this.activeCombineRecipe.finish(usedInput, sLevel);
+                    NeoForge.EVENT_BUS.post(new RecipeEvent.FocalCombine.End(this.activeCombineRecipe));
                     this.activeCombineRecipe = null;
                 }
             });

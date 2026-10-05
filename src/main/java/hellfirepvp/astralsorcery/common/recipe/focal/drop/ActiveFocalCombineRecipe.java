@@ -17,6 +17,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -34,27 +35,32 @@ import java.util.stream.Collectors;
  */
 public class ActiveFocalCombineRecipe {
 
-    private final FocalCombineRecipe recipe;
+    private final RecipeHolder<FocalCombineRecipe> recipe;
     private final BaseConstellation usedConstellation;
     private final Set<UUID> combineItems;
     private int duration;
 
-    private ActiveFocalCombineRecipe(FocalCombineRecipe recipe, BaseConstellation usedConstellation, Set<UUID> combineItems, int duration) {
+    private ActiveFocalCombineRecipe(RecipeHolder<FocalCombineRecipe> recipe, BaseConstellation usedConstellation, Set<UUID> combineItems, int duration) {
         this.recipe = recipe;
         this.usedConstellation = usedConstellation;
         this.combineItems = combineItems;
         this.duration = duration;
     }
 
-    public FocalCombineRecipe getRecipe() {
+    public RecipeHolder<FocalCombineRecipe> getRecipeHolder() {
         return this.recipe;
     }
 
-    public static ActiveFocalCombineRecipe create(FocalCombineRecipe recipe, BaseConstellation cst, FocalCombineCraftingInput input) {
+    public FocalCombineRecipe getRecipe() {
+        return this.getRecipeHolder().value();
+    }
+
+    public static ActiveFocalCombineRecipe create(RecipeHolder<FocalCombineRecipe> holder, BaseConstellation cst, FocalCombineCraftingInput input) {
+        FocalCombineRecipe recipe = holder.value();
         Set<UUID> itemEntityIds = recipe.filterNecessaryItems(input).stream()
                 .map(Entity::getUUID)
                 .collect(Collectors.toSet());
-        return new ActiveFocalCombineRecipe(recipe, cst, itemEntityIds, recipe.getDuration());
+        return new ActiveFocalCombineRecipe(holder, cst, itemEntityIds, recipe.getDuration());
     }
 
     public static Optional<ActiveFocalCombineRecipe> tryFindAtOpenSky(ServerLevel sLevel, BaseConstellation cst, ColumnPos pos, int scanRange) {
@@ -80,7 +86,7 @@ public class ActiveFocalCombineRecipe {
 
             Optional<ActiveFocalCombineRecipe> recipeOpt = finder.findFocalCombineRecipe(sLevel, cst, combinable).map(holder -> {
                 FocalCombineCraftingInput input = new FocalCombineCraftingInput(cst, sLevel, combinable);
-                return create(holder.value(), cst, input);
+                return create(holder, cst, input);
             });
             if (recipeOpt.isPresent()) {
                 return recipeOpt;
@@ -103,7 +109,7 @@ public class ActiveFocalCombineRecipe {
         this.combineItems.removeIf(id -> !aliveItems.contains(id));
 
         FocalCombineCraftingInput runningInput = new FocalCombineCraftingInput(this.usedConstellation, sLevel, itemEntities);
-        if (this.recipe.matches(runningInput, sLevel)) {
+        if (this.getRecipe().matches(runningInput, sLevel)) {
             return Optional.of(runningInput);
         }
         return Optional.empty();
@@ -118,7 +124,8 @@ public class ActiveFocalCombineRecipe {
     }
 
     public void finish(FocalCombineCraftingInput testedInput, ServerLevel sLevel) {
-        this.recipe.consumeInputs(testedInput, sLevel.registryAccess());
-        this.recipe.createOutput(testedInput, sLevel.registryAccess());
+        FocalCombineRecipe recipe = this.getRecipe();
+        recipe.consumeInputs(testedInput, sLevel.registryAccess());
+        recipe.createOutput(testedInput, sLevel.registryAccess());
     }
 }

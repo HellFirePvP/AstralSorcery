@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.component.ConstellationPaperComponent;
 import hellfirepvp.astralsorcery.common.component.StoredLumenComponent;
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.container.*;
+import hellfirepvp.astralsorcery.common.event.RecipeEvent;
 import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
@@ -71,6 +72,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -153,6 +155,7 @@ public class TileAltar extends TileEntityNetwork<ForwardingStarlightReceiverNode
             if (activeRecipe.isFinished(level) && activeRecipe.consumeItemInputs(this.getTileData(), level, this.getBlockPos(), true)) {
                 recipe.createOutput(this.createInput(level, activeRecipe.getPlayerUUID()), level.registryAccess());
                 activeRecipe.consumeItemInputs(this.getTileData(), level, this.getBlockPos(), false);
+                NeoForge.EVENT_BUS.post(new RecipeEvent.Altar.End(recipe, activeRecipe));
 
                 if (recipe.getBaseFocusShatterChance() > 0F &&
                         recipe.getFocusConstellation().isPresent() &&
@@ -180,14 +183,18 @@ public class TileAltar extends TileEntityNetwork<ForwardingStarlightReceiverNode
         }
 
         ActiveAltarRecipe activeRecipe = ActiveAltarRecipe.of(recipe, playerUUID, Direction.NORTH);
+        RecipeEvent.Altar.Start start = new RecipeEvent.Altar.Start(recipe, activeRecipe);
+        NeoForge.EVENT_BUS.post(start);
+        if (start.isCanceled()) return;
+
         this.getTileData().setActiveRecipe(activeRecipe);
         this.getTileData().markForUpdate();
 
         ServerSoundHelper.playSoundAround(SoundsAS.ALTAR_CRAFT_START, level, Vector3.atCenter(this), 0.6F, 1F);
     }
 
-    public Optional<RecipeHolder<AltarRecipe>> findMatchingRecipe(Level level) {
-        AltarCraftingInput input = this.createInput(level, null);
+    public Optional<RecipeHolder<AltarRecipe>> findMatchingRecipe(Level level, @Nullable UUID playerUUID) {
+        AltarCraftingInput input = this.createInput(level, playerUUID);
         return RecipeFinder.of(level).findAltarRecipe(this.getLevel(), input);
     }
 

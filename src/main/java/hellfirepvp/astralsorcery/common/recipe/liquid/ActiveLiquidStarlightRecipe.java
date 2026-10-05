@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.recipe.liquid;
 
+import hellfirepvp.astralsorcery.common.event.RecipeEvent;
 import hellfirepvp.astralsorcery.common.util.RecipeFinder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -15,7 +16,9 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.NeoForge;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,33 +41,42 @@ public class ActiveLiquidStarlightRecipe {
         Level level = itemEntity.level();
 
         RecipeFinder.of(level).findLiquidStarlightRecipe(itemEntity).ifPresent(recipeHolder -> {
-            LiquidStarlightRecipe recipe = recipeHolder.value();
             LiquidStarlightRecipeInput input = LiquidStarlightRecipeInput.of(itemEntity);
-            if (!recipe.matches(input, level)) {
+            if (!recipeHolder.value().matches(input, level)) {
                 return;
             }
 
             RandomSource rand = RandomSource.create(pos.asLong() + itemEntity.getId() + itemEntity.getId() << 16);
+            if (getCraftingTick(itemEntity) == 0) {
+                RecipeEvent.LiquidStarlight.Start start = new RecipeEvent.LiquidStarlight.Start(recipeHolder);
+                NeoForge.EVENT_BUS.post(start);
+                if (start.isCanceled()) return;
+            }
+
             int craftTick = getAndIncrementCraftingTick(itemEntity);
             if (!level.isClientSide()) {
-                doServerCraftTick(itemEntity, level, rand, recipe, craftTick);
+                doServerCraftTick(itemEntity, level, rand, recipeHolder, craftTick);
             } else {
-                doClientCraftTick(itemEntity, level, rand, recipe, craftTick);
+                doClientCraftTick(itemEntity, level, rand, recipeHolder, craftTick);
             }
         });
     }
 
-    private static void doServerCraftTick(ItemEntity triggerEntity, Level level, RandomSource rand, LiquidStarlightRecipe recipe, int craftTick) {
+    private static void doServerCraftTick(ItemEntity triggerEntity, Level level, RandomSource rand, RecipeHolder<LiquidStarlightRecipe> recipeHolder, int craftTick) {
+        LiquidStarlightRecipe recipe = recipeHolder.value();
         int requiredTicks = recipe.getDuration() + rand.nextInt(Math.max(recipe.getRandomAdditionalDuration() + 1, 1));
         if (craftTick >= requiredTicks) {
             LiquidStarlightRecipeInput input = LiquidStarlightRecipeInput.of(triggerEntity);
             if (recipe.matches(input, level) && recipe.consumeInputs(input, level.registryAccess())) {
+                setCraftingTick(triggerEntity, 0);
                 recipe.createOutput(input, level.registryAccess());
+                NeoForge.EVENT_BUS.post(new RecipeEvent.LiquidStarlight.End(recipeHolder));
             }
         }
     }
 
-    private static void doClientCraftTick(ItemEntity itemEntity, Level level, RandomSource rand, LiquidStarlightRecipe recipe, int craftTick) {
+    private static void doClientCraftTick(ItemEntity itemEntity, Level level, RandomSource rand, RecipeHolder<LiquidStarlightRecipe> recipeHolder, int craftTick) {
+        LiquidStarlightRecipe recipe = recipeHolder.value();
         RandomSource effectRand = RandomSource.create(rand.nextLong() ^ (long) craftTick << 32 ^ craftTick);
         LiquidStarlightRecipeInput input = LiquidStarlightRecipeInput.of(itemEntity);
         if (recipe.matches(input, level)) {

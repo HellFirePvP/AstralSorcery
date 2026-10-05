@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.common.block.tile.LumenArrayBlock;
 import hellfirepvp.astralsorcery.common.component.IdentifierComponent;
 import hellfirepvp.astralsorcery.common.component.StoredLumenComponent;
+import hellfirepvp.astralsorcery.common.event.RecipeEvent;
 import hellfirepvp.astralsorcery.common.lib.FluidsAS;
 import hellfirepvp.astralsorcery.common.lib.LumenAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
@@ -66,6 +67,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -223,6 +225,8 @@ public class TileLumenArray extends TileEntityTick<TileLumenArray.Data> implemen
                             if (requiredInputs <= 0) {
                                 LumenStack produced = LumenStack.of(this.activeRecipe.getProducedLumen(), fillableAttempts * this.activeRecipe.getProducedLumenAmount());
                                 this.getTileData().getLumenHandler().fill(produced, ILumenHandler.Action.EXECUTE);
+
+                                NeoForge.EVENT_BUS.post(new RecipeEvent.LumenGeneration(this.activeRecipe, this, produced.copy()));
 
                                 this.getTileData().getOwner(level).ifPresent(sPlayer -> {
                                     List<Lumen> newlyDiscovered = ResearchHelper.discoverLumen(sPlayer, RecipeUtil.findAnyLumenMakingUp(level, produced.getLumen()));

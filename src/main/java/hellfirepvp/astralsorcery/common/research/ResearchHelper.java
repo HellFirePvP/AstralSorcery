@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.research;
 
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.constellation.property.AttunePlayerProperty;
+import hellfirepvp.astralsorcery.common.event.ResearchEvent;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
@@ -27,6 +28,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
@@ -45,33 +47,64 @@ import java.util.function.Predicate;
 public class ResearchHelper {
 
     public static boolean memorizeConstellation(ServerPlayer player, BaseConstellation constellation) {
-        return withProgress(player, progress -> progress.memorizeConstellation(constellation));
+        return withProgress(player, progress -> {
+            if (progress.memorizeConstellation(constellation)) {
+                NeoForge.EVENT_BUS.post(new ResearchEvent.MemorizeConstellation(player, progress, constellation));
+                return true;
+            }
+            return false;
+        });
     }
 
     public static boolean discoverConstellation(ServerPlayer player, BaseConstellation constellation) {
-        return withProgress(player, progress -> progress.discoverConstellation(constellation));
+        return withProgress(player, progress -> {
+            boolean memorized = progress.hasSeenConstellation(constellation);
+            if (progress.discoverConstellation(constellation)) {
+                if (!memorized) {
+                    NeoForge.EVENT_BUS.post(new ResearchEvent.MemorizeConstellation(player, progress, constellation));
+                }
+                NeoForge.EVENT_BUS.post(new ResearchEvent.DiscoverConstellation(player, progress, constellation));
+                return true;
+            }
+            return false;
+        });
     }
 
     public static boolean discoverConstellations(ServerPlayer player, Collection<BaseConstellation> constellations) {
         return withProgress(player, progress -> {
             boolean discoveredAny = false;
             for (BaseConstellation c : constellations) {
-                if (progress.discoverConstellation(c)) discoveredAny = true;
+                boolean memorized = progress.hasSeenConstellation(c);
+                if (progress.discoverConstellation(c)) {
+                    if (!memorized) {
+                        NeoForge.EVENT_BUS.post(new ResearchEvent.MemorizeConstellation(player, progress, c));
+                    }
+                    NeoForge.EVENT_BUS.post(new ResearchEvent.DiscoverConstellation(player, progress, c));
+                    discoveredAny = true;
+                }
             }
             return discoveredAny;
         });
     }
 
     public static boolean memorizeFocalPoint(ServerPlayer player, BaseConstellation constellation) {
-        return withProgress(player, progress ->
-                constellation.is(TagsAS.Constellations.MAY_BE_FOCAL_POINT) && progress.memorizeFocalPoint(constellation));
+        return withProgress(player, progress -> {
+            if (constellation.is(TagsAS.Constellations.MAY_BE_FOCAL_POINT) && progress.memorizeFocalPoint(constellation)) {
+                NeoForge.EVENT_BUS.post(new ResearchEvent.MemorizedFocalPoint(player, progress, constellation));
+                return true;
+            }
+            return false;
+        });
     }
 
     public static boolean memorizeFocalPoints(ServerPlayer player, Collection<BaseConstellation> constellations) {
         return withProgress(player, progress -> {
             boolean memorizedAny = false;
             for (BaseConstellation c : constellations) {
-                if (c.is(TagsAS.Constellations.MAY_BE_FOCAL_POINT) && progress.memorizeFocalPoint(c)) memorizedAny = true;
+                if (c.is(TagsAS.Constellations.MAY_BE_FOCAL_POINT) && progress.memorizeFocalPoint(c)) {
+                    NeoForge.EVENT_BUS.post(new ResearchEvent.MemorizedFocalPoint(player, progress, c));
+                    memorizedAny = true;
+                }
             }
             return memorizedAny;
         });
@@ -82,6 +115,7 @@ public class ResearchHelper {
         withProgress(player, progress -> {
             if (progress.discoverLumen(lumen)) {
                 discovered.add(lumen);
+                NeoForge.EVENT_BUS.post(new ResearchEvent.DiscoveredLumen(player, progress, lumen));
                 return true;
             }
             return false;
@@ -94,6 +128,7 @@ public class ResearchHelper {
         withProgress(player, progress -> {
             for (Lumen l : lumen) {
                 if (progress.discoverLumen(l)) {
+                    NeoForge.EVENT_BUS.post(new ResearchEvent.DiscoveredLumen(player, progress, l));
                     discovered.add(l);
                 }
             }
@@ -104,7 +139,9 @@ public class ResearchHelper {
 
     public static boolean setResearchProgress(ServerPlayer player, ResearchTier progression) {
         return withProgress(player, progress -> {
+            ResearchTier previous = progress.getTierReached();
             progress.setProgression(progression);
+            NeoForge.EVENT_BUS.post(new ResearchEvent.ResearchTierSet(player, progress, previous, progression));
             return true;
         });
     }
@@ -136,9 +173,11 @@ public class ResearchHelper {
 
             removeAllAllocatedPerks(progress, player);
 
+            BaseConstellation prev = progress.getAttunedConstellation().orElse(null);
             PlayerPerkData perkData = progress.getPerkData();
             perkData.setExp(0);
             progress.setAttunedConstellation(constellation);
+            NeoForge.EVENT_BUS.post(new ResearchEvent.AttunedConstellationSet(player, progress, prev));
 
             AttunePlayerProperty.getRootPerk(constellation, LogicalSide.SERVER).ifPresent(root -> {
                 doApplyPerk(progress, perkData, player, root, PerkAllocation.unlock());
@@ -150,8 +189,11 @@ public class ResearchHelper {
     public static boolean removeAttunedConstellation(ServerPlayer player) {
         return withProgress(player, progress -> {
             removeAllAllocatedPerks(progress, player);
+
+            BaseConstellation prev = progress.getAttunedConstellation().orElse(null);
             progress.getPerkData().setExp(0);
             progress.setAttunedConstellation(null);
+            NeoForge.EVENT_BUS.post(new ResearchEvent.AttunedConstellationSet(player, progress, prev));
             return true;
         });
     }
@@ -165,7 +207,11 @@ public class ResearchHelper {
 
     public static boolean setKnowledgeFlag(ServerPlayer player, ResearchFlag flag) {
         return withProgress(player, progress -> {
-            return progress.setKnownFlag(flag);
+            if (progress.setKnownFlag(flag)) {
+                NeoForge.EVENT_BUS.post(new ResearchEvent.ResearchFlagSet(player, progress, flag));
+                return true;
+            }
+            return false;
         });
     }
 

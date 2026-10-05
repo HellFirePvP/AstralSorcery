@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.function.FXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.function.FXMotionFunction;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.component.CrystalAttributesComponent;
+import hellfirepvp.astralsorcery.common.event.CrystalPropertyEvent;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.constants.ColorsAS;
 import hellfirepvp.astralsorcery.common.lib.types.LiquidStarlightRecipeOutputTypesAS;
@@ -31,7 +32,10 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
+import org.checkerframework.checker.units.qual.N;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -77,6 +81,7 @@ public class LiquidStarlightOutputMergeCrystal extends LiquidStarlightRecipeOutp
 
         CrystalAttributesComponent mergeTo = cmpCrystal.getTotalTierCount() >= cmpOther.getTotalTierCount() ? cmpCrystal : cmpOther;
         CrystalAttributesComponent mergeFrom = mergeTo == cmpCrystal ? cmpOther : cmpCrystal;
+        CrystalAttributesComponent copyTo = mergeTo, copyFrom = mergeFrom;
 
         ItemStack resultStack = mergeTo == cmpCrystal ? crystal.getItem().copy() : otherCrystal.getItem().copy();
 
@@ -95,7 +100,11 @@ public class LiquidStarlightOutputMergeCrystal extends LiquidStarlightRecipeOutp
             }
         }
 
-        resultStack.set(DataComponentsAS.CRYSTAL_ATTRIBUTES, mergeTo);
+        CrystalPropertyEvent.Merge combineCrystals = new CrystalPropertyEvent.Merge(resultStack,
+                CrystalPropertyEvent.Merge.Type.MERGE_CRYSTALS, List.of(copyFrom, copyTo), mergeTo);
+        NeoForge.EVENT_BUS.post(combineCrystals);
+
+        resultStack.set(DataComponentsAS.CRYSTAL_ATTRIBUTES, combineCrystals.getResultComponent());
         ItemUtil.dropItemNaturally(crystal.level(), crystal.getX(), crystal.getY(), crystal.getZ(), resultStack);
         recipe.consumeItemInputs(input);
     }

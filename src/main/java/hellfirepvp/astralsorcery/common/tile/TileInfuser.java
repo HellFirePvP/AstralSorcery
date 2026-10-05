@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.client.sound.PlayableSoundInstance;
 import hellfirepvp.astralsorcery.client.util.ColorExtractUtil;
 import hellfirepvp.astralsorcery.client.util.RenderSpriteUtil;
 import hellfirepvp.astralsorcery.client.util.SoundUtil;
+import hellfirepvp.astralsorcery.common.event.RecipeEvent;
 import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.lumen.transfer.LumenRequestHelper;
 import hellfirepvp.astralsorcery.common.recipe.ActiveRecipe;
@@ -54,6 +55,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 
@@ -138,6 +140,7 @@ public class TileInfuser extends TileEntityTick<TileInfuser.Data> {
             if (activeRecipe.isFinished(level) && activeRecipe.consumeInputs(this, level)) {
                 data.getInventory().setStackInSlot(0, ItemStack.EMPTY);
                 ItemUtil.dropItem(level, this.getBlockPos().above(), recipe.getOutput());
+                NeoForge.EVENT_BUS.post(new RecipeEvent.Infusion.End(recipe, activeRecipe));
 
                 data.knownRecipes.add(activeRecipe.getRecipeId());
 
@@ -167,6 +170,10 @@ public class TileInfuser extends TileEntityTick<TileInfuser.Data> {
         }
 
         ActiveInfusionRecipe infusionRecipe = ActiveInfusionRecipe.of(recipe);
+        RecipeEvent.Infusion.Start start = new RecipeEvent.Infusion.Start(recipe, infusionRecipe);
+        NeoForge.EVENT_BUS.post(start);
+        if (start.isCanceled()) return;
+
         this.getTileData().setActiveRecipe(infusionRecipe);
         this.getTileData().markForUpdate();
 

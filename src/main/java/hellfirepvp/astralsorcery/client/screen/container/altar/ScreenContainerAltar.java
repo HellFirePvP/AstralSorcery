@@ -33,6 +33,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
@@ -94,10 +95,11 @@ public abstract class ScreenContainerAltar<T extends ContainerAltar> extends Scr
 
     protected void renderAltarOutput(GuiGraphics guiGraphics, int x, int y, float partialTick) {
         Level level = Minecraft.getInstance().level;
-        if (level == null) return;
+        Player player = Minecraft.getInstance().player;
+        if (level == null || player == null) return;
         long tick = ClientProxy.getClientTick();
-        AltarCraftingInput input = this.getMenu().getTile().createInput(level, null);
-        this.getMenu().getTile().findMatchingRecipe(level)
+        AltarCraftingInput input = this.getMenu().getTile().createInput(level, player.getUUID());
+        this.getMenu().getTile().findMatchingRecipe(level, player.getUUID())
                 .map(RecipeHolder::value)
                 .map(recipe -> recipe.getOutputsForDisplay(input, level.registryAccess()))
                 .filter(outputs -> !outputs.isEmpty())

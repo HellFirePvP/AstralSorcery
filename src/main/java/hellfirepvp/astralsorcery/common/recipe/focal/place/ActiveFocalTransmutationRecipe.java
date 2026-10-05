@@ -10,10 +10,10 @@ package hellfirepvp.astralsorcery.common.recipe.focal.place;
 
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.util.ChunkUtil;
-import hellfirepvp.astralsorcery.common.util.RecipeFinder;
 import hellfirepvp.astralsorcery.common.util.data.ColumnPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.Optional;
@@ -27,13 +27,13 @@ import java.util.Optional;
  */
 public class ActiveFocalTransmutationRecipe {
 
-    private final FocalTransmutationRecipe recipe;
+    private final RecipeHolder<FocalTransmutationRecipe> recipe;
     private final BaseConstellation usedConstellation;
     private final BlockPos transmutationPos;
     private float remainingDuration;
     private long lastTickedGameTick;
 
-    private ActiveFocalTransmutationRecipe(FocalTransmutationRecipe recipe, BaseConstellation usedConstellation, BlockPos transmutationPos, float duration, long lastTickedGameTick) {
+    private ActiveFocalTransmutationRecipe(RecipeHolder<FocalTransmutationRecipe> recipe, BaseConstellation usedConstellation, BlockPos transmutationPos, float duration, long lastTickedGameTick) {
         this.recipe = recipe;
         this.usedConstellation = usedConstellation;
         this.transmutationPos = transmutationPos;
@@ -41,16 +41,20 @@ public class ActiveFocalTransmutationRecipe {
         this.lastTickedGameTick = lastTickedGameTick;
     }
 
-    public FocalTransmutationRecipe getRecipe() {
+    public RecipeHolder<FocalTransmutationRecipe> getRecipeHolder() {
         return this.recipe;
+    }
+
+    public FocalTransmutationRecipe getRecipe() {
+        return this.getRecipeHolder().value();
     }
 
     public BlockPos getTransmutationPos() {
         return this.transmutationPos;
     }
 
-    public static ActiveFocalTransmutationRecipe create(FocalTransmutationRecipe recipe, BaseConstellation cst, BlockPos transmutationPos, long lastTickedGameTick) {
-        return new ActiveFocalTransmutationRecipe(recipe, cst, transmutationPos, recipe.getDuration(), lastTickedGameTick);
+    public static ActiveFocalTransmutationRecipe create(RecipeHolder<FocalTransmutationRecipe> recipe, BaseConstellation cst, BlockPos transmutationPos, long lastTickedGameTick) {
+        return new ActiveFocalTransmutationRecipe(recipe, cst, transmutationPos, recipe.value().getDuration(), lastTickedGameTick);
     }
 
     public static Optional<ActiveFocalTransmutationRecipe> tryFindAtOpenSky(ServerLevel sLevel, BaseConstellation cst, ColumnPos pos) {
@@ -66,7 +70,7 @@ public class ActiveFocalTransmutationRecipe {
 
     public Optional<FocalTransmutationCraftingInput> match(ServerLevel sLevel, boolean isFocused) {
         FocalTransmutationCraftingInput runningInput = new FocalTransmutationCraftingInput(this.usedConstellation, sLevel, this.transmutationPos, isFocused);
-        if (this.recipe.matches(runningInput, sLevel)) {
+        if (this.getRecipe().matches(runningInput, sLevel)) {
             return Optional.of(runningInput);
         }
         return Optional.empty();
@@ -87,7 +91,8 @@ public class ActiveFocalTransmutationRecipe {
     }
 
     public void finish(FocalTransmutationCraftingInput testedInput, ServerLevel sLevel) {
-        this.recipe.consumeInputs(testedInput, sLevel.registryAccess());
-        this.recipe.createOutput(testedInput, sLevel.registryAccess());
+        FocalTransmutationRecipe recipe = this.getRecipe();
+        recipe.consumeInputs(testedInput, sLevel.registryAccess());
+        recipe.createOutput(testedInput, sLevel.registryAccess());
     }
 }

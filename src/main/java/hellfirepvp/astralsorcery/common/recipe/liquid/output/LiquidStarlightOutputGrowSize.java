@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.function.FXColorFunction;
 import hellfirepvp.astralsorcery.client.effect.function.FXMotionFunction;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.component.CrystalAttributesComponent;
+import hellfirepvp.astralsorcery.common.event.CrystalPropertyEvent;
 import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.constants.ColorsAS;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -75,10 +77,17 @@ public class LiquidStarlightOutputGrowSize extends LiquidStarlightRecipeOutputMo
         }
 
         if (RandomSource.create().nextFloat() < chance) {
+            CrystalAttributesComponent prev = cmp;
+
             int current = cmp.getAttributeTier(CrystalPropertiesAS.SIZE);
             if (current >= CrystalPropertiesAS.SIZE.get().getMaxTier()) return;
             cmp = cmp.setAttributeTier(CrystalPropertiesAS.SIZE, current + 1);
-            crystal.set(DataComponentsAS.CRYSTAL_ATTRIBUTES, cmp);
+
+            CrystalPropertyEvent.Change growSize = new CrystalPropertyEvent.Change(crystal,
+                    CrystalPropertyEvent.Change.Type.GROW_SIZE, prev, cmp);
+            NeoForge.EVENT_BUS.post(growSize);
+
+            crystal.set(DataComponentsAS.CRYSTAL_ATTRIBUTES, growSize.getResultComponent());
         }
 
         ItemEntity trigger = input.getTriggerEntity();

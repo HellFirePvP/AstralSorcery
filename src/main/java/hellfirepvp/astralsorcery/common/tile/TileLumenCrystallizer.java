@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.client.effect.function.FXColorFunction;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.common.block.tile.LumenCrystalClusterBlock;
+import hellfirepvp.astralsorcery.common.event.RecipeEvent;
 import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.lumen.ILumenHandler;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
@@ -56,6 +57,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
@@ -191,7 +193,8 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
         if (storedLumen >= lumenToProvide) {
             if (above.isAir()) {
                 if (this.rand.nextInt(20 * 60) == 0) {
-                    level.setBlock(this.getBlockPos().above(), BlocksAS.LUMEN_CRYSTAL_CLUSTER.get().defaultBlockState(), Block.UPDATE_ALL);
+                    BlockState toSet = BlocksAS.LUMEN_CRYSTAL_CLUSTER.get().defaultBlockState();
+                    level.setBlock(this.getBlockPos().above(), toSet, Block.UPDATE_ALL);
                     MiscUtil.getTileAt(level, this.getBlockPos().above(), TileLumenCrystalCluster.class, true).ifPresent(newCluster -> {
                         newCluster.getTileData().setLumen(this.activeRecipe.getLumenToCrystallize());
                         newCluster.getTileData().markForUpdate();
@@ -201,14 +204,19 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
                     LumenUtil.drain(this.getTileData().getLumenHandler(),
                             this.activeRecipe.getLumenToCrystallize().stack(this.activeRecipe.getLumenConsumedPerOperation()),
                             ILumenHandler.Action.EXECUTE);
+
+                    NeoForge.EVENT_BUS.post(new RecipeEvent.LumenCrystallization(this.activeRecipe, this, toSet));
                 }
             } else {
                 if (this.rand.nextInt(20 * 60 * 5) == 0) {
                     int stage = above.getValue(LumenCrystalClusterBlock.STAGE);
-                    level.setBlock(this.getBlockPos().above(), above.setValue(LumenCrystalClusterBlock.STAGE, Math.min(4, stage + 1)), Block.UPDATE_ALL);
+                    BlockState toSet = above.setValue(LumenCrystalClusterBlock.STAGE, Math.min(4, stage + 1));
+                    level.setBlock(this.getBlockPos().above(), toSet, Block.UPDATE_ALL);
                     LumenUtil.drain(this.getTileData().getLumenHandler(),
                             this.activeRecipe.getLumenToCrystallize().stack(this.activeRecipe.getLumenConsumedPerOperation()),
                             ILumenHandler.Action.EXECUTE);
+
+                    NeoForge.EVENT_BUS.post(new RecipeEvent.LumenCrystallization(this.activeRecipe, this, toSet));
                 }
             }
         }

@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.entity.ItemEntityChiselAttackable;
 import hellfirepvp.astralsorcery.common.item.ArtifactItem;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.util.EntityUtil;
 import hellfirepvp.astralsorcery.common.util.ItemUtil;
 import hellfirepvp.astralsorcery.common.util.ServerSoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -69,6 +70,7 @@ public class ItemEntityArtifact extends ItemEntityChiselAttackable {
     private ActiveArtifactTrigger activeTrigger = null;
     private int triggerTimeout = 0;
     private int gracePulseTimeout = 1 * 20;
+    private int forcedMoveTimeout = 0;
 
     public ItemEntityArtifact(EntityType<? extends ItemEntityArtifact> entityType, Level level) {
         super(entityType, level);
@@ -110,6 +112,9 @@ public class ItemEntityArtifact extends ItemEntityChiselAttackable {
         if (pos == null) {
             pos = BlockPos.ZERO;
             speed = 0;
+            this.forcedMoveTimeout = 0;
+        } else {
+            this.forcedMoveTimeout = 10 * 20;
         }
         this.getEntityData().set(FORCED_MOVE_POS, pos);
         this.getEntityData().set(FORCED_MOVE_SPEED, speed);
@@ -200,6 +205,14 @@ public class ItemEntityArtifact extends ItemEntityChiselAttackable {
         }
 
         if (this.level() instanceof ServerLevel sLevel) {
+            if (this.forcedMoveTimeout > 0) {
+                this.forcedMoveTimeout--;
+            }
+            if (this.hasForcedMovePos() && this.forcedMoveTimeout <= 0) {
+                EntityUtil.transferEntity(this, Vector3.atBottomCenter(this.getForcedMovePos()));
+                this.resetForcedMovePos();
+            }
+
             this.getArtifactComponent().ifPresent(component -> {
                 if (!component.stability().mayTriggerPulse()) return;
                 if (component.lastPulseGameTick() == -1) {

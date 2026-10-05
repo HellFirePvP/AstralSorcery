@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.recipe.focal.place;
 
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
+import hellfirepvp.astralsorcery.common.event.RecipeEvent;
 import hellfirepvp.astralsorcery.common.visual.type.FocalPointTransmutationSparkle;
 import hellfirepvp.astralsorcery.common.starlight.transmission.StarlightTransmissionPacket;
 import hellfirepvp.astralsorcery.common.util.ChunkUtil;
@@ -17,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.TriState;
 
 import java.util.Collections;
@@ -48,7 +50,11 @@ public class ActiveTransmutationHandler {
         if (recipe.isPresent()) return recipe;
         return ChunkUtil.executeWithChunk(level, pos, () -> {
             return RecipeFinder.of(level).findFocalTransmutationRecipe(level, cst, pos, isFocusedStarlight).map(r -> {
-                ActiveFocalTransmutationRecipe activeRecipe = ActiveFocalTransmutationRecipe.create(r.value(), cst, pos, level.getGameTime());
+                ActiveFocalTransmutationRecipe activeRecipe = ActiveFocalTransmutationRecipe.create(r, cst, pos, level.getGameTime());
+                RecipeEvent.FocalTransmutation.Start start = new RecipeEvent.FocalTransmutation.Start(activeRecipe);
+                NeoForge.EVENT_BUS.post(start);
+                if (start.isCanceled()) return null;
+
                 activeRecipes.computeIfAbsent(level.dimension(), dim -> new HashMap<>()).put(pos, activeRecipe);
                 return activeRecipe;
             });
@@ -74,6 +80,7 @@ public class ActiveTransmutationHandler {
             FocalPointTransmutationSparkle.at(activeRecipe.getTransmutationPos(), activeRecipe.getRecipe().getColor()).sendToNearby(level);
             if (activeRecipe.isFinished()) {
                 activeRecipe.finish(usedInput, level);
+                NeoForge.EVENT_BUS.post(new RecipeEvent.FocalTransmutation.End(activeRecipe));
                 removeTransmutation(level, pos);
                 return TriState.DEFAULT;
             }

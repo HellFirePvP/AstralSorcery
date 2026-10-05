@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.constellation.level.ConstellationHandler
 import hellfirepvp.astralsorcery.common.constellation.level.LevelSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.event.RecipeEvent;
 import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.lib.constants.ColorsAS;
 import hellfirepvp.astralsorcery.common.recipe.attunement.AttunementRecipe;
@@ -50,6 +51,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.common.NeoForge;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -123,6 +125,10 @@ public class TileAttunementAltar extends TileEntityTick<TileAttunementAltar.Data
         for (AttunementRecipe<?> recipe : AttunementRecipe.getAllRecipes()) {
             if (recipe.canStartCrafting(this)) {
                 AttunementRecipe.Active<?, ?> active = recipe.createActiveRecipe(this);
+                RecipeEvent.Attunement.Start start = new RecipeEvent.Attunement.Start(recipe, active);
+                NeoForge.EVENT_BUS.post(start);
+                if (start.isCanceled()) return;
+
                 this.getTileData().setActiveRecipe(active);
                 this.getTileData().markForUpdate();
                 return;
@@ -134,6 +140,8 @@ public class TileAttunementAltar extends TileEntityTick<TileAttunementAltar.Data
         this.getTileData().getActiveRecipe().ifPresent(active -> {
             active.finishRecipe(this);
             active.stopCrafting(this);
+            NeoForge.EVENT_BUS.post(new RecipeEvent.Attunement.End(active.getRecipe(), active));
+
             this.getTileData().setActiveRecipe(null);
             this.getTileData().markForUpdate();
         });

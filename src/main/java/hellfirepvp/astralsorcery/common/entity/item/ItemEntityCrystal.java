@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.entity.item;
 
 import hellfirepvp.astralsorcery.common.component.CrystalAttributesComponent;
 import hellfirepvp.astralsorcery.common.entity.ItemEntityChiselAttackable;
+import hellfirepvp.astralsorcery.common.event.CrystalPropertyEvent;
 import hellfirepvp.astralsorcery.common.item.crystal.RockCrystalItem;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.util.ItemUtil;
@@ -27,7 +28,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.EventHooks;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -74,7 +78,7 @@ public class ItemEntityCrystal extends ItemEntityChiselAttackable {
         if (random.nextFloat() < 0.5F) {
             Holder<Enchantment> fortune = sPlayer.serverLevel().holderOrThrow(Enchantments.FORTUNE);
             int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(fortune, sPlayer);
-            didSplit = this.splitCrystal(thisItem, thisAttributes, fortuneLevel);
+            didSplit = this.splitCrystal(thisItem, crystalStack, thisAttributes, fortuneLevel);
         }
         if (didSplit || random.nextFloat() < 0.5F) {
             chisel.hurtAndBreak(1, sPlayer.serverLevel(), sPlayer, (item) -> {
@@ -84,7 +88,7 @@ public class ItemEntityCrystal extends ItemEntityChiselAttackable {
         }
     }
 
-    protected boolean splitCrystal(RockCrystalItem thisItem, CrystalAttributesComponent thisAttributes, int fortuneLevel) {
+    protected boolean splitCrystal(RockCrystalItem thisItem, ItemStack crystalStack, CrystalAttributesComponent thisAttributes, int fortuneLevel) {
         RockCrystalItem splitCrystalItem = thisItem.getCrystalSplitItem();
         ItemStack splitCrystal = new ItemStack(splitCrystalItem);
         if (splitCrystal.isEmpty()) {
@@ -102,6 +106,7 @@ public class ItemEntityCrystal extends ItemEntityChiselAttackable {
             }
         }
 
+        CrystalAttributesComponent originalComponent = thisAttributes;
         CrystalAttributesComponent.GenerationProperties props = thisAttributes.getProperties();
         CrystalAttributesComponent newAttributes = CrystalAttributesComponent.empty(props.generateCount(), props.maxTierCount());
 
@@ -119,11 +124,27 @@ public class ItemEntityCrystal extends ItemEntityChiselAttackable {
             }
         }
 
+        CrystalPropertyEvent.Split splitEvent = new CrystalPropertyEvent.Split(crystalStack,
+                CrystalPropertyEvent.Split.Type.CHISEL_SPLIT_CRYSTAL, originalComponent, List.of(thisAttributes, newAttributes));
+        NeoForge.EVENT_BUS.post(splitEvent);
+        List<CrystalAttributesComponent> results = splitEvent.getResultComponents();
+
+        if (results.isEmpty()) {
+            this.discard();
+            return true;
+        }
+
+        thisAttributes = results.getFirst();
+
         ItemStack thisStack = this.getItem();
         thisStack.set(DataComponentsAS.CRYSTAL_ATTRIBUTES, thisAttributes);
 
-        splitCrystal.set(DataComponentsAS.CRYSTAL_ATTRIBUTES, newAttributes);
-        ItemUtil.dropItemNaturally(this.level(), this.getX(), this.getY() + 0.25F, this.getZ(), splitCrystal);
+        List<CrystalAttributesComponent> otherComponents = results.subList(1, results.size());
+        for (CrystalAttributesComponent other : otherComponents) {
+            ItemStack otherStack = splitCrystal.copy();
+            otherStack.set(DataComponentsAS.CRYSTAL_ATTRIBUTES, other);
+            ItemUtil.dropItemNaturally(this.level(), this.getX(), this.getY() + 0.25F, this.getZ(), otherStack);
+        }
         return true;
     }
 }

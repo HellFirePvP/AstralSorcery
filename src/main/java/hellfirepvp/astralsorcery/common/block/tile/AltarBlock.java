@@ -70,7 +70,7 @@ public class AltarBlock extends BaseTickTileBlock<TileAltar> {
                 if (stack.is(ItemsAS.WAND)) {
                     if (altar.getTileData().getActiveRecipe().isPresent()) return ItemInteractionResult.CONSUME;
                     if (!altar.getTileData().hasStructure()) return ItemInteractionResult.CONSUME;
-                    return altar.findMatchingRecipe(level).map(recipe -> {
+                    return altar.findMatchingRecipe(level, sPlayer.getUUID()).map(recipe -> {
                         altar.startCrafting(recipe, sPlayer.getUUID());
                         return ItemInteractionResult.SUCCESS;
                     }).orElse(ItemInteractionResult.CONSUME);
