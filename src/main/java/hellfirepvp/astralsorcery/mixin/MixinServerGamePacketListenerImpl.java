@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import hellfirepvp.astralsorcery.common.entity.ItemEntityChiselAttackable;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -19,7 +21,6 @@ import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,13 +34,12 @@ public class MixinServerGamePacketListenerImpl {
 
     @Shadow public ServerPlayer player;
 
-    // TODO find a more stable solution that doesn't use redirect lol
-    @Redirect(
+    @WrapOperation(
             method = "handleInteract",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ServerboundInteractPacket;dispatch(Lnet/minecraft/network/protocol/game/ServerboundInteractPacket$Handler;)V")
     )
-    public void allowInteractableEntityAttack(ServerboundInteractPacket instance, ServerboundInteractPacket.Handler decorated) {
-        instance.dispatch(new ServerboundInteractPacket.Handler() {
+    public void allowInteractableEntityAttack(ServerboundInteractPacket instance, ServerboundInteractPacket.Handler decorated, Operation<Void> original) {
+        original.call(instance, new ServerboundInteractPacket.Handler() {
             @Override
             public void onInteraction(InteractionHand hand) {
                 decorated.onInteraction(hand);
