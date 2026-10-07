@@ -48,6 +48,7 @@
     "recipe.astralsorcery.result.increase_enchantment": "Increases enchantments by at least 1 level",
     "recipe.astralsorcery.result.generate_artifact_shard_loot": "Contains random loot",
 
+    "screen.astralsorcery.element.structure_marker": "Structure Marker Identifier",
     "screen.astralsorcery.element.astrolabe.focal.hint": "Mysterious Light",
     "screen.astralsorcery.element.astrolabe.focal": "%s Focal Point",
     "screen.astralsorcery.element.input.search": "Search",
@@ -511,6 +512,7 @@
     "block.astralsorcery.starlight_focus_celestial_crystal": "Starlight Focus Crystal",
     "block.astralsorcery.stellar_filament": "Stellar Filament",
     "block.astralsorcery.cave_illuminator": "Cave Illuminator",
+    "block.astralsorcery.structure_marker": "Structure Marker",
 
     "item.astralsorcery.tome": "Tome",
     "item.astralsorcery.wand": "Resonating Wand",

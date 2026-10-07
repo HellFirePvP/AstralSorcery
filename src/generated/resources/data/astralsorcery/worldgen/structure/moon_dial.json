@@ -1,0 +1,9 @@
+{
+  "type": "astralsorcery:template_structure",
+  "biomes": "#astralsorcery:moon_dial_biomes",
+  "rotation": "none",
+  "spawn_overrides": {},
+  "start_pool": "astralsorcery:moon_dial_pool",
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_thin"
+}

@@ -1,0 +1,56 @@
+{
+  "processors": [
+    {
+      "markers": {
+        "astralsorcery:chest": {
+          "type": "astralsorcery:random",
+          "entries": [
+            {
+              "data": {
+                "type": "astralsorcery:loot_container",
+                "block": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:chest",
+                    "Properties": {
+                      "type": "single",
+                      "facing": "north",
+                      "waterlogged": "false"
+                    }
+                  }
+                },
+                "loot_table": "astralsorcery:gameplay/shrine_chest"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "type": "astralsorcery:loot_container",
+                "block": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:chest",
+                    "Properties": {
+                      "type": "single",
+                      "facing": "north",
+                      "waterlogged": "false"
+                    }
+                  }
+                },
+                "loot_table": "astralsorcery:gameplay/shrine_chest_small"
+              },
+              "weight": 4
+            },
+            {
+              "data": {
+                "type": "astralsorcery:nothing"
+              },
+              "weight": 4
+            }
+          ]
+        }
+      },
+      "processor_type": "astralsorcery:structure_marker_processor"
+    }
+  ]
+}

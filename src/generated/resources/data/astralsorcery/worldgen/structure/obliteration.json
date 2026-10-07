@@ -1,0 +1,11 @@
+{
+  "type": "astralsorcery:template_structure",
+  "biomes": "#astralsorcery:obliteration_biomes",
+  "bounding_box_expansion": 1,
+  "heightmap": "OCEAN_FLOOR_WG",
+  "required_clearance": 10,
+  "spawn_overrides": {},
+  "start_pool": "astralsorcery:obliteration_pool",
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_box"
+}

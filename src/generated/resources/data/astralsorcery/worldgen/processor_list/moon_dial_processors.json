@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "markers": {},
+      "processor_type": "astralsorcery:structure_marker_processor"
+    }
+  ]
+}

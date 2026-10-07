@@ -190,6 +190,8 @@ public class ItemsAS {
     public static DeferredItem<BlockItem> BLOCK_CAVE_ILLUMINATOR = registerBlockItem(BlocksAS.CAVE_ILLUMINATOR,
             block -> new BlockItemCustom(block, new Item.Properties().component(DataComponentsAS.COLOR, ColorComponent.DEFAULT_YELLOW)));
 
+    public static DeferredItem<BlockItem> BLOCK_STRUCTURE_MARKER = registerBlockItem(BlocksAS.STRUCTURE_MARKER, BlockItem::new);
+
     //----------------------------- REGISTER ------------------------------//
 
     private static DeferredItem<BlockItem> registerBlockItem(DeferredBlock<?> block) {

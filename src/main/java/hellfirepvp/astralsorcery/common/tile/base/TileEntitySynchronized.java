@@ -46,6 +46,8 @@ import java.util.Optional;
  */
 public abstract class TileEntitySynchronized<T extends TileEntitySynchronized.Data> extends BlockEntity {
 
+    public static final String KEY_SAVE_DATA = "saveData";
+
     protected final RandomSource rand = RandomSource.create();
 
     private T data;
@@ -92,14 +94,14 @@ public abstract class TileEntitySynchronized<T extends TileEntitySynchronized.Da
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
 
-        tag.put("saveData", this.dataCodec().encodeStart(this.ops(registries), this.getTileData()).getOrThrow());
+        tag.put(KEY_SAVE_DATA, this.dataCodec().encodeStart(this.ops(registries), this.getTileData()).getOrThrow());
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
 
-        this.dataCodec().parse(this.ops(registries), tag.get("saveData")).ifSuccess(this::setTileData);
+        this.dataCodec().parse(this.ops(registries), tag.get(KEY_SAVE_DATA)).ifSuccess(this::setTileData);
     }
 
     @Override

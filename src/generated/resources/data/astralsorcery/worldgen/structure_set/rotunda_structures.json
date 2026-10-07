@@ -1,0 +1,19 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 2078433772,
+    "separation": 32,
+    "spacing": 40,
+    "spread_type": "triangular"
+  },
+  "structures": [
+    {
+      "structure": "astralsorcery:rotunda_1",
+      "weight": 1
+    },
+    {
+      "structure": "astralsorcery:rotunda_2",
+      "weight": 1
+    }
+  ]
+}

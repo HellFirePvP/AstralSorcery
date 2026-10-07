@@ -20,6 +20,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 
 /**
@@ -63,6 +64,17 @@ public class TagsAS {
         public static final TagKey<Item> FUNCTIONAL_PERKTREE_SOCKETABLE_ITEM = itemTag("functional_perktree_socketable_item");
 
         public static final TagKey<Item> CURIOS_NECKLACE = ItemTags.create(Mods.CURIOS.key("necklace"));
+
+    }
+
+    public static class Biomes {
+
+        public static final TagKey<Biome> FOCAL_POINT_BIOMES = TagKey.create(Registries.BIOME, AstralSorcery.key("focal_point_biomes"));
+        public static final TagKey<Biome> OBLITERATION_BIOMES = TagKey.create(Registries.BIOME, AstralSorcery.key("obliteration_biomes"));
+        public static final TagKey<Biome> DIG_SITE_BIOMES = TagKey.create(Registries.BIOME, AstralSorcery.key("dig_site_biomes"));
+        public static final TagKey<Biome> MOON_DIAL_BIOMES = TagKey.create(Registries.BIOME, AstralSorcery.key("moon_dial_biomes"));
+        public static final TagKey<Biome> COLUMN_BIOMES = TagKey.create(Registries.BIOME, AstralSorcery.key("column_biomes"));
+        public static final TagKey<Biome> ROTUNDA_BIOMES = TagKey.create(Registries.BIOME, AstralSorcery.key("rotunda_biomes"));
 
     }
 

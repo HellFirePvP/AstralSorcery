@@ -82,6 +82,8 @@ public class AstralBlockModelProvider extends BlockModelProvider {
         this.createPlant(ORCHID, POTTED_ORCHID);
         this.createPlant(PROTEA, POTTED_PROTEA);
         this.createPlant(THISTLE, POTTED_THISTLE);
+
+        this.cubeAll(modelName(STRUCTURE_MARKER), blockTextureName(STRUCTURE_MARKER));
     }
 
     protected void registerModelTemplates() {

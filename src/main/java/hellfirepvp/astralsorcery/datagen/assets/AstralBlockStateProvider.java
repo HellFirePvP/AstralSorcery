@@ -157,6 +157,8 @@ public class AstralBlockStateProvider extends BlockStateProvider {
         this.multiLayer(BlocksAS.STELLAR_FILAMENT, RenderType.solid(), RenderType.translucent());
 
         this.multiLayer(BlocksAS.CAVE_ILLUMINATOR, RenderType.solid(), RenderType.translucent());
+
+        this.simpleBlockState(BlocksAS.STRUCTURE_MARKER);
     }
 
     private void pillarModel(DeferredBlock<? extends PillarBlock> b) {

@@ -80,6 +80,7 @@ public class RegistryBootstrap {
         ArtifactEffectTypesAS.ARTIFACT_EFFECT_TYPES_REGISTER.register(modLifecycleBus);
         LumenBindingUsageTypesAS.LUMEN_BINDING_USAGE_TYPES_REGISTER.register(modLifecycleBus);
         LumenBindingEffectTypesAS.LUMEN_BINDING_USAGE_TYPES_REGISTER.register(modLifecycleBus);
+        StructureMarkerReplacementTypesAS.MARKER_REPLACEMENT_TYPE_REGISTER.register(modLifecycleBus);
 
         // ------------------ OBSERVER ----------------- //
         ObserversAS.OBSERVER_REGISTER.register(modLifecycleBus);
@@ -113,5 +114,6 @@ public class RegistryBootstrap {
         event.register(REGISTRY_ARTIFACT_EFFECT_TYPES);
         event.register(REGISTRY_LUMEN_BINDING_USAGE_TYPES);
         event.register(REGISTRY_LUMEN_BINDING_EFFECT_TYPES);
+        event.register(REGISTRY_STRUCTURE_MARKER_REPLACEMENT_TYPES);
     }
 }

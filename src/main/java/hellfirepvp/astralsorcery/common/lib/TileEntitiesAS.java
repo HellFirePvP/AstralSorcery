@@ -100,6 +100,10 @@ public class TileEntitiesAS {
             register("cave_illuminator", TileCaveIlluminator::new,
                     BlocksAS.CAVE_ILLUMINATOR);
 
+    public static final TileRegistryObject<TileStructureMarker> STRUCTURE_MARKER =
+            register("structure_marker", TileStructureMarker::new,
+                    BlocksAS.STRUCTURE_MARKER);
+
     private static <T extends BlockEntity> TileRegistryObject<T> register(String name,
                                                                           BlockEntityType.BlockEntitySupplier<T> tileCtor,
                                                                           DeferredBlock<?>... validBlocks) {

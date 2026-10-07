@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 412646634,
+    "separation": 16,
+    "spacing": 20
+  },
+  "structures": [
+    {
+      "structure": "astralsorcery:moon_dial",
+      "weight": 1
+    }
+  ]
+}

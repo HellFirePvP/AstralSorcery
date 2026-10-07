@@ -4,7 +4,7 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "location": "astralsorcery:focal_point",
-        "processors": "astralsorcery:focal_point_register_processor",
+        "processors": "astralsorcery:focal_point_processors",
         "projection": "rigid"
       },
       "weight": 1

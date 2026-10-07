@@ -1,7 +1,13 @@
 {
-  "type": "astralsorcery:focal_point_structure",
-  "biomes": "#minecraft:is_overworld",
+  "type": "astralsorcery:template_structure",
+  "biomes": "#astralsorcery:focal_point_biomes",
+  "bounding_box_expansion": 6,
+  "extend_bounds_to_build_height": true,
+  "liquid_settings": "ignore_waterlogging",
+  "required_clearance": 16,
+  "rotation": "none",
   "spawn_overrides": {},
+  "start_pool": "astralsorcery:focal_point_pool",
   "step": "surface_structures",
-  "structure": "astralsorcery:focal_point_pool"
+  "vertical_offset": 8
 }

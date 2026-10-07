@@ -1,0 +1,173 @@
+{
+  "processors": [
+    {
+      "markers": {
+        "astralsorcery:dig_sand": {
+          "type": "astralsorcery:biome",
+          "fallback": {
+            "type": "astralsorcery:nothing"
+          },
+          "replacements": {
+            "c:is_desert": {
+              "type": "astralsorcery:random",
+              "entries": [
+                {
+                  "data": {
+                    "type": "astralsorcery:loot_container",
+                    "block": {
+                      "type": "minecraft:simple_state_provider",
+                      "state": {
+                        "Name": "minecraft:suspicious_sand",
+                        "Properties": {
+                          "dusted": "0"
+                        }
+                      }
+                    },
+                    "loot_table": "astralsorcery:gameplay/dig_site_archaeology"
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "type": "astralsorcery:block",
+                    "state": {
+                      "type": "minecraft:simple_state_provider",
+                      "state": {
+                        "Name": "minecraft:sand"
+                      }
+                    }
+                  },
+                  "weight": 3
+                }
+              ]
+            },
+            "c:is_forest": {
+              "type": "astralsorcery:random",
+              "entries": [
+                {
+                  "data": {
+                    "type": "astralsorcery:loot_container",
+                    "block": {
+                      "type": "minecraft:simple_state_provider",
+                      "state": {
+                        "Name": "minecraft:suspicious_gravel",
+                        "Properties": {
+                          "dusted": "0"
+                        }
+                      }
+                    },
+                    "loot_table": "astralsorcery:gameplay/dig_site_archaeology"
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "type": "astralsorcery:block",
+                    "state": {
+                      "type": "minecraft:simple_state_provider",
+                      "state": {
+                        "Name": "minecraft:gravel"
+                      }
+                    }
+                  },
+                  "weight": 2
+                },
+                {
+                  "data": {
+                    "type": "astralsorcery:block",
+                    "state": {
+                      "type": "minecraft:simple_state_provider",
+                      "state": {
+                        "Name": "minecraft:dirt"
+                      }
+                    }
+                  },
+                  "weight": 1
+                }
+              ]
+            },
+            "c:is_mountain": {
+              "type": "astralsorcery:random",
+              "entries": [
+                {
+                  "data": {
+                    "type": "astralsorcery:loot_container",
+                    "block": {
+                      "type": "minecraft:simple_state_provider",
+                      "state": {
+                        "Name": "minecraft:suspicious_gravel",
+                        "Properties": {
+                          "dusted": "0"
+                        }
+                      }
+                    },
+                    "loot_table": "astralsorcery:gameplay/dig_site_archaeology"
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "type": "astralsorcery:block",
+                    "state": {
+                      "type": "minecraft:simple_state_provider",
+                      "state": {
+                        "Name": "minecraft:gravel"
+                      }
+                    }
+                  },
+                  "weight": 3
+                }
+              ]
+            },
+            "c:is_savanna": {
+              "type": "astralsorcery:random",
+              "entries": [
+                {
+                  "data": {
+                    "type": "astralsorcery:loot_container",
+                    "block": {
+                      "type": "minecraft:simple_state_provider",
+                      "state": {
+                        "Name": "minecraft:suspicious_sand",
+                        "Properties": {
+                          "dusted": "0"
+                        }
+                      }
+                    },
+                    "loot_table": "astralsorcery:gameplay/dig_site_archaeology"
+                  },
+                  "weight": 1
+                },
+                {
+                  "data": {
+                    "type": "astralsorcery:block",
+                    "state": {
+                      "type": "minecraft:simple_state_provider",
+                      "state": {
+                        "Name": "minecraft:sand"
+                      }
+                    }
+                  },
+                  "weight": 2
+                },
+                {
+                  "data": {
+                    "type": "astralsorcery:block",
+                    "state": {
+                      "type": "minecraft:simple_state_provider",
+                      "state": {
+                        "Name": "minecraft:dirt"
+                      }
+                    }
+                  },
+                  "weight": 1
+                }
+              ]
+            }
+          }
+        }
+      },
+      "processor_type": "astralsorcery:structure_marker_processor"
+    }
+  ]
+}

@@ -192,6 +192,17 @@ public class BlocksAS {
                     .sound(SoundType.GLASS)
                     .lightLevel(state -> 10)));
 
+    //----------------------------- WORLDGEN BLOCKS ------------------------------//
+
+    public static final DeferredBlock<StructureMarkerBlock> STRUCTURE_MARKER =
+            register("structure_marker", () -> new StructureMarkerBlock(BlockBehaviour.Properties.of()
+                    .strength(-1.0F, 3600000.8F)
+                    .noLootTable()
+                    .noOcclusion()
+                    .isValidSpawn(Blocks::never)
+                    .noTerrainParticles()
+                    .pushReaction(PushReaction.BLOCK)));
+
     //----------------------------- REGISTER ------------------------------//
 
     private static Supplier<SlabBlock> makeSlab(BlockBehaviour.Properties properties) {

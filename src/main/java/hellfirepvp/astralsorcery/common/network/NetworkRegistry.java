@@ -49,6 +49,7 @@ public class NetworkRegistry {
         PktRequestCancelLinkSession.HANDLER.register(registrar);
         PktRequestGatewayTeleport.HANDLER.register(registrar);
         PktRequestLearnedTomeNavigation.HANDLER.register(registrar);
+        PktSetStructureMarker.HANDLER.register(registrar);
 
         // Bi-Directional
         PktRequestSeed.HANDLER.register(registrar);

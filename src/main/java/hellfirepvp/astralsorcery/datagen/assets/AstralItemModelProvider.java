@@ -150,6 +150,8 @@ public class AstralItemModelProvider extends ItemModelProvider {
         this.multiLayerAllModel(STARLIGHT_FOCUS_ROCK_CRYSTAL);
         this.multiLayerAllModel(STARLIGHT_FOCUS_CELESTIAL_CRYSTAL);
         this.multiLayerAllModel(STELLAR_FILAMENT);
+
+        this.simpleBlockModel(STRUCTURE_MARKER);
     }
 
     private void registerItemModels() {

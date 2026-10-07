@@ -1,0 +1,10 @@
+{
+  "type": "astralsorcery:template_structure",
+  "biomes": "#astralsorcery:dig_site_biomes",
+  "required_clearance": 6,
+  "spawn_overrides": {},
+  "start_pool": "astralsorcery:dig_site_pool",
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_thin",
+  "vertical_offset": -2
+}

@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 2034897632,
+    "separation": 6,
+    "spacing": 24
+  },
+  "structures": [
+    {
+      "structure": "astralsorcery:dig_site",
+      "weight": 1
+    }
+  ]
+}

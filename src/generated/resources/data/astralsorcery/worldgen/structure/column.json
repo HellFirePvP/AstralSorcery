@@ -1,0 +1,10 @@
+{
+  "type": "astralsorcery:template_structure",
+  "biomes": "#astralsorcery:column_biomes",
+  "heightmap": "OCEAN_FLOOR_WG",
+  "spawn_overrides": {},
+  "start_pool": "astralsorcery:column_pool",
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_thin",
+  "vertical_offset": -1
+}

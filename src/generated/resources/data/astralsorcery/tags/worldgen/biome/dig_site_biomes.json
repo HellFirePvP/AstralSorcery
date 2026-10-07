@@ -1,0 +1,8 @@
+{
+  "values": [
+    "#c:is_forest",
+    "#c:is_mountain",
+    "#c:is_savanna",
+    "#c:is_desert"
+  ]
+}

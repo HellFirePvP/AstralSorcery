@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.datagen.data;
 import hellfirepvp.astralsorcery.common.lib.DamageTypesAS;
 import hellfirepvp.astralsorcery.common.lib.EnchantmentsAS;
 import hellfirepvp.astralsorcery.datagen.data.world.AstralWorldGenProvider;
+import hellfirepvp.astralsorcery.datagen.data.world.structure.AstralStructureProvider;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistrySetBuilder;
@@ -39,10 +40,10 @@ public class AstralRegistriesDataProvider {
             .add(Registries.CONFIGURED_FEATURE, AstralWorldGenProvider::generateConfiguredFeatures)
             .add(Registries.PLACED_FEATURE, AstralWorldGenProvider::generatePlacedFeatures)
             .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, AstralWorldGenProvider::generateBiomeModifiers)
-            .add(Registries.STRUCTURE, AstralWorldGenProvider::generateStructures)
-            .add(Registries.STRUCTURE_SET, AstralWorldGenProvider::generateStructureSets)
-            .add(Registries.TEMPLATE_POOL, AstralWorldGenProvider::generateStructurePools)
-            .add(Registries.PROCESSOR_LIST, AstralWorldGenProvider::generateStructureProcessorLists);
+            .add(Registries.STRUCTURE, AstralStructureProvider::generateStructures)
+            .add(Registries.STRUCTURE_SET, AstralStructureProvider::generateStructureSets)
+            .add(Registries.TEMPLATE_POOL, AstralStructureProvider::generateStructurePools)
+            .add(Registries.PROCESSOR_LIST, AstralStructureProvider::generateStructureProcessorLists);
 
     public static RegistrySetBuilder getRegistryBuilder() {
         return BUILDER;

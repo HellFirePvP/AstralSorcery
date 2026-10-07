@@ -35,6 +35,7 @@ import hellfirepvp.astralsorcery.common.research.condition.ResearchNodeCondition
 import hellfirepvp.astralsorcery.common.research.tome.TomePage;
 import hellfirepvp.astralsorcery.common.starlight.api.provider.TransmissionNodeProvider;
 import hellfirepvp.astralsorcery.common.focal.node.FocalPointNode;
+import hellfirepvp.astralsorcery.common.worldgen.structure.marker.StructureMarkerReplacement;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.registries.RegistryBuilder;
@@ -75,6 +76,7 @@ public class RegistriesAS {
     public static final ResourceKey<Registry<ArtifactEffect.Type<?>>> KEY_ARTIFACT_EFFECT_TYPES = registryKey("artifact_effect_types");
     public static final ResourceKey<Registry<LumenBindingUsage.Type<?>>> KEY_LUMEN_BINDING_USAGE_TYPES = registryKey("lumen_binding_usage_types");
     public static final ResourceKey<Registry<LumenBindingEffect.Type<?>>> KEY_LUMEN_BINDING_EFFECT_TYPES = registryKey("lumen_binding_effect_types");
+    public static final ResourceKey<Registry<StructureMarkerReplacement.Type<?>>> KEY_STRUCTURE_MARKER_REPLACEMENT_TYPES = registryKey("structure_marker_replacement_types");
 
     public static final Registry<BaseConstellation> REGISTRY_CONSTELLATIONS = new RegistryBuilder<>(KEY_CONSTELLATIONS).sync(true).create();
     public static final Registry<Lumen> REGISTRY_LUMEN = new RegistryBuilder<>(KEY_LUMEN).sync(true).create();
@@ -103,6 +105,7 @@ public class RegistriesAS {
     public static final Registry<ArtifactEffect.Type<?>> REGISTRY_ARTIFACT_EFFECT_TYPES = new RegistryBuilder<>(KEY_ARTIFACT_EFFECT_TYPES).sync(true).create();
     public static final Registry<LumenBindingUsage.Type<?>> REGISTRY_LUMEN_BINDING_USAGE_TYPES = new RegistryBuilder<>(KEY_LUMEN_BINDING_USAGE_TYPES).sync(true).create();
     public static final Registry<LumenBindingEffect.Type<?>> REGISTRY_LUMEN_BINDING_EFFECT_TYPES = new RegistryBuilder<>(KEY_LUMEN_BINDING_EFFECT_TYPES).sync(true).create();
+    public static final Registry<StructureMarkerReplacement.Type<?>> REGISTRY_STRUCTURE_MARKER_REPLACEMENT_TYPES = new RegistryBuilder<>(KEY_STRUCTURE_MARKER_REPLACEMENT_TYPES).create();
 
     private static <T> ResourceKey<Registry<T>> registryKey(String name) {
         return ResourceKey.createRegistryKey(AstralSorcery.key(name));

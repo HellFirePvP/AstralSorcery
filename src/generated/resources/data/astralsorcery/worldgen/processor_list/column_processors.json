@@ -1,0 +1,68 @@
+{
+  "processors": [
+    {
+      "markers": {
+        "astralsorcery:chest_bricks": {
+          "type": "astralsorcery:random",
+          "entries": [
+            {
+              "data": {
+                "type": "astralsorcery:loot_container",
+                "block": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:chest",
+                    "Properties": {
+                      "type": "single",
+                      "facing": "north",
+                      "waterlogged": "false"
+                    }
+                  }
+                },
+                "loot_table": "astralsorcery:gameplay/shrine_chest"
+              },
+              "weight": 1
+            },
+            {
+              "data": {
+                "type": "astralsorcery:loot_container",
+                "block": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:chest",
+                    "Properties": {
+                      "type": "single",
+                      "facing": "north",
+                      "waterlogged": "false"
+                    }
+                  }
+                },
+                "loot_table": "astralsorcery:gameplay/shrine_chest_small"
+              },
+              "weight": 3
+            },
+            {
+              "data": {
+                "type": "astralsorcery:block",
+                "state": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "astralsorcery:marble_bricks"
+                  }
+                }
+              },
+              "weight": 12
+            }
+          ]
+        }
+      },
+      "processor_type": "astralsorcery:structure_marker_processor"
+    },
+    {
+      "processor_type": "astralsorcery:flare_light_extinguish_processor"
+    },
+    {
+      "processor_type": "astralsorcery:flare_light_colorization_processor"
+    }
+  ]
+}

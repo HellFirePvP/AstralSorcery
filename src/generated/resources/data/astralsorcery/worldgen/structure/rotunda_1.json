@@ -1,0 +1,9 @@
+{
+  "type": "astralsorcery:template_structure",
+  "biomes": "#astralsorcery:rotunda_biomes",
+  "bounding_box_expansion": 1,
+  "spawn_overrides": {},
+  "start_pool": "astralsorcery:rotunda_pool",
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_box"
+}
