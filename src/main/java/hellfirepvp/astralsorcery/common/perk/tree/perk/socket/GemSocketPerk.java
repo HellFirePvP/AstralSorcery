@@ -13,6 +13,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.common.component.DynamicModifiersComponent;
+import hellfirepvp.astralsorcery.common.lib.AdvancementsAS;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.lib.types.PerkDataTypesAS;
@@ -219,8 +220,11 @@ public class GemSocketPerk extends AttributeModifierPerk<GemSocketPerk.Data> {
             }
         }
 
-        if (updateData) {
-            ResearchHelper.updatePerkData(sPlayer, this, gemSocketData, newGemData);
+        if (updateData && ResearchHelper.updatePerkData(sPlayer, this, gemSocketData, newGemData)) {
+            ItemStack socketed = newGemData.getGemStack();
+            if (!socketed.isEmpty()) {
+                AdvancementsAS.GEM_SOCKET.get().trigger(sPlayer, socketed);
+            }
         }
         return true;
     }

@@ -46,6 +46,7 @@ public class RegistryBootstrap {
         FluidsAS.FLUID_REGISTER.register(modLifecycleBus);
         FluidsAS.FLUID_TYPE_REGISTER.register(modLifecycleBus);
         SoundsAS.SOUND_REGISTER.register(modLifecycleBus);
+        AdvancementsAS.TRIGGER_REGISTER.register(modLifecycleBus);
         WorldGenAS.FEATURE_REGISTER.register(modLifecycleBus);
         WorldGenAS.PLACEMENT_REGISTER.register(modLifecycleBus);
         WorldGenAS.STRUCTURE_REGISTER.register(modLifecycleBus);

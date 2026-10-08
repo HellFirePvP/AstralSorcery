@@ -1,0 +1,33 @@
+{
+  "parent": "astralsorcery:focal_point",
+  "criteria": {
+    "discover_lumen": {
+      "conditions": {
+        "elementary": false
+      },
+      "trigger": "astralsorcery:lumen_discovery"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.astralsorcery.lumen.description"
+    },
+    "icon": {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:solyn"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    "title": {
+      "translate": "advancement.astralsorcery.lumen.title"
+    }
+  },
+  "requirements": [
+    [
+      "discover_lumen"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.component.AttunedConstellationComponent;
 import hellfirepvp.astralsorcery.common.component.ConstellationPaperComponent;
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.item.base.AttuneableItem;
+import hellfirepvp.astralsorcery.common.lib.AdvancementsAS;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
@@ -176,7 +177,7 @@ public class ItemAttunementRecipe extends AttunementRecipe<ItemAttunementRecipe.
                     itemEntity.setItem(stack);
 
                     if (itemEntity.getOwner() instanceof ServerPlayer sPlayer) {
-                        //TODO attune advancement
+                        AdvancementsAS.ITEM_ATTUNEMENT.get().trigger(sPlayer, cst, stack);
                     }
                 });
             });

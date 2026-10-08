@@ -1,0 +1,27 @@
+{
+  "parent": "astralsorcery:root",
+  "criteria": {
+    "discover_focal_point": {
+      "trigger": "astralsorcery:focal_point_discovery"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.astralsorcery.focal_point.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "astralsorcery:astrolabe"
+    },
+    "title": {
+      "translate": "advancement.astralsorcery.focal_point.title"
+    }
+  },
+  "requirements": [
+    [
+      "discover_focal_point"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

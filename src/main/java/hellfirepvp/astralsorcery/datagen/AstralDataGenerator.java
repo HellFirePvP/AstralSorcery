@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.datagen.assets.*;
 import hellfirepvp.astralsorcery.datagen.data.AstralCuriosProvider;
 import hellfirepvp.astralsorcery.datagen.data.AstralRegistriesDataProvider;
+import hellfirepvp.astralsorcery.datagen.data.advancement.AstralAdvancementProvider;
 import hellfirepvp.astralsorcery.datagen.data.artifact.AstralArtifactConditionProvider;
 import hellfirepvp.astralsorcery.datagen.data.artifact.AstralArtifactEffectProvider;
 import hellfirepvp.astralsorcery.datagen.data.artifact.AstralArtifactPenaltyProvider;
@@ -31,9 +32,11 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -87,6 +90,9 @@ public class AstralDataGenerator {
             gen.addProvider(true, new AstralLumenBindingDataProvider(output, lookupProvider));
             //gen.addProvider(true, new DebugPerkTreeProvider(output, lookupProvider));
             gen.addProvider(true, new AstralPerkTreeProvider(output, lookupProvider));
+            gen.addProvider(true, new AdvancementProvider(output, lookupProvider, fileHelper, List.of(
+                    new AstralAdvancementProvider()
+            )));
         }
     }
 }

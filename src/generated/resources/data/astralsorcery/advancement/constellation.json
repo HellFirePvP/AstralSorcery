@@ -1,0 +1,27 @@
+{
+  "parent": "astralsorcery:root",
+  "criteria": {
+    "discover_constellation": {
+      "trigger": "astralsorcery:constellation_discovery"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.astralsorcery.constellation.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "astralsorcery:constellation_paper"
+    },
+    "title": {
+      "translate": "advancement.astralsorcery.constellation.title"
+    }
+  },
+  "requirements": [
+    [
+      "discover_constellation"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

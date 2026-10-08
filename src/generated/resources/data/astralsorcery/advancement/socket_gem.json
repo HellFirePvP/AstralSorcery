@@ -1,0 +1,27 @@
+{
+  "parent": "astralsorcery:attune_player",
+  "criteria": {
+    "socket_gem": {
+      "trigger": "astralsorcery:gem_socket"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.astralsorcery.socket_gem.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "astralsorcery:dynamism_gem_sky"
+    },
+    "title": {
+      "translate": "advancement.astralsorcery.socket_gem.title"
+    }
+  },
+  "requirements": [
+    [
+      "socket_gem"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

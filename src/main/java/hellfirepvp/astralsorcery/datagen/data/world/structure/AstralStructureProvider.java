@@ -116,7 +116,7 @@ public class AstralStructureProvider {
     });
     public static final StructureDefinition COLUMN = definition("column", builder -> {
         builder.biomes(TagsAS.Biomes.COLUMN_BIOMES)
-                .spread(28, 12, 0xE940CBA2)
+                .spread(24, 12, 0xE940CBA2)
                 .heightmap(Heightmap.Types.OCEAN_FLOOR_WG)
                 .terrainAdjustment(TerrainAdjustment.BEARD_THIN)
                 .verticalOffset(-1)

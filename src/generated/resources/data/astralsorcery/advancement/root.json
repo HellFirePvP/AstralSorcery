@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "has_tome": {
+      "conditions": {
+        "items": [
+          {
+            "items": "astralsorcery:tome"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "astralsorcery:textures/block/marble_raw.png",
+    "description": {
+      "translate": "advancement.astralsorcery.root.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "astralsorcery:tome"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.astralsorcery.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_tome"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

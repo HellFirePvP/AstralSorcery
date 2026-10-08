@@ -1,0 +1,27 @@
+{
+  "parent": "astralsorcery:constellation",
+  "criteria": {
+    "attune_crystal": {
+      "trigger": "astralsorcery:item_attunement"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.astralsorcery.attune_crystal.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "astralsorcery:attuned_rock_crystal"
+    },
+    "title": {
+      "translate": "advancement.astralsorcery.attune_crystal.title"
+    }
+  },
+  "requirements": [
+    [
+      "attune_crystal"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

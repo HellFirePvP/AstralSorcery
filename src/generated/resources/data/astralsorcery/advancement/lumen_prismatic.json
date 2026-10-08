@@ -1,0 +1,33 @@
+{
+  "parent": "astralsorcery:lumen",
+  "criteria": {
+    "discover_prismatic_lumen": {
+      "conditions": {
+        "lumen": "astralsorcery:prismatic"
+      },
+      "trigger": "astralsorcery:lumen_discovery"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.astralsorcery.lumen_prismatic.description"
+    },
+    "icon": {
+      "components": {
+        "astralsorcery:lumen": "astralsorcery:prismatic"
+      },
+      "count": 1,
+      "id": "astralsorcery:lumen_crystal"
+    },
+    "title": {
+      "translate": "advancement.astralsorcery.lumen_prismatic.title"
+    }
+  },
+  "requirements": [
+    [
+      "discover_prismatic_lumen"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

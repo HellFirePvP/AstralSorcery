@@ -1,0 +1,27 @@
+{
+  "parent": "astralsorcery:constellation",
+  "criteria": {
+    "attune_player": {
+      "trigger": "astralsorcery:player_attunement"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.astralsorcery.attune_player.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "astralsorcery:shifting_star"
+    },
+    "title": {
+      "translate": "advancement.astralsorcery.attune_player.title"
+    }
+  },
+  "requirements": [
+    [
+      "attune_player"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
