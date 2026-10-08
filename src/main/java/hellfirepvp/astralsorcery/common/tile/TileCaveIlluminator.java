@@ -78,11 +78,9 @@ public class TileCaveIlluminator extends TileEntityTick<TileCaveIlluminator.Data
         }
 
         if (layerPositions == null) {
-            recalculate();
+            recalculate(level);
         }
 
-        placeFlare(level);
-        placeFlare(level);
         placeFlare(level);
         if (rand.nextInt(3) == 0 && placeFlare(level)) {
             doRecalculation = true;
@@ -98,7 +96,7 @@ public class TileCaveIlluminator extends TileEntityTick<TileCaveIlluminator.Data
             ticksUntilNextPlacement = data.getBoostedTicks() > 0 ? BOOSTED_TICK_INTERVAL : NORMAL_TICK_INTERVAL;
             if (doRecalculation) {
                 doRecalculation = false;
-                recalculate();
+                recalculate(level);
             }
         }
     }
@@ -148,12 +146,13 @@ public class TileCaveIlluminator extends TileEntityTick<TileCaveIlluminator.Data
         }
     }
 
-    private void recalculate() {
-        int height = Math.max(0, this.getBlockPos().getY() - LAYER_HEIGHT);
+    private void recalculate(ServerLevel level) {
+        int yOffset = this.getBlockPos().getY() - level.getMinBuildHeight();
+        int height = Math.max(0, yOffset - LAYER_HEIGHT);
         int parts = height / LAYER_HEIGHT;
         layerPositions = new ArrayList<>(parts);
         for (int i = 0; i < parts; i++) {
-            int yPart = 3 + i * LAYER_HEIGHT;
+            int yPart = level.getMinBuildHeight() + 3 + i * LAYER_HEIGHT;
             BlockPos layerCenter = new BlockPos(this.getBlockPos().getX(), yPart, this.getBlockPos().getZ());
             layerPositions.add(generatePositions(layerCenter));
         }
