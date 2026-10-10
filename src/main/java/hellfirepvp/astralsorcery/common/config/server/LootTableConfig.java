@@ -78,7 +78,7 @@ public class LootTableConfig extends ConfigEntry {
     }
 
     public boolean canAddConstellationPaper(ResourceLocation lootTableId) {
-        return this.constellationPaperLootTables.get().contains(lootTableId);
+        return this.constellationPaperLootTables.get().contains(lootTableId.toString());
     }
 
     public ResourceLocation getRandomArtifactShardLootTable(RandomSource rand) {
