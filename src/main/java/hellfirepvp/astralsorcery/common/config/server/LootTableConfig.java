@@ -77,9 +77,8 @@ public class LootTableConfig extends ConfigEntry {
         ).map(ResourceKey::location).map(ResourceLocation::toString).toList();
     }
 
-    public boolean canAddConstellationPaper(LootTable table) {
-        String id = table.getLootTableId().toString();
-        return this.constellationPaperLootTables.get().contains(id);
+    public boolean canAddConstellationPaper(ResourceLocation lootTableId) {
+        return this.constellationPaperLootTables.get().contains(lootTableId);
     }
 
     public ResourceLocation getRandomArtifactShardLootTable(RandomSource rand) {

@@ -32,9 +32,8 @@ public class LootEventHandler {
     }
 
     private static void onLootLoad(LootTableLoadEvent event) {
-        LootTable table = event.getTable();
-        if (LootTableConfig.CONFIG.canAddConstellationPaper(table)) {
-            table.addPool(LootPool.lootPool()
+        if (LootTableConfig.CONFIG.canAddConstellationPaper(event.getName())) {
+            event.getTable().addPool(LootPool.lootPool()
                     .setRolls(BinomialDistributionGenerator.binomial(1, 0.33F))
                     .add(LootItem.lootTableItem(ItemsAS.CONSTELLATION_PAPER))
                     .name(AstralSorcery.key("configured_constellation_paper_pool").toString())
