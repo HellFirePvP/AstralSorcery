@@ -47,6 +47,10 @@ public class ChunkUtil {
         return executeWithChunk(level, pos, () -> true, false);
     }
 
+    public static boolean isChunkLoaded(LevelReader level, ChunkPos pos) {
+        return executeWithChunk(level, pos.getWorldPosition(), () -> true, false);
+    }
+
     public static void executeWithChunk(LevelReader world, ChunkPos pos, Runnable run) {
         executeWithChunk(world, pos.getWorldPosition(), MiscUtil.nullSupplier(run));
     }

@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.util.tick;
 
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;

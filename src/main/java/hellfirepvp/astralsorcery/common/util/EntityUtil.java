@@ -43,8 +43,6 @@ import java.util.function.Function;
  */
 public class EntityUtil {
 
-    private static final Random rand = new Random();
-
     public static Optional<Player> getPlayer(UUID playerUUID, LogicalSide side) {
         return side.isClient() ? getPlayerClient(playerUUID) : getPlayerServer(playerUUID);
     }

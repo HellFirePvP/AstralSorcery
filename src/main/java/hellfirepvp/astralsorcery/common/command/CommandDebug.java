@@ -21,7 +21,10 @@ import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.LumenAS;
 import hellfirepvp.astralsorcery.common.lumen.binding.LumenBindingType;
 import hellfirepvp.astralsorcery.common.research.ResearchHelper;
+import hellfirepvp.astralsorcery.common.util.EntityMatchPredicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.time.TimeStopController;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -31,6 +34,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,10 +59,18 @@ public class CommandDebug {
         //flare.setPos(player.getX(), player.getY(), player.getZ());
         //player.serverLevel().addFreshEntity(flare);
 
-        Vector3 dir = Vector3.random(player.getRandom()).setY(0).normalize().multiply(0.15F + player.getRandom().nextFloat() * 0.06F);
-        Vector3 pos = new Vector3(player).addY(200);//.setY(EntityShootingStar.getYLevelCutoff(player.level()) + 40 + player.getRandom().nextInt(30));
-        EntityShootingStar shootingStar = EntityShootingStar.create(player.level(), pos, dir);
-        player.level().addFreshEntity(shootingStar);
+        //TimeStopController.create(player.serverLevel(),
+        //        UUID.randomUUID(),
+        //        player.blockPosition().above(3),
+        //        12F,
+        //        1000,
+        //        EntityMatchPredicate.withoutPlayers(Optional.of(player))
+        //);
+
+        //Vector3 dir = Vector3.random(player.getRandom()).setY(0).normalize().multiply(0.15F + player.getRandom().nextFloat() * 0.06F);
+        //Vector3 pos = new Vector3(player).addY(200);//.setY(EntityShootingStar.getYLevelCutoff(player.level()) + 40 + player.getRandom().nextInt(30));
+        //EntityShootingStar shootingStar = EntityShootingStar.create(player.level(), pos, dir);
+        //player.level().addFreshEntity(shootingStar);
 
         //BlockPos height = player.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, player.blockPosition());
         //ShootingStarExplosion.at(Vector3.atCenter(height),

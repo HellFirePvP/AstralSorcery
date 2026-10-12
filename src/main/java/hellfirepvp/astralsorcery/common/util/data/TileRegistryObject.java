@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.util.data;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -27,6 +28,10 @@ import javax.annotation.Nullable;
  * Date: 07.09.2026 / 10:00
  */
 public record TileRegistryObject<T extends BlockEntity>(DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> ref) {
+
+    public ResourceKey<BlockEntityType<?>> key() {
+        return this.ref().getKey();
+    }
 
     public BlockEntityType<T> type() {
         return this.ref.get();

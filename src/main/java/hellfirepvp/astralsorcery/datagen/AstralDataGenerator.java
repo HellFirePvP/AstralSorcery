@@ -74,6 +74,7 @@ public class AstralDataGenerator {
             AstralBlockTagsProvider blockTags = new AstralBlockTagsProvider(output, lookupProvider, fileHelper);
             gen.addProvider(true, blockTags);
             gen.addProvider(true, new AstralItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), fileHelper));
+            gen.addProvider(true, new AstralBlockEntityTagsProvider(output, lookupProvider, fileHelper));
             gen.addProvider(true, new AstralBiomeTagsProvider(output, lookupProvider, fileHelper));
             gen.addProvider(true, new AstralEntityTagsProvider(output, lookupProvider, fileHelper));
             gen.addProvider(true, new AstralConstellationTagsProvider(output, lookupProvider, fileHelper));

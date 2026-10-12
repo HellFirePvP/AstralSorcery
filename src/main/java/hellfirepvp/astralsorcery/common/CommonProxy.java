@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.config.json.JsonConfigurationManager;
 import hellfirepvp.astralsorcery.common.config.json.data.AmuletEnchantmentDataRegistry;
 import hellfirepvp.astralsorcery.common.config.json.data.KnownTreeRegistry;
 import hellfirepvp.astralsorcery.common.config.json.data.PerkGemModifierRegistry;
+import hellfirepvp.astralsorcery.common.config.json.data.TileTickManipulationRegistry;
 import hellfirepvp.astralsorcery.common.config.server.*;
 import hellfirepvp.astralsorcery.common.constellation.level.LevelSkyHandler;
 import hellfirepvp.astralsorcery.common.data.sync.SyncDataManager;
@@ -31,6 +32,7 @@ import hellfirepvp.astralsorcery.common.lumen.binding.usage.*;
 import hellfirepvp.astralsorcery.common.patreon.PatreonDataManager;
 import hellfirepvp.astralsorcery.common.patreon.PatreonManager;
 import hellfirepvp.astralsorcery.common.perk.source.provider.lumen.LumenBindingSourceProvider;
+import hellfirepvp.astralsorcery.common.util.time.TimeStopController;
 import hellfirepvp.astralsorcery.common.visual.VisualEffectTypes;
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentAmuletGenerator;
 import hellfirepvp.astralsorcery.common.event.handler.InteractEventHandler;
@@ -154,6 +156,7 @@ public class CommonProxy {
         JsonConfigurationManager.getInstance().addRegistry("amulet_enchantments", AmuletEnchantmentDataRegistry.getInstance());
         JsonConfigurationManager.getInstance().addRegistry("perk_gem_modifiers", PerkGemModifierRegistry.getInstance());
         JsonConfigurationManager.getInstance().addRegistry("known_trees", KnownTreeRegistry.getInstance());
+        JsonConfigurationManager.getInstance().addRegistry("tile_manipulation_blacklist", TileTickManipulationRegistry.getInstance());
     }
 
     public void initLifecycle(IEventBus modEventBus) {
@@ -198,6 +201,7 @@ public class CommonProxy {
         LinkSessionHelper.attachEventListeners(eventBus);
         StarlightTransmissionLevelHelper.getInstance().attachEventListeners(eventBus);
         TreeGrowUtil.attachEventListeners(eventBus);
+        TimeStopController.attachEventListeners(eventBus);
         CelestialGatewaySyncData.attachListeners(eventBus);
         PatreonManager.attachListeners(eventBus);
         LumenBindingHitAddEffectEffect.attachEventListeners(eventBus);
