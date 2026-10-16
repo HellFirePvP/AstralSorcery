@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.perk.type.base.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.DamageUtil;
+import hellfirepvp.astralsorcery.common.util.FlagExecutor;
 import hellfirepvp.astralsorcery.common.util.SidedHelper;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,6 +43,7 @@ public class AttributeTypeDamageReflect extends PerkAttributeType {
     }
 
     private void onDamageTaken(LivingDamageEvent.Post event) {
+        if (FlagExecutor.isFlagSet(FlagExecutor.Flag.DAMAGE_REFLECT_ATTACK)) return;
         if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) return;
         if (!(event.getEntity() instanceof Player player)) return;
         LogicalSide side = SidedHelper.getSide(player);
@@ -57,8 +59,10 @@ public class AttributeTypeDamageReflect extends PerkAttributeType {
         float damageToReflect = event.getNewDamage() * reflectPercent;
         if (damageToReflect <= 0) return;
 
-        DamageUtil.shotgunAttack(attacker, e -> {
-            e.hurt(e.level().damageSources().thorns(player), damageToReflect);
+        FlagExecutor.run(FlagExecutor.Flag.DAMAGE_REFLECT_ATTACK, () -> {
+            DamageUtil.shotgunAttack(attacker, e -> {
+                e.hurt(e.level().damageSources().thorns(player), damageToReflect);
+            });
         });
     }
 }

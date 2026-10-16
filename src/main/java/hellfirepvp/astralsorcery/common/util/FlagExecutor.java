@@ -41,6 +41,7 @@ public class FlagExecutor {
         TREE_GROWTH,
         RANGED_SWEEP_ATTACK,
         AOE_DAMAGE_BURST,
+        DAMAGE_REFLECT_ATTACK,
 
     }
 }

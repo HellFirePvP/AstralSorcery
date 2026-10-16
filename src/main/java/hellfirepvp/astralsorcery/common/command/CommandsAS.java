@@ -35,7 +35,9 @@ public class CommandsAS {
                         .then(CommandPerkExperience.register())
         );
 
-        dispatcher.register(Commands.literal(AstralSorcery.MODID).redirect(cmd));
+        dispatcher.register(Commands.literal(AstralSorcery.MODID)
+                .requires(src -> src.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                .redirect(cmd));
     }
 
 }
