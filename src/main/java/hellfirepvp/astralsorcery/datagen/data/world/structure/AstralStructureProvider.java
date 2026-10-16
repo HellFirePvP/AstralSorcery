@@ -69,6 +69,7 @@ public class AstralStructureProvider {
                 .terrainAdjustment(TerrainAdjustment.BEARD_BOX)
                 .requiredClearance(10)
                 .boundingBoxExpansion(1)
+                .requiresGround()
                 .marker("chest", MarkerReplacementRandom.builder()
                         .entry(1, MarkerReplacementLootContainer.chest(LootTablesAS.SHRINE_CHEST))
                         .entry(3, MarkerReplacementLootContainer.chest(LootTablesAS.SHRINE_CHEST_SMALL))

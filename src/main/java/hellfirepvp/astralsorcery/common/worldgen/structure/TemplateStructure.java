@@ -48,7 +48,8 @@ public class TemplateStructure extends Structure {
             Codec.BOOL.optionalFieldOf("extend_bounds_to_build_height", false).forGetter(TemplateStructure::isExtendBoundsToBuildHeight),
             Codec.BOOL.optionalFieldOf("random_chunk_offset", true).forGetter(TemplateStructure::isRandomChunkOffset),
             Rotation.CODEC.optionalFieldOf("rotation").forGetter(TemplateStructure::getRotation),
-            LiquidSettings.CODEC.optionalFieldOf("liquid_settings", LiquidSettings.APPLY_WATERLOGGING).forGetter(TemplateStructure::getLiquidSettings)
+            LiquidSettings.CODEC.optionalFieldOf("liquid_settings", LiquidSettings.APPLY_WATERLOGGING).forGetter(TemplateStructure::getLiquidSettings),
+            Codec.BOOL.optionalFieldOf("requires_ground", false).forGetter(TemplateStructure::isGroundRequired)
     ).apply(inst, TemplateStructure::new));
 
     private final Holder<StructureTemplatePool> startPool;
@@ -60,11 +61,12 @@ public class TemplateStructure extends Structure {
     private final boolean randomChunkOffset;
     private final Optional<Rotation> rotation;
     private final LiquidSettings liquidSettings;
+    private final boolean groundRequired;
 
     public TemplateStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, Heightmap.Types heightmap,
                              int verticalOffset, int requiredClearance, int boundingBoxExpansion,
                              boolean extendBoundsToBuildHeight, boolean randomChunkOffset,
-                             Optional<Rotation> rotation, LiquidSettings liquidSettings) {
+                             Optional<Rotation> rotation, LiquidSettings liquidSettings, boolean groundRequired) {
         super(settings);
         this.startPool = startPool;
         this.heightmap = heightmap;
@@ -75,6 +77,7 @@ public class TemplateStructure extends Structure {
         this.randomChunkOffset = randomChunkOffset;
         this.rotation = rotation;
         this.liquidSettings = liquidSettings;
+        this.groundRequired = groundRequired;
     }
 
     protected Holder<StructureTemplatePool> getStartPool() {
@@ -113,6 +116,10 @@ public class TemplateStructure extends Structure {
         return this.liquidSettings;
     }
 
+    protected boolean isGroundRequired() {
+        return this.groundRequired;
+    }
+
     @Override
     protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
         ChunkPos chunkPos = context.chunkPos();
@@ -126,10 +133,14 @@ public class TemplateStructure extends Structure {
             return Optional.empty();
         }
 
+        if (this.isGroundRequired() && (y <= context.heightAccessor().getMinBuildHeight() || !this.isSolidGround(context, x, z, y))) {
+            return Optional.empty();
+        }
+
         Rotation rotation = this.getRotation().orElseGet(() -> Rotation.getRandom(rand));
 
         return Optional.of(new GenerationStub(origin, builder -> {
-            StructurePoolElement poolElement = this.getStartPool().value().getRandomTemplate(context.random());
+            StructurePoolElement poolElement = this.getStartPool().value().getRandomTemplate(rand);
             BoundingBox structureBox = this.expand(
                     poolElement.getBoundingBox(context.structureTemplateManager(), origin, rotation), context.heightAccessor());
 
@@ -143,6 +154,11 @@ public class TemplateStructure extends Structure {
                     this.getLiquidSettings()
             ));
         }));
+    }
+
+    private boolean isSolidGround(GenerationContext context, int x, int z, int groundHeight) {
+        int floorHeight = context.chunkGenerator().getFirstOccupiedHeight(x, z, this.getHeightmap(), context.heightAccessor(), context.randomState());
+        return floorHeight == groundHeight;
     }
 
     private BoundingBox expand(BoundingBox box, LevelHeightAccessor heightAccessor) {

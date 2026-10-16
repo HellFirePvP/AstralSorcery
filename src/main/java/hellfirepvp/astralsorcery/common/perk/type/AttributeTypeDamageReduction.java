@@ -52,7 +52,7 @@ public class AttributeTypeDamageReduction extends PerkAttributeType {
             reduction = AttributeEvent.postProcessModded(sPlayer, this, reduction);
 
             reduction = Mth.clamp(1F - reduction, 0F, 1F);
-            event.setNewDamage(event.getNewDamage() * reduction);
+            event.setNewDamage(event.getNewDamage() - event.getNewDamage() * reduction);
         }
     }
 }

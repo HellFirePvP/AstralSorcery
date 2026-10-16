@@ -4,6 +4,7 @@
   "bounding_box_expansion": 1,
   "heightmap": "OCEAN_FLOOR_WG",
   "required_clearance": 10,
+  "requires_ground": true,
   "spawn_overrides": {},
   "start_pool": "astralsorcery:obliteration_pool",
   "step": "surface_structures",

@@ -145,7 +145,6 @@ public interface DefaultQuickMoveTransfer {
                     stack.isStackable() &&
                     ItemStack.isSameItemSameComponents(stack, targetSlot.getItem());
         }
-        return (targetSlot.hasItem() && stack.isStackable() && ItemStack.isSameItemSameComponents(stack, targetSlot.getItem())) ||
-                (!targetSlot.hasItem() && targetSlot.mayPlace(stack));
+        return !targetSlot.hasItem() && targetSlot.mayPlace(stack);
     }
 }

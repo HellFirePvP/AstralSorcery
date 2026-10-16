@@ -72,6 +72,7 @@ public class StructureDefinition {
     private final boolean randomChunkOffset;
     private final Optional<Rotation> rotation;
     private final LiquidSettings liquidSettings;
+    private final boolean groundRequired;
 
     private final StructureMarkerProcessor markerProcessor;
     private final Function<BootstrapContext<StructureProcessorList>, List<StructureProcessor>> additionalProcessors;
@@ -101,6 +102,7 @@ public class StructureDefinition {
         this.randomChunkOffset = builder.randomChunkOffset;
         this.rotation = builder.rotation;
         this.liquidSettings = builder.liquidSettings;
+        this.groundRequired = builder.groundRequired;
 
         this.markerProcessor = builder.markers.build();
         this.additionalProcessors = builder.additionalProcessors;
@@ -143,7 +145,8 @@ public class StructureDefinition {
                     this.extendBoundsToBuildHeight,
                     this.randomChunkOffset,
                     this.rotation,
-                    this.liquidSettings
+                    this.liquidSettings,
+                    this.groundRequired
             ));
         });
     }
@@ -212,6 +215,7 @@ public class StructureDefinition {
         private boolean randomChunkOffset = true;
         private Optional<Rotation> rotation = Optional.empty();
         private LiquidSettings liquidSettings = LiquidSettings.APPLY_WATERLOGGING;
+        private boolean groundRequired = false;
 
         private Function<BootstrapContext<StructureProcessorList>, List<StructureProcessor>> additionalProcessors = context -> List.of();
 
@@ -315,6 +319,11 @@ public class StructureDefinition {
 
         public Builder liquidSettings(LiquidSettings liquidSettings) {
             this.liquidSettings = liquidSettings;
+            return this;
+        }
+
+        public Builder requiresGround() {
+            this.groundRequired = true;
             return this;
         }
 

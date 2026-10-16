@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.config.ConfigEntry;
 import hellfirepvp.astralsorcery.common.lib.types.PerkDataTypesAS;
 import hellfirepvp.astralsorcery.common.perk.convert.PerkAttributeConverter;
 import hellfirepvp.astralsorcery.common.perk.modifier.PerkAttributeModifier;
+import hellfirepvp.astralsorcery.common.perk.tick.CooldownPerk;
 import hellfirepvp.astralsorcery.common.perk.tick.PerkCooldownHelper;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkCategory;
 import hellfirepvp.astralsorcery.common.perk.tree.PerkType;
@@ -30,6 +31,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -44,7 +46,7 @@ import java.util.Collections;
  * Created by HellFirePvP
  * Date: 07.09.2026 / 10:00
  */
-public class KeyPerkCheatDeath extends KeyPerk {
+public class KeyPerkCheatDeath extends KeyPerk implements CooldownPerk {
 
     public static final MapCodec<KeyPerkCheatDeath> CODEC = RecordCodecBuilder.mapCodec(inst -> perkModifierFields(inst).apply(inst, KeyPerkCheatDeath::new));
     public static final PerkType<KeyPerkCheatDeath> TYPE =
@@ -86,6 +88,9 @@ public class KeyPerkCheatDeath extends KeyPerk {
     public PerkType<?> getType() {
         return TYPE;
     }
+
+    @Override
+    public void onCooldownTimeout(Player player) {}
 
     public static class Config extends ConfigEntry {
 
