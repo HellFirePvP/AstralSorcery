@@ -33,9 +33,14 @@ public class CrystalPropertyConstellation extends CrystalProperty {
         this.constellation = constellation;
     }
 
+    public BaseConstellation getConstellation() {
+        return this.constellation.get();
+    }
+
     @Override
-    public MutableComponent getName(int currentTier) {
-        return Component.translatable("crystal.property.astralsorcery.constellation_focus", this.constellation.get().getColoredName())
+    public MutableComponent getName(int currentTier, int tick) {
+        return Component.translatable("crystal.property.astralsorcery.constellation_focus",
+                        this.constellation.get().getColoredName())
                 .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(this.getColor().getColor())));
     }
 }

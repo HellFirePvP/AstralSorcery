@@ -32,8 +32,8 @@ public class CrystalPropertiesAS {
     public static final DeferredRegister<CrystalProperty> CRYSTAL_PROPERTY_REGISTER =
             DeferredRegister.create(RegistriesAS.KEY_CRYSTAL_PROPERTIES, AstralSorcery.MODID);
 
-    private static final Map<BaseConstellation, DeferredHolder<CrystalProperty, CrystalPropertyConstellation>> CONSTELLATION_PROPERTIES = new HashMap<>();
-    private static final Map<Lumen, DeferredHolder<CrystalProperty, CrystalPropertyLumen>> LUMEN_PROPERTIES = new HashMap<>();
+    private static final List<DeferredHolder<CrystalProperty, CrystalPropertyConstellation>> CONSTELLATION_PROPERTIES = new ArrayList<>();
+    private static final List<DeferredHolder<CrystalProperty, CrystalPropertyLumen>> LUMEN_PROPERTIES = new ArrayList<>();
 
     public static final DeferredHolder<CrystalProperty, CrystalProperty> SIZE =
             CRYSTAL_PROPERTY_REGISTER.register("size", () -> new CrystalProperty(ChatFormatting.GRAY, 8));
@@ -52,23 +52,30 @@ public class CrystalPropertiesAS {
             CRYSTAL_PROPERTY_REGISTER.register("lumen_channeling", () -> new CrystalProperty(ChatFormatting.GRAY, 4));
 
     public static Optional<DeferredHolder<CrystalProperty, CrystalPropertyConstellation>> getProperty(BaseConstellation cst) {
-        return Optional.ofNullable(CONSTELLATION_PROPERTIES.get(cst));
+        return CONSTELLATION_PROPERTIES.stream()
+                .filter(DeferredHolder::isBound)
+                .filter(holder -> holder.get().getConstellation().equals(cst))
+                .findFirst();
     }
 
     public static Optional<DeferredHolder<CrystalProperty, CrystalPropertyLumen>> getProperty(Lumen lumen) {
-        return Optional.ofNullable(LUMEN_PROPERTIES.get(lumen));
+        return LUMEN_PROPERTIES.stream()
+                .filter(DeferredHolder::isBound)
+                .filter(holder -> holder.get().getLumen().equals(lumen))
+                .findFirst();
     }
 
     static {
         ConstellationsAS.CONSTELLATION_REGISTER.getEntries().forEach(holder -> {
-            CONSTELLATION_PROPERTIES.put(holder.get(),
+            CONSTELLATION_PROPERTIES.add(
                     CRYSTAL_PROPERTY_REGISTER.register("constellation_" + holder.getKey().location().getPath(),
                             () -> new CrystalPropertyConstellation(holder))
             );
         });
 
         LumenAS.LUMEN_REGISTER.getEntries().forEach(holder -> {
-            LUMEN_PROPERTIES.put(holder.get(),
+            if (LumenAS.NONE.getKey().equals(holder.getKey())) return;
+            LUMEN_PROPERTIES.add(
                     CRYSTAL_PROPERTY_REGISTER.register("lumen_" + holder.getKey().location().getPath(),
                             () -> new CrystalPropertyLumen(holder))
             );

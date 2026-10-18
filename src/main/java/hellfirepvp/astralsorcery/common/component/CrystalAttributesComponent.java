@@ -134,16 +134,13 @@ public class CrystalAttributesComponent implements DynamicTooltipComponent {
 
     @Override
     public void addTooltips(ItemStack stack, Consumer<Component> tooltipAdder, AttributeTooltipContext context) {
+        int tick = context.player() != null ? context.player().tickCount : 0;
         for (CrystalProperty property : RegistriesAS.REGISTRY_CRYSTAL_PROPERTIES) {
             this.getAttribute(property).ifPresent(attribute -> {
-                MutableComponent name = attribute.getProperty().getName(attribute.getTier());
-                if (attribute.getTier() == 1 && attribute.getProperty().getMaxTier() <= 1) {
-                    tooltipAdder.accept(name);
-                } else {
-                    MutableComponent tierCmp = Component.translatable(String.format("enchantment.level.%s", attribute.getTier()))
-                            .withStyle(ChatFormatting.GOLD);
-                    tooltipAdder.accept(Component.translatable(attribute.getProperty().getNameFormat(), name, tierCmp));
-                }
+                MutableComponent name = attribute.getProperty().getName(attribute.getTier(), tick);
+                MutableComponent tierCmp = Component.translatable(String.format("enchantment.level.%s", attribute.getTier()))
+                        .withStyle(ChatFormatting.GOLD);
+                tooltipAdder.accept(Component.translatable(attribute.getProperty().getNameFormat(), name, tierCmp));
             });
         }
     }

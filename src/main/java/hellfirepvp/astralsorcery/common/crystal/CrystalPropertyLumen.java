@@ -33,9 +33,14 @@ public class CrystalPropertyLumen extends CrystalProperty {
         this.lumen = lumen;
     }
 
+    public Lumen getLumen() {
+        return this.lumen.get();
+    }
+
     @Override
-    public MutableComponent getName(int currentTier) {
-        return Component.translatable("crystal.property.astralsorcery.lumen_focus", this.lumen.get().getHoverName())
+    public MutableComponent getName(int currentTier, int tick) {
+        return Component.translatable("crystal.property.astralsorcery.lumen_focus",
+                        this.lumen.get().getHoverName().copy().withColor(this.getLumen().getColor(tick).getColor()))
                 .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(this.getColor().getColor())));
     }
 }
