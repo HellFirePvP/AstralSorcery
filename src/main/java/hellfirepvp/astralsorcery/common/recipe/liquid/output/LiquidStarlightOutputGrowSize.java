@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.effect.function.FXMotionFunction;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.common.component.CrystalAttributesComponent;
 import hellfirepvp.astralsorcery.common.event.CrystalPropertyEvent;
+import hellfirepvp.astralsorcery.common.item.tool.CrystalToolItem;
 import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.constants.ColorsAS;
@@ -88,6 +89,7 @@ public class LiquidStarlightOutputGrowSize extends LiquidStarlightRecipeOutputMo
             NeoForge.EVENT_BUS.post(growSize);
 
             crystal.set(DataComponentsAS.CRYSTAL_ATTRIBUTES, growSize.getResultComponent());
+            CrystalToolItem.updateModifiers(crystal);
         }
 
         ItemEntity trigger = input.getTriggerEntity();

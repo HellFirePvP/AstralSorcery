@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.recipe.altar.output;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import hellfirepvp.astralsorcery.common.item.tool.CrystalToolItem;
 import hellfirepvp.astralsorcery.common.recipe.altar.AltarCraftingInput;
 import hellfirepvp.astralsorcery.common.util.MiscUtil;
 import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
@@ -99,6 +100,7 @@ public class AltarOutputCopyDataComponents extends AltarOutputReplaceWithInput {
                 }
             });
         }
+        CrystalToolItem.updateModifiers(output);
         return output;
     }
 

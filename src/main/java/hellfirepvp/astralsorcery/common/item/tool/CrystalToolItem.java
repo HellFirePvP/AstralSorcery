@@ -32,7 +32,13 @@ import java.util.function.Consumer;
  */
 public interface CrystalToolItem extends CreativeTabItem {
 
-    default void reApplyModifiers(ItemStack stack) {
+    static void updateModifiers(ItemStack stack) {
+        if (stack.getItem() instanceof CrystalToolItem toolItem) {
+            toolItem.reApplyAttackModifiers(stack);
+        }
+    }
+
+    default void reApplyAttackModifiers(ItemStack stack) {
         ItemAttributeModifiers modifiers = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
 
         float dmg = CrystalPropertyCalculator.getToolDamage(0, stack, 1F / this.getCrystalCount());
@@ -50,7 +56,7 @@ public interface CrystalToolItem extends CreativeTabItem {
                 .setAttributeTier(CrystalPropertiesAS.CUT.get(), CrystalPropertiesAS.CUT.get().getMaxTier() * this.getCrystalCount())
                 .setAttributeTier(CrystalPropertiesAS.TOOL_EFFICIENCY.get(), CrystalPropertiesAS.TOOL_EFFICIENCY.get().getMaxTier() * this.getCrystalCount())
                 .setAttributeTier(CrystalPropertiesAS.TOOL_DURABILITY.get(), CrystalPropertiesAS.TOOL_DURABILITY.get().getMaxTier() * this.getCrystalCount()));
-        this.reApplyModifiers(stack);
+        this.reApplyAttackModifiers(stack);
         tabItems.accept(stack);
     }
 

@@ -12,6 +12,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.common.component.CrystalAttributesComponent;
 import hellfirepvp.astralsorcery.common.crystal.CrystalPropertyGenerator;
+import hellfirepvp.astralsorcery.common.item.tool.CrystalToolItem;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.LootAS;
 import net.minecraft.world.item.ItemStack;
@@ -51,6 +52,7 @@ public class GenerateCrystalPropertiesFunction extends LootItemConditionalFuncti
                 stack.set(DataComponentsAS.CRYSTAL_ATTRIBUTES, attributes);
             }
         }
+        CrystalToolItem.updateModifiers(stack);
         return stack;
     }
 

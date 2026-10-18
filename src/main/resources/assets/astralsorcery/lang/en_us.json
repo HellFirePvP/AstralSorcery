@@ -69,11 +69,16 @@
     "effect.astralsorcery.phoenix_blessing": "Phoenix Blessing",
 
     "crystal.property.format": "%s %s",
+    "crystal.property.format.none": "%s",
     "crystal.property.astralsorcery.size": "Size",
     "crystal.property.astralsorcery.purity": "Purity",
     "crystal.property.astralsorcery.cut": "Cut",
     "crystal.property.astralsorcery.tool_efficiency": "Tool Efficiency",
     "crystal.property.astralsorcery.tool_durability": "Tool Durability",
+    "crystal.property.astralsorcery.starlight_focus": "Starlight Focus",
+    "crystal.property.astralsorcery.lumen_channeling": "Lumen Channeling",
+    "crystal.property.astralsorcery.constellation_focus": "Focus: %s",
+    "crystal.property.astralsorcery.lumen_focus": "Channels: %s",
 
     "observer_provider.astralsorcery.altar_t2": "Resonating Crafting Table",
     "observer_provider.astralsorcery.altar_t3": "Luminous Crafting Altar",

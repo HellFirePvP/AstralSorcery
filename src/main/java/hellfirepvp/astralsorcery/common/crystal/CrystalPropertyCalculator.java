@@ -10,11 +10,13 @@ package hellfirepvp.astralsorcery.common.crystal;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.component.CrystalAttributesComponent;
+import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.item.tool.CrystalAxeItem;
 import hellfirepvp.astralsorcery.common.item.tool.CrystalSwordItem;
 import hellfirepvp.astralsorcery.common.item.tool.CrystalToolItem;
 import hellfirepvp.astralsorcery.common.lib.CrystalPropertiesAS;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
+import hellfirepvp.astralsorcery.common.lumen.Lumen;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -45,23 +47,34 @@ public class CrystalPropertyCalculator {
         return _default;
     }
 
-    private static void withProperties(ItemStack stack, Consumer<CrystalAttributesComponent> run) {
-        CrystalAttributesComponent cmp = stack.getOrDefault(DataComponentsAS.CRYSTAL_ATTRIBUTES, CrystalAttributesComponent.defaultEmpty());
-        if (!cmp.isEmpty()) {
-            run.accept(cmp);
-        }
+    public static float getEffectRate(ItemStack stack, BaseConstellation cst) {
+        return withProperties(stack, 1F, cmp -> {
+            int focusTier = cmp.getAttributeTier(CrystalPropertiesAS.STARLIGHT_FOCUS) +
+                    cmp.getAttributeTier(CrystalPropertiesAS.CUT);
+            int cstTier = CrystalPropertiesAS.getProperty(cst).map(cmp::getAttributeTier).orElse(0);
+            return (1F + focusTier * 0.14F) * (1F + cstTier * 0.4F);
+        });
+    }
+
+    public static float getLumenEffectRate(ItemStack stack, Lumen lumen) {
+        return withProperties(stack, 1F, cmp -> {
+            int channelingTier = cmp.getAttributeTier(CrystalPropertiesAS.LUMEN_CHANNELING) +
+                    cmp.getAttributeTier(CrystalPropertiesAS.PURITY);
+            int lumenTier = CrystalPropertiesAS.getProperty(lumen).map(cmp::getAttributeTier).orElse(0);
+            return (1F + channelingTier * 0.08F) * (1F + lumenTier * 0.55F);
+        });
     }
 
     public static float getStarlightFocusRate(CrystalAttributesComponent cmp) {
         int sizeTier = cmp.getAttributeTier(CrystalPropertiesAS.SIZE);
         int cutTier = cmp.getAttributeTier(CrystalPropertiesAS.CUT);
-        return 1F + (sizeTier * 0.1F + cutTier * 0.15F);
+        return 1F + (sizeTier * 0.1F + cutTier * 0.12F);
     }
 
     public static float getStarlightTransmissionLoss(CrystalAttributesComponent cmp) {
         int purityTier = cmp.getAttributeTier(CrystalPropertiesAS.PURITY);
         int missingTiers = CrystalPropertiesAS.PURITY.get().getMaxTier() - purityTier;
-        return 1F - (missingTiers * 0.15F);
+        return 1F - (missingTiers * 0.08F);
     }
 
     public static int getToolDurability(int durability, ItemStack stack, float multiplier) {

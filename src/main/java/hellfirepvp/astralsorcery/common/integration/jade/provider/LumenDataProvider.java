@@ -17,10 +17,12 @@ import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IElementHelper;
 
-public enum LumenDataProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
-    INSTANCE;
+public class LumenDataProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 
     public static final ResourceLocation UID = AstralSorcery.key("lumen");
+    public static final LumenDataProvider INSTANCE = new LumenDataProvider();
+
+    private LumenDataProvider() {}
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig iPluginConfig) {

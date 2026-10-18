@@ -59,12 +59,9 @@ public class CrystalProperty implements Comparable<CrystalProperty> {
         return this.color;
     }
 
-    public Style getColorStyle() {
-        return Style.EMPTY.withColor(TextColor.fromRgb(this.getColor().getColor()));
-    }
-
     public MutableComponent getName(int currentTier) {
-        return Component.translatable(this.unlocalizedName.get());
+        return Component.translatable(this.unlocalizedName.get())
+                .withStyle(Style.EMPTY.withColor(TextColor.fromRgb(this.getColor().getColor())));
     }
 
     public String getNameFormat() {
