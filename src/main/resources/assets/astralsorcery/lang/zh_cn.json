@@ -74,6 +74,10 @@
   "crystal.property.astralsorcery.cut": "抛光",
   "crystal.property.astralsorcery.tool_efficiency": "工具效能",
   "crystal.property.astralsorcery.tool_durability": "工具耐久",
+  "crystal.property.astralsorcery.starlight_focus": "星能聚焦",
+  "crystal.property.astralsorcery.lumen_channeling": "流明导引",
+  "crystal.property.astralsorcery.constellation_focus": "聚焦：%s",
+  "crystal.property.astralsorcery.lumen_focus": "导引：%s",
 
   "observer_provider.astralsorcery.altar_t2": "共振工作台",
   "observer_provider.astralsorcery.altar_t3": "辉光合成祭坛",
