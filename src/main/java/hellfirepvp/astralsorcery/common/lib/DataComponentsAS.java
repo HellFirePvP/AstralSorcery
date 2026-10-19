@@ -98,11 +98,6 @@ public class DataComponentsAS {
                     .networkSynchronized(EnchantmentModifierComponent.STREAM_CODEC)
                     .build());
 
-    public static DeferredHolder<DataComponentType<?>, DataComponentType<WeakPlayerReferenceComponent>> WEAK_PLAYER_REFERENCE =
-            COMPONENT_TYPE_REGISTER.register("weak_player_reference", () -> DataComponentType.<WeakPlayerReferenceComponent>builder()
-                    .networkSynchronized(WeakPlayerReferenceComponent.STREAM_CODEC)
-                    .build());
-
     public static DeferredHolder<DataComponentType<?>, DataComponentType<BlockStateStorageComponent>> BLOCK_STATE_STORAGE =
             COMPONENT_TYPE_REGISTER.register("block_state_storage", () -> DataComponentType.<BlockStateStorageComponent>builder()
                     .persistent(BlockStateStorageComponent.CODEC)
