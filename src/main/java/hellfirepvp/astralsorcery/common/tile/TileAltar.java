@@ -195,7 +195,7 @@ public class TileAltar extends TileEntityNetwork<ForwardingStarlightReceiverNode
 
     public Optional<RecipeHolder<AltarRecipe>> findMatchingRecipe(Level level, @Nullable UUID playerUUID) {
         AltarCraftingInput input = this.createInput(level, playerUUID);
-        return RecipeFinder.of(level).findAltarRecipe(this.getLevel(), input);
+        return RecipeFinder.of(level).findAltarRecipe(input);
     }
 
     public AltarCraftingInput createInput(Level level, UUID playerUUID) {

@@ -106,7 +106,7 @@ public class TileLightwell extends TileEntityNetwork<ForwardingStarlightReceiver
         }
 
         if (this.activeRecipe == null) {
-            this.activeRecipe = this.getTileData().findMatchingRecipe(catalyst)
+            this.activeRecipe = this.getTileData().findMatchingRecipe(level, catalyst)
                     .map(RecipeHolder::value)
                     .orElse(null);
         }
@@ -154,7 +154,7 @@ public class TileLightwell extends TileEntityNetwork<ForwardingStarlightReceiver
 
         ItemStack catalyst = this.getTileData().getInventory().getStackInSlot(0);
         if (!catalyst.isEmpty()) {
-            this.getTileData().findMatchingRecipe(catalyst).ifPresent(recipe -> {
+            this.getTileData().findMatchingRecipe(level, catalyst).ifPresent(recipe -> {
                 this.playCatalystEffect(recipe.value().getCatalystColor());
             });
         }
@@ -264,9 +264,8 @@ public class TileLightwell extends TileEntityNetwork<ForwardingStarlightReceiver
             return this.fluidContents.getTank(0).getContent();
         }
 
-        protected Optional<RecipeHolder<LightwellRecipe>> findMatchingRecipe(ItemStack stack) {
-            return RecipeFinder.of()
-                    .flatMap(finder -> finder.findLightwellRecipe(stack, this.getContainedFluid()));
+        protected Optional<RecipeHolder<LightwellRecipe>> findMatchingRecipe(Level level, ItemStack stack) {
+            return RecipeFinder.of(level).findLightwellRecipe(stack, this.getContainedFluid());
         }
 
         protected FluidTankViewFactory newFluidTank() {
@@ -286,7 +285,7 @@ public class TileLightwell extends TileEntityNetwork<ForwardingStarlightReceiver
                     .extractFilter((slot, amount, existing) -> false)
                     .inputFilter((slot, toAdd, existing) -> {
                         if (!existing.isEmpty()) return false;
-                        return this.findMatchingRecipe(toAdd).isPresent();
+                        return this.findMatchingRecipe(this.getLevel(), toAdd).isPresent();
                     })
                     .accessibleSides(Direction.DOWN);
         }

@@ -84,7 +84,7 @@ public class ActiveFocalCombineRecipe {
                     .filter(e -> e.distanceTo(visited) < 0.5)
                     .toList();
 
-            Optional<ActiveFocalCombineRecipe> recipeOpt = finder.findFocalCombineRecipe(sLevel, cst, combinable).map(holder -> {
+            Optional<ActiveFocalCombineRecipe> recipeOpt = finder.findFocalCombineRecipe(cst, combinable).map(holder -> {
                 FocalCombineCraftingInput input = new FocalCombineCraftingInput(cst, sLevel, combinable);
                 return create(holder, cst, input);
             });

@@ -284,7 +284,7 @@ public class TileLumenArray extends TileEntityTick<TileLumenArray.Data> implemen
         if (level.getGameTime() - this.lastSearchGameTime < 100L) return;
         this.lastSearchGameTime = level.getGameTime();
 
-        this.getTileData().findMatchingRecipe(catalyst)
+        this.getTileData().findMatchingRecipe(level, catalyst)
                 .map(RecipeHolder::value)
                 .ifPresent(matchingRecipe -> {
                     this.activeRecipe = matchingRecipe;
@@ -473,9 +473,8 @@ public class TileLumenArray extends TileEntityTick<TileLumenArray.Data> implemen
                     .orElse(0F);
         }
 
-        protected Optional<RecipeHolder<LumenGenerationRecipe>> findMatchingRecipe(ItemStack stack) {
-            return RecipeFinder.of()
-                    .flatMap(finder -> finder.findLumenGenerationRecipe(stack, this.getAssignedLumen(), false));
+        protected Optional<RecipeHolder<LumenGenerationRecipe>> findMatchingRecipe(Level level, ItemStack stack) {
+            return RecipeFinder.of(level).findLumenGenerationRecipe(stack, this.getAssignedLumen(), false);
         }
 
         private void updateExtendedTransferState() {
@@ -534,7 +533,7 @@ public class TileLumenArray extends TileEntityTick<TileLumenArray.Data> implemen
                         if (!existing.isEmpty()) return false;
                         if (this.getFluidTank().getFluidInTank(0).isEmpty()) return false;
 
-                        return this.findMatchingRecipe(toAdd).isPresent();
+                        return this.findMatchingRecipe(this.getLevel(), toAdd).isPresent();
                     })
                     .accessibleSides(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
         }

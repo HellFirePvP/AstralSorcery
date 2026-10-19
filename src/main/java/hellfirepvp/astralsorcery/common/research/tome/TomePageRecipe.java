@@ -81,7 +81,7 @@ public record TomePageRecipe(ResourceKey<RecipeType<?>> type, ResourceLocation r
                 .flatMap(mgr -> {
                     RecipeType<?> type = BuiltInRegistries.RECIPE_TYPE.get(this.type());
                     if (type == null) return Optional.empty();
-                    return RecipeFinder.of(mgr).findRecipe(MiscUtil.cast(type), this.recipeId());
+                    return RecipeFinder.clientFinder().findRecipe(MiscUtil.cast(type), this.recipeId());
                 })
                 .flatMap(recipe -> {
                     return RenderPageRecipe.getFactoryForType(this.type())

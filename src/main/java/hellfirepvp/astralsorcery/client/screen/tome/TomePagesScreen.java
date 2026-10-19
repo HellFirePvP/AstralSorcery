@@ -116,7 +116,7 @@ public class TomePagesScreen extends TomeScreen {
         ResourceKey<RecipeType<?>> type = RecipeTypesAS.LUMEN_GENERATION_TYPE.getKey();
         pages.add(Optional.ofNullable(Minecraft.getInstance().getConnection())
                 .map(ClientPacketListener::getRecipeManager)
-                .flatMap(mgr -> RecipeFinder.of(mgr).findLumenGenerationRecipeByOutput(lumen))
+                .flatMap(mgr -> RecipeFinder.clientFinder().findLumenGenerationRecipeByOutput(lumen))
                 .map(recipe -> (TomePage) new TomePageRecipe(type, recipe.id()))
                 .orElse(TomePageEmpty.getInstance()));
 

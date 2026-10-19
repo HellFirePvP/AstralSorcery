@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.recipe.lumen.LumenCrystallizationRecipe;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenCrystallizationRecipeInput;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenGenerationRecipeInput;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenGenerationRecipe;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +34,8 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.extensions.IHolderExtension;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.ObjectUtils;
@@ -51,58 +54,61 @@ import java.util.Optional;
  */
 public class RecipeFinder {
 
+    private final Level level;
     private final RecipeManager mgr;
 
-    private RecipeFinder(RecipeManager mgr) {
+    private RecipeFinder(Level level, RecipeManager mgr) {
+        this.level = level;
         this.mgr = mgr;
     }
 
-    public static Optional<RecipeFinder> of() {
-        RecipeManager mgr = RecipeUtil.getRecipeManager();
-        if (mgr == null) return Optional.empty();
-        return Optional.of(of(mgr));
+    @OnlyIn(Dist.CLIENT)
+    public static RecipeFinder clientFinder() {
+        Level level = Minecraft.getInstance().level;
+        if (level == null) throw new IllegalArgumentException("Cannot resolve recipes outside of a level.");
+        return of(level);
     }
 
     public static RecipeFinder of(Level level) {
-        return of(level.getRecipeManager());
+        return of(level, level.getRecipeManager());
     }
 
-    public static RecipeFinder of(RecipeManager mgr) {
-        return new RecipeFinder(mgr);
+    public static RecipeFinder of(Level level, RecipeManager mgr) {
+        return new RecipeFinder(level, mgr);
     }
 
-    public Optional<? extends RecipeHolder<? extends AbstractCookingRecipe>> findSmeltingRecipe(Level level, ItemStack inputStack) {
+    public Optional<? extends RecipeHolder<? extends AbstractCookingRecipe>> findSmeltingRecipe(ItemStack inputStack) {
         SingleRecipeInput input = new SingleRecipeInput(inputStack);
         return ObjectUtils.firstNonNull(
-                this.mgr.getRecipeFor(RecipeType.SMELTING, input, level),
-                this.mgr.getRecipeFor(RecipeType.BLASTING, input, level),
-                this.mgr.getRecipeFor(RecipeType.SMOKING, input, level),
-                this.mgr.getRecipeFor(RecipeType.CAMPFIRE_COOKING, input, level),
+                this.mgr.getRecipeFor(RecipeType.SMELTING, input, this.level),
+                this.mgr.getRecipeFor(RecipeType.BLASTING, input, this.level),
+                this.mgr.getRecipeFor(RecipeType.SMOKING, input, this.level),
+                this.mgr.getRecipeFor(RecipeType.CAMPFIRE_COOKING, input, this.level),
                 Optional.empty());
     }
 
-    public Optional<RecipeHolder<FocalTransmutationRecipe>> findFocalTransmutationRecipe(Level level, BaseConstellation cst, BlockPos transmutationPos, boolean isFocused) {
-        FocalTransmutationCraftingInput input = new FocalTransmutationCraftingInput(cst, level, transmutationPos, isFocused);
-        return this.mgr.getRecipeFor(RecipeTypesAS.FOCAL_TRANSMUTATION_TYPE.get(), input, level);
+    public Optional<RecipeHolder<FocalTransmutationRecipe>> findFocalTransmutationRecipe(BaseConstellation cst, BlockPos transmutationPos, boolean isFocused) {
+        FocalTransmutationCraftingInput input = new FocalTransmutationCraftingInput(cst, this.level, transmutationPos, isFocused);
+        return this.mgr.getRecipeFor(RecipeTypesAS.FOCAL_TRANSMUTATION_TYPE.get(), input, this.level);
     }
 
-    public Optional<RecipeHolder<FocalCombineRecipe>> findFocalCombineRecipe(Level level, BaseConstellation cst, List<ItemEntity> combinableItems) {
-        FocalCombineCraftingInput input = new FocalCombineCraftingInput(cst, level, combinableItems);
-        return this.mgr.getRecipeFor(RecipeTypesAS.FOCAL_COMBINE_TYPE.get(), input, level);
+    public Optional<RecipeHolder<FocalCombineRecipe>> findFocalCombineRecipe(BaseConstellation cst, List<ItemEntity> combinableItems) {
+        FocalCombineCraftingInput input = new FocalCombineCraftingInput(cst, this.level, combinableItems);
+        return this.mgr.getRecipeFor(RecipeTypesAS.FOCAL_COMBINE_TYPE.get(), input, this.level);
     }
 
-    public Optional<RecipeHolder<AltarRecipe>> findAltarRecipe(Level level, AltarCraftingInput input) {
-        return this.mgr.getRecipeFor(RecipeTypesAS.ALTAR_CRAFTING_TYPE.get(), input, level);
+    public Optional<RecipeHolder<AltarRecipe>> findAltarRecipe(AltarCraftingInput input) {
+        return this.mgr.getRecipeFor(RecipeTypesAS.ALTAR_CRAFTING_TYPE.get(), input, this.level);
     }
 
     public Optional<RecipeHolder<LumenGenerationRecipe>> findLumenGenerationRecipe(ItemStack inputStack, Lumen generatedLumen, boolean useCombinationRecipes) {
         LumenGenerationRecipeInput input = LumenGenerationRecipeInput.create(inputStack);
         if (generatedLumen.equals(LumenAS.NONE.get())) {
-            return this.mgr.getRecipesFor(RecipeTypesAS.LUMEN_GENERATION_TYPE.get(), input, null).stream()
+            return this.mgr.getRecipesFor(RecipeTypesAS.LUMEN_GENERATION_TYPE.get(), input, this.level).stream()
                     .filter(recipeHolder -> useCombinationRecipes != recipeHolder.value().getLumenCombinationInputs().isEmpty())
                     .findFirst();
         }
-        return this.mgr.getRecipesFor(RecipeTypesAS.LUMEN_GENERATION_TYPE.get(), input, null).stream()
+        return this.mgr.getRecipesFor(RecipeTypesAS.LUMEN_GENERATION_TYPE.get(), input, this.level).stream()
                 .filter(recipeHolder -> useCombinationRecipes != recipeHolder.value().getLumenCombinationInputs().isEmpty())
                 .filter(recipeHolder -> recipeHolder.value().getProducedLumen().equals(generatedLumen))
                 .findFirst();
@@ -116,7 +122,7 @@ public class RecipeFinder {
 
     public Optional<RecipeHolder<LightwellRecipe>> findLightwellRecipe(ItemStack inputStack, FluidStack existingFluid) {
         LightwellRecipeInput input = LightwellRecipeInput.of(inputStack, existingFluid);
-        return this.mgr.getRecipeFor(RecipeTypesAS.LIGHTWELL_TYPE.get(), input, null);
+        return this.mgr.getRecipeFor(RecipeTypesAS.LIGHTWELL_TYPE.get(), input, this.level);
     }
 
     public Optional<RecipeHolder<LiquidStarlightRecipe>> findLiquidStarlightRecipe(ItemEntity itemEntity) {
@@ -132,12 +138,12 @@ public class RecipeFinder {
 
     public Optional<RecipeHolder<LumenCrystallizationRecipe>> findCrystallizationRecipe(ItemStack stack) {
         LumenCrystallizationRecipeInput input = LumenCrystallizationRecipeInput.of(stack);
-        return this.mgr.getRecipeFor(RecipeTypesAS.LUMEN_CRYSTALLIZATION_TYPE.get(), input, null);
+        return this.mgr.getRecipeFor(RecipeTypesAS.LUMEN_CRYSTALLIZATION_TYPE.get(), input, this.level);
     }
 
     public Optional<RecipeHolder<LumenCrystallizationRecipe>> findCrystallizationRecipe(Lumen lumen) {
         LumenCrystallizationRecipeInput input = LumenCrystallizationRecipeInput.of(lumen);
-        return this.mgr.getRecipeFor(RecipeTypesAS.LUMEN_CRYSTALLIZATION_TYPE.get(), input, null);
+        return this.mgr.getRecipeFor(RecipeTypesAS.LUMEN_CRYSTALLIZATION_TYPE.get(), input, this.level);
     }
 
     public <I extends RecipeInput, T extends Recipe<I>> Optional<RecipeHolder<T>> findRecipe(RecipeType<T> type, ResourceLocation recipeId) {

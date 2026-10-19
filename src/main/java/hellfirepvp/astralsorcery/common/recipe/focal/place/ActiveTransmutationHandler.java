@@ -49,7 +49,7 @@ public class ActiveTransmutationHandler {
         Optional<ActiveFocalTransmutationRecipe> recipe = getActiveTransmutation(level, pos);
         if (recipe.isPresent()) return recipe;
         return ChunkUtil.executeWithChunk(level, pos, () -> {
-            return RecipeFinder.of(level).findFocalTransmutationRecipe(level, cst, pos, isFocusedStarlight).map(r -> {
+            return RecipeFinder.of(level).findFocalTransmutationRecipe(cst, pos, isFocusedStarlight).map(r -> {
                 ActiveFocalTransmutationRecipe activeRecipe = ActiveFocalTransmutationRecipe.create(r, cst, pos, level.getGameTime());
                 RecipeEvent.FocalTransmutation.Start start = new RecipeEvent.FocalTransmutation.Start(activeRecipe);
                 NeoForge.EVENT_BUS.post(start);

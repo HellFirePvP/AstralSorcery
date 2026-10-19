@@ -165,20 +165,33 @@ public abstract class TileEntitySynchronized<T extends TileEntitySynchronized.Da
 
         @Nullable
         protected <T extends TileEntitySynchronized<?>> T getTile() {
+            this.ensureTileIsBound();
             return MiscUtil.cast(this.tile);
         }
 
         @Nullable
         protected <T extends TileEntitySynchronized<?>> T getTile(Class<T> clazzHint) {
+            this.ensureTileIsBound();
             return CodecUtil.informedCast(this.tile, clazzHint);
         }
 
         @Nonnull
         protected <T extends TileEntitySynchronized<?>> Optional<T> getOptionalTile(Class<T> clazzHint) {
+            this.ensureTileIsBound();
             if (clazzHint.isInstance(this.tile)) {
                 return Optional.of(clazzHint.cast(this.tile));
             }
             return Optional.empty();
+        }
+
+        protected Level getLevel() {
+            return this.getTile().getLevel();
+        }
+
+        private void ensureTileIsBound() {
+            if (this.tile == null) {
+                throw new IllegalStateException("TileEntity data without bound tileentity!");
+            }
         }
 
         public void markDirty() {
