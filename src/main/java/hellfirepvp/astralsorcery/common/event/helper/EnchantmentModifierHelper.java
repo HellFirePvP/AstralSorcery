@@ -86,7 +86,7 @@ public class EnchantmentModifierHelper {
         CombinedEnchantmentModifiers toAdd = getModifiersToApply(hostStack);
 
         toAdd.getAddedToSpecific().forEach((ench, level) -> {
-            if (filter.test(ench)) {
+            if (filter.test(ench) && hostStack.supportsEnchantment(ench)) {
                 enchants.set(ench, enchants.getLevel(ench) + level);
             }
         });
