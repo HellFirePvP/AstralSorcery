@@ -3,7 +3,7 @@
   "color": -1,
   "consumes_inputs": false,
   "consumes_liquid": true,
-  "duration": 80,
+  "duration": 60,
   "input": {
     "count": 1,
     "ingredient": {
@@ -16,5 +16,5 @@
       "type": "astralsorcery:grow_size"
     }
   ],
-  "random_additional_duration": 40
+  "random_additional_duration": 30
 }

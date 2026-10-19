@@ -63,7 +63,7 @@ public class AltarOutputAddGemModifier extends AltarRecipeOutputModifier {
     }
 
     @Override
-    public ItemStack modifyOutputForDisplay(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries) {
+    public ItemStack modifyOutputForDisplay(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries, long tick) {
         ItemLore lore = output.getOrDefault(DataComponents.LORE, ItemLore.EMPTY);
         lore = lore.withLineAdded(Component.translatable("recipe.astralsorcery.result.add_gem_modifier").withStyle(ChatFormatting.GRAY));
         output.set(DataComponents.LORE, lore);

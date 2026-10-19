@@ -1,0 +1,87 @@
+{
+  "type": "astralsorcery:liquid_starlight",
+  "color": -1,
+  "consumes_inputs": false,
+  "consumes_liquid": true,
+  "duration": 80,
+  "input": {
+    "count": 1,
+    "ingredient": {
+      "tag": "astralsorcery:crystal"
+    }
+  },
+  "other_inputs": [
+    {
+      "count": 1,
+      "ingredient": {
+        "type": "neoforge:components",
+        "components": {
+          "astralsorcery:lumen": "astralsorcery:dynamis"
+        },
+        "items": "astralsorcery:lumen_crystal"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:resonating_gem"
+      }
+    }
+  ],
+  "output_modifiers": [
+    {
+      "type": "astralsorcery:engrave_lumen",
+      "properties": [
+        {
+          "data": "astralsorcery:constellation_aevitas",
+          "weight": 1
+        },
+        {
+          "data": "astralsorcery:constellation_armara",
+          "weight": 1
+        },
+        {
+          "data": "astralsorcery:constellation_discidia",
+          "weight": 1
+        },
+        {
+          "data": "astralsorcery:constellation_evorsio",
+          "weight": 1
+        },
+        {
+          "data": "astralsorcery:constellation_vicio",
+          "weight": 1
+        },
+        {
+          "data": "astralsorcery:constellation_lucerna",
+          "weight": 4
+        },
+        {
+          "data": "astralsorcery:constellation_mineralis",
+          "weight": 4
+        },
+        {
+          "data": "astralsorcery:constellation_horologium",
+          "weight": 4
+        },
+        {
+          "data": "astralsorcery:constellation_octans",
+          "weight": 4
+        },
+        {
+          "data": "astralsorcery:constellation_bootes",
+          "weight": 4
+        },
+        {
+          "data": "astralsorcery:constellation_fornax",
+          "weight": 4
+        },
+        {
+          "data": "astralsorcery:constellation_pelotrio",
+          "weight": 4
+        }
+      ]
+    }
+  ],
+  "random_additional_duration": 40
+}

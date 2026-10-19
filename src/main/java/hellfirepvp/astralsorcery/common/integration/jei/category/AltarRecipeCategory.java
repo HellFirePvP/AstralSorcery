@@ -198,7 +198,7 @@ public class AltarRecipeCategory extends ASRecipeCategory<AltarRecipe> {
 
     private void setOutputs(IRecipeLayoutBuilder builder, AltarRecipe recipe) {
         AltarCraftingInput displayInput = recipe.createInputForDisplay(ClientProxy.getClientTick());
-        List<ItemStack> outputs = recipe.getOutputsForDisplay(displayInput, this.registries);
+        List<ItemStack> outputs = recipe.getOutputsForDisplay(displayInput, this.registries, ClientProxy.getClientTick());
         if (outputs.isEmpty()) return;
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 65, 18)

@@ -71,7 +71,7 @@ public class AltarOutputUpdateResearchTier extends AltarRecipeOutputModifier {
     }
 
     @Override
-    public ItemStack modifyOutputForDisplay(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries) {
+    public ItemStack modifyOutputForDisplay(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries, long tick) {
         return output;
     }
 }

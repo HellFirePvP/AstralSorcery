@@ -52,5 +52,7 @@ public class AltarRecipeOutputTypesAS {
             OUTPUT_MODIFIER_REGISTER.register("copy_data_components", () -> AltarOutputCopyDataComponents.TYPE);
     public static final DeferredHolder<AltarRecipeOutputModifier.Type<?>, AltarRecipeOutputModifier.Type<AltarOutputSetCrystalCount>> SET_CRYSTAL_COUNT =
             OUTPUT_MODIFIER_REGISTER.register("set_crystal_count", () -> AltarOutputSetCrystalCount.TYPE);
+    public static final DeferredHolder<AltarRecipeOutputModifier.Type<?>, AltarRecipeOutputModifier.Type<AltarOutputEngraveLumen>> ENGRAVE_LUMEN =
+            OUTPUT_MODIFIER_REGISTER.register("engrave_lumen", () -> AltarOutputEngraveLumen.TYPE);
 
 }

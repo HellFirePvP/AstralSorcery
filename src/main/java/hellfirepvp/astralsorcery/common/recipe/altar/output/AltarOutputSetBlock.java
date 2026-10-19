@@ -78,7 +78,7 @@ public class AltarOutputSetBlock extends AltarRecipeOutputModifier {
     }
 
     @Override
-    public ItemStack modifyOutputForDisplay(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries) {
+    public ItemStack modifyOutputForDisplay(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries, long tick) {
         return this.blockStates.getRandom(this.rand).map(WeightedEntry.Wrapper::data).map(ItemUtil::createBlockStack).orElse(output);
     }
 

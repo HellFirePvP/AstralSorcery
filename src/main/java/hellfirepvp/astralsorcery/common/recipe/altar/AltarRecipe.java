@@ -12,8 +12,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
-import hellfirepvp.astralsorcery.common.constellation.DebugConstellation;
-import hellfirepvp.astralsorcery.common.ingredient.IngredientBridge;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lumen.LumenStack;
@@ -34,7 +32,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -166,13 +163,13 @@ public class AltarRecipe extends CustomRecipe<AltarRecipe, AltarCraftingInput> {
         return craftedOutputs;
     }
 
-    public List<ItemStack> getOutputsForDisplay(AltarCraftingInput input, HolderLookup.Provider registries) {
+    public List<ItemStack> getOutputsForDisplay(AltarCraftingInput input, HolderLookup.Provider registries, long tick) {
         List<ItemStack> craftedOutputs = this.getOutputs();
 
         for (AltarRecipeOutputModifier modifier : this.outputModifiers) {
             List<ItemStack> modifiedOutputs = new ArrayList<>();
             for (ItemStack output : craftedOutputs) {
-                modifiedOutputs.add(modifier.modifyOutputForDisplay(output.copy(), input, registries));
+                modifiedOutputs.add(modifier.modifyOutputForDisplay(output.copy(), input, registries, tick));
             }
             modifiedOutputs.removeIf(ItemStack::isEmpty);
             craftedOutputs = modifiedOutputs;

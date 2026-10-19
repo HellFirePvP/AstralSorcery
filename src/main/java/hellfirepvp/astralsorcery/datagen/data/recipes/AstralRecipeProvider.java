@@ -42,14 +42,14 @@ public class AstralRecipeProvider extends RecipeProvider {
     protected void buildRecipes(RecipeOutput recipeOutput, HolderLookup.Provider provider) {
         recipeOutput = new GeneratedRecipeBuffer.BufferedRecipeOutput(recipeOutput, provider);
 
-        AltarRecipeProvider.registerRecipes(recipeOutput);
+        AltarRecipeProvider.registerRecipes(recipeOutput, provider);
         FocalCombineRecipeProvider.registerRecipes(recipeOutput);
         FocalTransmutationRecipeProvider.registerRecipes(recipeOutput);
         LumenGenerationRecipeProvider.registerRecipes(recipeOutput);
         LumenCrystallizationRecipeProvider.registerRecipes(recipeOutput);
         LightwellRecipeProvider.registerRecipes(recipeOutput);
         InfusionRecipeProvider.registerRecipes(recipeOutput);
-        LiquidStarlightRecipeProvider.registerRecipes(recipeOutput);
+        LiquidStarlightRecipeProvider.registerRecipes(recipeOutput, provider);
         LiquidInteractionRecipeProvider.registerRecipes(recipeOutput);
 
         VanillaRecipeProvider.registerCraftingRecipes(recipeOutput);

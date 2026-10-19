@@ -40,5 +40,7 @@ public class LiquidStarlightRecipeOutputTypesAS {
             OUTPUT_MODIFIER_REGISTER.register("bind_lumen", () -> LiquidStarlightOutputBindLumen.TYPE);
     public static final DeferredHolder<LiquidStarlightRecipeOutputModifier.Type<?>, LiquidStarlightRecipeOutputModifier.Type<LiquidStarlightOutputFillLumen>> FILL_LUMEN =
             OUTPUT_MODIFIER_REGISTER.register("fill_lumen", () -> LiquidStarlightOutputFillLumen.TYPE);
+    public static final DeferredHolder<LiquidStarlightRecipeOutputModifier.Type<?>, LiquidStarlightRecipeOutputModifier.Type<LiquidStarlightOutputEngraveLumen>> ENGRAVE_LUMEN =
+            OUTPUT_MODIFIER_REGISTER.register("engrave_lumen", () -> LiquidStarlightOutputEngraveLumen.TYPE);
 
 }

@@ -1,0 +1,101 @@
+{
+  "type": "astralsorcery:altar_crafting",
+  "base_focus_shatter_chance": 0.0,
+  "duration": 100,
+  "effects": [
+    "astralsorcery:default_altar_sparkle",
+    "astralsorcery:default_central_beam",
+    "astralsorcery:default_lumen_input",
+    "astralsorcery:default_relay_input"
+  ],
+  "grid": {
+    "key": {
+      "C": {
+        "type": "item",
+        "ingredient": {
+          "tag": "astralsorcery:crystal"
+        }
+      },
+      "R": {
+        "type": "item",
+        "ingredient": {
+          "item": "astralsorcery:nocturnal_powder"
+        }
+      }
+    },
+    "pattern": [
+      "   ",
+      "RCR",
+      "   "
+    ],
+    "relay_pattern": [
+      "     ",
+      "     ",
+      "     ",
+      "     ",
+      "     "
+    ]
+  },
+  "may_chain": false,
+  "only_night": true,
+  "output_modifiers": [
+    {
+      "type": "astralsorcery:replace_with_input",
+      "input_slot": 4,
+      "slot_type": "altar_grid"
+    },
+    {
+      "type": "astralsorcery:engrave_lumen",
+      "properties": [
+        {
+          "data": "astralsorcery:tool_efficiency",
+          "weight": 1
+        },
+        {
+          "data": "astralsorcery:tool_durability",
+          "weight": 1
+        },
+        {
+          "data": "astralsorcery:starlight_focus",
+          "weight": 1
+        },
+        {
+          "data": "astralsorcery:lumen_channeling",
+          "weight": 9
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "count": 1,
+      "id": "astralsorcery:rock_crystal"
+    }
+  ],
+  "required_additional_inputs": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "astralsorcery:stardust"
+      }
+    }
+  ],
+  "required_fluid": [
+    {
+      "amount": 1000,
+      "id": "astralsorcery:liquid_starlight"
+    },
+    {
+      "amount": 1000,
+      "id": "astralsorcery:liquid_starlight"
+    }
+  ],
+  "required_lumen": [
+    {
+      "amount": 400,
+      "lumen": "astralsorcery:nullae"
+    }
+  ],
+  "required_starlight": [],
+  "required_type": "luminance"
+}

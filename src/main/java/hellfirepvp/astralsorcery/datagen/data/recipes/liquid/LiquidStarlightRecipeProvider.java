@@ -8,18 +8,25 @@
 
 package hellfirepvp.astralsorcery.datagen.data.recipes.liquid;
 
+import hellfirepvp.astralsorcery.common.component.LumenComponent;
+import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
+import hellfirepvp.astralsorcery.common.crystal.CrystalPropertyConstellation;
 import hellfirepvp.astralsorcery.common.ingredient.HasStoredLumenIngredient;
 import hellfirepvp.astralsorcery.common.ingredient.IsLumenBindableIngredient;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.recipe.builder.LiquidStarlightRecipeBuilder;
 import hellfirepvp.astralsorcery.common.recipe.liquid.output.*;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.CompoundIngredient;
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 import java.util.List;
@@ -38,18 +45,18 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
         super(output, registries);
     }
 
-    public static void registerRecipes(RecipeOutput recipeOutput) {
+    public static void registerRecipes(RecipeOutput recipeOutput, HolderLookup.Provider provider) {
         LiquidStarlightRecipeBuilder.builder("infused_wood", new SizedIngredient(Ingredient.of(ItemTags.LOGS), 1))
                 .addOutputModifier(LiquidStarlightOutputDropItem.create(ItemsAS.BLOCK_INFUSED_WOOD_RAW.toStack()))
-                .duration(30)
-                .randomAdditionalDuration(0)
+                .duration(6)
+                .randomAdditionalDuration(10)
                 .save(recipeOutput);
         LiquidStarlightRecipeBuilder.builder("merge_crystals",
                         new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
                         List.of(new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1)))
                 .addOutputModifier(LiquidStarlightOutputMergeCrystal.getInstance())
                 .duration(60)
-                .randomAdditionalDuration(20)
+                .randomAdditionalDuration(40)
                 .consumesLiquid()
                 .doesntConsumeInputs()
                 .save(recipeOutput);
@@ -74,8 +81,8 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
         LiquidStarlightRecipeBuilder.builder("grow_crystal_size",
                         new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1))
                 .addOutputModifier(LiquidStarlightOutputGrowSize.getInstance())
-                .duration(80)
-                .randomAdditionalDuration(40)
+                .duration(60)
+                .randomAdditionalDuration(30)
                 .consumesLiquid()
                 .doesntConsumeInputs()
                 .save(recipeOutput);
@@ -102,5 +109,197 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
                 .doesntConsumeInputs()
                 .save(recipeOutput);
 
+        LiquidStarlightRecipeBuilder.builder("engrave_lumen_virel",
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
+                        List.of(
+                                new SizedIngredient(DataComponentIngredient.of(
+                                        false,
+                                        DataComponentPredicate.builder()
+                                                .expect(DataComponentsAS.LUMEN.get(), new LumenComponent(LumenAS.VIREL))
+                                                .build(),
+                                        ItemsAS.LUMEN_CRYSTAL.asItem()
+                                ), 1),
+                                new SizedIngredient(Ingredient.of(ItemsAS.RESONATING_GEM), 1)
+                        ))
+                .addOutputModifier(LiquidStarlightOutputEngraveLumen.builder()
+                        .add(CrystalPropertiesAS.TOOL_EFFICIENCY, 7)
+                        .add(CrystalPropertiesAS.TOOL_DURABILITY, 1)
+                        .add(CrystalPropertiesAS.STARLIGHT_FOCUS, 1)
+                        .add(CrystalPropertiesAS.LUMEN_CHANNELING, 1)
+                        .build())
+                .duration(80)
+                .randomAdditionalDuration(40)
+                .consumesLiquid()
+                .doesntConsumeInputs()
+                .save(recipeOutput);
+        LiquidStarlightRecipeBuilder.builder("engrave_lumen_solyn",
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
+                        List.of(
+                                new SizedIngredient(DataComponentIngredient.of(
+                                        false,
+                                        DataComponentPredicate.builder()
+                                                .expect(DataComponentsAS.LUMEN.get(), new LumenComponent(LumenAS.SOLYN))
+                                                .build(),
+                                        ItemsAS.LUMEN_CRYSTAL.asItem()
+                                ), 1),
+                                new SizedIngredient(Ingredient.of(ItemsAS.RESONATING_GEM), 1)
+                        ))
+                .addOutputModifier(LiquidStarlightOutputEngraveLumen.builder()
+                        .add(CrystalPropertiesAS.TOOL_EFFICIENCY, 1)
+                        .add(CrystalPropertiesAS.TOOL_DURABILITY, 1)
+                        .add(CrystalPropertiesAS.STARLIGHT_FOCUS, 7)
+                        .add(CrystalPropertiesAS.LUMEN_CHANNELING, 1)
+                        .build())
+                .duration(80)
+                .randomAdditionalDuration(40)
+                .consumesLiquid()
+                .doesntConsumeInputs()
+                .save(recipeOutput);
+        LiquidStarlightRecipeBuilder.builder("engrave_lumen_nullae",
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
+                        List.of(
+                                new SizedIngredient(DataComponentIngredient.of(
+                                        false,
+                                        DataComponentPredicate.builder()
+                                                .expect(DataComponentsAS.LUMEN.get(), new LumenComponent(LumenAS.NULLAE))
+                                                .build(),
+                                        ItemsAS.LUMEN_CRYSTAL.asItem()
+                                ), 1),
+                                new SizedIngredient(Ingredient.of(ItemsAS.RESONATING_GEM), 1)
+                        ))
+                .addOutputModifier(LiquidStarlightOutputEngraveLumen.builder()
+                        .add(CrystalPropertiesAS.TOOL_EFFICIENCY, 1)
+                        .add(CrystalPropertiesAS.TOOL_DURABILITY, 1)
+                        .add(CrystalPropertiesAS.STARLIGHT_FOCUS, 1)
+                        .add(CrystalPropertiesAS.LUMEN_CHANNELING, 7)
+                        .build())
+                .duration(80)
+                .randomAdditionalDuration(40)
+                .consumesLiquid()
+                .doesntConsumeInputs()
+                .save(recipeOutput);
+        LiquidStarlightRecipeBuilder.builder("engrave_lumen_caldor",
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
+                        List.of(
+                                new SizedIngredient(DataComponentIngredient.of(
+                                        false,
+                                        DataComponentPredicate.builder()
+                                                .expect(DataComponentsAS.LUMEN.get(), new LumenComponent(LumenAS.CALDOR))
+                                                .build(),
+                                        ItemsAS.LUMEN_CRYSTAL.asItem()
+                                ), 1),
+                                new SizedIngredient(Ingredient.of(ItemsAS.RESONATING_GEM), 1)
+                        ))
+                .addOutputModifier(LiquidStarlightOutputEngraveLumen.builder()
+                        .add(CrystalPropertiesAS.TOOL_EFFICIENCY, 1)
+                        .add(CrystalPropertiesAS.TOOL_DURABILITY, 7)
+                        .add(CrystalPropertiesAS.STARLIGHT_FOCUS, 1)
+                        .add(CrystalPropertiesAS.LUMEN_CHANNELING, 1)
+                        .build())
+                .duration(80)
+                .randomAdditionalDuration(40)
+                .consumesLiquid()
+                .doesntConsumeInputs()
+                .save(recipeOutput);
+
+        LiquidStarlightOutputEngraveLumen.Builder majorBuilder = LiquidStarlightOutputEngraveLumen.builder();
+        LiquidStarlightOutputEngraveLumen.Builder minorBuilder = LiquidStarlightOutputEngraveLumen.builder();
+        provider.lookupOrThrow(RegistriesAS.KEY_CONSTELLATIONS).listElements().forEach(ref -> {
+            CrystalPropertiesAS.getProperty(ref.value()).ifPresent(prop -> {
+                if (ref.value().getTier() == BaseConstellation.Tier.MAJOR) {
+                    majorBuilder.add(prop, 5);
+                    minorBuilder.add(prop, 1);
+                } else {
+                    majorBuilder.add(prop, 1);
+                    minorBuilder.add(prop, 4);
+                }
+            });
+        });
+        LiquidStarlightRecipeBuilder.builder("engrave_lumen_dynamis",
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
+                        List.of(
+                                new SizedIngredient(DataComponentIngredient.of(
+                                        false,
+                                        DataComponentPredicate.builder()
+                                                .expect(DataComponentsAS.LUMEN.get(), new LumenComponent(LumenAS.DYNAMIS))
+                                                .build(),
+                                        ItemsAS.LUMEN_CRYSTAL.asItem()
+                                ), 1),
+                                new SizedIngredient(Ingredient.of(ItemsAS.RESONATING_GEM), 1)
+                        ))
+                .addOutputModifier(minorBuilder.build())
+                .duration(80)
+                .randomAdditionalDuration(40)
+                .consumesLiquid()
+                .doesntConsumeInputs()
+                .save(recipeOutput);
+        LiquidStarlightRecipeBuilder.builder("engrave_lumen_aion",
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
+                        List.of(
+                                new SizedIngredient(DataComponentIngredient.of(
+                                        false,
+                                        DataComponentPredicate.builder()
+                                                .expect(DataComponentsAS.LUMEN.get(), new LumenComponent(LumenAS.AION))
+                                                .build(),
+                                        ItemsAS.LUMEN_CRYSTAL.asItem()
+                                ), 1),
+                                new SizedIngredient(Ingredient.of(ItemsAS.RESONATING_GEM), 1)
+                        ))
+                .addOutputModifier(majorBuilder.build())
+                .duration(80)
+                .randomAdditionalDuration(40)
+                .consumesLiquid()
+                .doesntConsumeInputs()
+                .save(recipeOutput);
+
+        LiquidStarlightOutputEngraveLumen.Builder elementaryBuilder = LiquidStarlightOutputEngraveLumen.builder();
+        LiquidStarlightOutputEngraveLumen.Builder complexBuilder = LiquidStarlightOutputEngraveLumen.builder();
+        provider.lookupOrThrow(RegistriesAS.KEY_LUMEN).listElements().forEach(ref -> {
+            CrystalPropertiesAS.getProperty(ref.value()).ifPresent(prop -> {
+                if (ref.value().isElementary()) {
+                    elementaryBuilder.add(prop, 3);
+                    complexBuilder.add(prop, 1);
+                } else {
+                    elementaryBuilder.add(prop, 1);
+                    complexBuilder.add(prop, 3);
+                }
+            });
+        });
+        LiquidStarlightRecipeBuilder.builder("engrave_lumen_hyle",
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
+                        List.of(
+                                new SizedIngredient(DataComponentIngredient.of(
+                                        false,
+                                        DataComponentPredicate.builder()
+                                                .expect(DataComponentsAS.LUMEN.get(), new LumenComponent(LumenAS.HYLE))
+                                                .build(),
+                                        ItemsAS.LUMEN_CRYSTAL.asItem()
+                                ), 1),
+                                new SizedIngredient(Ingredient.of(ItemsAS.RESONATING_GEM), 1)
+                        ))
+                .addOutputModifier(elementaryBuilder.build())
+                .duration(80)
+                .randomAdditionalDuration(40)
+                .consumesLiquid()
+                .doesntConsumeInputs()
+                .save(recipeOutput);
+        LiquidStarlightRecipeBuilder.builder("engrave_lumen_akasha",
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1),
+                        List.of(
+                                new SizedIngredient(DataComponentIngredient.of(
+                                        false,
+                                        DataComponentPredicate.builder()
+                                                .expect(DataComponentsAS.LUMEN.get(), new LumenComponent(LumenAS.AKASHA))
+                                                .build(),
+                                        ItemsAS.LUMEN_CRYSTAL.asItem()
+                                ), 1),
+                                new SizedIngredient(Ingredient.of(ItemsAS.RESONATING_GEM), 1)
+                        ))
+                .addOutputModifier(complexBuilder.build())
+                .duration(80)
+                .randomAdditionalDuration(40)
+                .consumesLiquid()
+                .doesntConsumeInputs()
+                .save(recipeOutput);
     }
 }

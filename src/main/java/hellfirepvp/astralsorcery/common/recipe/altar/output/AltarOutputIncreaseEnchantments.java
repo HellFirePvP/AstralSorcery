@@ -24,7 +24,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -82,7 +81,7 @@ public class AltarOutputIncreaseEnchantments extends AltarRecipeOutputModifier {
     }
 
     @Override
-    public ItemStack modifyOutputForDisplay(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries) {
+    public ItemStack modifyOutputForDisplay(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries, long tick) {
         ItemLore lore = output.getOrDefault(DataComponents.LORE, ItemLore.EMPTY);
         lore = lore.withLineAdded(Component.translatable("recipe.astralsorcery.result.increase_enchantment").withStyle(ChatFormatting.GRAY));
         output.set(DataComponents.LORE, lore);

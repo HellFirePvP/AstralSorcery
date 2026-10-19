@@ -44,6 +44,8 @@
     "ingredient.astralsorcery.fluid.description": "At least %s",
     "ingredient.astralsorcery.fluid.description.bucket": "%s B",
     "ingredient.astralsorcery.fluid.description.milli_bucket": "%s mB",
+    "ingredient.astralsorcery.lumen_engraving.description": "One of:",
+    "ingredient.astralsorcery.lumen_engraving.description.element": "- %s",
 
     "recipe.astralsorcery.result.add_gem_modifier": "Adds 1 perk modifier",
     "recipe.astralsorcery.result.add_enchantment_modifier": "Adds 1 enchantment modifier",

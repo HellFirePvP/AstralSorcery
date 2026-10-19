@@ -16,7 +16,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -37,7 +36,7 @@ public abstract class AltarRecipeOutputModifier {
 
     public abstract ItemStack modifyOutput(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries);
 
-    public ItemStack modifyOutputForDisplay(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries) {
+    public ItemStack modifyOutputForDisplay(ItemStack output, AltarCraftingInput input, HolderLookup.Provider registries, long tick) {
         return this.modifyOutput(output, input, registries);
     }
 

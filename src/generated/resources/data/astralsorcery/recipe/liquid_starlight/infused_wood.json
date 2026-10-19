@@ -3,7 +3,7 @@
   "color": -1,
   "consumes_inputs": true,
   "consumes_liquid": false,
-  "duration": 30,
+  "duration": 6,
   "input": {
     "count": 1,
     "ingredient": {
@@ -20,5 +20,5 @@
       }
     }
   ],
-  "random_additional_duration": 0
+  "random_additional_duration": 10
 }

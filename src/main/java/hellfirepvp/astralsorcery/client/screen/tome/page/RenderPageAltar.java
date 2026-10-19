@@ -159,7 +159,7 @@ public class RenderPageAltar extends RenderPageRecipe<AltarRecipe> {
         int midX = x + TomePage.DEFAULT_WIDTH / 2;
 
         AltarCraftingInput displayInput = recipe.createInputForDisplay(ClientProxy.getClientTick());
-        List<ItemStack> outputs = recipe.getOutputsForDisplay(displayInput, registries);
+        List<ItemStack> outputs = recipe.getOutputsForDisplay(displayInput, registries, ClientProxy.getClientTick());
         ItemStack mainOutput = outputs.isEmpty() ? ItemStack.EMPTY : outputs.getFirst();
         this.renderOutput(guiGraphics, midX - 8, y + 18 + 60 / 2 - 8, 16, 16, mainOutput);
 

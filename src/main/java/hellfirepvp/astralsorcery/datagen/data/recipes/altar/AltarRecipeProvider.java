@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.recipe.altar.output.*;
 import hellfirepvp.astralsorcery.common.recipe.builder.AltarRecipeBuilder;
+import hellfirepvp.astralsorcery.common.recipe.liquid.output.LiquidStarlightOutputEngraveLumen;
 import hellfirepvp.astralsorcery.common.research.ResearchTier;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.core.HolderLookup;
@@ -56,11 +57,12 @@ public class AltarRecipeProvider extends RecipeProvider {
         super(output, registries);
     }
 
-    public static void registerRecipes(RecipeOutput recipeOutput) {
+    public static void registerRecipes(RecipeOutput recipeOutput, HolderLookup.Provider provider) {
         registerVanillaConversionRecipes(recipeOutput);
         registerIlluminationRecipes(recipeOutput);
         registerResonanceRecipes(recipeOutput);
         registerLuminanceRecipes(recipeOutput);
+        registerLumenEngravingRecipes(recipeOutput, provider);
         registerRadianceRecipes(recipeOutput);
     }
 
@@ -1137,6 +1139,193 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
                 .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
                 .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .save(recipeOutput);
+    }
+
+    private static void registerLumenEngravingRecipes(RecipeOutput recipeOutput, HolderLookup.Provider provider) {
+        AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
+                .setRecipeId(AstralSorcery.key("altar_lumen_engraving_virel"))
+                .addOutput(ItemsAS.ROCK_CRYSTAL)
+                .setGridLines(
+                        "   ",
+                        "RCR",
+                        "   "
+                )
+                .addInput('C', TagsAS.Items.CRYSTAL)
+                .addInput('R', ItemsAS.VIVID_POWDER)
+                .addRequiredLumen(LumenAS.VIREL.stack(400))
+                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
+                .addOutputModifier(AltarOutputEngraveLumen.builder()
+                        .add(CrystalPropertiesAS.TOOL_EFFICIENCY, 9)
+                        .add(CrystalPropertiesAS.TOOL_DURABILITY, 1)
+                        .add(CrystalPropertiesAS.STARLIGHT_FOCUS, 1)
+                        .add(CrystalPropertiesAS.LUMEN_CHANNELING, 1)
+                        .build())
+                .save(recipeOutput);
+        AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
+                .setRecipeId(AstralSorcery.key("altar_lumen_engraving_solyn"))
+                .addOutput(ItemsAS.ROCK_CRYSTAL)
+                .setGridLines(
+                        "   ",
+                        "RCR",
+                        "   "
+                )
+                .addInput('C', TagsAS.Items.CRYSTAL)
+                .addInput('R', ItemsAS.ILLUMINATION_POWDER)
+                .addRequiredLumen(LumenAS.SOLYN.stack(400))
+                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
+                .addOutputModifier(AltarOutputEngraveLumen.builder()
+                        .add(CrystalPropertiesAS.TOOL_EFFICIENCY, 1)
+                        .add(CrystalPropertiesAS.TOOL_DURABILITY, 1)
+                        .add(CrystalPropertiesAS.STARLIGHT_FOCUS, 9)
+                        .add(CrystalPropertiesAS.LUMEN_CHANNELING, 1)
+                        .build())
+                .save(recipeOutput);
+        AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
+                .setRecipeId(AstralSorcery.key("altar_lumen_engraving_nullae"))
+                .addOutput(ItemsAS.ROCK_CRYSTAL)
+                .setGridLines(
+                        "   ",
+                        "RCR",
+                        "   "
+                )
+                .addInput('C', TagsAS.Items.CRYSTAL)
+                .addInput('R', ItemsAS.NOCTURNAL_POWDER)
+                .addRequiredLumen(LumenAS.NULLAE.stack(400))
+                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
+                .addOutputModifier(AltarOutputEngraveLumen.builder()
+                        .add(CrystalPropertiesAS.TOOL_EFFICIENCY, 1)
+                        .add(CrystalPropertiesAS.TOOL_DURABILITY, 1)
+                        .add(CrystalPropertiesAS.STARLIGHT_FOCUS, 1)
+                        .add(CrystalPropertiesAS.LUMEN_CHANNELING, 9)
+                        .build())
+                .save(recipeOutput);
+        AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
+                .setRecipeId(AstralSorcery.key("altar_lumen_engraving_caldor"))
+                .addOutput(ItemsAS.ROCK_CRYSTAL)
+                .setGridLines(
+                        "   ",
+                        "RCR",
+                        "   "
+                )
+                .addInput('C', TagsAS.Items.CRYSTAL)
+                .addInput('R', Tags.Items.GEMS_QUARTZ)
+                .addRequiredLumen(LumenAS.CALDOR.stack(400))
+                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
+                .addOutputModifier(AltarOutputEngraveLumen.builder()
+                        .add(CrystalPropertiesAS.TOOL_EFFICIENCY, 1)
+                        .add(CrystalPropertiesAS.TOOL_DURABILITY, 9)
+                        .add(CrystalPropertiesAS.STARLIGHT_FOCUS, 1)
+                        .add(CrystalPropertiesAS.LUMEN_CHANNELING, 1)
+                        .build())
+                .save(recipeOutput);
+
+        AltarOutputEngraveLumen.Builder majorBuilder = AltarOutputEngraveLumen.builder();
+        AltarOutputEngraveLumen.Builder minorBuilder = AltarOutputEngraveLumen.builder();
+        provider.lookupOrThrow(RegistriesAS.KEY_CONSTELLATIONS).listElements().forEach(ref -> {
+            CrystalPropertiesAS.getProperty(ref.value()).ifPresent(prop -> {
+                if (ref.value().getTier() == BaseConstellation.Tier.MAJOR) {
+                    majorBuilder.add(prop, 7);
+                    minorBuilder.add(prop, 1);
+                } else {
+                    majorBuilder.add(prop, 1);
+                    minorBuilder.add(prop, 6);
+                }
+            });
+        });
+        AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
+                .setRecipeId(AstralSorcery.key("altar_lumen_engraving_dynamis"))
+                .addOutput(ItemsAS.ROCK_CRYSTAL)
+                .setGridLines(
+                        "   ",
+                        "RCR",
+                        "   "
+                )
+                .addInput('C', TagsAS.Items.CRYSTAL)
+                .addInput('R', Tags.Items.GEMS_AMETHYST)
+                .addRequiredLumen(LumenAS.DYNAMIS.stack(400))
+                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
+                .addOutputModifier(minorBuilder.build())
+                .save(recipeOutput);
+        AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
+                .setRecipeId(AstralSorcery.key("altar_lumen_engraving_aion"))
+                .addOutput(ItemsAS.ROCK_CRYSTAL)
+                .setGridLines(
+                        "   ",
+                        "RCR",
+                        "   "
+                )
+                .addInput('C', TagsAS.Items.CRYSTAL)
+                .addInput('R', ItemsAS.RESONATING_GEM)
+                .addRequiredLumen(LumenAS.AION.stack(400))
+                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
+                .addOutputModifier(majorBuilder.build())
+                .save(recipeOutput);
+
+        AltarOutputEngraveLumen.Builder elementaryBuilder = AltarOutputEngraveLumen.builder();
+        AltarOutputEngraveLumen.Builder complexBuilder = AltarOutputEngraveLumen.builder();
+        provider.lookupOrThrow(RegistriesAS.KEY_LUMEN).listElements().forEach(ref -> {
+            CrystalPropertiesAS.getProperty(ref.value()).ifPresent(prop -> {
+                if (ref.value().isElementary()) {
+                    elementaryBuilder.add(prop, 5);
+                    complexBuilder.add(prop, 1);
+                } else {
+                    elementaryBuilder.add(prop, 1);
+                    complexBuilder.add(prop, 5);
+                }
+            });
+        });
+        AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
+                .setRecipeId(AstralSorcery.key("altar_lumen_engraving_hyle"))
+                .addOutput(ItemsAS.ROCK_CRYSTAL)
+                .setGridLines(
+                        "   ",
+                        "RCR",
+                        "   "
+                )
+                .addInput('C', TagsAS.Items.CRYSTAL)
+                .addInput('R', Items.ECHO_SHARD)
+                .addRequiredLumen(LumenAS.HYLE.stack(400))
+                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
+                .addOutputModifier(elementaryBuilder.build())
+                .save(recipeOutput);
+        AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
+                .setRecipeId(AstralSorcery.key("altar_lumen_engraving_akasha"))
+                .addOutput(ItemsAS.ROCK_CRYSTAL)
+                .setGridLines(
+                        "   ",
+                        "RCR",
+                        "   "
+                )
+                .addInput('C', TagsAS.Items.CRYSTAL)
+                .addInput('R', ItemsAS.STARDUST)
+                .addRequiredLumen(LumenAS.AKASHA.stack(400))
+                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
+                .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
+                .addOutputModifier(complexBuilder.build())
                 .save(recipeOutput);
     }
 
