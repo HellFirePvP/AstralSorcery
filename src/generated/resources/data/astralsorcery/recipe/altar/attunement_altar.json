@@ -31,7 +31,7 @@
       "M": {
         "type": "item",
         "ingredient": {
-          "item": "astralsorcery:starmetal_ingot"
+          "tag": "c:ingots/starmetal"
         }
       },
       "R": {

@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "A": {
-      "item": "astralsorcery:aquamarine"
+      "tag": "c:gems/aquamarine"
     },
     "B": {
       "item": "minecraft:book"

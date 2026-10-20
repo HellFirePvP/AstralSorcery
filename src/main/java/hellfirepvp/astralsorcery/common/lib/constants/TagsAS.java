@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
@@ -37,6 +36,9 @@ public class TagsAS {
 
     public static class Blocks {
 
+        public static final TagKey<Block> ORES_STARMETAL = blockTagCommon("ores/starmetal");
+        public static final TagKey<Block> STORAGE_BLOCKS_RAW_STARMETAL = blockTagCommon("storage_blocks/raw_starmetal");
+
         public static final TagKey<Block> INFUSED_WOOD = blockTag("infused_woods");
         public static final TagKey<Block> MARBLE = blockTagCommon("marbles");
         public static final TagKey<Block> SOOTY_MARBLE = blockTag("sooty_marbles");
@@ -50,6 +52,10 @@ public class TagsAS {
     public static class Items {
 
         public static final TagKey<Item> GEMS_AQUAMARINE = itemTagCommon("gems/aquamarine");
+        public static final TagKey<Item> INGOTS_STARMETAL = itemTagCommon("ingots/starmetal");
+        public static final TagKey<Item> ORES_STARMETAL = itemTagCommon("ores/starmetal");
+        public static final TagKey<Item> RAW_MATERIALS_STARMETAL = itemTagCommon("raw_materials/starmetal");
+        public static final TagKey<Item> STORAGE_BLOCKS_RAW_STARMETAL = itemTagCommon("storage_blocks/raw_starmetal");
 
         public static final TagKey<Item> INFUSED_WOOD = itemTag("infused_woods");
         public static final TagKey<Item> MARBLE = itemTagCommon("marbles");

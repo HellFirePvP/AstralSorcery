@@ -40,9 +40,9 @@ public class VanillaRecipeProvider extends RecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ItemsAS.TOME)
                 .pattern("A")
                 .pattern("B")
-                .define('A', ItemsAS.AQUAMARINE)
+                .define('A', TagsAS.Items.GEMS_AQUAMARINE)
                 .define('B', Items.BOOK)
-                .unlockedBy("has_aquamarine", has(ItemsAS.AQUAMARINE))
+                .unlockedBy("has_aquamarine", has(TagsAS.Items.GEMS_AQUAMARINE))
                 .save(recipeOutput);
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ItemsAS.ASTROLABE)
                 .pattern("GGG")

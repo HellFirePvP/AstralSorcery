@@ -15,7 +15,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -37,12 +36,24 @@ public class AstralItemTagsProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        copy(TagsAS.Blocks.ORES_STARMETAL, TagsAS.Items.ORES_STARMETAL);
+        copy(TagsAS.Blocks.STORAGE_BLOCKS_RAW_STARMETAL, TagsAS.Items.STORAGE_BLOCKS_RAW_STARMETAL);
         copy(TagsAS.Blocks.INFUSED_WOOD, TagsAS.Items.INFUSED_WOOD);
         copy(TagsAS.Blocks.MARBLE, TagsAS.Items.MARBLE);
         copy(TagsAS.Blocks.SOOTY_MARBLE, TagsAS.Items.SOOTY_MARBLE);
+
+        tag(Tags.Items.GEMS)
+                .addTag(TagsAS.Items.GEMS_AQUAMARINE);
         tag(TagsAS.Items.GEMS_AQUAMARINE)
                 .add(ItemsAS.AQUAMARINE.asItem());
+
+        tag(Tags.Items.INGOTS)
+                .addTag(TagsAS.Items.INGOTS_STARMETAL);
+        tag(TagsAS.Items.INGOTS_STARMETAL)
+                .add(ItemsAS.STARMETAL_INGOT.asItem());
         tag(Tags.Items.RAW_MATERIALS)
+                .addTag(TagsAS.Items.RAW_MATERIALS_STARMETAL);
+        tag(TagsAS.Items.RAW_MATERIALS_STARMETAL)
                 .add(ItemsAS.RAW_STARMETAL.asItem());
 
         tag(ItemTags.LECTERN_BOOKS)
@@ -87,9 +98,6 @@ public class AstralItemTagsProvider extends ItemTagsProvider {
         tag(ItemTags.SWORDS)
                 .add(ItemsAS.CRYSTAL_SWORD.asItem())
                 .add(ItemsAS.IRIDESCENT_CRYSTAL_SWORD.asItem());
-
-        tag(Tags.Items.INGOTS)
-                .add(ItemsAS.STARMETAL_INGOT.asItem());
 
         tag(ItemTags.SMALL_FLOWERS)
                 .add(ItemsAS.BLOCK_GLIMMER_AMARANTH.get())

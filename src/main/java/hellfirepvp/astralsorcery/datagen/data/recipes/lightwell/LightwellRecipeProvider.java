@@ -21,6 +21,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -38,7 +39,7 @@ public class LightwellRecipeProvider extends RecipeProvider {
     }
 
     public static void registerRecipes(RecipeOutput recipeOutput) {
-        LightwellRecipeBuilder.builder(Ingredient.of(ItemsAS.AQUAMARINE), FluidsAS.LIQUID_STARLIGHT.getSource().get(), "_aquamarine")
+        LightwellRecipeBuilder.builder(Ingredient.of(TagsAS.Items.GEMS_AQUAMARINE), FluidsAS.LIQUID_STARLIGHT.getSource().get(), "_aquamarine")
                 .color(ColorWrapper.opaque(0x00A7FF))
                 .productionMultiplier(0.35F)
                 .shatterMultiplier(0.15F)
@@ -65,7 +66,7 @@ public class LightwellRecipeProvider extends RecipeProvider {
                 .productionMultiplier(0.8F)
                 .shatterMultiplier(0.05F)
                 .save(recipeOutput);
-        LightwellRecipeBuilder.builder(Ingredient.of(Items.NETHERRACK), Fluids.LAVA, "_netherrack")
+        LightwellRecipeBuilder.builder(Ingredient.of(Tags.Items.NETHERRACKS), Fluids.LAVA, "_netherrack")
                 .color(ColorWrapper.opaque(0xFF350C))
                 .productionMultiplier(0.4F)
                 .shatterMultiplier(0.04F)

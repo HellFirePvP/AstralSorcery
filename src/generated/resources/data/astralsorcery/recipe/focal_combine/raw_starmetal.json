@@ -4,7 +4,7 @@
   "duration": 2000,
   "inputs": [
     {
-      "item": "minecraft:raw_iron"
+      "tag": "c:raw_materials/iron"
     }
   ],
   "outputs": [

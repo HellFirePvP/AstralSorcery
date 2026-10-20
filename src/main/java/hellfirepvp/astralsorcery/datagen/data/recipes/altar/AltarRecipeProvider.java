@@ -16,12 +16,10 @@ import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.ingredient.IsEnchantedIngredient;
 import hellfirepvp.astralsorcery.common.ingredient.IsFlagSetIngredient;
 import hellfirepvp.astralsorcery.common.ingredient.IsStableArtifactIngredient;
-import hellfirepvp.astralsorcery.common.item.ArtifactShardItem;
 import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.recipe.altar.output.*;
 import hellfirepvp.astralsorcery.common.recipe.builder.AltarRecipeBuilder;
-import hellfirepvp.astralsorcery.common.recipe.liquid.output.LiquidStarlightOutputEngraveLumen;
 import hellfirepvp.astralsorcery.common.research.ResearchTier;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.core.HolderLookup;
@@ -30,7 +28,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.Tags;
@@ -38,10 +35,7 @@ import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.common.crafting.IntersectionIngredient;
 import net.neoforged.neoforge.fluids.FluidType;
-import org.lwjgl.openal.AL;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -136,7 +130,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                         " WG",
                         "W  "
                 )
-                .addInput('S', ItemsAS.STARMETAL_INGOT)
+                .addInput('S', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('G', Tags.Items.NUGGETS_GOLD)
                 .addInput('W', ItemsAS.BLOCK_INFUSED_WOOD_PLANKS)
                 .save(recipeOutput);
@@ -294,7 +288,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                         " PRP ",
                         "     "
                 )
-                .addInput('S', ItemsAS.STARMETAL_INGOT)
+                .addInput('S', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('G', Tags.Items.INGOTS_GOLD)
                 .addInput('P', ItemsAS.BLOCK_MARBLE_PILLAR)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
@@ -465,7 +459,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('F', ItemsAS.BLOCK_FOCUS_RELAY)
                 .addInput('C', TagsAS.Items.CRYSTAL)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('S', ItemsAS.STARDUST)
                 .addInput('G', Tags.Items.INGOTS_GOLD)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
@@ -532,7 +526,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                         "     "
                 )
                 .addInput('P', ItemsAS.PERK_SEAL)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('S', ItemsAS.STARDUST)
                 .addRequiredAdditionalInput(1, ItemsAS.NOCTURNAL_POWDER)
                 .addRequiredAdditionalInput(1, ItemsAS.NOCTURNAL_POWDER)
@@ -614,7 +608,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('G', Tags.Items.NUGGETS_GOLD)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
                 .addInput('C', TagsAS.Items.CRYSTAL)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .save(recipeOutput);
 
         /*AltarRecipeBuilder.builder(TileAltar.AltarType.RESONANCE)
@@ -807,7 +801,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('C', TagsAS.Items.CELESTIAL_CRYSTAL)
                 .addInput('L', ItemsAS.GLASS_LENS)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
                 .addInput('P', ItemsAS.BLOCK_MARBLE_PILLAR)
                 .addInput('S', ItemsAS.BLOCK_SOOTY_MARBLE_RAW)
@@ -959,7 +953,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('T', ItemsAS.SHIFTING_STAR)
                 .addInput('S', ItemsAS.STARDUST)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('L', Tags.Items.SEEDS)
                 .addInput('O', ItemTags.SAPLINGS)
                 .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
@@ -983,7 +977,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('T', ItemsAS.SHIFTING_STAR)
                 .addInput('S', ItemsAS.STARDUST)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('L', Tags.Items.LEATHERS)
                 .addInput('O', Tags.Items.INGOTS_IRON)
                 .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
@@ -1007,7 +1001,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('T', ItemsAS.SHIFTING_STAR)
                 .addInput('S', ItemsAS.STARDUST)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('L', Items.FLINT)
                 .addInput('O', Tags.Items.DUSTS_REDSTONE)
                 .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
@@ -1031,7 +1025,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('T', ItemsAS.SHIFTING_STAR)
                 .addInput('S', ItemsAS.STARDUST)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('L', Tags.Items.COBBLESTONES)
                 .addInput('O', Tags.Items.GUNPOWDERS)
                 .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
@@ -1055,7 +1049,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('T', ItemsAS.SHIFTING_STAR)
                 .addInput('S', ItemsAS.STARDUST)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('L', Items.SUGAR)
                 .addInput('O', Tags.Items.FEATHERS)
                 .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
