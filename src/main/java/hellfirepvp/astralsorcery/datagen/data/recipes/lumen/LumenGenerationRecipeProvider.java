@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.LumenAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
-import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.recipe.builder.LumenGenerationRecipeBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -106,7 +105,7 @@ public class LumenGenerationRecipeProvider extends RecipeProvider {
                 .addLumenCombinationInput(LumenAS.VIREL.asLumen(), 4)
                 .addLumenCombinationInput(LumenAS.ARMARA.asLumen(), 8)
                 .save(recipeOutput);
-        LumenGenerationRecipeBuilder.builder(Ingredient.of(TagsAS.Items.DUSTS_STARMETAL), LumenAS.AKASHA.get())
+        LumenGenerationRecipeBuilder.builder(Ingredient.of(ItemsAS.STARDUST), LumenAS.AKASHA.get())
                 .producedLumenAmount(2)
                 .productionAttemptMultiplier(3F)
                 .catalystShatterMultiplier(1.5F)

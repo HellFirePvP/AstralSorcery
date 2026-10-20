@@ -49,7 +49,7 @@
     {
       "count": 1,
       "ingredient": {
-        "tag": "c:dusts/starmetal"
+        "item": "astralsorcery:stardust"
       }
     }
   ],

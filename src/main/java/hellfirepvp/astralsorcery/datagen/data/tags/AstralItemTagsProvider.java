@@ -47,10 +47,6 @@ public class AstralItemTagsProvider extends ItemTagsProvider {
         tag(TagsAS.Items.GEMS_AQUAMARINE)
                 .add(ItemsAS.AQUAMARINE.asItem());
 
-        tag(Tags.Items.DUSTS)
-                .addTag(TagsAS.Items.DUSTS_STARMETAL);
-        tag(TagsAS.Items.DUSTS_STARMETAL)
-                .add(ItemsAS.STARDUST.asItem());
         tag(Tags.Items.INGOTS)
                 .addTag(TagsAS.Items.INGOTS_STARMETAL);
         tag(TagsAS.Items.INGOTS_STARMETAL)

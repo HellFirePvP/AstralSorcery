@@ -8,10 +8,13 @@
 
 package hellfirepvp.astralsorcery.datagen.data.recipes.lumen;
 
+import hellfirepvp.astralsorcery.common.component.ArtifactTypeComponent;
 import hellfirepvp.astralsorcery.common.component.LumenComponent;
+import hellfirepvp.astralsorcery.common.item.LumenCrystalItem;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.LumenAS;
+import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
 import hellfirepvp.astralsorcery.common.recipe.builder.LumenCrystallizationRecipeBuilder;
@@ -25,6 +28,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 
 import java.util.concurrent.CompletableFuture;
@@ -131,7 +135,7 @@ public class LumenCrystallizationRecipeProvider extends RecipeProvider {
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(TagsAS.Items.DUSTS_STARMETAL), LumenAS.AKASHA.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.STARDUST), LumenAS.AKASHA.get())
                 .catalystShatterMultiplier(3F)
                 .save(recipeOutput);
         LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.AKASHA), LumenAS.AKASHA.get(), "_crystal")

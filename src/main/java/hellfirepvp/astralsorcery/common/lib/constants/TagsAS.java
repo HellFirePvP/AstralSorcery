@@ -51,7 +51,6 @@ public class TagsAS {
 
     public static class Items {
 
-        public static final TagKey<Item> DUSTS_STARMETAL = itemTagCommon("dusts/starmetal");
         public static final TagKey<Item> GEMS_AQUAMARINE = itemTagCommon("gems/aquamarine");
         public static final TagKey<Item> INGOTS_STARMETAL = itemTagCommon("ingots/starmetal");
         public static final TagKey<Item> ORES_STARMETAL = itemTagCommon("ores/starmetal");
