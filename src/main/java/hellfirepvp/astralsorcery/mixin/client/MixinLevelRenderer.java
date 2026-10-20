@@ -68,6 +68,14 @@ public abstract class MixinLevelRenderer {
         }
     }
 
+    @Inject(method = "renderSky", at = @At("RETURN"))
+    public void skyConstellationOverlay(Matrix4f frustumMatrix, Matrix4f projectionMatrix, float partialTick, Camera camera, boolean isFoggy, Runnable skyFogSetup, CallbackInfo ci) {
+        AstralSkyRenderer renderer = AstralSkyRenderer.getInstance();
+        if (this.level != null && renderer.shouldRenderConstellationOverlay(this.level)) {
+            renderer.renderConstellationOverlay(this.level, frustumMatrix, partialTick, camera, isFoggy, skyFogSetup);
+        }
+    }
+
     @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/debug/DebugRenderer;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;DDD)V"))
     public void renderStellarFilamentCustomHitRender(DeltaTracker deltaTracker, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f frustumMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
         if (!renderBlockOutline) return;

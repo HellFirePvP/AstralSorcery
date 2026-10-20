@@ -14,6 +14,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
+import hellfirepvp.astralsorcery.client.config.RenderingConfig;
 import hellfirepvp.astralsorcery.client.lib.ShadersAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderTexture;
@@ -97,17 +98,41 @@ public class AstralSkyRenderer {
     }
 
     public boolean shouldRenderSpecialSky(ClientLevel level) {
-        //TODO config?
-        return level.dimension() == Level.OVERWORLD && level.effects().skyType() == DimensionSpecialEffects.SkyType.NORMAL;
+        return isDimensionListed(level, RenderingConfig.CONFIG.skyRenderDimensions.get()) &&
+                level.effects().skyType() == DimensionSpecialEffects.SkyType.NORMAL;
+    }
+
+    public boolean shouldRenderConstellationOverlay(ClientLevel level) {
+        return !isDimensionListed(level, RenderingConfig.CONFIG.skyRenderDimensions.get()) &&
+                isDimensionListed(level, RenderingConfig.CONFIG.constellationOverlaySkyDimensions.get());
+    }
+
+    private static boolean isDimensionListed(ClientLevel level, List<? extends String> dimensions) {
+        ResourceLocation dimKey = level.dimension().location();
+        return dimensions.stream()
+                .map(ResourceLocation::tryParse)
+                .anyMatch(dimKey::equals);
+    }
+
+    public void renderConstellationOverlay(ClientLevel level, Matrix4f frustumMatrix, float partialTick, Camera camera, boolean isFoggy, Runnable skyFogSetup) {
+        if (AssetLibrary.isReloading() || Minecraft.getInstance().player == null) {
+            return;
+        }
+        if (this.isSkyHidden(camera, isFoggy)) return;
+
+        PoseStack pose = new PoseStack();
+        pose.mulPose(frustumMatrix);
+
+        RenderSystem.depthMask(false);
+        Blending.DEFAULT.apply();
+        SkyConstellationRenderer.renderSkyConstellations(pose, level, partialTick, skyFogSetup);
+        RenderSystem.depthMask(true);
     }
 
     public void renderSky(ClientLevel level, Matrix4f frustumMatrix, Matrix4f projectionMatrix, float partialTick, Camera camera, boolean isFoggy, Runnable skyFogSetup) {
         // Vanilla behavior
         skyFogSetup.run();
-        if (isFoggy) return;
-        FogType fogtype = camera.getFluidInCamera();
-        if (fogtype == FogType.POWDER_SNOW || fogtype == FogType.LAVA) return;
-        if (this.doesMobEffectBlockSky(camera)) return;
+        if (this.isSkyHidden(camera, isFoggy)) return;
         // Vanilla behavior end
 
         LevelSkyContext ctx = LevelSkyHandler.getContext(level).orElse(null);
@@ -312,6 +337,12 @@ public class AstralSkyRenderer {
         });
 
         pose.popPose();
+    }
+
+    private boolean isSkyHidden(Camera camera, boolean isFoggy) {
+        if (isFoggy) return true;
+        FogType fogtype = camera.getFluidInCamera();
+        return fogtype == FogType.POWDER_SNOW || fogtype == FogType.LAVA || this.doesMobEffectBlockSky(camera);
     }
 
     private boolean doesMobEffectBlockSky(Camera camera) {

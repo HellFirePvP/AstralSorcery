@@ -9,7 +9,10 @@
 package hellfirepvp.astralsorcery.client.config;
 
 import hellfirepvp.astralsorcery.common.config.ConfigEntry;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.ModConfigSpec;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,6 +27,8 @@ public class RenderingConfig extends ConfigEntry {
 
     public ModConfigSpec.BooleanValue patreonEffects;
     public ModConfigSpec.BooleanValue animateAdditionalInputs;
+    public ModConfigSpec.ConfigValue<List<? extends String>> skyRenderDimensions;
+    public ModConfigSpec.ConfigValue<List<? extends String>> constellationOverlaySkyDimensions;
 
     private RenderingConfig() {
         super("rendering");
@@ -39,5 +44,13 @@ public class RenderingConfig extends ConfigEntry {
                 .comment("Animate additional inputs on altar recipe pages in the tome")
                 .translation(translationKey("animateAdditionalInputs"))
                 .define("animateAdditionalInputs", true);
+        this.skyRenderDimensions = cfgBuilder
+                .comment("Dimensions in which to do Astral Sorcery's sky render. Only applies to dimensions with a normal sky type.")
+                .translation(translationKey("skyRenderDimensions"))
+                .defineListAllowEmpty("skyRenderDimensions", List.of("minecraft:overworld"), () -> "minecraft:overworld", s -> s instanceof String str && ResourceLocation.tryParse(str) != null);
+        this.constellationOverlaySkyDimensions = cfgBuilder
+                .comment("Dimensions in which to only render constellations on top of its sky render. Ignored for dimensions listed in skyRenderDimensions")
+                .translation(translationKey("constellationOverlaySkyDimensions"))
+                .defineListAllowEmpty("constellationOverlaySkyDimensions", List.of(), () -> "minecraft:overworld", s -> s instanceof String str && ResourceLocation.tryParse(str) != null);
     }
 }
