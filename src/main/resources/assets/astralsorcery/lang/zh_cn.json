@@ -44,6 +44,8 @@
   "ingredient.astralsorcery.fluid.description": "至少%s",
   "ingredient.astralsorcery.fluid.description.bucket": "%s B",
   "ingredient.astralsorcery.fluid.description.milli_bucket": "%s mB",
+  "ingredient.astralsorcery.lumen_engraving.description": "以下之一：",
+  "ingredient.astralsorcery.lumen_engraving.description.element": "- %s",
 
   "recipe.astralsorcery.result.add_gem_modifier": "增加1个星能力词条",
   "recipe.astralsorcery.result.add_enchantment_modifier": "增加1个魔咒词条",
