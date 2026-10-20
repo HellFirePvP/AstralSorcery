@@ -228,19 +228,12 @@ public class VanillaRecipeProvider extends RecipeProvider {
                 .save(recipeOutput, RecipeBuilder.getDefaultRecipeId(BlocksAS.INFUSED_WOOD_ENGRAVED).withPrefix("infused_wood/"));
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BlocksAS.INFUSED_WOOD_ENRICHED, 5)
                 .pattern(" W ")
-                .pattern("WWW")
-                .pattern(" W ")
-                .define('W', BlocksAS.INFUSED_WOOD_PLANKS)
-                .unlockedBy("has_infused_wood", has(ItemsAS.BLOCK_INFUSED_WOOD_RAW))
-                .save(recipeOutput, RecipeBuilder.getDefaultRecipeId(BlocksAS.INFUSED_WOOD_ENRICHED).withPrefix("infused_wood/"));
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BlocksAS.INFUSED_WOOD_INFUSED, 2)
-                .pattern(" W ")
                 .pattern("WAW")
                 .pattern(" W ")
                 .define('W', BlocksAS.INFUSED_WOOD_PLANKS)
                 .define('A', TagsAS.Items.GEMS_AQUAMARINE)
                 .unlockedBy("has_infused_wood", has(ItemsAS.BLOCK_INFUSED_WOOD_RAW))
-                .save(recipeOutput, RecipeBuilder.getDefaultRecipeId(BlocksAS.INFUSED_WOOD_INFUSED).withPrefix("infused_wood/"));
+                .save(recipeOutput, RecipeBuilder.getDefaultRecipeId(BlocksAS.INFUSED_WOOD_ENRICHED).withPrefix("infused_wood/"));
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, BlocksAS.INFUSED_WOOD_SLAB, 6)
                 .pattern("WWW")
                 .define('W', BlocksAS.INFUSED_WOOD_PLANKS)

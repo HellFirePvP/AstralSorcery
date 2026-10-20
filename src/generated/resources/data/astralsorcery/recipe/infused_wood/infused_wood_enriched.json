@@ -2,13 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
+    "A": {
+      "tag": "c:gems/aquamarine"
+    },
     "W": {
       "item": "astralsorcery:infused_wood_planks"
     }
   },
   "pattern": [
     " W ",
-    "WWW",
+    "WAW",
     " W "
   ],
   "result": {
