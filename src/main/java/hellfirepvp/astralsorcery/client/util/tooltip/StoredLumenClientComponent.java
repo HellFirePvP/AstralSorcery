@@ -213,7 +213,7 @@ public class StoredLumenClientComponent implements ClientTooltipComponent {
                     .setScale(14 + rand.nextInt(2))
                     .setMaxAge(80);
 
-            stepY += EFFECT_ROW_HEIGHT;
+            stepY += EFFECT_ROW_HEIGHT - 2;
 
             List<Component> displayTexts = this.dataComponent.getLumenDisplayTexts(LogicalSide.CLIENT, this.stack, lumen);
             stepY += displayTexts.size() * (font.lineHeight + 1);
