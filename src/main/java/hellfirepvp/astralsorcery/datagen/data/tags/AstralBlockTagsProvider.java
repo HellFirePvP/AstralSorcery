@@ -57,6 +57,10 @@ public class AstralBlockTagsProvider extends BlockTagsProvider {
                 );
         this.tag(TagsAS.Blocks.ORES_STARMETAL)
                 .add(BlocksAS.STARMETAL_ORE.get());
+        this.tag(Tags.Blocks.STORAGE_BLOCKS)
+                .addTag(TagsAS.Blocks.STORAGE_BLOCKS_RAW_STARMETAL);
+        this.tag(TagsAS.Blocks.STORAGE_BLOCKS_RAW_STARMETAL)
+                .add(BlocksAS.RAW_STARMETAL_BLOCK.get());
         this.tag(TagsAS.Blocks.SOOTY_MARBLE)
                 .add(
                         BlocksAS.SOOTY_MARBLE_ARCH.get(),

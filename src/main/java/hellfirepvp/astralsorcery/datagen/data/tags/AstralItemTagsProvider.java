@@ -37,6 +37,7 @@ public class AstralItemTagsProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         copy(TagsAS.Blocks.ORES_STARMETAL, TagsAS.Items.ORES_STARMETAL);
+        copy(TagsAS.Blocks.STORAGE_BLOCKS_RAW_STARMETAL, TagsAS.Items.STORAGE_BLOCKS_RAW_STARMETAL);
         copy(TagsAS.Blocks.INFUSED_WOOD, TagsAS.Items.INFUSED_WOOD);
         copy(TagsAS.Blocks.MARBLE, TagsAS.Items.MARBLE);
         copy(TagsAS.Blocks.SOOTY_MARBLE, TagsAS.Items.SOOTY_MARBLE);
