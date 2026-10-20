@@ -3,7 +3,7 @@
   "attempt_starlight_consumption": 2.0,
   "catalyst_shatter_multiplier": 1.5,
   "input": {
-    "item": "astralsorcery:stardust"
+    "tag": "c:dusts/starmetal"
   },
   "lumen_combination_inputs": {
     "astralsorcery:caldor": 7,

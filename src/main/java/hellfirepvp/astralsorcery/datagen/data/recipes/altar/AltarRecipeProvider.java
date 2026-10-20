@@ -16,12 +16,10 @@ import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.ingredient.IsEnchantedIngredient;
 import hellfirepvp.astralsorcery.common.ingredient.IsFlagSetIngredient;
 import hellfirepvp.astralsorcery.common.ingredient.IsStableArtifactIngredient;
-import hellfirepvp.astralsorcery.common.item.ArtifactShardItem;
 import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.recipe.altar.output.*;
 import hellfirepvp.astralsorcery.common.recipe.builder.AltarRecipeBuilder;
-import hellfirepvp.astralsorcery.common.recipe.liquid.output.LiquidStarlightOutputEngraveLumen;
 import hellfirepvp.astralsorcery.common.research.ResearchTier;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.core.HolderLookup;
@@ -30,7 +28,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.Tags;
@@ -38,10 +35,7 @@ import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.common.crafting.IntersectionIngredient;
 import net.neoforged.neoforge.fluids.FluidType;
-import org.lwjgl.openal.AL;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -136,7 +130,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                         " WG",
                         "W  "
                 )
-                .addInput('S', ItemsAS.STARMETAL_INGOT)
+                .addInput('S', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('G', Tags.Items.NUGGETS_GOLD)
                 .addInput('W', ItemsAS.BLOCK_INFUSED_WOOD_PLANKS)
                 .save(recipeOutput);
@@ -231,7 +225,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('F', Tags.Items.FEATHERS)
                 .addInput('P', ItemsAS.PARCHMENT)
                 .addInput('B', Tags.Items.DYES_BLACK)
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.ILLUMINATION)
                 .setRecipeId(ItemsAS.ARCHITECT_WAND)
@@ -243,7 +237,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('P', Tags.Items.DYES_PURPLE)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.ILLUMINATION)
                 .setRecipeId(ItemsAS.EXCHANGE_WAND)
@@ -255,7 +249,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('D', Tags.Items.GEMS_DIAMOND)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
 
         CompoundIngredient matchAnyArtifactShard = new CompoundIngredient(RegistriesAS.REGISTRY_ARTIFACT_TYPES.stream()
@@ -270,7 +264,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                         " D ",
                         "SAS"
                 )
-                .addInput('D', ItemsAS.STARDUST)
+                .addInput('D', TagsAS.Items.DUSTS_STARMETAL)
                 .addInput('S', matchAnyArtifactShard)
                 .addInput('A', TagsAS.Items.GEMS_AQUAMARINE)
                 .addOutputModifier(AltarOutputGenerateArtifactShardLoot.of(4, 12))
@@ -294,7 +288,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                         " PRP ",
                         "     "
                 )
-                .addInput('S', ItemsAS.STARMETAL_INGOT)
+                .addInput('S', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('G', Tags.Items.INGOTS_GOLD)
                 .addInput('P', ItemsAS.BLOCK_MARBLE_PILLAR)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
@@ -340,9 +334,9 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
                 .addInput('P', ItemsAS.BLOCK_MARBLE_PILLAR)
                 .addInput('G', Tags.Items.INGOTS_GOLD)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
@@ -368,11 +362,11 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('S', ItemTags.SAPLINGS)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
                 .addInput('V', ItemsAS.VIVID_POWDER)
-                .addInput('D', ItemsAS.STARDUST)
+                .addInput('D', TagsAS.Items.DUSTS_STARMETAL)
                 .addInput('L', ItemTags.LEAVES)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.RESONANCE)
                 .setRecipeId(ItemsAS.BLOCK_CELESTIAL_GATEWAY)
@@ -393,10 +387,10 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('C', TagsAS.Items.CRYSTAL)
                 .addInput('N', ItemsAS.NOCTURNAL_POWDER)
                 .addInput('G', Tags.Items.INGOTS_GOLD)
-                .addInput('D', ItemsAS.STARDUST)
+                .addInput('D', TagsAS.Items.DUSTS_STARMETAL)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
                 .addInput('E', Tags.Items.ENDER_PEARLS)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .save(recipeOutput);
@@ -418,9 +412,9 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
                 .addInput('B', Items.BLUE_DYE)
                 .addInput('C', TagsAS.Items.CRYSTAL)
-                .addInput('S', ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(1000))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(1000))
                 .save(recipeOutput);
@@ -443,10 +437,10 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('C', TagsAS.Items.CRYSTAL)
                 .addInput('D', Tags.Items.GEMS_DIAMOND)
                 .addInput('G', ItemsAS.RESONATING_GEM)
-                .addInput('S', ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.RESONANCE)
                 .setRecipeId(ItemsAS.BLOCK_ATTUNEMENT_ALTAR)
@@ -465,8 +459,8 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('F', ItemsAS.BLOCK_FOCUS_RELAY)
                 .addInput('C', TagsAS.Items.CRYSTAL)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .addInput('G', Tags.Items.INGOTS_GOLD)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
                 .save(recipeOutput);
@@ -487,7 +481,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('R', ItemsAS.RESONATING_GEM)
                 .addInput('A', TagsAS.Items.GEMS_AQUAMARINE)
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredAdditionalInput(1, ItemsAS.ILLUMINATION_POWDER)
                 .addRequiredAdditionalInput(1, ItemsAS.ILLUMINATION_POWDER)
                 .addRequiredAdditionalInput(1, ItemsAS.ILLUMINATION_POWDER)
@@ -511,7 +505,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('L', ItemsAS.GLASS_LENS)
                 .addInput('N', ItemsAS.NOCTURNAL_POWDER)
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredAdditionalInput(1, ItemsAS.NOCTURNAL_POWDER)
                 .addRequiredAdditionalInput(1, ItemsAS.NOCTURNAL_POWDER)
                 .addRequiredAdditionalInput(1, ItemsAS.NOCTURNAL_POWDER)
@@ -532,8 +526,8 @@ public class AltarRecipeProvider extends RecipeProvider {
                         "     "
                 )
                 .addInput('P', ItemsAS.PERK_SEAL)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredAdditionalInput(1, ItemsAS.NOCTURNAL_POWDER)
                 .addRequiredAdditionalInput(1, ItemsAS.NOCTURNAL_POWDER)
                 .addRequiredAdditionalInput(1, ItemsAS.NOCTURNAL_POWDER)
@@ -548,7 +542,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('A', TagsAS.Items.GEMS_AQUAMARINE)
                 .addInput('G', Items.GLASS_BOTTLE)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.RESONANCE)
                 .setRecipeId(ItemsAS.BLOCK_LUMEN_ARRAY)
@@ -614,7 +608,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('G', Tags.Items.NUGGETS_GOLD)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
                 .addInput('C', TagsAS.Items.CRYSTAL)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .save(recipeOutput);
 
         /*AltarRecipeBuilder.builder(TileAltar.AltarType.RESONANCE)
@@ -652,7 +646,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                         "I   I"
                 )
                 .addInput('C', TagsAS.Items.CRYSTAL)
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .addInput('P', ItemsAS.BLOCK_INFUSED_WOOD_RAW)
                 .addInput('I', ItemsAS.ILLUMINATION_POWDER)
                 .addInput('A', TagsAS.Items.GEMS_AQUAMARINE)
@@ -685,10 +679,10 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(1000))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(1000))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(1000))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
                 .setRecipeId(ItemsAS.BLOCK_STARLIGHT_FOCUS_CELESTIAL_CRYSTAL)
@@ -714,10 +708,10 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(1000))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(1000))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(1000))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
                 .setRecipeId(ItemsAS.BLOCK_LENS)
@@ -786,7 +780,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('P', ItemsAS.BLOCK_MARBLE_PILLAR)
                 .addInput('S', ItemsAS.BLOCK_SOOTY_MARBLE_RAW)
                 .addInput('G', Tags.Items.NUGGETS_GOLD)
-                .addInput('D', ItemsAS.STARDUST)
+                .addInput('D', TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .save(recipeOutput);
@@ -807,7 +801,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('C', TagsAS.Items.CELESTIAL_CRYSTAL)
                 .addInput('L', ItemsAS.GLASS_LENS)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('R', ItemsAS.BLOCK_MARBLE_RUNED)
                 .addInput('P', ItemsAS.BLOCK_MARBLE_PILLAR)
                 .addInput('S', ItemsAS.BLOCK_SOOTY_MARBLE_RAW)
@@ -815,10 +809,10 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredAdditionalInput(1, ItemsAS.NOCTURNAL_POWDER)
                 .addRequiredAdditionalInput(1, ItemsAS.ILLUMINATION_POWDER)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredAdditionalInput(1, ItemsAS.NOCTURNAL_POWDER)
                 .addRequiredAdditionalInput(1, ItemsAS.ILLUMINATION_POWDER)
                 .addRequiredLumen(LumenAS.AEVITAS.stack(200))
@@ -958,13 +952,13 @@ public class AltarRecipeProvider extends RecipeProvider {
                         "  O  "
                 )
                 .addInput('T', ItemsAS.SHIFTING_STAR)
-                .addInput('S', ItemsAS.STARDUST)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('L', Tags.Items.SEEDS)
                 .addInput('O', ItemTags.SAPLINGS)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
                 .setRecipeId(ItemsAS.SHIFTING_STAR_ARMARA)
@@ -982,13 +976,13 @@ public class AltarRecipeProvider extends RecipeProvider {
                         "  O  "
                 )
                 .addInput('T', ItemsAS.SHIFTING_STAR)
-                .addInput('S', ItemsAS.STARDUST)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('L', Tags.Items.LEATHERS)
                 .addInput('O', Tags.Items.INGOTS_IRON)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
                 .setRecipeId(ItemsAS.SHIFTING_STAR_DISCIDIA)
@@ -1006,13 +1000,13 @@ public class AltarRecipeProvider extends RecipeProvider {
                         "  O  "
                 )
                 .addInput('T', ItemsAS.SHIFTING_STAR)
-                .addInput('S', ItemsAS.STARDUST)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('L', Items.FLINT)
                 .addInput('O', Tags.Items.DUSTS_REDSTONE)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
                 .setRecipeId(ItemsAS.SHIFTING_STAR_EVORSIO)
@@ -1030,13 +1024,13 @@ public class AltarRecipeProvider extends RecipeProvider {
                         "  O  "
                 )
                 .addInput('T', ItemsAS.SHIFTING_STAR)
-                .addInput('S', ItemsAS.STARDUST)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('L', Tags.Items.COBBLESTONES)
                 .addInput('O', Tags.Items.GUNPOWDERS)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
                 .setRecipeId(ItemsAS.SHIFTING_STAR_VICIO)
@@ -1054,13 +1048,13 @@ public class AltarRecipeProvider extends RecipeProvider {
                         "  O  "
                 )
                 .addInput('T', ItemsAS.SHIFTING_STAR)
-                .addInput('S', ItemsAS.STARDUST)
-                .addInput('M', ItemsAS.STARMETAL_INGOT)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
+                .addInput('M', TagsAS.Items.INGOTS_STARMETAL)
                 .addInput('L', Items.SUGAR)
                 .addInput('O', Tags.Items.FEATHERS)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
                 .setRecipeId(ItemsAS.ILLUMINATION_WAND)
@@ -1083,11 +1077,11 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('A', TagsAS.Items.GEMS_AQUAMARINE)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredAdditionalInput(1, ItemsAS.ILLUMINATION_POWDER)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredAdditionalInput(1, ItemsAS.ILLUMINATION_POWDER)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredAdditionalInput(1, ItemsAS.ILLUMINATION_POWDER)
                 .addFocusConstellation(ConstellationsAS.LUCERNA.get())
                 .save(recipeOutput);
@@ -1111,11 +1105,11 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('F', Tags.Items.STRINGS)
                 .addInput('G', Tags.Items.INGOTS_GOLD)
                 .addInput('Z', ItemsAS.SHIFTING_STAR)
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
         AltarRecipeBuilder.builder(TileAltar.AltarType.LUMINANCE)
                 .setRecipeId(ItemsAS.ENCHANTMENT_AMULET, "_reroll")
@@ -1133,12 +1127,12 @@ public class AltarRecipeProvider extends RecipeProvider {
                         "     "
                 )
                 .addInput('E', ItemsAS.ENCHANTMENT_AMULET)
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .addInput('R', ItemsAS.RESONATING_GEM)
                 .addInput('L', FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .save(recipeOutput);
     }
 
@@ -1154,7 +1148,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('C', TagsAS.Items.CRYSTAL)
                 .addInput('R', ItemsAS.VIVID_POWDER)
                 .addRequiredLumen(LumenAS.VIREL.stack(400))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
@@ -1176,7 +1170,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('C', TagsAS.Items.CRYSTAL)
                 .addInput('R', ItemsAS.ILLUMINATION_POWDER)
                 .addRequiredLumen(LumenAS.SOLYN.stack(400))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
@@ -1198,7 +1192,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('C', TagsAS.Items.CRYSTAL)
                 .addInput('R', ItemsAS.NOCTURNAL_POWDER)
                 .addRequiredLumen(LumenAS.NULLAE.stack(400))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
@@ -1220,7 +1214,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('C', TagsAS.Items.CRYSTAL)
                 .addInput('R', Tags.Items.GEMS_QUARTZ)
                 .addRequiredLumen(LumenAS.CALDOR.stack(400))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
@@ -1256,7 +1250,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('C', TagsAS.Items.CRYSTAL)
                 .addInput('R', Tags.Items.GEMS_AMETHYST)
                 .addRequiredLumen(LumenAS.DYNAMIS.stack(400))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
@@ -1273,7 +1267,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('C', TagsAS.Items.CRYSTAL)
                 .addInput('R', ItemsAS.RESONATING_GEM)
                 .addRequiredLumen(LumenAS.AION.stack(400))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
@@ -1304,7 +1298,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                 .addInput('C', TagsAS.Items.CRYSTAL)
                 .addInput('R', Items.ECHO_SHARD)
                 .addRequiredLumen(LumenAS.HYLE.stack(400))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
@@ -1319,9 +1313,9 @@ public class AltarRecipeProvider extends RecipeProvider {
                         "   "
                 )
                 .addInput('C', TagsAS.Items.CRYSTAL)
-                .addInput('R', ItemsAS.STARDUST)
+                .addInput('R', TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredLumen(LumenAS.AKASHA.stack(400))
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(FluidType.BUCKET_VOLUME))
                 .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
@@ -1347,9 +1341,9 @@ public class AltarRecipeProvider extends RecipeProvider {
                 )
                 .addInput('C', TagsAS.Items.CRYSTAL)
                 .addInput('R', ItemsAS.RESONATING_GEM)
-                .addInput('S', ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
-                .addRequiredAdditionalInput(1, ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
+                .addRequiredAdditionalInput(1, TagsAS.Items.DUSTS_STARMETAL)
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(1000))
                 .addRequiredFluid(FluidsAS.LIQUID_STARLIGHT.stack(1000))
                 .addFocusConstellation(ConstellationsAS.AEVITAS.get())
@@ -1375,7 +1369,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                         Ingredient.of(ItemsAS.ENCHANTMENT_AMULET),
                         IsFlagSetIngredient.of(FlagsComponent.Flag.IS_ARTIFACT_ENHANCED, false).toVanilla()
                 ))
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .addInput('G', Tags.Items.NUGGETS_GOLD)
                 .addInput('I', ItemsAS.ILLUMINATION_POWDER)
                 .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
@@ -1408,7 +1402,7 @@ public class AltarRecipeProvider extends RecipeProvider {
                         IsEnchantedIngredient.INSTANCE.toVanilla(),
                         IsFlagSetIngredient.of(FlagsComponent.Flag.IS_ARTIFACT_ENHANCED, false).toVanilla()
                 ))
-                .addInput('S', ItemsAS.STARDUST)
+                .addInput('S', TagsAS.Items.DUSTS_STARMETAL)
                 .addInput('R', ItemsAS.RESONATING_GEM)
                 .addOutputModifier(AltarOutputReplaceWithInput.of(AltarOutputReplaceWithInput.SlotType.ALTAR_GRID, 4))
                 .addOutputModifier(AltarOutputGenerateIdentifier.INSTANCE)

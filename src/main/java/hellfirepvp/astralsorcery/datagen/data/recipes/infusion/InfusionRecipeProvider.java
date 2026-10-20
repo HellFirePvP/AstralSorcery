@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.datagen.data.recipes.infusion;
 
 import hellfirepvp.astralsorcery.common.lib.FluidsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.recipe.builder.InfusionRecipeBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -34,7 +35,7 @@ public class InfusionRecipeProvider extends RecipeProvider {
     }
 
     public static void registerRecipes(RecipeOutput recipeOutput) {
-        InfusionRecipeBuilder.builder(Ingredient.of(ItemsAS.AQUAMARINE), FluidsAS.LIQUID_STARLIGHT.getSource(), ItemsAS.RESONATING_GEM.toStack())
+        InfusionRecipeBuilder.builder(Ingredient.of(TagsAS.Items.GEMS_AQUAMARINE), FluidsAS.LIQUID_STARLIGHT.getSource(), ItemsAS.RESONATING_GEM.toStack())
                 .setConsumptionChance(0.03F)
                 .save(recipeOutput);
         InfusionRecipeBuilder.builder(Ingredient.of(ItemsAS.BLOCK_INFUSED_WOOD_RAW), FluidsAS.LIQUID_STARLIGHT.getSource(), ItemsAS.BLOCK_INFUSED_WOOD_INFUSED.toStack())

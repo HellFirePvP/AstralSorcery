@@ -19,7 +19,7 @@
       "D": {
         "type": "item",
         "ingredient": {
-          "item": "astralsorcery:stardust"
+          "tag": "c:dusts/starmetal"
         }
       },
       "E": {
@@ -79,7 +79,7 @@
     {
       "count": 1,
       "ingredient": {
-        "item": "astralsorcery:stardust"
+        "tag": "c:dusts/starmetal"
       }
     }
   ],

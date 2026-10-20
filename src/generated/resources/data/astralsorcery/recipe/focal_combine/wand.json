@@ -10,10 +10,10 @@
       "item": "astralsorcery:marble_raw"
     },
     {
-      "item": "astralsorcery:aquamarine"
+      "tag": "c:gems/aquamarine"
     },
     {
-      "item": "astralsorcery:aquamarine"
+      "tag": "c:gems/aquamarine"
     },
     {
       "tag": "c:ender_pearls"

@@ -10,14 +10,12 @@ package hellfirepvp.astralsorcery.datagen.data.recipes.liquid;
 
 import hellfirepvp.astralsorcery.common.component.LumenComponent;
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
-import hellfirepvp.astralsorcery.common.crystal.CrystalPropertyConstellation;
 import hellfirepvp.astralsorcery.common.ingredient.HasStoredLumenIngredient;
 import hellfirepvp.astralsorcery.common.ingredient.IsLumenBindableIngredient;
 import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.recipe.builder.LiquidStarlightRecipeBuilder;
 import hellfirepvp.astralsorcery.common.recipe.liquid.output.*;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.data.PackOutput;
@@ -25,7 +23,6 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
@@ -61,8 +58,8 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
                 .doesntConsumeInputs()
                 .save(recipeOutput);
         LiquidStarlightRecipeBuilder.builder("form_crystal_cluster",
-                        new SizedIngredient(Ingredient.of(ItemsAS.STARDUST), 1),
-                        List.of(new SizedIngredient(Ingredient.of(TagsAS.Items.CRYSTAL), 1)))
+                        new SizedIngredient(Ingredient.of(TagsAS.Items.DUSTS_STARMETAL), 1),
+                        List.of(new SizedIngredient(Ingredient.of(TagsAS.Items.DUSTS_STARMETAL), 1)))
                 .addOutputModifier(LiquidStarlightOutputFormCrystalCluster.getInstance())
                 .duration(80)
                 .randomAdditionalDuration(40)
@@ -90,7 +87,7 @@ public class LiquidStarlightRecipeProvider extends RecipeProvider {
         LiquidStarlightRecipeBuilder.builder("bind_lumen",
                         new SizedIngredient(Ingredient.of(ItemsAS.LUMEN_CRYSTAL), 1),
                         List.of(
-                                new SizedIngredient(Ingredient.of(ItemsAS.STARDUST), 1),
+                                SizedIngredient.of(TagsAS.Items.DUSTS_STARMETAL, 1),
                                 new SizedIngredient(IsLumenBindableIngredient.INSTANCE.toVanilla(), 1)
                         ))
                 .addOutputModifier(LiquidStarlightOutputBindLumen.getInstance())

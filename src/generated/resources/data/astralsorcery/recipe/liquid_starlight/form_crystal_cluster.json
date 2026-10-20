@@ -7,14 +7,14 @@
   "input": {
     "count": 1,
     "ingredient": {
-      "item": "astralsorcery:stardust"
+      "tag": "c:dusts/starmetal"
     }
   },
   "other_inputs": [
     {
       "count": 1,
       "ingredient": {
-        "tag": "astralsorcery:crystal"
+        "tag": "c:dusts/starmetal"
       }
     }
   ],

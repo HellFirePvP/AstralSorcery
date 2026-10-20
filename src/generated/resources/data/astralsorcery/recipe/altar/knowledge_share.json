@@ -30,7 +30,7 @@
       "S": {
         "type": "item",
         "ingredient": {
-          "item": "astralsorcery:stardust"
+          "tag": "c:dusts/starmetal"
         }
       }
     },
