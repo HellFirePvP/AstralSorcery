@@ -49,7 +49,7 @@ public class RenderingConfig extends ConfigEntry {
                 .translation(translationKey("skyRenderDimensions"))
                 .defineListAllowEmpty("skyRenderDimensions", List.of("minecraft:overworld"), () -> "minecraft:overworld", s -> s instanceof String str && ResourceLocation.tryParse(str) != null);
         this.constellationOverlaySkyDimensions = cfgBuilder
-                .comment("Dimensions in which to only render constellations on top of its sky render. Ignored for dimensions listed in skyRenderDimensions")
+                .comment("Dimensions in which to only render constellations on top of its sky render. Ignored for dimensions listed in skyRenderDimensions. Be aware that this also prevents the Solar and Lunar Eclipses from being shown/rendered in the sky")
                 .translation(translationKey("constellationOverlaySkyDimensions"))
                 .defineListAllowEmpty("constellationOverlaySkyDimensions", List.of(), () -> "minecraft:overworld", s -> s instanceof String str && ResourceLocation.tryParse(str) != null);
     }

@@ -61,19 +61,31 @@ public class CrystalPropertyCalculator {
             int channelingTier = cmp.getAttributeTier(CrystalPropertiesAS.LUMEN_CHANNELING) +
                     cmp.getAttributeTier(CrystalPropertiesAS.PURITY);
             int lumenTier = CrystalPropertiesAS.getProperty(lumen).map(cmp::getAttributeTier).orElse(0);
-            return (1F + channelingTier * 0.08F) * (1F + lumenTier * 0.55F);
+            return (1F + channelingTier * 0.08F) * (1F + lumenTier * 0.6F);
         });
     }
 
-    public static float getStarlightFocusRate(CrystalAttributesComponent cmp) {
+    public static float getLumenBindingEffectRate(ItemStack stack, Lumen lumen) {
+        return withProperties(stack, 1F, cmp -> {
+            int channelingTier = cmp.getAttributeTier(CrystalPropertiesAS.LUMEN_CHANNELING);
+            int lumenTier = CrystalPropertiesAS.getProperty(lumen).map(cmp::getAttributeTier).orElse(0);
+            return (1F + channelingTier * 0.11F) * (1F + lumenTier * 0.4F);
+        });
+    }
+
+    public static float getStarlightFocusRate(CrystalAttributesComponent cmp, BaseConstellation cst) {
         int sizeTier = cmp.getAttributeTier(CrystalPropertiesAS.SIZE);
         int cutTier = cmp.getAttributeTier(CrystalPropertiesAS.CUT);
-        return 1F + (sizeTier * 0.1F + cutTier * 0.12F);
+        int focusTier = cmp.getAttributeTier(CrystalPropertiesAS.STARLIGHT_FOCUS);
+        int cstTier = CrystalPropertiesAS.getProperty(cst).map(cmp::getAttributeTier).orElse(0);
+        float cutMultiplier = sizeTier >= 2 ? 0.06F : 0.03F;
+        return 1F + (sizeTier * 0.04F + cutTier * cutMultiplier + focusTier * 0.08F) * (1F + cstTier * 0.4F);
     }
 
     public static float getStarlightTransmissionLoss(CrystalAttributesComponent cmp) {
         int purityTier = cmp.getAttributeTier(CrystalPropertiesAS.PURITY);
-        int missingTiers = CrystalPropertiesAS.PURITY.get().getMaxTier() - purityTier;
+        int focusTier = cmp.getAttributeTier(CrystalPropertiesAS.STARLIGHT_FOCUS);
+        int missingTiers = Math.max(5 - purityTier - focusTier, 0);
         return 1F - (missingTiers * 0.08F);
     }
 

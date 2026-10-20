@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
 import hellfirepvp.astralsorcery.common.integration.IntegrationCurios;
 import hellfirepvp.astralsorcery.common.item.base.ItemStackEquipmentReference;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -27,8 +28,12 @@ import net.minecraft.world.item.BookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.util.thread.EffectiveSide;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.LogicalSidedProvider;
 import net.neoforged.neoforge.event.enchanting.GetEnchantmentLevelEvent;
@@ -139,23 +144,31 @@ public class EnchantmentModifierHelper {
     private static Optional<Pair<Player, EquipmentSlot>> getPlayerFromToolReference(ItemStack tool) {
         Pair<UUID, EquipmentSlot> reference = ItemStackEquipmentReference.getEquipmentReference(tool);
         if (reference == null) return Optional.empty();
-        //if (!tool.has(DataComponentsAS.WEAK_PLAYER_REFERENCE)) {
-        //    return Optional.empty();
-        //}
 
-        //UUID playerId = tool.getOrDefault(DataComponentsAS.WEAK_PLAYER_REFERENCE, WeakPlayerReferenceComponent.NONE).playerUUID();
         UUID playerId = reference.getFirst();
 
-        //Try server first, then client world lookup
-        MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
-        if (srv != null) {
-            return Optional.ofNullable(srv.getPlayerList().getPlayer(playerId))
-                    .map(player -> new Pair<>(player, reference.getSecond()));
+        LogicalSide side = EffectiveSide.get();
+        if (side.isServer()) {
+            MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
+            if (srv != null && srv.isSameThread()) {
+                return Optional.ofNullable(srv.getPlayerList().getPlayer(playerId))
+                        .map(player -> new Pair<>(player, reference.getSecond()));
+            }
         } else {
-            return LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT).map(level -> {
-                return level.getPlayerByUUID(playerId);
-            }).map(player -> new Pair<>(player, reference.getSecond()));
+            return LogicalSidedProvider.CLIENTWORLD.get(LogicalSide.CLIENT)
+                    .flatMap(level -> resolveClientReference(level, playerId))
+                    .map(player -> new Pair<>(player, reference.getSecond()));
         }
+
+        return Optional.empty();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static Optional<Player> resolveClientReference(Level clientLevel, UUID playerId) {
+        if (Minecraft.getInstance().isSameThread()) {
+            return Optional.ofNullable(clientLevel.getPlayerByUUID(playerId));
+        }
+        return Optional.empty();
     }
 
     private static List<ItemStack> findEnchantmentModifiers(Player player) {

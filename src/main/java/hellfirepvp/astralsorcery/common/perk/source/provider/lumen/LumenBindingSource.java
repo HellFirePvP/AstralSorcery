@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.perk.source.provider.lumen;
 
 import hellfirepvp.astralsorcery.common.component.IdentifierComponent;
 import hellfirepvp.astralsorcery.common.component.StoredLumenComponent;
+import hellfirepvp.astralsorcery.common.crystal.CrystalPropertyCalculator;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.PerksAS;
 import hellfirepvp.astralsorcery.common.lumen.binding.effect.CombinedLumenBindingEffect;
@@ -64,29 +65,30 @@ public class LumenBindingSource implements ModifierSource, AttributeModifierProv
         StoredLumenComponent storedLumenCmp = this.itemStack.getOrDefault(DataComponentsAS.STORED_LUMEN, StoredLumenComponent.EMPTY);
         if (storedLumenCmp.isEmpty()) return;
 
-        storedLumenCmp.getActiveBindings().stream()
-                .map(lumen -> storedLumenCmp.getBinding(side, lumen))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(bindingType -> bindingType.getActiveBinding(this.itemStack, player))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .forEach(binding -> {
-                    List<LumenBindingEffect> effects = new ArrayList<>();
-                    effects.add(binding.getEffect());
-                    if (binding.getEffect() instanceof CombinedLumenBindingEffect combined) {
-                        effects.addAll(combined.getEffects());
-                    }
-
-                    effects.forEach(effect -> {
-                        if (effect instanceof EquipmentAttributeModifierProvider provider) {
-                            this.modifierSnapshot.addAll(provider.getModifiers(this.itemStack, player, side, ignoreRequirements).stream()
-                                    .filter(modifier -> modifier instanceof DynamicAttributeModifier)
-                                    .map(modifier -> (DynamicAttributeModifier) modifier)
-                                    .toList());
+        storedLumenCmp.getActiveBindings().forEach(lumen -> {
+            storedLumenCmp.getBinding(side, lumen)
+                    .map(bindingType -> bindingType.getActiveBinding(this.itemStack, player))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .ifPresent(binding -> {
+                        List<LumenBindingEffect> effects = new ArrayList<>();
+                        effects.add(binding.getEffect());
+                        if (binding.getEffect() instanceof CombinedLumenBindingEffect combined) {
+                            effects.addAll(combined.getEffects());
                         }
+                        float crystalMult = CrystalPropertyCalculator.getLumenBindingEffectRate(this.itemStack, lumen);
+
+                        effects.forEach(effect -> {
+                            if (effect instanceof EquipmentAttributeModifierProvider provider) {
+                                this.modifierSnapshot.addAll(provider.getModifiers(this.itemStack, player, side, ignoreRequirements).stream()
+                                        .filter(modifier -> modifier instanceof DynamicAttributeModifier)
+                                        .map(modifier -> (DynamicAttributeModifier) modifier)
+                                        .map(modifier -> modifier.changeValue(modifier.getRawValue() * crystalMult))
+                                        .toList());
+                            }
+                        });
                     });
-                });
+        });
     }
 
     @Override

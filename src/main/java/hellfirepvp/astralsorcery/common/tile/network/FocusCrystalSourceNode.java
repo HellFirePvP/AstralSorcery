@@ -95,12 +95,13 @@ public class FocusCrystalSourceNode implements TransmissionSourceNode, SimpleLin
     public Optional<StarlightTransmissionPacket> produceStarlight(Level level) {
         if (this.constellation == null) return Optional.empty();
         return LevelSkyHandler.getContext(level).flatMap(ctx -> {
-            float generated = CrystalPropertyCalculator.getStarlightFocusRate(this.crystalProperties);
+            float generated = CrystalPropertyCalculator.getStarlightFocusRate(this.crystalProperties, this.constellation);
             float distributionMultiplier = ctx.getConstellationHandler().getDistributionMultiplier(level, this.constellation);
             float dayTimeMultiplier = DayTimeHelper.getCurrentDaytimeDistribution(level);
+            float layerMultiplier = 1F + this.getValidLayers() * 0.08F;
 
             return Optional.of(new StarlightTransmissionPacket(this.constellation,
-                    generated * distributionMultiplier * dayTimeMultiplier));
+                    generated * distributionMultiplier * dayTimeMultiplier * layerMultiplier));
         });
     }
 
