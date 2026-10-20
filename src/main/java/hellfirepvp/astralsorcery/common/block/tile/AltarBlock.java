@@ -64,6 +64,11 @@ public class AltarBlock extends BaseTickTileBlock<TileAltar> {
     }
 
     @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return this.getAltarType().getCollisionShape();
+    }
+
+    @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (hand == InteractionHand.MAIN_HAND && player instanceof ServerPlayer sPlayer) {
             return MiscUtil.getTileAt(level, pos, TileAltar.class, true).map(altar -> {

@@ -528,6 +528,7 @@ public class TileAltar extends TileEntityNetwork<ForwardingStarlightReceiverNode
         private final ObserverRegistryObject requiredStructure;
         private final Supplier<? extends ItemLike> altarItemSupplier;
         private final VoxelShape shape;
+        private final VoxelShape collisionShape;
         private final ContainerAltar.Type containerType;
 
         AltarType(ResearchTier requiredTier,
@@ -539,6 +540,7 @@ public class TileAltar extends TileEntityNetwork<ForwardingStarlightReceiverNode
             this.requiredStructure = requiredStructure;
             this.altarItemSupplier = altarItemSupplier;
             this.shape = shape;
+            this.collisionShape = Shapes.box(0, 0, 0, 1, shape.max(Direction.Axis.Y), 1);
             this.containerType = containerType;
         }
 
@@ -567,6 +569,10 @@ public class TileAltar extends TileEntityNetwork<ForwardingStarlightReceiverNode
 
         public VoxelShape getShape() {
             return this.shape;
+        }
+
+        public VoxelShape getCollisionShape() {
+            return this.collisionShape;
         }
 
         public ContainerAltar.Type getContainerType() {
