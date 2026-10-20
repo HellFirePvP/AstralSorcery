@@ -37,6 +37,8 @@ public class TagsAS {
 
     public static class Blocks {
 
+        public static final TagKey<Block> ORES_STARMETAL = blockTagCommon("ores/starmetal");
+
         public static final TagKey<Block> INFUSED_WOOD = blockTag("infused_woods");
         public static final TagKey<Block> MARBLE = blockTagCommon("marbles");
         public static final TagKey<Block> SOOTY_MARBLE = blockTag("sooty_marbles");
@@ -49,7 +51,11 @@ public class TagsAS {
 
     public static class Items {
 
+        public static final TagKey<Item> DUSTS_STARMETAL = itemTagCommon("dusts/starmetal");
         public static final TagKey<Item> GEMS_AQUAMARINE = itemTagCommon("gems/aquamarine");
+        public static final TagKey<Item> INGOTS_STARMETAL = itemTagCommon("ingots/starmetal");
+        public static final TagKey<Item> ORES_STARMETAL = itemTagCommon("ores/starmetal");
+        public static final TagKey<Item> RAW_MATERIALS_STARMETAL = itemTagCommon("raw_materials/starmetal");
 
         public static final TagKey<Item> INFUSED_WOOD = itemTag("infused_woods");
         public static final TagKey<Item> MARBLE = itemTagCommon("marbles");
