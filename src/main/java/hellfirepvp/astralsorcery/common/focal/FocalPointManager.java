@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.research.ResearchHelper;
 import hellfirepvp.astralsorcery.common.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.research.ResearchMessageHelper;
+import hellfirepvp.astralsorcery.common.util.ChunkUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtil;
 import hellfirepvp.astralsorcery.common.util.RayTraceUtil;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -85,7 +86,8 @@ public class FocalPointManager {
 
     private void onLevelTick(LevelTickEvent.Post event) {
         if (event.getLevel() instanceof ServerLevel sLevel) {
-            List.copyOf(this.getData().getNodes(sLevel.dimension())).forEach(node -> node.tick(sLevel));
+            List.copyOf(this.getData().getNodes(sLevel.dimension()))
+                    .forEach(node -> node.tick(sLevel, ChunkUtil.isChunkLoaded(sLevel, node.getPos().toBlockPos(0))));
         }
     }
 

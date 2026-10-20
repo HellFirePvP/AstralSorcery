@@ -108,7 +108,7 @@ public abstract class FocalPointNode {
         SyncDataManager.getInstance().getData(SyncDataTypesAS.FOCAL_POINT).markForUpdate(level, this);
     }
 
-    public void tick(ServerLevel sLevel) {
+    public void tick(ServerLevel sLevel, boolean isLoaded) {
         this.ticksExisted++;
     }
 
