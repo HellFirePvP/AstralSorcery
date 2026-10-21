@@ -29,7 +29,6 @@ import hellfirepvp.astralsorcery.client.sound.PlayableSoundInstance;
 import hellfirepvp.astralsorcery.client.util.RenderingDrawUtil;
 import hellfirepvp.astralsorcery.client.util.tooltip.TooltipUtil;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
-import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenGenerationRecipe;
@@ -46,14 +45,12 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -110,10 +107,8 @@ public class TomeLumenScreen extends TomeScreen implements TomeStarParallaxLayer
         if (connection == null) return;
         connection.getRecipeManager().getAllRecipesFor(RecipeTypesAS.LUMEN_GENERATION_TYPE.get()).forEach(recipeHolder -> {
             LumenGenerationRecipe recipe = recipeHolder.value();
-            Lumen generated = recipe.getProducedLumen();
-            recipe.getLumenCombinationInputs().keySet().forEach(lumenInput -> {
-                lumenConnections.add(new Connection(lumenInput, generated));
-            });
+            Lumen generated = recipe.getProducedLumen().value();
+            recipe.getLumenCombinationInputs().keySet().forEach(lumenInput -> lumenConnections.add(new Connection(lumenInput, generated)));
         });
     }
 
@@ -175,7 +170,7 @@ public class TomeLumenScreen extends TomeScreen implements TomeStarParallaxLayer
         LumenDisplayPositionLoader.getInstance().getPositions().forEach((lumen, position) -> {
             if (!lumen.maySee(level, ResearchManager.getClientProgress())) return;
 
-            lumen.getRegistryKey().map(ResourceKey::location).ifPresent(id -> {
+            lumen.getRegistryId().ifPresent(id -> {
                 FloatPoint offset = this.sizeHandler.scalePointToGui(this, this.mousePoint, position.asPoint());
                 FloatRectangle lumenBox = new FloatRectangle(offset.x() - size / 2F, offset.y() - size / 2F, size, size);
                 this.thisFrameLumen.put(lumen, lumenBox);

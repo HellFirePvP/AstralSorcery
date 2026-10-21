@@ -26,6 +26,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -66,18 +67,16 @@ public class LumenCrystallizationRecipeCategory extends ASRecipeCategory<LumenCr
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, LumenCrystallizationRecipe recipe, IFocusGroup focuses) {
-        Lumen toCrystallize = recipe.getLumenToCrystallize();
-        toCrystallize.getHolder().ifPresent(lumenHolder -> {
-            builder.addSlot(RecipeIngredientRole.INPUT, 13, 18)
-                    .addIngredient(LumenIngredientType.INSTANCE, LumenStack.of(toCrystallize, LumenStack.FLASK_VALUE));
+        Holder<Lumen> toCrystallize = recipe.getLumenToCrystallize();
+        builder.addSlot(RecipeIngredientRole.INPUT, 13, 18)
+                .addIngredient(LumenIngredientType.INSTANCE, LumenStack.of(toCrystallize, LumenStack.FLASK_VALUE));
 
-            builder.addSlot(RecipeIngredientRole.INPUT, this.getWidth() / 2 - 8, this.getHeight() / 2 - 16)
-                    .addIngredients(recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.INPUT, this.getWidth() / 2 - 8, this.getHeight() / 2 - 16)
+                .addIngredients(recipe.getInput());
 
-            ItemStack lumenCrystalCluster = LumenCrystalClusterBlockItem.getCluster(lumenHolder, 4);
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19)
-                    .addItemStack(lumenCrystalCluster);
-        });
+        ItemStack lumenCrystalCluster = LumenCrystalClusterBlockItem.getCluster(toCrystallize, 4);
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19)
+                .addItemStack(lumenCrystalCluster);
     }
 
     @Override

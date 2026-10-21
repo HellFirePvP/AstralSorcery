@@ -27,14 +27,12 @@ import hellfirepvp.astralsorcery.common.lumen.capability.LumenHandlerView;
 import hellfirepvp.astralsorcery.common.lumen.capability.LumenHandlerViewFactory;
 import hellfirepvp.astralsorcery.common.lumen.capability.LumenStackList;
 import hellfirepvp.astralsorcery.common.lumen.transfer.LumenRequestHelper;
-import hellfirepvp.astralsorcery.common.recipe.infusion.ActiveInfusionRecipe;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenCrystallizationRecipe;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityLumenDisplay;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
 import hellfirepvp.astralsorcery.common.util.data.ColorWrapper;
-import hellfirepvp.astralsorcery.common.util.data.LazyRecipeHolder;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.inventory.FilteredInventoryView;
 import hellfirepvp.astralsorcery.common.util.inventory.FilteredInventoryViewFactory;
@@ -45,6 +43,7 @@ import hellfirepvp.astralsorcery.common.util.tank.FluidTankView;
 import hellfirepvp.astralsorcery.common.util.tank.FluidTankViewFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -54,16 +53,14 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -129,7 +126,9 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
         boolean byCatalyst = cluster == null;
 
         LumenStack containedLumen = this.getTileData().getContainedLumen();
-        if (!containedLumen.isEmpty() && !containedLumen.is(this.activeRecipe.getLumenToCrystallize())) {
+        Holder<Lumen> lumenHolderToCrystallize = this.activeRecipe.getLumenToCrystallize();
+        Lumen lumenToCrystallize = lumenHolderToCrystallize.value();
+        if (!containedLumen.isEmpty() && !containedLumen.is(lumenHolderToCrystallize)) {
             this.getTileData().getLumenContents().clear();
             this.getTileData().markForUpdate();
         }
@@ -141,21 +140,21 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
         }
         if (above.is(BlocksAS.LUMEN_CRYSTAL_CLUSTER)) {
             if (cluster != null && above.getValue(LumenCrystalClusterBlock.STAGE) < 4) {
-                canCraft = cluster.getTileData().getLumen().equals(this.activeRecipe.getLumenToCrystallize());
+                canCraft = Objects.equals(cluster.getTileData().getLumen(), lumenToCrystallize);
             }
         }
         if (!canCraft) return;
 
         int lumenToProvide = this.activeRecipe.getLumenConsumedPerOperation() + 100;
         int storedLumen = this.getTileData().getLumenContents()
-                .getLumenStack(this.activeRecipe.getLumenToCrystallize())
+                .getLumenStack(lumenToCrystallize)
                 .map(LumenStack::getAmount)
                 .orElse(0);
 
         if (this.getTileData().getTicksExisted() % 80 == 0) {
             if (storedLumen <= lumenToProvide) {
-                int maxCapacity = this.getTileData().getLumenHandler().getCapacity(this.activeRecipe.getLumenToCrystallize());
-                LumenStack drainStack = this.activeRecipe.getLumenToCrystallize().stack(Math.min(200, maxCapacity - storedLumen));
+                int maxCapacity = this.getTileData().getLumenHandler().getCapacity(lumenToCrystallize);
+                LumenStack drainStack = LumenStack.of(activeRecipe.getLumenToCrystallize(), Math.min(200, maxCapacity - storedLumen));
                 if (drainStack.getAmount() > 0) {
                     LumenRequestHelper.requestRelayed(level, this.getBlockPos(), drainStack).ifPresent(chain -> {
                         LumenStack stored = LumenUtil.tryChainTransfer(this.getTileData().getLumenHandler(), level, chain, drainStack, ILumenHandler.Action.EXECUTE);
@@ -168,7 +167,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
         }
 
         int drainAmt = PASSIVE_LUMEN_DRAIN;
-        LumenStack drained = this.getTileData().getLumenHandler().drain(this.activeRecipe.getLumenToCrystallize(), drainAmt, ILumenHandler.Action.SIMULATE);
+        LumenStack drained = this.getTileData().getLumenHandler().drain(lumenToCrystallize, drainAmt, ILumenHandler.Action.SIMULATE);
         if (drained.getAmount() < drainAmt) return;
 
         int liquidAmt = PASSIVE_LIQUID_STARLIGHT_DRAIN;
@@ -178,7 +177,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
         if (drainedFluid.getAmount() < liquidAmt) return;
 
         if (this.getTileData().getTicksExisted() % 20 == 0) {
-            this.getTileData().getLumenHandler().drain(this.activeRecipe.getLumenToCrystallize(), drainAmt, ILumenHandler.Action.EXECUTE);
+            this.getTileData().getLumenHandler().drain(lumenToCrystallize, drainAmt, ILumenHandler.Action.EXECUTE);
             this.getTileData().getFluidTank().withoutFilters(tank -> tank.drain(requested, IFluidHandler.FluidAction.EXECUTE));
         }
 
@@ -196,13 +195,13 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
                     BlockState toSet = BlocksAS.LUMEN_CRYSTAL_CLUSTER.get().defaultBlockState();
                     level.setBlock(this.getBlockPos().above(), toSet, Block.UPDATE_ALL);
                     MiscUtil.getTileAt(level, this.getBlockPos().above(), TileLumenCrystalCluster.class, true).ifPresent(newCluster -> {
-                        newCluster.getTileData().setLumen(this.activeRecipe.getLumenToCrystallize());
+                        newCluster.getTileData().setLumen(lumenToCrystallize);
                         newCluster.getTileData().markForUpdate();
                     });
                     this.getTileData().getInventory().clearInventory();
                     this.getTileData().markForUpdate();
                     LumenUtil.drain(this.getTileData().getLumenHandler(),
-                            this.activeRecipe.getLumenToCrystallize().stack(this.activeRecipe.getLumenConsumedPerOperation()),
+                            LumenStack.of(lumenHolderToCrystallize, this.activeRecipe.getLumenConsumedPerOperation()),
                             ILumenHandler.Action.EXECUTE);
 
                     NeoForge.EVENT_BUS.post(new RecipeEvent.LumenCrystallization(this.activeRecipe, this, toSet));
@@ -213,7 +212,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
                     BlockState toSet = above.setValue(LumenCrystalClusterBlock.STAGE, Math.min(4, stage + 1));
                     level.setBlock(this.getBlockPos().above(), toSet, Block.UPDATE_ALL);
                     LumenUtil.drain(this.getTileData().getLumenHandler(),
-                            this.activeRecipe.getLumenToCrystallize().stack(this.activeRecipe.getLumenConsumedPerOperation()),
+                            LumenStack.of(lumenHolderToCrystallize, this.activeRecipe.getLumenConsumedPerOperation()),
                             ILumenHandler.Action.EXECUTE);
 
                     NeoForge.EVENT_BUS.post(new RecipeEvent.LumenCrystallization(this.activeRecipe, this, toSet));

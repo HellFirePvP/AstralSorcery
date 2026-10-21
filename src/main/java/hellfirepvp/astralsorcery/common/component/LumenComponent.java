@@ -16,10 +16,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceKey;
 
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,10 +35,8 @@ public record LumenComponent(Holder<Lumen> lumen) {
     public static final StreamCodec<RegistryFriendlyByteBuf, LumenComponent> STREAM_CODEC =
             ByteBufCodecs.holderRegistry(RegistriesAS.KEY_LUMEN).map(LumenComponent::new, LumenComponent::lumen);
 
-    public static Optional<LumenComponent> of(Lumen lumen) {
-        return RegistriesAS.REGISTRY_LUMEN.getResourceKey(lumen)
-                .flatMap(RegistriesAS.REGISTRY_LUMEN::getHolder)
-                .map(LumenComponent::new);
+    public static LumenComponent of(Lumen lumen) {
+        return new LumenComponent(RegistriesAS.REGISTRY_LUMEN.wrapAsHolder(lumen));
     }
 
     @Override

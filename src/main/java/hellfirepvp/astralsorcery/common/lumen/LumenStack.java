@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.lumen;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.common.lib.LumenAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
@@ -35,13 +34,6 @@ import java.util.Optional;
  */
 public final class LumenStack {
 
-    @SuppressWarnings("deprecation")
-    public static final Codec<Holder<Lumen>> LUMEN_NON_EMPTY_CODEC = RegistriesAS.REGISTRY_LUMEN
-            .holderByNameCodec()
-            .validate((holder) -> holder.is(LumenAS.NONE)
-                    ? DataResult.error(() -> "Lumen must not be astralsorcery:none")
-                    : DataResult.success(holder)
-            );
     /**
      * @deprecated Use {@link NON_EMPTY_CODEC} or {@link OPTIONAL_CODEC} instead of this
      */
@@ -51,16 +43,15 @@ public final class LumenStack {
             Codec.INT.fieldOf("amount").forGetter(LumenStack::getAmount)
     ).apply(inst, (lumen, amount) -> lumen.map(lumen1 -> new LumenStack(lumen1, amount)).orElse(LumenStack.EMPTY)));
     public static final Codec<LumenStack> NON_EMPTY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            LUMEN_NON_EMPTY_CODEC.fieldOf("lumen").forGetter(LumenStack::getLumenHolder),
+            Lumen.NON_EMPTY_HOLDER_CODEC.fieldOf("lumen").forGetter(LumenStack::getLumenHolder),
             ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(LumenStack::getAmount)
     ).apply(instance, LumenStack::new));
     public static final Codec<LumenStack> OPTIONAL_CODEC = ExtraCodecs.optionalEmptyMap(NON_EMPTY_CODEC).xmap(
             (optional) -> optional.orElse(LumenStack.EMPTY),
             (lumenStack) -> Optional.ofNullable(lumenStack).filter(LumenStack::isNotEmpty)
     );
-    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Lumen>> LUMEN_STREAM_CODEC = ByteBufCodecs.holderRegistry(RegistriesAS.KEY_LUMEN);
     public static final StreamCodec<RegistryFriendlyByteBuf, LumenStack> STREAM_CODEC = StreamCodec.composite(
-            LUMEN_STREAM_CODEC,
+            Lumen.HOLDER_STREAM_CODEC,
             LumenStack::getLumenHolder,
             ByteBufCodecs.INT,
             LumenStack::getAmount,

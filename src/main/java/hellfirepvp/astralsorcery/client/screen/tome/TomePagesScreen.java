@@ -11,13 +11,11 @@ package hellfirepvp.astralsorcery.client.screen.tome;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.resource.AbstractRenderTexture;
 import hellfirepvp.astralsorcery.client.screen.element.TomeNavArrowElement;
 import hellfirepvp.astralsorcery.client.screen.tome.page.RenderPage;
 import hellfirepvp.astralsorcery.client.screen.tome.page.RenderPageConstellation;
-import hellfirepvp.astralsorcery.client.screen.tome.page.RenderPageLumenDescription;
 import hellfirepvp.astralsorcery.client.sound.PlayableSoundInstance;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderQuadUtil;
@@ -33,7 +31,6 @@ import hellfirepvp.astralsorcery.common.lumen.binding.LumenBindingType;
 import hellfirepvp.astralsorcery.common.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.research.tome.*;
 import hellfirepvp.astralsorcery.common.util.RecipeFinder;
-import hellfirepvp.astralsorcery.common.util.RecipeUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -43,12 +40,10 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.common.extensions.IHolderExtension;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -109,7 +104,7 @@ public class TomePagesScreen extends TomeScreen {
     }
 
     public static TomePagesScreen fromLumen(TomeLumenScreen screen, Lumen lumen) {
-        String descriptionKey = String.format("tome.research.lumen.astralsorcery.%s.description", lumen.getRegistryKey().map(key -> key.location().getPath()).orElse("unknown"));
+        String descriptionKey = String.format("tome.research.lumen.astralsorcery.%s.description", lumen.getRegistryId().map(ResourceLocation::getPath).orElse("unknown"));
         List<TomePage> pages = new ArrayList<>();
         pages.add(new TomePageText(descriptionKey));
 

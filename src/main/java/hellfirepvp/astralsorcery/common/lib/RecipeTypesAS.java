@@ -23,7 +23,6 @@ import hellfirepvp.astralsorcery.common.recipe.liquid.interaction.LiquidInteract
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenCrystallizationRecipe;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenGenerationRecipe;
 import hellfirepvp.astralsorcery.common.util.data.ResolvingRecipeTypeRegistryObject;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -60,7 +59,7 @@ public class RecipeTypesAS {
     public static final ResolvingRecipeTypeRegistryObject<LumenGenerationRecipe> LUMEN_GENERATION_TYPE = resolvableType("lumen_generation",
             recipe -> ItemStack.EMPTY);
     public static final ResolvingRecipeTypeRegistryObject<LumenCrystallizationRecipe> LUMEN_CRYSTALLIZATION_TYPE = resolvableType("lumen_crystallization",
-            recipe -> LumenCrystalItem.getCrystal(Holder.direct(recipe.getLumenToCrystallize())));
+            recipe -> LumenCrystalItem.getCrystal(recipe.getLumenToCrystallize()));
     public static final ResolvingRecipeTypeRegistryObject<LightwellRecipe> LIGHTWELL_TYPE = resolvableType("lightwell",
             recipe -> FluidUtil.getFilledBucket(new FluidStack(recipe.getGeneratedFluid(), FluidType.BUCKET_VOLUME)));
     public static final ResolvingRecipeTypeRegistryObject<InfusionRecipe> INFUSION_TYPE = resolvableType("infusion",

@@ -9,27 +9,26 @@
 package hellfirepvp.astralsorcery.common.recipe.builder;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
+import hellfirepvp.astralsorcery.common.lumen.LumenLike;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenGenerationRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Holder;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,7 +43,7 @@ public class LumenGenerationRecipeBuilder implements RecipeBuilder {
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
     private final Ingredient input;
-    private final Lumen producedLumen;
+    private final Holder<Lumen> producedLumen;
     private final String recipeIdSuffix;
 
     private int producedLumenAmount = 1;
@@ -53,17 +52,17 @@ public class LumenGenerationRecipeBuilder implements RecipeBuilder {
     private float catalystShatterMultiplier = 1F;
     private final Map<Lumen, Integer> lumenCombinationInputs = new LinkedHashMap<>();
 
-    private LumenGenerationRecipeBuilder(Ingredient input, Lumen producedLumen, String recipeIdSuffix) {
+    private LumenGenerationRecipeBuilder(Ingredient input, Holder<Lumen> producedLumen, String recipeIdSuffix) {
         this.input = input;
         this.producedLumen = producedLumen;
         this.recipeIdSuffix = recipeIdSuffix;
     }
 
-    public static LumenGenerationRecipeBuilder builder(Ingredient input, Lumen producedLumen) {
+    public static LumenGenerationRecipeBuilder builder(Ingredient input, Holder<Lumen> producedLumen) {
         return builder(input, producedLumen, "");
     }
 
-    public static LumenGenerationRecipeBuilder builder(Ingredient input, Lumen producedLumen, String recipeIdSuffix) {
+    public static LumenGenerationRecipeBuilder builder(Ingredient input, Holder<Lumen> producedLumen, String recipeIdSuffix) {
         return new LumenGenerationRecipeBuilder(input, producedLumen, recipeIdSuffix);
     }
 
@@ -87,8 +86,8 @@ public class LumenGenerationRecipeBuilder implements RecipeBuilder {
         return this;
     }
 
-    public LumenGenerationRecipeBuilder addLumenCombinationInput(Lumen lumen, int amount) {
-        this.lumenCombinationInputs.put(lumen, amount);
+    public LumenGenerationRecipeBuilder addLumenCombinationInput(LumenLike lumen, int amount) {
+        this.lumenCombinationInputs.put(lumen.asLumen(), amount);
         return this;
     }
 
@@ -111,7 +110,7 @@ public class LumenGenerationRecipeBuilder implements RecipeBuilder {
 
     @Override
     public void save(RecipeOutput recipeOutput) {
-        ResourceLocation id = RegistriesAS.REGISTRY_LUMEN.getKey(this.producedLumen);
+        ResourceLocation id = this.producedLumen.unwrapKey().orElseThrow(() -> new NoSuchElementException("Unregistered lumen " + this.producedLumen)).location();
         this.save(recipeOutput, id.withSuffix(this.recipeIdSuffix));
     }
 

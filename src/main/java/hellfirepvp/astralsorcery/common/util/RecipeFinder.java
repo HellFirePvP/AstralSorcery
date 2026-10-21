@@ -24,11 +24,10 @@ import hellfirepvp.astralsorcery.common.recipe.liquid.LiquidStarlightRecipe;
 import hellfirepvp.astralsorcery.common.recipe.liquid.LiquidStarlightRecipeInput;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenCrystallizationRecipe;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenCrystallizationRecipeInput;
-import hellfirepvp.astralsorcery.common.recipe.lumen.LumenGenerationRecipeInput;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenGenerationRecipe;
+import hellfirepvp.astralsorcery.common.recipe.lumen.LumenGenerationRecipeInput;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -36,14 +35,10 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.extensions.IHolderExtension;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -110,13 +105,13 @@ public class RecipeFinder {
         }
         return this.mgr.getRecipesFor(RecipeTypesAS.LUMEN_GENERATION_TYPE.get(), input, this.level).stream()
                 .filter(recipeHolder -> useCombinationRecipes != recipeHolder.value().getLumenCombinationInputs().isEmpty())
-                .filter(recipeHolder -> recipeHolder.value().getProducedLumen().equals(generatedLumen))
+                .filter(recipeHolder -> Objects.equals(recipeHolder.value().getProducedLumen().value(), generatedLumen))
                 .findFirst();
     }
 
     public Optional<RecipeHolder<LumenGenerationRecipe>> findLumenGenerationRecipeByOutput(Lumen generatedLumen) {
         return this.mgr.getAllRecipesFor(RecipeTypesAS.LUMEN_GENERATION_TYPE.get()).stream()
-                .filter(recipeHolder -> recipeHolder.value().getProducedLumen().equals(generatedLumen))
+                .filter(recipeHolder -> Objects.equals(recipeHolder.value().getProducedLumen().value(), generatedLumen))
                 .findFirst();
     }
 
