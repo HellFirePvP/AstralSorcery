@@ -107,8 +107,10 @@ public class TomeLumenScreen extends TomeScreen implements TomeStarParallaxLayer
         if (connection == null) return;
         connection.getRecipeManager().getAllRecipesFor(RecipeTypesAS.LUMEN_GENERATION_TYPE.get()).forEach(recipeHolder -> {
             LumenGenerationRecipe recipe = recipeHolder.value();
-            Lumen generated = recipe.getProducedLumen().value();
-            recipe.getLumenCombinationInputs().keySet().forEach(lumenInput -> lumenConnections.add(new Connection(lumenInput, generated)));
+            Lumen generated = recipe.getProducedLumen();
+            recipe.getLumenCombinationInputs().keySet().forEach(lumenInput -> {
+                lumenConnections.add(new Connection(lumenInput, generated));
+            });
         });
     }
 

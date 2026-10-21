@@ -17,7 +17,6 @@ import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.core.Holder;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -43,7 +42,7 @@ public class LumenGenerationRecipeBuilder implements RecipeBuilder {
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
     private final Ingredient input;
-    private final Holder<Lumen> producedLumen;
+    private final Lumen producedLumen;
     private final String recipeIdSuffix;
 
     private int producedLumenAmount = 1;
@@ -52,17 +51,17 @@ public class LumenGenerationRecipeBuilder implements RecipeBuilder {
     private float catalystShatterMultiplier = 1F;
     private final Map<Lumen, Integer> lumenCombinationInputs = new LinkedHashMap<>();
 
-    private LumenGenerationRecipeBuilder(Ingredient input, Holder<Lumen> producedLumen, String recipeIdSuffix) {
+    private LumenGenerationRecipeBuilder(Ingredient input, LumenLike producedLumen, String recipeIdSuffix) {
         this.input = input;
-        this.producedLumen = producedLumen;
+        this.producedLumen = producedLumen.asLumen();
         this.recipeIdSuffix = recipeIdSuffix;
     }
 
-    public static LumenGenerationRecipeBuilder builder(Ingredient input, Holder<Lumen> producedLumen) {
+    public static LumenGenerationRecipeBuilder builder(Ingredient input, LumenLike producedLumen) {
         return builder(input, producedLumen, "");
     }
 
-    public static LumenGenerationRecipeBuilder builder(Ingredient input, Holder<Lumen> producedLumen, String recipeIdSuffix) {
+    public static LumenGenerationRecipeBuilder builder(Ingredient input, LumenLike producedLumen, String recipeIdSuffix) {
         return new LumenGenerationRecipeBuilder(input, producedLumen, recipeIdSuffix);
     }
 
@@ -110,7 +109,7 @@ public class LumenGenerationRecipeBuilder implements RecipeBuilder {
 
     @Override
     public void save(RecipeOutput recipeOutput) {
-        ResourceLocation id = this.producedLumen.unwrapKey().orElseThrow(() -> new NoSuchElementException("Unregistered lumen " + this.producedLumen)).location();
+        ResourceLocation id = this.producedLumen.getRegistryId().orElseThrow(() -> new NoSuchElementException("Unregistered lumen " + this.producedLumen));
         this.save(recipeOutput, id.withSuffix(this.recipeIdSuffix));
     }
 

@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
 import hellfirepvp.astralsorcery.common.recipe.CustomRecipe;
 import hellfirepvp.astralsorcery.common.util.data.ResolvingRecipeTypeRegistryObject;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -41,7 +40,7 @@ public class LumenGenerationRecipe extends CustomRecipe<LumenGenerationRecipe, L
 
     public static final MapCodec<LumenGenerationRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Ingredient.CODEC.fieldOf("input").forGetter(LumenGenerationRecipe::getInput),
-            Lumen.NON_EMPTY_HOLDER_CODEC.fieldOf("produced_lumen").forGetter(LumenGenerationRecipe::getProducedLumen),
+            Lumen.NON_EMPTY_CODEC.fieldOf("produced_lumen").forGetter(LumenGenerationRecipe::getProducedLumen),
             Codec.INT.fieldOf("produced_lumen_amount").forGetter(LumenGenerationRecipe::getProducedLumenAmount),
             Codec.FLOAT.fieldOf("production_attempt_multiplier").forGetter(LumenGenerationRecipe::getProductionAttemptMultiplier),
             Codec.FLOAT.fieldOf("attempt_starlight_consumption").forGetter(LumenGenerationRecipe::getAttemptStarlightConsumption),
@@ -50,7 +49,7 @@ public class LumenGenerationRecipe extends CustomRecipe<LumenGenerationRecipe, L
     ).apply(inst, LumenGenerationRecipe::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, LumenGenerationRecipe> STREAM_CODEC = NeoForgeStreamCodecs.composite(
             Ingredient.CONTENTS_STREAM_CODEC, LumenGenerationRecipe::getInput,
-            Lumen.HOLDER_STREAM_CODEC, LumenGenerationRecipe::getProducedLumen,
+            Lumen.STREAM_CODEC, LumenGenerationRecipe::getProducedLumen,
             ByteBufCodecs.VAR_INT, LumenGenerationRecipe::getProducedLumenAmount,
             ByteBufCodecs.FLOAT, LumenGenerationRecipe::getProductionAttemptMultiplier,
             ByteBufCodecs.FLOAT, LumenGenerationRecipe::getAttemptStarlightConsumption,
@@ -60,7 +59,7 @@ public class LumenGenerationRecipe extends CustomRecipe<LumenGenerationRecipe, L
     );
 
     private final Ingredient input;
-    private final Holder<Lumen> producedLumen;
+    private final Lumen producedLumen;
     private final int producedLumenAmount;
     private final float productionAttemptMultiplier;
     private final float attemptStarlightConsumption;
@@ -68,7 +67,7 @@ public class LumenGenerationRecipe extends CustomRecipe<LumenGenerationRecipe, L
     private final Map<Lumen, Integer> lumenCombinationInputs;
 
     public LumenGenerationRecipe(Ingredient input,
-                                 Holder<Lumen> producedLumen,
+                                 Lumen producedLumen,
                                  int producedLumenAmount,
                                  float productionAttemptMultiplier,
                                  float attemptStarlightConsumption,
@@ -101,7 +100,7 @@ public class LumenGenerationRecipe extends CustomRecipe<LumenGenerationRecipe, L
         return this.input;
     }
 
-    public Holder<Lumen> getProducedLumen() {
+    public Lumen getProducedLumen() {
         return this.producedLumen;
     }
 

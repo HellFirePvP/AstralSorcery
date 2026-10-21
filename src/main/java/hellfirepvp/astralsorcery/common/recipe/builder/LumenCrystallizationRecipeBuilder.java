@@ -10,13 +10,13 @@ package hellfirepvp.astralsorcery.common.recipe.builder;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
+import hellfirepvp.astralsorcery.common.lumen.LumenLike;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenCrystallizationRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
-import net.minecraft.core.Holder;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -42,23 +42,23 @@ public class LumenCrystallizationRecipeBuilder implements RecipeBuilder {
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
 
     private final Ingredient input;
-    private final Holder<Lumen> lumen;
+    private final Lumen lumen;
     private float catalystShatterMultiplier = 1F;
     private final String recipeIdSuffix;
 
     private int lumenConsumedPerOperation = 1400;
 
-    private LumenCrystallizationRecipeBuilder(Ingredient input, Holder<Lumen> lumen, String recipeIdSuffix) {
+    private LumenCrystallizationRecipeBuilder(Ingredient input, LumenLike lumen, String recipeIdSuffix) {
         this.input = input;
-        this.lumen = lumen;
+        this.lumen = lumen.asLumen();
         this.recipeIdSuffix = recipeIdSuffix;
     }
 
-    public static LumenCrystallizationRecipeBuilder builder(Ingredient input, Holder<Lumen> lumen) {
+    public static LumenCrystallizationRecipeBuilder builder(Ingredient input, LumenLike lumen) {
         return builder(input, lumen, "");
     }
 
-    public static LumenCrystallizationRecipeBuilder builder(Ingredient input, Holder<Lumen> lumen, String recipeIdSuffix) {
+    public static LumenCrystallizationRecipeBuilder builder(Ingredient input, LumenLike lumen, String recipeIdSuffix) {
         return new LumenCrystallizationRecipeBuilder(input, lumen, recipeIdSuffix);
     }
 
@@ -94,7 +94,7 @@ public class LumenCrystallizationRecipeBuilder implements RecipeBuilder {
 
     @Override
     public void save(RecipeOutput recipeOutput) {
-        ResourceLocation id = this.lumen.unwrapKey().orElseThrow(() -> new NoSuchElementException("Unregistered lumen " + this.lumen)).location();
+        ResourceLocation id = this.lumen.getRegistryId().orElseThrow(() -> new NoSuchElementException("Unregistered lumen " + this.lumen));
         this.save(recipeOutput, id.withSuffix(this.recipeIdSuffix));
     }
 

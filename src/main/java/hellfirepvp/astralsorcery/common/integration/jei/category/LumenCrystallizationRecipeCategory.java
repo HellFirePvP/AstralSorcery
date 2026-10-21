@@ -26,7 +26,6 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -67,7 +66,7 @@ public class LumenCrystallizationRecipeCategory extends ASRecipeCategory<LumenCr
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, LumenCrystallizationRecipe recipe, IFocusGroup focuses) {
-        Holder<Lumen> toCrystallize = recipe.getLumenToCrystallize();
+        Lumen toCrystallize = recipe.getLumenToCrystallize();
         builder.addSlot(RecipeIngredientRole.INPUT, 13, 18)
                 .addIngredient(LumenIngredientType.INSTANCE, LumenStack.of(toCrystallize, LumenStack.FLASK_VALUE));
 

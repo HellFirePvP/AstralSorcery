@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
 import hellfirepvp.astralsorcery.common.recipe.CustomRecipe;
 import hellfirepvp.astralsorcery.common.util.data.ResolvingRecipeTypeRegistryObject;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -37,7 +36,7 @@ public class LumenCrystallizationRecipe extends CustomRecipe<LumenCrystallizatio
 
     public static final MapCodec<LumenCrystallizationRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Ingredient.CODEC.fieldOf("input").forGetter(LumenCrystallizationRecipe::getInput),
-            Lumen.NON_EMPTY_HOLDER_CODEC.fieldOf("lumen_to_crystallize").forGetter(LumenCrystallizationRecipe::getLumenToCrystallize),
+            Lumen.NON_EMPTY_CODEC.fieldOf("lumen_to_crystallize").forGetter(LumenCrystallizationRecipe::getLumenToCrystallize),
             Codec.FLOAT.fieldOf("catalyst_shatter_multiplier").forGetter(LumenCrystallizationRecipe::getCatalystShatterMultiplier),
             Codec.intRange(1, 1900).fieldOf("lumen_consumed_per_operation").forGetter(LumenCrystallizationRecipe::getLumenConsumedPerOperation)
     ).apply(inst, LumenCrystallizationRecipe::new));
@@ -45,7 +44,7 @@ public class LumenCrystallizationRecipe extends CustomRecipe<LumenCrystallizatio
     public static final StreamCodec<RegistryFriendlyByteBuf, LumenCrystallizationRecipe> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC,
             LumenCrystallizationRecipe::getInput,
-            Lumen.HOLDER_STREAM_CODEC,
+            Lumen.STREAM_CODEC,
             LumenCrystallizationRecipe::getLumenToCrystallize,
             ByteBufCodecs.FLOAT,
             LumenCrystallizationRecipe::getCatalystShatterMultiplier,
@@ -55,11 +54,11 @@ public class LumenCrystallizationRecipe extends CustomRecipe<LumenCrystallizatio
     );
 
     private final Ingredient input;
-    private final Holder<Lumen> lumenToCrystallize;
+    private final Lumen lumenToCrystallize;
     private final float catalystShatterMultiplier;
     private final int lumenConsumedPerOperation;
 
-    public LumenCrystallizationRecipe(Ingredient input, Holder<Lumen> lumenToCrystallize, float catalystShatterMultiplier, int lumenConsumedPerOperation) {
+    public LumenCrystallizationRecipe(Ingredient input, Lumen lumenToCrystallize, float catalystShatterMultiplier, int lumenConsumedPerOperation) {
         this.input = input;
         this.lumenToCrystallize = lumenToCrystallize;
         this.lumenConsumedPerOperation = lumenConsumedPerOperation;
@@ -70,7 +69,7 @@ public class LumenCrystallizationRecipe extends CustomRecipe<LumenCrystallizatio
         return this.input;
     }
 
-    public Holder<Lumen> getLumenToCrystallize() {
+    public Lumen getLumenToCrystallize() {
         return this.lumenToCrystallize;
     }
 

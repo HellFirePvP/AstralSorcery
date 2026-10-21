@@ -38,7 +38,10 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.ObjectUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -105,13 +108,13 @@ public class RecipeFinder {
         }
         return this.mgr.getRecipesFor(RecipeTypesAS.LUMEN_GENERATION_TYPE.get(), input, this.level).stream()
                 .filter(recipeHolder -> useCombinationRecipes != recipeHolder.value().getLumenCombinationInputs().isEmpty())
-                .filter(recipeHolder -> Objects.equals(recipeHolder.value().getProducedLumen().value(), generatedLumen))
+                .filter(recipeHolder -> recipeHolder.value().getProducedLumen().equals(generatedLumen))
                 .findFirst();
     }
 
     public Optional<RecipeHolder<LumenGenerationRecipe>> findLumenGenerationRecipeByOutput(Lumen generatedLumen) {
         return this.mgr.getAllRecipesFor(RecipeTypesAS.LUMEN_GENERATION_TYPE.get()).stream()
-                .filter(recipeHolder -> Objects.equals(recipeHolder.value().getProducedLumen().value(), generatedLumen))
+                .filter(recipeHolder -> recipeHolder.value().getProducedLumen().equals(generatedLumen))
                 .findFirst();
     }
 

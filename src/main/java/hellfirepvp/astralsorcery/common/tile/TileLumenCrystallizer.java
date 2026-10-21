@@ -43,7 +43,6 @@ import hellfirepvp.astralsorcery.common.util.tank.FluidTankView;
 import hellfirepvp.astralsorcery.common.util.tank.FluidTankViewFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -126,9 +125,8 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
         boolean byCatalyst = cluster == null;
 
         LumenStack containedLumen = this.getTileData().getContainedLumen();
-        Holder<Lumen> lumenHolderToCrystallize = this.activeRecipe.getLumenToCrystallize();
-        Lumen lumenToCrystallize = lumenHolderToCrystallize.value();
-        if (!containedLumen.isEmpty() && !containedLumen.is(lumenHolderToCrystallize)) {
+        Lumen lumenToCrystallize = this.activeRecipe.getLumenToCrystallize();
+        if (!containedLumen.isEmpty() && !containedLumen.is(lumenToCrystallize)) {
             this.getTileData().getLumenContents().clear();
             this.getTileData().markForUpdate();
         }
@@ -201,7 +199,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
                     this.getTileData().getInventory().clearInventory();
                     this.getTileData().markForUpdate();
                     LumenUtil.drain(this.getTileData().getLumenHandler(),
-                            LumenStack.of(lumenHolderToCrystallize, this.activeRecipe.getLumenConsumedPerOperation()),
+                            LumenStack.of(lumenToCrystallize, this.activeRecipe.getLumenConsumedPerOperation()),
                             ILumenHandler.Action.EXECUTE);
 
                     NeoForge.EVENT_BUS.post(new RecipeEvent.LumenCrystallization(this.activeRecipe, this, toSet));
@@ -212,7 +210,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
                     BlockState toSet = above.setValue(LumenCrystalClusterBlock.STAGE, Math.min(4, stage + 1));
                     level.setBlock(this.getBlockPos().above(), toSet, Block.UPDATE_ALL);
                     LumenUtil.drain(this.getTileData().getLumenHandler(),
-                            LumenStack.of(lumenHolderToCrystallize, this.activeRecipe.getLumenConsumedPerOperation()),
+                            LumenStack.of(lumenToCrystallize, this.activeRecipe.getLumenConsumedPerOperation()),
                             ILumenHandler.Action.EXECUTE);
 
                     NeoForge.EVENT_BUS.post(new RecipeEvent.LumenCrystallization(this.activeRecipe, this, toSet));

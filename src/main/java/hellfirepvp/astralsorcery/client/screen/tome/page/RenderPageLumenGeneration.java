@@ -48,7 +48,7 @@ public class RenderPageLumenGeneration extends RenderPageRecipe<LumenGenerationR
         this.resolveRecipeOrWriteError(guiGraphics, x, y).map(RecipeHolder::value).ifPresent(recipe -> {
             List<Lumen> requiredLumen = new ArrayList<>(recipe.getLumenCombinationInputs().keySet());
             requiredLumen.sort(Comparator.comparing(lumen -> lumen.getRegistryKey().orElse(LumenAS.NONE.getKey())));
-            Lumen producedLumen = recipe.getProducedLumen().value();
+            Lumen producedLumen = recipe.getProducedLumen();
             int yOffset = 113;
 
             ItemStack display = requiredLumen.isEmpty() ? ItemsAS.BLOCK_LUMEN_ARRAY.toStack() : ItemsAS.BLOCK_LUMEN_ALCHEMY_ARRAY.toStack();
