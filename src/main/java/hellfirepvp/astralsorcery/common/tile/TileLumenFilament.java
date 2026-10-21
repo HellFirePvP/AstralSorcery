@@ -37,7 +37,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -96,7 +95,7 @@ public class TileLumenFilament extends TileEntityTick<TileLumenFilament.Data> im
 
             EffectHelper.of(EffectTemplatesAS.LUMEN_PARTICLE)
                     .spawn(pos)
-                    .setSprite(TexturesAS.ATLAS_LUMEN, RegistriesAS.REGISTRY_LUMEN.getKey(transmittedLumen))
+                    .setSprite(TexturesAS.ATLAS_LUMEN, transmittedLumen.getRegistryId().orElseThrow())
                     .setAlpha(0.3F)
                     .color(FXColorFunction.constant(transmittedLumen.getColor(level, pos)))
                     .setGravity(Vector3.y(0.00007F));

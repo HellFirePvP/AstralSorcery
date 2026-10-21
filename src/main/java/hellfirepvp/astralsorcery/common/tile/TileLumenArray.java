@@ -339,7 +339,7 @@ public class TileLumenArray extends TileEntityTick<TileLumenArray.Data> implemen
                 pos = VectorUtil.withRandomOffset(pos, rand, 0.4F);
                 EffectHelper.of(EffectTemplatesAS.LUMEN_PARTICLE)
                         .spawn(pos)
-                        .setSprite(TexturesAS.ATLAS_LUMEN, RegistriesAS.REGISTRY_LUMEN.getKey(lumenStack.getLumen()))
+                        .setSprite(TexturesAS.ATLAS_LUMEN, lumenStack.getLumen().getRegistryId().orElseThrow())
                         .setAlpha(0.75F)
                         .color(FXColorFunction.constant(lumen.getColor(level, pos)))
                         .setGravity(Vector3.y(0.0001F));

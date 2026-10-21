@@ -28,7 +28,6 @@ import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.client.util.tooltip.TooltipUtil;
 import hellfirepvp.astralsorcery.common.constellation.BaseConstellation;
 import hellfirepvp.astralsorcery.common.ingredient.IngredientBridge;
-import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
 import hellfirepvp.astralsorcery.common.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.research.ResearchNode;
@@ -543,7 +542,7 @@ public abstract class RenderPageRecipe<T extends Recipe<?>> extends RenderPage {
         if (rand.nextInt(14) == 0) {
             Vector3 rPos = Vector3.random(rand).setZ(0).multiply(20F).add(offsetX, offsetY, 0);
             container.createParticle(EffectTemplatesAS.SCREEN_LUMEN_PARTICLE, rPos.getX(), rPos.getY())
-                    .setSprite(TexturesAS.ATLAS_LUMEN, RegistriesAS.REGISTRY_LUMEN.getKey(lumen))
+                    .setSprite(TexturesAS.ATLAS_LUMEN, lumen.getRegistryId().orElseThrow())
                     .alpha(FXAlphaFunction.PYRAMID)
                     .color(FXColorFunction.constant(lumen.getColor(tick)))
                     .setMaxAge(40 + rand.nextInt(20));

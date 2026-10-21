@@ -42,19 +42,19 @@ import java.util.Set;
  */
 public class Lumen implements LumenLike {
 
-    public static final Codec<Lumen> NON_EMPTY_CODEC = RegistriesAS.REGISTRY_LUMEN
+    public static final Codec<Lumen> NON_EMPTY_CODEC = Codec.lazyInitialized(() -> RegistriesAS.REGISTRY_LUMEN
             .byNameCodec()
             .validate((lumen) -> Objects.equals(lumen, LumenAS.NONE.get())
                     ? DataResult.error(() -> "Lumen must not be astralsorcery:none")
                     : DataResult.success(lumen)
-            );
+            ));
     @SuppressWarnings("deprecation")
-    public static final Codec<Holder<Lumen>> NON_EMPTY_HOLDER_CODEC = RegistriesAS.REGISTRY_LUMEN
+    public static final Codec<Holder<Lumen>> NON_EMPTY_HOLDER_CODEC = Codec.lazyInitialized(() -> RegistriesAS.REGISTRY_LUMEN
             .holderByNameCodec()
             .validate((holder) -> holder.is(LumenAS.NONE)
                     ? DataResult.error(() -> "Lumen must not be astralsorcery:none")
                     : DataResult.success(holder)
-            );
+            ));
     public static final StreamCodec<RegistryFriendlyByteBuf, Lumen> STREAM_CODEC = ByteBufCodecs.registry(RegistriesAS.KEY_LUMEN);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Lumen>> HOLDER_STREAM_CODEC = ByteBufCodecs.holderRegistry(RegistriesAS.KEY_LUMEN);
 
@@ -105,7 +105,7 @@ public class Lumen implements LumenLike {
     }
 
     public Optional<ResourceKey<Lumen>> getRegistryKey() {
-        return RegistriesAS.REGISTRY_LUMEN.getResourceKey(this);
+        return this.builtInRegistryHolder.unwrapKey();
     }
 
     public Optional<ResourceLocation> getRegistryId() {
@@ -131,7 +131,7 @@ public class Lumen implements LumenLike {
     @Nonnull
     protected String getOrCreateNameId() {
         if (this.nameId == null) {
-            this.nameId = Util.makeDescriptionId("lumen", RegistriesAS.REGISTRY_LUMEN.getKey(this));
+            this.nameId = Util.makeDescriptionId("lumen", this.getRegistryId().orElse(null));
         }
         return this.nameId;
     }

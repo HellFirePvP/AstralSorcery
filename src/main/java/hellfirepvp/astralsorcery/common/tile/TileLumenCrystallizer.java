@@ -269,7 +269,7 @@ public class TileLumenCrystallizer extends TileEntityTick<TileLumenCrystallizer.
 
             EffectHelper.of(EffectTemplatesAS.LUMEN_PARTICLE)
                     .spawn(pos)
-                    .setSprite(TexturesAS.ATLAS_LUMEN, RegistriesAS.REGISTRY_LUMEN.getKey(transmittedLumen))
+                    .setSprite(TexturesAS.ATLAS_LUMEN, transmittedLumen.getRegistryId().orElseThrow())
                     .setAlpha(0.3F)
                     .color(FXColorFunction.constant(transmittedLumen.getColor(level, pos)))
                     .setGravity(Vector3.y(0.00007F));

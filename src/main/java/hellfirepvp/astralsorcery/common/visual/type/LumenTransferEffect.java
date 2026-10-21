@@ -17,14 +17,14 @@ import hellfirepvp.astralsorcery.client.effect.function.FXColorFunction;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.client.sound.PlayableSoundInstance;
-import hellfirepvp.astralsorcery.common.lib.SoundsAS;
-import hellfirepvp.astralsorcery.common.visual.VisualEffectTypes;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import hellfirepvp.astralsorcery.common.lib.SoundsAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
 import hellfirepvp.astralsorcery.common.lumen.transfer.LumenNode;
 import hellfirepvp.astralsorcery.common.lumen.transfer.LumenRequestChain;
 import hellfirepvp.astralsorcery.common.util.VectorUtil;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.visual.VisualEffectTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -143,7 +143,7 @@ public class LumenTransferEffect implements VisualEffectTypes.Effect {
                     if (rand.nextInt(4) == 0) {
                         EffectHelper.of(EffectTemplatesAS.LUMEN_PARTICLE)
                                 .spawn(VectorUtil.withRandomOffset(pos.copy(), rand, 0.3F))
-                                .setSprite(TexturesAS.ATLAS_LUMEN, RegistriesAS.REGISTRY_LUMEN.getKey(this.lumen))
+                                .setSprite(TexturesAS.ATLAS_LUMEN, this.lumen.getRegistryId().orElseThrow())
                                 .alpha(FXAlphaFunction.FADE_OUT)
                                 .setAlpha(0.7F)
                                 .color(FXColorFunction.constant(this.lumen.getColor(level, effectPos)))
