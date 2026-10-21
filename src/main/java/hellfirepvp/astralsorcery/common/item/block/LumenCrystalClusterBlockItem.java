@@ -59,12 +59,11 @@ public class LumenCrystalClusterBlockItem extends BlockItemCustom implements Ite
     }
 
     public static ItemStack getCluster(Lumen lumen, int stage) {
-        return getCluster(RegistriesAS.REGISTRY_LUMEN.wrapAsHolder(lumen), stage);
+        return getCluster(lumen.builtInRegistryHolder(), stage);
     }
     
     public static ItemStack getCluster(Holder<Lumen> lumen, int stage) {
         ItemStack stack = ItemsAS.BLOCK_LUMEN_CRYSTAL_CLUSTER.toStack();
-        if (!lumen.isBound()) return stack;
         setStage(stack, stage);
         stack.set(DataComponentsAS.LUMEN, new LumenComponent(lumen));
         return stack;

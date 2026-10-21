@@ -49,7 +49,7 @@ public class LumenCrystalItem extends ItemCustom implements ItemDynamicColor {
     }
 
     public static ItemStack getCrystal(Lumen lumen) {
-        return getCrystal(RegistriesAS.REGISTRY_LUMEN.wrapAsHolder(lumen));
+        return getCrystal(lumen.builtInRegistryHolder());
     }
     
     public static ItemStack getCrystal(Holder<Lumen> lumen) {

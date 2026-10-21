@@ -66,7 +66,7 @@ public final class LumenStack {
     private int amount;
 
     private LumenStack(Lumen lumen, int amount) {
-        this(RegistriesAS.REGISTRY_LUMEN.wrapAsHolder(lumen), amount);
+        this(lumen.builtInRegistryHolder(), amount);
     }
 
     private LumenStack(@Nonnull Holder<Lumen> lumen, int amount) {

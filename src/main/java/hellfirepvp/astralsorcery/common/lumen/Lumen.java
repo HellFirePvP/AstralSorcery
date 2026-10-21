@@ -58,6 +58,7 @@ public class Lumen implements LumenLike {
     public static final StreamCodec<RegistryFriendlyByteBuf, Lumen> STREAM_CODEC = ByteBufCodecs.registry(RegistriesAS.KEY_LUMEN);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Lumen>> HOLDER_STREAM_CODEC = ByteBufCodecs.holderRegistry(RegistriesAS.KEY_LUMEN);
 
+    private final Holder.Reference<Lumen> builtInRegistryHolder = RegistriesAS.REGISTRY_LUMEN.createIntrusiveHolder(this);
     private final ColorWrapper color;
     private final boolean isElementary;
 
@@ -70,6 +71,10 @@ public class Lumen implements LumenLike {
     public Lumen(ColorWrapper color, boolean isElementary) {
         this.color = color;
         this.isElementary = isElementary;
+    }
+
+    public Holder.Reference<Lumen> builtInRegistryHolder() {
+        return this.builtInRegistryHolder;
     }
 
     @Override

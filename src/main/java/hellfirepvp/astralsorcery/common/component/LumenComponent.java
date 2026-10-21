@@ -17,8 +17,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-import java.util.Objects;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on GitHub.
@@ -36,19 +34,6 @@ public record LumenComponent(Holder<Lumen> lumen) {
             ByteBufCodecs.holderRegistry(RegistriesAS.KEY_LUMEN).map(LumenComponent::new, LumenComponent::lumen);
 
     public static LumenComponent of(Lumen lumen) {
-        return new LumenComponent(RegistriesAS.REGISTRY_LUMEN.wrapAsHolder(lumen));
+        return new LumenComponent(lumen.builtInRegistryHolder());
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        LumenComponent that = (LumenComponent) o;
-        return Objects.equals(lumen, that.lumen);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(lumen);
-    }
-
 }
