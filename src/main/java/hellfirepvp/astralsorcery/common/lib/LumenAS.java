@@ -77,11 +77,11 @@ public class LumenAS {
         }
 
         public LumenStack stack() {
-            return LumenStack.of(this.get(), LumenStack.FLASK_VALUE);
+            return LumenStack.of(this, LumenStack.FLASK_VALUE);
         }
 
         public LumenStack stack(int amount) {
-            return LumenStack.of(this.get(), amount);
+            return LumenStack.of(this, amount);
         }
     }
 }

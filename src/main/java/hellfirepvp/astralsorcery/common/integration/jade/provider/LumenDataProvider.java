@@ -35,7 +35,7 @@ public class LumenDataProvider implements IBlockComponentProvider, IServerDataPr
                 int capacity = tag.getInt("capacity");
                 if (capacity <= 0) continue;
 
-                LumenStack.CODEC.parse(accessor.nbtOps(), tag).result().ifPresent(stack -> {
+                LumenStack.NON_EMPTY_CODEC.parse(accessor.nbtOps(), tag).result().ifPresent(stack -> {
                     int amount = stack.getAmount();
                     var lumen = stack.getLumen();
                     int color = lumen.getColor(ClientProxy.getClientTick()).getColor();
@@ -55,7 +55,7 @@ public class LumenDataProvider implements IBlockComponentProvider, IServerDataPr
 
         var lumenData = new ListTag();
         handler.getContainedLumen().forEach(stack -> {
-            LumenStack.CODEC.encodeStart(accessor.nbtOps(), stack).result().ifPresent(tag -> {
+            LumenStack.NON_EMPTY_CODEC.encodeStart(accessor.nbtOps(), stack).result().ifPresent(tag -> {
                 if (tag instanceof CompoundTag compoundTag) {
                     compoundTag.putInt("capacity", handler.getCapacity(stack.getLumen()));
                     lumenData.add(tag);
