@@ -33,6 +33,7 @@ public class CommandsAS {
                         .then(CommandFocalPoint.register())
                         .then(CommandAttune.register())
                         .then(CommandPerkExperience.register())
+                        .then(CommandResearch.register())
         );
 
         dispatcher.register(Commands.literal(AstralSorcery.MODID)
