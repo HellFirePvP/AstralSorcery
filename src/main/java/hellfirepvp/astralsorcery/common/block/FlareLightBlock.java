@@ -63,7 +63,13 @@ public class FlareLightBlock extends Block {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        ColorWrapper color = ColorsAS.DYE_COLORS[state.getValue(COLOR).getId()];
+        DyeColor dye = state.getValue(COLOR);
+        int id = dye.getId();
+
+        ColorWrapper color = ColorWrapper.opaque(dye.getTextColor());
+        if (id >= 0 && id < ColorsAS.DYE_COLORS.length) {
+            color = ColorsAS.DYE_COLORS[id];
+        }
 
         for (int i = 0; i < 2; i++) {
             Vector3 vec = Vector3.atCenter(pos)
