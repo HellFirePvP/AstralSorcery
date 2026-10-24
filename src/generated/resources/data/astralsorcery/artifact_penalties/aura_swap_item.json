@@ -1,0 +1,13 @@
+{
+  "effect": {
+    "type": "astralsorcery:swap_item_aura",
+    "chance": 0.33,
+    "id": "astralsorcery:aura_swap_item",
+    "interval": 200,
+    "range": 5
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

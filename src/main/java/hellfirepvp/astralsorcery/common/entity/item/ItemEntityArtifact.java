@@ -270,6 +270,16 @@ public class ItemEntityArtifact extends ItemEntityChiselAttackable {
                     this.activeTrigger.tick(this, sLevel);
                 }
 
+                this.getArtifactComponent().ifPresent(component -> {
+                    if (!component.stability().mayTriggerPulse()) return;
+
+                    component.failureEffects().forEach(chancedEffect -> {
+                        if (chancedEffect.effect() instanceof ContinuousArtifactEffect continuousEffect) {
+                            continuousEffect.tickEffect(this.random, sLevel, this);
+                        }
+                    });
+                });
+
                 this.gracePulseTimeout--;
                 if (this.gracePulseTimeout <= 0) {
                     this.getArtifactComponent().ifPresent(component -> {

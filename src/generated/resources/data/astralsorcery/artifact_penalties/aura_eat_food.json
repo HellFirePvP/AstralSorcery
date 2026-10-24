@@ -1,0 +1,13 @@
+{
+  "effect": {
+    "type": "astralsorcery:eat_food_aura",
+    "chance": 0.05,
+    "id": "astralsorcery:aura_eat_food",
+    "interval": 10,
+    "range": 5
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

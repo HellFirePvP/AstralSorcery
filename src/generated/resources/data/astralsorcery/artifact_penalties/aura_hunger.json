@@ -1,0 +1,24 @@
+{
+  "effect": {
+    "type": "astralsorcery:effect_aura",
+    "effects": [
+      {
+        "ambient": true,
+        "amplifier": 3,
+        "duration": 20,
+        "id": "minecraft:hunger",
+        "neoforge:cures": [
+          "protected_by_totem",
+          "milk"
+        ],
+        "show_icon": false
+      }
+    ],
+    "id": "astralsorcery:aura_hunger",
+    "range": 6
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 public class CelestialCrystalItem extends RockCrystalItem {
 
     public CelestialCrystalItem() {
-        super(CrystalAttributesComponent.empty(6, 14));
+        this(CrystalAttributesComponent.empty(6, 14));
     }
 
     protected CelestialCrystalItem(CrystalAttributesComponent emptyComponent) {

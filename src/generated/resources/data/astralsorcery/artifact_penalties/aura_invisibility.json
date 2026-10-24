@@ -1,0 +1,23 @@
+{
+  "effect": {
+    "type": "astralsorcery:effect_aura",
+    "effects": [
+      {
+        "ambient": true,
+        "duration": 40,
+        "id": "minecraft:invisibility",
+        "neoforge:cures": [
+          "protected_by_totem",
+          "milk"
+        ],
+        "show_icon": false
+      }
+    ],
+    "id": "astralsorcery:aura_invisibility",
+    "range": 6
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

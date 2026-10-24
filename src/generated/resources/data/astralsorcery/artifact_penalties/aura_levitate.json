@@ -1,0 +1,23 @@
+{
+  "effect": {
+    "type": "astralsorcery:effect_aura",
+    "effects": [
+      {
+        "ambient": true,
+        "duration": 40,
+        "id": "minecraft:levitation",
+        "neoforge:cures": [
+          "protected_by_totem",
+          "milk"
+        ],
+        "show_icon": false
+      }
+    ],
+    "id": "astralsorcery:aura_levitate",
+    "range": 3
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

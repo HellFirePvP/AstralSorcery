@@ -82,6 +82,18 @@ public abstract class ArtifactEffectProvider implements DataProvider {
         return ArtifactEffectEffects.of();
     }
 
+    protected ArtifactEffectEffectAura.Builder applyEffectAura() {
+        return ArtifactEffectEffectAura.builder();
+    }
+
+    protected ArtifactEffect.Provider eatFoodAura(int range, int interval, float chance) {
+        return ArtifactEffectEatFoodAura.of(range, interval, chance);
+    }
+
+    protected ArtifactEffect.Provider swapItemAura(int range, int interval, float chance) {
+        return ArtifactEffectSwapItemAura.of(range, interval, chance);
+    }
+
     protected ArtifactEffect.Provider explode(int range, Level.ExplosionInteraction interaction) {
         return ArtifactEffectExplode.of(range, interaction);
     }

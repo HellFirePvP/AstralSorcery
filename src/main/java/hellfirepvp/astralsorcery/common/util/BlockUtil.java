@@ -105,7 +105,12 @@ public class BlockUtil {
     }
 
     private static void applyWorldState(Level level, boolean wasCapturingBlockStates, List<BlockSnapshot> previousCapturedStates) {
-        level.capturedBlockSnapshots.forEach(snapshot -> {
+        List<BlockSnapshot> captured = List.copyOf(level.capturedBlockSnapshots);
+        level.captureBlockSnapshots = wasCapturingBlockStates;
+        level.capturedBlockSnapshots.clear();
+        level.capturedBlockSnapshots.addAll(previousCapturedStates);
+
+        captured.forEach(snapshot -> {
             int flags = snapshot.getFlags();
             BlockState previous = snapshot.getState();
             BlockState newState = level.getBlockState(snapshot.getPos());
@@ -113,10 +118,6 @@ public class BlockUtil {
             newState.onPlace(level, snapshot.getPos(), previous, false);
             level.markAndNotifyBlock(snapshot.getPos(), level.getChunkAt(snapshot.getPos()), previous, newState, flags, Block.UPDATE_LIMIT);
         });
-
-        level.captureBlockSnapshots = wasCapturingBlockStates;
-        level.capturedBlockSnapshots.clear();
-        level.capturedBlockSnapshots.addAll(previousCapturedStates);
     }
 
     private static void restoreWorldState(Level level, boolean wasCapturingBlockStates, List<BlockSnapshot> previousCapturedStates) {

@@ -43,6 +43,12 @@ public class ArtifactEffectTypesAS {
             register("spawn_mobs", ArtifactEffectSpawnMobs.CODEC, ArtifactEffectSpawnMobs.STREAM_CODEC);
     public static final ArtifactEffect.DeferredType<ArtifactEffectSpawnNaturalMobs> SPAWN_NATURAL_MOBS =
             register("spawn_natural_mobs", ArtifactEffectSpawnNaturalMobs.CODEC, ArtifactEffectSpawnNaturalMobs.STREAM_CODEC);
+    public static final ArtifactEffect.DeferredType<ArtifactEffectEffectAura> EFFECT_AURA =
+            register("effect_aura", ArtifactEffectEffectAura.CODEC, ArtifactEffectEffectAura.STREAM_CODEC);
+    public static final ArtifactEffect.DeferredType<ArtifactEffectEatFoodAura> EAT_FOOD_AURA =
+            register("eat_food_aura", ArtifactEffectEatFoodAura.CODEC, ArtifactEffectEatFoodAura.STREAM_CODEC);
+    public static final ArtifactEffect.DeferredType<ArtifactEffectSwapItemAura> SWAP_ITEM_AURA =
+            register("swap_item_aura", ArtifactEffectSwapItemAura.CODEC, ArtifactEffectSwapItemAura.STREAM_CODEC);
 
     private static <T extends ArtifactEffect> ArtifactEffect.DeferredType<T> register(String name,
                                                                                       MapCodec<T> codec,
