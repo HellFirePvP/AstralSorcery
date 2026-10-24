@@ -26,8 +26,8 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileChalice;
 import hellfirepvp.astralsorcery.common.tile.TileFocusRelay;
 import hellfirepvp.astralsorcery.common.util.ItemUtil;
-import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtil;
+import hellfirepvp.astralsorcery.common.util.codec.CodecUtil;
 import hellfirepvp.astralsorcery.common.util.data.LazyRecipeHolder;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.inventory.InventoryView;
@@ -39,6 +39,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
@@ -73,9 +74,9 @@ public class ActiveAltarRecipe extends ActiveRecipe<AltarRecipe> {
             CodecUtil.uuidCodec().fieldOf("player_uuid").forGetter(ActiveAltarRecipe::getPlayerUUID),
             Direction.CODEC.fieldOf("recipe_direction").forGetter(ActiveAltarRecipe::getRecipeDirection),
             State.CODEC.fieldOf("crafting_state").forGetter(ActiveAltarRecipe::getCraftingState),
-            Codec.INT.fieldOf("tick").forGetter(recipe -> recipe.tick),
-            Codec.INT.fieldOf("progress_tick").forGetter(ActiveAltarRecipe::getProgressTick),
-            Codec.list(LumenStack.CODEC).fieldOf("drawn_lumen").forGetter(recipe -> recipe.drawnLumen),
+            ExtraCodecs.NON_NEGATIVE_INT.fieldOf("tick").forGetter(recipe -> recipe.tick),
+            ExtraCodecs.NON_NEGATIVE_INT.fieldOf("progress_tick").forGetter(ActiveAltarRecipe::getProgressTick),
+            LumenStack.NON_EMPTY_CODEC.listOf().fieldOf("drawn_lumen").forGetter(recipe -> recipe.drawnLumen),
             Codec.unboundedMap(CodecUtil.stringInteger(), FluidStack.CODEC).fieldOf("drawn_fluid").forGetter(recipe -> recipe.drawnFluid),
             AdditionalInput.CODEC.listOf().fieldOf("captured_entity_uuids").forGetter(ActiveAltarRecipe::getAdditionalInputs)
     ).apply(inst, ActiveAltarRecipe::new));

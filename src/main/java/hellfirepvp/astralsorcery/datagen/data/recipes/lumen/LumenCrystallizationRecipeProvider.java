@@ -8,13 +8,10 @@
 
 package hellfirepvp.astralsorcery.datagen.data.recipes.lumen;
 
-import hellfirepvp.astralsorcery.common.component.ArtifactTypeComponent;
 import hellfirepvp.astralsorcery.common.component.LumenComponent;
-import hellfirepvp.astralsorcery.common.item.LumenCrystalItem;
 import hellfirepvp.astralsorcery.common.lib.DataComponentsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.LumenAS;
-import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lib.constants.TagsAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
 import hellfirepvp.astralsorcery.common.recipe.builder.LumenCrystallizationRecipeBuilder;
@@ -28,7 +25,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 
 import java.util.concurrent.CompletableFuture;
@@ -47,104 +43,104 @@ public class LumenCrystallizationRecipeProvider extends RecipeProvider {
     }
 
     public static void registerRecipes(RecipeOutput recipeOutput) {
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemTags.SAPLINGS), LumenAS.AEVITAS.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemTags.SAPLINGS), LumenAS.AEVITAS)
                 .catalystShatterMultiplier(5F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.AEVITAS), LumenAS.AEVITAS.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.AEVITAS), LumenAS.AEVITAS, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Tags.Items.INGOTS), LumenAS.ARMARA.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Tags.Items.INGOTS), LumenAS.ARMARA)
                 .catalystShatterMultiplier(2F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.ARMARA), LumenAS.ARMARA.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.ARMARA), LumenAS.ARMARA, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemTags.ARROWS), LumenAS.DISCIDIA.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemTags.ARROWS), LumenAS.DISCIDIA)
                 .catalystShatterMultiplier(3F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.DISCIDIA), LumenAS.DISCIDIA.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.DISCIDIA), LumenAS.DISCIDIA, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Tags.Items.STONES), LumenAS.EVORSIO.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Tags.Items.STONES), LumenAS.EVORSIO)
                 .catalystShatterMultiplier(5F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.EVORSIO), LumenAS.EVORSIO.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.EVORSIO), LumenAS.EVORSIO, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Tags.Items.FEATHERS), LumenAS.VICIO.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Tags.Items.FEATHERS), LumenAS.VICIO)
                 .catalystShatterMultiplier(2F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.VICIO), LumenAS.VICIO.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.VICIO), LumenAS.VICIO, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
         // ---------------------------------------------------------------------------
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.VIVID_POWDER), LumenAS.VIREL.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.VIVID_POWDER), LumenAS.VIREL)
                 .catalystShatterMultiplier(2F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.VIREL), LumenAS.VIREL.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.VIREL), LumenAS.VIREL, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.ILLUMINATION_POWDER), LumenAS.SOLYN.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.ILLUMINATION_POWDER), LumenAS.SOLYN)
                 .catalystShatterMultiplier(2F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.SOLYN), LumenAS.SOLYN.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.SOLYN), LumenAS.SOLYN, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.NOCTURNAL_POWDER), LumenAS.NULLAE.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.NOCTURNAL_POWDER), LumenAS.NULLAE)
                 .catalystShatterMultiplier(2F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.NULLAE), LumenAS.NULLAE.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.NULLAE), LumenAS.NULLAE, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Tags.Items.GEMS_QUARTZ), LumenAS.CALDOR.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Tags.Items.GEMS_QUARTZ), LumenAS.CALDOR)
                 .catalystShatterMultiplier(3F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.CALDOR), LumenAS.CALDOR.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.CALDOR), LumenAS.CALDOR, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
         // ---------------------------------------------------------------------------
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Items.ECHO_SHARD), LumenAS.HYLE.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Items.ECHO_SHARD), LumenAS.HYLE)
                 .catalystShatterMultiplier(3.5F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.HYLE), LumenAS.HYLE.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.HYLE), LumenAS.HYLE, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Tags.Items.GEMS_AMETHYST), LumenAS.DYNAMIS.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(Tags.Items.GEMS_AMETHYST), LumenAS.DYNAMIS)
                 .catalystShatterMultiplier(4F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.DYNAMIS), LumenAS.DYNAMIS.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.DYNAMIS), LumenAS.DYNAMIS, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.RESONATING_GEM), LumenAS.AION.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.RESONATING_GEM), LumenAS.AION)
                 .catalystShatterMultiplier(3F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.AION), LumenAS.AION.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.AION), LumenAS.AION, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.STARDUST), LumenAS.AKASHA.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(ItemsAS.STARDUST), LumenAS.AKASHA)
                 .catalystShatterMultiplier(3F)
                 .save(recipeOutput);
-        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.AKASHA), LumenAS.AKASHA.get(), "_crystal")
+        LumenCrystallizationRecipeBuilder.builder(lumenCrystal(LumenAS.AKASHA), LumenAS.AKASHA, "_crystal")
                 .catalystShatterMultiplier(0F)
                 .save(recipeOutput);
 
         // ---------------------------------------------------------------------------
 
-        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(TagsAS.Items.CRYSTAL), LumenAS.PRISMATIC.get())
+        LumenCrystallizationRecipeBuilder.builder(Ingredient.of(TagsAS.Items.CRYSTAL), LumenAS.PRISMATIC)
                 .catalystShatterMultiplier(3F)
                 .save(recipeOutput);
     }

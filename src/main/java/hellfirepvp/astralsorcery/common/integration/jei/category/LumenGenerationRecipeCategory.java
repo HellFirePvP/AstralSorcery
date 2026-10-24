@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.integration.jei.category;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.integration.jei.base.ASRecipeCategory;
-import hellfirepvp.astralsorcery.common.integration.jei.ingredient.LumenIngredientRenderer;
 import hellfirepvp.astralsorcery.common.integration.jei.ingredient.LumenIngredientType;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
@@ -26,9 +25,9 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 
 import javax.annotation.Nullable;

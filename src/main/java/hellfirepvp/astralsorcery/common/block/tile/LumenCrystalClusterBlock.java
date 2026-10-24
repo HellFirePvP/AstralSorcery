@@ -129,9 +129,7 @@ public class LumenCrystalClusterBlock extends BaseTickTileBlock<TileLumenCrystal
         ItemStack stack = super.getCloneItemStack(state, target, level, pos, player);
         LumenCrystalClusterBlockItem.setStage(stack, state.getValue(STAGE));
         MiscUtil.getTileAt(level, pos, TileLumenCrystalCluster.class, true).ifPresent(cluster -> {
-            LumenComponent.of(cluster.getTileData().getLumen()).ifPresent(lumenCmp -> {
-                stack.set(DataComponentsAS.LUMEN, lumenCmp);
-            });
+            stack.set(DataComponentsAS.LUMEN, LumenComponent.of(cluster.getTileData().getLumen()));
         });
         return stack;
     }

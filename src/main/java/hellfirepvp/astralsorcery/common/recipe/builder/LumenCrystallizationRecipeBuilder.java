@@ -9,8 +9,8 @@
 package hellfirepvp.astralsorcery.common.recipe.builder;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
+import hellfirepvp.astralsorcery.common.lumen.LumenLike;
 import hellfirepvp.astralsorcery.common.recipe.lumen.LumenCrystallizationRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -27,6 +27,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,17 +48,17 @@ public class LumenCrystallizationRecipeBuilder implements RecipeBuilder {
 
     private int lumenConsumedPerOperation = 1400;
 
-    private LumenCrystallizationRecipeBuilder(Ingredient input, Lumen lumen, String recipeIdSuffix) {
+    private LumenCrystallizationRecipeBuilder(Ingredient input, LumenLike lumen, String recipeIdSuffix) {
         this.input = input;
-        this.lumen = lumen;
+        this.lumen = lumen.asLumen();
         this.recipeIdSuffix = recipeIdSuffix;
     }
 
-    public static LumenCrystallizationRecipeBuilder builder(Ingredient input, Lumen lumen) {
+    public static LumenCrystallizationRecipeBuilder builder(Ingredient input, LumenLike lumen) {
         return builder(input, lumen, "");
     }
 
-    public static LumenCrystallizationRecipeBuilder builder(Ingredient input, Lumen lumen, String recipeIdSuffix) {
+    public static LumenCrystallizationRecipeBuilder builder(Ingredient input, LumenLike lumen, String recipeIdSuffix) {
         return new LumenCrystallizationRecipeBuilder(input, lumen, recipeIdSuffix);
     }
 
@@ -93,7 +94,7 @@ public class LumenCrystallizationRecipeBuilder implements RecipeBuilder {
 
     @Override
     public void save(RecipeOutput recipeOutput) {
-        ResourceLocation id = RegistriesAS.REGISTRY_LUMEN.getKey(this.lumen);
+        ResourceLocation id = this.lumen.getRegistryId().orElseThrow(() -> new NoSuchElementException("Unregistered lumen " + this.lumen));
         this.save(recipeOutput, id.withSuffix(this.recipeIdSuffix));
     }
 

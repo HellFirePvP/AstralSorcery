@@ -52,18 +52,18 @@ public class AltarRecipe extends CustomRecipe<AltarRecipe, AltarCraftingInput> {
     public static final MapCodec<AltarRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             TileAltar.AltarType.CODEC.fieldOf("required_type").forGetter(AltarRecipe::getRequiredType),
             AltarRecipeGrid.CODEC.fieldOf("grid").forGetter(AltarRecipe::getGrid),
-            Codec.list(ItemStack.CODEC).fieldOf("outputs").forGetter(AltarRecipe::getOutputs),
+            ItemStack.CODEC.listOf().fieldOf("outputs").forGetter(AltarRecipe::getOutputs),
             RegistriesAS.REGISTRY_CONSTELLATIONS.byNameCodec().optionalFieldOf("focus_constellation").forGetter(AltarRecipe::getFocusConstellation),
             Codec.FLOAT.fieldOf("base_focus_shatter_chance").forGetter(AltarRecipe::getBaseFocusShatterChance),
             Codec.INT.fieldOf("duration").forGetter(AltarRecipe::getDuration),
             Codec.BOOL.fieldOf("only_night").forGetter(AltarRecipe::isOnlyNight),
             Codec.BOOL.fieldOf("may_chain").forGetter(AltarRecipe::mayChain),
             SetCodec.of(RegistriesAS.REGISTRY_CONSTELLATIONS.byNameCodec()).fieldOf("required_starlight").forGetter(AltarRecipe::getRequiredStarlight),
-            Codec.list(LumenStack.CODEC).fieldOf("required_lumen").forGetter(AltarRecipe::getRequiredLumen),
-            Codec.list(FluidStack.CODEC).fieldOf("required_fluid").forGetter(AltarRecipe::getRequiredFluid),
-            Codec.list(SizedIngredient.NESTED_CODEC).fieldOf("required_additional_inputs").forGetter(AltarRecipe::getRequiredAdditionalInputs),
+            LumenStack.NON_EMPTY_CODEC.listOf().fieldOf("required_lumen").forGetter(AltarRecipe::getRequiredLumen),
+            FluidStack.CODEC.listOf().fieldOf("required_fluid").forGetter(AltarRecipe::getRequiredFluid),
+            SizedIngredient.NESTED_CODEC.listOf().fieldOf("required_additional_inputs").forGetter(AltarRecipe::getRequiredAdditionalInputs),
             SetCodec.of(RegistriesAS.REGISTRY_ALTAR_EFFECTS.byNameCodec()).fieldOf("effects").forGetter(AltarRecipe::getEffects),
-            Codec.list(AltarRecipeOutputModifier.CODEC).fieldOf("output_modifiers").forGetter(AltarRecipe::getOutputModifiers)
+            AltarRecipeOutputModifier.CODEC.listOf().fieldOf("output_modifiers").forGetter(AltarRecipe::getOutputModifiers)
     ).apply(inst, AltarRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, AltarRecipe> STREAM_CODEC = StreamCodec.of(AltarRecipe::write, AltarRecipe::read);

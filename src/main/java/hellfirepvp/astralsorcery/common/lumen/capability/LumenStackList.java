@@ -25,7 +25,7 @@ import java.util.Optional;
  */
 public class LumenStackList {
 
-    public static final Codec<LumenStackList> CODEC = Codec.list(LumenStack.CODEC)
+    public static final Codec<LumenStackList> CODEC = Codec.list(LumenStack.OPTIONAL_CODEC)
             .xmap(LumenStackList::new, view -> view.lumenStacks);
 
     private final List<LumenStack> lumenStacks = new ArrayList<>();
@@ -50,13 +50,13 @@ public class LumenStackList {
 
     public Optional<LumenStack> getLumenStack(Lumen lumen) {
         return this.lumenStacks.stream()
-                .filter(stack -> stack.getLumen().equals(lumen))
+                .filter(stack -> stack.is(lumen))
                 .findFirst()
                 .map(LumenStack::copy);
     }
 
     public void setLumenStack(LumenStack stack) {
-        this.lumenStacks.removeIf(existing -> existing.getLumen().equals(stack.getLumen()));
+        this.lumenStacks.removeIf(stack::isSameLumen);
         if (stack.getAmount() > 0) {
             this.lumenStacks.add(stack.copy());
         }

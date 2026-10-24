@@ -79,7 +79,8 @@ public class RegistriesAS {
     public static final ResourceKey<Registry<StructureMarkerReplacement.Type<?>>> KEY_STRUCTURE_MARKER_REPLACEMENT_TYPES = registryKey("structure_marker_replacement_types");
 
     public static final Registry<BaseConstellation> REGISTRY_CONSTELLATIONS = new RegistryBuilder<>(KEY_CONSTELLATIONS).sync(true).create();
-    public static final Registry<Lumen> REGISTRY_LUMEN = new RegistryBuilder<>(KEY_LUMEN).sync(true).create();
+    @SuppressWarnings("deprecation")
+    public static final Registry<Lumen> REGISTRY_LUMEN = new RegistryBuilder<>(KEY_LUMEN).sync(true).withIntrusiveHolders().create();
     public static final Registry<CrystalProperty> REGISTRY_CRYSTAL_PROPERTIES = new RegistryBuilder<>(KEY_CRYSTAL_PROPERTIES).sync(true).create();
     public static final Registry<TransmissionNodeProvider<?>> REGISTRY_TRANSMISSION_NODES = new RegistryBuilder<>(KEY_TRANSMISSION_NODES).create();
     public static final Registry<AltarEffect> REGISTRY_ALTAR_EFFECTS = new RegistryBuilder<>(KEY_ALTAR_EFFECTS).sync(true).create();

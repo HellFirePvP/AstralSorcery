@@ -19,7 +19,6 @@ import hellfirepvp.astralsorcery.common.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.research.tome.TomePage;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
@@ -49,9 +48,7 @@ public class RenderPageLumenCrystallization extends RenderPageRecipe<LumenCrysta
             Lumen lumen = recipe.getLumenToCrystallize();
             int yOffset = 113;
 
-            ItemStack cluster = lumen.getHolder()
-                    .map(lumenRef -> LumenCrystalClusterBlockItem.getCluster(lumenRef, 4))
-                    .orElse(ItemsAS.BLOCK_LUMEN_CRYSTAL_CLUSTER.toStack());
+            ItemStack cluster = LumenCrystalClusterBlockItem.getCluster(lumen, 4);
 
             int midX = x + TomePage.DEFAULT_WIDTH / 2;
             int resultY = y + 18 + 60 / 2;
