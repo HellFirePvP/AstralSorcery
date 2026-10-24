@@ -27,6 +27,7 @@ public class ArtifactConfig extends ConfigEntry {
     public ModConfigSpec.IntValue triggerDelay;
     public ModConfigSpec.IntValue triggerChance;
     public ModConfigSpec.IntValue pulseDelay;
+    public ModConfigSpec.IntValue spawnedMobLimit;
 
     public ModConfigSpec.IntValue artifactConditionCountMin;
     public ModConfigSpec.IntValue artifactConditionCountMax;
@@ -55,6 +56,10 @@ public class ArtifactConfig extends ConfigEntry {
                 .comment("Sets the default delay between artifact pulses, before stability.")
                 .translation(translationKey("pulseDelay"))
                 .defineInRange("pulseDelay", 40 * 20, 20, 10000);
+        this.spawnedMobLimit = cfgBuilder
+                .comment("Maximum mobs spawned by an artifact to be alive at the same time.")
+                .translation(translationKey("spawnedMobLimit"))
+                .defineInRange("spawnedMobLimit", 30, 5, 1000);
 
         this.artifactConditionCountMin = cfgBuilder
                 .comment("The minimum amount of conditions a artifact may need to stabilize.")

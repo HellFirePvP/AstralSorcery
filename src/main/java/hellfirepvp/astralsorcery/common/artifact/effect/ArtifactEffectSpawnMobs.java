@@ -94,10 +94,11 @@ public class ArtifactEffectSpawnMobs extends ArtifactEffect {
     @Override
     public void applyEffect(RandomSource rand, ServerLevel sLevel, ItemEntityArtifact artifact) {
         if (this.getSpawnableTypes().isEmpty()) return;
+        int count = Math.min(this.getSpawnCount().getRandom(rand), artifact.getRemainingMobSpawns(sLevel));
+        if (count <= 0) return;
 
         BlockPos offset = artifact.blockPosition();
         int range = this.getRange();
-        int count = this.getSpawnCount().getRandom(rand);
         sLevel.levelEvent(2004, offset, 0);
 
         for (int i = 0; i < count; i++) {
@@ -113,7 +114,10 @@ public class ArtifactEffectSpawnMobs extends ArtifactEffect {
                 if (!EntityUtil.canEntityFit(sLevel, type, at)) continue;
                 spawned = EntityUtil.spawnLivingEntity(sLevel, type, Vector3.atBottomCenter(at));
             } while (spawned == null && --attempts > 0);
-            if (spawned != null) continue;
+            if (spawned != null) {
+                artifact.addSpawnedMob(spawned);
+                continue;
+            }
 
             EntityType<?> type = this.getSpawnableTypes().getRandomEntry(rand).orElse(null);
             if (type == null) continue;
@@ -121,7 +125,10 @@ public class ArtifactEffectSpawnMobs extends ArtifactEffect {
                     rand.nextInt(2 + 1) - 1,
                     rand.nextInt(2 + 1) - 1,
                     rand.nextInt(2 + 1) - 1);
-            EntityUtil.spawnLivingEntity(sLevel, type, Vector3.atBottomCenter(at));
+            spawned = EntityUtil.spawnLivingEntity(sLevel, type, Vector3.atBottomCenter(at));
+            if (spawned != null) {
+                artifact.addSpawnedMob(spawned);
+            }
         }
     }
 }

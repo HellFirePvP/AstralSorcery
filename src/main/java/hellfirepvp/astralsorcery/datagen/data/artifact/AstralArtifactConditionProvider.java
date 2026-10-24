@@ -9,10 +9,13 @@
 package hellfirepvp.astralsorcery.datagen.data.artifact;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.Mods;
 import hellfirepvp.astralsorcery.common.artifact.condition.data.ArtifactConditionProvider;
 import hellfirepvp.astralsorcery.common.util.data.IntRange;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
@@ -152,7 +155,8 @@ public class AstralArtifactConditionProvider extends ArtifactConditionProvider {
                 .addConflict(AstralSorcery.key("in_nether"))
                 .addConflict(AstralSorcery.key("in_fortress"))
                 .addConflict(AstralSorcery.key("in_mineshaft"))
-                .build(this.inAnyStructure(BuiltinStructures.STRONGHOLD));
+                .build(this.inAnyStructure(BuiltinStructures.STRONGHOLD,
+                        ResourceKey.create(Registries.STRUCTURE, Mods.BETTER_STRONGHOLDS.key("stronghold"))));
         this.newCondition("in_mineshaft")
                 .addConflict(AstralSorcery.key("in_end"))
                 .addConflict(AstralSorcery.key("in_nether"))

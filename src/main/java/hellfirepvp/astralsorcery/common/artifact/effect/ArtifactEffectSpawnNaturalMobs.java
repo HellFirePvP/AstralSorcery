@@ -88,9 +88,11 @@ public class ArtifactEffectSpawnNaturalMobs extends ArtifactEffect {
 
     @Override
     public void applyEffect(RandomSource rand, ServerLevel sLevel, ItemEntityArtifact artifact) {
+        int count = Math.min(this.getSpawnCount().getRandom(rand), artifact.getRemainingMobSpawns(sLevel));
+        if (count <= 0) return;
+
         BlockPos offset = artifact.blockPosition();
         int range = this.getRange();
-        int count = this.getSpawnCount().getRandom(rand);
         sLevel.levelEvent(2004, offset, 0);
 
         for (int i = 0; i < count; i++) {
@@ -104,7 +106,10 @@ public class ArtifactEffectSpawnNaturalMobs extends ArtifactEffect {
                 spawned = EntitySpawnUtil.performNaturalSpawnAt(sLevel, at, true, this.getCategory(),
                         EntitySpawnUtil.SpawnConditionFlags.C_IGNORE_SPAWN_RULES | EntitySpawnUtil.SpawnConditionFlags.IGNORE_ENTITY_SPAWN_COLLISION);
             } while (spawned == null && --attempts > 0);
-            if (spawned != null) continue;
+            if (spawned != null) {
+                artifact.addSpawnedMob(spawned);
+                continue;
+            }
 
             attempts = 10;
             do {
@@ -115,6 +120,9 @@ public class ArtifactEffectSpawnNaturalMobs extends ArtifactEffect {
                 spawned = EntitySpawnUtil.performNaturalSpawnAt(sLevel, at, true, this.getCategory(),
                         EntitySpawnUtil.SpawnConditionFlags.C_IGNORE_SPAWN_RULES | EntitySpawnUtil.SpawnConditionFlags.C_IGNORE_COLLISIONS);
             } while (spawned == null && --attempts > 0);
+            if (spawned != null) {
+                artifact.addSpawnedMob(spawned);
+            }
         }
     }
 }

@@ -9,7 +9,8 @@
     },
     "id": "astralsorcery:in_stronghold",
     "validStructures": [
-      "minecraft:stronghold"
+      "minecraft:stronghold",
+      "betterstrongholds:stronghold"
     ]
   },
   "selector": {
