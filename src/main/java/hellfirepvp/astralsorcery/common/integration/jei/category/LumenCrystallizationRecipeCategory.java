@@ -67,17 +67,15 @@ public class LumenCrystallizationRecipeCategory extends ASRecipeCategory<LumenCr
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, LumenCrystallizationRecipe recipe, IFocusGroup focuses) {
         Lumen toCrystallize = recipe.getLumenToCrystallize();
-        toCrystallize.getHolder().ifPresent(lumenHolder -> {
-            builder.addSlot(RecipeIngredientRole.INPUT, 13, 18)
-                    .addIngredient(LumenIngredientType.INSTANCE, LumenStack.of(toCrystallize, LumenStack.FLASK_VALUE));
+        builder.addSlot(RecipeIngredientRole.INPUT, 13, 18)
+                .addIngredient(LumenIngredientType.INSTANCE, LumenStack.of(toCrystallize, LumenStack.FLASK_VALUE));
 
-            builder.addSlot(RecipeIngredientRole.INPUT, this.getWidth() / 2 - 8, this.getHeight() / 2 - 16)
-                    .addIngredients(recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.INPUT, this.getWidth() / 2 - 8, this.getHeight() / 2 - 16)
+                .addIngredients(recipe.getInput());
 
-            ItemStack lumenCrystalCluster = LumenCrystalClusterBlockItem.getCluster(lumenHolder, 4);
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19)
-                    .addItemStack(lumenCrystalCluster);
-        });
+        ItemStack lumenCrystalCluster = LumenCrystalClusterBlockItem.getCluster(toCrystallize, 4);
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19)
+                .addItemStack(lumenCrystalCluster);
     }
 
     @Override

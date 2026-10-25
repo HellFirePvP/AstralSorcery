@@ -12,14 +12,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.common.lib.LumenAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.ExtraCodecs;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,98 +34,131 @@ import java.util.function.Supplier;
  */
 public final class LumenStack {
 
+    /**
+     * @deprecated Use {@link NON_EMPTY_CODEC} or {@link OPTIONAL_CODEC} instead of this
+     */
+    @Deprecated
     public static final Codec<LumenStack> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-            RegistriesAS.REGISTRY_LUMEN.byNameCodec().optionalFieldOf("lumen").forGetter(LumenStack::getLumenOpt),
+            RegistriesAS.REGISTRY_LUMEN.byNameCodec().optionalFieldOf("lumen").forGetter((stack) -> Optional.of(stack.getLumen())),
             Codec.INT.fieldOf("amount").forGetter(LumenStack::getAmount)
-    ).apply(inst, LumenStack::new));
+    ).apply(inst, (lumen, amount) -> lumen.map(lumen1 -> new LumenStack(lumen1, amount)).orElse(LumenStack.EMPTY)));
+    public static final Codec<LumenStack> NON_EMPTY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Lumen.NON_EMPTY_HOLDER_CODEC.fieldOf("lumen").forGetter(LumenStack::getLumenHolder),
+            ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(LumenStack::getAmount)
+    ).apply(instance, LumenStack::new));
+    public static final Codec<LumenStack> OPTIONAL_CODEC = ExtraCodecs.optionalEmptyMap(NON_EMPTY_CODEC).xmap(
+            (optional) -> optional.orElse(LumenStack.EMPTY),
+            (lumenStack) -> Optional.ofNullable(lumenStack).filter(LumenStack::isNotEmpty)
+    );
     public static final StreamCodec<RegistryFriendlyByteBuf, LumenStack> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.optional(ByteBufCodecs.registry(RegistriesAS.KEY_LUMEN)),
-            LumenStack::getLumenOpt,
+            Lumen.HOLDER_STREAM_CODEC,
+            LumenStack::getLumenHolder,
             ByteBufCodecs.INT,
             LumenStack::getAmount,
             LumenStack::new
     );
 
-    public static final LumenStack EMPTY = new LumenStack(Optional.empty(), 0);
+    public static final LumenStack EMPTY = new LumenStack(null);
     public static final int FLASK_VALUE = 500;
 
     @Nullable
-    private Lumen lumen;
+    private final Holder<Lumen> lumen;
     private int amount;
 
-    private LumenStack(Optional<Lumen> lumen, int amount) {
-        this(lumen.orElse(null), amount);
+    private LumenStack(Lumen lumen, int amount) {
+        this(lumen.builtInRegistryHolder(), amount);
     }
 
-    private LumenStack(@Nullable Lumen lumen, int amount) {
+    private LumenStack(@Nonnull Holder<Lumen> lumen, int amount) {
         this.lumen = lumen;
         this.amount = amount;
-        this.updateEmpty();
+    }
+
+    private LumenStack(@Nullable Void unused) {
+        this.lumen = null;
+        this.amount = 0;
     }
 
     public static LumenStack of(@Nonnull Lumen lumen, int amount) {
         return new LumenStack(lumen, amount);
     }
 
-    private Optional<Lumen> getLumenOpt() {
-        return Optional.ofNullable(this.lumen);
+    public static LumenStack of(@Nonnull Holder<Lumen> lumen, int amount) {
+        return new LumenStack(lumen, amount);
     }
 
     public LumenStack copy() {
-        return new LumenStack(this.lumen, this.amount);
+        if (this.isEmpty()) {
+            return EMPTY;
+        } else {
+            return new LumenStack(Objects.requireNonNull(this.lumen), this.amount);
+        }
     }
 
+    @Nonnull
     public LumenStack copyWithAmount(int amount) {
-        return new LumenStack(this.lumen, amount);
+        if (this.isEmpty()) {
+            return EMPTY;
+        } else {
+            var stack = this.copy();
+            stack.setAmount(amount);
+            return stack;
+        }
+    }
+
+    @Nonnull
+    public Holder<Lumen> getLumenHolder() {
+        return this.isEmpty() ? LumenAS.NONE : Objects.requireNonNull(this.lumen);
     }
 
     @Nonnull
     public Lumen getLumen() {
-        if (this.isEmpty()) return LumenAS.NONE.get();
-        return this.lumen;
+        return getLumenHolder().value();
     }
 
     public boolean isSameLumen(LumenStack otherStack) {
         return this.is(otherStack.getLumen());
     }
 
-    public boolean is(Supplier<Lumen> lumen) {
-        return this.is(lumen.get());
+    public boolean is(Lumen lumen) {
+        return this.getLumen() == lumen;
     }
 
-    public boolean is(Lumen lumen) {
-        if (this.isEmpty()) return lumen == LumenAS.NONE.get();
-        return this.lumen == lumen;
+    public boolean is(ResourceKey<Lumen> key) {
+        return this.getLumenHolder().is(key);
+    }
+
+    public boolean is(TagKey<Lumen> tagKey) {
+        return this.getLumenHolder().is(tagKey);
+    }
+
+    @SuppressWarnings("deprecation")
+    public boolean is(Holder<Lumen> lumen) {
+        return this.getLumenHolder().is(lumen);
     }
 
     public int getAmount() {
-        if (this.isEmpty()) return 0;
-        return this.amount;
+        return this.isEmpty() ? 0 : this.amount;
     }
 
     public void setAmount(int amount) {
         this.amount = amount;
-        this.updateEmpty();
     }
 
     public void grow(int amount) {
         this.amount += amount;
-        this.updateEmpty();
     }
 
     public void shrink(int amount) {
         this.amount -= amount;
-        this.updateEmpty();
     }
 
+    @SuppressWarnings("deprecation")
     public boolean isEmpty() {
-        return this.lumen == null || this.amount <= 0;
+        return this == EMPTY || this.lumen == null || this.lumen.is(LumenAS.NONE) || this.amount <= 0;
     }
 
-    private void updateEmpty() {
-        if (this.isEmpty() || this.lumen == LumenAS.NONE.get()) {
-            this.lumen = null;
-            this.amount = 0;
-        }
+    public boolean isNotEmpty() {
+        return !isEmpty();
     }
 }

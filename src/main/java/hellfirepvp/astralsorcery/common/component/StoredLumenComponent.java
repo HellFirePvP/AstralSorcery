@@ -217,11 +217,9 @@ public record StoredLumenComponent(List<StoredLumen> storedLumen, List<StoredLum
                     display.addAll(b.getDisplayText());
                     display.addAll(b.getEffect().getDisplayText(side, stack));
                 });
-        RegistriesAS.REGISTRY_LUMEN.getResourceKey(lumen).ifPresent(lumenKey -> {
-            this.lumenDisplay.stream()
-                    .filter(s -> s.lumen().equals(lumenKey))
-                    .forEach(s -> display.add(s.message()));
-        });
+        lumen.getRegistryKey().ifPresent(lumenKey -> this.lumenDisplay.stream()
+                .filter(s -> s.lumen().equals(lumenKey))
+                .forEach(s -> display.add(s.message())));
         return display;
     }
 

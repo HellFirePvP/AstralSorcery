@@ -31,7 +31,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.TooltipFlag;
 
 import java.text.NumberFormat;
@@ -88,7 +87,7 @@ public class LumenIngredientRenderer implements IIngredientRenderer<LumenStack> 
     private void renderIcon(GuiGraphics guiGraphics, LumenStack ingredient, int posX, int posY, int width, int height) {
         if (ingredient.isEmpty()) return;
 
-        ingredient.getLumen().getRegistryKey().map(ResourceKey::location).ifPresent(id -> {
+        ingredient.getLumen().getRegistryId().ifPresent(id -> {
             TextureAtlas atlas = Minecraft.getInstance().getModelManager().getAtlas(TexturesAS.ATLAS_LUMEN);
             TextureAtlasSprite tas = atlas.getSprite(id);
 

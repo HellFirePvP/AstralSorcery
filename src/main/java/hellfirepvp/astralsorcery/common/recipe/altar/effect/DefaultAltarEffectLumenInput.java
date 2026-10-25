@@ -70,10 +70,10 @@ public class DefaultAltarEffectLumenInput extends AltarEffect {
                         .setGravity(grav);
 
                 if (rand.nextBoolean()) {
-                    lumen.getLumen().getRegistryKey().ifPresent(key -> {
+                    lumen.getLumen().getRegistryId().ifPresent(key -> {
                         EffectHelper.of(EffectTemplatesAS.LUMEN_PARTICLE)
                                 .spawn(pos)
-                                .setSprite(TexturesAS.ATLAS_LUMEN, key.location())
+                                .setSprite(TexturesAS.ATLAS_LUMEN, key)
                                 .alpha(FXAlphaFunction.FADE_OUT)
                                 .setAlpha(0.7F)
                                 .color(FXColorFunction.constant(lumen.getLumen().getColor(lumenTick)))

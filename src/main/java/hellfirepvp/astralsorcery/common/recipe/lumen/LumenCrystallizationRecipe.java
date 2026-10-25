@@ -12,7 +12,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.common.lib.RecipeTypesAS;
-import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.lumen.Lumen;
 import hellfirepvp.astralsorcery.common.recipe.CustomRecipe;
 import hellfirepvp.astralsorcery.common.util.data.ResolvingRecipeTypeRegistryObject;
@@ -22,7 +21,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
 import java.util.function.Supplier;
@@ -38,7 +36,7 @@ public class LumenCrystallizationRecipe extends CustomRecipe<LumenCrystallizatio
 
     public static final MapCodec<LumenCrystallizationRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Ingredient.CODEC.fieldOf("input").forGetter(LumenCrystallizationRecipe::getInput),
-            RegistriesAS.REGISTRY_LUMEN.byNameCodec().fieldOf("lumen_to_crystallize").forGetter(LumenCrystallizationRecipe::getLumenToCrystallize),
+            Lumen.NON_EMPTY_CODEC.fieldOf("lumen_to_crystallize").forGetter(LumenCrystallizationRecipe::getLumenToCrystallize),
             Codec.FLOAT.fieldOf("catalyst_shatter_multiplier").forGetter(LumenCrystallizationRecipe::getCatalystShatterMultiplier),
             Codec.intRange(1, 1900).fieldOf("lumen_consumed_per_operation").forGetter(LumenCrystallizationRecipe::getLumenConsumedPerOperation)
     ).apply(inst, LumenCrystallizationRecipe::new));
@@ -46,7 +44,7 @@ public class LumenCrystallizationRecipe extends CustomRecipe<LumenCrystallizatio
     public static final StreamCodec<RegistryFriendlyByteBuf, LumenCrystallizationRecipe> STREAM_CODEC = StreamCodec.composite(
             Ingredient.CONTENTS_STREAM_CODEC,
             LumenCrystallizationRecipe::getInput,
-            ByteBufCodecs.fromCodecWithRegistriesTrusted(RegistriesAS.REGISTRY_LUMEN.byNameCodec()),
+            Lumen.STREAM_CODEC,
             LumenCrystallizationRecipe::getLumenToCrystallize,
             ByteBufCodecs.FLOAT,
             LumenCrystallizationRecipe::getCatalystShatterMultiplier,

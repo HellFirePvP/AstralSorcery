@@ -12,14 +12,11 @@ import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
-import hellfirepvp.astralsorcery.client.effect.EntityVisualFX;
 import hellfirepvp.astralsorcery.client.effect.function.FXAlphaFunction;
 import hellfirepvp.astralsorcery.client.effect.function.FXColorFunction;
-import hellfirepvp.astralsorcery.client.effect.function.FXScaleFunction;
 import hellfirepvp.astralsorcery.client.lib.EffectTemplatesAS;
 import hellfirepvp.astralsorcery.client.lib.TexturesAS;
 import hellfirepvp.astralsorcery.common.block.tile.LumenArrayBlock;
-import hellfirepvp.astralsorcery.common.component.IdentifierComponent;
 import hellfirepvp.astralsorcery.common.component.StoredLumenComponent;
 import hellfirepvp.astralsorcery.common.event.RecipeEvent;
 import hellfirepvp.astralsorcery.common.lib.FluidsAS;
@@ -342,7 +339,7 @@ public class TileLumenArray extends TileEntityTick<TileLumenArray.Data> implemen
                 pos = VectorUtil.withRandomOffset(pos, rand, 0.4F);
                 EffectHelper.of(EffectTemplatesAS.LUMEN_PARTICLE)
                         .spawn(pos)
-                        .setSprite(TexturesAS.ATLAS_LUMEN, RegistriesAS.REGISTRY_LUMEN.getKey(lumenStack.getLumen()))
+                        .setSprite(TexturesAS.ATLAS_LUMEN, lumenStack.getLumen().getRegistryId().orElseThrow())
                         .setAlpha(0.75F)
                         .color(FXColorFunction.constant(lumen.getColor(level, pos)))
                         .setGravity(Vector3.y(0.0001F));

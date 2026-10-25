@@ -96,29 +96,25 @@ public class ASJeiPlugin implements IModPlugin {
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
         registration.register(LumenIngredientType.INSTANCE,
-                RegistriesAS.REGISTRY_LUMEN.stream()
-                        .filter(lumen -> lumen != LumenAS.NONE.get())
+                RegistriesAS.REGISTRY_LUMEN.holders()
                         .map(lumen -> LumenStack.of(lumen, LumenStack.FLASK_VALUE))
+                        .filter(LumenStack::isNotEmpty)
                         .toList(),
                 new LumenIngredientHelper(registration.getSubtypeManager()),
                 new LumenIngredientRenderer(LumenIngredientRenderer.Display.ICON),
-                LumenStack.CODEC);
+                LumenStack.NON_EMPTY_CODEC);
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         RecipeManager mgr = RecipeUtil.getRecipeManager();
 
-        this.categories.forEach(cat -> {
-            registration.addRecipes(MiscUtil.cast(cat.getRecipeType()), cat.provideRecipes(mgr, registration));
-        });
+        this.categories.forEach(cat -> registration.addRecipes(MiscUtil.cast(cat.getRecipeType()), cat.provideRecipes(mgr, registration)));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        this.categories.forEach(cat -> {
-            registration.addRecipeCatalysts(cat.getRecipeType(), VanillaTypes.ITEM_STACK, cat.provideCatalyst());
-        });
+        this.categories.forEach(cat -> registration.addRecipeCatalysts(cat.getRecipeType(), VanillaTypes.ITEM_STACK, cat.provideCatalyst()));
     }
 
     @Override

@@ -8,6 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.lumen;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import hellfirepvp.astralsorcery.common.lib.LumenAS;
 import hellfirepvp.astralsorcery.common.lib.RegistriesAS;
 import hellfirepvp.astralsorcery.common.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.research.ResearchTier;
@@ -17,12 +20,16 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,6 +42,23 @@ import java.util.Set;
  */
 public class Lumen implements LumenLike {
 
+    public static final Codec<Lumen> NON_EMPTY_CODEC = Codec.lazyInitialized(() -> RegistriesAS.REGISTRY_LUMEN
+            .byNameCodec()
+            .validate((lumen) -> Objects.equals(lumen, LumenAS.NONE.get())
+                    ? DataResult.error(() -> "Lumen must not be astralsorcery:none")
+                    : DataResult.success(lumen)
+            ));
+    @SuppressWarnings("deprecation")
+    public static final Codec<Holder<Lumen>> NON_EMPTY_HOLDER_CODEC = Codec.lazyInitialized(() -> RegistriesAS.REGISTRY_LUMEN
+            .holderByNameCodec()
+            .validate((holder) -> holder.is(LumenAS.NONE)
+                    ? DataResult.error(() -> "Lumen must not be astralsorcery:none")
+                    : DataResult.success(holder)
+            ));
+    public static final StreamCodec<RegistryFriendlyByteBuf, Lumen> STREAM_CODEC = ByteBufCodecs.registry(RegistriesAS.KEY_LUMEN);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Lumen>> HOLDER_STREAM_CODEC = ByteBufCodecs.holderRegistry(RegistriesAS.KEY_LUMEN);
+
+    private final Holder.Reference<Lumen> builtInRegistryHolder = RegistriesAS.REGISTRY_LUMEN.createIntrusiveHolder(this);
     private final ColorWrapper color;
     private final boolean isElementary;
 
@@ -47,6 +71,10 @@ public class Lumen implements LumenLike {
     public Lumen(ColorWrapper color, boolean isElementary) {
         this.color = color;
         this.isElementary = isElementary;
+    }
+
+    public Holder.Reference<Lumen> builtInRegistryHolder() {
+        return this.builtInRegistryHolder;
     }
 
     @Override
@@ -77,13 +105,11 @@ public class Lumen implements LumenLike {
     }
 
     public Optional<ResourceKey<Lumen>> getRegistryKey() {
-        return RegistriesAS.REGISTRY_LUMEN.getResourceKey(this);
+        return this.builtInRegistryHolder.unwrapKey();
     }
 
-    public Optional<? extends Holder<Lumen>> getHolder() {
-        ResourceLocation lumenKey = RegistriesAS.REGISTRY_LUMEN.getKey(this);
-        if (lumenKey == null) return Optional.empty();
-        return RegistriesAS.REGISTRY_LUMEN.getHolder(lumenKey);
+    public Optional<ResourceLocation> getRegistryId() {
+        return getRegistryKey().map(ResourceKey::location);
     }
 
     public boolean maySee(Level level, PlayerProgress progress) {
@@ -105,7 +131,7 @@ public class Lumen implements LumenLike {
     @Nonnull
     protected String getOrCreateNameId() {
         if (this.nameId == null) {
-            this.nameId = Util.makeDescriptionId("lumen", RegistriesAS.REGISTRY_LUMEN.getKey(this));
+            this.nameId = Util.makeDescriptionId("lumen", this.getRegistryId().orElse(null));
         }
         return this.nameId;
     }
