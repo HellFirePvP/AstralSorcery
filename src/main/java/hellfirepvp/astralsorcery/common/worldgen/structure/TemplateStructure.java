@@ -127,7 +127,7 @@ public class TemplateStructure extends Structure {
         int x = chunkPos.getMinBlockX() + (this.isRandomChunkOffset() ? rand.nextInt(16) : 0);
         int z = chunkPos.getMinBlockZ() + (this.isRandomChunkOffset() ? rand.nextInt(16) : 0);
         int y = context.chunkGenerator().getFirstOccupiedHeight(x, z, this.getHeightmap(), context.heightAccessor(), context.randomState());
-        BlockPos origin = new BlockPos(x, y, z);
+        BlockPos origin = new BlockPos(x, y + this.getVerticalOffset(), z);
 
         if (context.heightAccessor().isOutsideBuildHeight(origin.above(this.getRequiredClearance()))) {
             return Optional.empty();

@@ -5,11 +5,11 @@
       {
         "ambient": true,
         "amplifier": 3,
-        "duration": 20,
+        "duration": 100,
         "id": "minecraft:hunger",
         "neoforge:cures": [
-          "milk",
-          "protected_by_totem"
+          "protected_by_totem",
+          "milk"
         ],
         "show_icon": false
       }

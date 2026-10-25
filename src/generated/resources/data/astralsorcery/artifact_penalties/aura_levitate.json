@@ -7,8 +7,8 @@
         "duration": 40,
         "id": "minecraft:levitation",
         "neoforge:cures": [
-          "milk",
-          "protected_by_totem"
+          "protected_by_totem",
+          "milk"
         ],
         "show_icon": false
       }

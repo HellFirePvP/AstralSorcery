@@ -4,11 +4,11 @@
     "effects": [
       {
         "ambient": true,
-        "duration": 40,
+        "duration": 100,
         "id": "minecraft:invisibility",
         "neoforge:cures": [
-          "milk",
-          "protected_by_totem"
+          "protected_by_totem",
+          "milk"
         ],
         "show_icon": false
       }
