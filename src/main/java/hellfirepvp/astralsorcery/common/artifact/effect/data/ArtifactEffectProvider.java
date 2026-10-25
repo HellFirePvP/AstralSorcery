@@ -94,6 +94,10 @@ public abstract class ArtifactEffectProvider implements DataProvider {
         return ArtifactEffectSwapItemAura.of(range, interval, chance);
     }
 
+    protected ArtifactEffectVeilItemAura.Builder veilItemAura() {
+        return ArtifactEffectVeilItemAura.builder();
+    }
+
     protected ArtifactEffect.Provider explode(int range, Level.ExplosionInteraction interaction) {
         return ArtifactEffectExplode.of(range, interaction);
     }

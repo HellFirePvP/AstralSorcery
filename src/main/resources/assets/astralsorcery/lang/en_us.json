@@ -66,6 +66,7 @@
     "component.constellation.crystal.unknown.1": "An unknown, yet dazzling constellation",
     "component.constellation.crystal.unknown.2": "shimmers through the crystal.",
     "component.constellation.crystal.attuned": "Attuned to %s",
+    "component.veiled.item_name": "%s?",
 
     "effect.astralsorcery.rampage": "Rampage",
     "effect.astralsorcery.phoenix_blessing": "Phoenix Blessing",

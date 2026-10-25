@@ -127,4 +127,10 @@ public class DataComponentsAS {
                     .persistent(StoredPlayerProgressComponent.CODEC)
                     .networkSynchronized(ByteBufCodecs.fromCodecWithRegistriesTrusted(StoredPlayerProgressComponent.CODEC))
                     .build());
+
+    public static DeferredHolder<DataComponentType<?>, DataComponentType<VeiledItemStackComponent>> VEILED =
+            COMPONENT_TYPE_REGISTER.register("veiled_item_stack", () -> DataComponentType.<VeiledItemStackComponent>builder()
+                    .persistent(VeiledItemStackComponent.CODEC)
+                    .networkSynchronized(VeiledItemStackComponent.STREAM_CODEC)
+                    .build());
 }

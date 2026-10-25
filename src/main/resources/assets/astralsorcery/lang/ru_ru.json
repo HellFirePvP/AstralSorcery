@@ -55,6 +55,7 @@
     "component.constellation.crystal.unknown.1": "Неизвестное, но ослепительное созвездие",
     "component.constellation.crystal.unknown.2": "мерцает сквозь кристалл.",
     "component.constellation.crystal.attuned": "Настроено на %s",
+    "component.veiled.item_name": "%s?",
 
     "effect.astralsorcery.rampage": "Буйство",
     "effect.astralsorcery.phoenix_blessing": "Благословение Феникса",

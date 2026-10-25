@@ -1,0 +1,15 @@
+{
+  "effect": {
+    "type": "astralsorcery:veil_item_aura",
+    "chance": 0.15,
+    "duration": 600,
+    "id": "astralsorcery:aura_veil_item",
+    "interval": 200,
+    "inventory_chance": 0.5,
+    "range": 5
+  },
+  "selector": {
+    "conflicts": [],
+    "weight": 1
+  }
+}

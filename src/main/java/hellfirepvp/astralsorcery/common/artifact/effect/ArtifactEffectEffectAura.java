@@ -27,6 +27,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -100,8 +101,7 @@ public class ArtifactEffectEffectAura extends ArtifactEffect implements Continuo
 
     private void applyToEntities(ServerLevel sLevel, ItemEntityArtifact artifact) {
         AABB bounds = artifact.getBoundingBox().inflate(this.getRange());
-
-        sLevel.getEntities(EntityTypeTest.forClass(LivingEntity.class), bounds, Entity::isAlive).forEach(entity -> {
+        sLevel.getEntities(EntityTypeTest.forClass(LivingEntity.class), bounds, EntitySelector.NO_CREATIVE_OR_SPECTATOR.and(Entity::isAlive)).forEach(entity -> {
             this.getEffects().forEach(effect -> entity.addEffect(new MobEffectInstance(effect)));
         });
     }

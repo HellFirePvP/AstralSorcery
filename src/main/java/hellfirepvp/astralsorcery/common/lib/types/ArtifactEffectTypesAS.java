@@ -49,6 +49,8 @@ public class ArtifactEffectTypesAS {
             register("eat_food_aura", ArtifactEffectEatFoodAura.CODEC, ArtifactEffectEatFoodAura.STREAM_CODEC);
     public static final ArtifactEffect.DeferredType<ArtifactEffectSwapItemAura> SWAP_ITEM_AURA =
             register("swap_item_aura", ArtifactEffectSwapItemAura.CODEC, ArtifactEffectSwapItemAura.STREAM_CODEC);
+    public static final ArtifactEffect.DeferredType<ArtifactEffectVeilItemAura> VEIL_ITEM_AURA =
+            register("veil_item_aura", ArtifactEffectVeilItemAura.CODEC, ArtifactEffectVeilItemAura.STREAM_CODEC);
 
     private static <T extends ArtifactEffect> ArtifactEffect.DeferredType<T> register(String name,
                                                                                       MapCodec<T> codec,

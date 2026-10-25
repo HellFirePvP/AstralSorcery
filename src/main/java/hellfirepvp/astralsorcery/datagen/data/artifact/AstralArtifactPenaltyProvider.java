@@ -42,25 +42,27 @@ public class AstralArtifactPenaltyProvider extends ArtifactEffectProvider {
                 .build(this.spawnNaturalMobs(7, IntRange.of(8, 13), MobCategory.MONSTER));
         this.newCondition("aura_slowness")
                 .build(this.applyEffectAura()
-                        .addEffect(MobEffects.MOVEMENT_SLOWDOWN, 2)
-                        .addEffect(MobEffects.DIG_SLOWDOWN, 2)
+                        .addEffect(MobEffects.MOVEMENT_SLOWDOWN, 5 * 20)
+                        .addEffect(MobEffects.DIG_SLOWDOWN, 5 * 20)
                         .build());
         this.newCondition("aura_levitate")
                 .build(this.applyEffectAura()
                         .setRange(3)
-                        .addEffect(MobEffects.LEVITATION)
+                        .addEffect(MobEffects.LEVITATION, 2 * 20)
                         .build());
         this.newCondition("aura_hunger")
                 .build(this.applyEffectAura()
-                        .addEffect(MobEffects.HUNGER, 20, 3)
+                        .addEffect(MobEffects.HUNGER, 5 * 20, 3)
                         .build());
         this.newCondition("aura_invisibility")
                 .build(this.applyEffectAura()
-                        .addEffect(MobEffects.INVISIBILITY)
+                        .addEffect(MobEffects.INVISIBILITY, 5 * 20)
                         .build());
         this.newCondition("aura_eat_food")
                 .build(this.eatFoodAura(5, 10, 0.05F));
         this.newCondition("aura_swap_item")
                 .build(this.swapItemAura(5, 10 * 20, 0.33F));
+        this.newCondition("aura_veil_item")
+                .build(this.veilItemAura().build());
     }
 }

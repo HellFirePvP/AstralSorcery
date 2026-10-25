@@ -35,6 +35,6 @@ public interface CreativeTabItem extends ItemLike {
     }
 
     default void fillCreativeTab(Consumer<ItemStack> tabItems) {
-        tabItems.accept(new ItemStack(this));
+        tabItems.accept(this.asItem().getDefaultInstance());
     }
 }

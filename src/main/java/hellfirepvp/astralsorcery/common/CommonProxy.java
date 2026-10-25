@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.data.sync.server.CelestialGatewaySyncDat
 import hellfirepvp.astralsorcery.common.event.handler.TooltipEventHandler;
 import hellfirepvp.astralsorcery.common.event.helper.DamageCancellingHelper;
 import hellfirepvp.astralsorcery.common.event.helper.SwordParryHelper;
+import hellfirepvp.astralsorcery.common.event.helper.VeiledItemStackHelper;
 import hellfirepvp.astralsorcery.common.item.base.CauldronInteractableItem;
 import hellfirepvp.astralsorcery.common.lumen.binding.data.LumenBindingTypeLoader;
 import hellfirepvp.astralsorcery.common.lumen.binding.effect.*;
@@ -186,6 +187,7 @@ public class CommonProxy {
         TemporaryFlightHelper.attachListeners(eventBus);
         DamageCancellingHelper.attachListeners(eventBus);
         SwordParryHelper.attachListeners(eventBus);
+        VeiledItemStackHelper.attachListeners(eventBus);
         SyncDataManager.getInstance().attachEventListeners(eventBus);
         LevelSkyHandler.getInstance().attachEventListeners(eventBus);
         StarlightNetworkTickHelper.getInstance().attachEventListeners(eventBus);

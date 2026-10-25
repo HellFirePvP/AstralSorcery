@@ -9,8 +9,10 @@
 package hellfirepvp.astralsorcery.mixin;
 
 import hellfirepvp.astralsorcery.common.event.helper.EnchantmentModifierHelper;
+import hellfirepvp.astralsorcery.common.event.helper.VeiledItemStackHelper;
 import hellfirepvp.astralsorcery.common.item.base.ItemStackEquipmentReference;
 import hellfirepvp.astralsorcery.common.util.MiscUtil;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.TooltipProvider;
@@ -72,6 +74,15 @@ public class MixinItemStack implements ItemStackEquipmentReference {
         ItemStackEquipmentReference.setEquipmentReference(cir.getReturnValue(),
                 this.astralSorcery_1_21$playerReference,
                 this.astralSorcery_1_21$equippedSlot);
+    }
+
+    @Inject(method = "getHoverName", at = @At("HEAD"), cancellable = true, order = 800)
+    public void getVeiledHoverName(CallbackInfoReturnable<Component> cir) {
+        ItemStack thisStack = MiscUtil.cast(this);
+        ItemStack displayed = VeiledItemStackHelper.getDisplayedStack(thisStack);
+        if (displayed != thisStack) {
+            cir.setReturnValue(VeiledItemStackHelper.markUnknownVeil(thisStack, displayed.getHoverName()));
+        }
     }
 
     @ModifyVariable(method = "addToTooltip", at = @At(value = "STORE", target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"))

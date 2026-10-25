@@ -63,6 +63,7 @@
     "component.constellation.crystal.unknown.1": "Una constelación desconocida, pero deslumbrante,",
     "component.constellation.crystal.unknown.2": "brilla a través del cristal.",
     "component.constellation.crystal.attuned": "En sintonía con %s",
+    "component.veiled.item_name": "%s?",
 
     "effect.astralsorcery.rampage": "Descontrol",
     "effect.astralsorcery.phoenix_blessing": "Bendición del fénix",

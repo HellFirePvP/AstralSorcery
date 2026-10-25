@@ -4,21 +4,21 @@
     "effects": [
       {
         "ambient": true,
-        "duration": 2,
+        "duration": 40,
         "id": "minecraft:slowness",
         "neoforge:cures": [
-          "protected_by_totem",
-          "milk"
+          "milk",
+          "protected_by_totem"
         ],
         "show_icon": false
       },
       {
         "ambient": true,
-        "duration": 2,
+        "duration": 40,
         "id": "minecraft:mining_fatigue",
         "neoforge:cures": [
-          "protected_by_totem",
-          "milk"
+          "milk",
+          "protected_by_totem"
         ],
         "show_icon": false
       }

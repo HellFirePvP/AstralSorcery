@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.lib.CustomModelsAS;
+import hellfirepvp.astralsorcery.common.event.helper.VeiledItemStackHelper;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.FlagExecutor;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -28,6 +29,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -47,6 +49,16 @@ public abstract class MixinItemRenderer {
     @Shadow public abstract ItemModelShaper getItemModelShaper();
 
     @Shadow public abstract void render(ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, BakedModel p_model);
+
+    @ModifyVariable(method = "getModel", at = @At("HEAD"), argsOnly = true, order = 800)
+    public ItemStack getVeiledModelStack(ItemStack stack) {
+        return VeiledItemStackHelper.getDisplayedStack(stack);
+    }
+
+    @ModifyVariable(method = "render", at = @At("HEAD"), argsOnly = true, order = 800)
+    public ItemStack getVeiledRenderStack(ItemStack itemStack) {
+        return VeiledItemStackHelper.getDisplayedStack(itemStack);
+    }
 
     @Inject(method = "getModel", at = @At(value = "HEAD"), cancellable = true)
     public void getCustomSextantModel(ItemStack stack, Level level, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
